@@ -17,26 +17,37 @@ KiwixSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
 {
     std::cout << "Handling request " << request->requestUrl().toString().toUtf8().constData() << std::endl;
     std::string url = request->requestUrl().path().toUtf8().constData();
-    zim::Article art;
     std::cout << "Url is " << url << std::endl;
+    if (url[0] == '/')
+        url = url.substr(1);
     auto reader = static_cast<KiwixApp*>(KiwixApp::instance())->getReader();
     if ( reader == nullptr) {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;
     }
-    if ( !reader->getArticleObjectByDecodedUrl(url, art))
-    {
+    kiwix::Entry entry;
+    try {
+        entry = reader->getEntryFromPath(url);
+    } catch (kiwix::NoEntry& e) {
         url = "A/" + url;
-        if (!reader->getArticleObjectByDecodedUrl(url, art))
-        {
+        std::cout << "Url is " << url << std::endl;
+        try {
+            entry = reader->getEntryFromPath(url);
+        } catch (kiwix::NoEntry& e) {
             request->fail(QWebEngineUrlRequestJob::UrlNotFound);
             return;
         }
     }
+    try {
+        entry = entry.getFinalEntry();
+    } catch (kiwix::NoEntry& e) {
+        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+        return;
+    }
 
-    BlobBuffer* buffer = new BlobBuffer(art.getData());
-    std::cout << "  mimetype : " << art.getMimeType() << std::endl;
-    auto mimeType = QByteArray::fromRawData(art.getMimeType().data(), art.getMimeType().size());
+    BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
+    std::cout << "  mimetype : " << entry.getMimetype() << std::endl;
+    auto mimeType = QByteArray::fromRawData(entry.getMimetype().data(), entry.getMimetype().size());
     connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
     request->reply(mimeType, buffer);
 }
