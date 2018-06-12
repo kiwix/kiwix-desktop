@@ -19,7 +19,11 @@ void KiwixApp::openZimFile(const QString &zimfile)
         delete reader;
     const std::string zimfile_ = zimfile.toLocal8Bit().constData();
     std::cout << "Opening " << zimfile_ << std::endl;
-    reader = new kiwix::Reader(zimfile_);
+    try {
+        reader = new kiwix::Reader(zimfile_);
+    } catch (...) {
+        reader = nullptr;
+    }
 }
 
 kiwix::Reader* KiwixApp::getReader()

@@ -20,6 +20,10 @@ KiwixSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
     zim::Article art;
     std::cout << "Url is " << url << std::endl;
     auto reader = static_cast<KiwixApp*>(KiwixApp::instance())->getReader();
+    if ( reader == nullptr) {
+        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+        return;
+    }
     if ( !reader->getArticleObjectByDecodedUrl(url, art))
     {
         url = "A/" + url;
