@@ -4,6 +4,10 @@
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv)
 {
+    auto icon = QIcon();
+    icon.addFile(":/icons/kiwix/app_icon.svg");
+    setWindowIcon(icon);
+
     mainWindow = new MainWindow;
     setApplicationName("kiwix-desktop");
     mainWindow->show();

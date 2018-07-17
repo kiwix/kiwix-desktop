@@ -39,5 +39,6 @@
         <file>icons/filter.svg</file>
         <file>icons/reading-list.svg</file>
         <file>icons/reading-list-active.svg</file>
+        <file>icons/kiwix/app_icon.svg</file>
     </qresource>
 </RCC>
