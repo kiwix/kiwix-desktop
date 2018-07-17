@@ -57,7 +57,6 @@ INSTALLS += target
 
 static {
   PKGCONFIG_OPTION = "--static"
-  QMAKE_LFLAGS += "-static-libstdc++ --static"
 }
 
 unix {
