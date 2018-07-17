@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     QString zimfile;
     auto positionalArguments = parser.positionalArguments();
     if (positionalArguments.size() < 1){
-        zimfile = QFileDialog::getOpenFileName(nullptr,
+        zimfile = QFileDialog::getOpenFileName(a.getMainWindow(),
             "Open Zim",
             QString(),
             "ZimFile (*.zim*)");

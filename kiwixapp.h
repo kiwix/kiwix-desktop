@@ -20,6 +20,7 @@ public:
     KiwixSchemeHandler* getSchemeHandler() { return &schemeHandler; }
     KiwixRequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
     Library* getLibrary() { return &library; }
+    MainWindow* getMainWindow() { return mainWindow; }
 private:
     Library library;
     MainWindow* mainWindow;
