@@ -23,10 +23,8 @@ int main(int argc, char *argv[])
     } else {
         zimfile = parser.positionalArguments().at(0);
     }
-    std::string f = zimfile.toUtf8().constData();
-    std::cout << f << std::endl;
-
-    a.openZimFile(zimfile);
-
+    if (zimfile.size()) {
+        a.openZimFile(zimfile);
+    }
     return a.exec();
 }
