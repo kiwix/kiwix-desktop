@@ -44,10 +44,9 @@ KiwixSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;
     }
-
     BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
-    std::cout << "  mimetype : " << entry.getMimetype() << std::endl;
-    auto mimeType = QByteArray::fromRawData(entry.getMimetype().data(), entry.getMimetype().size());
+    std::cout << "  mimetype : '" << entry.getMimetype() << "'" << std::endl;
+    auto mimeType = QByteArray::fromStdString(entry.getMimetype());
     connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
     request->reply(mimeType, buffer);
 }
