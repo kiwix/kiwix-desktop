@@ -2,9 +2,7 @@
 #define KIWIXWEBVIEW_H
 
 #include <QWebEngineView>
-#include "kiwixschemehandler.h"
-#include "kiwixrequestinterceptor.h"
-
+#include <kiwix/reader.h>
 
 class KiwixWebView : public QWebEngineView
 {
@@ -14,9 +12,7 @@ public:
     KiwixWebView(QWidget *parent = Q_NULLPTR);
     virtual ~KiwixWebView();
 
-private:
-    KiwixSchemeHandler schemeHandler;
-    KiwixRequestInterceptor requestInterceptor;
+    void initFromReader(std::shared_ptr<kiwix::Reader> reader);
 };
 
 #endif // KIWIXWEBVIEW_H

@@ -16,11 +16,14 @@ void
 KiwixSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
 {
     std::cout << "Handling request " << request->requestUrl().toString().toUtf8().constData() << std::endl;
-    std::string url = request->requestUrl().path().toUtf8().constData();
+    auto qurl = request->requestUrl();
+    std::string url = qurl.path().toUtf8().constData();
     std::cout << "Url is " << url << std::endl;
     if (url[0] == '/')
         url = url.substr(1);
-    auto reader = static_cast<KiwixApp*>(KiwixApp::instance())->getReader();
+    auto library = static_cast<KiwixApp*>(KiwixApp::instance())->getLibrary();
+    auto zim_id = qurl.host();
+    auto reader = library->getReader(zim_id);
     if ( reader == nullptr) {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;

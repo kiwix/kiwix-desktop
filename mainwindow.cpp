@@ -9,10 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->webview->page()->setUrl(QUrl("http://foo.zim"));
-    //ui->webview->page()->setUrl(QUrl("http://localhost:8080"));
-
-    QObject::connect(ui->webview, SIGNAL(urlChanged(const QUrl&)), this, SLOT(on_urlChanged_triggered(const QUrl&)));
+    ui->tabWidget->tabBar()->setExpanding(false);
 }
 
 MainWindow::~MainWindow()
@@ -20,14 +17,16 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::displayReader(std::shared_ptr<kiwix::Reader> reader)
 {
-    ui->webview->reload();
-}
-
-
-void MainWindow::on_urlChanged_triggered(const QUrl& url)
-{
-    std::cout << "new url : " << url.toString().toUtf8().constData() << std::endl;
-    ui->addressBar->setText(url.toString());
+    auto webview = new KiwixWebView();
+    std::string favicon_content;
+    std::string favicon_mimetype;
+    reader->getFavicon(favicon_content, favicon_mimetype);
+    QPixmap pixmap;
+    pixmap.loadFromData((const uchar*)favicon_content.data(), favicon_content.size());
+    auto icon = QIcon(pixmap);
+    // Ownership of webview is passed to the tabWidget
+    ui->tabWidget->addTab(webview, icon, QString::fromStdString(reader->getTitle()));
+    webview->initFromReader(reader);
 }

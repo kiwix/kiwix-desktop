@@ -5,7 +5,7 @@
 #include "kiwixrequestinterceptor.h"
 
 #include <QApplication>
-#include <kiwix/reader.h>
+#include "library.h"
 #include "mainwindow.h"
 
 
@@ -16,12 +16,16 @@ public:
     virtual ~KiwixApp();
 
     void openZimFile(const QString& zimfile);
-    kiwix::Reader* getReader();
 
-
+    KiwixSchemeHandler* getSchemeHandler() { return &schemeHandler; }
+    KiwixRequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
+    Library* getLibrary() { return &library; }
 private:
-    kiwix::Reader* reader;
+    Library library;
     MainWindow* mainWindow;
+
+    KiwixSchemeHandler schemeHandler;
+    KiwixRequestInterceptor requestIntercetor;
 };
 
 #endif // KIWIXAPP_H

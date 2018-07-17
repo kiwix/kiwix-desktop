@@ -36,7 +36,8 @@ SOURCES += \
     kiwixapp.cpp \
     blobbuffer.cpp \
     kiwixrequestinterceptor.cpp \
-    kiwixwebview.cpp
+    kiwixwebview.cpp \
+    library.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +45,8 @@ HEADERS += \
     kiwixapp.h \
     blobbuffer.h \
     kiwixrequestinterceptor.h \
-    kiwixwebview.h
+    kiwixwebview.h \
+    library.h
 
 FORMS += \
         mainwindow.ui
