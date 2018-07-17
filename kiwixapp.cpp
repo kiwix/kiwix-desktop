@@ -10,6 +10,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     setApplicationDisplayName("Kiwix");
     setApplicationName("Kiwix");
+    setDesktopFileName("kiwix.desktop");
 
     mainWindow = new MainWindow;
     mainWindow->show();
