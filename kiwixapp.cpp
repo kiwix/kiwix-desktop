@@ -14,22 +14,28 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     mainWindow = new MainWindow;
     mainWindow->show();
+
+    errorDialog = new QErrorMessage(mainWindow);
 }
 
 KiwixApp::~KiwixApp()
 {
+    delete errorDialog;
     delete mainWindow;
 }
 
 
 void KiwixApp::openZimFile(const QString &zimfile)
 {
-    const std::string zimfile_ = zimfile.toLocal8Bit().constData();
-    std::cout << "Opening " << zimfile_ << std::endl;
     try {
         auto zimId = library.openBook(zimfile);
         mainWindow->displayReader(library.getReader(zimId));
     } catch (const std::exception& e) {
-        std::cout << "oup" << e.what() << std::endl;
+        showMessage("Cannot open " + zimfile + ": \n" + e.what());
     }
+}
+
+void KiwixApp::showMessage(const QString &message)
+{
+    errorDialog->showMessage(message);
 }

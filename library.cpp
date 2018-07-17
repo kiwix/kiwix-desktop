@@ -1,4 +1,5 @@
 #include "library.h"
+#include <QtDebug>
 
 Library::Library()
 {
@@ -14,6 +15,7 @@ QString Library::openBook(const QString &zimPath)
         if(QString::fromStdString(it->second->getZimFilePath()) == zimPath)
             return it->first;
     }
+    qInfo() << "Opening" << zimPath;
     const std::string zimPath_ = zimPath.toLocal8Bit().constData();
     auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(zimPath_));
     auto id = QString::fromStdString(reader->getId() + ".zim");

@@ -1,12 +1,13 @@
 #ifndef KIWIXAPP_H
 #define KIWIXAPP_H
 
+#include "library.h"
+#include "mainwindow.h"
 #include "kiwixschemehandler.h"
 #include "kiwixrequestinterceptor.h"
 
 #include <QApplication>
-#include "library.h"
-#include "mainwindow.h"
+#include <QErrorMessage>
 
 
 class KiwixApp : public QApplication
@@ -21,9 +22,12 @@ public:
     KiwixRequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
     Library* getLibrary() { return &library; }
     MainWindow* getMainWindow() { return mainWindow; }
+
+    void showMessage(const QString& message);
 private:
     Library library;
     MainWindow* mainWindow;
+    QErrorMessage* errorDialog;
 
     KiwixSchemeHandler schemeHandler;
     KiwixRequestInterceptor requestIntercetor;
