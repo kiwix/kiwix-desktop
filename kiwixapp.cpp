@@ -1,6 +1,8 @@
 #include "kiwixapp.h"
 #include "zim/error.h"
 
+#include <QFontDatabase>
+
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv)
 {
@@ -12,6 +14,33 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     setApplicationName("Kiwix");
     setDesktopFileName("kiwix.desktop");
 
+    QString fontName;
+    if (platformName() == 'windows') {
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuib.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuii.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuil.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuisl.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeui.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuiz.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/seguibli.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/seguibl.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/seguili.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/seguisbi.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/SegoeUI/seguisb.ttf");
+        fontName = "Segoe";
+    } else {
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-Regular.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-Light.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-LightItalic.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-Medium.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-MediumItalic.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-Bold.ttf");
+        QFontDatabase::addApplicationFont(":/fonts/Ubuntu/Ubuntu-BoldItalic.ttf");
+        fontName = "Ubuntu";
+    }
+
+    auto font = QFont(fontName);
+    setFont(font);
     mainWindow = new MainWindow;
     mainWindow->show();
 

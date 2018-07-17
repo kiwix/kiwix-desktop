@@ -40,5 +40,25 @@
         <file>icons/reading-list.svg</file>
         <file>icons/reading-list-active.svg</file>
         <file>icons/kiwix/app_icon.svg</file>
+        <file>fonts/Ubuntu/Ubuntu-Medium.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-MediumItalic.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-Light.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-Italic.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-Bold.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-BoldItalic.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-Regular.ttf</file>
+        <file>fonts/Ubuntu/Ubuntu-LightItalic.ttf</file>
+        <file>fonts/SegoeUI/seguisli.ttf</file>
+        <file>fonts/SegoeUI/seguili.ttf</file>
+        <file>fonts/SegoeUI/seguisbi.ttf</file>
+        <file>fonts/SegoeUI/seguibli.ttf</file>
+        <file>fonts/SegoeUI/segoeuisl.ttf</file>
+        <file>fonts/SegoeUI/segoeuii.ttf</file>
+        <file>fonts/SegoeUI/segoeuiz.ttf</file>
+        <file>fonts/SegoeUI/segoeuib.ttf</file>
+        <file>fonts/SegoeUI/seguibl.ttf</file>
+        <file>fonts/SegoeUI/segoeuil.ttf</file>
+        <file>fonts/SegoeUI/seguisb.ttf</file>
+        <file>fonts/SegoeUI/segoeui.ttf</file>
     </qresource>
 </RCC>
