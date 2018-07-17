@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->tabBar()->setExpanding(false);
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);// | Qt::WindowCloseButtonHint);// | Qt::WindowTitleHint);
 }
 
 MainWindow::~MainWindow()
