@@ -1,0 +1,43 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/input-number.svg</file>
+        <file>icons/minimize.svg</file>
+        <file>icons/download.svg</file>
+        <file>icons/checkbox.svg</file>
+        <file>icons/back.svg</file>
+        <file>icons/forward.svg</file>
+        <file>icons/help.svg</file>
+        <file>icons/tick.svg</file>
+        <file>icons/menu.svg</file>
+        <file>icons/more.svg</file>
+        <file>icons/add.svg</file>
+        <file>icons/exit.svg</file>
+        <file>icons/donate.svg</file>
+        <file>icons/star.svg</file>
+        <file>icons/search.svg</file>
+        <file>icons/close.svg</file>
+        <file>icons/star-active.svg</file>
+        <file>icons/search-inactive.svg</file>
+        <file>icons/checkbox-indeterminate.svg</file>
+        <file>icons/add-to-reading-list.svg</file>
+        <file>icons/checkbox-active.svg</file>
+        <file>icons/pictures.svg</file>
+        <file>icons/search-filter.svg</file>
+        <file>icons/pause-download.svg</file>
+        <file>icons/folder.svg</file>
+        <file>icons/sidebar.svg</file>
+        <file>icons/share.svg</file>
+        <file>icons/blank.svg</file>
+        <file>icons/print.svg</file>
+        <file>icons/random.svg</file>
+        <file>icons/full-screen-exit.svg</file>
+        <file>icons/full-screen-enter.svg</file>
+        <file>icons/search-toc.svg</file>
+        <file>icons/downloading.svg</file>
+        <file>icons/toc.svg</file>
+        <file>icons/settings.svg</file>
+        <file>icons/filter.svg</file>
+        <file>icons/reading-list.svg</file>
+        <file>icons/reading-list-active.svg</file>
+    </qresource>
+</RCC>

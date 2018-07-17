@@ -82,3 +82,47 @@ QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
 LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
+
+RESOURCES += \
+    resources/kiwix.qrc
+
+DISTFILES += \
+    resources/icons/input-number.svg \
+    resources/icons/minimize.svg \
+    resources/icons/download.svg \
+    resources/icons/checkbox.svg \
+    resources/icons/back.svg \
+    resources/icons/forward.svg \
+    resources/icons/help.svg \
+    resources/icons/tick.svg \
+    resources/icons/menu.svg \
+    resources/icons/more.svg \
+    resources/icons/add.svg \
+    resources/icons/exit.svg \
+    resources/icons/donate.svg \
+    resources/icons/star.svg \
+    resources/icons/search.svg \
+    resources/icons/close.svg \
+    resources/icons/star-active.svg \
+    resources/icons/search-inactive.svg \
+    resources/icons/checkbox-indeterminate.svg \
+    resources/icons/add-to-reading-list.svg \
+    resources/icons/checkbox-active.svg \
+    resources/icons/pictures.svg \
+    resources/icons/search-filter.svg \
+    resources/icons/pause-download.svg \
+    resources/icons/folder.svg \
+    resources/icons/sidebar.svg \
+    resources/icons/share.svg \
+    resources/icons/blank.svg \
+    resources/icons/print.svg \
+    resources/icons/random.svg \
+    resources/icons/full-screen-exit.svg \
+    resources/icons/full-screen-enter.svg \
+    resources/icons/search-toc.svg \
+    resources/icons/downloading.svg \
+    resources/icons/toc.svg \
+    resources/icons/settings.svg \
+    resources/icons/filter.svg \
+    resources/icons/reading-list.svg \
+    resources/icons/reading-list-active.svg
