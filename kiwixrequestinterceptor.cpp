@@ -14,10 +14,12 @@ void KiwixRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
 {
     std::cout << "Intercept request" << std::endl;
     auto url = info.requestUrl();
-    std::cout << "  - " << url.toString().toUtf8().constData() << std::endl;
-    url.setScheme("zim");
-    std::cout << "  + " << url.toString().toUtf8().constData() << std::endl;
-    info.redirect(url);
-
+    auto urlString = url.toString();
+    std::cout << " - " << urlString.toUtf8().constData() << std::endl;
+    if (urlString.startsWith("http://")) {
+      urlString.replace(0, 7, "zim://");
+    }
+    std::cout << " + " << urlString.toUtf8().constData() << std::endl;
+    info.redirect(QUrl(urlString));
 }
 
