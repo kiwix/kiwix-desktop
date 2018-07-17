@@ -8,8 +8,10 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     icon.addFile(":/icons/kiwix/app_icon.svg");
     setWindowIcon(icon);
 
+    setApplicationDisplayName("Kiwix");
+    setApplicationName("Kiwix");
+
     mainWindow = new MainWindow;
-    setApplicationName("kiwix-desktop");
     mainWindow->show();
 }
 
