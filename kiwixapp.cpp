@@ -5,10 +5,14 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
       reader(nullptr)
 {
+    mainWindow = new MainWindow;
+    setApplicationName("kiwix-desktop");
+    mainWindow->show();
 }
 
 KiwixApp::~KiwixApp()
 {
+    delete mainWindow;
     if (reader)
         delete reader;
 }

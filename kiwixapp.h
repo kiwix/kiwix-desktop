@@ -6,6 +6,7 @@
 
 #include <QApplication>
 #include <kiwix/reader.h>
+#include "mainwindow.h"
 
 
 class KiwixApp : public QApplication
@@ -20,6 +21,7 @@ public:
 
 private:
     kiwix::Reader* reader;
+    MainWindow* mainWindow;
 };
 
 #endif // KIWIXAPP_H

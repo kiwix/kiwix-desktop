@@ -1,5 +1,4 @@
 #include "kiwixapp.h"
-#include "mainwindow.h"
 
 #include <QCommandLineParser>
 #include <QFileDialog>
@@ -8,7 +7,6 @@
 int main(int argc, char *argv[])
 {
     KiwixApp a(argc, argv);
-    KiwixApp::setApplicationName("kiwix-desktop");
 
     QCommandLineParser parser;
     parser.addPositionalArgument("zimfile", "The zim file");
@@ -27,8 +25,6 @@ int main(int argc, char *argv[])
     std::string f = zimfile.toUtf8().constData();
     std::cout << f << std::endl;
 
-    MainWindow w;
-    w.show();
     a.openZimFile(zimfile);
 
     return a.exec();
