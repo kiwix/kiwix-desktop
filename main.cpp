@@ -1,5 +1,4 @@
 #include "kiwixapp.h"
-#include "mainwindow.h"
 
 #include <QCommandLineParser>
 #include <QFileDialog>
@@ -7,8 +6,8 @@
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     KiwixApp a(argc, argv);
-    KiwixApp::setApplicationName("kiwix-desktop");
 
     QCommandLineParser parser;
     parser.addPositionalArgument("zimfile", "The zim file");
@@ -17,19 +16,15 @@ int main(int argc, char *argv[])
     QString zimfile;
     auto positionalArguments = parser.positionalArguments();
     if (positionalArguments.size() < 1){
-        zimfile = QFileDialog::getOpenFileName(nullptr,
+        zimfile = QFileDialog::getOpenFileName(a.getMainWindow(),
             "Open Zim",
             QString(),
             "ZimFile (*.zim*)");
     } else {
         zimfile = parser.positionalArguments().at(0);
     }
-    std::string f = zimfile.toUtf8().constData();
-    std::cout << f << std::endl;
-
-    MainWindow w;
-    w.show();
-    a.openZimFile(zimfile);
-
+    if (zimfile.size()) {
+        a.openZimFile(zimfile);
+    }
     return a.exec();
 }

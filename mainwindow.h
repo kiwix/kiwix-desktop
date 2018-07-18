@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "kiwixwebview.h"
+#include "ktabwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -15,12 +17,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void on_pushButton_clicked();
-    void on_urlChanged_triggered(const  QUrl& url);
+    KTabWidget* getTabWidget();
 
 private:
     Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H

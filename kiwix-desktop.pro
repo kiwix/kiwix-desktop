@@ -36,7 +36,10 @@ SOURCES += \
     kiwixapp.cpp \
     blobbuffer.cpp \
     kiwixrequestinterceptor.cpp \
-    kiwixwebview.cpp
+    kiwixwebview.cpp \
+    library.cpp \
+    topwidget.cpp \
+    ktabwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +47,11 @@ HEADERS += \
     kiwixapp.h \
     blobbuffer.h \
     kiwixrequestinterceptor.h \
-    kiwixwebview.h
+    kiwixwebview.h \
+    library.h \
+    topwidget.h \
+    ktabwidget.h \
+    kconstants.h
 
 FORMS += \
         mainwindow.ui
@@ -54,6 +61,7 @@ isEmpty(PREFIX) {
 }
 target.path = $$PREFIX/bin
 INSTALLS += target
+
 
 static {
   PKGCONFIG_OPTION = "--static"
@@ -80,3 +88,6 @@ QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
 LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
+
+RESOURCES += \
+    resources/kiwix.qrc
