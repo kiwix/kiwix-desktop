@@ -11,6 +11,8 @@ KiwixWebView* KTabWidget::createNewTab(bool setCurrent)
     KiwixWebView* webView = new KiwixWebView();
     QObject::connect(webView, &KiwixWebView::titleChanged, this,
                      [=](const QString& str) { setTitleOf(webView, str); });
+    QObject::connect(webView, &KiwixWebView::iconChanged, this,
+                     [=](const QIcon& icon) { setIconOf(webView, icon);  });
     // Ownership of webview is passed to the tabWidget
     addTab(webView, "");
     if (setCurrent) {
@@ -36,4 +38,9 @@ void KTabWidget::setTitleOf(KiwixWebView* webView, const QString& title)
     } else {
         setTabText(indexOf(webView), title);
     }
+}
+
+void KTabWidget::setIconOf(KiwixWebView *webView, const QIcon &icon)
+{
+    setTabIcon(indexOf(webView), icon);
 }
