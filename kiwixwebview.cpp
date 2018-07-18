@@ -8,7 +8,7 @@ KiwixWebView::KiwixWebView(QWidget *parent)
     : QWebEngineView(parent)
 {
     auto profile = page()->profile();
-    auto app = static_cast<KiwixApp*>(KiwixApp::instance());
+    auto app = KiwixApp::instance();
     profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
     profile->setRequestInterceptor(app->getRequestInterceptor());
 }

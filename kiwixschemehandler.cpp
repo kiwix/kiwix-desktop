@@ -20,7 +20,7 @@ KiwixSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
     qDebug() << "Handling request" << qurl;
     if (url[0] == '/')
         url = url.substr(1);
-    auto library = static_cast<KiwixApp*>(KiwixApp::instance())->getLibrary();
+    auto library = KiwixApp::instance()->getLibrary();
     auto zim_id = qurl.host();
     auto reader = library->getReader(zim_id);
     if ( reader == nullptr) {

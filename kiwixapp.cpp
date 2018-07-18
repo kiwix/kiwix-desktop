@@ -53,6 +53,10 @@ KiwixApp::~KiwixApp()
     delete mainWindow;
 }
 
+KiwixApp *KiwixApp::instance()
+{
+    return static_cast<KiwixApp*>(QApplication::instance());
+}
 
 void KiwixApp::openZimFile(const QString &zimfile)
 {
