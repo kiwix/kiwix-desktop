@@ -13,6 +13,7 @@ public:
 
     KiwixWebView* createNewTab(bool setCurrent);
     void openUrl(std::shared_ptr<kiwix::Reader> reader, const QUrl &url, bool newTab);
+    void setTitleOf(KiwixWebView* webView, const QString& title);
 };
 
 #endif // KTABWIDGET_H

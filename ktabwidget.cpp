@@ -9,6 +9,8 @@ KTabWidget::KTabWidget(QWidget *parent) :
 KiwixWebView* KTabWidget::createNewTab(bool setCurrent)
 {
     KiwixWebView* webView = new KiwixWebView();
+    QObject::connect(webView, &KiwixWebView::titleChanged, this,
+                     [=](const QString& str) { setTitleOf(webView, str); });
     // Ownership of webview is passed to the tabWidget
     addTab(webView, "");
     if (setCurrent) {
@@ -24,4 +26,14 @@ void KTabWidget::openUrl(std::shared_ptr<kiwix::Reader> reader, const QUrl& url,
         webView = createNewTab(true);
     }
     webView->setUrl(url);
+}
+
+void KTabWidget::setTitleOf(KiwixWebView* webView, const QString& title)
+{
+    if (title.startsWith("zim://")) {
+        auto url = QUrl(title);
+        setTabText(indexOf(webView), url.path());
+    } else {
+        setTabText(indexOf(webView), title);
+    }
 }
