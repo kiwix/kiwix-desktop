@@ -15,7 +15,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     setDesktopFileName("kiwix.desktop");
 
     QString fontName;
-    if (platformName() == 'windows') {
+    if (platformName() == "windows") {
         QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuib.ttf");
         QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuii.ttf");
         QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuil.ttf");
