@@ -1,6 +1,9 @@
-#include "kiwixapp.h"
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
+#include "kiwixapp.h"
+#include "kconstants.h"
 
 #include <QWebEngineProfile>
 
@@ -10,7 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->tabBar()->setExpanding(false);
-    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);// | Qt::WindowCloseButtonHint);// | Qt::WindowTitleHint);
+#if !SYSTEMTITLEBAR
+    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+#endif
 }
 
 MainWindow::~MainWindow()

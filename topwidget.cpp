@@ -1,4 +1,6 @@
 #include "topwidget.h"
+
+#include "kconstants.h"
 #include "kiwixapp.h"
 
 #include <QMouseEvent>
@@ -15,11 +17,15 @@ TopWidget::TopWidget(QWidget *parent) :
 
     addSeparator();
 
+#if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
+#endif
     fullScreenAction = addAction(QIcon(":/icons/full-screen-enter.svg"), "fullscreen", this, SLOT(toggleFullScreen()));
     normalScreenAction = addAction(QIcon(":/icons/full-screen-exit.svg"), "unfullscreen", this, SLOT(toggleFullScreen()));
     normalScreenAction->setVisible(false);
+#if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/close.svg"), "close", parent, SLOT(close()));
+#endif
     setMovable(false);
 }
 

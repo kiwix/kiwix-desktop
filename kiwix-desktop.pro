@@ -48,7 +48,8 @@ HEADERS += \
     kiwixrequestinterceptor.h \
     kiwixwebview.h \
     library.h \
-    topwidget.h
+    topwidget.h \
+    kconstants.h
 
 FORMS += \
         mainwindow.ui
