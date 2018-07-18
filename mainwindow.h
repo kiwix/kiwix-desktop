@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "kiwixwebview.h"
+#include "ktabwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,11 +17,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void displayReader(std::shared_ptr<kiwix::Reader> reader);
+    KTabWidget* getTabWidget();
 
 private:
     Ui::MainWindow *ui;
-    std::map<std::shared_ptr<kiwix::Reader>, KiwixWebView*> webviews_map;
+
 };
 
 #endif // MAINWINDOW_H

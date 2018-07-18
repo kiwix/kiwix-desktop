@@ -12,7 +12,8 @@ public:
     KiwixWebView(QWidget *parent = Q_NULLPTR);
     virtual ~KiwixWebView();
 
-    void initFromReader(std::shared_ptr<kiwix::Reader> reader);
+protected:
+    virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
 };
 
 #endif // KIWIXWEBVIEW_H

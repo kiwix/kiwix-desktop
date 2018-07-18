@@ -38,7 +38,8 @@ SOURCES += \
     kiwixrequestinterceptor.cpp \
     kiwixwebview.cpp \
     library.cpp \
-    topwidget.cpp
+    topwidget.cpp \
+    ktabwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,6 +50,7 @@ HEADERS += \
     kiwixwebview.h \
     library.h \
     topwidget.h \
+    ktabwidget.h \
     kconstants.h
 
 FORMS += \
@@ -59,6 +61,7 @@ isEmpty(PREFIX) {
 }
 target.path = $$PREFIX/bin
 INSTALLS += target
+
 
 static {
   PKGCONFIG_OPTION = "--static"

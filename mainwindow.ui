@@ -19,7 +19,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <widget class="QTabWidget" name="tabWidget">
+     <widget class="KTabWidget" name="tabWidget">
       <property name="tabShape">
        <enum>QTabWidget::Rounded</enum>
       </property>
@@ -49,6 +49,12 @@
    <class>TopWidget</class>
    <extends>QToolBar</extends>
    <header>topwidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>ktabwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

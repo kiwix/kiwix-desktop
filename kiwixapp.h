@@ -3,6 +3,7 @@
 
 #include "library.h"
 #include "mainwindow.h"
+#include "ktabwidget.h"
 #include "kiwixschemehandler.h"
 #include "kiwixrequestinterceptor.h"
 
@@ -18,16 +19,21 @@ public:
     static KiwixApp* instance();
 
     void openZimFile(const QString& zimfile);
+    void openUrl(const QUrl& url, bool newTab=true);
+
+    void showMessage(const QString& message);
 
     KiwixSchemeHandler* getSchemeHandler() { return &schemeHandler; }
     KiwixRequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
     Library* getLibrary() { return &library; }
     MainWindow* getMainWindow() { return mainWindow; }
+    KTabWidget* getTabWidget() { return tabWidget; }
 
-    void showMessage(const QString& message);
+
 private:
     Library library;
     MainWindow* mainWindow;
+    KTabWidget* tabWidget;
     QErrorMessage* errorDialog;
 
     KiwixSchemeHandler schemeHandler;

@@ -16,11 +16,15 @@ KiwixWebView::KiwixWebView(QWidget *parent)
 KiwixWebView::~KiwixWebView()
 {}
 
-
-void KiwixWebView::initFromReader(std::shared_ptr<kiwix::Reader> reader)
+QWebEngineView* KiwixWebView::createWindow(QWebEnginePage::WebWindowType type)
 {
-    std::string url("zim://");
-    url += reader->getId();
-    url += ".zim/";
-    page()->setUrl(QUrl(QString::fromStdString(url)));
+    if ( type==QWebEnginePage::WebBrowserBackgroundTab
+      || type==QWebEnginePage::WebBrowserTab )
+    {
+        auto tabWidget = KiwixApp::instance()->getTabWidget();
+        return tabWidget->createNewTab(type==QWebEnginePage::WebBrowserTab);
+    }
+    return nullptr;
+}
+
 }
