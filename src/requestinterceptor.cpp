@@ -1,16 +1,16 @@
-#include "kiwixrequestinterceptor.h"
+#include "requestinterceptor.h"
 
 #include <QWebEngineUrlRequestInfo>
 #include <QDebug>
 #include <iostream>
 
-KiwixRequestInterceptor::KiwixRequestInterceptor()
+RequestInterceptor::RequestInterceptor()
 {
 
 }
 
 
-void KiwixRequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
+void RequestInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
 {
     auto url = info.requestUrl();
     auto urlString = url.toString();

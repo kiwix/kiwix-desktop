@@ -1,19 +1,19 @@
 #include "kiwixapp.h"
-#include "kiwixschemehandler.h"
+#include "urlschemehandler.h"
 #include "blobbuffer.h"
 #include <QDebug>
 #include <QWebEngineUrlRequestJob>
 #include <QTextStream>
 #include <iostream>
 
-KiwixSchemeHandler::KiwixSchemeHandler()
+UrlSchemeHandler::UrlSchemeHandler()
 {
 
 }
 
 
 void
-KiwixSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
+UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
 {
     auto qurl = request->requestUrl();
     std::string url = qurl.path().toUtf8().constData();

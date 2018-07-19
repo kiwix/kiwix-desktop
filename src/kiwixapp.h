@@ -3,9 +3,9 @@
 
 #include "library.h"
 #include "mainwindow.h"
-#include "ktabwidget.h"
-#include "kiwixschemehandler.h"
-#include "kiwixrequestinterceptor.h"
+#include "tabwidget.h"
+#include "urlschemehandler.h"
+#include "requestinterceptor.h"
 
 #include <QApplication>
 #include <QErrorMessage>
@@ -23,21 +23,21 @@ public:
 
     void showMessage(const QString& message);
 
-    KiwixSchemeHandler* getSchemeHandler() { return &schemeHandler; }
-    KiwixRequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
+    UrlSchemeHandler* getSchemeHandler() { return &schemeHandler; }
+    RequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
     Library* getLibrary() { return &library; }
     MainWindow* getMainWindow() { return mainWindow; }
-    KTabWidget* getTabWidget() { return tabWidget; }
+    TabWidget* getTabWidget() { return tabWidget; }
 
 
 private:
     Library library;
     MainWindow* mainWindow;
-    KTabWidget* tabWidget;
+    TabWidget* tabWidget;
     QErrorMessage* errorDialog;
 
-    KiwixSchemeHandler schemeHandler;
-    KiwixRequestInterceptor requestIntercetor;
+    UrlSchemeHandler schemeHandler;
+    RequestInterceptor requestIntercetor;
 };
 
 #endif // KIWIXAPP_H

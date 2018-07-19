@@ -32,26 +32,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/kiwixschemehandler.cpp \
     src/kiwixapp.cpp \
     src/blobbuffer.cpp \
-    src/kiwixrequestinterceptor.cpp \
-    src/kiwixwebview.cpp \
     src/library.cpp \
     src/topwidget.cpp \
-    src/ktabwidget.cpp
+    src/requestinterceptor.cpp \
+    src/urlschemehandler.cpp \
+    src/tabwidget.cpp \
+    src/webview.cpp
 
 HEADERS += \
     src/mainwindow.h \
-    src/kiwixschemehandler.h \
     src/kiwixapp.h \
     src/blobbuffer.h \
-    src/kiwixrequestinterceptor.h \
-    src/kiwixwebview.h \
     src/library.h \
     src/topwidget.h \
-    src/ktabwidget.h \
-    src/kconstants.h
+    src/kconstants.h \
+    src/requestinterceptor.h \
+    src/urlschemehandler.h \
+    src/tabwidget.h \
+    src/webview.h
 
 FORMS += \
     ui/mainwindow.ui

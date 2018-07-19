@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "kiwixwebview.h"
-#include "ktabwidget.h"
+#include "webview.h"
+#include "tabwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +17,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    KTabWidget* getTabWidget();
+    TabWidget* getTabWidget();
 
 private:
     Ui::MainWindow *ui;

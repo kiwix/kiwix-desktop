@@ -1,19 +1,19 @@
-#ifndef KIWIXWEBVIEW_H
-#define KIWIXWEBVIEW_H
+#ifndef WEBVIEW_H
+#define WEBVIEW_H
 
 #include <QWebEngineView>
 #include <QIcon>
 
 #include <kiwix/reader.h>
 
-class KiwixWebView : public QWebEngineView
+class WebView : public QWebEngineView
 {
     Q_OBJECT
     Q_PROPERTY(const QIcon icon READ icon NOTIFY iconChanged);
 
 public:
-    KiwixWebView(QWidget *parent = Q_NULLPTR);
-    virtual ~KiwixWebView();
+    WebView(QWidget *parent = Q_NULLPTR);
+    virtual ~WebView();
 
     const QIcon &icon() { return _icon; }
 
@@ -29,4 +29,4 @@ protected:
     QIcon _icon;
 };
 
-#endif // KIWIXWEBVIEW_H
+#endif // WEBVIEW_H

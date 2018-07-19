@@ -1,23 +1,23 @@
-#include "kiwixwebview.h"
+#include "webview.h"
 
 #include <QWebEngineProfile>
 #include <iostream>
 #include "kiwixapp.h"
 
-KiwixWebView::KiwixWebView(QWidget *parent)
+WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
 {
     auto profile = page()->profile();
     auto app = KiwixApp::instance();
     profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
     profile->setRequestInterceptor(app->getRequestInterceptor());
-    QObject::connect(this, &QWebEngineView::urlChanged, this, &KiwixWebView::onUrlChanged);
+    QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
 }
 
-KiwixWebView::~KiwixWebView()
+WebView::~WebView()
 {}
 
-QWebEngineView* KiwixWebView::createWindow(QWebEnginePage::WebWindowType type)
+QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 {
     if ( type==QWebEnginePage::WebBrowserBackgroundTab
       || type==QWebEnginePage::WebBrowserTab )
@@ -28,7 +28,7 @@ QWebEngineView* KiwixWebView::createWindow(QWebEnginePage::WebWindowType type)
     return nullptr;
 }
 
-void KiwixWebView::onUrlChanged(const QUrl& url) {
+void WebView::onUrlChanged(const QUrl& url) {
     if (currentHost != url.host() ) {
         currentHost = url.host();
         auto app = KiwixApp::instance();

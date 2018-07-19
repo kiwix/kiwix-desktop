@@ -23,7 +23,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-KTabWidget* MainWindow::getTabWidget()
+TabWidget* MainWindow::getTabWidget()
 {
     return ui->tabWidget;
 }

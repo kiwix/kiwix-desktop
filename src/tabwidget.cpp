@@ -1,17 +1,17 @@
-#include "ktabwidget.h"
+#include "tabwidget.h"
 
-KTabWidget::KTabWidget(QWidget *parent) :
+TabWidget::TabWidget(QWidget *parent) :
     QTabWidget(parent)
 {
 
 }
 
-KiwixWebView* KTabWidget::createNewTab(bool setCurrent)
+WebView* TabWidget::createNewTab(bool setCurrent)
 {
-    KiwixWebView* webView = new KiwixWebView();
-    QObject::connect(webView, &KiwixWebView::titleChanged, this,
+    WebView* webView = new WebView();
+    QObject::connect(webView, &WebView::titleChanged, this,
                      [=](const QString& str) { setTitleOf(webView, str); });
-    QObject::connect(webView, &KiwixWebView::iconChanged, this,
+    QObject::connect(webView, &WebView::iconChanged, this,
                      [=](const QIcon& icon) { setIconOf(webView, icon);  });
     // Ownership of webview is passed to the tabWidget
     addTab(webView, "");
@@ -21,16 +21,16 @@ KiwixWebView* KTabWidget::createNewTab(bool setCurrent)
     return webView;
 }
 
-void KTabWidget::openUrl(std::shared_ptr<kiwix::Reader> reader, const QUrl& url, bool newTab)
+void TabWidget::openUrl(std::shared_ptr<kiwix::Reader> reader, const QUrl& url, bool newTab)
 {
-    KiwixWebView* webView = nullptr;
+    WebView* webView = nullptr;
     if (newTab || !currentWidget()) {
         webView = createNewTab(true);
     }
     webView->setUrl(url);
 }
 
-void KTabWidget::setTitleOf(KiwixWebView* webView, const QString& title)
+void TabWidget::setTitleOf(WebView* webView, const QString& title)
 {
     if (title.startsWith("zim://")) {
         auto url = QUrl(title);
@@ -40,7 +40,7 @@ void KTabWidget::setTitleOf(KiwixWebView* webView, const QString& title)
     }
 }
 
-void KTabWidget::setIconOf(KiwixWebView *webView, const QIcon &icon)
+void TabWidget::setIconOf(WebView *webView, const QIcon &icon)
 {
     setTabIcon(indexOf(webView), icon);
 }
