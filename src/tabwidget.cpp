@@ -3,7 +3,8 @@
 TabWidget::TabWidget(QWidget *parent) :
     QTabWidget(parent)
 {
-
+    setTabsClosable(true);
+    connect(this, &QTabWidget::tabCloseRequested, this, &TabWidget::closeTab);
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)
@@ -43,4 +44,12 @@ void TabWidget::setTitleOf(WebView* webView, const QString& title)
 void TabWidget::setIconOf(WebView *webView, const QIcon &icon)
 {
     setTabIcon(indexOf(webView), icon);
+}
+
+void TabWidget::closeTab(int index)
+{
+    auto webview = widget(index);
+    removeTab(index);
+    webview->close();
+    delete webview;
 }

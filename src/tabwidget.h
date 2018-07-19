@@ -14,6 +14,9 @@ public:
     void openUrl(const QUrl &url, bool newTab);
     void setTitleOf(WebView* webView, const QString& title);
     void setIconOf(WebView* webView, const QIcon& icon);
+
+public slots:
+    void closeTab(int index);
 };
 
 #endif // TABWIDGET_H
