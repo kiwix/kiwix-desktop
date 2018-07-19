@@ -39,7 +39,8 @@ SOURCES += \
     src/requestinterceptor.cpp \
     src/urlschemehandler.cpp \
     src/tabwidget.cpp \
-    src/webview.cpp
+    src/webview.cpp \
+    src/searchbar.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -51,7 +52,8 @@ HEADERS += \
     src/requestinterceptor.h \
     src/urlschemehandler.h \
     src/tabwidget.h \
-    src/webview.h
+    src/webview.h \
+    src/searchbar.h
 
 FORMS += \
     ui/mainwindow.ui

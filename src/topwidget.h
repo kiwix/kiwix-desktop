@@ -5,6 +5,8 @@
 #include <QLineEdit>
 #include <QWebEnginePage>
 
+#include "searchbar.h"
+
 class TopWidget : public QToolBar
 {
     Q_OBJECT
@@ -17,7 +19,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 
 private:
-    QLineEdit m_searchEntry;
+    SearchBar m_searchEntry;
     QAction* mp_historyBackAction;
     QAction* mp_historyForwardAction;
     QAction* mp_fullScreenAction;
