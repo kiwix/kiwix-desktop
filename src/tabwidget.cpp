@@ -21,7 +21,7 @@ WebView* TabWidget::createNewTab(bool setCurrent)
     return webView;
 }
 
-void TabWidget::openUrl(std::shared_ptr<kiwix::Reader> reader, const QUrl& url, bool newTab)
+void TabWidget::openUrl(const QUrl& url, bool newTab)
 {
     WebView* webView = nullptr;
     if (newTab || !currentWidget()) {

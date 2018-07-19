@@ -72,9 +72,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
 }
 
 void KiwixApp::openUrl(const QUrl &url, bool newTab) {
-    auto reader = library.getReader(url.host());
-    Q_ASSERT(reader);
-    tabWidget->openUrl(reader, url, newTab);
+    tabWidget->openUrl(url, newTab);
 }
 
 void KiwixApp::showMessage(const QString &message)
