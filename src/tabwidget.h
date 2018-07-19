@@ -7,6 +7,7 @@
 
 class TabWidget : public QTabWidget
 {
+    Q_OBJECT
 public:
     TabWidget(QWidget* parent=nullptr);
 
@@ -17,8 +18,13 @@ public:
     void setTitleOf(WebView* webView, const QString& title);
     void setIconOf(WebView* webView, const QIcon& icon);
 
+    void triggerWebPageAction(QWebEnginePage::WebAction action);
+signals:
+    void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
+
 public slots:
     void closeTab(int index);
+    void onCurrentChanged(int index);
 };
 
 #endif // TABWIDGET_H

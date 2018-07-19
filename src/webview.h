@@ -15,6 +15,7 @@ public:
     WebView(QWidget *parent = Q_NULLPTR);
     virtual ~WebView();
 
+    bool isWebActionEnabled(QWebEnginePage::WebAction webAction) const;
     const QIcon &icon() { return _icon; }
 
 public slots:

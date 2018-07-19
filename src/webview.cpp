@@ -1,5 +1,6 @@
 #include "webview.h"
 
+#include <QAction>
 #include <QWebEngineProfile>
 #include <iostream>
 #include "kiwixapp.h"
@@ -16,6 +17,11 @@ WebView::WebView(QWidget *parent)
 
 WebView::~WebView()
 {}
+
+bool WebView::isWebActionEnabled(QWebEnginePage::WebAction webAction) const
+{
+    return page()->action(webAction)->isEnabled();
+}
 
 QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 {

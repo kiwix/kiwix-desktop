@@ -9,8 +9,22 @@ TopWidget::TopWidget(QWidget *parent) :
     QToolBar(parent),
     fullScreen(false)
 {
-    addAction(QIcon(":/icons/back.svg"), "back");
-    addAction(QIcon(":/icons/forward.svg"), "forward");
+    m_historyBackAction = new QAction(this);
+    m_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
+    m_historyBackAction->setText("back");
+    m_historyBackAction->setToolTip("back");
+    connect(m_historyBackAction, &QAction::triggered, [this](){
+        KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
+    });
+    addAction(m_historyBackAction);
+    m_historyForwardAction = new QAction(this);
+    m_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
+    m_historyForwardAction->setText("forward");
+    m_historyForwardAction->setToolTip("forward");
+    connect(m_historyForwardAction, &QAction::triggered, [this](){
+        KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
+    });
+    addAction(m_historyForwardAction);
     addSeparator();
 
     addWidget(&searchEntry);
@@ -38,6 +52,20 @@ void TopWidget::toggleFullScreen() {
     fullScreen = !fullScreen;
     fullScreenAction->setVisible(!fullScreen);
     normalScreenAction->setVisible(fullScreen);
+}
+
+void TopWidget::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled)
+{
+    switch (action) {
+    case QWebEnginePage::Back:
+        m_historyBackAction->setEnabled(enabled);
+        break;
+    case QWebEnginePage::Forward:
+        m_historyForwardAction->setEnabled(enabled);
+        break;
+    default:
+        break;
+    }
 }
 
 

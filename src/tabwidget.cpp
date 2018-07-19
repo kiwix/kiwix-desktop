@@ -5,6 +5,7 @@ TabWidget::TabWidget(QWidget *parent) :
 {
     setTabsClosable(true);
     connect(this, &QTabWidget::tabCloseRequested, this, &TabWidget::closeTab);
+    connect(this, &QTabWidget::currentChanged, this, &TabWidget::onCurrentChanged);
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)
@@ -46,10 +47,28 @@ void TabWidget::setIconOf(WebView *webView, const QIcon &icon)
     setTabIcon(indexOf(webView), icon);
 }
 
+void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action)
+{
+    if (auto webView = currentWidget()) {
+        webView->triggerPageAction(action);
+        webView->setFocus();
+    }
+}
+
 void TabWidget::closeTab(int index)
 {
     auto webview = widget(index);
     removeTab(index);
     webview->close();
     delete webview;
+}
+
+void TabWidget::onCurrentChanged(int index)
+{
+    if (index != 1)
+    {
+        auto view = widget(index);
+        emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
+        emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
+    }
 }
