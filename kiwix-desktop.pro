@@ -30,31 +30,31 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
-    kiwixschemehandler.cpp \
-    kiwixapp.cpp \
-    blobbuffer.cpp \
-    kiwixrequestinterceptor.cpp \
-    kiwixwebview.cpp \
-    library.cpp \
-    topwidget.cpp \
-    ktabwidget.cpp
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/kiwixschemehandler.cpp \
+    src/kiwixapp.cpp \
+    src/blobbuffer.cpp \
+    src/kiwixrequestinterceptor.cpp \
+    src/kiwixwebview.cpp \
+    src/library.cpp \
+    src/topwidget.cpp \
+    src/ktabwidget.cpp
 
 HEADERS += \
-        mainwindow.h \
-    kiwixschemehandler.h \
-    kiwixapp.h \
-    blobbuffer.h \
-    kiwixrequestinterceptor.h \
-    kiwixwebview.h \
-    library.h \
-    topwidget.h \
-    ktabwidget.h \
-    kconstants.h
+    src/mainwindow.h \
+    src/kiwixschemehandler.h \
+    src/kiwixapp.h \
+    src/blobbuffer.h \
+    src/kiwixrequestinterceptor.h \
+    src/kiwixwebview.h \
+    src/library.h \
+    src/topwidget.h \
+    src/ktabwidget.h \
+    src/kconstants.h
 
 FORMS += \
-        mainwindow.ui
+    ui/mainwindow.ui
 
 isEmpty(PREFIX) {
  PREFIX = /usr/local

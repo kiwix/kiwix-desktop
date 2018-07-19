@@ -48,12 +48,12 @@
   <customwidget>
    <class>TopWidget</class>
    <extends>QToolBar</extends>
-   <header>topwidget.h</header>
+   <header>src/topwidget.h</header>
   </customwidget>
   <customwidget>
    <class>KTabWidget</class>
    <extends>QTabWidget</extends>
-   <header>ktabwidget.h</header>
+   <header>src/ktabwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
