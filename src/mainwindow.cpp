@@ -9,10 +9,10 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    mp_ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    ui->tabWidget->tabBar()->setExpanding(false);
+    mp_ui->setupUi(this);
+    mp_ui->tabWidget->tabBar()->setExpanding(false);
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
@@ -20,11 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    delete mp_ui;
 }
 
 TabWidget* MainWindow::getTabWidget()
 {
-    return ui->tabWidget;
+    return mp_ui->tabWidget;
 }
 

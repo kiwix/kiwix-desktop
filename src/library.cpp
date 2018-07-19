@@ -8,8 +8,8 @@ Library::Library()
 
 QString Library::openBook(const QString &zimPath)
 {
-    for(auto it=readers_map.begin();
-        it != readers_map.end();
+    for(auto it=m_readersMap.begin();
+        it != m_readersMap.end();
         it++)
     {
         if(QString::fromStdString(it->second->getZimFilePath()) == zimPath)
@@ -19,14 +19,14 @@ QString Library::openBook(const QString &zimPath)
     const std::string zimPath_ = zimPath.toLocal8Bit().constData();
     auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(zimPath_));
     auto id = QString::fromStdString(reader->getId() + ".zim");
-    readers_map[id] = reader;
+    m_readersMap[id] = reader;
     return id;
 }
 
 std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
 {
-    auto it = readers_map.find(zimId);
-    if (it != readers_map.end())
+    auto it = m_readersMap.find(zimId);
+    if (it != m_readersMap.end())
         return it->second;
     return nullptr;
 }

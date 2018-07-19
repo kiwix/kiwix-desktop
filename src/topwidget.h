@@ -10,20 +10,21 @@ class TopWidget : public QToolBar
     Q_OBJECT
 public:
     explicit TopWidget(QWidget *parent = nullptr);
+    virtual ~TopWidget();
 
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
 private:
-    QLineEdit searchEntry;
-    QAction* m_historyBackAction;
-    QAction* m_historyForwardAction;
-    QAction* fullScreenAction;
-    QAction* normalScreenAction;
-    bool fullScreen;
-    QPoint m_pCursor;
-    ulong timestamp;
+    QLineEdit m_searchEntry;
+    QAction* mp_historyBackAction;
+    QAction* mp_historyForwardAction;
+    QAction* mp_fullScreenAction;
+    QAction* mp_normalScreenAction;
+    bool m_fullScreen;
+    QPoint m_cursorPos;
+    ulong m_timestamp;
 
 protected slots:
     void toggleFullScreen();

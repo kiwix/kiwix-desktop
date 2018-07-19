@@ -35,15 +35,15 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 }
 
 void WebView::onUrlChanged(const QUrl& url) {
-    if (currentHost != url.host() ) {
-        currentHost = url.host();
+    if (m_currentHost != url.host() ) {
+        m_currentHost = url.host();
         auto app = KiwixApp::instance();
-        auto reader = app->getLibrary()->getReader(currentHost);
+        auto reader = app->getLibrary()->getReader(m_currentHost);
         std::string favicon, _mimetype;
         reader->getFavicon(favicon, _mimetype);
         QPixmap pixmap;
         pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
-        _icon = QIcon(pixmap);
-        emit iconChanged(_icon);
+        m_icon = QIcon(pixmap);
+        emit iconChanged(m_icon);
     }
 }

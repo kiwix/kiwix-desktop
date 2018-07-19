@@ -1,7 +1,7 @@
 #include "blobbuffer.h"
 
 BlobBuffer::BlobBuffer(zim::Blob blob)
-    : blob(blob)
+    : m_blob(blob)
 {
     setData(blob.data(), blob.size());
 }

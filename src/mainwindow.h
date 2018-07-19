@@ -20,7 +20,7 @@ public:
     TabWidget* getTabWidget();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow *mp_ui;
 
 };
 

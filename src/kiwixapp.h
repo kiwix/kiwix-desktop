@@ -23,21 +23,21 @@ public:
 
     void showMessage(const QString& message);
 
-    UrlSchemeHandler* getSchemeHandler() { return &schemeHandler; }
-    RequestInterceptor* getRequestInterceptor() { return &requestIntercetor; }
-    Library* getLibrary() { return &library; }
-    MainWindow* getMainWindow() { return mainWindow; }
-    TabWidget* getTabWidget() { return tabWidget; }
+    UrlSchemeHandler* getSchemeHandler() { return &m_schemeHandler; }
+    RequestInterceptor* getRequestInterceptor() { return &m_requestInterceptor; }
+    Library* getLibrary() { return &m_library; }
+    MainWindow* getMainWindow() { return mp_mainWindow; }
+    TabWidget* getTabWidget() { return mp_tabWidget; }
 
 
 private:
-    Library library;
-    MainWindow* mainWindow;
-    TabWidget* tabWidget;
-    QErrorMessage* errorDialog;
+    Library m_library;
+    MainWindow* mp_mainWindow;
+    TabWidget* mp_tabWidget;
+    QErrorMessage* mp_errorDialog;
 
-    UrlSchemeHandler schemeHandler;
-    RequestInterceptor requestIntercetor;
+    UrlSchemeHandler m_schemeHandler;
+    RequestInterceptor m_requestInterceptor;
 };
 
 #endif // KIWIXAPP_H

@@ -16,7 +16,7 @@ public:
     virtual ~WebView();
 
     bool isWebActionEnabled(QWebEnginePage::WebAction webAction) const;
-    const QIcon &icon() { return _icon; }
+    const QIcon &icon() { return m_icon; }
 
 public slots:
     void onUrlChanged(const QUrl& url);
@@ -26,8 +26,8 @@ signals:
 
 protected:
     virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
-    QString currentHost;
-    QIcon _icon;
+    QString m_currentHost;
+    QIcon m_icon;
 };
 
 #endif // WEBVIEW_H

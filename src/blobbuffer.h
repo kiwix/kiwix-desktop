@@ -7,11 +7,11 @@
 class BlobBuffer : public QBuffer
 {
 public:
-    BlobBuffer(zim::Blob blob);
+    BlobBuffer(zim::Blob m_blob);
     virtual ~BlobBuffer() = default;
 
 private:
-    zim::Blob blob;
+    zim::Blob m_blob;
 };
 
 #endif // BLOBBUFFER_H

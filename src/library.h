@@ -12,7 +12,7 @@ public:
     QString openBook(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
 private:
-    std::map<QString, std::shared_ptr<kiwix::Reader>> readers_map;
+    std::map<QString, std::shared_ptr<kiwix::Reader>> m_readersMap;
 };
 
 #endif // LIBRARY_H

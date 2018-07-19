@@ -7,61 +7,69 @@
 
 TopWidget::TopWidget(QWidget *parent) :
     QToolBar(parent),
-    fullScreen(false)
+    m_fullScreen(false)
 {
-    m_historyBackAction = new QAction(this);
-    m_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
-    m_historyBackAction->setText("back");
-    m_historyBackAction->setToolTip("back");
-    connect(m_historyBackAction, &QAction::triggered, [this](){
+    mp_historyBackAction = new QAction(this);
+    mp_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
+    mp_historyBackAction->setText("back");
+    mp_historyBackAction->setToolTip("back");
+    connect(mp_historyBackAction, &QAction::triggered, [this](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
-    addAction(m_historyBackAction);
-    m_historyForwardAction = new QAction(this);
-    m_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
-    m_historyForwardAction->setText("forward");
-    m_historyForwardAction->setToolTip("forward");
-    connect(m_historyForwardAction, &QAction::triggered, [this](){
+    addAction(mp_historyBackAction);
+    mp_historyForwardAction = new QAction(this);
+    mp_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
+    mp_historyForwardAction->setText("forward");
+    mp_historyForwardAction->setToolTip("forward");
+    connect(mp_historyForwardAction, &QAction::triggered, [this](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
-    addAction(m_historyForwardAction);
+    addAction(mp_historyForwardAction);
     addSeparator();
 
-    addWidget(&searchEntry);
+    addWidget(&m_searchEntry);
 
     addSeparator();
 
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
 #endif
-    fullScreenAction = addAction(QIcon(":/icons/full-screen-enter.svg"), "fullscreen", this, SLOT(toggleFullScreen()));
-    normalScreenAction = addAction(QIcon(":/icons/full-screen-exit.svg"), "unfullscreen", this, SLOT(toggleFullScreen()));
-    normalScreenAction->setVisible(false);
+    mp_fullScreenAction = addAction(QIcon(":/icons/full-screen-enter.svg"), "fullscreen", this, SLOT(toggleFullScreen()));
+    mp_normalScreenAction = addAction(QIcon(":/icons/full-screen-exit.svg"), "unfullscreen", this, SLOT(toggleFullScreen()));
+    mp_normalScreenAction->setVisible(false);
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/close.svg"), "close", parent, SLOT(close()));
 #endif
     setMovable(false);
 }
 
+TopWidget::~TopWidget()
+{
+    delete mp_historyBackAction;
+    delete mp_historyForwardAction;
+    delete mp_fullScreenAction;
+    delete mp_normalScreenAction;
+}
+
 
 void TopWidget::toggleFullScreen() {
-    if (fullScreen)
+    if (m_fullScreen)
         parentWidget()->showNormal();
     else
         parentWidget()->showFullScreen();
-    fullScreen = !fullScreen;
-    fullScreenAction->setVisible(!fullScreen);
-    normalScreenAction->setVisible(fullScreen);
+    m_fullScreen = !m_fullScreen;
+    mp_fullScreenAction->setVisible(!m_fullScreen);
+    mp_normalScreenAction->setVisible(m_fullScreen);
 }
 
 void TopWidget::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled)
 {
     switch (action) {
     case QWebEnginePage::Back:
-        m_historyBackAction->setEnabled(enabled);
+        mp_historyBackAction->setEnabled(enabled);
         break;
     case QWebEnginePage::Forward:
-        m_historyForwardAction->setEnabled(enabled);
+        mp_historyForwardAction->setEnabled(enabled);
         break;
     default:
         break;
@@ -73,17 +81,17 @@ void TopWidget::mousePressEvent(QMouseEvent *event) {
     if(event->button() != Qt::LeftButton)
         return;
 
-    m_pCursor = event->globalPos() + frameGeometry().topLeft() - parentWidget()->frameGeometry().topLeft();
-    timestamp = event->timestamp();
+    m_cursorPos = event->globalPos() + frameGeometry().topLeft() - parentWidget()->frameGeometry().topLeft();
+    m_timestamp = event->timestamp();
     event->accept();
 }
 
 void TopWidget::mouseMoveEvent(QMouseEvent *event) {
-    if(event->timestamp() <= timestamp)
+    if(event->timestamp() <= m_timestamp)
         return;
 
-    timestamp = event->timestamp();
-    auto delta = event->globalPos() - m_pCursor;
+    m_timestamp = event->timestamp();
+    auto delta = event->globalPos() - m_cursorPos;
     parentWidget()->move(delta);
     event->accept();
 }

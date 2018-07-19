@@ -41,17 +41,17 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     auto font = QFont(fontName);
     setFont(font);
-    mainWindow = new MainWindow;
-    mainWindow->show();
-    tabWidget = mainWindow->getTabWidget();
+    mp_mainWindow = new MainWindow;
+    mp_mainWindow->show();
+    mp_tabWidget = mp_mainWindow->getTabWidget();
 
-    errorDialog = new QErrorMessage(mainWindow);
+    mp_errorDialog = new QErrorMessage(mp_mainWindow);
 }
 
 KiwixApp::~KiwixApp()
 {
-    delete errorDialog;
-    delete mainWindow;
+    delete mp_errorDialog;
+    delete mp_mainWindow;
 }
 
 KiwixApp *KiwixApp::instance()
@@ -63,7 +63,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
 {
     QString zimId;
     try {
-        zimId = library.openBook(zimfile);
+        zimId = m_library.openBook(zimfile);
     } catch (const std::exception& e) {
         showMessage("Cannot open " + zimfile + ": \n" + e.what());
         return;
@@ -72,10 +72,10 @@ void KiwixApp::openZimFile(const QString &zimfile)
 }
 
 void KiwixApp::openUrl(const QUrl &url, bool newTab) {
-    tabWidget->openUrl(url, newTab);
+    mp_tabWidget->openUrl(url, newTab);
 }
 
 void KiwixApp::showMessage(const QString &message)
 {
-    errorDialog->showMessage(message);
+    mp_errorDialog->showMessage(message);
 }
