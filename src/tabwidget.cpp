@@ -1,6 +1,7 @@
 #include "tabwidget.h"
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
+#define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentWidget();}
 
 TabWidget::TabWidget(QWidget *parent) :
@@ -18,6 +19,12 @@ WebView* TabWidget::createNewTab(bool setCurrent)
             [=](const QString& str) { setTitleOf(str, webView); });
     connect(webView, &WebView::iconChanged, this,
             [=](const QIcon& icon) { setIconOf(icon, webView);  });
+    connect(webView, &WebView::zimIdChanged, this,
+            [=](const QString& zimId) {
+                QUITIFNOTCURRENT(webView);
+                emit currentZimIdChanged(zimId);
+            }
+    );
     // Ownership of webview is passed to the tabWidget
     addTab(webView, "");
     if (setCurrent) {
@@ -50,6 +57,11 @@ void TabWidget::setIconOf(const QIcon &icon, WebView *webView)
 {
     CURRENTIFNULL(webView);
     setTabIcon(indexOf(webView), icon);
+}
+
+const QString &TabWidget::currentZimId()
+{
+    return currentWidget()->zimId();
 }
 
 void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *webView)

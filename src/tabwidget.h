@@ -8,6 +8,7 @@
 class TabWidget : public QTabWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString currentZimId READ currentZimId NOTIFY currentZimIdChanged)
 public:
     TabWidget(QWidget* parent=nullptr);
 
@@ -19,10 +20,12 @@ public:
 // Redirect call to sub-webView
     void setTitleOf(const QString& title, WebView* webView=nullptr);
     void setIconOf(const QIcon& icon, WebView* webView=nullptr);
+    const QString& currentZimId();
 
     void triggerWebPageAction(QWebEnginePage::WebAction action, WebView* webView=nullptr);
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
+    void currentZimIdChanged(const QString& zimId);
 
 public slots:
     void closeTab(int index);
