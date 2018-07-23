@@ -59,20 +59,25 @@ void SearchBar::openTitle()
     QString title = text();
     clear();
     auto tabWidget = KiwixApp::instance()->getTabWidget();
-    auto qurl = tabWidget->currentWidget()->url();
-    auto reader = KiwixApp::instance()->getLibrary()->getReader(qurl.host());
+    auto zimId = tabWidget->currentZimId();
+    auto reader = KiwixApp::instance()->getLibrary()->getReader(zimId);
     if ( reader == nullptr) {
         return;
     }
-    std::string url;
-    if (reader->getPageUrlFromTitle(title.toStdString(), url))
+    std::string path;
+    try {
+        auto entry = reader->getEntryFromTitle(title.toStdString());
+        path = entry.getPath();
+    } catch (kiwix::NoEntry& e)
     {
-        QUrl qurl_;
-        qurl_.setScheme("zim");
-        qurl_.setHost(qurl.host());
-        qurl_.setPath("/" + QString::fromStdString(url));
-        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl_, true);});
+        return;
     }
+
+    QUrl qurl;
+    qurl.setScheme("zim");
+    qurl.setHost(qurl.host());
+    qurl.setPath("/" + QString::fromStdString(path));
+    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
 }
 
 void SearchBar::openCompletion(const QModelIndex &index)
