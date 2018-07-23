@@ -1,5 +1,8 @@
 #include "tabwidget.h"
 
+#define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
+#define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentWidget();}
+
 TabWidget::TabWidget(QWidget *parent) :
     QTabWidget(parent)
 {
@@ -11,10 +14,10 @@ TabWidget::TabWidget(QWidget *parent) :
 WebView* TabWidget::createNewTab(bool setCurrent)
 {
     WebView* webView = new WebView();
-    QObject::connect(webView, &WebView::titleChanged, this,
-                     [=](const QString& str) { setTitleOf(webView, str); });
-    QObject::connect(webView, &WebView::iconChanged, this,
-                     [=](const QIcon& icon) { setIconOf(webView, icon);  });
+    connect(webView, &WebView::titleChanged, this,
+            [=](const QString& str) { setTitleOf(str, webView); });
+    connect(webView, &WebView::iconChanged, this,
+            [=](const QIcon& icon) { setIconOf(icon, webView);  });
     // Ownership of webview is passed to the tabWidget
     addTab(webView, "");
     if (setCurrent) {
@@ -32,8 +35,9 @@ void TabWidget::openUrl(const QUrl& url, bool newTab)
     webView->setUrl(url);
 }
 
-void TabWidget::setTitleOf(WebView* webView, const QString& title)
+void TabWidget::setTitleOf(const QString& title, WebView* webView)
 {
+    CURRENTIFNULL(webView);
     if (title.startsWith("zim://")) {
         auto url = QUrl(title);
         setTabText(indexOf(webView), url.path());
@@ -42,17 +46,18 @@ void TabWidget::setTitleOf(WebView* webView, const QString& title)
     }
 }
 
-void TabWidget::setIconOf(WebView *webView, const QIcon &icon)
+void TabWidget::setIconOf(const QIcon &icon, WebView *webView)
 {
+    CURRENTIFNULL(webView);
     setTabIcon(indexOf(webView), icon);
 }
 
-void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action)
+void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *webView)
 {
-    if (auto webView = currentWidget()) {
-        webView->triggerPageAction(action);
-        webView->setFocus();
-    }
+    CURRENTIFNULL(webView);
+    QUITIFNULL(webView);
+    webView->triggerPageAction(action);
+    webView->setFocus();
 }
 
 void TabWidget::closeTab(int index)

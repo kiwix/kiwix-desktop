@@ -14,11 +14,13 @@ public:
     WebView* createNewTab(bool setCurrent);
     WebView* widget(int index) { return static_cast<WebView*>(QTabWidget::widget(index)); }
     WebView* currentWidget() { return static_cast<WebView*>(QTabWidget::currentWidget()); }
-    void openUrl(const QUrl &url, bool newTab);
-    void setTitleOf(WebView* webView, const QString& title);
-    void setIconOf(WebView* webView, const QIcon& icon);
 
-    void triggerWebPageAction(QWebEnginePage::WebAction action);
+    void openUrl(const QUrl &url, bool newTab);
+// Redirect call to sub-webView
+    void setTitleOf(const QString& title, WebView* webView=nullptr);
+    void setIconOf(const QIcon& icon, WebView* webView=nullptr);
+
+    void triggerWebPageAction(QWebEnginePage::WebAction action, WebView* webView=nullptr);
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
 
