@@ -6,18 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>873</width>
-    <height>984</height>
+    <width>1000</width>
+    <height>961</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="documentMode">
+   <bool>true</bool>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="TabWidget" name="tabWidget">
       <property name="tabShape">
