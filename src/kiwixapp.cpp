@@ -2,6 +2,8 @@
 #include "zim/error.h"
 
 #include <QFontDatabase>
+#include <QStyleFactory>
+#include <QFile>
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv)
@@ -13,6 +15,15 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     setApplicationDisplayName("Kiwix");
     setApplicationName("Kiwix");
     setDesktopFileName("kiwix.desktop");
+
+    setStyle(QStyleFactory::create("Windows"));
+    QFile styleFile(":/css/style.css");
+    styleFile.open(QIODevice::ReadOnly);
+    auto byteContent = styleFile.readAll();
+    styleFile.close();
+    QString style(byteContent);
+    setStyleSheet(style);
+
 
     QString fontName;
     if (platformName() == "windows") {

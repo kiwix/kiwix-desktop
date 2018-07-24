@@ -8,6 +8,9 @@ TabWidget::TabWidget(QWidget *parent) :
     QTabWidget(parent)
 {
     setTabsClosable(true);
+    setElideMode(Qt::ElideNone);
+    setDocumentMode(true);
+    setFocusPolicy(Qt::NoFocus);
     connect(this, &QTabWidget::tabCloseRequested, this, &TabWidget::closeTab);
     connect(this, &QTabWidget::currentChanged, this, &TabWidget::onCurrentChanged);
 }

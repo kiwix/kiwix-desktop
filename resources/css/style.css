@@ -1,0 +1,70 @@
+QWidget {
+    background-color: #EAECF0;
+}
+
+
+/* ------------------------------------
+   The topBar
+*/
+
+TopWidget {
+    min-height: 48px;
+    max-height: 48px;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+}
+
+TopWidget::separator {
+    background: none;
+    border: none;
+    icon: none;
+    width: 40px;
+}
+
+QToolButton {
+    background: none;
+    height: 100%;
+    width: 40px;
+    border: none;
+}
+
+/* -----------------------------------------
+    TabWidget
+*/
+
+QTabBar {
+    font-size: 16px;
+    icon-size: 40px;
+}
+
+QTabBar::tear {
+     background-color: blue;
+}
+
+QTabWidget::pane {
+    top: -2px;
+    border: none;
+    border-top: 2px solid #ccc;
+}
+
+QTabBar::tab {
+    min-width: 205px;
+    max-width: 205px;
+    border: none;
+    border-right: 2px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0px;
+    padding: 2px;
+}
+
+QTabBar::tab:selected {
+    background-color: white;
+    border-bottom: 2px solid white;
+}
+
+QTabBar::close-button {
+    image: url(":/icons/close.svg");
+    subcontrol-position: right;
+}
