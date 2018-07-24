@@ -30,6 +30,19 @@ QToolButton {
     border: none;
 }
 
+SearchBar {
+    background-color: white;
+    background-image: url(":/icons/search.svg");
+    background-repeat: no-repeat;
+    padding: 2px 2px 2px 40px;
+    max-height: 40px;
+    margin: 5px;
+    color: #666;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+
 /* -----------------------------------------
     TabWidget
 */

@@ -7,12 +7,9 @@
 
 SearchBar::SearchBar(QWidget *parent) :
     QLineEdit(parent),
-    m_completer(&m_completionModel, this),
-    m_icon(":icons/search.svg")
+    m_completer(&m_completionModel, this)
 {
-    setTextMargins(37, 1, 1, 1);
     setPlaceholderText("Search");
-    setClearButtonEnabled(true);
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     setCompleter(&m_completer);
     connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);
@@ -23,14 +20,6 @@ SearchBar::SearchBar(QWidget *parent) :
 #else
     connect(this, &QLineEdit::returnPressed, this, &SearchBar::openTitle);
 #endif
-}
-
-void SearchBar::paintEvent(QPaintEvent *event)
-{
-    QLineEdit::paintEvent(event);
-    QPainter painter(this);
-    QPixmap pxm = m_icon.pixmap(height() - 6, height() - 6);
-    painter.drawPixmap(3, 3, pxm);
 }
 
 void SearchBar::updateCompletion(const QString &text)

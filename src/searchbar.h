@@ -12,15 +12,11 @@ class SearchBar : public QLineEdit
 public:
     SearchBar(QWidget *parent = nullptr);
 
-protected:
-    virtual void paintEvent(QPaintEvent *event);
-
 private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
     std::vector<std::string> m_urlList;
     QString m_currentHost;
-    QIcon m_icon;
 
 private slots:
     void updateCompletion(const QString& text);
