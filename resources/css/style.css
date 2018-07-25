@@ -43,6 +43,54 @@ SearchBar {
     border-radius: 5px;
 }
 
+/* ----------------------------------------
+   Menu
+*/
+
+TopWidget QToolButton:pressed {
+    background-color: #D9E9FF;
+    border: 1px solid #3366CC;
+    border-radius: 2px;
+}
+
+TopWidget QToolButton::menu-button {
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+}
+
+TopWidget QToolButton::menu-arrow {
+    image: none;
+}
+
+QMenu {
+    border: none;
+    min-width: 320px;
+}
+
+QMenu::item {
+    min-width: 320px;
+    min-height: 40px;
+    max-height: 40px;
+    border: 1px solid transparent;
+    padding: 2px 12px 2px 40px;
+}
+
+QMenu::icon {
+    min-width: 40px;
+    min-height: 40px;
+}
+
+QMenu::item:selected {
+    background-color: #D9E9FF;
+    border: 1px solid #3366CC;
+}
+
+QMenu::indicator {
+    color: #666666;
+    width: 13px;
+    height: 13px;
+}
+
 /* -----------------------------------------
     TabWidget
 */
