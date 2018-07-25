@@ -218,5 +218,4 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(ExitAction, "exit", "Exit");
     SET_SHORTCUT(ExitAction, QKeySequence::Quit);
-    DISABLE_ACTION(ExitAction);
 }

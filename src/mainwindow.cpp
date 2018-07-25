@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     mp_ui->setupUi(this);
     mp_ui->tabWidget->tabBar()->setExpanding(false);
+    auto app = KiwixApp::instance();
+    connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
+            this, &QMainWindow::close);
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
