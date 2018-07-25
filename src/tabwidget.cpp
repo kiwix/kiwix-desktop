@@ -97,7 +97,7 @@ void TabWidget::closeTab(int index)
 
 void TabWidget::onCurrentChanged(int index)
 {
-    if (index != 1)
+    if (index != -1)
     {
         auto view = widget(index);
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
