@@ -40,7 +40,8 @@ SOURCES += \
     src/urlschemehandler.cpp \
     src/tabwidget.cpp \
     src/webview.cpp \
-    src/searchbar.cpp
+    src/searchbar.cpp \
+    src/mainmenu.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -53,7 +54,8 @@ HEADERS += \
     src/urlschemehandler.h \
     src/tabwidget.h \
     src/webview.h \
-    src/searchbar.h
+    src/searchbar.h \
+    src/mainmenu.h
 
 FORMS += \
     ui/mainwindow.ui

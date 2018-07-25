@@ -2,8 +2,10 @@
 
 #include "kconstants.h"
 #include "kiwixapp.h"
+#include "mainmenu.h"
 
 #include <QMouseEvent>
+#include <QAction>
 
 TopWidget::TopWidget(QWidget *parent) :
     QToolBar(parent),
@@ -30,6 +32,15 @@ TopWidget::TopWidget(QWidget *parent) :
     addWidget(&m_searchEntry);
 
     addSeparator();
+
+
+    QMenu* menu = new MainMenu();
+    QAction* menuAction = new QAction(this);
+    menuAction->setIcon(QIcon(":/icons/more.svg"));
+    menuAction->setMenu(menu);
+
+    addAction(menuAction);
+
 
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
