@@ -126,7 +126,6 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(CloseTabAction, "Close tab");
     SET_SHORTCUT(CloseTabAction, QKeySequence::Close);
-    DISABLE_ACTION(CloseTabAction);
 
     CREATE_ACTION(ReopenClosedTabAction, "Reopen closed tab");
     SET_SHORTCUT(ReopenClosedTabAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));

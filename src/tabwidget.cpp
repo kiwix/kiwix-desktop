@@ -23,6 +23,8 @@ TabWidget::TabWidget(QWidget *parent) :
                 auto widget = this->createNewTab(true);
                 widget->setUrl(url);
           });
+    connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
+            this, &TabWidget::closeTab);
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)
