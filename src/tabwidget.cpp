@@ -1,5 +1,8 @@
 #include "tabwidget.h"
 
+#include "kiwixapp.h"
+#include <QAction>
+
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentWidget();}
@@ -13,6 +16,13 @@ TabWidget::TabWidget(QWidget *parent) :
     setFocusPolicy(Qt::NoFocus);
     connect(this, &QTabWidget::tabCloseRequested, this, &TabWidget::closeTab);
     connect(this, &QTabWidget::currentChanged, this, &TabWidget::onCurrentChanged);
+    auto app = KiwixApp::instance();
+    connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
+            this, [=]() {
+                auto url = this->currentWidget()->url();
+                auto widget = this->createNewTab(true);
+                widget->setUrl(url);
+          });
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)

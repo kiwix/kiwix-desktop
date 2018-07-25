@@ -123,7 +123,6 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(NewTabAction, "New tab");
     SET_SHORTCUT(NewTabAction, QKeySequence::AddTab);
-    DISABLE_ACTION(NewTabAction);
 
     CREATE_ACTION(CloseTabAction, "Close tab");
     SET_SHORTCUT(CloseTabAction, QKeySequence::Close);
