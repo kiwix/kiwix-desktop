@@ -1,7 +1,6 @@
 #include "kiwixapp.h"
 
 #include <QCommandLineParser>
-#include <QFileDialog>
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -15,16 +14,9 @@ int main(int argc, char *argv[])
     parser.process(a);
     QString zimfile;
     auto positionalArguments = parser.positionalArguments();
-    if (positionalArguments.size() < 1){
-        zimfile = QFileDialog::getOpenFileName(a.getMainWindow(),
-            "Open Zim",
-            QString(),
-            "ZimFile (*.zim*)");
-    } else {
+    if (positionalArguments.size() >= 1){
         zimfile = parser.positionalArguments().at(0);
     }
-    if (zimfile.size()) {
-        a.openZimFile(zimfile);
-    }
+    a.openZimFile(zimfile);
     return a.exec();
 }

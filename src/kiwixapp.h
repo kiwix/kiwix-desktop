@@ -13,6 +13,7 @@
 
 class KiwixApp : public QApplication
 {
+    Q_OBJECT
 public:
     enum Actions {
         KiwixServeAction,
@@ -51,7 +52,6 @@ public:
     virtual ~KiwixApp();
     static KiwixApp* instance();
 
-    void openZimFile(const QString& zimfile);
     void openUrl(const QUrl& url, bool newTab=true);
 
     void showMessage(const QString& message);
@@ -62,6 +62,9 @@ public:
     MainWindow* getMainWindow() { return mp_mainWindow; }
     TabWidget* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
+
+public slots:
+    void openZimFile(const QString& zimfile="");
 
 protected:
     void createAction();

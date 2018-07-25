@@ -4,6 +4,7 @@
 #include <QFontDatabase>
 #include <QStyleFactory>
 #include <QFile>
+#include <QFileDialog>
 #include <QAction>
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
@@ -75,11 +76,22 @@ KiwixApp *KiwixApp::instance()
 
 void KiwixApp::openZimFile(const QString &zimfile)
 {
+    QString _zimfile = zimfile;
+    if (_zimfile.isEmpty()) {
+        _zimfile = QFileDialog::getOpenFileName(
+            getMainWindow(),
+            "Open Zim",
+            QString(),
+            "ZimFile (*.zim*)");
+    }
+    if (_zimfile.isEmpty()) {
+        return;
+    }
     QString zimId;
     try {
-        zimId = m_library.openBook(zimfile);
+        zimId = m_library.openBook(_zimfile);
     } catch (const std::exception& e) {
-        showMessage("Cannot open " + zimfile + ": \n" + e.what());
+        showMessage("Cannot open " + _zimfile + ": \n" + e.what());
         return;
     }
     openUrl(QUrl("zim://"+zimId+"/"));
@@ -137,7 +149,8 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(OpenFileAction, "Open file");
     SET_SHORTCUT(OpenFileAction, QKeySequence::Open);
-    DISABLE_ACTION(OpenFileAction);
+    connect(mpa_actions[OpenFileAction], &QAction::triggered,
+            this, [=]() { openZimFile(); });
 
     CREATE_ACTION(OpenRecentAction, "Open recent");
     HIDE_ACTION(OpenRecentAction);
