@@ -64,7 +64,7 @@ void SearchBar::openTitle()
 
     QUrl qurl;
     qurl.setScheme("zim");
-    qurl.setHost(qurl.host());
+    qurl.setHost(zimId);
     qurl.setPath("/" + QString::fromStdString(path));
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
 }
