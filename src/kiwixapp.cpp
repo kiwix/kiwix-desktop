@@ -6,6 +6,8 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QAction>
+#include <QPrinter>
+#include <QPrintDialog>
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv)
@@ -97,6 +99,23 @@ void KiwixApp::openZimFile(const QString &zimfile)
     openUrl(QUrl("zim://"+zimId+"/"));
 }
 
+void KiwixApp::printPage()
+{
+    QPrinter* printer = new QPrinter();
+    QPrintDialog printDialog(printer, mp_mainWindow);
+    printDialog.setStyle(nullptr);
+    printDialog.setStyleSheet("");
+    if (printDialog.exec() == QDialog::Accepted) {
+        auto webview = mp_tabWidget->currentWidget();
+        webview->page()->print(printer, [=](bool success) {
+            if (!success) {
+                showMessage("An error has occured while printing.");
+            }
+            delete printer;
+        });
+    }
+}
+
 void KiwixApp::openUrl(const QUrl &url, bool newTab) {
     mp_tabWidget->openUrl(url, newTab);
 }
@@ -131,7 +150,8 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(PrintAction, "print", "Print");
     SET_SHORTCUT(PrintAction, QKeySequence::Print);
-    DISABLE_ACTION(PrintAction);
+    connect(mpa_actions[PrintAction], &QAction::triggered,
+            this, &KiwixApp::printPage);
 
     CREATE_ACTION(NewTabAction, "New tab");
     SET_SHORTCUT(NewTabAction, QKeySequence::AddTab);

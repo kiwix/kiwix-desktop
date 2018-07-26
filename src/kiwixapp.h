@@ -65,6 +65,7 @@ public:
 
 public slots:
     void openZimFile(const QString& zimfile="");
+    void printPage();
 
 protected:
     void createAction();
