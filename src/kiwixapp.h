@@ -53,6 +53,7 @@ public:
     static KiwixApp* instance();
 
     void openUrl(const QUrl& url, bool newTab=true);
+    void openRandomUrl(bool newTab=true);
 
     void showMessage(const QString& message);
 

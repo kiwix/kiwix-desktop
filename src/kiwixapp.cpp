@@ -120,6 +120,22 @@ void KiwixApp::openUrl(const QUrl &url, bool newTab) {
     mp_tabWidget->openUrl(url, newTab);
 }
 
+void KiwixApp::openRandomUrl(bool newTab)
+{
+    auto zimId = mp_tabWidget->currentZimId();
+    if (zimId.isEmpty()) {
+        return;
+    }
+    auto reader = m_library.getReader(zimId);
+    auto entry = reader->getRandomPage();
+
+    QUrl url;
+    url.setScheme("zim");
+    url.setHost(zimId);
+    url.setPath("/" + QString::fromStdString(entry.getPath()));
+    openUrl(url, newTab);
+}
+
 void KiwixApp::showMessage(const QString &message)
 {
     mp_errorDialog->showMessage(message);
@@ -146,7 +162,8 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(RandomArticleAction, "random", "Random Article");
     SET_SHORTCUT(RandomArticleAction, QKeySequence(Qt::CTRL+Qt::Key_R));
-    DISABLE_ACTION(RandomArticleAction);
+    connect(mpa_actions[RandomArticleAction], &QAction::triggered,
+            this, [=]() { this->openRandomUrl(); });
 
     CREATE_ACTION_ICON(PrintAction, "print", "Print");
     SET_SHORTCUT(PrintAction, QKeySequence::Print);
