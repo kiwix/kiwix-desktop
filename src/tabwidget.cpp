@@ -19,12 +19,19 @@ TabWidget::TabWidget(QWidget *parent) :
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
-                auto url = this->currentWidget()->url();
+                auto current = this->currentWidget();
                 auto widget = this->createNewTab(true);
-                widget->setUrl(url);
+                QUITIFNULL(current);
+                widget->setUrl(current->url());
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
-            this, &TabWidget::closeTab);
+            this, [=]() {
+                auto index = this->currentIndex();
+                if (-1 == index) {
+                    return;
+                }
+                this->closeTab(index);
+            });
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)
@@ -50,10 +57,11 @@ WebView* TabWidget::createNewTab(bool setCurrent)
 
 void TabWidget::openUrl(const QUrl& url, bool newTab)
 {
-    WebView* webView = nullptr;
-    if (newTab || !currentWidget()) {
+    WebView* webView = currentWidget();
+    if (newTab || !webView) {
         webView = createNewTab(true);
     }
+    QUITIFNULL(webView);
     webView->setUrl(url);
 }
 
@@ -74,8 +82,10 @@ void TabWidget::setIconOf(const QIcon &icon, WebView *webView)
     setTabIcon(indexOf(webView), icon);
 }
 
-const QString &TabWidget::currentZimId()
+QString TabWidget::currentZimId()
 {
+    if (!currentWidget())
+        return "";
     return currentWidget()->zimId();
 }
 

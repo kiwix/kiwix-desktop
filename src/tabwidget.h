@@ -20,7 +20,7 @@ public:
 // Redirect call to sub-webView
     void setTitleOf(const QString& title, WebView* webView=nullptr);
     void setIconOf(const QIcon& icon, WebView* webView=nullptr);
-    const QString& currentZimId();
+    QString currentZimId();
 
     void triggerWebPageAction(QWebEnginePage::WebAction action, WebView* webView=nullptr);
 signals:

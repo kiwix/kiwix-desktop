@@ -26,11 +26,15 @@ void SearchBar::updateCompletion(const QString &text)
 {
     QStringList wordList;
     m_urlList.clear();
-    auto tabWidget = KiwixApp::instance()->getTabWidget();
-    auto qurl = tabWidget->currentWidget()->url();
+    auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWidget();
+    if (!currentWidget) {
+        m_completionModel.setStringList(wordList);
+        return;
+    }
+    auto qurl = currentWidget->url();
     m_currentHost = qurl.host();
     auto reader = KiwixApp::instance()->getLibrary()->getReader(m_currentHost);
-    if ( reader == nullptr) {
+    if (!reader) {
         m_completionModel.setStringList(wordList);
         return;
     }

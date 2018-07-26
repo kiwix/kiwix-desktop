@@ -101,12 +101,16 @@ void KiwixApp::openZimFile(const QString &zimfile)
 
 void KiwixApp::printPage()
 {
+    if(!mp_tabWidget->currentWidget())
+        return;
     QPrinter* printer = new QPrinter();
     QPrintDialog printDialog(printer, mp_mainWindow);
     printDialog.setStyle(nullptr);
     printDialog.setStyleSheet("");
     if (printDialog.exec() == QDialog::Accepted) {
         auto webview = mp_tabWidget->currentWidget();
+        if(!webview)
+            return;
         webview->page()->print(printer, [=](bool success) {
             if (!success) {
                 showMessage("An error has occured while printing.");
