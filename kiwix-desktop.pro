@@ -41,7 +41,8 @@ SOURCES += \
     src/tabwidget.cpp \
     src/webview.cpp \
     src/searchbar.cpp \
-    src/mainmenu.cpp
+    src/mainmenu.cpp \
+    src/webpage.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -55,7 +56,8 @@ HEADERS += \
     src/tabwidget.h \
     src/webview.h \
     src/searchbar.h \
-    src/mainmenu.h
+    src/mainmenu.h \
+    src/webpage.h
 
 FORMS += \
     ui/mainwindow.ui
