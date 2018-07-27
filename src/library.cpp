@@ -16,7 +16,7 @@ QString Library::openBook(const QString &zimPath)
             return it->first;
     }
     qInfo() << "Opening" << zimPath;
-    const std::string zimPath_ = zimPath.toLocal8Bit().constData();
+    auto zimPath_ = zimPath.toStdString();
     auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(zimPath_));
     auto id = QString::fromStdString(reader->getId() + ".zim");
     m_readersMap[id] = reader;
