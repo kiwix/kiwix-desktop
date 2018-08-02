@@ -8,8 +8,7 @@
 #include <QAction>
 
 TopWidget::TopWidget(QWidget *parent) :
-    QToolBar(parent),
-    m_fullScreen(false)
+    QToolBar(parent)
 {
     mp_historyBackAction = new QAction(this);
     mp_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
@@ -45,9 +44,7 @@ TopWidget::TopWidget(QWidget *parent) :
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
 #endif
-    mp_fullScreenAction = addAction(QIcon(":/icons/full-screen-enter.svg"), "fullscreen", this, SLOT(toggleFullScreen()));
-    mp_normalScreenAction = addAction(QIcon(":/icons/full-screen-exit.svg"), "unfullscreen", this, SLOT(toggleFullScreen()));
-    mp_normalScreenAction->setVisible(false);
+    addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction));
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/close.svg"), "close", parent, SLOT(close()));
 #endif
@@ -58,19 +55,6 @@ TopWidget::~TopWidget()
 {
     delete mp_historyBackAction;
     delete mp_historyForwardAction;
-    delete mp_fullScreenAction;
-    delete mp_normalScreenAction;
-}
-
-
-void TopWidget::toggleFullScreen() {
-    if (m_fullScreen)
-        parentWidget()->showNormal();
-    else
-        parentWidget()->showFullScreen();
-    m_fullScreen = !m_fullScreen;
-    mp_fullScreenAction->setVisible(!m_fullScreen);
-    mp_normalScreenAction->setVisible(m_fullScreen);
 }
 
 void TopWidget::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled)

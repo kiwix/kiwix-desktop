@@ -19,6 +19,9 @@ public:
 
     TabWidget* getTabWidget();
 
+protected slots:
+    void toggleFullScreen();
+
 private:
     Ui::MainWindow *mp_ui;
 

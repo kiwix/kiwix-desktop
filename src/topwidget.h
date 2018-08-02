@@ -22,14 +22,8 @@ private:
     SearchBar m_searchEntry;
     QAction* mp_historyBackAction;
     QAction* mp_historyForwardAction;
-    QAction* mp_fullScreenAction;
-    QAction* mp_normalScreenAction;
-    bool m_fullScreen;
     QPoint m_cursorPos;
     ulong m_timestamp;
-
-protected slots:
-    void toggleFullScreen();
 
 private slots:
     void handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);

@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
+    connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
+            this, &MainWindow::toggleFullScreen);
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
@@ -24,6 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete mp_ui;
+}
+
+void MainWindow::toggleFullScreen() {
+    if (isFullScreen())
+        showNormal();
+    else
+        showFullScreen();
 }
 
 TabWidget* MainWindow::getTabWidget()

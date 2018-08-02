@@ -220,9 +220,16 @@ void KiwixApp::createAction()
     SET_SHORTCUT(FindPreviousAction, QKeySequence::FindPrevious);
     HIDE_ACTION(FindPreviousAction);
 
-    CREATE_ACTION(ToggleFullscreenAction, "Set full screen");
+    CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", "Set fullScreen");
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);
-    DISABLE_ACTION(ToggleFullscreenAction);
+    connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
+            this, [=](bool checked) {
+        auto action = mpa_actions[ToggleFullscreenAction];
+        action->setIcon(
+            QIcon(checked ? ":/icons/full-screen-exit.svg" : ":/icons/full-screen-enter.svg"));
+        action->setText(checked ? "Quit fullScreen" : "Set fullScreen");
+    });
+    mpa_actions[ToggleFullscreenAction]->setCheckable(true);
 
     CREATE_ACTION(ToggleTOCAction, "Table of content");
     SET_SHORTCUT(ToggleTOCAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_1));
