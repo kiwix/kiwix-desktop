@@ -17,6 +17,17 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -std=c++11
 
+unix {
+  DEFINES += GIT_VERSION='"$(shell cd $$PWD && git describe --dirty=* --tags --always)"'
+  DEFINES += BUILD_DATE='"$(shell date)"'
+}
+
+win32 {
+  DEFINES += GIT_VERSION='"$$system(cd $$PWD && git describe --dirty=* --tags --always)"'
+  DEFINES += BUILD_DATE='"$$system(echo %DATE%)"'
+}
+
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
