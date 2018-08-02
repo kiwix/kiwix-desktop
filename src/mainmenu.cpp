@@ -51,8 +51,7 @@ MainMenu::MainMenu(QWidget *parent) :
     m_helpMenu.ADD_ACTION(ReportBugAction);
     m_helpMenu.ADD_ACTION(RequestFeatureAction);
     m_helpMenu.ADD_ACTION(AboutAction);
-//    m_helpMenu.addAction();
-    //addMenu(&m_helpMenu);
+    addMenu(&m_helpMenu);
 
     addSeparator();
     ADD_ACTION(SettingAction);

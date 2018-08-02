@@ -265,7 +265,6 @@ void KiwixApp::createAction()
     HIDE_ACTION(RequestFeatureAction);
 
     CREATE_ACTION(AboutAction, "About Kiwix");
-    HIDE_ACTION(AboutAction);
 
     CREATE_ACTION_ICON(SettingAction, "settings", "Settings");
     SET_SHORTCUT(SettingAction, QKeySequence::Preferences);

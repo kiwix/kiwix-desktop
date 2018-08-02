@@ -1,6 +1,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "ui_about.h"
 
 #include "kiwixapp.h"
 #include "kconstants.h"
@@ -19,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &QMainWindow::close);
     connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
             this, &MainWindow::toggleFullScreen);
+    connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
+            mp_about, &QDialog::show);
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
