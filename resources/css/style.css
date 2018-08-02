@@ -131,3 +131,13 @@ QTabBar::close-button {
     image: url(":/icons/close.svg");
     subcontrol-position: right;
 }
+
+
+/* -----------------------------------------
+    TabWidget
+*/
+
+#aboutText {
+    padding: 20px;
+    background-color: white;
+}

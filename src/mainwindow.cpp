@@ -9,7 +9,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    mp_ui(new Ui::MainWindow)
+    mp_ui(new Ui::MainWindow),
+    mp_about(new About(this))
 {
     mp_ui->setupUi(this);
     mp_ui->tabWidget->tabBar()->setExpanding(false);

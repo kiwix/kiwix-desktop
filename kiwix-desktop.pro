@@ -42,7 +42,8 @@ SOURCES += \
     src/webview.cpp \
     src/searchbar.cpp \
     src/mainmenu.cpp \
-    src/webpage.cpp
+    src/webpage.cpp \
+    src/about.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -57,10 +58,12 @@ HEADERS += \
     src/webview.h \
     src/searchbar.h \
     src/mainmenu.h \
-    src/webpage.h
+    src/webpage.h \
+    src/about.h
 
 FORMS += \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/about.ui
 
 isEmpty(PREFIX) {
  PREFIX = /usr/local

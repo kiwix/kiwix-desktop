@@ -60,6 +60,7 @@
         <file>fonts/SegoeUI/segoeuil.ttf</file>
         <file>fonts/SegoeUI/seguisb.ttf</file>
         <file>fonts/SegoeUI/segoeui.ttf</file>
+        <file>texts/about.html</file>
         <file>css/style.css</file>
     </qresource>
 </RCC>

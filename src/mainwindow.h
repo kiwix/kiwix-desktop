@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "webview.h"
 #include "tabwidget.h"
+#include "about.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,7 @@ protected slots:
 
 private:
     Ui::MainWindow *mp_ui;
+    About     *mp_about;
 
 };
 
