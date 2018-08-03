@@ -6,4 +6,4 @@ Type=Application
 Terminal=false
 StartupNotify=true
 NoDisplay=false
-Categories=Education
+Categories=Education;
