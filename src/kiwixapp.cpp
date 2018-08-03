@@ -182,7 +182,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(ReopenClosedTabAction, "Reopen closed tab");
     SET_SHORTCUT(ReopenClosedTabAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
-    DISABLE_ACTION(ReopenClosedTabAction);
+    HIDE_ACTION(ReopenClosedTabAction);
 
     CREATE_ACTION(BrowseLibraryAction, "Browse library");
     SET_SHORTCUT(BrowseLibraryAction, QKeySequence(Qt::CTRL+Qt::Key_E));
@@ -268,7 +268,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(SettingAction, "settings", "Settings");
     SET_SHORTCUT(SettingAction, QKeySequence::Preferences);
-    DISABLE_ACTION(SettingAction);
+    HIDE_ACTION(SettingAction);
 
     CREATE_ACTION_ICON(DonateAction, "donate", "Donate to support Kiwix");
     //SET_SHORTCUT(DonateAction, QKeySequence(Qt::CTRL+Qt::Key_BracketLeft+Qt::Key_3));
