@@ -1,0 +1,112 @@
+id: org.kiwix.Client
+runtime: org.kde.Platform
+runtime-version: '5.11'
+sdk: org.kde.Sdk
+command: kiwix-desktop
+finish-args:
+  - --socket=wayland
+  - --socket=x11
+  - --share=ipc
+  - --device=dri
+  - --socket=pulseaudio
+build-options:
+  cflags: -O2 -g
+  cxxflags: -O2 -g
+modules:
+  - name: xapian-core
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+      - /lib/cmake
+      - /lib/*.la
+      - /share
+    sources:
+      - type: archive
+        url: http://snapshot.debian.org/archive/debian/20180703T030317Z/pool/main/x/xapian-core/xapian-core_1.4.6.orig.tar.xz
+        sha256: 1e0ef1c1d3e2119874d545b7edbb60e6e17d7d18fb802eb890d9ef7bb0bbd898
+
+  #
+  # require
+  #   xapian-core
+  #
+  - name: libzim
+    buildsystem: meson
+    builddir: true
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/openzim/libzim/archive/4.0.1.tar.gz
+        sha256: 8e26cfea24a77cdc0ad7d51ad2df939130ad4c489f28c90fdc6ffc1b0da0a085
+
+  - name: pugixml
+    buildsystem: cmake
+    builddir: true
+    config-opts:
+      - -DBUILD_PKGCONFIG=ON
+      - -DBUILD_SHARED_LIBS=ON
+      - -DCMAKE_INSTALL_LIBDIR=lib
+    cleanup:
+      - /include
+      - /lib/pkgconfig
+      - /lib/cmake
+    sources:
+      - type: archive
+        url: http://snapshot.debian.org/archive/debian/20170618T160104Z/pool/main/p/pugixml/pugixml_1.8.1.orig.tar.gz
+        sha256: 4445a8db1421c2d2ce61140ece0837dd2651fb1049ddd820e71a7fe44be1a7cc
+      #
+      # The following instructions fix the installatoin folder.
+      #
+      - type: shell
+        commands:
+          - sed -i 's/${CMAKE_INSTALL_LIBDIR}${INSTALL_SUFFIX}/${CMAKE_INSTALL_LIBDIR}/g' CMakeLists.txt
+          - sed -i 's/lib\/pugixml-@PUGIXML_VERSION_STRING@/lib/g' scripts/pugixml.pc.in
+
+  - name: aria2
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+      - /lib/*.la
+      - /share/doc
+      - /share/man
+    config-opts:
+      - --enable-libaria2
+    sources:
+      - type: archive
+        url: http://snapshot.debian.org/archive/debian/20180521T162626Z/pool/main/a/aria2/aria2_1.34.0.orig.tar.gz
+        sha256: ec4866985760b506aa36dc9021dbdc69551c1a647823cae328c30a4f3affaa6c
+
+  #
+  # require
+  #   libzim, pugixml, aria2
+  #
+  - name: libkiwix
+    buildsystem: meson
+    cleanup:
+      - /bin
+      - /include
+      - /lib/pkgconfig
+    sources:
+      - type: archive
+        url: https://github.com/kiwix/kiwix-lib/archive/2.0.2.tar.gz
+        sha256: af73875d7845d5333ae04462859cdbe3620294a06938440423ab9d967e6d7638
+      #
+      # The following tip helps to avoid `maybe-uninitialized` error.
+      #
+      - type: shell
+        commands:
+          - sed -i 's/werror=true/werror=false/g' meson.build
+
+  #
+  # require
+  #   libkiwix
+  #
+  - name: kiwix-desktop
+    buildsystem: qmake
+    sources:
+      - type: git
+        url: https://github.com/kiwix/kiwix-desktop.git
