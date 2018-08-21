@@ -82,6 +82,10 @@ isEmpty(PREFIX) {
 target.path = $$PREFIX/bin
 INSTALLS += target
 
+TRANSLATIONS = locales/kiwix-desktop_fr.ts
+CODECFORSRC = UTF-8
+
+QT += widgets
 
 static {
   PKGCONFIG_OPTION = "--static"
