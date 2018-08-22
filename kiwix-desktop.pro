@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += webenginewidgets
+QT       += widgets qml quick
 
 CONFIG += link_pkgconfig
 
@@ -82,10 +83,9 @@ isEmpty(PREFIX) {
 target.path = $$PREFIX/bin
 INSTALLS += target
 
-TRANSLATIONS = locales/kiwix-desktop_fr.ts
+TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
 CODECFORSRC = UTF-8
 
-QT += widgets
 
 static {
   PKGCONFIG_OPTION = "--static"
@@ -114,4 +114,8 @@ QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
 
 RESOURCES += \
-    resources/kiwix.qrc
+    resources/kiwix.qrc \
+    resources/translations.qrc
+
+system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
+system($$QMAKE_LRELEASE $$_PRO_FILE_)
