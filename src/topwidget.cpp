@@ -4,6 +4,7 @@
 #include "kiwixapp.h"
 #include "mainmenu.h"
 
+#include <QObject>
 #include <QMouseEvent>
 #include <QAction>
 
@@ -12,16 +13,16 @@ TopWidget::TopWidget(QWidget *parent) :
 {
     mp_historyBackAction = new QAction(this);
     mp_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
-    mp_historyBackAction->setText("back");
-    mp_historyBackAction->setToolTip("back");
+    mp_historyBackAction->setText(QObject::tr("back"));
+    mp_historyBackAction->setToolTip(QObject::tr("back"));
     connect(mp_historyBackAction, &QAction::triggered, [this](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
     addAction(mp_historyBackAction);
     mp_historyForwardAction = new QAction(this);
     mp_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
-    mp_historyForwardAction->setText("forward");
-    mp_historyForwardAction->setToolTip("forward");
+    mp_historyForwardAction->setText(QObject::tr("forward"));
+    mp_historyForwardAction->setToolTip(QObject::tr("forward"));
     connect(mp_historyForwardAction, &QAction::triggered, [this](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
