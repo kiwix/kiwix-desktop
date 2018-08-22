@@ -6,7 +6,6 @@
 
 QT       += core gui
 QT       += webenginewidgets
-QT       += widgets qml quick
 
 CONFIG += link_pkgconfig
 
@@ -80,15 +79,14 @@ FORMS += \
     ui/about.ui \
     src/tocsidebar.ui
 
+TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
+CODECFORSRC = UTF-8
+
 isEmpty(PREFIX) {
  PREFIX = /usr/local
 }
 target.path = $$PREFIX/bin
 INSTALLS += target
-
-TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
-CODECFORSRC = UTF-8
-
 
 static {
   PKGCONFIG_OPTION = "--static"
