@@ -174,14 +174,6 @@
     </message>
 </context>
 <context>
-    <name>Library</name>
-    <message>
-        <location filename="src/library.cpp" line="20"/>
-        <source>Opening</source>
-        <translation>Ouverture</translation>
-    </message>
-</context>
-<context>
     <name>MainMenu</name>
     <message>
         <location filename="src/mainmenu.cpp" line="18"/>
