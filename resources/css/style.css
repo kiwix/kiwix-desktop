@@ -1,8 +1,3 @@
-QWidget {
-    background-color: #EAECF0;
-}
-
-
 /* ------------------------------------
    The topBar
 */
@@ -13,7 +8,7 @@ TopWidget {
     margin: 0px;
     padding: 5px;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid palette(mid);
 }
 
 TopWidget::separator {
@@ -30,21 +25,20 @@ QToolButton {
 }
 
 SearchBar {
-    background-color: white;
+    background-color: palette(light);
     padding: 2px 2px 2px 40px;
     max-height: 38px;
     margin-bottom: 2px;
-    color: #666;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid palette(mid);
     border-radius: 3px;
 }
 
 SearchBar > QPushButton {
     margin: 8px;
     padding: 0px;
-    border: 0px solid #fff;
-    background-color: white;
+    border: 0px solid palette(mid);
+    background-color: palette(highlight);
     height: 30px;
     width: 30px;
 }
@@ -55,8 +49,8 @@ SearchBar > QPushButton {
 
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
+    border: 1px solid palette(mid);
+    background-color: palette(highlight);
     border-radius: 1px;
 }
 
@@ -88,14 +82,8 @@ QMenu::icon {
 }
 
 QMenu::item:selected {
-    background-color: #D9E9FF;
-    border: 1px solid #3366CC;
-}
-
-QMenu::indicator {
-    color: #666666;
-    width: 13px;
-    height: 13px;
+    background-color: palette(highlight);
+    border: 1px solid palette(mid);
 }
 
 /* -----------------------------------------
@@ -107,26 +95,22 @@ QTabBar {
     icon-size: 24px;
 }
 
-QTabBar::tear {
-     background-color: blue;
-}
-
 QTabWidget::pane {
     top: -2px;
     border: none;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid palette(mid);
 }
 
 QTabBar::tab {
     border: none;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid palette(mid);
     border-radius: 0px;
     padding: 2px;
 }
 
 QTabBar::tab:selected {
-    background-color: white;
-    border-bottom: 2px solid white;
+    background-color: palette(light);
+    border-bottom: 2px solid palette(mid);
 }
 
 QTabBar::close-button {
@@ -134,14 +118,13 @@ QTabBar::close-button {
     subcontrol-position: right;
 }
 
-
 /* -----------------------------------------
     TabWidget
 */
 
 #aboutText {
     padding: 20px;
-    background-color: white;
+    background-color: palette(window);
 }
 
 /* ----------------------------------------
