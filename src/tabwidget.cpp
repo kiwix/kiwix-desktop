@@ -32,6 +32,30 @@ TabWidget::TabWidget(QWidget *parent) :
                 }
                 this->closeTab(index);
             });
+    connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
+            this, [=]() {
+                auto current = this->currentWidget();
+                QUITIFNULL(current);
+                auto zoomFactor = current->zoomFactor();
+                zoomFactor += 0.1;
+                zoomFactor = max(min(zoomFactor, 5.0), 0.25);
+                current->setZoomFactor(zoomFactor);
+            });
+    connect(app->getAction(KiwixApp::ZoomOutAction), &QAction::triggered,
+            this, [=]() {
+                auto current = this->currentWidget();
+                QUITIFNULL(current);
+                auto zoomFactor = current->zoomFactor();
+                zoomFactor -= 0.1;
+                zoomFactor = max(min(zoomFactor, 5.0), 0.25);
+                current->setZoomFactor(zoomFactor);
+            });
+    connect(app->getAction(KiwixApp::ZoomResetAction), &QAction::triggered,
+            this, [=]() {
+                auto current = this->currentWidget();
+                QUITIFNULL(current);
+                current->setZoomFactor(1.0);
+            });
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)

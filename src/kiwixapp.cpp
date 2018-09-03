@@ -241,15 +241,12 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(ZoomInAction, "Zoom in");
     SET_SHORTCUT(ZoomInAction, QKeySequence::ZoomIn);
-    HIDE_ACTION(ZoomInAction);
 
     CREATE_ACTION(ZoomOutAction, "Zoom out");
     SET_SHORTCUT(ZoomOutAction, QKeySequence::ZoomOut);
-    HIDE_ACTION(ZoomOutAction);
 
     CREATE_ACTION(ZoomResetAction, "Zoom reset");
     SET_SHORTCUT(ZoomResetAction, QKeySequence(Qt::CTRL+Qt::Key_0));
-    HIDE_ACTION(ZoomResetAction);
 
     CREATE_ACTION(HelpAction, "Help");
     SET_SHORTCUT(HelpAction, QKeySequence::HelpContents);
