@@ -141,3 +141,39 @@ QTabBar::close-button {
     padding: 20px;
     background-color: white;
 }
+
+/* ----------------------------------------
+    Find Search page
+*/
+
+#findEdit {
+    background-color: white;
+    padding: 2px;
+    max-height: 36px;
+    color: #666;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 0px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#fNextButton,
+#fPreviousButton {
+    max-height: 36px;
+    max-width: 36px;
+    border: 2px solid #ccc;
+    border-radius: 0px;
+    margin-left: -2px;
+}
+
+#fNextButton:pressed,
+#fPreviousButton:pressed {
+    background-color: #D9E9FF;
+    border: 2px solid #3366CC;
+}
+
+#fPreviousButton {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

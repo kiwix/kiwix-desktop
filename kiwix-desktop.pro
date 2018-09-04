@@ -54,7 +54,8 @@ SOURCES += \
     src/searchbar.cpp \
     src/mainmenu.cpp \
     src/webpage.cpp \
-    src/about.cpp
+    src/about.cpp \
+    src/tocsidebar.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -70,11 +71,13 @@ HEADERS += \
     src/searchbar.h \
     src/mainmenu.h \
     src/webpage.h \
-    src/about.h
+    src/about.h \
+    src/tocsidebar.h
 
 FORMS += \
     ui/mainwindow.ui \
-    ui/about.ui
+    ui/about.ui \
+    src/tocsidebar.ui
 
 isEmpty(PREFIX) {
  PREFIX = /usr/local

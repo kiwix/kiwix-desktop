@@ -59,10 +59,11 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     createAction();
     mp_mainWindow = new MainWindow;
-    mp_mainWindow->show();
     mp_tabWidget = mp_mainWindow->getTabWidget();
+    postInit();
 
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
+    mp_mainWindow->show();
 }
 
 KiwixApp::~KiwixApp()
@@ -210,15 +211,6 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(FindInPageAction, "Find in page");
     SET_SHORTCUT(FindInPageAction, QKeySequence::Find);
-    HIDE_ACTION(FindInPageAction);
-
-    CREATE_ACTION(FindNextAction, "Find next");
-    SET_SHORTCUT(FindNextAction, QKeySequence::FindNext);
-    HIDE_ACTION(FindNextAction);
-
-    CREATE_ACTION(FindPreviousAction, "Find previous");
-    SET_SHORTCUT(FindPreviousAction, QKeySequence::FindPrevious);
-    HIDE_ACTION(FindPreviousAction);
 
     CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", "Set fullScreen");
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);
@@ -273,4 +265,12 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(ExitAction, "exit", "Exit");
     SET_SHORTCUT(ExitAction, QKeySequence::Quit);
+}
+
+void KiwixApp::postInit() {
+    auto realToggleAction = mp_mainWindow->getSideDockWidget()->toggleViewAction();
+    auto proxyToggleAction = mpa_actions[FindInPageAction];
+    connect(proxyToggleAction, &QAction::triggered, realToggleAction, &QAction::trigger);
+    connect(realToggleAction, &QAction::toggled, proxyToggleAction, &QAction::setChecked);
+    realToggleAction->toggle();
 }

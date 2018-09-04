@@ -4,6 +4,7 @@
 #include "library.h"
 #include "mainwindow.h"
 #include "tabwidget.h"
+#include "tocsidebar.h"
 #include "urlschemehandler.h"
 #include "requestinterceptor.h"
 
@@ -29,8 +30,6 @@ public:
         SearchArticleAction,
         SearchLibraryAction,
         FindInPageAction,
-        FindNextAction,
-        FindPreviousAction,
         ToggleFullscreenAction,
         ToggleTOCAction,
         ToggleReadingListAction,
@@ -70,6 +69,7 @@ public slots:
 
 protected:
     void createAction();
+    void postInit();
 
 private:
     Library m_library;

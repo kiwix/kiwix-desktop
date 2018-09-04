@@ -62,5 +62,7 @@
         <file>fonts/SegoeUI/segoeui.ttf</file>
         <file>texts/about.html</file>
         <file>css/style.css</file>
+        <file>icons/search_backward.svg</file>
+        <file>icons/search_forward.svg</file>
     </qresource>
 </RCC>

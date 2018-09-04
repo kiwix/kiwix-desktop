@@ -28,9 +28,7 @@ MainMenu::MainMenu(QWidget *parent) :
     m_editMenu.ADD_ACTION(SearchArticleAction);
     m_editMenu.ADD_ACTION(SearchLibraryAction);
     m_editMenu.ADD_ACTION(FindInPageAction);
-    m_editMenu.ADD_ACTION(FindNextAction);
-    m_editMenu.ADD_ACTION(FindPreviousAction);
-    //addMenu(&m_editMenu);
+    addMenu(&m_editMenu);
 
     m_viewMenu.setTitle("View");
     m_viewMenu.ADD_ACTION(ToggleFullscreenAction);

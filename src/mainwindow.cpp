@@ -44,3 +44,7 @@ TabWidget* MainWindow::getTabWidget()
     return mp_ui->tabWidget;
 }
 
+QDockWidget* MainWindow::getSideDockWidget()
+{
+    return mp_ui->sideDockWidget;
+}
