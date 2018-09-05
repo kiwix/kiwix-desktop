@@ -2,7 +2,6 @@
 #include "zim/error.h"
 
 #include <QLocale>
-#include <QTranslator>
 #include <QObject>
 #include <QLibraryInfo>
 #include <QFontDatabase>
@@ -16,14 +15,12 @@
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv)
 {
-    QTranslator qtTranslator;
-    qtTranslator.load("qt_" + QLocale::system().name(),
-                             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    installTranslator(&qtTranslator);
+    m_qtTranslator.load("qt_" + QLocale::system().name(),
+                        QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    installTranslator(&m_qtTranslator);
 
-    QTranslator myappTranslator;
-    myappTranslator.load(":/i18n/kiwix-desktop.qm");
-    installTranslator(&myappTranslator);
+    m_appTranslator.load(":/i18n/kiwix-desktop.qm");
+    installTranslator(&m_appTranslator);
 
     auto icon = QIcon();
     icon.addFile(":/icons/kiwix/app_icon.svg");

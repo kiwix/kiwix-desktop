@@ -10,6 +10,7 @@
 
 #include <QApplication>
 #include <QErrorMessage>
+#include <QTranslator>
 
 
 class KiwixApp : public QApplication
@@ -72,6 +73,7 @@ protected:
     void postInit();
 
 private:
+    QTranslator m_qtTranslator, m_appTranslator;
     Library m_library;
     MainWindow* mp_mainWindow;
     TabWidget* mp_tabWidget;
