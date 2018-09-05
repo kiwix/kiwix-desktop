@@ -65,4 +65,7 @@
         <file>icons/search_backward.svg</file>
         <file>icons/search_forward.svg</file>
     </qresource>
+    <qresource lang="fr" prefix="/">
+        <file alias="texts/about.html">texts/fr/about.html</file>
+    </qresource>
 </RCC>

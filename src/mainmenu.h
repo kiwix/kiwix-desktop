@@ -5,6 +5,7 @@
 
 class MainMenu : public QMenu
 {
+    Q_OBJECT
 public:
     MainMenu(QWidget *parent=nullptr);
 

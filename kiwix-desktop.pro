@@ -79,12 +79,14 @@ FORMS += \
     ui/about.ui \
     src/tocsidebar.ui
 
+TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
+CODECFORSRC = UTF-8
+
 isEmpty(PREFIX) {
  PREFIX = /usr/local
 }
 target.path = $$PREFIX/bin
 INSTALLS += target
-
 
 static {
   PKGCONFIG_OPTION = "--static"
@@ -113,4 +115,8 @@ QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
 
 RESOURCES += \
-    resources/kiwix.qrc
+    resources/kiwix.qrc \
+    resources/translations.qrc
+
+system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
+system($$QMAKE_LRELEASE $$_PRO_FILE_)

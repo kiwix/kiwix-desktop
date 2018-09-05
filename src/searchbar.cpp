@@ -9,7 +9,7 @@ SearchBar::SearchBar(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_completionModel, this)
 {
-    setPlaceholderText("Search");
+    setPlaceholderText(tr("Search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     setCompleter(&m_completer);
     connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);

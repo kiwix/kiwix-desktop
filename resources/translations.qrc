@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>i18n/kiwix-desktop_fr.qm</file>
+    </qresource>
+</RCC>
