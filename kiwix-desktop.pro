@@ -118,5 +118,7 @@ RESOURCES += \
     resources/kiwix.qrc \
     resources/translations.qrc
 
-system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
-system($$QMAKE_LRELEASE $$_PRO_FILE_)
+unix {
+    system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
+    system($$QMAKE_LRELEASE $$_PRO_FILE_)
+}
