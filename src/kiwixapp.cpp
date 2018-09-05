@@ -15,11 +15,11 @@
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv)
 {
-    m_qtTranslator.load("qt_" + QLocale::system().name(),
+    m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     installTranslator(&m_qtTranslator);
 
-    m_appTranslator.load(":/i18n/kiwix-desktop.qm");
+    m_appTranslator.load(QLocale(), "kiwix-desktop", "_", ":/i18n/");
     installTranslator(&m_appTranslator);
 
     auto icon = QIcon();

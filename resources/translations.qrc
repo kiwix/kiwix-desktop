@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/i18n" lang="fr">
-        <file alias="kiwix-desktop.qm">i18n/kiwix-desktop_fr.qm</file>
+    <qresource prefix="/">
+        <file>i18n/kiwix-desktop_fr.qm</file>
     </qresource>
 </RCC>
