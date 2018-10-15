@@ -26,11 +26,11 @@ class Library : public QObject
 public:
     Library();
     QString openBookFromPath(const QString& zimPath);
-    QString openBookById(const QString& _id);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     QStringList getBookIds();
 public slots:
     QStringList getBookInfos(QString id, const QStringList &keys);
+    QString openBookById(const QString& _id);
 
 signals:
     void booksChanged();

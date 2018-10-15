@@ -64,6 +64,13 @@ std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
     auto it = m_readersMap.find(zimId);
     if (it != m_readersMap.end())
         return it.value();
+    // No reader, try to open the file
+    try {
+        QString _id = zimId;
+        if (_id.endsWith(".zim")) _id.resize(_id.size()-4);
+        openBookById(_id);
+        return m_readersMap.find(zimId).value();
+    } catch(...) {}
     return nullptr;
 }
 

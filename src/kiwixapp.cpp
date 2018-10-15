@@ -72,6 +72,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     mp_mainWindow = new MainWindow;
     mp_tabWidget = mp_mainWindow->getTabWidget();
     mp_tabWidget->setContentManagerView(m_manager.getView());
+    m_manager.getView()->registerObject("kiwix", this);
     postInit();
 
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
@@ -131,6 +132,10 @@ void KiwixApp::printPage()
             delete printer;
         });
     }
+}
+
+void KiwixApp::openUrl(const QString &url, bool newTab) {
+    openUrl(QUrl(url), newTab);
 }
 
 void KiwixApp::openUrl(const QUrl &url, bool newTab) {

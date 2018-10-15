@@ -25,14 +25,19 @@ function init() {
   new QWebChannel(qt.webChannelTransport, function(channel) {
     contentManager = channel.objects.contentManager;
     library = channel.objects.library;
+    kiwix = channel.objects.kiwix;
     app = new Vue({
       el: "#app",
       data: {
         contentManager: contentManager,
         library: library,
+        kiwix: kiwix,
         books: []
       },
       methods: {
+        openBook : function(book) {
+          kiwix.openUrl("zim://"+book.id+".zim/", true, function() {});
+        },
         changePage : function(delta) {
           var newPage = contentManager.currentPage+delta;
           if (newPage < 0) newPage = 0;
@@ -90,7 +95,7 @@ function init() {
              {{ book.tags }}
            </span>
            <span>
-             <button v-if="book.path">Open</button>
+             <button v-if="book.path" v-on:click="openBook(book)">Open</button>
              <button v-else>Download</button>
            </span>
          </div>
