@@ -2,6 +2,7 @@
 #define KIWIXAPP_H
 
 #include "library.h"
+#include "contentmanager.h"
 #include "mainwindow.h"
 #include "tabwidget.h"
 #include "tocsidebar.h"
@@ -75,6 +76,7 @@ protected:
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     Library m_library;
+    ContentManager m_manager;
     MainWindow* mp_mainWindow;
     TabWidget* mp_tabWidget;
     QErrorMessage* mp_errorDialog;

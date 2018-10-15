@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     auto positionalArguments = parser.positionalArguments();
     if (positionalArguments.size() >= 1){
         zimfile = parser.positionalArguments().at(0);
+        a.openZimFile(zimfile);
     }
-    a.openZimFile(zimfile);
     return a.exec();
 }

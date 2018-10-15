@@ -55,7 +55,9 @@ SOURCES += \
     src/mainmenu.cpp \
     src/webpage.cpp \
     src/about.cpp \
-    src/tocsidebar.cpp
+    src/tocsidebar.cpp \
+    src/contentmanager.cpp \
+    src/contentmanagerview.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -72,7 +74,9 @@ HEADERS += \
     src/mainmenu.h \
     src/webpage.h \
     src/about.h \
-    src/tocsidebar.h
+    src/tocsidebar.h \
+    src/contentmanager.h \
+    src/contentmanagerview.h
 
 FORMS += \
     ui/mainwindow.ui \
@@ -116,7 +120,8 @@ LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
 
 RESOURCES += \
     resources/kiwix.qrc \
-    resources/translations.qrc
+    resources/translations.qrc \
+    resources/contentmanager.qrc
 
 unix {
     system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)

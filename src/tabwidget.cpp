@@ -27,7 +27,7 @@ TabWidget::TabWidget(QWidget *parent) :
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
                 auto index = this->currentIndex();
-                if (-1 == index) {
+                if (index <= 0) {
                     return;
                 }
                 this->closeTab(index);
@@ -56,6 +56,12 @@ TabWidget::TabWidget(QWidget *parent) :
                 QUITIFNULL(current);
                 current->setZoomFactor(1.0);
             });
+}
+
+void     TabWidget::setContentManagerView(ContentManagerView* view)
+{
+    mp_contentManagerView = view;
+    addTab(mp_contentManagerView, "");
 }
 
 WebView* TabWidget::createNewTab(bool setCurrent)
@@ -123,6 +129,8 @@ void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *
 
 void TabWidget::closeTab(int index)
 {
+    if (index == 0)
+        return;
     auto webview = widget(index);
     removeTab(index);
     webview->close();
@@ -131,10 +139,15 @@ void TabWidget::closeTab(int index)
 
 void TabWidget::onCurrentChanged(int index)
 {
-    if (index != -1)
+    if (index == -1)
+        return;
+    if (index)
     {
         auto view = widget(index);
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
+    } else {
+        emit webActionEnabledChanged(QWebEnginePage::Back, false);
+        emit webActionEnabledChanged(QWebEnginePage::Forward, false);
     }
 }

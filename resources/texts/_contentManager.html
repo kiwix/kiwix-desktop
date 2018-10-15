@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+<script src="qrc:///js/vue.js"></script>
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script type="text/javascript">
+BOOK_KEYS = ["id", "name", "path", "description", "title", "tags", "date", "favicon", "faviconMimeType"]
+function addBook(values) {
+    var book  = {}
+    for (var i=0; i<BOOK_KEYS.length; i++) {
+      book[BOOK_KEYS[i]] = values[i];
+    }
+    app.books.push(book);
+}
+
+function onBooksChanged () {
+  app.books = [];
+  for(var i=contentManager.startBookIndex; i<contentManager.endBookIndex; i++) {
+    var id = library.bookIds[i];
+    library.getBookInfos(id, BOOK_KEYS, addBook);
+  }
+}
+
+function init() {
+  new QWebChannel(qt.webChannelTransport, function(channel) {
+    contentManager = channel.objects.contentManager;
+    library = channel.objects.library;
+    app = new Vue({
+      el: "#app",
+      data: {
+        contentManager: contentManager,
+        library: library,
+        books: []
+      },
+      methods: {
+        changePage : function(delta) {
+          var newPage = contentManager.currentPage+delta;
+          if (newPage < 0) newPage = 0;
+          if (newPage > contentManager.nbPages) newPage = contentManager.nbPages;
+          contentManager.currentPage = newPage;
+        }
+      }
+    });
+    library.booksChanged.connect(onBooksChanged);
+    contentManager.pagingChanged.connect(onBooksChanged);
+    onBooksChanged();
+  });
+}
+</script>
+<style>
+#app {
+    display: flex;
+}
+</style>
+</head>
+<body onload="init()">
+<div id="app">
+  <div id="sideBar">
+  <ul>
+    <li><a>All files</a></li>
+    <li><a>Local files</a></li>
+    <li><a>Browse by category</a></li>
+    <li><a>Language:</a></li>
+    <li><a>Content type:</a></li>
+  </ul>
+  </div>
+  <div>
+   <div id="searchBar">
+     <form>
+       <input />
+     </form>
+   </div>
+   <div id="bookList">
+     <div class="header">
+       <span>File name</span><span>Size</span><span>Date</span><span>Content type</span>
+     </div>
+     <ul>
+       <li v-for="book in books">
+         <div class="book header">
+           <span>
+             <img v-bind:src="'data:image/png;base64,' + book.favicon"/> {{ book.title }}
+           </span>
+           <span>
+             {{ book.size }}
+           </span>
+           <span>
+             {{ book.date }}
+           </span>
+           <span>
+             {{ book.tags }}
+           </span>
+           <span>
+             <button v-if="book.path">Open</button>
+             <button v-else>Download</button>
+           </span>
+         </div>
+         <div class="book content">
+           {{ book.description }}
+         </div>
+       </li>
+     </ul>
+     <div class="footer">
+       <button v-on:click="contentManager.currentPage = 0">First</button>
+       <button v-on:click="changePage(-1)">Previous</button>
+       {{ contentManager.currentPage+1 }} / {{ contentManager.nbPages+1 }}
+       <button v-on:click="changePage(1)">Next</button>
+       <button v-on:click="contentManager.currentPage = contentManager.nbPages">Last</button>
+     </div>
+   </div>
+ </div>
+</div>
+</body></html>

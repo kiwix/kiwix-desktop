@@ -4,6 +4,7 @@
 #include <QTableWidget>
 #include <memory>
 #include "webview.h"
+#include "contentmanagerview.h"
 
 class TabWidget : public QTabWidget
 {
@@ -12,9 +13,13 @@ class TabWidget : public QTabWidget
 public:
     TabWidget(QWidget* parent=nullptr);
 
+    void     setContentManagerView(ContentManagerView* view);
     WebView* createNewTab(bool setCurrent);
-    WebView* widget(int index) { return static_cast<WebView*>(QTabWidget::widget(index)); }
-    WebView* currentWidget() { return static_cast<WebView*>(QTabWidget::currentWidget()); }
+    WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(QTabWidget::widget(index)) : nullptr; }
+    WebView* currentWidget() { auto current = QTabWidget::currentWidget();
+                               if (current == mp_contentManagerView) return nullptr;
+                               return static_cast<WebView*>(current);
+                             }
 
     void openUrl(const QUrl &url, bool newTab);
 // Redirect call to sub-webView
@@ -30,6 +35,10 @@ signals:
 public slots:
     void closeTab(int index);
     void onCurrentChanged(int index);
+
+private:
+    ContentManagerView* mp_contentManagerView;
+
 };
 
 #endif // TABWIDGET_H

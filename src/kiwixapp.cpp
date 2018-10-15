@@ -12,7 +12,9 @@
 #include <QPrintDialog>
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
-    : QApplication(argc, argv)
+    : QApplication(argc, argv),
+      m_library(),
+      m_manager(&m_library)
 {
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -69,6 +71,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     createAction();
     mp_mainWindow = new MainWindow;
     mp_tabWidget = mp_mainWindow->getTabWidget();
+    mp_tabWidget->setContentManagerView(m_manager.getView());
     postInit();
 
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
@@ -101,7 +104,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
     }
     QString zimId;
     try {
-        zimId = m_library.openBook(_zimfile);
+        zimId = m_library.openBookFromPath(_zimfile);
     } catch (const std::exception& e) {
         showMessage("Cannot open " + _zimfile + ": \n" + e.what());
         return;
@@ -282,4 +285,5 @@ void KiwixApp::postInit() {
     connect(proxyToggleAction, &QAction::triggered, realToggleAction, &QAction::trigger);
     connect(realToggleAction, &QAction::toggled, proxyToggleAction, &QAction::setChecked);
     realToggleAction->toggle();
+    emit(m_library.booksChanged());
 }
