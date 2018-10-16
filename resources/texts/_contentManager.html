@@ -4,6 +4,14 @@
 <script src="qrc:///js/vue.js"></script>
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 <script type="text/javascript">
+const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+function niceBytes(x){
+  var unitIndex = 0;
+  var n = parseInt(x, 10) || 0;
+  while(n >= 1024 && ++unitIndex)
+      n = n/1024;
+  return(n.toFixed(n >= 10 || unitIndex < 1 ? 0 : 2) + ' ' + units[unitIndex]);
+}
 
 function createDict(keys, values) {
     var d = {}
@@ -12,7 +20,7 @@ function createDict(keys, values) {
     }
     return d;
 }
-const BOOK_KEYS = ["id", "name", "path", "description", "title", "tags", "date", "favicon", "faviconMimeType"];
+const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "favicon", "faviconMimeType"];
 function addBook(values) {
   var b = createDict(BOOK_KEYS, values);
   app.books.push(b);
@@ -47,7 +55,8 @@ function init() {
           if (newPage < 0) newPage = 0;
           if (newPage > contentManager.nbPages) newPage = contentManager.nbPages;
           contentManager.currentPage = newPage;
-        }
+        },
+        niceBytes : niceBytes
       }
     });
     library.booksChanged.connect(onBooksChanged);
@@ -90,7 +99,7 @@ function init() {
              <img v-bind:src="'data:image/png;base64,' + book.favicon"/> {{ book.title }}
            </span>
            <span>
-             {{ book.size }}
+             {{ niceBytes(book.size) }}
            </span>
            <span>
              {{ book.date }}

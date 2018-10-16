@@ -25,9 +25,11 @@ class Library : public QObject
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
 public:
     Library();
+    virtual ~Library();
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     QStringList getBookIds();
+    void save();
 public slots:
     QStringList getBookInfos(QString id, const QStringList &keys);
     QString openBookById(const QString& _id);

@@ -27,6 +27,11 @@ Library::Library()
     emit(booksChanged());
 }
 
+Library::~Library()
+{
+    save();
+}
+
 QString Library::openBookFromPath(const QString &zimPath)
 {
     for(auto it=m_readersMap.begin();
@@ -45,7 +50,7 @@ QString Library::openBookFromPath(const QString &zimPath)
     b.update(*reader);
     m_library.addBook(b);
     m_readersMap[id] = reader;
-    m_library.writeToFile(appendToDirectory(getDataDirectory(),"library.xml"));
+    save();
     emit(booksChanged());
     return id;
 }
@@ -83,6 +88,11 @@ QStringList Library::getBookIds()
     return list;
 }
 
+void Library::save()
+{
+    m_library.writeToFile(appendToDirectory(getDataDirectory(),"library.xml"));
+}
+
 #define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b.METH())));}
 QStringList Library::getBookInfos(QString id, const QStringList &keys)
 {
@@ -110,6 +120,15 @@ QStringList Library::getBookInfos(QString id, const QStringList &keys)
         if (key == "favicon") {
             auto s = b.getFavicon();
             values.append(QByteArray::fromStdString(s).toBase64());
+        }
+        if (key == "size") {
+            values.append(QString::number(b.getSize()));
+        }
+        if (key == "articleCount") {
+            values.append(QString::number(b.getArticleCount()));
+        }
+        if (key == "mediaCount") {
+            values.append(QString::number(b.getMediaCount()));
         }
     }
     return values;
