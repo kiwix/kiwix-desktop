@@ -94,8 +94,59 @@ function init() {
 }
 </script>
 <style>
+body {
+padding: 0;
+    margin: 0;
+}
 #app {
     display: flex;
+}
+#sideBar {
+    flex-grow: 0;
+    flex-basis: 284px;
+    flex-shrink: 0;
+}
+#mainContent {
+    flex-grow: 1;
+}
+#bookList {
+    width:100%;
+}
+.tablerow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.tablecell{
+    flex-basis:20%;
+}
+.cell0 {
+    flex-basis: 60px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+.cell0 > img {
+    width: 24px;
+    height: 24px;
+}
+.cell1 {
+    flex-grow: 1;
+}
+summary::-webkit-details-marker {
+  display: none
+}
+summary {
+  height: 64px;
+}
+.book {
+  border-top: 1px solid #99F;
+  padding: 10px;
+
+}
+button {
+  color: blue;
+  border: 0px;
+  background: transparent;
 }
 </style>
 </head>
@@ -110,46 +161,52 @@ function init() {
     <li><a>Content type:</a></li>
   </ul>
   </div>
-  <div>
+  <div id="mainContent">
    <div id="searchBar">
      <form>
        <input />
      </form>
    </div>
    <div id="bookList">
-     <div class="header">
-       <span>File name</span><span>Size</span><span>Date</span><span>Content type</span>
+     <div class="header tablerow">
+       <span class="tablecell cell0"></span>
+       <span class="tablecell cell1">File name</span>
+       <span class="tablecell cell1">Size</span>
+       <span class="tablecell cell1">Date</span>
+       <span class="tablecell cell1">Content type</span>
+       <span class="tablecell cell1"></span>
      </div>
-     <ul>
-       <li v-for="book in books">
-         <div class="book header">
-           <span>
-             <img v-bind:src="'data:image/png;base64,' + book.favicon"/> {{ book.title }}
-           </span>
-           <span>
-             {{ niceBytes(book.size) }}
-           </span>
-           <span>
-             {{ book.date }}
-           </span>
-           <span>
-             {{ book.tags }}
-           </span>
-           <span>
-             <template v-if="book.downloadId">
-               <span v-if="downloads[book.id]">
-                 {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
-               </span>
-             </template>
-             <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
-             <button v-else v-on:click="downloadBook(book)">Download ({{niceBytes(book.size)}})</button>
-           </span>
-         </div>
-         <div class="book content">
-           {{ book.description }}
-         </div>
-       </li>
-     </ul>
+     <details v-for="book in books" class="book">
+       <summary class="tablerow">
+         <span class="tablecell cell0">
+           <img v-bind:src="'data:image/png;base64,' + book.favicon"/>
+         </span>
+         <span class="tablecell cell1">
+            {{ book.title }}
+         </span>
+         <span class="tablecell cell1">
+           {{ niceBytes(book.size) }}
+         </span>
+         <span class="tablecell cell1">
+           {{ book.date }}
+         </span>
+         <span class="tablecell cell1">
+           {{ book.tags }}
+         </span>
+         <span class="tablecell cell1">
+           <template v-if="book.downloadId">
+             <span v-if="downloads[book.id]">
+               {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
+             </span>
+           </template>
+           <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
+           <button v-else v-on:click="downloadBook(book)">Download</button>
+         </span>
+       </summary>
+       <p class="content">
+         {{ book.description }}
+       </p>
+     </details>
      <div class="footer">
        <button v-on:click="contentManager.currentPage = 0">First</button>
        <button v-on:click="changePage(-1)">Previous</button>
