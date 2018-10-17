@@ -33,6 +33,7 @@ public:
 public slots:
     QStringList getBookInfos(QString id, const QStringList &keys);
     QString openBookById(const QString& _id);
+    kiwix::Book& getBookById(QString id);
 
 signals:
     void booksChanged();

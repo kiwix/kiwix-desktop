@@ -133,3 +133,11 @@ QStringList Library::getBookInfos(QString id, const QStringList &keys)
     }
     return values;
 }
+
+kiwix::Book &Library::getBookById(QString id)
+{
+    if (id.endsWith(".zim")) {
+        id.resize(id.size()-4);
+    }
+    return m_library.getBookById(id.toStdString());
+}

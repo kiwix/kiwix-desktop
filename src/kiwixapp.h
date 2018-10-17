@@ -4,6 +4,7 @@
 #include "library.h"
 #include "contentmanager.h"
 #include "mainwindow.h"
+#include "downloader.h"
 #include "tabwidget.h"
 #include "tocsidebar.h"
 #include "urlschemehandler.h"
@@ -78,6 +79,7 @@ private:
     QTranslator m_qtTranslator, m_appTranslator;
     Library m_library;
     ContentManager m_manager;
+    Downloader m_downloader;
     MainWindow* mp_mainWindow;
     TabWidget* mp_tabWidget;
     QErrorMessage* mp_errorDialog;

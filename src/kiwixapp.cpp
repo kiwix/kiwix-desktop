@@ -14,7 +14,8 @@
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
       m_library(),
-      m_manager(&m_library)
+      m_manager(&m_library),
+      m_downloader(&m_library)
 {
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -73,6 +74,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     mp_tabWidget = mp_mainWindow->getTabWidget();
     mp_tabWidget->setContentManagerView(m_manager.getView());
     m_manager.getView()->registerObject("kiwix", this);
+    m_manager.getView()->registerObject("downloader", &m_downloader);
     postInit();
 
     mp_errorDialog = new QErrorMessage(mp_mainWindow);

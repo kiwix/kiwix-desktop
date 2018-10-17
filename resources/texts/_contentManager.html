@@ -20,9 +20,12 @@ function createDict(keys, values) {
     }
     return d;
 }
-const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "favicon", "faviconMimeType"];
+const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "favicon", "faviconMimeType", "downloadId"];
 function addBook(values) {
   var b = createDict(BOOK_KEYS, values);
+  if (b.downloadId && !downloadUpdaters.hasOwnProperty(b.id)) {
+    downloadUpdaters[b.id] = setInterval(function() { getDownloadInfo(b.id); }, 1000);
+  }
   app.books.push(b);
 }
 function onBooksChanged () {
@@ -33,18 +36,37 @@ function onBooksChanged () {
   }
 }
 
+downloadUpdaters = {}
+const DOWNLOAD_KEYS = ["id", "status", "followedBy", "path", "totalLength", "completedLength", "downloadSpeed", "verifiedLength"];
+function getDownloadInfo(id) {
+  downloader.updateDownloadInfos(id, DOWNLOAD_KEYS, function(values) {
+    if (values.length == 0) {
+      clearInterval(downloadUpdaters[id]);
+      return;
+    }
+    d = createDict(DOWNLOAD_KEYS, values);
+    if (d.status == "completed") {
+      clearInterval(downloadUpdaters[id]);
+    }
+    Vue.set(app.downloads, id, createDict(DOWNLOAD_KEYS, values));
+  });
+}
+
 function init() {
   new QWebChannel(qt.webChannelTransport, function(channel) {
     contentManager = channel.objects.contentManager;
     library = channel.objects.library;
     kiwix = channel.objects.kiwix;
+    downloader = channel.objects.downloader;
     app = new Vue({
       el: "#app",
       data: {
         contentManager: contentManager,
         library: library,
         kiwix: kiwix,
-        books: []
+        downloader: downloader,
+        books: [],
+        downloads: {}
       },
       methods: {
         openBook : function(book) {
@@ -55,6 +77,12 @@ function init() {
           if (newPage < 0) newPage = 0;
           if (newPage > contentManager.nbPages) newPage = contentManager.nbPages;
           contentManager.currentPage = newPage;
+        },
+        downloadBook : function(book) {
+          downloader.downloadBook(book.id, function(did)  {
+            book.downloadId = did;
+            downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
+          });
         },
         niceBytes : niceBytes
       }
@@ -108,8 +136,13 @@ function init() {
              {{ book.tags }}
            </span>
            <span>
-             <button v-if="book.path" v-on:click="openBook(book)">Open</button>
-             <button v-else>Download</button>
+             <template v-if="book.downloadId">
+               <span v-if="downloads[book.id]">
+                 {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
+               </span>
+             </template>
+             <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
+             <button v-else v-on:click="downloadBook(book)">Download ({{niceBytes(book.size)}})</button>
            </span>
          </div>
          <div class="book content">
