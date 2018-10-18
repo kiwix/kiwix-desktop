@@ -51,6 +51,7 @@ public:
     };
     enum SideBarType {
         SEARCH_BAR,
+        CONTENTMANAGER_BAR,
         NONE
     };
 
@@ -88,6 +89,7 @@ private:
     ContentManager m_manager;
     MainWindow* mp_mainWindow;
     TabBar* mp_tabWidget;
+    QWidget* mp_currentSideBar;
     QErrorMessage* mp_errorDialog;
 
     UrlSchemeHandler m_schemeHandler;

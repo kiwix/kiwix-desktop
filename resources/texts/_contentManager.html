@@ -91,17 +91,6 @@ body {
 padding: 0;
     margin: 0;
 }
-#app {
-    display: flex;
-}
-#sideBar {
-    flex-grow: 0;
-    flex-basis: 284px;
-    flex-shrink: 0;
-}
-#mainContent {
-    flex-grow: 1;
-}
 #bookList {
     width:100%;
 }
@@ -145,69 +134,58 @@ button {
 </head>
 <body onload="init()">
 <div id="app">
-  <div id="sideBar">
-  <ul>
-    <li><a>All files</a></li>
-    <li><a>Local files</a></li>
-    <li><a>Browse by category</a></li>
-    <li><a>Language:</a></li>
-    <li><a>Content type:</a></li>
-  </ul>
+  <div id="searchBar">
+    <form>
+      <input />
+    </form>
   </div>
-  <div id="mainContent">
-   <div id="searchBar">
-     <form>
-       <input />
-     </form>
-   </div>
-   <div id="bookList">
-     <div class="header tablerow">
-       <span class="tablecell cell0"></span>
-       <span class="tablecell cell1">File name</span>
-       <span class="tablecell cell1">Size</span>
-       <span class="tablecell cell1">Date</span>
-       <span class="tablecell cell1">Content type</span>
-       <span class="tablecell cell1"></span>
-     </div>
-     <details v-for="book in books" class="book">
-       <summary class="tablerow">
-         <span class="tablecell cell0">
-           <img v-bind:src="'data:image/png;base64,' + book.favicon"/>
-         </span>
-         <span class="tablecell cell1">
-            {{ book.title }}
-         </span>
-         <span class="tablecell cell1">
-           {{ niceBytes(book.size) }}
-         </span>
-         <span class="tablecell cell1">
-           {{ book.date }}
-         </span>
-         <span class="tablecell cell1">
-           {{ book.tags }}
-         </span>
-         <span class="tablecell cell1">
-           <template v-if="book.downloadId">
-             <span v-if="downloads[book.id]">
-               {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
-             </span>
-           </template>
-           <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
-           <button v-else v-on:click="downloadBook(book)">Download</button>
-         </span>
-       </summary>
-       <p class="content">
-         {{ book.description }}
-       </p>
-     </details>
-     <div class="footer">
-       <button v-on:click="contentManager.currentPage = 0">First</button>
-       <button v-on:click="changePage(-1)">Previous</button>
-       {{ contentManager.currentPage+1 }} / {{ contentManager.nbPages+1 }}
-       <button v-on:click="changePage(1)">Next</button>
-       <button v-on:click="contentManager.currentPage = contentManager.nbPages">Last</button>
-     </div>
-   </div>
- </div>
+  <div id="bookList">
+    <div class="header tablerow">
+      <span class="tablecell cell0"></span>
+      <span class="tablecell cell1">File name</span>
+      <span class="tablecell cell1">Size</span>
+      <span class="tablecell cell1">Date</span>
+      <span class="tablecell cell1">Content type</span>
+      <span class="tablecell cell1"></span>
+    </div>
+    <details v-for="book in books" class="book">
+      <summary class="tablerow">
+        <span class="tablecell cell0">
+          <img v-bind:src="'data:image/png;base64,' + book.favicon"/>
+        </span>
+        <span class="tablecell cell1">
+          {{ book.title }}
+        </span>
+        <span class="tablecell cell1">
+          {{ niceBytes(book.size) }}
+        </span>
+        <span class="tablecell cell1">
+          {{ book.date }}
+        </span>
+        <span class="tablecell cell1">
+          {{ book.tags }}
+        </span>
+        <span class="tablecell cell1">
+          <template v-if="book.downloadId">
+            <span v-if="downloads[book.id]">
+              {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
+            </span>
+          </template>
+          <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
+          <button v-else v-on:click="downloadBook(book)">Download</button>
+        </span>
+      </summary>
+      <p class="content">
+        {{ book.description }}
+      </p>
+    </details>
+    <div class="footer">
+      <button v-on:click="contentManager.currentPage = 0">First</button>
+      <button v-on:click="changePage(-1)">Previous</button>
+      {{ contentManager.currentPage+1 }} / {{ contentManager.nbPages+1 }}
+      <button v-on:click="changePage(1)">Next</button>
+      <button v-on:click="contentManager.currentPage = contentManager.nbPages">Last</button>
+    </div>
+  </div>
 </div>
 </body></html>

@@ -7,6 +7,7 @@
 #include "tabbar.h"
 #include "tocsidebar.h"
 #include "about.h"
+#include "contentmanagerside.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ public:
 
     TabBar*   getTabBar();
     QStackedWidget* getSideDockWidget();
+    ContentManagerSide* getSideContentManager();
 
 protected slots:
     void toggleFullScreen();

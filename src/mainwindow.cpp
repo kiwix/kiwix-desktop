@@ -49,3 +49,8 @@ QStackedWidget *MainWindow::getSideDockWidget()
 {
     return mp_ui->sideBar;
 }
+
+ContentManagerSide *MainWindow::getSideContentManager()
+{
+    return mp_ui->contentmanagerside;
+}

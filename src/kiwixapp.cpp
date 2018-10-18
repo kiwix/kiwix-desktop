@@ -73,6 +73,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     mp_mainWindow = new MainWindow;
     mp_tabWidget = mp_mainWindow->getTabBar();
     mp_tabWidget->setContentManagerView(m_manager.getView());
+    mp_mainWindow->getSideContentManager()->setContentManager(&m_manager);
+    setSideBar(CONTENTMANAGER_BAR);
     postInit();
 
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
@@ -148,6 +150,7 @@ void KiwixApp::setSideBar(KiwixApp::SideBarType type)
     auto sideDockWidget = mp_mainWindow->getSideDockWidget();
     switch(type) {
         case SEARCH_BAR:
+        case CONTENTMANAGER_BAR:
             sideDockWidget->setCurrentIndex(type);
             sideDockWidget->show();
             break;
