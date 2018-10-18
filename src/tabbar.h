@@ -1,22 +1,24 @@
 #ifndef TABWIDGET_H
 #define TABWIDGET_H
 
-#include <QTableWidget>
+#include <QTabBar>
+#include <QStackedWidget>
 #include <memory>
 #include "webview.h"
 #include "contentmanagerview.h"
 
-class TabWidget : public QTabWidget
+class TabBar : public QTabBar
 {
     Q_OBJECT
     Q_PROPERTY(QString currentZimId READ currentZimId NOTIFY currentZimIdChanged)
 public:
-    TabWidget(QWidget* parent=nullptr);
+    TabBar(QWidget* parent=nullptr);
+    void setStackedWidget(QStackedWidget* widget);
 
     void     setContentManagerView(ContentManagerView* view);
     WebView* createNewTab(bool setCurrent);
-    WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(QTabWidget::widget(index)) : nullptr; }
-    WebView* currentWidget() { auto current = QTabWidget::currentWidget();
+    WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(mp_stackedWidget->widget(index)) : nullptr; }
+    WebView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
                                if (current == mp_contentManagerView) return nullptr;
                                return static_cast<WebView*>(current);
                              }
@@ -38,6 +40,7 @@ public slots:
 
 private:
     ContentManagerView* mp_contentManagerView;
+    QStackedWidget*     mp_stackedWidget;
 
 };
 

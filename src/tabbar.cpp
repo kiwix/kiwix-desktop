@@ -1,4 +1,4 @@
-#include "tabwidget.h"
+#include "tabbar.h"
 
 #include "kiwixapp.h"
 #include <QAction>
@@ -7,15 +7,15 @@
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentWidget();}
 
-TabWidget::TabWidget(QWidget *parent) :
-    QTabWidget(parent)
+TabBar::TabBar(QWidget *parent) :
+    QTabBar(parent)
 {
     setTabsClosable(true);
     setElideMode(Qt::ElideNone);
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
-    connect(this, &QTabWidget::tabCloseRequested, this, &TabWidget::closeTab);
-    connect(this, &QTabWidget::currentChanged, this, &TabWidget::onCurrentChanged);
+    connect(this, &QTabBar::tabCloseRequested, this, &TabBar::closeTab);
+    connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged);
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
@@ -31,6 +31,10 @@ TabWidget::TabWidget(QWidget *parent) :
                     return;
                 }
                 this->closeTab(index);
+                auto widget = mp_stackedWidget->widget(index);
+                mp_stackedWidget->removeWidget(widget);
+                widget->setParent(nullptr);
+                delete widget;
             });
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
@@ -58,13 +62,22 @@ TabWidget::TabWidget(QWidget *parent) :
             });
 }
 
-void     TabWidget::setContentManagerView(ContentManagerView* view)
-{
-    mp_contentManagerView = view;
-    addTab(mp_contentManagerView, "");
+void TabBar::setStackedWidget(QStackedWidget *widget) {
+    mp_stackedWidget = widget;
+    connect(this, &QTabBar::currentChanged,
+            widget, &QStackedWidget::setCurrentIndex);
 }
 
-WebView* TabWidget::createNewTab(bool setCurrent)
+void TabBar::setContentManagerView(ContentManagerView* view)
+{
+    qInfo() << "add widget";
+    mp_contentManagerView = view;
+    mp_stackedWidget->addWidget(mp_contentManagerView);
+    mp_stackedWidget->show();
+    addTab("contentManager");
+}
+
+WebView* TabBar::createNewTab(bool setCurrent)
 {
     WebView* webView = new WebView();
     connect(webView, &WebView::titleChanged, this,
@@ -78,14 +91,15 @@ WebView* TabWidget::createNewTab(bool setCurrent)
             }
     );
     // Ownership of webview is passed to the tabWidget
-    addTab(webView, "");
+    mp_stackedWidget->addWidget(webView);
+    auto index = addTab("");
     if (setCurrent) {
-        setCurrentWidget(webView);
+        setCurrentIndex(index);
     }
     return webView;
 }
 
-void TabWidget::openUrl(const QUrl& url, bool newTab)
+void TabBar::openUrl(const QUrl& url, bool newTab)
 {
     WebView* webView = currentWidget();
     if (newTab || !webView) {
@@ -95,31 +109,31 @@ void TabWidget::openUrl(const QUrl& url, bool newTab)
     webView->setUrl(url);
 }
 
-void TabWidget::setTitleOf(const QString& title, WebView* webView)
+void TabBar::setTitleOf(const QString& title, WebView* webView)
 {
     CURRENTIFNULL(webView);
     if (title.startsWith("zim://")) {
         auto url = QUrl(title);
-        setTabText(indexOf(webView), url.path());
+        setTabText(mp_stackedWidget->indexOf(webView), url.path());
     } else {
-        setTabText(indexOf(webView), title);
+        setTabText(mp_stackedWidget->indexOf(webView), title);
     }
 }
 
-void TabWidget::setIconOf(const QIcon &icon, WebView *webView)
+void TabBar::setIconOf(const QIcon &icon, WebView *webView)
 {
     CURRENTIFNULL(webView);
-    setTabIcon(indexOf(webView), icon);
+    setTabIcon(mp_stackedWidget->indexOf(webView), icon);
 }
 
-QString TabWidget::currentZimId()
+QString TabBar::currentZimId()
 {
     if (!currentWidget())
         return "";
     return currentWidget()->zimId();
 }
 
-void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *webView)
+void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *webView)
 {
     CURRENTIFNULL(webView);
     QUITIFNULL(webView);
@@ -127,7 +141,7 @@ void TabWidget::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *
     webView->setFocus();
 }
 
-void TabWidget::closeTab(int index)
+void TabBar::closeTab(int index)
 {
     if (index == 0)
         return;
@@ -137,7 +151,7 @@ void TabWidget::closeTab(int index)
     delete webview;
 }
 
-void TabWidget::onCurrentChanged(int index)
+void TabBar::onCurrentChanged(int index)
 {
     if (index == -1)
         return;

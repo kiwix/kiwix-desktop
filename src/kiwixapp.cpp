@@ -71,7 +71,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     createAction();
     mp_mainWindow = new MainWindow;
-    mp_tabWidget = mp_mainWindow->getTabWidget();
+    mp_tabWidget = mp_mainWindow->getTabBar();
     mp_tabWidget->setContentManagerView(m_manager.getView());
     postInit();
 
@@ -141,6 +141,20 @@ void KiwixApp::openUrl(const QString &url, bool newTab) {
 
 void KiwixApp::openUrl(const QUrl &url, bool newTab) {
     mp_tabWidget->openUrl(url, newTab);
+}
+
+void KiwixApp::setSideBar(KiwixApp::SideBarType type)
+{
+    auto sideDockWidget = mp_mainWindow->getSideDockWidget();
+    switch(type) {
+        case SEARCH_BAR:
+            sideDockWidget->setCurrentIndex(type);
+            sideDockWidget->show();
+            break;
+        case NONE:
+            sideDockWidget->hide();
+            break;
+    }
 }
 
 void KiwixApp::openRandomUrl(bool newTab)
@@ -229,6 +243,8 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(FindInPageAction, tr("Find in page"));
     SET_SHORTCUT(FindInPageAction, QKeySequence::Find);
+    connect(mpa_actions[FindInPageAction], &QAction::triggered,
+            this, [=]() { setSideBar(SEARCH_BAR); });
 
     CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", tr("Set fullScreen"));
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);
@@ -286,10 +302,5 @@ void KiwixApp::createAction()
 }
 
 void KiwixApp::postInit() {
-    auto realToggleAction = mp_mainWindow->getSideDockWidget()->toggleViewAction();
-    auto proxyToggleAction = mpa_actions[FindInPageAction];
-    connect(proxyToggleAction, &QAction::triggered, realToggleAction, &QAction::trigger);
-    connect(realToggleAction, &QAction::toggled, proxyToggleAction, &QAction::setChecked);
-    realToggleAction->toggle();
     emit(m_library.booksChanged());
 }

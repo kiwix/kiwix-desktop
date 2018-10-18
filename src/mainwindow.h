@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QDockWidget>
 #include "webview.h"
-#include "tabwidget.h"
+#include "tabbar.h"
 #include "tocsidebar.h"
 #include "about.h"
 
@@ -20,8 +20,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    TabWidget*   getTabWidget();
-    QDockWidget* getSideDockWidget();
+    TabBar*   getTabBar();
+    QStackedWidget* getSideDockWidget();
 
 protected slots:
     void toggleFullScreen();

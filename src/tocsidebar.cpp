@@ -8,6 +8,8 @@ TocSideBar::TocSideBar(QWidget *parent) :
 {
     mp_ui->setupUi(this);
     mp_findLineEdit = mp_ui->findEdit;
+    connect(mp_ui->hideButton, &QPushButton::released,
+            this, [=]() { KiwixApp::instance()->setSideBar(KiwixApp::NONE);});
     connect(mp_ui->fNextButton, &QPushButton::released,
             this, &TocSideBar::findNext);
     connect(mp_ui->fPreviousButton, &QPushButton::released,

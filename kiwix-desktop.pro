@@ -49,7 +49,6 @@ SOURCES += \
     src/topwidget.cpp \
     src/requestinterceptor.cpp \
     src/urlschemehandler.cpp \
-    src/tabwidget.cpp \
     src/webview.cpp \
     src/searchbar.cpp \
     src/mainmenu.cpp \
@@ -58,6 +57,7 @@ SOURCES += \
     src/tocsidebar.cpp \
     src/contentmanager.cpp \
     src/contentmanagerview.cpp \
+    src/tabbar.cpp \
 
 HEADERS += \
     src/mainwindow.h \
@@ -68,7 +68,6 @@ HEADERS += \
     src/kconstants.h \
     src/requestinterceptor.h \
     src/urlschemehandler.h \
-    src/tabwidget.h \
     src/webview.h \
     src/searchbar.h \
     src/mainmenu.h \
@@ -77,6 +76,7 @@ HEADERS += \
     src/tocsidebar.h \
     src/contentmanager.h \
     src/contentmanagerview.h \
+    src/tabbar.h \
 
 FORMS += \
     ui/mainwindow.ui \

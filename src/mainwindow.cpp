@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_about(new About(this))
 {
     mp_ui->setupUi(this);
-    mp_ui->tabWidget->tabBar()->setExpanding(false);
+    mp_ui->tabBar->setExpanding(false);
+    mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
@@ -39,12 +40,12 @@ void MainWindow::toggleFullScreen() {
         showFullScreen();
 }
 
-TabWidget* MainWindow::getTabWidget()
+TabBar* MainWindow::getTabBar()
 {
-    return mp_ui->tabWidget;
+    return mp_ui->tabBar;
 }
 
-QDockWidget* MainWindow::getSideDockWidget()
+QStackedWidget *MainWindow::getSideDockWidget()
 {
-    return mp_ui->sideDockWidget;
+    return mp_ui->sideBar;
 }

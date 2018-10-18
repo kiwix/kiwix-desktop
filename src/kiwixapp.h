@@ -5,7 +5,7 @@
 #include "contentmanager.h"
 #include "mainwindow.h"
 #include "kiwix/downloader.h"
-#include "tabwidget.h"
+#include "tabbar.h"
 #include "tocsidebar.h"
 #include "urlschemehandler.h"
 #include "requestinterceptor.h"
@@ -49,6 +49,10 @@ public:
         ExitAction,
         MAX_ACTION
     };
+    enum SideBarType {
+        SEARCH_BAR,
+        NONE
+    };
 
     KiwixApp(int& argc, char *argv[]);
     virtual ~KiwixApp();
@@ -63,13 +67,14 @@ public:
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
     kiwix::Downloader* getDownloader() { return &m_downloader; }
-    TabWidget* getTabWidget() { return mp_tabWidget; }
+    TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
 
 public slots:
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
+    void setSideBar(SideBarType type);
     void printPage();
 
 protected:
@@ -82,7 +87,7 @@ private:
     kiwix::Downloader m_downloader;
     ContentManager m_manager;
     MainWindow* mp_mainWindow;
-    TabWidget* mp_tabWidget;
+    TabBar* mp_tabWidget;
     QErrorMessage* mp_errorDialog;
 
     UrlSchemeHandler m_schemeHandler;
