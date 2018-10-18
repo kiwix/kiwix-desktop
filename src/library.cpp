@@ -93,47 +93,6 @@ void Library::save()
     m_library.writeToFile(appendToDirectory(getDataDirectory(),"library.xml"));
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b.METH())));}
-QStringList Library::getBookInfos(QString id, const QStringList &keys)
-{
-    QStringList values;
-    if (id.endsWith(".zim")) {
-        id.resize(id.size()-4);
-    }
-    auto& b = m_library.getBookById(id.toStdString());
-    for(auto& key: keys){
-        ADD_V("id", getId);
-        ADD_V("path", getPath);
-        ADD_V("indexPath", getIndexPath);
-        ADD_V("title", getTitle);
-        ADD_V("description", getDescription);
-        ADD_V("language", getLanguage);
-        ADD_V("creator", getCreator);
-        ADD_V("publisher", getPublisher);
-        ADD_V("date", getDate);
-        ADD_V("url", getUrl);
-        ADD_V("name", getName);
-        ADD_V("tags", getTags);
-        ADD_V("origId", getOrigId);
-        ADD_V("faviconMimeType", getFaviconMimeType);
-        ADD_V("downloadId", getDownloadId);
-        if (key == "favicon") {
-            auto s = b.getFavicon();
-            values.append(QByteArray::fromStdString(s).toBase64());
-        }
-        if (key == "size") {
-            values.append(QString::number(b.getSize()));
-        }
-        if (key == "articleCount") {
-            values.append(QString::number(b.getArticleCount()));
-        }
-        if (key == "mediaCount") {
-            values.append(QString::number(b.getMediaCount()));
-        }
-    }
-    return values;
-}
-
 kiwix::Book &Library::getBookById(QString id)
 {
     if (id.endsWith(".zim")) {

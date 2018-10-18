@@ -4,7 +4,7 @@
 #include "library.h"
 #include "contentmanager.h"
 #include "mainwindow.h"
-#include "downloader.h"
+#include "kiwix/downloader.h"
 #include "tabwidget.h"
 #include "tocsidebar.h"
 #include "urlschemehandler.h"
@@ -62,6 +62,7 @@ public:
     RequestInterceptor* getRequestInterceptor() { return &m_requestInterceptor; }
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
+    kiwix::Downloader* getDownloader() { return &m_downloader; }
     TabWidget* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
 
@@ -78,8 +79,8 @@ protected:
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     Library m_library;
+    kiwix::Downloader m_downloader;
     ContentManager m_manager;
-    Downloader m_downloader;
     MainWindow* mp_mainWindow;
     TabWidget* mp_tabWidget;
     QErrorMessage* mp_errorDialog;

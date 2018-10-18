@@ -30,16 +30,16 @@ function addBook(values) {
 }
 function onBooksChanged () {
   app.books = [];
-  for(var i=contentManager.startBookIndex; i<contentManager.endBookIndex; i++) {
-    var id = library.bookIds[i];
-    library.getBookInfos(id, BOOK_KEYS, addBook);
+  for(var i=0; i<contentManager.bookIds.length; i++) {
+    var id = contentManager.bookIds[i];
+    contentManager.getBookInfos(id, BOOK_KEYS, addBook);
   }
 }
 
 downloadUpdaters = {}
 const DOWNLOAD_KEYS = ["id", "status", "followedBy", "path", "totalLength", "completedLength", "downloadSpeed", "verifiedLength"];
 function getDownloadInfo(id) {
-  downloader.updateDownloadInfos(id, DOWNLOAD_KEYS, function(values) {
+  contentManager.updateDownloadInfos(id, DOWNLOAD_KEYS, function(values) {
     if (values.length == 0) {
       clearInterval(downloadUpdaters[id]);
       return;
@@ -55,22 +55,16 @@ function getDownloadInfo(id) {
 function init() {
   new QWebChannel(qt.webChannelTransport, function(channel) {
     contentManager = channel.objects.contentManager;
-    library = channel.objects.library;
-    kiwix = channel.objects.kiwix;
-    downloader = channel.objects.downloader;
     app = new Vue({
       el: "#app",
       data: {
         contentManager: contentManager,
-        library: library,
-        kiwix: kiwix,
-        downloader: downloader,
         books: [],
         downloads: {}
       },
       methods: {
         openBook : function(book) {
-          kiwix.openUrl("zim://"+book.id+".zim/", true, function() {});
+          contentManager.openBook(book.id, function() {});
         },
         changePage : function(delta) {
           var newPage = contentManager.currentPage+delta;
@@ -79,7 +73,7 @@ function init() {
           contentManager.currentPage = newPage;
         },
         downloadBook : function(book) {
-          downloader.downloadBook(book.id, function(did)  {
+          contentManager.downloadBook(book.id, function(did)  {
             book.downloadId = did;
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });
@@ -87,8 +81,7 @@ function init() {
         niceBytes : niceBytes
       }
     });
-    library.booksChanged.connect(onBooksChanged);
-    contentManager.pagingChanged.connect(onBooksChanged);
+    contentManager.booksChanged.connect(onBooksChanged);
     onBooksChanged();
   });
 }

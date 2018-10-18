@@ -58,7 +58,6 @@ SOURCES += \
     src/tocsidebar.cpp \
     src/contentmanager.cpp \
     src/contentmanagerview.cpp \
-    src/downloader.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -78,7 +77,6 @@ HEADERS += \
     src/tocsidebar.h \
     src/contentmanager.h \
     src/contentmanagerview.h \
-    src/downloader.h
 
 FORMS += \
     ui/mainwindow.ui \

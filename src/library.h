@@ -31,7 +31,6 @@ public:
     QStringList getBookIds();
     void save();
 public slots:
-    QStringList getBookInfos(QString id, const QStringList &keys);
     QString openBookById(const QString& _id);
     kiwix::Book& getBookById(QString id);
 
