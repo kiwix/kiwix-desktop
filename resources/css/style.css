@@ -177,3 +177,29 @@ QTabBar::close-button {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
+
+/* ----------------------------------------
+    Find Search page
+*/
+
+#sideBar {
+   background-color: white;
+}
+
+#contentmanagerside QWidget{
+   background-color: white;
+   outline: none;
+}
+
+#contentmanagerside QRadioButton:checked {
+   border: none;
+}
+
+
+#contentmanagerside QRadioButton::indicator {
+   image: none;
+}
+
+#contentmanagerside QCheckBox::indicator {
+   image: none;
+}

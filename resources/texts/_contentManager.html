@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+<script src="qrc:///js/vue.js"></script>
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script type="text/javascript">
+const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+function niceBytes(x){
+  var unitIndex = 0;
+  var n = parseInt(x, 10) || 0;
+  while(n >= 1024 && ++unitIndex)
+      n = n/1024;
+  return(n.toFixed(n >= 10 || unitIndex < 1 ? 0 : 2) + ' ' + units[unitIndex]);
+}
+
+function createDict(keys, values) {
+    var d = {}
+    for(var i=0; i<keys.length; i++) {
+      d[keys[i]] = values[i];
+    }
+    return d;
+}
+const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "favicon", "faviconMimeType", "downloadId"];
+function addBook(values) {
+  var b = createDict(BOOK_KEYS, values);
+  if (b.downloadId && !downloadUpdaters.hasOwnProperty(b.id)) {
+    downloadUpdaters[b.id] = setInterval(function() { getDownloadInfo(b.id); }, 1000);
+  }
+  app.books.push(b);
+}
+function onBooksChanged () {
+  app.books = [];
+  for(var i=0; i<contentManager.bookIds.length; i++) {
+    var id = contentManager.bookIds[i];
+    contentManager.getBookInfos(id, BOOK_KEYS, addBook);
+  }
+}
+
+downloadUpdaters = {}
+const DOWNLOAD_KEYS = ["id", "status", "followedBy", "path", "totalLength", "completedLength", "downloadSpeed", "verifiedLength"];
+function getDownloadInfo(id) {
+  contentManager.updateDownloadInfos(id, DOWNLOAD_KEYS, function(values) {
+    if (values.length == 0) {
+      clearInterval(downloadUpdaters[id]);
+      return;
+    }
+    d = createDict(DOWNLOAD_KEYS, values);
+    if (d.status == "completed") {
+      clearInterval(downloadUpdaters[id]);
+    }
+    Vue.set(app.downloads, id, createDict(DOWNLOAD_KEYS, values));
+  });
+}
+
+function init() {
+  new QWebChannel(qt.webChannelTransport, function(channel) {
+    contentManager = channel.objects.contentManager;
+    app = new Vue({
+      el: "#app",
+      data: {
+        contentManager: contentManager,
+        books: [],
+        downloads: {}
+      },
+      methods: {
+        openBook : function(book) {
+          contentManager.openBook(book.id, function() {});
+        },
+        changePage : function(delta) {
+          var newPage = contentManager.currentPage+delta;
+          if (newPage < 0) newPage = 0;
+          if (newPage > contentManager.nbPages) newPage = contentManager.nbPages;
+          contentManager.currentPage = newPage;
+        },
+        downloadBook : function(book) {
+          contentManager.downloadBook(book.id, function(did)  {
+            book.downloadId = did;
+            downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
+          });
+        },
+        niceBytes : niceBytes
+      }
+    });
+    contentManager.booksChanged.connect(onBooksChanged);
+    onBooksChanged();
+  });
+}
+</script>
+<style>
+body {
+padding: 0;
+    margin: 0;
+}
+*:focus {
+    outline: none;
+}
+#searchInput {
+    background-image: url('qrc:///icons/search.svg');
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 40px 40px;
+    padding: 0px;
+    margin: 0px;
+    padding-left: 45px;
+    height: 40px;
+    width: 90%;
+    border: 1px solid #EEE;
+}
+#bookList {
+    width:100%;
+}
+.tablerow,
+.header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.header {
+    color: #555;
+    margin-top: 20px;
+}
+.tablecell{
+    flex-basis:20%;
+}
+.cell0 {
+    flex-basis: 60px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+.tablerow > .cell1 {
+    font-weight: bold;
+}
+.cell0 > img {
+    width: 24px;
+    height: 24px;
+}
+.cell1,
+.cell2,
+.cell3,
+.cell4,
+.cell5 {
+    flex-grow: 1;
+}
+summary::-webkit-details-marker {
+  display: none
+}
+summary {
+  height: 64px;
+}
+.book {
+  border-top: 1px solid #EEE;
+  padding: 10px;
+
+}
+button {
+  background: transparent;
+  border: 0px;
+}
+.tablerow button {
+  color: blue;
+  font-weight: bold;
+  font-size: 14px;
+  border: 0px;
+  background: transparent;
+  border-radius: 2px;
+}
+.tablerow button:hover {
+  color: white;
+  background: blue;
+}
+</style>
+</head>
+<body onload="init()">
+<div id="app">
+  <div id="searchBar">
+    <form>
+      <input id="searchInput" type="text" placeholder="Search files" readonly/>
+    </form>
+  </div>
+  <div id="bookList">
+    <div class="header">
+      <span class="tablecell cell0"></span>
+      <span class="tablecell cell1">File name</span>
+      <span class="tablecell cell2">Size</span>
+      <span class="tablecell cell3">Date</span>
+      <span class="tablecell cell4">Content type</span>
+      <span class="tablecell cell5"></span>
+    </div>
+    <details v-for="book in books" class="book">
+      <summary class="tablerow">
+        <span class="tablecell cell0">
+          <img v-bind:src="'data:image/png;base64,' + book.favicon"/>
+        </span>
+        <span class="tablecell cell1">
+          {{ book.title }}
+        </span>
+        <span class="tablecell cell2">
+          {{ niceBytes(book.size) }}
+        </span>
+        <span class="tablecell cell3">
+          {{ book.date }}
+        </span>
+        <span class="tablecell cell4">
+          {{ book.tags }}
+        </span>
+        <span class="tablecell cell5">
+          <template v-if="book.downloadId">
+            <span v-if="downloads[book.id]">
+              {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
+            </span>
+          </template>
+          <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
+          <button v-else v-on:click="downloadBook(book)">Download</button>
+        </span>
+      </summary>
+      <p class="content">
+        {{ book.description }}
+      </p>
+    </details>
+    <div class="footer">
+      <button v-on:click="contentManager.currentPage = 0">First</button>
+      <button v-on:click="changePage(-1)">Previous</button>
+      {{ contentManager.currentPage+1 }} / {{ contentManager.nbPages+1 }}
+      <button v-on:click="changePage(1)">Next</button>
+      <button v-on:click="contentManager.currentPage = contentManager.nbPages">Last</button>
+    </div>
+  </div>
+</div>
+</body></html>

@@ -4,9 +4,10 @@
 #include <QMainWindow>
 #include <QDockWidget>
 #include "webview.h"
-#include "tabwidget.h"
+#include "tabbar.h"
 #include "tocsidebar.h"
 #include "about.h"
+#include "contentmanagerside.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,8 +21,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    TabWidget*   getTabWidget();
-    QDockWidget* getSideDockWidget();
+    TabBar*   getTabBar();
+    QStackedWidget* getSideDockWidget();
+    ContentManagerSide* getSideContentManager();
 
 protected slots:
     void toggleFullScreen();

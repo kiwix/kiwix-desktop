@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>js/vue.js</file>
+        <file>texts/_contentManager.html</file>
+    </qresource>
+</RCC>

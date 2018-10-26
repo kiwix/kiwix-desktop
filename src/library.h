@@ -1,18 +1,47 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-#include <kiwix/manager.h>
-#include <map>
+#include <kiwix/book.h>
+#include <kiwix/library.h>
+#include <kiwix/reader.h>
 #include <qstring.h>
+#include <memory>
 
-class Library : public kiwix::Manager
+#include <QObject>
+#include <QSharedPointer>
+#include <QMap>
+
+#define TQS(v) (QString::fromStdString(v))
+#define FORWARD_GETTER(METH) QString METH() const { return TQS(mp_book->METH()); }
+
+#undef FORWARD_GETTER
+#undef TQS
+
+class LibraryManipulator;
+
+class Library : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
 public:
     Library();
-    QString openBook(const QString& zimPath);
+    virtual ~Library();
+    QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
+    QStringList getBookIds();
+    void addBookToLibrary(kiwix::Book& book);
+    void save();
+public slots:
+    QString openBookById(const QString& _id);
+    kiwix::Book& getBookById(QString id);
+
+signals:
+    void booksChanged();
+
 private:
-    std::map<QString, std::shared_ptr<kiwix::Reader>> m_readersMap;
+    kiwix::Library m_library;
+    QMap<QString, std::shared_ptr<kiwix::Reader>> m_readersMap;
+friend class LibraryManipulator;
 };
 
 #endif // LIBRARY_H

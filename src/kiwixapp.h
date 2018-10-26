@@ -2,8 +2,10 @@
 #define KIWIXAPP_H
 
 #include "library.h"
+#include "contentmanager.h"
 #include "mainwindow.h"
-#include "tabwidget.h"
+#include "kiwix/downloader.h"
+#include "tabbar.h"
 #include "tocsidebar.h"
 #include "urlschemehandler.h"
 #include "requestinterceptor.h"
@@ -47,12 +49,16 @@ public:
         ExitAction,
         MAX_ACTION
     };
+    enum SideBarType {
+        SEARCH_BAR,
+        CONTENTMANAGER_BAR,
+        NONE
+    };
 
     KiwixApp(int& argc, char *argv[]);
     virtual ~KiwixApp();
     static KiwixApp* instance();
 
-    void openUrl(const QUrl& url, bool newTab=true);
     void openRandomUrl(bool newTab=true);
 
     void showMessage(const QString& message);
@@ -61,11 +67,15 @@ public:
     RequestInterceptor* getRequestInterceptor() { return &m_requestInterceptor; }
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
-    TabWidget* getTabWidget() { return mp_tabWidget; }
+    kiwix::Downloader* getDownloader() { return &m_downloader; }
+    TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
 
 public slots:
     void openZimFile(const QString& zimfile="");
+    void openUrl(const QString& url, bool newTab=true);
+    void openUrl(const QUrl& url, bool newTab=true);
+    void setSideBar(SideBarType type);
     void printPage();
 
 protected:
@@ -75,8 +85,11 @@ protected:
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     Library m_library;
+    kiwix::Downloader m_downloader;
+    ContentManager m_manager;
     MainWindow* mp_mainWindow;
-    TabWidget* mp_tabWidget;
+    TabBar* mp_tabWidget;
+    QWidget* mp_currentSideBar;
     QErrorMessage* mp_errorDialog;
 
     UrlSchemeHandler m_schemeHandler;

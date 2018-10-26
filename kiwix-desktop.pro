@@ -49,13 +49,16 @@ SOURCES += \
     src/topwidget.cpp \
     src/requestinterceptor.cpp \
     src/urlschemehandler.cpp \
-    src/tabwidget.cpp \
     src/webview.cpp \
     src/searchbar.cpp \
     src/mainmenu.cpp \
     src/webpage.cpp \
     src/about.cpp \
-    src/tocsidebar.cpp
+    src/tocsidebar.cpp \
+    src/contentmanager.cpp \
+    src/contentmanagerview.cpp \
+    src/tabbar.cpp \
+    src/contentmanagerside.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -66,18 +69,22 @@ HEADERS += \
     src/kconstants.h \
     src/requestinterceptor.h \
     src/urlschemehandler.h \
-    src/tabwidget.h \
     src/webview.h \
     src/searchbar.h \
     src/mainmenu.h \
     src/webpage.h \
     src/about.h \
-    src/tocsidebar.h
+    src/tocsidebar.h \
+    src/contentmanager.h \
+    src/contentmanagerview.h \
+    src/tabbar.h \
+    src/contentmanagerside.h
 
 FORMS += \
     ui/mainwindow.ui \
     ui/about.ui \
-    src/tocsidebar.ui
+    src/tocsidebar.ui \
+    src/contentmanagerside.ui
 
 TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
 CODECFORSRC = UTF-8
@@ -116,7 +123,9 @@ LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
 
 RESOURCES += \
     resources/kiwix.qrc \
-    resources/translations.qrc
+    resources/translations.qrc \
+    resources/contentmanager.qrc \
+    resources/style.qrc
 
 unix {
     system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
