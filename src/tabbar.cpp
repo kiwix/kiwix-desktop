@@ -160,8 +160,10 @@ void TabBar::onCurrentChanged(int index)
         auto view = widget(index);
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
+        KiwixApp::instance()->setSideBar(KiwixApp::NONE);
     } else {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
+        KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
     }
 }
