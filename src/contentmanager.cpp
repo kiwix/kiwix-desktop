@@ -109,7 +109,7 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
     }
 
     d->updateStatus(true);
-    if (d->getStatus() == kiwix::Download::COMPLETE) {
+    if (d->getStatus() == kiwix::Download::K_COMPLETE) {
         b.setPath(d->getPath());
         b.setDownloadId("");
         mp_library->save();
@@ -119,22 +119,22 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         ADD_V("id", getDid);
         if(key == "status") {
             switch(d->getStatus()){
-            case kiwix::Download::ACTIVE:
+            case kiwix::Download::K_ACTIVE:
                 values.append("active");
                 break;
-            case kiwix::Download::WAITING:
+            case kiwix::Download::K_WAITING:
                 values.append("waiting");
                 break;
-            case kiwix::Download::PAUSED:
+            case kiwix::Download::K_PAUSED:
                 values.append("paused");
                 break;
-            case kiwix::Download::ERROR:
+            case kiwix::Download::K_ERROR:
                 values.append("error");
                 break;
-            case kiwix::Download::COMPLETE:
+            case kiwix::Download::K_COMPLETE:
                 values.append("completed");
                 break;
-            case kiwix::Download::REMOVED:
+            case kiwix::Download::K_REMOVED:
                 values.append("removed");
                 break;
             default:
