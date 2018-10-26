@@ -74,7 +74,7 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     mp_contentManagerView = view;
     mp_stackedWidget->addWidget(mp_contentManagerView);
     mp_stackedWidget->show();
-    addTab("contentManager");
+    addTab(QIcon(":/icons/kiwix/app_icon.svg"), "");
 }
 
 WebView* TabBar::createNewTab(bool setCurrent)

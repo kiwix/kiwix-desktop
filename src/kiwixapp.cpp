@@ -25,7 +25,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     installTranslator(&m_appTranslator);
 
     auto icon = QIcon();
-    icon.addFile(":/icons/kiwix/app_icon.svg");
+    icon.addFile(":/icons/kiwix-app-icons-square.svg");
     setWindowIcon(icon);
 
     setApplicationDisplayName("Kiwix");
