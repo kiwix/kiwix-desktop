@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
@@ -75,6 +72,9 @@
       </item>
       <item>
        <widget class="QCheckBox" name="categoryButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Browse By Category</string>
         </property>
@@ -82,6 +82,9 @@
       </item>
       <item>
        <widget class="QCheckBox" name="languageButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Language</string>
         </property>
@@ -89,6 +92,9 @@
       </item>
       <item>
        <widget class="QCheckBox" name="contentTypeButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string>Content Type</string>
         </property>
