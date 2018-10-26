@@ -91,13 +91,33 @@ body {
 padding: 0;
     margin: 0;
 }
+*:focus {
+    outline: none;
+}
+#searchInput {
+    background-image: url('qrc:///icons/search.svg');
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 40px 40px;
+    padding: 0px;
+    margin: 0px;
+    padding-left: 45px;
+    height: 40px;
+    width: 90%;
+    border: 1px solid #EEE;
+}
 #bookList {
     width:100%;
 }
-.tablerow {
+.tablerow,
+.header {
     display: flex;
     flex-direction: row;
     width: 100%;
+}
+.header {
+    color: #555;
+    margin-top: 20px;
 }
 .tablecell{
     flex-basis:20%;
@@ -107,11 +127,18 @@ padding: 0;
     flex-grow: 0;
     flex-shrink: 0;
 }
+.tablerow > .cell1 {
+    font-weight: bold;
+}
 .cell0 > img {
     width: 24px;
     height: 24px;
 }
-.cell1 {
+.cell1,
+.cell2,
+.cell3,
+.cell4,
+.cell5 {
     flex-grow: 1;
 }
 summary::-webkit-details-marker {
@@ -121,14 +148,25 @@ summary {
   height: 64px;
 }
 .book {
-  border-top: 1px solid #99F;
+  border-top: 1px solid #EEE;
   padding: 10px;
 
 }
 button {
+  background: transparent;
+  border: 0px;
+}
+.tablerow button {
   color: blue;
+  font-weight: bold;
+  font-size: 14px;
   border: 0px;
   background: transparent;
+  border-radius: 2px;
+}
+.tablerow button:hover {
+  color: white;
+  background: blue;
 }
 </style>
 </head>
@@ -136,17 +174,17 @@ button {
 <div id="app">
   <div id="searchBar">
     <form>
-      <input />
+      <input id="searchInput" type="text" placeholder="Search files" readonly/>
     </form>
   </div>
   <div id="bookList">
-    <div class="header tablerow">
+    <div class="header">
       <span class="tablecell cell0"></span>
       <span class="tablecell cell1">File name</span>
-      <span class="tablecell cell1">Size</span>
-      <span class="tablecell cell1">Date</span>
-      <span class="tablecell cell1">Content type</span>
-      <span class="tablecell cell1"></span>
+      <span class="tablecell cell2">Size</span>
+      <span class="tablecell cell3">Date</span>
+      <span class="tablecell cell4">Content type</span>
+      <span class="tablecell cell5"></span>
     </div>
     <details v-for="book in books" class="book">
       <summary class="tablerow">
@@ -156,16 +194,16 @@ button {
         <span class="tablecell cell1">
           {{ book.title }}
         </span>
-        <span class="tablecell cell1">
+        <span class="tablecell cell2">
           {{ niceBytes(book.size) }}
         </span>
-        <span class="tablecell cell1">
+        <span class="tablecell cell3">
           {{ book.date }}
         </span>
-        <span class="tablecell cell1">
+        <span class="tablecell cell4">
           {{ book.tags }}
         </span>
-        <span class="tablecell cell1">
+        <span class="tablecell cell5">
           <template v-if="book.downloadId">
             <span v-if="downloads[book.id]">
               {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
