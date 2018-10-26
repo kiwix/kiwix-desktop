@@ -124,7 +124,8 @@ LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
 RESOURCES += \
     resources/kiwix.qrc \
     resources/translations.qrc \
-    resources/contentmanager.qrc
+    resources/contentmanager.qrc \
+    resources/style.qrc
 
 unix {
     system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
