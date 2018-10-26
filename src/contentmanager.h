@@ -45,6 +45,7 @@ private:
     QStringList getBookIds();
 
 signals:
+    void remoteParamsChanged();
     void booksChanged();
     void downloadsChanged();
     void currentLangChanged();
