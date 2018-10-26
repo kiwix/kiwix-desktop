@@ -29,6 +29,7 @@ public:
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     QStringList getBookIds();
+    void addBookToLibrary(kiwix::Book& book);
     void save();
 public slots:
     QString openBookById(const QString& _id);

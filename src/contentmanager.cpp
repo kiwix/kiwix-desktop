@@ -1,8 +1,13 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
+#include <kiwix/common/networkTools.h>
+#include <kiwix/common/otherTools.h>
+#include <kiwix/manager.h>
 
 #include <QDebug>
+#include <QUrlQuery>
+#include <QUrl>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -14,9 +19,21 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     mp_view = new ContentManagerView();
     mp_view->registerObject("contentManager", this);
     mp_view->setHtml();
+    setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
+    connect(this, &ContentManager::remoteParamsChanged, this, &ContentManager::updateRemoteLibrary);
 }
 
+
+void ContentManager::setLocal(bool local) {
+    if (local == m_local) {
+        return;
+    }
+    m_local = local;
+    m_currentPage = 0;
+    emit(remoteParamsChanged());
+    emit(booksChanged());
+}
 
 #define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b.METH())));}
 QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
@@ -25,7 +42,14 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
     if (id.endsWith(".zim")) {
         id.resize(id.size()-4);
     }
-    auto& b = mp_library->getBookById(id);
+    kiwix::Book& b = [=]()->kiwix::Book& {
+        try {
+            return mp_library->getBookById(id);
+        } catch (...) {
+            return m_remoteLibrary.getBookById(id.toStdString());
+        }
+    }();
+
     for(auto& key: keys){
         ADD_V("id", getId);
         ADD_V("path", getPath);
@@ -139,11 +163,20 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
 
 QString ContentManager::downloadBook(const QString &id)
 {
-    auto& book = mp_library->getBookById(id);
+    auto& book = [&]()->kiwix::Book& {
+        try {
+            return m_remoteLibrary.getBookById(id.toStdString());
+        } catch (...) {
+            return mp_library->getBookById(id);
+        }
+    }();
     auto download = mp_downloader->startDownload(book.getUrl());
     book.setDownloadId(download->getDid());
-    return QString::fromStdString(download->getDid());
+    mp_library->addBookToLibrary(book);
+    mp_library->save();
+    emit(mp_library->booksChanged());
     emit(booksChanged());
+    return QString::fromStdString(download->getDid());
 }
 
 QStringList ContentManager::getDownloadIds()
@@ -153,4 +186,53 @@ QStringList ContentManager::getDownloadIds()
         list.append(QString::fromStdString(id));
     }
     return list;
+}
+
+void ContentManager::setCurrentLanguage(QString language)
+{
+    if (language.length() == 2) {
+      try {
+        language = QString::fromStdString(
+                     kiwix::converta2toa3(language.toStdString()));
+      } catch (std::out_of_range&) {}
+    }
+    m_currentLanguage = language;
+    emit(currentLangChanged());
+}
+
+#define CATALOG_HOST "http://library.kiwix.org"
+void ContentManager::updateRemoteLibrary() {
+    QUrlQuery query;
+    query.addQueryItem("lang", m_currentLanguage);
+    query.addQueryItem("count", QString::number(m_booksPerPage));
+    query.addQueryItem("start", QString::number(getStartBookIndex()));
+    QUrl url;
+    url.setScheme("http");
+    url.setHost("localhost");
+    url.setPort(8080);
+    url.setPath("/catalog/search.xml");
+    url.setQuery(query);
+    qInfo() << "Downloading" << url;
+    kiwix::Manager manager(&m_remoteLibrary);
+    try {
+        auto allContent = kiwix::download(url.toString().toStdString());
+        manager.readOpds(allContent, CATALOG_HOST);
+    } catch (runtime_error&) {}
+}
+
+QStringList ContentManager::getBookIds() {
+    if (m_local) {
+        return mp_library->getBookIds().mid(getStartBookIndex(), m_booksPerPage);
+    } else {
+        auto bookIds = m_remoteLibrary.getBooksIds();
+        QStringList list;
+        for(auto i=0; i<m_booksPerPage; i++) {
+            try{
+                list.append(QString::fromStdString(bookIds.at(getStartBookIndex()+i)));
+            } catch (out_of_range& e) {
+                break;
+            }
+        }
+        return list;
+    }
 }

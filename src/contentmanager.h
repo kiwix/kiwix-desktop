@@ -17,6 +17,7 @@ class ContentManager : public QObject
     Q_PROPERTY(int endBookIndex READ getEndBookIndex NOTIFY booksChanged)
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
+    Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
 
 public:
 
@@ -24,30 +25,37 @@ public:
     virtual ~ContentManager() {}
 
     ContentManagerView* getView() { return mp_view; }
+    void setLocal(bool local);
     QStringList getDownloadIds();
 private:
     Library* mp_library;
+    kiwix::Library m_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     ContentManagerView* mp_view;
     int m_booksPerPage = 10;
     int m_currentPage = 0;
+    bool m_local = true;
+    QString m_currentLanguage;
     void setCurrentPage(int currentPage) {
         m_currentPage = max(0, min(currentPage, getNbPages()));
         emit(booksChanged());
     }
+    void setCurrentLanguage(QString language);
 
-    QStringList getBookIds() {
-        return mp_library->getBookIds().mid(getStartBookIndex(), m_booksPerPage);
-    }
-
+    QStringList getBookIds();
 
 signals:
     void booksChanged();
     void downloadsChanged();
+    void currentLangChanged();
 
 public slots:
     int getNbPages() {
-        return round(float(mp_library->getBookIds().length()) / m_booksPerPage);
+        if (m_local) {
+            return round(float(mp_library->getBookIds().length()) / m_booksPerPage);
+        } else {
+            return round(float(m_remoteLibrary.getBooksIds().size()) / m_booksPerPage);
+        }
     }
     int getStartBookIndex() {
         return m_currentPage * m_booksPerPage;
@@ -59,6 +67,7 @@ public slots:
     void openBook(const QString& id);
     QStringList updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);
+    void updateRemoteLibrary();
 };
 
 #endif // CONTENTMANAGER_H

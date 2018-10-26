@@ -88,6 +88,11 @@ QStringList Library::getBookIds()
     return list;
 }
 
+void Library::addBookToLibrary(kiwix::Book &book)
+{
+    m_library.addBook(book);
+}
+
 void Library::save()
 {
     m_library.writeToFile(appendToDirectory(getDataDirectory(),"library.xml"));
