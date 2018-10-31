@@ -200,7 +200,8 @@ void ContentManager::setCurrentLanguage(QString language)
     emit(currentLangChanged());
 }
 
-#define CATALOG_HOST "http://library.kiwix.org"
+#define CATALOG_HOST "library.kiwix.org"
+#define CATALOG_PORT 80
 void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
     query.addQueryItem("lang", m_currentLanguage);
@@ -208,8 +209,8 @@ void ContentManager::updateRemoteLibrary() {
     query.addQueryItem("start", QString::number(getStartBookIndex()));
     QUrl url;
     url.setScheme("http");
-    url.setHost("localhost");
-    url.setPort(8080);
+    url.setHost(CATALOG_HOST);
+    url.setPort(CATALOG_PORT);
     url.setPath("/catalog/search.xml");
     url.setQuery(query);
     qInfo() << "Downloading" << url;
