@@ -218,6 +218,7 @@ void ContentManager::updateRemoteLibrary() {
     try {
         auto allContent = kiwix::download(url.toString().toStdString());
         manager.readOpds(allContent, CATALOG_HOST);
+        m_totalBooks = manager.m_totalBooks;
     } catch (runtime_error&) {}
 }
 

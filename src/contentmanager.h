@@ -34,6 +34,7 @@ private:
     ContentManagerView* mp_view;
     int m_booksPerPage = 10;
     int m_currentPage = 0;
+    int m_totalBooks = 0;
     bool m_local = true;
     QString m_currentLanguage;
     void setCurrentPage(int currentPage) {
@@ -52,11 +53,8 @@ signals:
 
 public slots:
     int getNbPages() {
-        if (m_local) {
-            return round(float(mp_library->getBookIds().length()) / m_booksPerPage);
-        } else {
-            return round(float(m_remoteLibrary.getBooksIds().size()) / m_booksPerPage);
-        }
+        auto nbBooks = m_local ? mp_library->getBookIds().length() : m_totalBooks;
+        return round(float(nbBooks) / m_booksPerPage);
     }
     int getStartBookIndex() {
         return m_currentPage * m_booksPerPage;
