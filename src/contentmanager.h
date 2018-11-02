@@ -38,7 +38,7 @@ private:
     bool m_local = true;
     QString m_currentLanguage;
     void setCurrentPage(int currentPage) {
-        m_currentPage = max(0, min(currentPage, getNbPages()));
+        m_currentPage = max(0, min(currentPage, getNbPages()-1));
         emit(booksChanged());
     }
     void setCurrentLanguage(QString language);
