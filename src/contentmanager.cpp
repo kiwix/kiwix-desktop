@@ -22,6 +22,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::remoteParamsChanged, this, &ContentManager::updateRemoteLibrary);
+    connect(this, &ContentManager::booksChanged, this, [=]() {if (!m_local) this->updateRemoteLibrary(); });
 }
 
 
