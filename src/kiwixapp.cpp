@@ -10,12 +10,26 @@
 #include <QAction>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <thread>
+
+kiwix::Downloader* createDownloader() {
+    int attempt = 5;
+    while(attempt--) {
+        try {
+            return new kiwix::Downloader();
+        } catch (exception& e) {
+            qInfo() << "Cannot create downloader" << e.what();
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+    }
+    return nullptr;
+}
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
       m_library(),
-      m_downloader(),
-      m_manager(&m_library, &m_downloader)
+      mp_downloader(createDownloader()),
+      m_manager(&m_library, mp_downloader)
 {
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -79,11 +93,18 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     mp_mainWindow->show();
+    if (!mp_downloader) {
+        showMessage("Impossible to launch downloader");
+        mpa_actions[ExitAction]->trigger();
+    }
 }
 
 KiwixApp::~KiwixApp()
 {
-    m_downloader.close();
+    if (mp_downloader) {
+        mp_downloader->close();
+        delete mp_downloader;
+    }
     delete mp_errorDialog;
     delete mp_mainWindow;
 }

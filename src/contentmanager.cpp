@@ -95,6 +95,11 @@ void ContentManager::openBook(const QString &id)
 QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
     QStringList values;
+    if (!mp_downloader) {
+        for(auto& key: keys)
+            values.append("");
+        return values;
+    }
     if (id.endsWith(".zim")) {
         id.resize(id.size()-4);
     }
@@ -164,6 +169,8 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
 
 QString ContentManager::downloadBook(const QString &id)
 {
+    if (!mp_downloader)
+        return "";
     auto& book = [&]()->kiwix::Book& {
         try {
             return m_remoteLibrary.getBookById(id.toStdString());
@@ -183,6 +190,8 @@ QString ContentManager::downloadBook(const QString &id)
 QStringList ContentManager::getDownloadIds()
 {
     QStringList list;
+    if (!mp_downloader)
+        return list;
     for(auto& id: mp_downloader->getDownloadIds()) {
         list.append(QString::fromStdString(id));
     }

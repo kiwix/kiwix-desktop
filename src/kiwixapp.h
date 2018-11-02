@@ -67,7 +67,7 @@ public:
     RequestInterceptor* getRequestInterceptor() { return &m_requestInterceptor; }
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
-    kiwix::Downloader* getDownloader() { return &m_downloader; }
+    kiwix::Downloader* getDownloader() { return mp_downloader; }
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
 
@@ -85,7 +85,7 @@ protected:
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     Library m_library;
-    kiwix::Downloader m_downloader;
+    kiwix::Downloader* mp_downloader;
     ContentManager m_manager;
     MainWindow* mp_mainWindow;
     TabBar* mp_tabWidget;
