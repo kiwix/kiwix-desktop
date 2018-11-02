@@ -211,7 +211,7 @@ void ContentManager::updateRemoteLibrary() {
     url.setScheme("http");
     url.setHost(CATALOG_HOST);
     url.setPort(CATALOG_PORT);
-    url.setPath("/catalog/search.xml");
+    url.setPath("/catalog/search");
     url.setQuery(query);
     qInfo() << "Downloading" << url;
     kiwix::Manager manager(&m_remoteLibrary);
