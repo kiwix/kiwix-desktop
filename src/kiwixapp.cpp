@@ -123,6 +123,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
             tr("Open Zim"),
             QString(),
             "ZimFile (*.zim*)");
+        _zimfile = QDir::toNativeSeparators(_zimfile);
     }
     if (_zimfile.isEmpty()) {
         return;

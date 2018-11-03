@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QUrlQuery>
 #include <QUrl>
+#include <QDir>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -116,7 +117,8 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
 
     d->updateStatus(true);
     if (d->getStatus() == kiwix::Download::K_COMPLETE) {
-        b.setPath(d->getPath());
+        QString tmp(QString::fromStdString(d->getPath()));
+        b.setPath(QDir::toNativeSeparators(tmp).toStdString());
         b.setDownloadId("");
         mp_library->save();
         emit(mp_library->booksChanged());
