@@ -1,10 +1,15 @@
 #include "contentmanagerview.h"
 #include <QFile>
+#include <QWebEngineProfile>
+#include "kiwixapp.h"
 
 ContentManagerView::ContentManagerView(QWidget *parent)
     : QWebEngineView(parent)
 {
     page()->setWebChannel(&m_webChannel);
+    auto profile = page()->profile();
+    auto app = KiwixApp::instance();
+    profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
 }
 
 

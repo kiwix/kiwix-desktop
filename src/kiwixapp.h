@@ -82,6 +82,7 @@ protected:
 
 private:
     QTranslator m_qtTranslator, m_appTranslator;
+    UrlSchemeHandler m_schemeHandler;
     Library m_library;
     kiwix::Downloader* mp_downloader;
     ContentManager m_manager;
@@ -90,7 +91,6 @@ private:
     QWidget* mp_currentSideBar;
     QErrorMessage* mp_errorDialog;
 
-    UrlSchemeHandler m_schemeHandler;
     QAction*     mpa_actions[MAX_ACTION];
 };
 
