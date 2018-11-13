@@ -9,6 +9,7 @@ public:
     UrlSchemeHandler();
     void requestStarted(QWebEngineUrlRequestJob *request);
 private:
+    void handleMetaRequest(QWebEngineUrlRequestJob *request);
     void handleContentRequest(QWebEngineUrlRequestJob *request);
 };
 

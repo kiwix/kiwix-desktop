@@ -53,12 +53,41 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
 }
 
 void
+UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
+{
+    auto qurl = request->requestUrl();
+    auto host = qurl.host();
+    auto parts = host.split('.');
+    auto zimId = parts[0];
+    auto metaName = parts[1];
+
+    auto library = KiwixApp::instance()->getLibrary();
+    auto reader = library->getReader(zimId+".zim");
+    if ( reader == nullptr) {
+        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+        return;
+    }
+    if (metaName == "favicon") {
+        std::string mimeType;
+        std::string content;
+        QBuffer* buffer = new QBuffer;
+        reader->getFavicon(content, mimeType);
+        buffer->setData(content.data(), content.size());
+        connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
+        request->reply(QByteArray::fromStdString(mimeType), buffer);
+    }
+    request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+}
+
+void
 UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
 {
     auto qurl = request->requestUrl();
     auto host = qurl.host();
     if (host.endsWith(".zim")) {
         handleContentRequest(request);
+    } else if (host.endsWith(".meta")) {
+        handleMetaRequest(request);
     } else {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
     }
