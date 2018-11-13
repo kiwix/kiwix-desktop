@@ -8,7 +8,6 @@
 #include "tabbar.h"
 #include "tocsidebar.h"
 #include "urlschemehandler.h"
-#include "requestinterceptor.h"
 
 #include <QApplication>
 #include <QErrorMessage>
@@ -64,7 +63,6 @@ public:
     void showMessage(const QString& message);
 
     UrlSchemeHandler* getSchemeHandler() { return &m_schemeHandler; }
-    RequestInterceptor* getRequestInterceptor() { return &m_requestInterceptor; }
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
     kiwix::Downloader* getDownloader() { return mp_downloader; }
@@ -84,6 +82,7 @@ protected:
 
 private:
     QTranslator m_qtTranslator, m_appTranslator;
+    UrlSchemeHandler m_schemeHandler;
     Library m_library;
     kiwix::Downloader* mp_downloader;
     ContentManager m_manager;
@@ -92,8 +91,6 @@ private:
     QWidget* mp_currentSideBar;
     QErrorMessage* mp_errorDialog;
 
-    UrlSchemeHandler m_schemeHandler;
-    RequestInterceptor m_requestInterceptor;
     QAction*     mpa_actions[MAX_ACTION];
 };
 

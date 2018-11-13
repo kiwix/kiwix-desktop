@@ -47,7 +47,6 @@ SOURCES += \
     src/blobbuffer.cpp \
     src/library.cpp \
     src/topwidget.cpp \
-    src/requestinterceptor.cpp \
     src/urlschemehandler.cpp \
     src/webview.cpp \
     src/searchbar.cpp \
@@ -67,7 +66,6 @@ HEADERS += \
     src/library.h \
     src/topwidget.h \
     src/kconstants.h \
-    src/requestinterceptor.h \
     src/urlschemehandler.h \
     src/webview.h \
     src/searchbar.h \
