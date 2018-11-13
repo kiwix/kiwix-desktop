@@ -8,6 +8,8 @@ class UrlSchemeHandler : public QWebEngineUrlSchemeHandler
 public:
     UrlSchemeHandler();
     void requestStarted(QWebEngineUrlRequestJob *request);
+private:
+    void handleContentRequest(QWebEngineUrlRequestJob *request);
 };
 
 #endif // URLSCHEMEHANDLER_H

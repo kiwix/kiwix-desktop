@@ -13,7 +13,7 @@ UrlSchemeHandler::UrlSchemeHandler()
 
 
 void
-UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
+UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
 {
     auto qurl = request->requestUrl();
     std::string url = qurl.path().toUtf8().constData();
@@ -30,18 +30,18 @@ UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
     kiwix::Entry entry;
     try {
         entry = reader->getEntryFromPath(url);
-    } catch (kiwix::NoEntry& e) {
+    } catch (kiwix::NoEntry&) {
         url = "A/" + url;
         try {
             entry = reader->getEntryFromPath(url);
-        } catch (kiwix::NoEntry& e) {
+        } catch (kiwix::NoEntry&) {
             request->fail(QWebEngineUrlRequestJob::UrlNotFound);
             return;
         }
     }
     try {
         entry = entry.getFinalEntry();
-    } catch (kiwix::NoEntry& e) {
+    } catch (kiwix::NoEntry&) {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;
     }
@@ -50,4 +50,16 @@ UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
     mimeType = mimeType.split(';')[0];
     connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
     request->reply(mimeType, buffer);
+}
+
+void
+UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
+{
+    auto qurl = request->requestUrl();
+    auto host = qurl.host();
+    if (host.endsWith(".zim")) {
+        handleContentRequest(request);
+    } else {
+        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+    }
 }
