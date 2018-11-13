@@ -13,7 +13,6 @@ WebView::WebView(QWidget *parent)
     auto profile = page()->profile();
     auto app = KiwixApp::instance();
     profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
-    profile->setRequestInterceptor(app->getRequestInterceptor());
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
 }
 
