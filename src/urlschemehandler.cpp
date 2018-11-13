@@ -47,6 +47,7 @@ UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
     }
     BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
     auto mimeType = QByteArray::fromStdString(entry.getMimetype());
+    mimeType = mimeType.split(';')[0];
     connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
     request->reply(mimeType, buffer);
 }
