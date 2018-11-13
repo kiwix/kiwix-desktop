@@ -20,7 +20,7 @@ function createDict(keys, values) {
     }
     return d;
 }
-const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "favicon", "faviconMimeType", "downloadId"];
+const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "faviconUrl", "faviconMimeType", "downloadId"];
 function addBook(values) {
   var b = createDict(BOOK_KEYS, values);
   if (b.downloadId && !downloadUpdaters.hasOwnProperty(b.id)) {
@@ -189,7 +189,8 @@ button {
     <details v-for="book in books" class="book">
       <summary class="tablerow">
         <span class="tablecell cell0">
-          <img v-bind:src="'data:image/png;base64,' + book.favicon"/>
+          <img v-if="book.faviconUrl" v-bind:src="'http://' + book.faviconUrl" />
+          <img v-else-if="book.faviconMimeType" v-bind:src="'zim://' + book.id + '.favicon.meta'" />
         </span>
         <span class="tablecell cell1">
           {{ book.title }}

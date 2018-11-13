@@ -68,6 +68,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         ADD_V("origId", getOrigId);
         ADD_V("faviconMimeType", getFaviconMimeType);
         ADD_V("downloadId", getDownloadId);
+        ADD_V("faviconUrl", getFaviconUrl);
         if (key == "favicon") {
             auto s = b.getFavicon();
             values.append(QByteArray::fromStdString(s).toBase64());
