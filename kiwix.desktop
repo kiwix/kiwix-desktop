@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Kiwix
-Exec=kiwix-desktop %F
-Icon=kiwix-desktop
-Type=Application
-Terminal=false
-StartupNotify=true
-NoDisplay=false
-Categories=Education;

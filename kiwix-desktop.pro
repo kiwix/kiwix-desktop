@@ -99,6 +99,10 @@ static {
 
 unix {
   QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/../lib64\ '"
+
+  desktop_file.path = $$PREFIX/share/applications/
+  desktop_file.files = resources/kiwix-desktop.desktop
+  INSTALLS += desktop_file
 }
 
 PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION kiwix)
