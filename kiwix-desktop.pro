@@ -103,6 +103,18 @@ unix {
   desktop_file.path = $$PREFIX/share/applications/
   desktop_file.files = resources/kiwix-desktop.desktop
   INSTALLS += desktop_file
+
+  icon_file24.path = $$PREFIX/share/icons/hicolor/24x24/apps
+  icon_file24.files = resources/icons/kiwix/24/kiwix-desktop.png
+  icon_file32.path = $$PREFIX/share/icons/hicolor/32x32/apps
+  icon_file32.files = resources/icons/kiwix/32/kiwix-desktop.png
+  icon_file48.path = $$PREFIX/share/icons/hicolor/48x48/apps
+  icon_file48.files = resources/icons/kiwix/48/kiwix-desktop.png
+  icon_file128.path = $$PREFIX/share/icons/hicolor/128x128/apps
+  icon_file128.files = resources/icons/kiwix/128/kiwix-desktop.png
+  icon_file256.path = $$PREFIX/share/icons/hicolor/256x256/apps
+  icon_file256.files = resources/icons/kiwix/256/kiwix-desktop.png
+  INSTALLS += icon_file24 icon_file32 icon_file48 icon_file128 icon_file256
 }
 
 PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION kiwix)
