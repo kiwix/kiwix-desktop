@@ -1,11 +1,10 @@
 [Desktop Entry]
 Type=Application
 Name=Kiwix
-Version=2.0-alpha6
 Comment=View offline content
 Icon=kiwix-desktop
 Exec=kiwix-desktop %F
 Terminal=false
-MimeType=application/zim
-Keywords=zim
+MimeType=application/zim;
+Keywords=zim;
 Categories=Education;
