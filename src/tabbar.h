@@ -33,6 +33,7 @@ public:
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void currentZimIdChanged(const QString& zimId);
+    void currentTitleChanged(const QString& title);
 
 public slots:
     void closeTab(int index);

@@ -32,8 +32,6 @@ QToolButton {
 
 SearchBar {
     background-color: white;
-    background-image: url(":/icons/search.svg");
-    background-repeat: no-repeat;
     padding: 2px 2px 2px 40px;
     max-height: 40px;
     margin: 5px;
@@ -41,6 +39,15 @@ SearchBar {
     font-size: 16px;
     border: 2px solid #ccc;
     border-radius: 5px;
+}
+
+SearchBar > QPushButton {
+    margin: 8px;
+    padding: 0px;
+    border: 0px solid #fff;
+    background-color: white;
+    height: 30px;
+    width: 30px;
 }
 
 /* ----------------------------------------

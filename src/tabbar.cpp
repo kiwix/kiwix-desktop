@@ -81,7 +81,11 @@ WebView* TabBar::createNewTab(bool setCurrent)
 {
     WebView* webView = new WebView();
     connect(webView, &WebView::titleChanged, this,
-            [=](const QString& str) { setTitleOf(str, webView); });
+            [=](const QString& str) {
+        setTitleOf(str, webView);
+        QUITIFNOTCURRENT(webView);
+        emit currentTitleChanged(str);
+    });
     connect(webView, &WebView::iconChanged, this,
             [=](const QIcon& icon) { setIconOf(icon, webView);  });
     connect(webView, &WebView::zimIdChanged, this,

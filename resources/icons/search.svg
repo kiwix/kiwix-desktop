@@ -7,13 +7,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="40"
-   height="40"
-   viewBox="0 0 40 40"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
    version="1.1"
    id="svg6"
    sodipodi:docname="search.svg"
-   inkscape:version="0.92.2 2405546, 2018-03-11">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata12">
     <rdf:RDF>
@@ -37,8 +37,8 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2775"
-     inkscape:window-height="1527"
+     inkscape:window-width="1523"
+     inkscape:window-height="1272"
      id="namedview8"
      showgrid="false"
      inkscape:snap-object-midpoints="false"
@@ -46,8 +46,8 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:zoom="9.8333333"
-     inkscape:cx="-18.813559"
-     inkscape:cy="11.79661"
+     inkscape:cx="58.677967"
+     inkscape:cy="11.59322"
      inkscape:window-x="0"
      inkscape:window-y="55"
      inkscape:window-maximized="0"
@@ -70,7 +70,7 @@
   <title
      id="title2">icon / search</title>
   <path
-     d="m 18.02452,22.026487 -5.61,5.61 5.61,-5.61 a 5.5,5.5 0 1 1 7.778,-7.777999 5.5,5.5 0 0 1 -7.777,7.776999 z"
+     d="m 9.9906217,13.95869 -5.61,5.61 5.61,-5.61 A 5.5,5.5 0 1 1 17.768622,6.1806914 5.5,5.5 0 0 1 9.9916217,13.95769 Z"
      id="path4"
      inkscape:connector-curvature="0"
      style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-linecap:round;stroke-linejoin:round" />

@@ -69,6 +69,9 @@ public:
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
 
+signals:
+    void currentTitleChanged(const QString& title);
+
 public slots:
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);

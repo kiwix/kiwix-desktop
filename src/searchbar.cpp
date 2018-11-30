@@ -5,9 +5,31 @@
 
 #include "kiwixapp.h"
 
+SearchButton::SearchButton(QWidget *parent) :
+    QPushButton(parent),
+    m_searchMode(true)
+{
+    setFlat(true);
+    setIcon(QIcon(":/icons/search.svg"));
+}
+
+void SearchButton::set_searchMode(bool searchMode)
+{
+    if (searchMode == m_searchMode)
+        return;
+
+    m_searchMode = searchMode;
+    if (m_searchMode) {
+        setIcon(QIcon(":/icons/search.svg"));
+    } else {
+        setIcon(QIcon(":/icons/reading-list.svg"));
+    }
+}
+
 SearchBar::SearchBar(QWidget *parent) :
     QLineEdit(parent),
-    m_completer(&m_completionModel, this)
+    m_completer(&m_completionModel, this),
+    m_button(this)
 {
     setPlaceholderText(tr("Search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
@@ -20,6 +42,19 @@ SearchBar::SearchBar(QWidget *parent) :
 #else
     connect(this, &QLineEdit::returnPressed, this, &SearchBar::openTitle);
 #endif
+    connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged, this,
+            [=](const QString& title) {
+        setText(title);
+        m_button.set_searchMode(false);
+    });
+}
+
+
+void SearchBar::focusInEvent( QFocusEvent* event)
+{
+    clear();
+    QLineEdit::focusInEvent(event);
+    m_button.set_searchMode(true);
 }
 
 void SearchBar::updateCompletion(const QString &text)
@@ -71,6 +106,7 @@ void SearchBar::openTitle()
     qurl.setHost(zimId);
     qurl.setPath("/" + QString::fromStdString(path));
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
+    clearFocus();
 }
 
 void SearchBar::openCompletion(const QModelIndex &index)
