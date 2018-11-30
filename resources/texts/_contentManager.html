@@ -66,12 +66,6 @@ function init() {
         openBook : function(book) {
           contentManager.openBook(book.id, function() {});
         },
-        changePage : function(delta) {
-          var newPage = contentManager.currentPage+delta;
-          if (newPage < 0) newPage = 0;
-          if (newPage > contentManager.nbPages-1) newPage = contentManager.nbPages-1;
-          contentManager.currentPage = newPage;
-        },
         downloadBook : function(book) {
           contentManager.downloadBook(book.id, function(did)  {
             book.downloadId = did;
@@ -218,13 +212,6 @@ button {
         {{ book.description }}
       </p>
     </details>
-    <div class="footer">
-      <button v-on:click="contentManager.currentPage = 0">First</button>
-      <button v-on:click="changePage(-1)">Previous</button>
-      {{ contentManager.currentPage+1 }} / {{ contentManager.nbPages }}
-      <button v-on:click="changePage(1)">Next</button>
-      <button v-on:click="contentManager.currentPage = contentManager.nbPages-1">Last</button>
-    </div>
   </div>
 </div>
 </body></html>

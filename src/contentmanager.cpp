@@ -32,7 +32,6 @@ void ContentManager::setLocal(bool local) {
         return;
     }
     m_local = local;
-    m_currentPage = 0;
     emit(remoteParamsChanged());
     emit(booksChanged());
 }
@@ -218,8 +217,7 @@ void ContentManager::setCurrentLanguage(QString language)
 void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
     query.addQueryItem("lang", m_currentLanguage);
-    query.addQueryItem("count", QString::number(m_booksPerPage));
-    query.addQueryItem("start", QString::number(getStartBookIndex()));
+    query.addQueryItem("count", QString::number(0));
     QUrl url;
     url.setScheme("http");
     url.setHost(CATALOG_HOST);
@@ -237,14 +235,14 @@ void ContentManager::updateRemoteLibrary() {
 
 QStringList ContentManager::getBookIds() {
     if (m_local) {
-        return mp_library->getBookIds().mid(getStartBookIndex(), m_booksPerPage);
+        return mp_library->getBookIds();
     } else {
         auto bookIds = m_remoteLibrary.getBooksIds();
         QStringList list;
-        for(auto i=0; i<m_booksPerPage; i++) {
+        for(auto& bookId:bookIds) {
             try{
-                list.append(QString::fromStdString(bookIds.at(getStartBookIndex()+i)));
-            } catch (out_of_range& e) {
+                list.append(QString::fromStdString(bookId));
+            } catch (out_of_range&) {
                 break;
             }
         }
