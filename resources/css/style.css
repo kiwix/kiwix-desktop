@@ -60,6 +60,11 @@ TopWidget QToolButton:pressed {
     border-radius: 2px;
 }
 
+TopWidget QToolButton::hover {
+    border: 1px solid #3366CC;
+    border-radius: 2px;
+}
+
 TopWidget QToolButton::menu-button {
     width: 100%;
     background: rgba(0, 0, 0, 0);
