@@ -9,7 +9,7 @@
 class WebView : public QWebEngineView
 {
     Q_OBJECT
-    Q_PROPERTY(const QIcon icon READ icon NOTIFY iconChanged);
+    Q_PROPERTY(const QIcon icon READ icon NOTIFY iconChanged)
     Q_PROPERTY(QString zimId READ zimId NOTIFY zimIdChanged)
 
 public:

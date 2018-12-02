@@ -137,6 +137,20 @@ QString TabBar::currentZimId()
     return currentWidget()->zimId();
 }
 
+QString TabBar::currentArticleUrl()
+{
+    if(!currentWidget())
+        return "";
+    return currentWidget()->url().path();
+}
+
+QString TabBar::currentArticleTitle()
+{
+    if(!currentWidget())
+        return "";
+    return currentWidget()->title();
+}
+
 void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *webView)
 {
     CURRENTIFNULL(webView);

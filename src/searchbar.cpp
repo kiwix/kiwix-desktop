@@ -11,19 +11,49 @@ SearchButton::SearchButton(QWidget *parent) :
 {
     setFlat(true);
     setIcon(QIcon(":/icons/search.svg"));
+    connect(this, &QPushButton::clicked, this, &SearchButton::on_buttonClicked);
 }
 
 void SearchButton::set_searchMode(bool searchMode)
 {
-    if (searchMode == m_searchMode)
-        return;
-
     m_searchMode = searchMode;
     if (m_searchMode) {
         setIcon(QIcon(":/icons/search.svg"));
     } else {
-        setIcon(QIcon(":/icons/reading-list.svg"));
+        auto kiwixApp = KiwixApp::instance();
+        if (kiwixApp->isCurrentArticleBookmarked()) {
+            setIcon(QIcon(":/icons/reading-list-active.svg"));
+        } else {
+            setIcon(QIcon(":/icons/reading-list.svg"));
+        }
     }
+}
+
+void SearchButton::on_buttonClicked()
+{
+    if (m_searchMode)
+        return;
+
+    auto kiwixApp = KiwixApp::instance();
+    auto library = kiwixApp->getLibrary();
+    auto tabWidget = kiwixApp->getTabWidget();
+    if (kiwixApp->isCurrentArticleBookmarked()) {
+        auto zimid = tabWidget->currentZimId();
+        zimid.resize(zimid.length()-4);
+        library->removeBookmark(
+            zimid, tabWidget->currentArticleUrl()
+        );
+    } else {
+        kiwix::Bookmark bookmark;
+        auto zimid = tabWidget->currentZimId().toStdString();
+        zimid.resize(zimid.length()-4);
+        bookmark.setBookId(zimid);
+        bookmark.setUrl(tabWidget->currentArticleUrl().toStdString());
+        bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());
+        library->addBookmark(bookmark);
+    }
+    set_searchMode(false);
+    library->save();
 }
 
 SearchBar::SearchBar(QWidget *parent) :
@@ -42,13 +72,15 @@ SearchBar::SearchBar(QWidget *parent) :
 #else
     connect(this, &QLineEdit::returnPressed, this, &SearchBar::openTitle);
 #endif
-    connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged, this,
-            [=](const QString& title) {
-        setText(title);
-        m_button.set_searchMode(false);
-    });
+    connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
+            this, &SearchBar::on_currentTitleChanged);
 }
 
+void SearchBar::on_currentTitleChanged(const QString& title)
+{
+    setText(title);
+    m_button.set_searchMode(false);
+}
 
 void SearchBar::focusInEvent( QFocusEvent* event)
 {

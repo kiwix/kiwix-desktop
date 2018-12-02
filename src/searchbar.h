@@ -14,6 +14,8 @@ public:
 
 public slots:
     void set_searchMode(bool searchMode);
+    void on_buttonClicked();
+
 protected:
     bool m_searchMode;
 };
@@ -24,6 +26,8 @@ class SearchBar : public QLineEdit
 public:
     SearchBar(QWidget *parent = nullptr);
 
+public slots:
+    void on_currentTitleChanged(const QString &title);
 protected:
     virtual void focusInEvent(QFocusEvent *);
 private:

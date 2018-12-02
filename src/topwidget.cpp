@@ -14,7 +14,7 @@ TopWidget::TopWidget(QWidget *parent) :
     mp_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
     mp_historyBackAction->setText(tr("back"));
     mp_historyBackAction->setToolTip(tr("back"));
-    connect(mp_historyBackAction, &QAction::triggered, [this](){
+    connect(mp_historyBackAction, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
     addAction(mp_historyBackAction);
@@ -22,13 +22,14 @@ TopWidget::TopWidget(QWidget *parent) :
     mp_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
     mp_historyForwardAction->setText(tr("forward"));
     mp_historyForwardAction->setToolTip(tr("forward"));
-    connect(mp_historyForwardAction, &QAction::triggered, [this](){
+    connect(mp_historyForwardAction, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
     addAction(mp_historyForwardAction);
     addSeparator();
 
     addWidget(&m_searchEntry);
+    addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction));
 
     addSeparator();
 

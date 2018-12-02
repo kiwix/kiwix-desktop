@@ -76,6 +76,7 @@
           </sizepolicy>
          </property>
         </widget>
+        <widget class="ReadingListBar" name="readinglistbar"/>
        </widget>
       </item>
       <item>
@@ -124,6 +125,12 @@
    <class>ContentManagerSide</class>
    <extends>QWidget</extends>
    <header>src/contentmanagerside.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ReadingListBar</class>
+   <extends>QWidget</extends>
+   <header>src/readinglistbar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

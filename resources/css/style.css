@@ -193,7 +193,8 @@ QTabBar::close-button {
    background-color: white;
 }
 
-#contentmanagerside QWidget{
+#contentmanagerside QWidget,
+#readinglistbar QWidget{
    background-color: white;
    outline: none;
 }
@@ -209,4 +210,13 @@ QTabBar::close-button {
 
 #contentmanagerside QCheckBox::indicator {
    image: none;
+}
+
+#readinglistbar QListWidget {
+   border: none;
+}
+
+#readinglistbar QListWidget::item {
+    font-size: 16px;
+    margin-bottom: 5px;
 }

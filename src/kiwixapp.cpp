@@ -173,6 +173,7 @@ void KiwixApp::setSideBar(KiwixApp::SideBarType type)
     switch(type) {
         case SEARCH_BAR:
         case CONTENTMANAGER_BAR:
+        case READINGLIST_BAR:
             sideDockWidget->setCurrentIndex(type);
             sideDockWidget->show();
             break;
@@ -206,6 +207,20 @@ void KiwixApp::showMessage(const QString &message)
 QAction *KiwixApp::getAction(KiwixApp::Actions action)
 {
     return mpa_actions[action];
+}
+
+bool KiwixApp::isCurrentArticleBookmarked()
+{
+    auto zimId = getTabWidget()->currentZimId().toStdString();
+    zimId.resize(zimId.length()-4);
+    auto url = getTabWidget()->currentArticleUrl().toStdString();
+
+    for (auto& bookmark: getLibrary()->getBookmarks()) {
+        if (bookmark.getBookId() == zimId && bookmark.getUrl() == url) {
+            return true;
+        }
+    }
+    return false;
 }
 
 #define CREATE_ACTION_ICON(ID, ICON, TEXT) \
@@ -286,9 +301,17 @@ void KiwixApp::createAction()
     SET_SHORTCUT(ToggleTOCAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_1));
     HIDE_ACTION(ToggleTOCAction);
 
-    CREATE_ACTION(ToggleReadingListAction, tr("Reading list"));
+    CREATE_ACTION_ICON(ToggleReadingListAction, "reading-list" ,tr("Reading list"));
     SET_SHORTCUT(ToggleReadingListAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_2));
-    HIDE_ACTION(ToggleReadingListAction);
+    connect(mpa_actions[ToggleReadingListAction], &QAction::toggled,
+            this, [=](bool checked) {
+        auto action = mpa_actions[ToggleReadingListAction];
+        action->setIcon(
+            QIcon(checked ? ":/icons/reading-list-active.svg" : ":/icons/reading-list.svg"));
+        setSideBar(checked ? READINGLIST_BAR : NONE);
+    });
+    mpa_actions[ToggleReadingListAction]->setCheckable(true);
+
 
     CREATE_ACTION(ZoomInAction, tr("Zoom in"));
     SET_SHORTCUT(ZoomInAction, QKeySequence::ZoomIn);

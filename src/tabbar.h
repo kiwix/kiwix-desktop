@@ -11,6 +11,7 @@ class TabBar : public QTabBar
 {
     Q_OBJECT
     Q_PROPERTY(QString currentZimId READ currentZimId NOTIFY currentZimIdChanged)
+
 public:
     TabBar(QWidget* parent=nullptr);
     void setStackedWidget(QStackedWidget* widget);
@@ -30,6 +31,8 @@ public:
     QString currentZimId();
 
     void triggerWebPageAction(QWebEnginePage::WebAction action, WebView* webView=nullptr);
+    QString currentArticleUrl();
+    QString currentArticleTitle();
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void currentZimIdChanged(const QString& zimId);

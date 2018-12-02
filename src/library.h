@@ -29,7 +29,10 @@ public:
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     QStringList getBookIds();
+    const std::vector<kiwix::Bookmark>& getBookmarks() { return m_library.getBookmarks(); }
     void addBookToLibrary(kiwix::Book& book);
+    void addBookmark(kiwix::Bookmark& bookmark);
+    void removeBookmark(const QString& zimId, const QString& url);
     void save();
 public slots:
     QString openBookById(const QString& _id);
@@ -37,6 +40,7 @@ public slots:
 
 signals:
     void booksChanged();
+    void bookmarksChanged();
 
 private:
     kiwix::Library m_library;

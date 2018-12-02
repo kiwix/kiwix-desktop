@@ -51,6 +51,7 @@ public:
     enum SideBarType {
         SEARCH_BAR,
         CONTENTMANAGER_BAR,
+        READINGLIST_BAR,
         NONE
     };
 
@@ -68,6 +69,8 @@ public:
     kiwix::Downloader* getDownloader() { return mp_downloader; }
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
+
+    bool isCurrentArticleBookmarked();
 
 signals:
     void currentTitleChanged(const QString& title);

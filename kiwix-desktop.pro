@@ -57,7 +57,8 @@ SOURCES += \
     src/contentmanager.cpp \
     src/contentmanagerview.cpp \
     src/tabbar.cpp \
-    src/contentmanagerside.cpp
+    src/contentmanagerside.cpp \
+    src/readinglistbar.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -76,13 +77,15 @@ HEADERS += \
     src/contentmanager.h \
     src/contentmanagerview.h \
     src/tabbar.h \
-    src/contentmanagerside.h
+    src/contentmanagerside.h \
+    src/readinglistbar.h
 
 FORMS += \
     ui/mainwindow.ui \
     ui/about.ui \
     src/tocsidebar.ui \
-    src/contentmanagerside.ui
+    src/contentmanagerside.ui \
+    src/readinglistbar.ui
 
 TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
 CODECFORSRC = UTF-8

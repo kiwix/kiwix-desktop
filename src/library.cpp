@@ -9,10 +9,14 @@ class LibraryManipulator: public kiwix::LibraryManipulator {
   public:
     LibraryManipulator(Library* p_library)
         : mp_library(p_library) {}
+    virtual ~LibraryManipulator() {}
     bool addBookToLibrary(kiwix::Book book) {
         auto ret = mp_library->m_library.addBook(book);
         emit(mp_library->booksChanged());
         return ret;
+    }
+    void addBookmarkToLibrary(kiwix::Bookmark bookmark) {
+        mp_library->m_library.addBookmark(bookmark);
     }
     Library* mp_library;
 };
@@ -23,6 +27,7 @@ Library::Library()
     auto manager = kiwix::Manager(&manipulator);
     qInfo() << QString::fromStdString(getDataDirectory());
     manager.readFile(appendToDirectory(getDataDirectory(),"library.xml"), false);
+    manager.readBookmarkFile(appendToDirectory(getDataDirectory(),"library.bookmarks.xml"));
     qInfo() << getBookIds().length();
     emit(booksChanged());
 }
@@ -93,9 +98,22 @@ void Library::addBookToLibrary(kiwix::Book &book)
     m_library.addBook(book);
 }
 
+void Library::addBookmark(kiwix::Bookmark &bookmark)
+{
+    m_library.addBookmark(bookmark);
+    emit bookmarksChanged();
+}
+
+void Library::removeBookmark(const QString &zimId, const QString &url)
+{
+    m_library.removeBookmark(zimId.toStdString(), url.toStdString());
+    emit bookmarksChanged();
+}
+
 void Library::save()
 {
     m_library.writeToFile(appendToDirectory(getDataDirectory(),"library.xml"));
+    m_library.writeBookmarksToFile(appendToDirectory(getDataDirectory(), "library.bookmarks.xml"));
 }
 
 kiwix::Book &Library::getBookById(QString id)
