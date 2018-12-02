@@ -168,7 +168,7 @@ button {
 <div id="app">
   <div id="searchBar">
     <form>
-      <input id="searchInput" type="text" placeholder="Search files" readonly/>
+      <input id="searchInput" type="text" placeholder="Search files" oninput="contentManager.setSearch(this.value)"/>
     </form>
   </div>
   <div id="bookList">

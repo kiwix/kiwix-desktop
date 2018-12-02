@@ -23,7 +23,6 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::remoteParamsChanged, this, &ContentManager::updateRemoteLibrary);
-    connect(this, &ContentManager::booksChanged, this, [=]() {if (!m_local) this->updateRemoteLibrary(); });
 }
 
 
@@ -218,6 +217,8 @@ void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
     query.addQueryItem("lang", m_currentLanguage);
     query.addQueryItem("count", QString::number(0));
+    if (not m_searchQuery.isEmpty())
+        query.addQueryItem("q", m_searchQuery);
     QUrl url;
     url.setScheme("http");
     url.setHost(CATALOG_HOST);
@@ -225,17 +226,27 @@ void ContentManager::updateRemoteLibrary() {
     url.setPath("/catalog/search");
     url.setQuery(query);
     qInfo() << "Downloading" << url;
+    m_remoteLibrary = kiwix::Library();
     kiwix::Manager manager(&m_remoteLibrary);
     try {
         auto allContent = kiwix::download(url.toString().toStdString());
         manager.readOpds(allContent, CATALOG_HOST);
-        m_totalBooks = manager.m_totalBooks;
     } catch (runtime_error&) {}
+    emit(booksChanged());
+}
+
+void ContentManager::setSearch(const QString &search)
+{
+    m_searchQuery = search;
+    if (m_local)
+        emit(booksChanged());
+    else
+        emit(remoteParamsChanged());
 }
 
 QStringList ContentManager::getBookIds() {
     if (m_local) {
-        return mp_library->getBookIds();
+        return mp_library->listBookIds(m_searchQuery);
     } else {
         auto bookIds = m_remoteLibrary.getBooksIds();
         QStringList list;

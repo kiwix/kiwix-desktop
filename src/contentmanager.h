@@ -27,9 +27,9 @@ private:
     kiwix::Library m_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     ContentManagerView* mp_view;
-    int m_totalBooks = 0;
     bool m_local = true;
     QString m_currentLanguage;
+    QString m_searchQuery;
     void setCurrentLanguage(QString language);
 
     QStringList getBookIds();
@@ -46,6 +46,7 @@ public slots:
     QStringList updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);
     void updateRemoteLibrary();
+    void setSearch(const QString& search);
 };
 
 #endif // CONTENTMANAGER_H

@@ -93,6 +93,17 @@ QStringList Library::getBookIds()
     return list;
 }
 
+QStringList Library::listBookIds(const QString &query)
+{
+    QStringList list;
+    for(auto& id: m_library.listBooksIds(kiwix::VALID|kiwix::LOCAL,
+                                         kiwix::UNSORTED,
+                                         query.toStdString())) {
+        list.append(QString::fromStdString(id));
+    }
+    return list;
+}
+
 void Library::addBookToLibrary(kiwix::Book &book)
 {
     m_library.addBook(book);
