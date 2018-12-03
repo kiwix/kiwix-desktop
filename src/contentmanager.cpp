@@ -217,7 +217,7 @@ void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
     query.addQueryItem("lang", m_currentLanguage);
     query.addQueryItem("count", QString::number(0));
-    if (not m_searchQuery.isEmpty())
+    if (!m_searchQuery.isEmpty())
         query.addQueryItem("q", m_searchQuery);
     QUrl url;
     url.setScheme("http");
