@@ -79,7 +79,7 @@ SearchBar::SearchBar(QWidget *parent) :
 void SearchBar::on_currentTitleChanged(const QString& title)
 {
     setText(title);
-    m_button.set_searchMode(false);
+    m_button.set_searchMode(title.isEmpty());
 }
 
 void SearchBar::focusInEvent( QFocusEvent* event)

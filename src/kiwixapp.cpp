@@ -212,6 +212,9 @@ QAction *KiwixApp::getAction(KiwixApp::Actions action)
 bool KiwixApp::isCurrentArticleBookmarked()
 {
     auto zimId = getTabWidget()->currentZimId().toStdString();
+    if (zimId.empty()) {
+        return false;
+    }
     zimId.resize(zimId.length()-4);
     auto url = getTabWidget()->currentArticleUrl().toStdString();
 
