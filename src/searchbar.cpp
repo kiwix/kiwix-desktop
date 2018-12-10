@@ -39,14 +39,12 @@ void SearchButton::on_buttonClicked()
     auto tabWidget = kiwixApp->getTabWidget();
     if (kiwixApp->isCurrentArticleBookmarked()) {
         auto zimid = tabWidget->currentZimId();
-        zimid.resize(zimid.length()-4);
         library->removeBookmark(
             zimid, tabWidget->currentArticleUrl()
         );
     } else {
         kiwix::Bookmark bookmark;
         auto zimid = tabWidget->currentZimId().toStdString();
-        zimid.resize(zimid.length()-4);
         bookmark.setBookId(zimid);
         bookmark.setUrl(tabWidget->currentArticleUrl().toStdString());
         bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());

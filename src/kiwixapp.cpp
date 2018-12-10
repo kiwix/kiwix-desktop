@@ -229,7 +229,6 @@ bool KiwixApp::isCurrentArticleBookmarked()
     if (zimId.empty()) {
         return false;
     }
-    zimId.resize(zimId.length()-4);
     auto url = getTabWidget()->currentArticleUrl().toStdString();
 
     for (auto& bookmark: getLibrary()->getBookmarks()) {
