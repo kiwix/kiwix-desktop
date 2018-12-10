@@ -79,6 +79,12 @@ function init() {
     onBooksChanged();
   });
 }
+
+futurCall = null;
+function setSearch(value) {
+  clearTimeout(futurCall);
+  futurCall = setTimeout(function(){contentManager.setSearch(value)}, 200);
+}
 </script>
 <style>
 body {
@@ -172,7 +178,7 @@ details:hover {
 <div id="app">
   <div id="searchBar">
     <form>
-      <input id="searchInput" type="text" placeholder="Search files" oninput="contentManager.setSearch(this.value)"/>
+      <input id="searchInput" type="text" placeholder="Search files" oninput="setSearch(this.value)"/>
     </form>
   </div>
   <div id="bookList">
