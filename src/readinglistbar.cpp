@@ -30,7 +30,7 @@ void ReadingListBar::setupList()
     auto listWidget = ui->listWidget;
     listWidget->clear();
     for(auto& bookmark:bookmarks) {
-        auto reader = library->getReader(QString::fromStdString(bookmark.getBookId()) + ".zim");
+        auto reader = library->getReader(QString::fromStdString(bookmark.getBookId()));
         if (reader == nullptr)
             continue;
         std::string content;

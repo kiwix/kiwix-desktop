@@ -18,7 +18,7 @@ public:
 
     bool isWebActionEnabled(QWebEnginePage::WebAction webAction) const;
     const QIcon &icon() { return m_icon; }
-    const QString &zimId() { return m_currentHost; }
+    const QString &zimId() { return m_currentZimId; }
 
 public slots:
     void onUrlChanged(const QUrl& url);
@@ -29,7 +29,7 @@ signals:
 
 protected:
     virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
-    QString m_currentHost;
+    QString m_currentZimId;
     QIcon m_icon;
 };
 

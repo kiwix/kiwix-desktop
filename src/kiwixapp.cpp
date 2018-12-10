@@ -194,7 +194,7 @@ void KiwixApp::openRandomUrl(bool newTab)
 
     QUrl url;
     url.setScheme("zim");
-    url.setHost(zimId);
+    url.setHost(zimId + ".zim");
     url.setPath("/" + QString::fromStdString(entry.getPath()));
     openUrl(url, newTab);
 }

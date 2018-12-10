@@ -99,8 +99,9 @@ void SearchBar::updateCompletion(const QString &text)
         return;
     }
     auto qurl = currentWidget->url();
-    m_currentHost = qurl.host();
-    auto reader = KiwixApp::instance()->getLibrary()->getReader(m_currentHost);
+    m_currentZimId = qurl.host();
+    m_currentZimId.resize(m_currentZimId.length()-4);
+    auto reader = KiwixApp::instance()->getLibrary()->getReader(m_currentZimId);
     if (!reader) {
         m_completionModel.setStringList(wordList);
         return;
@@ -135,7 +136,7 @@ void SearchBar::openTitle()
 
     QUrl qurl;
     qurl.setScheme("zim");
-    qurl.setHost(zimId);
+    qurl.setHost(zimId+".zim");
     qurl.setPath("/" + QString::fromStdString(path));
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
     clearFocus();
@@ -146,7 +147,7 @@ void SearchBar::openCompletion(const QModelIndex &index)
     auto url = m_urlList.at(index.row());
     QUrl qurl;
     qurl.setScheme("zim");
-    qurl.setHost(m_currentHost);
+    qurl.setHost(m_currentZimId+".zim");
     qurl.setPath(QString::fromStdString(url));
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
 }

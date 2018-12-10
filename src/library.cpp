@@ -49,8 +49,7 @@ QString Library::openBookFromPath(const QString &zimPath)
     qInfo() << "Opening" << zimPath;
     auto zimPath_ = zimPath.toStdString();
     auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(zimPath_));
-    auto _id(reader->getId());
-    auto id = QString::fromStdString(_id + ".zim");
+    auto id = QString::fromStdString(reader->getId());
     kiwix::Book b;
     b.update(*reader);
     m_library.addBook(b);
@@ -60,11 +59,10 @@ QString Library::openBookFromPath(const QString &zimPath)
     return id;
 }
 
-QString Library::openBookById(const QString& _id)
+QString Library::openBookById(const QString& id)
 {
-    auto& b = m_library.getBookById(_id.toStdString());
+    auto& b = m_library.getBookById(id.toStdString());
     auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(b.getPath()));
-    auto id = _id + ".zim";
     m_readersMap[id] = reader;
     return id;
 }
@@ -76,9 +74,7 @@ std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
         return it.value();
     // No reader, try to open the file
     try {
-        QString _id = zimId;
-        if (_id.endsWith(".zim")) _id.resize(_id.size()-4);
-        openBookById(_id);
+        openBookById(zimId);
         return m_readersMap.find(zimId).value();
     } catch(...) {}
     return nullptr;
@@ -129,8 +125,5 @@ void Library::save()
 
 kiwix::Book &Library::getBookById(QString id)
 {
-    if (id.endsWith(".zim")) {
-        id.resize(id.size()-4);
-    }
     return m_library.getBookById(id.toStdString());
 }

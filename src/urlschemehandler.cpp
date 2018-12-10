@@ -22,6 +22,7 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
         url = url.substr(1);
     auto library = KiwixApp::instance()->getLibrary();
     auto zim_id = qurl.host();
+    zim_id.resize(zim_id.length()-4);
     auto reader = library->getReader(zim_id);
     if ( reader == nullptr) {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
@@ -62,7 +63,7 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
     auto metaName = parts[1];
 
     auto library = KiwixApp::instance()->getLibrary();
-    auto reader = library->getReader(zimId+".zim");
+    auto reader = library->getReader(zimId);
     if ( reader == nullptr) {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;

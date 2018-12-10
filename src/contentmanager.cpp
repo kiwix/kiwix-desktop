@@ -39,9 +39,6 @@ void ContentManager::setLocal(bool local) {
 QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
     QStringList values;
-    if (id.endsWith(".zim")) {
-        id.resize(id.size()-4);
-    }
     kiwix::Book* b = [=]()->kiwix::Book* {
         try {
             return &mp_library->getBookById(id);
@@ -108,9 +105,6 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         for(auto& key: keys)
             values.append("");
         return values;
-    }
-    if (id.endsWith(".zim")) {
-        id.resize(id.size()-4);
     }
     auto& b = mp_library->getBookById(id);
     kiwix::Download* d;

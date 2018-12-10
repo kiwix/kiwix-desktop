@@ -34,7 +34,7 @@ private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
     std::vector<std::string> m_urlList;
-    QString m_currentHost;
+    QString m_currentZimId;
     SearchButton m_button;
 
 private slots:
