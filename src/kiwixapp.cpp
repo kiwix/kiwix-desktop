@@ -181,6 +181,20 @@ void KiwixApp::setSideBar(KiwixApp::SideBarType type)
             sideDockWidget->hide();
             break;
     }
+    m_currentSideType = type;
+    emit(currentSideTypeChanged(type));
+}
+
+void KiwixApp::toggleSideBar(KiwixApp::SideBarType type) {
+    if (m_currentSideType == type) {
+        setSideBar(NONE);
+        return;
+    }
+
+    if (m_currentSideType == CONTENTMANAGER_BAR) {
+        return;
+    }
+    setSideBar(type);
 }
 
 void KiwixApp::openRandomUrl(bool newTab)
@@ -287,7 +301,7 @@ void KiwixApp::createAction()
     CREATE_ACTION(FindInPageAction, tr("Find in page"));
     SET_SHORTCUT(FindInPageAction, QKeySequence::Find);
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
-            this, [=]() { setSideBar(SEARCH_BAR); });
+            this, [=]() { toggleSideBar(SEARCH_BAR); });
 
     CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", tr("Set fullScreen"));
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);
@@ -306,15 +320,13 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(ToggleReadingListAction, "reading-list" ,tr("Reading list"));
     SET_SHORTCUT(ToggleReadingListAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_2));
-    connect(mpa_actions[ToggleReadingListAction], &QAction::toggled,
-            this, [=](bool checked) {
-        auto action = mpa_actions[ToggleReadingListAction];
-        action->setIcon(
-            QIcon(checked ? ":/icons/reading-list-active.svg" : ":/icons/reading-list.svg"));
-        setSideBar(checked ? READINGLIST_BAR : NONE);
+    connect(mpa_actions[ToggleReadingListAction], &QAction::triggered,
+            this, [=]() { toggleSideBar(READINGLIST_BAR); });
+    connect(this, &KiwixApp::currentSideTypeChanged,
+            this, [=](SideBarType type) {
+        mpa_actions[ToggleReadingListAction]->setIcon(
+            QIcon((type == READINGLIST_BAR) ? ":/icons/reading-list-active.svg" : ":/icons/reading-list.svg"));
     });
-    mpa_actions[ToggleReadingListAction]->setCheckable(true);
-
 
     CREATE_ACTION(ZoomInAction, tr("Zoom in"));
     SET_SHORTCUT(ZoomInAction, QKeySequence::ZoomIn);

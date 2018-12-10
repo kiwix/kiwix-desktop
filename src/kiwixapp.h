@@ -17,6 +17,8 @@
 class KiwixApp : public QApplication
 {
     Q_OBJECT
+    Q_PROPERTY(SideBarType currentSideType MEMBER m_currentSideType NOTIFY currentSideTypeChanged)
+
 public:
     enum Actions {
         KiwixServeAction,
@@ -74,12 +76,14 @@ public:
 
 signals:
     void currentTitleChanged(const QString& title);
+    void currentSideTypeChanged(SideBarType type);
 
 public slots:
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
     void setSideBar(SideBarType type);
+    void toggleSideBar(KiwixApp::SideBarType type);
     void printPage();
 
 protected:
@@ -94,7 +98,7 @@ private:
     ContentManager m_manager;
     MainWindow* mp_mainWindow;
     TabBar* mp_tabWidget;
-    QWidget* mp_currentSideBar;
+    SideBarType m_currentSideType;
     QErrorMessage* mp_errorDialog;
 
     QAction*     mpa_actions[MAX_ACTION];
