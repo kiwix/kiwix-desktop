@@ -63,16 +63,11 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
     auto metaName = parts[1];
 
     auto library = KiwixApp::instance()->getLibrary();
-    auto reader = library->getReader(zimId);
-    if ( reader == nullptr) {
-        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
-        return;
-    }
+    auto book = library->getBookById(zimId);
     if (metaName == "favicon") {
-        std::string mimeType;
-        std::string content;
+        std::string content= book.getFavicon();
+        std::string mimeType = book.getFaviconMimeType();
         QBuffer* buffer = new QBuffer;
-        reader->getFavicon(content, mimeType);
         buffer->setData(content.data(), content.size());
         connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
         request->reply(QByteArray::fromStdString(mimeType), buffer);
