@@ -197,6 +197,7 @@ QStringList ContentManager::getDownloadIds()
     if (!mp_downloader)
         return list;
     for(auto& id: mp_downloader->getDownloadIds()) {
+        qInfo() << QString::fromStdString(id);
         list.append(QString::fromStdString(id));
     }
     return list;
@@ -228,11 +229,11 @@ void ContentManager::updateRemoteLibrary() {
     url.setPort(CATALOG_PORT);
     url.setPath("/catalog/search");
     url.setQuery(query);
-    qInfo() << "Downloading" << url;
+    qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
     m_remoteLibrary = kiwix::Library();
     kiwix::Manager manager(&m_remoteLibrary);
     try {
-        auto allContent = kiwix::download(url.toString().toStdString());
+        auto allContent = kiwix::download(url.toString(QUrl::FullyEncoded).toStdString());
         manager.readOpds(allContent, CATALOG_HOST);
     } catch (runtime_error&) {}
     emit(booksChanged());
