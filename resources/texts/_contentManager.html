@@ -83,7 +83,7 @@ function init() {
 futurCall = null;
 function setSearch(value) {
   clearTimeout(futurCall);
-  futurCall = setTimeout(function(){contentManager.setSearch(value)}, 200);
+  futurCall = setTimeout(function(){contentManager.setSearch(value)}, 100);
 }
 </script>
 <style>

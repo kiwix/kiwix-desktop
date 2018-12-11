@@ -221,8 +221,6 @@ void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
     query.addQueryItem("lang", m_currentLanguage);
     query.addQueryItem("count", QString::number(0));
-    if (!m_searchQuery.isEmpty())
-        query.addQueryItem("q", m_searchQuery);
     QUrl url;
     url.setScheme("http");
     url.setHost(CATALOG_HOST);
@@ -242,24 +240,18 @@ void ContentManager::updateRemoteLibrary() {
 void ContentManager::setSearch(const QString &search)
 {
     m_searchQuery = search;
-    if (m_local)
-        emit(booksChanged());
-    else
-        emit(remoteParamsChanged());
+    emit(booksChanged());
 }
 
 QStringList ContentManager::getBookIds() {
     if (m_local) {
         return mp_library->listBookIds(m_searchQuery);
     } else {
-        auto bookIds = m_remoteLibrary.getBooksIds();
+        auto bookIds = m_remoteLibrary.listBooksIds(kiwix::REMOTE, kiwix::UNSORTED,
+                                                    m_searchQuery.toStdString());
         QStringList list;
         for(auto& bookId:bookIds) {
-            try{
-                list.append(QString::fromStdString(bookId));
-            } catch (out_of_range&) {
-                break;
-            }
+            list.append(QString::fromStdString(bookId));
         }
         return list;
     }
