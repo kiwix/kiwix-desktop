@@ -15,6 +15,7 @@ TabBar::TabBar(QWidget *parent) :
     setElideMode(Qt::ElideNone);
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
+    setIconSize(QSize(30, 30));
     connect(this, &QTabBar::tabCloseRequested, this, &TabBar::closeTab);
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged);
     auto app = KiwixApp::instance();
@@ -76,6 +77,7 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     mp_stackedWidget->addWidget(mp_contentManagerView);
     mp_stackedWidget->show();
     addTab(QIcon(":/icons/kiwix/app_icon.svg"), "");
+    setTabButton(0, RightSide, nullptr);
 }
 
 WebView* TabBar::createNewTab(bool setCurrent)
@@ -150,6 +152,12 @@ QString TabBar::currentArticleTitle()
     if(!currentWidget())
         return "";
     return currentWidget()->title();
+}
+
+QSize TabBar::tabSizeHint(int index) const {
+    if (index)
+        return QSize(205, 40);
+    return QSize(40, 40);
 }
 
 void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *webView)

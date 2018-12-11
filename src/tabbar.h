@@ -33,6 +33,7 @@ public:
     void triggerWebPageAction(QWebEnginePage::WebAction action, WebView* webView=nullptr);
     QString currentArticleUrl();
     QString currentArticleTitle();
+    virtual QSize tabSizeHint(int index) const;
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void currentZimIdChanged(const QString& zimId);
