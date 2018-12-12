@@ -104,7 +104,7 @@ unix {
   QMAKE_LFLAGS += "-Wl,-rpath,\'\$$ORIGIN/../lib64\ '"
 
   desktop_file.path = $$PREFIX/share/applications/
-  desktop_file.files = resources/kiwix-desktop.desktop
+  desktop_file.files = resources/org.kiwix.desktop.desktop
   INSTALLS += desktop_file
 
   icon_file24.path = $$PREFIX/share/icons/hicolor/24x24/apps
