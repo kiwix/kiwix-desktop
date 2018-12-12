@@ -56,7 +56,7 @@
       <enum>Qt::ElideNone</enum>
      </property>
      <property name="isWrapping" stdset="0">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
      <property name="uniformItemSizes">
       <bool>true</bool>
