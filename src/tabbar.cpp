@@ -12,7 +12,7 @@ TabBar::TabBar(QWidget *parent) :
     QTabBar(parent)
 {
     setTabsClosable(true);
-    setElideMode(Qt::ElideNone);
+    setElideMode(Qt::ElideRight);
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
     setIconSize(QSize(30, 30));
