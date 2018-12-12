@@ -135,7 +135,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
         showMessage("Cannot open " + _zimfile + ": \n" + e.what());
         return;
     }
-    openUrl(QUrl("zim://"+zimId+"/"));
+    openUrl(QUrl("zim://"+zimId+".zim/"));
 }
 
 void KiwixApp::printPage()
