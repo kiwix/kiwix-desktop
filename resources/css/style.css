@@ -25,7 +25,7 @@ TopWidget::separator {
 
 QToolButton {
     background: none;
-    height: 100%;
+    height: 40px;
     width: 40px;
     border: none;
 }
@@ -54,14 +54,10 @@ SearchBar > QPushButton {
    Menu
 */
 
-TopWidget QToolButton:pressed {
-    background-color: #D9E9FF;
-    border: 1px solid #3366CC;
-    border-radius: 2px;
-}
-
+TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;
+    background-color: #D9E9FF;
     border-radius: 2px;
 }
 
