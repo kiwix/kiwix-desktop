@@ -1,0 +1,14 @@
+kiwix-desktop beta2
+===================
+
+ * Do not crash in contentManager view and backend are out of sync.
+ * Reduce number of requests when we search in the contentManager
+ * Correctly handle the sideBar
+ * Make the searchBar update to tab change.
+ * Url encode the request to the server.
+ * Get the favicon from the book instead of the reader.
+ * Correctly style the first tab.
+ * Ensure reading list is displayed in only one column.
+ * Rename .desktop file to org.kiwix.desktop.desktop
+ * Add a appdata file
+ * Elide the title tab of the article.
