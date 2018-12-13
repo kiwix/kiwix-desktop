@@ -21,6 +21,7 @@ public:
 public slots:
     void findNext();
     void findPrevious();
+    void findClose();
 
 private:
     Ui::TocSideBar *mp_ui;
