@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 #include <QAction>
 #include <QTimer>
+#include <QWebEnginePage>
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
@@ -95,8 +96,17 @@ WebView* TabBar::createNewTab(bool setCurrent)
             [=](const QString& zimId) {
                 QUITIFNOTCURRENT(webView);
                 emit currentZimIdChanged(zimId);
-            }
-    );
+            });
+    connect(webView->page()->action(QWebEnginePage::Back), &QAction::changed,
+            [=]() {
+                QUITIFNOTCURRENT(webView);
+                emit webActionEnabledChanged(QWebEnginePage::Back, webView->isWebActionEnabled(QWebEnginePage::Back));
+            });
+    connect(webView->page()->action(QWebEnginePage::Forward), &QAction::changed,
+            [=]() {
+                QUITIFNOTCURRENT(webView);
+                emit webActionEnabledChanged(QWebEnginePage::Forward, webView->isWebActionEnabled(QWebEnginePage::Forward));
+            });
     // Ownership of webview is passed to the tabWidget
     mp_stackedWidget->addWidget(webView);
     auto index = addTab("");

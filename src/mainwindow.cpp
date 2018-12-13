@@ -45,6 +45,11 @@ TabBar* MainWindow::getTabBar()
     return mp_ui->tabBar;
 }
 
+TopWidget *MainWindow::getTopWidget()
+{
+    return mp_ui->mainToolBar;
+}
+
 QStackedWidget *MainWindow::getSideDockWidget()
 {
     return mp_ui->sideBar;

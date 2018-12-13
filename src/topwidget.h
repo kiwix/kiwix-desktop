@@ -25,7 +25,7 @@ private:
     QPoint m_cursorPos;
     ulong m_timestamp;
 
-private slots:
+public slots:
     void handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
 };
 

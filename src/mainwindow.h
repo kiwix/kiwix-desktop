@@ -5,6 +5,7 @@
 #include <QDockWidget>
 #include "webview.h"
 #include "tabbar.h"
+#include "topwidget.h"
 #include "tocsidebar.h"
 #include "about.h"
 #include "contentmanagerside.h"
@@ -22,6 +23,7 @@ public:
     ~MainWindow();
 
     TabBar*   getTabBar();
+    TopWidget* getTopWidget();
     QStackedWidget* getSideDockWidget();
     ContentManagerSide* getSideContentManager();
 
