@@ -12,3 +12,6 @@ kiwix-desktop beta2
  * Rename .desktop file to org.kiwix.desktop.desktop
  * Add a appdata file
  * Elide the title tab of the article.
+ * Update style
+ * Disable navigation buttons when needed
+ * Remove text highlight when we quit search
