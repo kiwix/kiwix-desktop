@@ -33,7 +33,7 @@ to use [kiwix-build](https://github.com/kiwix/kiwix-build).
 
 Install needed packages (on Ubuntu):
 ```
-$ sudo apt-get install libqt5gui qtbase5-dev qtwebengine5-dev libgt5svg5-dev qt5-image-formats-plugins qt5-default aria2
+$ sudo apt-get install libqt5gui qtbase5-dev qtwebengine5-dev libqt5svg5-dev qt5-image-formats-plugins qt5-default aria2
 ```
 
 Compilation
