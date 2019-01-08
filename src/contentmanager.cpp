@@ -59,7 +59,6 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
     for(auto& key: keys){
         ADD_V("id", getId);
         ADD_V("path", getPath);
-        ADD_V("indexPath", getIndexPath);
         ADD_V("title", getTitle);
         ADD_V("description", getDescription);
         ADD_V("language", getLanguage);
