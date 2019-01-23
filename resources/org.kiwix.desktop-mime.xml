@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/org.kiwix.desktop.x-zim">
+         <comment xml:lang="en">ZIM archive</comment>
+         <magic priority="50">
+           <match type="little32" value="72173914" offset="0"/>
+         </magic>
+         <glob pattern="*.zim"/>
+         <glob pattern="*.zimaa"/>
+  </mime-type>
+</mime-info>
+
