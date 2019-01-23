@@ -1,3 +1,11 @@
+kiwix-desktop beta3
+===================
+
+ * Update README.
+ * Update to last version of kiwix-lib.
+ * Correctly install extra-files for flatpak.
+ * Update `about.html` files.
+
 kiwix-desktop beta2
 ===================
 
