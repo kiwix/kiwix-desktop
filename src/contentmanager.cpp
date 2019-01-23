@@ -1,8 +1,8 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
-#include <kiwix/common/networkTools.h>
-#include <kiwix/common/otherTools.h>
+#include <kiwix/tools/networkTools.h>
+#include <kiwix/tools/otherTools.h>
 #include <kiwix/manager.h>
 
 #include <QDebug>
