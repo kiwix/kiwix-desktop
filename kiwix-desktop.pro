@@ -123,8 +123,8 @@ unix {
   icon_file256.files = resources/icons/kiwix/256/kiwix-desktop.png
   INSTALLS += icon_file24 icon_file32 icon_file48 icon_file128 icon_file256
 
-  mime_file.path = $$PREFIX/share/mime/application/
-  mime_file.files = resources/x-zim.xml
+  mime_file.path = $$PREFIX/share/mime/packages/
+  mime_file.files = resources/org.kiwix.desktop-mime.xml
   INSTALLS += mime_file
 }
 

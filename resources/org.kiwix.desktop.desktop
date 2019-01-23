@@ -5,6 +5,6 @@ Comment=View offline content
 Icon=kiwix-desktop
 Exec=kiwix-desktop %F
 Terminal=false
-MimeType=application/zim;
+MimeType=application/org.kiwix.desktop.x-zim;
 Keywords=zim;
 Categories=Education;
