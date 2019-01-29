@@ -108,7 +108,7 @@ unix {
   INSTALLS += desktop_file
 
   metainfo_file.path = $$PREFIX/share/metainfo/
-  metainfo_file.path = resources/org.kiwix.desktop.appdata.xml
+  metainfo_file.files = resources/org.kiwix.desktop.appdata.xml
   INSTALLS += metainfo_file
 
   icon_file24.path = $$PREFIX/share/icons/hicolor/24x24/apps
