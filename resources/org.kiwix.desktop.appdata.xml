@@ -9,15 +9,30 @@
       Kiwix is an offline reader - meaning that it allows you to check text or video that is normally only available on the internet.
     </p>
     <p>
-      We turn various online educational contents (such as Wikipedia, for example) into ZIM files, and these can be opened by Kiwix even if you are no connection whatsoever.
+      We turn various online educational contents (such as Wikipedia, for example) into ZIM files, and these can be opened by Kiwix even if you have no connectivity whatsoever.
     </p>
   </description>
+  <releases>
+    <release version="2.0-beta3" date="2019-01-29" />
+  </releases>
+  <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>XGPL-3.0+</project_license>
+  <project_license>GPL-3.0+</project_license>
   <url type="bugtracker">https://github.com/kiwix/kiwix-desktop</url>
   <url type="donation">https://www.kiwix.org/support/</url>
   <url type="faq">https://www.kiwix.org/faq/</url>
   <url type="homepage">https://www.kiwix.org/</url>
   <update_contact>mgautier_AT_kymeria.fr</update_contact>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://download.kiwix.org/screenshots/kiwix_desktop_library.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://download.kiwix.org/screenshots/kiwix_desktop_remote_library.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://download.kiwix.org/screenshots/kiwix_desktop_ted.png</image>
+    </screenshot>
+  </screenshots>
 </component>
