@@ -12,6 +12,9 @@
       We turn various online educational contents (such as Wikipedia, for example) into ZIM files, and these can be opened by Kiwix even if you have no connectivity whatsoever.
     </p>
   </description>
+  <releases>
+    <release version="2.0-beta3" date="2019-01-29" />
+  </releases>
   <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
