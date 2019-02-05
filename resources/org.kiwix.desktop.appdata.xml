@@ -24,4 +24,15 @@
   <url type="faq">https://www.kiwix.org/faq/</url>
   <url type="homepage">https://www.kiwix.org/</url>
   <update_contact>mgautier_AT_kymeria.fr</update_contact>
+  <screenshots>
+    <screenshot type="default">
+      <image>http://download.kiwix.org/screenshots/kiwix_desktop_library.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://download.kiwix.org/screenshots/kiwix_desktop_remote_library.png</image>
+    </screenshot>
+    <screenshot>
+      <image>http://download.kiwix.org/screenshots/kiwix_desktop_ted.png</image>
+    </screenshot>
+  </screenshots>
 </component>
