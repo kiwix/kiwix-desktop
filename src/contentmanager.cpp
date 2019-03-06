@@ -219,7 +219,9 @@ void ContentManager::setCurrentLanguage(QString language)
 #define CATALOG_PORT 80
 void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
-    query.addQueryItem("lang", m_currentLanguage);
+    if (m_currentLanguage != "*") {
+        query.addQueryItem("lang", m_currentLanguage);
+    }
     query.addQueryItem("count", QString::number(0));
     QUrl url;
     url.setScheme("http");

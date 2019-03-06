@@ -29,6 +29,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     for (auto lang:
         {
+         QLocale::AnyLanguage,
          QLocale::Afar,
          QLocale::Afrikaans,
          QLocale::Akan,
@@ -175,6 +176,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     })
     {
         auto currentLang = QLocale().language();
+        if (lang == QLocale::AnyLanguage) {
+            auto item = new KListWidgetItem("All");
+            item->setData(Qt::UserRole, lang);
+            mp_languageSelector->addItem(item);
+            continue;
+        }
         auto locale = QLocale(lang);
         if (locale.language() != lang) {
             // Qt may not find the locale for the lang :/
@@ -205,6 +212,10 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
                 auto item = mp_languageSelector->selectedItems().at(0);
                 if (!item) return;
                 auto lang = QLocale::Language(item->data(Qt::UserRole).toInt());
+                if (lang == QLocale::AnyLanguage) {
+                    mp_contentManager->setCurrentLanguage("*");
+                    return;
+                }
                 auto locale = QLocale(QLocale::Language(item->data(Qt::UserRole).toInt()));
                 mp_contentManager->setCurrentLanguage(locale.name().split("_").at(0));});
 }
