@@ -212,6 +212,7 @@ void ContentManager::setCurrentLanguage(QString language)
     }
     m_currentLanguage = language;
     emit(currentLangChanged());
+    emit(remoteParamsChanged());
 }
 
 #define CATALOG_HOST "library.kiwix.org"
