@@ -3,6 +3,8 @@
 
 #include <QLocale>
 
+#include "klistwidgetitem.h"
+
 ContentManagerSide::ContentManagerSide(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::contentmanagerside)
@@ -181,7 +183,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
             // else we may add several time the current language.
             continue;
         }
-        auto item = new QListWidgetItem(QLocale::languageToString(locale.language()));
+        auto item = new KListWidgetItem(QLocale::languageToString(locale.language()));
         item->setData(Qt::UserRole, lang);
         mp_languageSelector->addItem(item);
         if (lang == currentLang) {
