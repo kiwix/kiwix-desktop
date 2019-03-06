@@ -2,6 +2,8 @@
 #define CONTENTMANAGERSIDE_H
 
 #include <QWidget>
+#include <QListWidget>
+#include <QCheckBox>
 #include "contentmanager.h"
 
 namespace Ui {
@@ -16,11 +18,13 @@ public:
     explicit ContentManagerSide(QWidget *parent = 0);
     ~ContentManagerSide();
 
-    void setContentManager(ContentManager* contentManager) { mp_contentManager = contentManager; }
+    void setContentManager(ContentManager* contentManager);
 
 private:
     Ui::contentmanagerside *mp_ui;
     ContentManager* mp_contentManager;
+    QCheckBox* mp_languageButton;
+    QListWidget* mp_languageSelector;
 };
 
 #endif // CONTENTMANAGERSIDE_H

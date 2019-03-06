@@ -34,6 +34,7 @@ function onBooksChanged () {
     var id = contentManager.bookIds[i];
     contentManager.getBookInfos(id, BOOK_KEYS, addBook);
   }
+  app.displayedBooksNb = 20;
 }
 
 downloadUpdaters = {}
@@ -59,6 +60,7 @@ function init() {
       el: "#app",
       data: {
         contentManager: contentManager,
+        displayedBooksNb: 20,
         books: [],
         downloads: {}
       },
@@ -71,6 +73,10 @@ function init() {
             book.downloadId = did;
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });
+        },
+        displayedBooks : function(books, nb) {
+            var a = books.slice(0, nb);
+            return a;
         },
         niceBytes : niceBytes
       }
@@ -85,11 +91,25 @@ function setSearch(value) {
   clearTimeout(futurCall);
   futurCall = setTimeout(function(){contentManager.setSearch(value)}, 100);
 }
+
+function scrolled(e) {
+  if (e.offsetHeight + e.scrollTop >= e.scrollHeight) {
+    app.displayedBooksNb = Math.min(app.displayedBooksNb+20, app.books.length);
+  }
+}
 </script>
 <style>
-body {
-padding: 0;
+html, body {
+    padding: 0;
     margin: 0;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+#app {
+    height: 100%;
+    position: relative;
 }
 *:focus {
     outline: none;
@@ -106,9 +126,21 @@ padding: 0;
     width: 90%;
     border: 1px solid #EEE;
 }
-#bookList {
-    width:100%;
+
+#bookTable {
+    position: relative;
+    height: calc(100% - 42px); /* 42px = 40px(height of #searchInput) + 2px(border) */
+    width: 100%;
 }
+
+#bookList {
+    height: calc(100% - 19px - 20px); /*19px the header size, 20px the header margin-top */
+    overflow-y:scroll;
+    overflow-x:hidden;
+    position: relative;
+    width: 100%
+}
+
 .tablerow,
 .header {
     display: flex;
@@ -181,7 +213,7 @@ details:hover {
       <input id="searchInput" type="text" placeholder="Search files" oninput="setSearch(this.value)"/>
     </form>
   </div>
-  <div id="bookList">
+  <div id="bookTable">
     <div class="header">
       <span class="tablecell cell0"></span>
       <span class="tablecell cell1">File name</span>
@@ -190,38 +222,40 @@ details:hover {
       <span class="tablecell cell4">Content type</span>
       <span class="tablecell cell5"></span>
     </div>
-    <details v-for="book in books" class="book">
-      <summary class="tablerow">
-        <span class="tablecell cell0">
-          <img v-if="book.faviconUrl" v-bind:src="'http://' + book.faviconUrl" />
-          <img v-else-if="book.faviconMimeType" v-bind:src="'zim://' + book.id + '.favicon.meta'" />
-        </span>
-        <span class="tablecell cell1">
-          {{ book.title }}
-        </span>
-        <span class="tablecell cell2">
-          {{ niceBytes(book.size) }}
-        </span>
-        <span class="tablecell cell3">
-          {{ book.date }}
-        </span>
-        <span class="tablecell cell4">
-          {{ book.tags }}
-        </span>
-        <span class="tablecell cell5">
-          <template v-if="book.downloadId">
-            <span v-if="downloads[book.id]">
-              {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
-            </span>
-          </template>
-          <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
-          <button v-else v-on:click="downloadBook(book)">Download</button>
-        </span>
-      </summary>
-      <p class="content">
-        {{ book.description }}
-      </p>
-    </details>
+    <div id="bookList" onscroll=scrolled(this)>
+      <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">
+        <summary class="tablerow">
+          <span class="tablecell cell0">
+            <img v-if="book.faviconUrl" v-bind:src="'http://' + book.faviconUrl" />
+            <img v-else-if="book.faviconMimeType" v-bind:src="'zim://' + book.id + '.favicon.meta'" />
+          </span>
+          <span class="tablecell cell1">
+            {{ book.title }}
+          </span>
+          <span class="tablecell cell2">
+            {{ niceBytes(book.size) }}
+          </span>
+          <span class="tablecell cell3">
+            {{ book.date }}
+          </span>
+          <span class="tablecell cell4">
+            {{ book.tags }}
+          </span>
+          <span class="tablecell cell5">
+            <template v-if="book.downloadId">
+              <span v-if="downloads[book.id]">
+                {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
+              </span>
+            </template>
+            <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
+            <button v-else v-on:click="downloadBook(book)">Download</button>
+          </span>
+        </summary>
+        <p class="content">
+          {{ book.description }}
+        </p>
+      </details>
+    </div>
   </div>
 </div>
 </body></html>

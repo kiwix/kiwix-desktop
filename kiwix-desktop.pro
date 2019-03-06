@@ -58,7 +58,8 @@ SOURCES += \
     src/contentmanagerview.cpp \
     src/tabbar.cpp \
     src/contentmanagerside.cpp \
-    src/readinglistbar.cpp
+    src/readinglistbar.cpp \
+    src/klistwidgetitem.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -78,7 +79,8 @@ HEADERS += \
     src/contentmanagerview.h \
     src/tabbar.h \
     src/contentmanagerside.h \
-    src/readinglistbar.h
+    src/readinglistbar.h \
+    src/klistwidgetitem.h
 
 FORMS += \
     ui/mainwindow.ui \

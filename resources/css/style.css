@@ -200,13 +200,34 @@ QTabBar::close-button {
    border: none;
 }
 
-
 #contentmanagerside QRadioButton::indicator {
    image: none;
 }
 
 #contentmanagerside QCheckBox::indicator {
    image: none;
+}
+
+#contentmanagerside QListWidget {
+    border: none;
+    padding-left: 30px;
+    show-decoration-selected: 0;
+}
+
+#languageSelector QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+#languageSelector QScrollBar::handle {
+    background-color: grey;
+}
+
+#languageSelector::item:selected {
+    background-color: white;
+    color: black;
+    outline: none;
 }
 
 #readinglistbar QListWidget {

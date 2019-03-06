@@ -22,6 +22,7 @@ public:
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
     QStringList getDownloadIds();
+    void setCurrentLanguage(QString language);
 private:
     Library* mp_library;
     kiwix::Library m_remoteLibrary;
@@ -30,7 +31,7 @@ private:
     bool m_local = true;
     QString m_currentLanguage;
     QString m_searchQuery;
-    void setCurrentLanguage(QString language);
+
 
     QStringList getBookIds();
 
