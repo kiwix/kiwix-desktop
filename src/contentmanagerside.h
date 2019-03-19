@@ -25,6 +25,8 @@ private:
     ContentManager* mp_contentManager;
     QCheckBox* mp_languageButton;
     QListWidget* mp_languageSelector;
+    QCheckBox* mp_categoryButton;
+    QListWidget* mp_categorySelector;
 };
 
 #endif // CONTENTMANAGERSIDE_H

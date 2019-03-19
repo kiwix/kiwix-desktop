@@ -215,6 +215,12 @@ void ContentManager::setCurrentLanguage(QString language)
     emit(remoteParamsChanged());
 }
 
+void ContentManager::setCurrentCategoryFilter(QString category)
+{
+    m_categoryFilter = category.toLower();
+    emit(remoteParamsChanged());
+}
+
 #define CATALOG_HOST "library.kiwix.org"
 #define CATALOG_PORT 80
 #define CATALOG_URL "library.kiwix.org"
@@ -224,6 +230,9 @@ void ContentManager::updateRemoteLibrary() {
         query.addQueryItem("lang", m_currentLanguage);
     }
     query.addQueryItem("count", QString::number(0));
+    if (m_categoryFilter != "all") {
+        query.addQueryItem("tag", m_categoryFilter);
+    }
     QUrl url;
     url.setScheme("http");
     url.setHost(CATALOG_HOST);

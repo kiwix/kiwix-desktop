@@ -21,10 +21,15 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
             this, [=](bool checked) { mp_ui->localFileButton->setStyleSheet(
                     checked ?"*{font-weight: bold}" : "");});
     mp_ui->localFileButton->setStyleSheet("*{font-weight: bold}");
+
     mp_languageButton = mp_ui->languageButton;
     mp_languageSelector = mp_ui->languageSelector;
     connect(mp_languageButton, &QCheckBox::toggled, this, [=](bool checked) { mp_languageSelector->setHidden(!checked); });
     mp_languageSelector->setHidden(true);
+    mp_categoryButton = mp_ui->categoryButton;
+    mp_categorySelector = mp_ui->categorySelector;
+    connect(mp_categoryButton, &QCheckBox::toggled, this, [=](bool checked) { mp_categorySelector->setHidden(!checked); });
+    mp_categorySelector->setHidden(true);
 
 
     for (auto lang:
@@ -198,12 +203,43 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         }
     }
 
+    for (auto category: {
+         "All",
+         "Gutenberg",
+         "Other",
+         "Phet",
+         "Psiram",
+         "Stack_exchange",
+         "Ted",
+         "Vikidia",
+         "Wikibooks",
+         "Wikinews",
+         "Wikipedia",
+         "Wikiquote",
+         "Wikisource",
+         "Wikispecies",
+         "Wikiversity",
+         "Wikivoyage",
+         "Wiktionary"
+    })
+    {
+        auto c = QString(category);
+        auto item = new KListWidgetItem(c);
+        mp_categorySelector->addItem(item);
+        if (c ==  "All")
+        {
+            item->setSelected(true);
+        }
+    }
+
 }
 
 ContentManagerSide::~ContentManagerSide()
 {
     delete mp_ui;
 }
+
+
 void ContentManagerSide::setContentManager(ContentManager *contentManager)
 {
     mp_contentManager = contentManager;
@@ -217,5 +253,13 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
                     return;
                 }
                 auto locale = QLocale(QLocale::Language(item->data(Qt::UserRole).toInt()));
-                mp_contentManager->setCurrentLanguage(locale.name().split("_").at(0));});
+                mp_contentManager->setCurrentLanguage(locale.name().split("_").at(0));
+    });
+    connect(mp_categorySelector, &QListWidget::itemSelectionChanged,
+            this, [=]() {
+                auto item = mp_categorySelector->selectedItems().at(0);
+                if (!item) return;
+                auto category = item->text();
+                mp_contentManager->setCurrentCategoryFilter(category);
+    });
 }

@@ -214,16 +214,19 @@ QTabBar::close-button {
     show-decoration-selected: 0;
 }
 
+#categorySelector QScrollBar,
 #languageSelector QScrollBar {
     width: 5px;
     border: none;
     outline: none;
 }
 
+#categorySelector QScrollBar::handle,
 #languageSelector QScrollBar::handle {
     background-color: grey;
 }
 
+#categorySelector::item:selected,
 #languageSelector::item:selected {
     background-color: white;
     color: black;

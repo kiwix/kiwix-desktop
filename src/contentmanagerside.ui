@@ -43,7 +43,7 @@
      <property name="flat">
       <bool>true</bool>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,1">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0,1">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -94,9 +94,6 @@
           <verstretch>1</verstretch>
          </sizepolicy>
         </property>
-        <property name="cursor" stdset="0">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -115,21 +112,40 @@
         <property name="sizeAdjustPolicy">
          <enum>QAbstractScrollArea::AdjustToContents</enum>
         </property>
-        <property name="selectionBehavior">
-         <enum>QAbstractItemView::SelectItems</enum>
-        </property>
-        <property name="verticalScrollMode">
-         <enum>QAbstractItemView::ScrollPerPixel</enum>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QCheckBox" name="categoryButton">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string>Browse By Category</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QListWidget" name="categorySelector">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
         </property>
        </widget>
       </item>
