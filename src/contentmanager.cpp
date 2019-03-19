@@ -217,6 +217,7 @@ void ContentManager::setCurrentLanguage(QString language)
 
 #define CATALOG_HOST "library.kiwix.org"
 #define CATALOG_PORT 80
+#define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary() {
     QUrlQuery query;
     if (m_currentLanguage != "*") {
@@ -234,7 +235,7 @@ void ContentManager::updateRemoteLibrary() {
     kiwix::Manager manager(&m_remoteLibrary);
     try {
         auto allContent = kiwix::download(url.toString(QUrl::FullyEncoded).toStdString());
-        manager.readOpds(allContent, CATALOG_HOST);
+        manager.readOpds(allContent, CATALOG_URL);
     } catch (runtime_error&) {}
     emit(booksChanged());
 }
