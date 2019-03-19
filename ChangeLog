@@ -1,3 +1,10 @@
+kiwix-desktop beta4
+===================
+
+ * Fixup appdata information (for flatpak).
+ * Add a filtering by language for the remote content.
+ * Add a filtering by category for the remote content.
+
 kiwix-desktop beta3
 ===================
 
