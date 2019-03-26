@@ -1,8 +1,6 @@
 #include "searchbar.h"
-
 #include <QCompleter>
 #include <QTimer>
-
 #include "kiwixapp.h"
 
 SearchButton::SearchButton(QWidget *parent) :
@@ -24,7 +22,7 @@ void SearchButton::set_searchMode(bool searchMode)
         if (kiwixApp->isCurrentArticleBookmarked()) {
             setIcon(QIcon(":/icons/reading-list-active.svg"));
         } else {
-            setIcon(QIcon(":/icons/reading-list.svg"));
+            setIcon(QIcon(":/icons/reading-list.svg"));     //Setting the icon for the search button
         }
     }
 }
@@ -33,10 +31,9 @@ void SearchButton::on_buttonClicked()
 {
     if (m_searchMode)
         return;
-
     auto kiwixApp = KiwixApp::instance();
-    auto library = kiwixApp->getLibrary();
-    auto tabWidget = kiwixApp->getTabWidget();
+    auto library = kiwixApp->getLibrary();  //Fetching the data from the library
+    auto tabWidget = kiwixApp->getTabWidget(); //applying the Tab Widget
     if (kiwixApp->isCurrentArticleBookmarked()) {
         auto zimid = tabWidget->currentZimId();
         library->removeBookmark(
@@ -46,12 +43,12 @@ void SearchButton::on_buttonClicked()
         kiwix::Bookmark bookmark;
         auto zimid = tabWidget->currentZimId().toStdString();
         bookmark.setBookId(zimid);
-        bookmark.setUrl(tabWidget->currentArticleUrl().toStdString());
-        bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());
-        library->addBookmark(bookmark);
+        bookmark.setUrl(tabWidget->currentArticleUrl().toStdString());  //setting the url for the ZIM file
+        bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());  //setting the bookmark name with the current article name
+        library->addBookmark(bookmark);             //adding the bookmark in the library
     }
     set_searchMode(false);
-    library->save();
+    library->save();                    //saving the bookmark in the library
 }
 
 SearchBar::SearchBar(QWidget *parent) :
@@ -76,7 +73,7 @@ SearchBar::SearchBar(QWidget *parent) :
 
 void SearchBar::on_currentTitleChanged(const QString& title)
 {
-    setText(title);
+    setText(title);                     //setting the title same as the ZIM FILE
     m_button.set_searchMode(title.isEmpty());
 }
 
@@ -149,4 +146,3 @@ void SearchBar::openCompletion(const QModelIndex &index)
     qurl.setPath(QString::fromStdString(url));
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
 }
-
