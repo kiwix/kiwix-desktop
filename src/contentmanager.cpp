@@ -225,6 +225,8 @@ void ContentManager::setCurrentCategoryFilter(QString category)
 #define CATALOG_PORT 80
 #define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary() {
+    if (m_local)
+        return;
     QUrlQuery query;
     if (m_currentLanguage != "*") {
         query.addQueryItem("lang", m_currentLanguage);
