@@ -34,10 +34,6 @@ TabBar::TabBar(QWidget *parent) :
                     return;
                 }
                 this->closeTab(index);
-                auto widget = mp_stackedWidget->widget(index);
-                mp_stackedWidget->removeWidget(widget);
-                widget->setParent(nullptr);
-                delete widget;
             });
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
@@ -183,6 +179,8 @@ void TabBar::closeTab(int index)
     if (index == 0)
         return;
     auto webview = widget(index);
+    mp_stackedWidget->removeWidget(webview);
+    webview->setParent(nullptr);
     removeTab(index);
     webview->close();
     delete webview;
