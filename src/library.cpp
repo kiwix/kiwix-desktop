@@ -89,12 +89,20 @@ QStringList Library::getBookIds()
     return list;
 }
 
-QStringList Library::listBookIds(const QString &query)
+QStringList Library::listBookIds(const QString &query, const QString &categoryFilter)
 {
     QStringList list;
+    std::vector<std::string> tags;
+    if (categoryFilter != "all") {
+        tags.push_back(categoryFilter.toStdString());
+    }
     for(auto& id: m_library.listBooksIds(kiwix::VALID|kiwix::LOCAL,
                                          kiwix::UNSORTED,
-                                         query.toStdString())) {
+                                         query.toStdString(),
+                                         "",
+                                         "",
+                                         "",
+                                         tags)) {
         list.append(QString::fromStdString(id));
     }
     return list;

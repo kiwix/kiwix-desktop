@@ -22,7 +22,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     mp_view->setHtml();
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
-    connect(this, &ContentManager::remoteParamsChanged, this, &ContentManager::updateRemoteLibrary);
+    connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
 }
 
 
@@ -31,8 +31,7 @@ void ContentManager::setLocal(bool local) {
         return;
     }
     m_local = local;
-    emit(remoteParamsChanged());
-    emit(booksChanged());
+    emit(filterParamsChanged());
 }
 
 #define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b->METH())));}
@@ -212,21 +211,23 @@ void ContentManager::setCurrentLanguage(QString language)
     }
     m_currentLanguage = language;
     emit(currentLangChanged());
-    emit(remoteParamsChanged());
+    emit(filterParamsChanged());
 }
 
 void ContentManager::setCurrentCategoryFilter(QString category)
 {
     m_categoryFilter = category.toLower();
-    emit(remoteParamsChanged());
+    emit(filterParamsChanged());
 }
 
 #define CATALOG_HOST "library.kiwix.org"
 #define CATALOG_PORT 80
 #define CATALOG_URL "library.kiwix.org"
-void ContentManager::updateRemoteLibrary() {
-    if (m_local)
-        return;
+void ContentManager::updateLibrary() {
+    if (m_local) {
+        emit(booksChanged());
+        return ();
+    }
     QUrlQuery query;
     if (m_currentLanguage != "*") {
         query.addQueryItem("lang", m_currentLanguage);
@@ -259,7 +260,7 @@ void ContentManager::setSearch(const QString &search)
 
 QStringList ContentManager::getBookIds() {
     if (m_local) {
-        return mp_library->listBookIds(m_searchQuery);
+        return mp_library->listBookIds(m_searchQuery, m_categoryFilter);
     } else {
         auto bookIds = m_remoteLibrary.listBooksIds(kiwix::REMOTE, kiwix::UNSORTED,
                                                     m_searchQuery.toStdString());

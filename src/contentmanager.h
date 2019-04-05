@@ -39,7 +39,7 @@ private:
     QStringList getBookIds();
 
 signals:
-    void remoteParamsChanged();
+    void filterParamsChanged();
     void booksChanged();
     void downloadsChanged();
     void currentLangChanged();
@@ -49,7 +49,7 @@ public slots:
     void openBook(const QString& id);
     QStringList updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);
-    void updateRemoteLibrary();
+    void updateLibrary();
     void setSearch(const QString& search);
 };
 
