@@ -126,7 +126,7 @@ unix {
   INSTALLS += app_icon24 app_icon32 app_icon48 app_icon128 app_icon256
 
   mime_icon48.path = $$PREFIX/share/icons/hicolor/48x48/mimetypes
-  mime_icon48.files = resources/icons/kiwix/application-org.kiwix.desktop.x-zim.png
+  mime_icon48.files = resources/icons/48/kiwix/org.kiwix.desktop.x-zim.png
   INSTALLS += mime_icon48
 
   mime_file.path = $$PREFIX/share/mime/packages/
