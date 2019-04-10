@@ -1,8 +1,8 @@
 #include "about.h"
 #include "ui_about.h"
 
-#define _STR(X) #X
-#define STR(X)  _STR(X)
+#define _STR(...) # __VA_ARGS__
+#define STR(X) _STR(X)
 
 About::About(QWidget *parent) :
     QDialog(parent),
