@@ -226,7 +226,7 @@ void ContentManager::setCurrentCategoryFilter(QString category)
 void ContentManager::updateLibrary() {
     if (m_local) {
         emit(booksChanged());
-        return ();
+        return;
     }
     QUrlQuery query;
     if (m_currentLanguage != "*") {
