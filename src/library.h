@@ -29,7 +29,7 @@ public:
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     QStringList getBookIds();
-    QStringList listBookIds(const QString& query);
+    QStringList listBookIds(const QString& query, const QString &categoryFilter);
     const std::vector<kiwix::Bookmark>& getBookmarks() { return m_library.getBookmarks(); }
     void addBookToLibrary(kiwix::Book& book);
     void addBookmark(kiwix::Bookmark& bookmark);
