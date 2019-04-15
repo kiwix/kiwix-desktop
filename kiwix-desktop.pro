@@ -113,17 +113,21 @@ unix {
   metainfo_file.files = resources/org.kiwix.desktop.appdata.xml
   INSTALLS += metainfo_file
 
-  icon_file24.path = $$PREFIX/share/icons/hicolor/24x24/apps
-  icon_file24.files = resources/icons/kiwix/24/kiwix-desktop.png
-  icon_file32.path = $$PREFIX/share/icons/hicolor/32x32/apps
-  icon_file32.files = resources/icons/kiwix/32/kiwix-desktop.png
-  icon_file48.path = $$PREFIX/share/icons/hicolor/48x48/apps
-  icon_file48.files = resources/icons/kiwix/48/kiwix-desktop.png
-  icon_file128.path = $$PREFIX/share/icons/hicolor/128x128/apps
-  icon_file128.files = resources/icons/kiwix/128/kiwix-desktop.png
-  icon_file256.path = $$PREFIX/share/icons/hicolor/256x256/apps
-  icon_file256.files = resources/icons/kiwix/256/kiwix-desktop.png
-  INSTALLS += icon_file24 icon_file32 icon_file48 icon_file128 icon_file256
+  app_icon24.path = $$PREFIX/share/icons/hicolor/24x24/apps
+  app_icon24.files = resources/icons/kiwix/24/kiwix-desktop.png
+  app_icon32.path = $$PREFIX/share/icons/hicolor/32x32/apps
+  app_icon32.files = resources/icons/kiwix/32/kiwix-desktop.png
+  app_icon48.path = $$PREFIX/share/icons/hicolor/48x48/apps
+  app_icon48.files = resources/icons/kiwix/48/kiwix-desktop.png
+  app_icon128.path = $$PREFIX/share/icons/hicolor/128x128/apps
+  app_icon128.files = resources/icons/kiwix/128/kiwix-desktop.png
+  app_icon256.path = $$PREFIX/share/icons/hicolor/256x256/apps
+  app_icon256.files = resources/icons/kiwix/256/kiwix-desktop.png
+  INSTALLS += app_icon24 app_icon32 app_icon48 app_icon128 app_icon256
+
+  mime_icon48.path = $$PREFIX/share/icons/hicolor/48x48/mimetypes
+  mime_icon48.files = resources/icons/48/kiwix/org.kiwix.desktop.x-zim.png
+  INSTALLS += mime_icon48
 
   mime_file.path = $$PREFIX/share/mime/packages/
   mime_file.files = resources/org.kiwix.desktop-mime.xml
