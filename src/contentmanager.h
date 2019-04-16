@@ -45,6 +45,7 @@ signals:
     void booksChanged();
     void downloadsChanged();
     void currentLangChanged();
+    void pendingRequest(const bool);
 
 public slots:
     QStringList getBookInfos(QString id, const QStringList &keys);

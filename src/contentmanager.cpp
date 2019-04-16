@@ -236,10 +236,12 @@ void ContentManager::setCurrentCategoryFilter(QString category)
 
 void ContentManager::updateLibrary() {
     if (m_local) {
+        emit(pendingRequest(false));
         emit(booksChanged());
         return;
     }
     try {
+        emit(pendingRequest(true));
         m_remoteLibraryManager.doUpdate(m_currentLanguage, m_categoryFilter);
     } catch (runtime_error&) {}
 }
@@ -250,6 +252,7 @@ void ContentManager::updateRemoteLibrary(const QString& content) {
     kiwix::Manager manager(&m_remoteLibrary);
     manager.readOpds(content.toStdString(), CATALOG_URL);
     emit(this->booksChanged());
+    emit(this->pendingRequest(false));
 }
 
 void ContentManager::setSearch(const QString &search)
