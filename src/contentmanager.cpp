@@ -13,7 +13,8 @@
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
       mp_library(library),
-      mp_downloader(downloader)
+      mp_downloader(downloader),
+      m_remoteLibraryManager()
 {
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
@@ -23,6 +24,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
 }
 
 void ContentManager::setLocal(bool local) {
@@ -232,36 +234,22 @@ void ContentManager::setCurrentCategoryFilter(QString category)
     emit(filterParamsChanged());
 }
 
-#define CATALOG_HOST "library.kiwix.org"
-#define CATALOG_PORT 80
-#define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateLibrary() {
     if (m_local) {
         emit(booksChanged());
         return;
     }
-    QUrlQuery query;
-    if (m_currentLanguage != "*") {
-        query.addQueryItem("lang", m_currentLanguage);
-    }
-    query.addQueryItem("count", QString::number(0));
-    if (m_categoryFilter != "all") {
-        query.addQueryItem("tag", m_categoryFilter);
-    }
-    QUrl url;
-    url.setScheme("http");
-    url.setHost(CATALOG_HOST);
-    url.setPort(CATALOG_PORT);
-    url.setPath("/catalog/search");
-    url.setQuery(query);
-    qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
+    try {
+        m_remoteLibraryManager.doUpdate(m_currentLanguage, m_categoryFilter);
+    } catch (runtime_error&) {}
+}
+
+#define CATALOG_URL "library.kiwix.org"
+void ContentManager::updateRemoteLibrary(const QString& content) {
     m_remoteLibrary = kiwix::Library();
     kiwix::Manager manager(&m_remoteLibrary);
-    try {
-        auto allContent = kiwix::download(url.toString(QUrl::FullyEncoded).toStdString());
-        manager.readOpds(allContent, CATALOG_URL);
-    } catch (runtime_error&) {}
-    emit(booksChanged());
+    manager.readOpds(content.toStdString(), CATALOG_URL);
+    emit(this->booksChanged());
 }
 
 void ContentManager::setSearch(const QString &search)
