@@ -23,6 +23,12 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
+    connect(app, &KiwixApp::currentTitleChanged, this, [=](const QString& title) {
+        if (!title.isEmpty() && !title.startsWith("zim://"))
+            setWindowTitle(title + " - Kiwix");
+        else
+            setWindowTitle(tr("Library") + " - Kiwix");
+    });
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
