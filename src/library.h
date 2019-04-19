@@ -32,6 +32,7 @@ public:
     QStringList listBookIds(const QString& query, const QString &categoryFilter);
     const std::vector<kiwix::Bookmark>& getBookmarks() { return m_library.getBookmarks(); }
     void addBookToLibrary(kiwix::Book& book);
+    void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
     void save();

@@ -74,6 +74,9 @@ function init() {
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });
         },
+        eraseBook : function(book) {
+            contentManager.eraseBook(book.id);
+        },
         displayedBooks : function(books, nb) {
             var a = books.slice(0, nb);
             return a;
@@ -215,6 +218,7 @@ details:hover {
   </div>
   <div id="bookTable">
     <div class="header">
+      <span class="tablecell cell0">icone poubelle</span>
       <span class="tablecell cell0"></span>
       <span class="tablecell cell1">File name</span>
       <span class="tablecell cell2">Size</span>
@@ -225,6 +229,9 @@ details:hover {
     <div id="bookList" onscroll=scrolled(this)>
       <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">
         <summary class="tablerow">
+          <span class="tablecell cell0">
+            <button v-if="book.path" v-on:click="eraseBook(book)">Delete</button>
+          </span>
           <span class="tablecell cell0">
             <img v-if="book.faviconUrl" v-bind:src="'http://' + book.faviconUrl" />
             <img v-else-if="book.faviconMimeType" v-bind:src="'zim://' + book.id + '.favicon.meta'" />
