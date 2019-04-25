@@ -203,6 +203,22 @@ void ContentManager::eraseBook(const QString& id)
     emit(mp_library->booksChanged());
 }
 
+void ContentManager::pauseBook(const QString& id)
+{
+    auto& b = mp_library->getBookById(id);
+    auto download = mp_downloader->getDownload(b.getDownloadId());
+    if (download->getStatus() == kiwix::Download::K_ACTIVE)
+        download->pauseDownload();
+}
+
+void ContentManager::resumeBook(const QString& id)
+{
+    auto& b = mp_library->getBookById(id);
+    auto download = mp_downloader->getDownload(b.getDownloadId());
+    if (download->getStatus() == kiwix::Download::K_PAUSED)
+        download->resumeDownload();
+}
+
 QStringList ContentManager::getDownloadIds()
 {
     QStringList list;

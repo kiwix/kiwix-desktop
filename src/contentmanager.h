@@ -56,6 +56,8 @@ public slots:
     void setSearch(const QString& search);
     void eraseBook(const QString& id);
     void updateRemoteLibrary(const QString& content);
+    void pauseBook(const QString& id);
+    void resumeBook(const QString& id);
 };
 
 #endif // CONTENTMANAGER_H
