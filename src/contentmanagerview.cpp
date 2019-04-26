@@ -10,6 +10,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     auto profile = page()->profile();
     auto app = KiwixApp::instance();
     profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
+    setContextMenuPolicy( Qt::NoContextMenu );
 }
 
 
