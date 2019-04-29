@@ -95,6 +95,11 @@ function init() {
         resumeBook : function(book) {
           contentManager.resumeBook(book.id);
         },
+        cancelBook : function(book) {
+            contentManager.cancelBook(book.id);
+            clearInterval(downloadUpdaters[book.id]);
+            Vue.delete(app.downloads, book.id);
+        },
         displayedBooks : function(books, nb) {
             var a = books.slice(0, nb);
             return a;
@@ -367,8 +372,8 @@ details:hover {
             {{ book.tags }}
           </span>
           <span class="tablecell cell5">
-            <template v-if="book.downloadId">
-              <span v-if="downloads[book.id]">
+            <template v-if="downloads[book.id]">
+              <span>
                 {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
               </span>
             </template>
@@ -376,6 +381,7 @@ details:hover {
             <button v-if="!book.path && !downloads[book.id]" v-on:click="downloadBook(book)">Download</button>
             <button v-if="downloads[book.id] && downloads[book.id].status == 'active'" v-on:click="pauseBook(book)">Pause</button>
             <button v-if="downloads[book.id] && downloads[book.id].status == 'paused'" v-on:click="resumeBook(book)">Resume</button>
+            <button v-if="downloads[book.id]" v-on:click="cancelBook(book)">Cancel</button>
           </span>
         </summary>
         <p class="content">
