@@ -17,72 +17,72 @@
 <context>
     <name>KiwixApp</name>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="95"/>
+        <location filename="../../src/kiwixapp.cpp" line="123"/>
         <source>Open Zim</source>
         <translation>Ouvrir Zim</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="173"/>
+        <location filename="../../src/kiwixapp.cpp" line="252"/>
         <source>Local Kiwix Server</source>
         <translation>Serveur local Kiwix</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="177"/>
+        <location filename="../../src/kiwixapp.cpp" line="256"/>
         <source>Random Article</source>
         <translation>Article aléatoire</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="182"/>
+        <location filename="../../src/kiwixapp.cpp" line="261"/>
         <source>Print</source>
         <translation>Imprimer</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="187"/>
+        <location filename="../../src/kiwixapp.cpp" line="266"/>
         <source>New tab</source>
         <translation>Nouvel onglet</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="190"/>
+        <location filename="../../src/kiwixapp.cpp" line="269"/>
         <source>Close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="193"/>
+        <location filename="../../src/kiwixapp.cpp" line="272"/>
         <source>Reopen closed tab</source>
         <translation>Rouvrir l&apos;onglet fermé</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="197"/>
+        <location filename="../../src/kiwixapp.cpp" line="276"/>
         <source>Browse library</source>
         <translation>Parcourir la bibliothèque</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="201"/>
+        <location filename="../../src/kiwixapp.cpp" line="280"/>
         <source>Open file</source>
         <translation>Ouvrir un ficher</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="206"/>
+        <location filename="../../src/kiwixapp.cpp" line="285"/>
         <source>Open recent</source>
         <translation>Fichiers récemment ouverts</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="209"/>
+        <location filename="../../src/kiwixapp.cpp" line="288"/>
         <source>Save page as ...</source>
         <translation>Enregister sous...</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="213"/>
+        <location filename="../../src/kiwixapp.cpp" line="292"/>
         <source>Search article</source>
         <translation>Chercher un article</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="217"/>
+        <location filename="../../src/kiwixapp.cpp" line="296"/>
         <source>Search in library</source>
         <translation>Chercher dans la bibliothèque</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="221"/>
+        <location filename="../../src/kiwixapp.cpp" line="300"/>
         <source>Find in page</source>
         <translation>Chercher dans la page</translation>
     </message>
@@ -95,78 +95,78 @@
         <translation type="vanished">Trouver le précédent</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="224"/>
-        <location filename="../../src/kiwixapp.cpp" line="231"/>
+        <location filename="../../src/kiwixapp.cpp" line="305"/>
+        <location filename="../../src/kiwixapp.cpp" line="312"/>
         <source>Set fullScreen</source>
         <translation>Mode plein écran</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="231"/>
+        <location filename="../../src/kiwixapp.cpp" line="312"/>
         <source>Quit fullScreen</source>
         <translation>Quitter le pein écran</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="235"/>
+        <location filename="../../src/kiwixapp.cpp" line="316"/>
         <source>Table of content</source>
         <translation>Table des matières</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="239"/>
+        <location filename="../../src/kiwixapp.cpp" line="320"/>
         <source>Reading list</source>
         <translation>Liste de lecture</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="243"/>
+        <location filename="../../src/kiwixapp.cpp" line="330"/>
         <source>Zoom in</source>
         <translation>Zoom +</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="246"/>
+        <location filename="../../src/kiwixapp.cpp" line="333"/>
         <source>Zoom out</source>
         <translation>Zoom -</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="249"/>
+        <location filename="../../src/kiwixapp.cpp" line="336"/>
         <source>Zoom reset</source>
         <translation>Réinitialisation du zoom</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="252"/>
+        <location filename="../../src/kiwixapp.cpp" line="339"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="256"/>
+        <location filename="../../src/kiwixapp.cpp" line="343"/>
         <source>Feedback</source>
         <translation>Retour d&apos;information</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="259"/>
+        <location filename="../../src/kiwixapp.cpp" line="346"/>
         <source>Repost a bug</source>
         <translation>Déclarer un bogue</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="262"/>
+        <location filename="../../src/kiwixapp.cpp" line="349"/>
         <source>Request a feature</source>
         <translation>Demander une nouvelle fonctionnalité</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="265"/>
+        <location filename="../../src/kiwixapp.cpp" line="352"/>
         <source>About Kiwix</source>
         <translation>A propos de Kiwix</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="267"/>
+        <location filename="../../src/kiwixapp.cpp" line="354"/>
         <source>Settings</source>
         <translation>Paramètres</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="271"/>
+        <location filename="../../src/kiwixapp.cpp" line="358"/>
         <source>Donate to support Kiwix</source>
         <translation>Faire un don pour soutenir Kiwix</translation>
     </message>
     <message>
-        <location filename="../../src/kiwixapp.cpp" line="275"/>
+        <location filename="../../src/kiwixapp.cpp" line="362"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
@@ -207,9 +207,13 @@
         <translation>MainWindow</translation>
     </message>
     <message>
-        <location filename="../../ui/mainwindow.ui" line="83"/>
         <source>Find in page</source>
-        <translation>Chercher dans la page</translation>
+        <translation type="vanished">Chercher dans la page</translation>
+    </message>
+    <message>
+        <location filename="../../src/mainwindow.cpp" line="30"/>
+        <source>Library</source>
+        <translation>Bibliothèque</translation>
     </message>
 </context>
 <context>
@@ -362,7 +366,7 @@
 <context>
     <name>SearchBar</name>
     <message>
-        <location filename="../../src/searchbar.cpp" line="12"/>
+        <location filename="../../src/searchbar.cpp" line="62"/>
         <source>Search</source>
         <translation>Recherche</translation>
     </message>
@@ -374,6 +378,11 @@
         <source>Form</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../src/tocsidebar.ui" line="49"/>
+        <source>Hide</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TopWidget</name>
@@ -384,10 +393,56 @@
         <translation>Précédent</translation>
     </message>
     <message>
-        <location filename="../../src/topwidget.cpp" line="23"/>
         <location filename="../../src/topwidget.cpp" line="24"/>
+        <location filename="../../src/topwidget.cpp" line="25"/>
         <source>forward</source>
         <translation>Suivant</translation>
+    </message>
+</context>
+<context>
+    <name>contentmanagerside</name>
+    <message>
+        <location filename="../../src/contentmanagerside.ui" line="20"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/contentmanagerside.ui" line="68"/>
+        <source>All Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/contentmanagerside.ui" line="75"/>
+        <source>Local Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/contentmanagerside.ui" line="85"/>
+        <source>Browse By Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/contentmanagerside.ui" line="123"/>
+        <source>Browse By Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/contentmanagerside.ui" line="158"/>
+        <source>Content Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>readinglistbar</name>
+    <message>
+        <location filename="../../src/readinglistbar.ui" line="14"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/readinglistbar.ui" line="37"/>
+        <source>Reading List</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
