@@ -25,7 +25,6 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
 }
 
-
 void ContentManager::setLocal(bool local) {
     if (local == m_local) {
         return;
@@ -185,8 +184,21 @@ QString ContentManager::downloadBook(const QString &id)
     mp_library->addBookToLibrary(book);
     mp_library->save();
     emit(mp_library->booksChanged());
-    emit(booksChanged());
     return QString::fromStdString(download->getDid());
+}
+
+void ContentManager::eraseBook(const QString& id)
+{
+    kiwix::Book book = mp_library->getBookById(id);
+    QString dirName = QString::fromUtf8(getDataDirectory().c_str());
+    QString fileSelection = QString::fromUtf8(getLastPathElement(book.getPath()).c_str()) + "*";
+    QDir dir(dirName, fileSelection);
+    for(const QString& filename: dir.entryList()) {
+        dir.remove(filename);
+    }
+    mp_library->removeBookFromLibraryById(id);
+    mp_library->save();
+    emit(mp_library->booksChanged());
 }
 
 QStringList ContentManager::getDownloadIds()

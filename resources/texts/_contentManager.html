@@ -74,9 +74,30 @@ function init() {
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });
         },
+        eraseBook : function(book) {
+            contentManager.eraseBook(book.id);
+        },
         displayedBooks : function(books, nb) {
             var a = books.slice(0, nb);
             return a;
+        },
+        getBookFromMousePosition : function() {
+            var elements = document.elementsFromPoint(mouseX, mouseY);
+            var bookId = null;
+            for(var i = 0; i < elements.length; i++) {
+                if (elements[i].localName == "summary" && elements[i].classList.contains("book-summary")) {
+                    bookId = elements[i].id;
+                    break;
+                }
+            }
+            var book = null;
+            for(var i = 0; i < app.books.length; i++) {
+                if (app.books[i]["id"] == bookId) {
+                    book = app.books[i];
+                    break;
+                }
+            }
+            return book;
         },
         niceBytes : niceBytes
       }
@@ -97,6 +118,39 @@ function scrolled(e) {
     app.displayedBooksNb = Math.min(app.displayedBooksNb+20, app.books.length);
   }
 }
+
+window.addEventListener("click", e => {
+    if (menuVisible)
+        displayMenu(null);
+});
+
+var mouseX, mouseY = 0;
+window.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    mouseX = e.pageX;
+    mouseY = e.pageY;
+    setContextMenuPosition();
+    var book = app.getBookFromMousePosition();
+    displayMenu(book);
+});
+
+var menuVisible = false;
+function displayMenu(book) {
+    var menu = document.getElementById("menu");
+    menu.style.display = (book) ? "block" : "none";
+    menuVisible = (book) ? true : false;
+    if (!book)
+        return;
+    var localElement = document.getElementsByClassName("local-option")[0];
+    localElement.style.display = (book.path) ? "block" : "none";
+};
+
+function setContextMenuPosition() {
+    var menu = document.getElementById("menu");
+    menu.style.left = `${mouseX}px`;
+    menu.style.top = `${mouseY}px`;
+};
+
 </script>
 <style>
 html, body {
@@ -204,6 +258,33 @@ details:hover {
   background-color: #d9e9ff;
   cursor: pointer;
 }
+
+.menu {
+  /* width: 120px; */
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  display: none;
+  z-index: 99999999999999;
+  background-color: white;
+}
+
+.menu-options {
+    list-style: none;
+    padding: 0 0 0 0;
+    margin: 2px 0px 2px;
+}
+
+.menu-option {
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 40px 10px 20px;
+    cursor: pointer;
+}
+
+.menu-option:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
 </style>
 </head>
 <body onload="init()">
@@ -223,8 +304,13 @@ details:hover {
       <span class="tablecell cell5"></span>
     </div>
     <div id="bookList" onscroll=scrolled(this)>
+      <div id="menu" class="menu">
+        <ul class="menu-options local-option">
+          <li v-on:click="eraseBook(getBookFromMousePosition())" class="menu-option">Delete</li>
+        </ul>
+      </div>
       <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">
-        <summary class="tablerow">
+        <summary v-bind:id="book.id" class="tablerow book-summary">
           <span class="tablecell cell0">
             <img v-if="book.faviconUrl" v-bind:src="'http://' + book.faviconUrl" />
             <img v-else-if="book.faviconMimeType" v-bind:src="'zim://' + book.id + '.favicon.meta'" />

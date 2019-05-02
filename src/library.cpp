@@ -113,6 +113,10 @@ void Library::addBookToLibrary(kiwix::Book &book)
     m_library.addBook(book);
 }
 
+void Library::removeBookFromLibraryById(const QString& id) {
+    m_library.removeBookById(id.toStdString());
+}
+
 void Library::addBookmark(kiwix::Bookmark &bookmark)
 {
     m_library.addBookmark(bookmark);
