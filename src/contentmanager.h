@@ -6,6 +6,7 @@
 #include "library.h"
 #include "contentmanagerview.h"
 #include <kiwix/downloader.h>
+#include "opdsrequestmanager.h"
 
 class ContentManager : public QObject
 {
@@ -29,6 +30,7 @@ private:
     Library* mp_library;
     kiwix::Library m_remoteLibrary;
     kiwix::Downloader* mp_downloader;
+    OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
     QString m_currentLanguage;
@@ -43,6 +45,7 @@ signals:
     void booksChanged();
     void downloadsChanged();
     void currentLangChanged();
+    void pendingRequest(const bool);
 
 public slots:
     QStringList getBookInfos(QString id, const QStringList &keys);
@@ -52,6 +55,7 @@ public slots:
     void updateLibrary();
     void setSearch(const QString& search);
     void eraseBook(const QString& id);
+    void updateRemoteLibrary(const QString& content);
 };
 
 #endif // CONTENTMANAGER_H

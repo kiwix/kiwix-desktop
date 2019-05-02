@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 QT       += webenginewidgets
 
 CONFIG += link_pkgconfig
@@ -59,7 +59,8 @@ SOURCES += \
     src/tabbar.cpp \
     src/contentmanagerside.cpp \
     src/readinglistbar.cpp \
-    src/klistwidgetitem.cpp
+    src/klistwidgetitem.cpp \
+    src/opdsrequestmanager.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -80,7 +81,8 @@ HEADERS += \
     src/tabbar.h \
     src/contentmanagerside.h \
     src/readinglistbar.h \
-    src/klistwidgetitem.h
+    src/klistwidgetitem.h \
+    src/opdsrequestmanager.h
 
 FORMS += \
     ui/mainwindow.ui \
