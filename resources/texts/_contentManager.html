@@ -82,6 +82,8 @@ function init() {
         },
         downloadBook : function(book) {
           contentManager.downloadBook(book.id, function(did)  {
+            if (did.length == 0)
+                return;
             book.downloadId = did;
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });

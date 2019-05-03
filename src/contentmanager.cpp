@@ -181,6 +181,10 @@ QString ContentManager::downloadBook(const QString &id)
             return mp_library->getBookById(id);
         }
     }();
+    auto booksList = mp_library->getBookIds();
+    for (auto b : booksList)
+        if (b.toStdString() == book.getId())
+            return "";
     auto download = mp_downloader->startDownload(book.getUrl());
     book.setDownloadId(download->getDid());
     mp_library->addBookToLibrary(book);
