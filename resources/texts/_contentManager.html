@@ -16,11 +16,13 @@
   <div id="bookTable">
     <div class="header">
       <span class="tablecell cell0"></span>
-      <span class="tablecell cell1">File name</span>
-      <span class="tablecell cell2">Size</span>
-      <span class="tablecell cell3">Date</span>
+      <span v-on:click="sortBookBy('title')" :class="{ sortableBold: isActive('title') }" class="tablecell cell1 sortable"><i :class="{ arrowDown: isUpOrDown('title', true), arrowUp: isUpOrDown('title', false) }"></i> File name</span>
+      <span v-on:click="sortBookBy('size')" :class="{ sortableBold: isActive('size') }" class="tablecell cell2 sortable"><i :class="{ arrowDown: isUpOrDown('size', true), arrowUp: isUpOrDown('size', false) }"></i> Size</span>
+      <span v-on:click="sortBookBy('date')" :class="{ sortableBold: isActive('date') }" class="tablecell cell3 sortable"><i :class="{ arrowDown: isUpOrDown('date', true), arrowUp: isUpOrDown('date', false) }"></i> Date</span>
       <span class="tablecell cell4">Content type</span>
-      <span class="tablecell cell5"></span>
+      <span class="tablecell cell5 tablerow">
+          <button v-on:click="resetSort()">reset sort</button>
+      </span>
     </div>
     <div id="load-icon" class="loader"></div>
     <div id="bookList" onscroll=scrolled(this)>

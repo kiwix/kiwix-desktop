@@ -99,7 +99,9 @@ function init() {
         contentManager: contentManager,
         displayedBooksNb: 20,
         books: [],
-        downloads: {}
+        downloads: {},
+        activeSortType:"",
+        sortOrderAsc:true
       },
       methods: {
         openBook : function(book) {
@@ -160,6 +162,26 @@ function init() {
                 }
             }
             return book;
+        },
+        sortBookBy : function(sortBy) {
+            if (this.activeSortType == sortBy && this.sortOrderAsc)
+                this.sortOrderAsc = false;
+            else {
+                this.activeSortType = sortBy;
+                this.sortOrderAsc = true;
+            }
+            contentManager.setSortBy(this.activeSortType, this.sortOrderAsc);
+        },
+        isActive: function (sortType) {
+            return (this.activeSortType == sortType)
+        },
+        isUpOrDown: function (sortType, sortOrderAsc) {
+            return (sortType == this.activeSortType && this.sortOrderAsc == sortOrderAsc);
+        },
+        resetSort: function () {
+            this.sortOrderAsc = true;
+            this.activeSortType = "";
+            contentManager.setSortBy("unsorted", this.sortOrderAsc);
         },
         niceBytes : niceBytes
       }
