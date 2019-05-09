@@ -270,6 +270,9 @@ void KiwixApp::createAction()
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
             this, [=]() { this->openRandomUrl(false); });
 
+    CREATE_ACTION(OpenHomePageAction, tr("Home page"));
+    SET_SHORTCUT(OpenHomePageAction, QKeySequence(Qt::ALT + Qt::Key_Home));
+    
     CREATE_ACTION_ICON(PrintAction, "print", tr("Print"));
     SET_SHORTCUT(PrintAction, QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
