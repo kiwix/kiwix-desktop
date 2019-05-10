@@ -30,7 +30,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_libraryDirectory(findLibraryDirectory()),
       m_library(),
       mp_downloader(createDownloader()),
-      m_manager(&m_library, mp_downloader)
+      m_manager(&m_library, mp_downloader),
+      mp_server(new kiwix::KiwixServe(8181))
 {
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -103,6 +104,10 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
 KiwixApp::~KiwixApp()
 {
+    if (mp_server) {
+        mp_server->shutDown();
+        delete mp_server;
+    }
     if (mp_downloader) {
         mp_downloader->close();
         delete mp_downloader;
@@ -264,7 +269,6 @@ void KiwixApp::createAction()
 {
     CREATE_ACTION_ICON(KiwixServeAction, "share", tr("Local Kiwix Server"));
     SET_SHORTCUT(KiwixServeAction, QKeySequence(Qt::CTRL+Qt::Key_I));
-    HIDE_ACTION(KiwixServeAction);
 
     CREATE_ACTION_ICON(RandomArticleAction, "random", tr("Random Article"));
     SET_SHORTCUT(RandomArticleAction, QKeySequence(Qt::CTRL+Qt::Key_R));

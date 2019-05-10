@@ -11,7 +11,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mp_ui(new Ui::MainWindow),
-    mp_about(new About(this))
+    mp_about(new About(this)),
+    mp_localKiwixServer(new LocalKiwixServer(this))
 {
     mp_ui->setupUi(this);
     mp_ui->tabBar->setExpanding(false);
@@ -23,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
+    connect(app->getAction(KiwixApp::KiwixServeAction), &QAction::triggered,
+            mp_localKiwixServer, &QDialog::show);
     connect(app, &KiwixApp::currentTitleChanged, this, [=](const QString& title) {
         if (!title.isEmpty() && !title.startsWith("zim://"))
             setWindowTitle(title + " - Kiwix");

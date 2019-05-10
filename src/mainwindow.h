@@ -9,6 +9,7 @@
 #include "tocsidebar.h"
 #include "about.h"
 #include "contentmanagerside.h"
+#include "localkiwixserver.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,7 +34,7 @@ protected slots:
 private:
     Ui::MainWindow *mp_ui;
     About     *mp_about;
-
+    LocalKiwixServer *mp_localKiwixServer;
 };
 
 #endif // MAINWINDOW_H
