@@ -162,8 +162,13 @@ function displayMenu(book) {
     menuVisible = (book) ? true : false;
     if (!book)
         return;
-    var localElement = document.getElementsByClassName("local-option")[0];
-    localElement.style.display = (book.path) ? "block" : "none";
+    var localElements = document.getElementsByClassName("local-option");
+    for(var i = 0; i < localElements.length; i++)
+        localElements[i].style.display = (book.path) ? "block" : "none";
+    document.getElementsByClassName("download-option")[0].style.display = (!book.path && !app.downloads[book.id]) ? "block" : "none";
+    document.getElementsByClassName("pause-option")[0].style.display = (app.downloads[book.id] && app.downloads[book.id].status == 'active') ? "block" : "none";
+    document.getElementsByClassName("resume-option")[0].style.display = (app.downloads[book.id] && app.downloads[book.id].status == 'paused') ? "block" : "none";
+    document.getElementsByClassName("cancel-option")[0].style.display = (app.downloads[book.id]) ? "block" : "none";
 };
 
 function setContextMenuPosition() {
