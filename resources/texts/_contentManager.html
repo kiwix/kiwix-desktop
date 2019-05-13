@@ -25,8 +25,13 @@
     <div id="load-icon" class="loader"></div>
     <div id="bookList" onscroll=scrolled(this)>
       <div id="menu" class="menu">
-        <ul class="menu-options local-option">
-          <li v-on:click="eraseBook(getBookFromMousePosition())" class="menu-option">Delete</li>
+        <ul class="menu-options">
+          <li v-on:click="openBook(getBookFromMousePosition())" class="menu-option local-option">Open</li>
+          <li v-on:click="eraseBook(getBookFromMousePosition())" class="menu-option local-option">Delete</li>
+          <li v-on:click="downloadBook(getBookFromMousePosition())" class="menu-option download-option">Download</li>        
+          <li v-on:click="resumeBook(getBookFromMousePosition())" class="menu-option resume-option">Resume</li>
+          <li v-on:click="pauseBook(getBookFromMousePosition())" class="menu-option pause-option">Pause</li>
+          <li v-on:click="cancelBook(getBookFromMousePosition())" class="menu-option cancel-option">Cancel</li>
         </ul>
       </div>
       <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">
