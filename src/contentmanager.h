@@ -39,6 +39,7 @@ private:
 
 
     QStringList getBookIds();
+    void eraseBookFilesFromComputer(const QString fileSelection);
 
 signals:
     void filterParamsChanged();
@@ -56,6 +57,9 @@ public slots:
     void setSearch(const QString& search);
     void eraseBook(const QString& id);
     void updateRemoteLibrary(const QString& content);
+    void pauseBook(const QString& id);
+    void resumeBook(const QString& id);
+    void cancelBook(const QString& id);
 };
 
 #endif // CONTENTMANAGER_H

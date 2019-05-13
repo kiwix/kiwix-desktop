@@ -48,6 +48,8 @@ function getDownloadInfo(id) {
     d = createDict(DOWNLOAD_KEYS, values);
     if (d.status == "completed") {
       clearInterval(downloadUpdaters[id]);
+      Vue.delete(app.downloads, id);
+      return;
     }
     Vue.set(app.downloads, id, createDict(DOWNLOAD_KEYS, values));
   });
@@ -80,12 +82,25 @@ function init() {
         },
         downloadBook : function(book) {
           contentManager.downloadBook(book.id, function(did)  {
+            if (did.length == 0)
+                return;
             book.downloadId = did;
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });
         },
         eraseBook : function(book) {
             contentManager.eraseBook(book.id);
+        },
+        pauseBook : function(book) {
+          contentManager.pauseBook(book.id);
+        },
+        resumeBook : function(book) {
+          contentManager.resumeBook(book.id);
+        },
+        cancelBook : function(book) {
+            contentManager.cancelBook(book.id);
+            clearInterval(downloadUpdaters[book.id]);
+            Vue.delete(app.downloads, book.id);
         },
         displayedBooks : function(books, nb) {
             var a = books.slice(0, nb);
@@ -359,13 +374,16 @@ details:hover {
             {{ book.tags }}
           </span>
           <span class="tablecell cell5">
-            <template v-if="book.downloadId">
-              <span v-if="downloads[book.id]">
+            <template v-if="downloads[book.id]">
+              <span>
                 {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
               </span>
             </template>
-            <button v-else-if="book.path" v-on:click="openBook(book)">Open</button>
-            <button v-else v-on:click="downloadBook(book)">Download</button>
+            <button v-if="book.path" v-on:click="openBook(book)">Open</button>
+            <button v-if="!book.path && !downloads[book.id]" v-on:click="downloadBook(book)">Download</button>
+            <button v-if="downloads[book.id] && downloads[book.id].status == 'active'" v-on:click="pauseBook(book)">Pause</button>
+            <button v-if="downloads[book.id] && downloads[book.id].status == 'paused'" v-on:click="resumeBook(book)">Resume</button>
+            <button v-if="downloads[book.id]" v-on:click="cancelBook(book)">Cancel</button>
           </span>
         </summary>
         <p class="content">
