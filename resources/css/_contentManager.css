@@ -1,0 +1,149 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+#app {
+    height: 100%;
+    position: relative;
+}
+*:focus {
+    outline: none;
+}
+#searchInput {
+    background-image: url('qrc:///icons/search.svg');
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 40px 40px;
+    padding: 0px;
+    margin: 0px;
+    padding-left: 45px;
+    height: 40px;
+    width: 90%;
+    border: 1px solid #EEE;
+}
+
+#bookTable {
+    position: relative;
+    height: calc(100% - 42px); /* 42px = 40px(height of #searchInput) + 2px(border) */
+    width: 100%;
+}
+
+#bookList {
+    height: calc(100% - 19px - 20px); /*19px the header size, 20px the header margin-top */
+    overflow-y:scroll;
+    overflow-x:hidden;
+    position: relative;
+    width: 100%
+}
+
+.tablerow,
+.header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.header {
+    color: #555;
+    margin-top: 20px;
+}
+.tablecell{
+    flex-basis:20%;
+}
+.cell0 {
+    flex-basis: 60px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+.tablerow > .cell1 {
+    font-weight: bold;
+}
+.cell0 > img {
+    width: 24px;
+    height: 24px;
+}
+.cell1,
+.cell2,
+.cell3,
+.cell4,
+.cell5 {
+    flex-grow: 1;
+}
+summary::-webkit-details-marker {
+  display: none
+}
+summary {
+  height: 64px;
+}
+.book {
+  border-top: 1px solid #EEE;
+  padding: 10px;
+
+}
+button {
+  background: transparent;
+  border: 0px;
+}
+.tablerow button {
+  color: blue;
+  font-weight: bold;
+  font-size: 14px;
+  border: 0px;
+  background: transparent;
+  border-radius: 2px;
+}
+.tablerow button:hover {
+  color: white;
+  background: blue;
+}
+details:hover {
+  background-color: #d9e9ff;
+  cursor: pointer;
+}
+
+.menu {
+  /* width: 120px; */
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  display: none;
+  z-index: 99999999999999;
+  background-color: white;
+}
+
+.menu-options {
+    list-style: none;
+    padding: 0 0 0 0;
+    margin: 2px 0px 2px;
+}
+
+.menu-option {
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 40px 10px 20px;
+    cursor: pointer;
+}
+
+.menu-option:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+.loader {
+  margin: 0 auto;
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+.do-not-display {
+  display: none;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

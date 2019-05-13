@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>js/vue.js</file>
         <file>texts/_contentManager.html</file>
+        <file>css/_contentManager.css</file>
+        <file>js/_contentManager.js</file>
     </qresource>
 </RCC>
