@@ -2,6 +2,7 @@
 
 #include <QCompleter>
 #include <QTimer>
+#include <QFocusEvent>
 
 #include "kiwixapp.h"
 
@@ -82,7 +83,8 @@ void SearchBar::on_currentTitleChanged(const QString& title)
 
 void SearchBar::focusInEvent( QFocusEvent* event)
 {
-    clear();
+    if (event->reason() == Qt::MouseFocusReason)
+        clear();
     QLineEdit::focusInEvent(event);
     m_button.set_searchMode(true);
 }
