@@ -43,6 +43,8 @@ void WebView::onUrlChanged(const QUrl& url) {
         emit zimIdChanged(m_currentZimId);
         auto app = KiwixApp::instance();
         auto reader = app->getLibrary()->getReader(m_currentZimId);
+        if (!reader)
+            return;
         std::string favicon, _mimetype;
         reader->getFavicon(favicon, _mimetype);
         QPixmap pixmap;
