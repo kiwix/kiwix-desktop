@@ -83,7 +83,9 @@ function init() {
           });
         },
         eraseBook : function(book) {
-            contentManager.eraseBook(book.id);
+            if (confirm("Are you sure you want to delete '" + book.title + "' ?")) {
+                contentManager.eraseBook(book.id);
+            }
         },
         pauseBook : function(book) {
           contentManager.pauseBook(book.id);
