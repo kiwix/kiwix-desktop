@@ -19,7 +19,6 @@ TopWidget {
 TopWidget::separator {
     background: none;
     border: none;
-    icon: none;
     width: 40px;
 }
 
@@ -58,7 +57,7 @@ TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;
     background-color: #D9E9FF;
-    border-radius: 2px;
+    border-radius: 1px;
 }
 
 TopWidget QToolButton::menu-button {
@@ -115,13 +114,12 @@ QTabBar::tear {
 QTabWidget::pane {
     top: -2px;
     border: none;
-    border-top: 2px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
 QTabBar::tab {
     border: none;
-    border-right: 2px solid #ccc;
-    border-bottom: 2px solid #ccc;
+    border-right: 1px solid #ccc;
     border-radius: 0px;
     padding: 2px;
 }
@@ -156,7 +154,7 @@ QTabBar::close-button {
     max-height: 36px;
     color: #666;
     font-size: 16px;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 0px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
@@ -166,7 +164,7 @@ QTabBar::close-button {
 #fPreviousButton {
     max-height: 36px;
     max-width: 36px;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 0px;
     margin-left: -2px;
 }
@@ -174,7 +172,7 @@ QTabBar::close-button {
 #fNextButton:pressed,
 #fPreviousButton:pressed {
     background-color: #D9E9FF;
-    border: 2px solid #3366CC;
+    border: 1px solid #3366CC;
 }
 
 #fPreviousButton {
