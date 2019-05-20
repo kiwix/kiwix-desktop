@@ -184,14 +184,14 @@ QTabBar::close-button {
     Find Search page
 */
 
-#sideBar {
-   background-color: white;
-}
-
-#contentmanagerside QWidget,
-#readinglistbar QWidget{
+#contentmanagerside QWidget {
    background-color: white;
    outline: none;
+}
+
+#contentmanagerside QRadioButton,
+#contentmanagerside QCheckBox {
+    padding: 10px;
 }
 
 #contentmanagerside QRadioButton:checked {
@@ -213,14 +213,16 @@ QTabBar::close-button {
 }
 
 #categorySelector QScrollBar,
-#languageSelector QScrollBar {
+#languageSelector QScrollBar,
+#readinglistbar QScrollBar {
     width: 5px;
     border: none;
     outline: none;
 }
 
 #categorySelector QScrollBar::handle,
-#languageSelector QScrollBar::handle {
+#languageSelector QScrollBar::handle,
+#readinglistbar QScrollBar {
     background-color: grey;
 }
 
@@ -231,11 +233,19 @@ QTabBar::close-button {
     outline: none;
 }
 
+#readinglistbar QLabel {
+    font-size: 24px;
+    font: bold;
+    padding: 5px;
+}
+
 #readinglistbar QListWidget {
-   border: none;
+    show-decoration-selected: 0;
+    border: none;
+    padding: 5px;
 }
 
 #readinglistbar QListWidget::item {
     font-size: 16px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
