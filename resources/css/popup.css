@@ -1,0 +1,14 @@
+QWidget {
+    background-color: white;
+    border: none;
+}
+
+QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+QScrollBar::handle {
+    background-color: grey;
+}

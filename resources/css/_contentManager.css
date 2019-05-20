@@ -13,6 +13,11 @@ html, body {
 *:focus {
     outline: none;
 }
+
+#searchBar {
+    padding: 10px;
+}
+
 #searchInput {
     background-image: url('qrc:///icons/search.svg');
     background-repeat: no-repeat;

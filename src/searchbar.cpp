@@ -64,6 +64,14 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
     setCompleter(&m_completer);
+
+    QFile styleFile(":/css/popup.css");
+    styleFile.open(QIODevice::ReadOnly);
+    auto byteContent = styleFile.readAll();
+    styleFile.close();
+    QString style(byteContent);
+    m_completer.popup()->setStyleSheet(style);
+
     connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);
     connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
             this, &SearchBar::openCompletion);
