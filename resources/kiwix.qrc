@@ -64,6 +64,9 @@
         <file>icons/search_backward.svg</file>
         <file>icons/search_forward.svg</file>
         <file>icons/kiwix-app-icons-square.svg</file>
+        <file>icons/play-button.png</file>
+        <file>icons/pause-button.png</file>
+        <file>icons/cancel-button.png</file>
     </qresource>
     <qresource lang="fr" prefix="/">
         <file alias="texts/about.html">texts/fr/about.html</file>
