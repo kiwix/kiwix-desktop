@@ -76,12 +76,19 @@ html, body {
 .cell4,
 .cell5 {
     flex-grow: 1;
+    margin: 0px 10px;
 }
-summary::-webkit-details-marker {
-  display: none
+
+.cell5 {
+    flex-basis: 30%;
+    flex-grow: 2;
+    flex-direction: row;
+    text-align: center;
 }
+
 summary {
   height: 64px;
+  align-items: center;
 }
 .book {
   border-top: 1px solid #EEE;
