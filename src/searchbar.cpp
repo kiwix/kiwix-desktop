@@ -73,6 +73,7 @@ SearchBar::SearchBar(QWidget *parent) :
 #endif
     connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
             this, &SearchBar::on_currentTitleChanged);
+    connect(m_completer.popup(), &QAbstractItemView::clicked, this, &SearchBar::openCompletion);
 }
 
 void SearchBar::on_currentTitleChanged(const QString& title)
