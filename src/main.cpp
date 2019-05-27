@@ -2,10 +2,13 @@
 
 #include <QCommandLineParser>
 #include <iostream>
+#include <QWebEngineUrlScheme>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QWebEngineUrlScheme scheme("zim");
+    QWebEngineUrlScheme::registerScheme(scheme);
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;
