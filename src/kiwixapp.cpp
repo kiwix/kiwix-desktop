@@ -256,7 +256,7 @@ void KiwixApp::createAction()
     CREATE_ACTION_ICON(RandomArticleAction, "random", tr("Random Article"));
     SET_SHORTCUT(RandomArticleAction, QKeySequence(Qt::CTRL+Qt::Key_R));
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
-            this, [=]() { this->openRandomUrl(); });
+            this, [=]() { this->openRandomUrl(false); });
 
     CREATE_ACTION_ICON(PrintAction, "print", tr("Print"));
     SET_SHORTCUT(PrintAction, QKeySequence::Print);
