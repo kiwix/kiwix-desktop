@@ -62,6 +62,7 @@ SearchBar::SearchBar(QWidget *parent) :
 {
     setPlaceholderText(tr("Search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+    m_completer.setCaseSensitivity(Qt::CaseInsensitive);
     setCompleter(&m_completer);
     connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);
 #if 0 //The `activated` signal seems to not be emitted if user navigate in the page.
