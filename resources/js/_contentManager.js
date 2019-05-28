@@ -83,7 +83,9 @@ function init() {
           });
         },
         eraseBook : function(book) {
-            contentManager.eraseBook(book.id);
+            if (confirm("Are you sure you want to delete '" + book.title + "' ?")) {
+                contentManager.eraseBook(book.id);
+            }
         },
         pauseBook : function(book) {
           contentManager.pauseBook(book.id);
@@ -92,9 +94,11 @@ function init() {
           contentManager.resumeBook(book.id);
         },
         cancelBook : function(book) {
-            contentManager.cancelBook(book.id);
-            clearInterval(downloadUpdaters[book.id]);
-            Vue.delete(app.downloads, book.id);
+            if (confirm("Are you sure you want to abort the download of '" + book.title + "' ?")) {
+                contentManager.cancelBook(book.id);
+                clearInterval(downloadUpdaters[book.id]);
+                Vue.delete(app.downloads, book.id);
+            }
         },
         displayedBooks : function(books, nb) {
             var a = books.slice(0, nb);
