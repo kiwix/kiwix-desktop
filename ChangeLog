@@ -1,3 +1,19 @@
+kiwix-desktop beta5
+===================
+
+ * Bug fixes (numerous)
+ * Avoid to update the remote library when displaying the local library.
+ * Add filtering by category for the local content.
+ * Make zim files displayed with kiwix icon in the file explorer.
+ * Make the windows' title displaying the current article's title.
+ * Add an option to delete a book from the local library.
+ * Display a "load" icon when we are loading/updating the remote library.
+ * Add pause, resume and stop button for the downloads.
+ * Fix crash when trying to open a non existant file (from a link).
+ * Fix search bar reset.
+ * Search result doesn't open a new tab.
+ * Random article doesn't open a new tab.
+
 kiwix-desktop beta4
 ===================
 
