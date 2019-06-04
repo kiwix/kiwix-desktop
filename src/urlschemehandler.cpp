@@ -49,7 +49,7 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
     BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
     auto mimeType = QByteArray::fromStdString(entry.getMimetype());
     mimeType = mimeType.split(';')[0];
-    connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
+    connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
     request->reply(mimeType, buffer);
 }
 
@@ -69,7 +69,7 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
         std::string mimeType = book.getFaviconMimeType();
         QBuffer* buffer = new QBuffer;
         buffer->setData(content.data(), content.size());
-        connect(buffer, &QIODevice::aboutToClose, buffer, &QObject::deleteLater);
+        connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
         request->reply(QByteArray::fromStdString(mimeType), buffer);
     }
     request->fail(QWebEngineUrlRequestJob::UrlNotFound);
