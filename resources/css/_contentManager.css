@@ -62,6 +62,7 @@ html, body {
     flex-basis: 60px;
     flex-grow: 0;
     flex-shrink: 0;
+
 }
 .tablerow > .cell1 {
     font-weight: bold;
@@ -77,6 +78,12 @@ html, body {
 .cell5 {
     flex-grow: 1;
     margin: 0px 10px;
+}
+
+.cell2,
+.cell3,
+.cell4 {
+    overflow: hidden;
 }
 
 .cell5 {
