@@ -40,7 +40,6 @@ private:
 private slots:
     void updateCompletion(const QString& text);
     void openCompletion(const QModelIndex& index);
-    void openTitle();
 };
 
 #endif // SEARCHBAR_H
