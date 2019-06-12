@@ -71,6 +71,7 @@ public:
     kiwix::Downloader* getDownloader() { return mp_downloader; }
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
+    QString getLibraryDirectory() { return m_libraryDirectory; };
 
     bool isCurrentArticleBookmarked();
 
@@ -93,6 +94,7 @@ protected:
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     UrlSchemeHandler m_schemeHandler;
+    QString m_libraryDirectory;
     Library m_library;
     kiwix::Downloader* mp_downloader;
     ContentManager m_manager;
@@ -102,6 +104,8 @@ private:
     QErrorMessage* mp_errorDialog;
 
     QAction*     mpa_actions[MAX_ACTION];
+
+    QString findLibraryDirectory();
 };
 
 #endif // KIWIXAPP_H

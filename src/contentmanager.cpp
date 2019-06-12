@@ -200,7 +200,7 @@ QString ContentManager::downloadBook(const QString &id)
 
 void ContentManager::eraseBookFilesFromComputer(const QString fileToRemove)
 {
-    QString dirName = QString::fromUtf8(getDataDirectory().c_str());
+    QString dirName = KiwixApp::instance()->getLibraryDirectory();
     QDir dir(dirName, fileToRemove);
     for(const QString& filename: dir.entryList()) {
         dir.remove(filename);

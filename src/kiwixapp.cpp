@@ -27,6 +27,7 @@ kiwix::Downloader* createDownloader() {
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
+      m_libraryDirectory(findLibraryDirectory()),
       m_library(),
       mp_downloader(createDownloader()),
       m_manager(&m_library, mp_downloader)
@@ -107,6 +108,17 @@ KiwixApp::~KiwixApp()
     }
     delete mp_errorDialog;
     delete mp_mainWindow;
+}
+
+QString KiwixApp::findLibraryDirectory()
+{
+    QString currentPathLibrary = QString::fromStdString(appendToDirectory(removeLastPathElement(getExecutablePath()),"library.xml"));
+    QFileInfo libraryFile(currentPathLibrary);
+
+    if (libraryFile.exists())
+        return QString::fromStdString(removeLastPathElement(getExecutablePath()));
+    else
+        return QString::fromStdString(getDataDirectory());
 }
 
 KiwixApp *KiwixApp::instance()

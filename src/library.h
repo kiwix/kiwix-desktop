@@ -47,6 +47,7 @@ signals:
 private:
     kiwix::Library m_library;
     QMap<QString, std::shared_ptr<kiwix::Reader>> m_readersMap;
+    QString m_libraryDirectory;
 friend class LibraryManipulator;
 };
 
