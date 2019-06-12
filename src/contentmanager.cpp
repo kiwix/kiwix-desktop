@@ -313,12 +313,32 @@ void ContentManager::setSearch(const QString &search)
     emit(booksChanged());
 }
 
-QStringList ContentManager::getBookIds() {
+QStringList ContentManager::getBookIds()
+{
+    kiwix::Filter filter;
+    std::vector<std::string> tags;
+    if (m_categoryFilter != "all" && m_categoryFilter != "other") {
+        tags.push_back(m_categoryFilter.toStdString());
+        filter.acceptTags(tags);
+    }
+    if (m_categoryFilter == "other") {
+        auto categoryList = KiwixApp::instance()->getMainWindow()->getSideContentManager()->getCategoryList();
+        for (auto& category: categoryList) {
+            if (category != "Other") {
+                tags.push_back(category.toLower().toStdString());
+            }
+        }
+        filter.rejectTags(tags);
+    }
+    filter.query(m_searchQuery.toStdString());
+    
     if (m_local) {
-        return mp_library->listBookIds(m_searchQuery, m_categoryFilter);
+        filter.local(true);
+        filter.valid(true);
+        return mp_library->listBookIds(filter);
     } else {
-        auto bookIds = m_remoteLibrary.listBooksIds(kiwix::REMOTE, kiwix::UNSORTED,
-                                                    m_searchQuery.toStdString());
+        filter.remote(true);
+        auto bookIds = m_remoteLibrary.filter(filter);
         QStringList list;
         for(auto& bookId:bookIds) {
             list.append(QString::fromStdString(bookId));

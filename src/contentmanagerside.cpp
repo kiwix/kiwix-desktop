@@ -224,6 +224,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     })
     {
         auto c = QString(category);
+        m_categoryList.append(c);
         auto item = new KListWidgetItem(c);
         mp_categorySelector->addItem(item);
         if (c ==  "All")
