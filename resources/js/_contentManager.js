@@ -78,6 +78,10 @@ function init() {
           contentManager.downloadBook(book.id, function(did)  {
             if (did.length == 0)
                 return;
+            if (did == "storage_error") {
+                alert("not enough storage available.");
+                return;
+            }
             book.downloadId = did;
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
           });

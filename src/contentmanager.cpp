@@ -9,6 +9,7 @@
 #include <QUrlQuery>
 #include <QUrl>
 #include <QDir>
+#include <QStorageInfo>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -181,6 +182,10 @@ QString ContentManager::downloadBook(const QString &id)
             return mp_library->getBookById(id);
         }
     }();
+    QStorageInfo storage(QString::fromStdString(getDataDirectory()));
+    if (book.getSize() > storage.bytesAvailable()) {
+        return "storage_error";
+    }
     auto booksList = mp_library->getBookIds();
     for (auto b : booksList)
         if (b.toStdString() == book.getId())
