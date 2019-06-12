@@ -59,6 +59,12 @@ TabBar::TabBar(QWidget *parent) :
                 QUITIFNULL(current);
                 current->setZoomFactor(1.0);
             });
+    connect(app->getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
+            this, [=]() {
+                auto current = this->currentWidget();
+                QUITIFNULL(current);
+                current->setUrl("zim://" + current->zimId() + ".zim/");
+            });
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {

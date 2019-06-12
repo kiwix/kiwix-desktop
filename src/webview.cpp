@@ -53,3 +53,14 @@ void WebView::onUrlChanged(const QUrl& url) {
         emit iconChanged(m_icon);
     }
 }
+
+void WebView::wheelEvent(QWheelEvent *event) {
+    if ((event->modifiers() & Qt::ControlModifier) != 0)
+    {
+        if (event->angleDelta().y() > 0) {
+            KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->activate(QAction::Trigger);
+        } else if (event->angleDelta().y() < 0) {
+            KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->activate(QAction::Trigger);
+        }
+    }
+}

@@ -23,6 +23,7 @@ public:
     enum Actions {
         KiwixServeAction,
         RandomArticleAction,
+        OpenHomePageAction,
         PrintAction,
         NewTabAction,
         CloseTabAction,

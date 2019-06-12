@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
         else
             setWindowTitle(tr("Library") + " - Kiwix");
     });
+    addAction(app->getAction(KiwixApp::OpenHomePageAction));
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
