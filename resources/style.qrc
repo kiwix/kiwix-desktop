@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>css/style.css</file>
+        <file>css/popup.css</file>
     </qresource>
 </RCC>

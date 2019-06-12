@@ -11,15 +11,14 @@ TopWidget {
     min-height: 48px;
     max-height: 48px;
     margin: 0px;
-    padding: 0px;
+    padding: 5px;
     border: none;
-    border-bottom: 2px solid #ccc;
+    border-bottom: 1px solid #ccc;
 }
 
 TopWidget::separator {
     background: none;
     border: none;
-    icon: none;
     width: 40px;
 }
 
@@ -33,12 +32,12 @@ QToolButton {
 SearchBar {
     background-color: white;
     padding: 2px 2px 2px 40px;
-    max-height: 40px;
-    margin: 5px;
+    max-height: 38px;
+    margin-bottom: 2px;
     color: #666;
     font-size: 16px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 
 SearchBar > QPushButton {
@@ -58,7 +57,7 @@ TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;
     background-color: #D9E9FF;
-    border-radius: 2px;
+    border-radius: 1px;
 }
 
 TopWidget QToolButton::menu-button {
@@ -115,13 +114,12 @@ QTabBar::tear {
 QTabWidget::pane {
     top: -2px;
     border: none;
-    border-top: 2px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
 QTabBar::tab {
     border: none;
-    border-right: 2px solid #ccc;
-    border-bottom: 2px solid #ccc;
+    border-right: 1px solid #ccc;
     border-radius: 0px;
     padding: 2px;
 }
@@ -156,7 +154,7 @@ QTabBar::close-button {
     max-height: 36px;
     color: #666;
     font-size: 16px;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 0px;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
@@ -166,7 +164,7 @@ QTabBar::close-button {
 #fPreviousButton {
     max-height: 36px;
     max-width: 36px;
-    border: 2px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 0px;
     margin-left: -2px;
 }
@@ -174,7 +172,7 @@ QTabBar::close-button {
 #fNextButton:pressed,
 #fPreviousButton:pressed {
     background-color: #D9E9FF;
-    border: 2px solid #3366CC;
+    border: 1px solid #3366CC;
 }
 
 #fPreviousButton {
@@ -186,14 +184,14 @@ QTabBar::close-button {
     Find Search page
 */
 
-#sideBar {
-   background-color: white;
-}
-
-#contentmanagerside QWidget,
-#readinglistbar QWidget{
+#contentmanagerside QWidget {
    background-color: white;
    outline: none;
+}
+
+#contentmanagerside QRadioButton,
+#contentmanagerside QCheckBox {
+    padding: 10px;
 }
 
 #contentmanagerside QRadioButton:checked {
@@ -215,14 +213,16 @@ QTabBar::close-button {
 }
 
 #categorySelector QScrollBar,
-#languageSelector QScrollBar {
+#languageSelector QScrollBar,
+#readinglistbar QScrollBar {
     width: 5px;
     border: none;
     outline: none;
 }
 
 #categorySelector QScrollBar::handle,
-#languageSelector QScrollBar::handle {
+#languageSelector QScrollBar::handle,
+#readinglistbar QScrollBar {
     background-color: grey;
 }
 
@@ -233,11 +233,19 @@ QTabBar::close-button {
     outline: none;
 }
 
+#readinglistbar QLabel {
+    font-size: 24px;
+    font: bold;
+    padding: 5px;
+}
+
 #readinglistbar QListWidget {
-   border: none;
+    show-decoration-selected: 0;
+    border: none;
+    padding: 5px;
 }
 
 #readinglistbar QListWidget::item {
     font-size: 16px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }

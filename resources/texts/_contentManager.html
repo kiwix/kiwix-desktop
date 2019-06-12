@@ -53,16 +53,34 @@
             {{ book.tags }}
           </span>
           <span class="tablecell cell5">
-            <template v-if="downloads[book.id]">
+            <template v-if="downloads[book.id]" class="line">
               <span>
                 {{ niceBytes(downloads[book.id].completedLength) }} / {{ niceBytes(downloads[book.id].totalLength) }}
               </span>
             </template>
-            <button v-if="book.path" v-on:click="openBook(book)">Open</button>
-            <button v-if="!book.path && !downloads[book.id]" v-on:click="downloadBook(book)">Download</button>
-            <button v-if="downloads[book.id] && downloads[book.id].status == 'active'" v-on:click="pauseBook(book)">Pause</button>
-            <button v-if="downloads[book.id] && downloads[book.id].status == 'paused'" v-on:click="resumeBook(book)">Resume</button>
-            <button v-if="downloads[book.id]" v-on:click="cancelBook(book)">Cancel</button>
+            <button v-if="book.path" v-on:click="openBook(book)" class="line">Open</button>
+            <button v-if="!book.path && !downloads[book.id]" v-on:click="downloadBook(book)" class="">Download</button>
+    
+            <!-- round download progress bar -->
+            <template v-if="downloads[book.id]" class="line">
+              <div v-on:click.stop.prevent="pauseResumeBook(book)" v-bind:style="{'--download': downloads[book.id].completedLengthInDegree}" class="circle-wrap">
+                <div class="circle">
+                  <div class="mask full">
+                    <div class="fill"></div>
+                  </div>
+                  <div class="mask half">
+                    <div class="fill"></div>
+                  </div>
+                  <div class="inside-circle">
+                    <img v-if="downloads[book.id] && downloads[book.id].status == 'active'" src="qrc:///icons/pause-button.png">
+                    <img v-if="downloads[book.id] && downloads[book.id].status == 'paused'" src="qrc:///icons/play-button.png">                          
+                  </div>
+                </div>
+              </div>
+            </template>
+            <!-- end  -->
+            
+            <img class="cancel-button" v-if="downloads[book.id]" v-on:click.stop.prevent="cancelBook(book)" src="qrc:///icons/cancel-button.png">
           </span>
         </summary>
         <p class="content">
