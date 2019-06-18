@@ -73,8 +73,6 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer.popup()->setStyleSheet(style);
 
     connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);
-    connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
-            this, &SearchBar::openCompletion);
     connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
             this, &SearchBar::on_currentTitleChanged);
 }
@@ -87,8 +85,11 @@ void SearchBar::on_currentTitleChanged(const QString& title)
 
 void SearchBar::focusInEvent( QFocusEvent* event)
 {
-    if (event->reason() == Qt::MouseFocusReason)
+    if (event->reason() == Qt::MouseFocusReason) {
         clear();
+        connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
+        this, &SearchBar::openCompletion);
+    }
     QLineEdit::focusInEvent(event);
     m_button.set_searchMode(true);
 }
