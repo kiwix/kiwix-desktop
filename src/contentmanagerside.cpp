@@ -205,19 +205,19 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     for (auto category: {
          "All",
-         "Gutenberg",
+         "Gutenberg", // Gutenberg book has wrong tag
          "Other",
-         "Phet",
+         "Phet", // Phet books have no tags
          "Psiram",
          "Stack Exchange",
-         "Ted",
+         "Ted",  // Ted books have wrong tags
          "Vikidia",
-         "Wikibooks",
+         "Wikibooks", // wikibooks have no tags
          "Wikinews",
          "Wikipedia",
          "Wikiquote",
          "Wikisource",
-         "Wikispecies",
+        //  "Wikispecies", // Wikispecies books have wrong tags
          "Wikiversity",
          "Wikivoyage",
          "Wiktionary"
