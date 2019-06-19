@@ -209,7 +209,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
          "Other",
          "Phet",
          "Psiram",
-         "Stack_exchange",
+         "Stack Exchange",
          "Ted",
          "Vikidia",
          "Wikibooks",
@@ -260,6 +260,9 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
                 auto item = mp_categorySelector->selectedItems().at(0);
                 if (!item) return;
                 auto category = item->text();
+                if (category == "Stack Exchange") {
+                    category = "Stackexchange";
+                }
                 mp_contentManager->setCurrentCategoryFilter(category);
     });
 }
