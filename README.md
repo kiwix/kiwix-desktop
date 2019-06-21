@@ -2,7 +2,7 @@ Kiwix desktop
 =============
 
 The Kiwix-desktop is a view/manager of zim files for GNU/Linux and Windows.
-You can download and view your zim files as you which.
+You can download and view your zim files as you wish.
 
 Disclaimer
 ----------
