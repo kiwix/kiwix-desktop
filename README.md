@@ -47,12 +47,13 @@ make
 make install
 ```
 
-`qmake` will use pkg-config to locate libraries. Depending of where you've
-installed kiwix-lib (and other libraries) you may have to update the env
-variable `PKG_CONFIG_PATH`.
+`qmake` will use pkg-config to locate libraries. Depending of where
+you've installed kiwix-lib (and other libraries) you may have to
+update the env variable `PKG_CONFIG_PATH`.
 
-You may want to simply open the kiwix-desktop project in QtCreator and compile
-the project from here (We will may have to also update `PKG_CONFIG_PATH`).
+You may want to simply open the kiwix-desktop project in QtCreator and
+then compile the project from there (don't forget to update
+`PKG_CONFIG_PATH` if necessary).
 
 License
 -------
