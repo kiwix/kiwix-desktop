@@ -237,7 +237,9 @@ void ContentManager::cancelBook(const QString& id)
 {
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
-    download->cancelDownload();
+    if (download->getStatus() != kiwix::Download::K_COMPLETE) {
+        download->cancelDownload();
+    }
     QString fileToRemove = QString::fromUtf8(getLastPathElement(download->getPath()).c_str()) + "*";
     eraseBookFilesFromComputer(fileToRemove);
     mp_library->removeBookFromLibraryById(id);
