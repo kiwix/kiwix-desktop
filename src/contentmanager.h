@@ -44,6 +44,8 @@ private:
 signals:
     void filterParamsChanged();
     void booksChanged();
+    void oneBookChanged(const QString&);
+    void bookRemoved(const QString&);
     void downloadsChanged();
     void currentLangChanged();
     void pendingRequest(const bool);

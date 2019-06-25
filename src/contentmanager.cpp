@@ -123,7 +123,11 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         b.setPath(QDir::toNativeSeparators(tmp).toStdString());
         b.setDownloadId("");
         mp_library->save();
-        emit(mp_library->booksChanged());
+        if (!m_local) {
+            emit(oneBookChanged(id));
+        } else {
+            emit(mp_library->booksChanged());
+        }
     }
     for(auto& key: keys){
         ADD_V("id", getDid);
@@ -194,7 +198,7 @@ QString ContentManager::downloadBook(const QString &id)
     book.setDownloadId(download->getDid());
     mp_library->addBookToLibrary(book);
     mp_library->save();
-    emit(mp_library->booksChanged());
+    emit(oneBookChanged(id));
     return QString::fromStdString(download->getDid());
 }
 
@@ -214,7 +218,11 @@ void ContentManager::eraseBook(const QString& id)
     eraseBookFilesFromComputer(fileToRemove);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
-    emit(mp_library->booksChanged());
+    if (m_local) {
+        emit(bookRemoved(id));
+    } else {
+        emit(oneBookChanged(id));
+    }
 }
 
 void ContentManager::pauseBook(const QString& id)
@@ -244,7 +252,7 @@ void ContentManager::cancelBook(const QString& id)
     eraseBookFilesFromComputer(fileToRemove);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
-    emit(mp_library->booksChanged());
+    emit(oneBookChanged(id));
 }
 
 QStringList ContentManager::getDownloadIds()

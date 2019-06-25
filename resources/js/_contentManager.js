@@ -7,6 +7,17 @@ function niceBytes(x){
   return(n.toFixed(n >= 10 || unitIndex < 1 ? 0 : 2) + ' ' + units[unitIndex]);
 }
 
+function getIndexById(id) {
+    var index = 0;
+    for(var i = 0; i < app.books.length; i++) {
+        if (app.books[i]["id"] == id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
 function createDict(keys, values) {
     var d = {}
     for(var i=0; i<keys.length; i++) {
@@ -32,6 +43,22 @@ function onBooksChanged () {
     contentManager.getBookInfos(id, BOOK_KEYS, addBook);
   }
   app.displayedBooksNb = 20;
+}
+
+function onOneBookChanged (id) {
+    var index = getIndexById(id);
+    contentManager.getBookInfos(id, BOOK_KEYS, function(values) {
+        var b = createDict(BOOK_KEYS, values);
+        if (b.downloadId && !downloadUpdaters.hasOwnProperty(b.id)) {
+            downloadUpdaters[b.id] = setInterval(function() { getDownloadInfo(b.id); }, 1000);
+        }
+        app.books.splice(index, 1, b);
+    });
+}
+
+function onBookRemoved (id) {
+    var index = getIndexById(id);
+    app.books.splice(index, 1);
 }
 
 downloadUpdaters = {}
@@ -138,6 +165,8 @@ function init() {
       }
     });
     contentManager.booksChanged.connect(onBooksChanged);
+    contentManager.oneBookChanged.connect(onOneBookChanged);
+    contentManager.bookRemoved.connect(onBookRemoved);
     contentManager.pendingRequest.connect(displayLoadIcon);
     onBooksChanged();
     displayLoadIcon(false);
