@@ -4,6 +4,7 @@
 #include <QAction>
 #include <QTimer>
 #include <QWebEnginePage>
+#include <QToolButton>
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
@@ -83,6 +84,18 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     setTabButton(0, RightSide, nullptr);
 }
 
+void TabBar::setNewTabButton()
+{
+    QToolButton *tb = new QToolButton();
+    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::NewTabAction));
+    tb->setText("+");
+    addTab("");
+    setTabEnabled(1, false);
+    setTabButton(1, QTabBar::LeftSide, tb);
+    tabButton(1, QTabBar::RightSide)->deleteLater();
+    setTabButton(1, QTabBar::RightSide, 0);
+}
+
 WebView* TabBar::createNewTab(bool setCurrent)
 {
     WebView* webView = new WebView();
@@ -110,8 +123,9 @@ WebView* TabBar::createNewTab(bool setCurrent)
                 emit webActionEnabledChanged(QWebEnginePage::Forward, webView->isWebActionEnabled(QWebEnginePage::Forward));
             });
     // Ownership of webview is passed to the tabWidget
-    mp_stackedWidget->addWidget(webView);
-    auto index = addTab("");
+    auto index = count() - 1;
+    mp_stackedWidget->insertWidget(index, webView);
+    insertTab(index, "");
     if (setCurrent) {
         setCurrentIndex(index);
     }
@@ -184,12 +198,23 @@ void TabBar::closeTab(int index)
 {
     if (index == 0)
         return;
+    setSelectionBehaviorOnRemove(index);
     auto webview = widget(index);
     mp_stackedWidget->removeWidget(webview);
     webview->setParent(nullptr);
     removeTab(index);
     webview->close();
     delete webview;
+}
+
+void TabBar::setSelectionBehaviorOnRemove(int index)
+{
+    if (index == count() - 2)
+    {
+        QTabBar::setSelectionBehaviorOnRemove(QTabBar::SelectLeftTab);
+    } else {
+        QTabBar::setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
+    }
 }
 
 void TabBar::onCurrentChanged(int index)

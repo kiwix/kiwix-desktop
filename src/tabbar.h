@@ -17,6 +17,7 @@ public:
     void setStackedWidget(QStackedWidget* widget);
 
     void     setContentManagerView(ContentManagerView* view);
+    void     setNewTabButton();
     WebView* createNewTab(bool setCurrent);
     WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(mp_stackedWidget->widget(index)) : nullptr; }
     WebView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
@@ -46,6 +47,8 @@ public slots:
 private:
     ContentManagerView* mp_contentManagerView;
     QStackedWidget*     mp_stackedWidget;
+
+    void setSelectionBehaviorOnRemove(int index);
 
 };
 

@@ -134,6 +134,14 @@ QTabBar::close-button {
     subcontrol-position: right;
 }
 
+QTabBar::tab:last {
+    border: none;
+}
+
+QTabBar::tab:last QToolButton {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
 
 /* -----------------------------------------
     TabWidget
