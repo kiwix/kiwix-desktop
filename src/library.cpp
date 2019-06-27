@@ -2,6 +2,7 @@
 #include "kiwixapp.h"
 
 #include <kiwix/manager.h>
+#include "kiwixapp.h"
 
 #include <QtDebug>
 
@@ -90,20 +91,11 @@ QStringList Library::getBookIds()
     return list;
 }
 
-QStringList Library::listBookIds(const QString &query, const QString &categoryFilter)
+QStringList Library::listBookIds(const kiwix::Filter& filter)
 {
     QStringList list;
-    std::vector<std::string> tags;
-    if (categoryFilter != "all") {
-        tags.push_back(categoryFilter.toStdString());
-    }
-    for(auto& id: m_library.listBooksIds(kiwix::VALID|kiwix::LOCAL,
-                                         kiwix::UNSORTED,
-                                         query.toStdString(),
-                                         "",
-                                         "",
-                                         "",
-                                         tags)) {
+    auto bookIds = m_library.filter(filter);
+    for(auto& id: bookIds) {
         list.append(QString::fromStdString(id));
     }
     return list;

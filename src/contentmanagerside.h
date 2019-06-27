@@ -19,6 +19,7 @@ public:
     ~ContentManagerSide();
 
     void setContentManager(ContentManager* contentManager);
+    QStringList getCategoryList() { return m_categoryList;};
 
 private:
     Ui::contentmanagerside *mp_ui;
@@ -27,6 +28,7 @@ private:
     QListWidget* mp_languageSelector;
     QCheckBox* mp_categoryButton;
     QListWidget* mp_categorySelector;
+    QStringList m_categoryList;
 };
 
 #endif // CONTENTMANAGERSIDE_H
