@@ -267,3 +267,14 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
                 mp_contentManager->setCurrentCategoryFilter(category);
     });
 }
+
+QStringList ContentManagerSide::getCategoryList()
+{
+    QStringList categories = m_categoryList;
+    for (auto& category:categories) {
+        if (category == "Stack Exchange") {
+            category = "Stackexchange";
+        }
+    }
+    return (categories);
+}

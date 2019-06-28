@@ -19,7 +19,7 @@ public:
     ~ContentManagerSide();
 
     void setContentManager(ContentManager* contentManager);
-    QStringList getCategoryList() { return m_categoryList;};
+    QStringList getCategoryList();
 
 private:
     Ui::contentmanagerside *mp_ui;
