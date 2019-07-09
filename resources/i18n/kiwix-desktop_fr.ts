@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<TS version="2.0" language="fr">
 <context>
     <name>AboutDialog</name>
     <message>
         <location filename="../../ui/about.ui" line="20"/>
         <source>About</source>
-        <translation>A propos</translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <location filename="../../ui/about.ui" line="69"/>
@@ -19,7 +19,7 @@
     <message>
         <location filename="../../src/kiwixapp.cpp" line="123"/>
         <source>Open Zim</source>
-        <translation>Ouvrir Zim</translation>
+        <translation>Ouvrir un Zim</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="252"/>
@@ -29,7 +29,7 @@
     <message>
         <location filename="../../src/kiwixapp.cpp" line="256"/>
         <source>Random Article</source>
-        <translation>Article aléatoire</translation>
+        <translation>Article au hasard</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="261"/>
@@ -59,7 +59,7 @@
     <message>
         <location filename="../../src/kiwixapp.cpp" line="280"/>
         <source>Open file</source>
-        <translation>Ouvrir un ficher</translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="285"/>
@@ -88,11 +88,11 @@
     </message>
     <message>
         <source>Find next</source>
-        <translation type="vanished">Trouver le suivant</translation>
+        <translation>Trouver le suivant</translation>
     </message>
     <message>
         <source>Find previous</source>
-        <translation type="vanished">Trouver le précédent</translation>
+        <translation>Trouver le précédent</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="305"/>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../../src/kiwixapp.cpp" line="312"/>
         <source>Quit fullScreen</source>
-        <translation>Quitter le pein écran</translation>
+        <translation>Quitter le plein écran</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="316"/>
@@ -118,12 +118,12 @@
     <message>
         <location filename="../../src/kiwixapp.cpp" line="330"/>
         <source>Zoom in</source>
-        <translation>Zoom +</translation>
+        <translation>Agrandir</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="333"/>
         <source>Zoom out</source>
-        <translation>Zoom -</translation>
+        <translation>Réduire</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="336"/>
@@ -153,7 +153,7 @@
     <message>
         <location filename="../../src/kiwixapp.cpp" line="352"/>
         <source>About Kiwix</source>
-        <translation>A propos de Kiwix</translation>
+        <translation>À propos de Kiwix</translation>
     </message>
     <message>
         <location filename="../../src/kiwixapp.cpp" line="354"/>
@@ -204,11 +204,11 @@
     <message>
         <location filename="../../ui/mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation>MainWindow</translation>
+        <translation>Fenêtre principale</translation>
     </message>
     <message>
         <source>Find in page</source>
-        <translation type="vanished">Chercher dans la page</translation>
+        <translation>Chercher dans la page</translation>
     </message>
     <message>
         <location filename="../../src/mainwindow.cpp" line="30"/>
@@ -220,147 +220,147 @@
     <name>QObject</name>
     <message>
         <source>Open Zim</source>
-        <translation type="vanished">Ouvrir Zim</translation>
+        <translation>Ouvrir un Zim</translation>
     </message>
     <message>
         <source>Local Kiwix Server</source>
-        <translation type="vanished">Serveur local Kiwix</translation>
+        <translation>Serveur local Kiwix</translation>
     </message>
     <message>
         <source>Random Article</source>
-        <translation type="vanished">Article aléatoire</translation>
+        <translation>Article au hasard</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation type="vanished">Imprimer</translation>
+        <translation>Imprimer</translation>
     </message>
     <message>
         <source>New tab</source>
-        <translation type="vanished">Nouvel onglet</translation>
+        <translation>Nouvel onglet</translation>
     </message>
     <message>
         <source>Close tab</source>
-        <translation type="vanished">Fermer l&apos;onglet</translation>
+        <translation>Fermer l&apos;onglet</translation>
     </message>
     <message>
         <source>Reopen closed tab</source>
-        <translation type="vanished">Rouvrir l&apos;onglet fermé</translation>
+        <translation>Rouvrir l&apos;onglet fermé</translation>
     </message>
     <message>
         <source>Browse library</source>
-        <translation type="vanished">Parcourir la bibliothèque</translation>
+        <translation>Parcourir la bibliothèque</translation>
     </message>
     <message>
         <source>Open file</source>
-        <translation type="vanished">Ouvrir un ficher</translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <source>Open recent</source>
-        <translation type="vanished">Fichiers récemment ouverts</translation>
+        <translation>Fichiers récemment ouverts</translation>
     </message>
     <message>
         <source>Save page as ...</source>
-        <translation type="vanished">Enregister sous...</translation>
+        <translation>Enregister sous...</translation>
     </message>
     <message>
         <source>Search article</source>
-        <translation type="vanished">Chercher un article</translation>
+        <translation>Chercher un article</translation>
     </message>
     <message>
         <source>Search in library</source>
-        <translation type="vanished">Chercher dans la bibliothèque</translation>
+        <translation>Chercher dans la bibliothèque</translation>
     </message>
     <message>
         <source>Find in page</source>
-        <translation type="vanished">Chercher dans la page</translation>
+        <translation>Chercher dans la page</translation>
     </message>
     <message>
         <source>Set fullScreen</source>
-        <translation type="vanished">Mode plein écran</translation>
+        <translation>Mode plein écran</translation>
     </message>
     <message>
         <source>Quit fullScreen</source>
-        <translation type="vanished">Quitter le pein écran</translation>
+        <translation>Quitter le pein écran</translation>
     </message>
     <message>
         <source>Table of content</source>
-        <translation type="vanished">Table des matières</translation>
+        <translation>Table des matières</translation>
     </message>
     <message>
         <source>Reading list</source>
-        <translation type="vanished">Liste de lecture</translation>
+        <translation>Liste de lecture</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation type="vanished">Zoom +</translation>
+        <translation>Agrandir</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation type="vanished">Zoom -</translation>
+        <translation>Réduire</translation>
     </message>
     <message>
         <source>Zoom reset</source>
-        <translation type="vanished">Réinitialisation du zoom</translation>
+        <translation>Réinitialisation du zoom</translation>
     </message>
     <message>
         <source>Help</source>
-        <translation type="vanished">Aide</translation>
+        <translation>Aide</translation>
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="vanished">Retour d&apos;information</translation>
+        <translation>Retour d&apos;information</translation>
     </message>
     <message>
         <source>Repost a bug</source>
-        <translation type="vanished">Déclarer un bogue</translation>
+        <translation>Déclarer un bogue</translation>
     </message>
     <message>
         <source>Request a feature</source>
-        <translation type="vanished">Demander une nouvelle fonctionnalité</translation>
+        <translation>Demander une nouvelle fonctionnalité</translation>
     </message>
     <message>
         <source>About Kiwix</source>
-        <translation type="vanished">A propos de Kiwix</translation>
+        <translation>À propos de Kiwix</translation>
     </message>
     <message>
         <source>Settings</source>
-        <translation type="vanished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <source>Donate to support Kiwix</source>
-        <translation type="vanished">Faire un don pour soutenir Kiwix</translation>
+        <translation>Faire un don pour soutenir Kiwix</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="vanished">Quitter</translation>
+        <translation>Quitter</translation>
     </message>
     <message>
         <source>File</source>
-        <translation type="vanished">Fichier</translation>
+        <translation>Fichier</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="vanished">Édition</translation>
+        <translation>Édition</translation>
     </message>
     <message>
         <source>View</source>
-        <translation type="vanished">Affichage</translation>
+        <translation>Affichage</translation>
     </message>
     <message>
         <source>Tools</source>
-        <translation type="vanished">Outils</translation>
+        <translation>Outils</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="vanished">Recherche</translation>
+        <translation>Recherche</translation>
     </message>
     <message>
         <source>back</source>
-        <translation type="vanished">Précédent</translation>
+        <translation>Précédent</translation>
     </message>
     <message>
         <source>forward</source>
-        <translation type="vanished">Suivant</translation>
+        <translation>Suivant</translation>
     </message>
 </context>
 <context>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../../src/searchbar.cpp" line="62"/>
         <source>Search</source>
-        <translation>Recherche</translation>
+        <translation>Rechercher</translation>
     </message>
 </context>
 <context>
@@ -381,7 +381,7 @@
     <message>
         <location filename="../../src/tocsidebar.ui" line="49"/>
         <source>Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>Masquer</translation>
     </message>
 </context>
 <context>
@@ -404,32 +404,32 @@
     <message>
         <location filename="../../src/contentmanagerside.ui" line="20"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/contentmanagerside.ui" line="68"/>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <location filename="../../src/contentmanagerside.ui" line="75"/>
         <source>Local Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers locaux</translation>
     </message>
     <message>
         <location filename="../../src/contentmanagerside.ui" line="85"/>
         <source>Browse By Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Parcourir par langues</translation>
     </message>
     <message>
         <location filename="../../src/contentmanagerside.ui" line="123"/>
         <source>Browse By Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Parcourir par catégories</translation>
     </message>
     <message>
         <location filename="../../src/contentmanagerside.ui" line="158"/>
         <source>Content Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contenu</translation>
     </message>
 </context>
 <context>
@@ -437,12 +437,12 @@
     <message>
         <location filename="../../src/readinglistbar.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/readinglistbar.ui" line="37"/>
         <source>Reading List</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste de lecture</translation>
     </message>
 </context>
 </TS>
