@@ -331,18 +331,34 @@ QStringList ContentManager::getBookIds()
         filter.rejectTags(tags);
     }
     filter.query(m_searchQuery.toStdString());
-    
+
     if (m_local) {
         filter.local(true);
         filter.valid(true);
-        return mp_library->listBookIds(filter);
+        return mp_library->listBookIds(filter, m_sortBy, m_sortOrderAsc);
     } else {
         filter.remote(true);
         auto bookIds = m_remoteLibrary.filter(filter);
+        m_remoteLibrary.sort(bookIds, m_sortBy, m_sortOrderAsc);
         QStringList list;
         for(auto& bookId:bookIds) {
             list.append(QString::fromStdString(bookId));
         }
         return list;
     }
+}
+
+void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
+{
+    if (sortBy == "unsorted") {
+        m_sortBy = kiwix::UNSORTED;
+    } else if (sortBy == "title") {
+        m_sortBy = kiwix::TITLE;
+    } else if (sortBy == "size") {
+        m_sortBy = kiwix::SIZE;
+    } else if (sortBy == "date") {
+        m_sortBy = kiwix::DATE;
+    }
+    m_sortOrderAsc = sortOrderAsc;
+    emit(booksChanged());
 }

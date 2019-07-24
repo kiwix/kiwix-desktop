@@ -91,10 +91,11 @@ QStringList Library::getBookIds()
     return list;
 }
 
-QStringList Library::listBookIds(const kiwix::Filter& filter)
+QStringList Library::listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending)
 {
     QStringList list;
     auto bookIds = m_library.filter(filter);
+    m_library.sort(bookIds, sortBy, ascending);
     for(auto& id: bookIds) {
         list.append(QString::fromStdString(id));
     }
