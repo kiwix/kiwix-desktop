@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>css/style.css</file>
         <file>css/popup.css</file>
+        <file>css/localServer.css</file>
     </qresource>
 </RCC>

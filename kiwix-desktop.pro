@@ -60,7 +60,8 @@ SOURCES += \
     src/contentmanagerside.cpp \
     src/readinglistbar.cpp \
     src/klistwidgetitem.cpp \
-    src/opdsrequestmanager.cpp
+    src/opdsrequestmanager.cpp \
+    src/localkiwixserver.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -82,14 +83,16 @@ HEADERS += \
     src/contentmanagerside.h \
     src/readinglistbar.h \
     src/klistwidgetitem.h \
-    src/opdsrequestmanager.h
+    src/opdsrequestmanager.h \
+    src/localkiwixserver.h
 
 FORMS += \
     ui/mainwindow.ui \
     ui/about.ui \
     src/tocsidebar.ui \
     src/contentmanagerside.ui \
-    src/readinglistbar.ui
+    src/readinglistbar.ui \
+    ui/localkiwixserver.ui
 
 TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
 CODECFORSRC = UTF-8
