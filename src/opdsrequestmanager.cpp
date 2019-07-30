@@ -1,4 +1,5 @@
 #include "opdsrequestmanager.h"
+#include "kiwixapp.h"
 
 OpdsRequestManager::OpdsRequestManager()
 : mp_reply(nullptr)
@@ -14,16 +15,29 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
         query.addQueryItem("lang", currentLanguage);
     }
     query.addQueryItem("count", QString::number(0));
-    if (categoryFilter != "all") {
+    if (categoryFilter != "all" && categoryFilter != "other") {
         query.addQueryItem("tag", categoryFilter);
     }
+
+    if (categoryFilter == "other") {
+        auto allCategories = KiwixApp::instance()->getMainWindow()->getSideContentManager()->getCategoryList();
+        QStringList excludeTags;
+        for (auto& category:allCategories) {
+            if (category != "Other") {
+		excludeTags += category.toLower();
+            }
+        }
+        query.addQueryItem("notag", excludeTags.join(";"));
+    }
+
+
     QUrl url;
     url.setScheme("http");
     url.setHost(CATALOG_HOST);
     url.setPort(CATALOG_PORT);
     url.setPath("/catalog/search");
     url.setQuery(query);
-    
+
     qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
 
     QNetworkRequest request(url);
