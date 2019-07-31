@@ -1,8 +1,11 @@
-Kiwix desktop
+Kiwix Desktop
 =============
 
-The Kiwix-desktop is a view/manager of zim files for GNU/Linux and Windows.
-You can download and view your zim files as you wish.
+The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
+Microsoft Windows OSes.
+
+[![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Disclaimer
 ----------
@@ -15,12 +18,12 @@ to [kiwix-build](https://github.com/kiwix/kiwix-build).
 Dependencies
 ------------
 
-The kiwix-desktop application relies on many third parts software libraries.
+The Kiwix Desktop application relies on many third parts software libraries.
 Following libraries need to be available:
 
-* kiwix-lib ...................... https://github.com/kiwix/kiwix-lib/
-* Qt .............................................. https://www.qt.io/
-* aria2 ..................................... https://aria2.github.io/
+* [kiwix-lib](https://github.com/kiwix/kiwix-lib/)
+* [Qt](https://www.qt.io/)
+* [aria2](https://aria2.github.io/)
 
 These dependencies may or may not be packaged by your operating
 system. They may also be packaged but only in an older version. The
@@ -31,20 +34,22 @@ version by hand.
 kiwix-lib has to be compiled dynamically, the best way to have it is
 to use [kiwix-build](https://github.com/kiwix/kiwix-build).
 
-Install needed packages (on Ubuntu):
-```
-$ sudo apt-get install libqt5gui qtbase5-dev qtwebengine5-dev libqt5svg5-dev qt5-image-formats-plugins qt5-default aria2
+Install needed packages (on Ubuntu 18.04+):
+
+```bash
+sudo apt-get install libqt5gui qtbase5-dev qtwebengine5-dev \
+     libqt5svg5-dev qt5-image-formats-plugins qt5-default aria2
 ```
 
 Compilation
 -----------
 
-Once all dependencies are installed, you can compile the kiwix-desktop
-with:
-```
+Once all dependencies are installed, you can compile Kiwix Desktop:
+
+```bash
 qmake .
 make
-make install
+sudo make install
 ```
 
 `qmake` will use pkg-config to locate libraries. Depending of where
