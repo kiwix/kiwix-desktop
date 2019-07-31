@@ -50,7 +50,6 @@ Once all dependencies are installed, you can compile Kiwix Desktop:
 ```bash
 qmake .
 make
-sudo make install
 ```
 
 `qmake` will use pkg-config to locate libraries. Depending of where
@@ -60,6 +59,27 @@ update the env variable `PKG_CONFIG_PATH`.
 You may want to simply open the kiwix-desktop project in QtCreator and
 then compile the project from there (don't forget to update
 `PKG_CONFIG_PATH` if necessary).
+
+Installation
+------------
+
+To install Kiwix Desktop on the system:
+```bash
+sudo make install
+```
+
+Run
+---
+
+To run Kiwix Desktop
+```bash
+kiwix-desktop
+```
+
+You might have to refresh the `ld` database before:
+```bash
+sudo ldconfig
+```
 
 License
 -------
