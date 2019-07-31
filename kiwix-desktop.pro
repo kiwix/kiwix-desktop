@@ -151,6 +151,6 @@ RESOURCES += \
     resources/style.qrc
 
 unix {
-    system($$QMAKE_LUPDATE -locations relative -no-ui-lines $$_PRO_FILE_)
-    system($$QMAKE_LRELEASE $$_PRO_FILE_)
+    system(lupdate -locations relative -no-ui-lines $$_PRO_FILE_)
+    system(lrelease $$_PRO_FILE_)
 }
