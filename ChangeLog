@@ -1,3 +1,21 @@
+kiwix-desktop rc1
+=================
+
+ * Fix random crash when opening article (race condition).
+ * Alert user if there is not enough place to download a zim file.
+ * Better searchbar completion and validation.
+ * Use the library.xml along the kiwix-desktop binary if present.
+   (For kiwix-desktop+content on a usb key)
+ * Better content manager design (css, icons, ...)
+ * Add few shortcuts (alt+home, ctrl+mousewheel)
+ * Refresh only information about downloading books instead of all books.
+ * Remove RPATH from the binaries.
+ * Add a new tag button.
+ * Remove categories without content.
+ * Integrate kiwix-serve (can run kiwix-serve from kiwix-desktop)7
+ * Add book sorting.
+
+
 kiwix-desktop beta5
 ===================
 
