@@ -54,7 +54,12 @@ make
 
 `qmake` will use pkg-config to locate libraries. Depending of where
 you've installed kiwix-lib (and other libraries) you may have to
-update the env variable `PKG_CONFIG_PATH`.
+update the env variable `PKG_CONFIG_PATH`. It can be set as follows, 
+for example, for x86-64 native systems:
+
+```bash
+export PKG_CONFIG_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu/pkgconfig"
+```
 
 You may want to simply open the kiwix-desktop project in QtCreator and
 then compile the project from there (don't forget to update
@@ -79,6 +84,13 @@ kiwix-desktop
 You might have to refresh the `ld` database before:
 ```bash
 sudo ldconfig
+```
+
+If you face problems such as `library not found...`, add the following 
+environment variable:
+
+```bash
+LD_LIBRARY_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu"
 ```
 
 License
