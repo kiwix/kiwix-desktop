@@ -218,6 +218,16 @@ void ContentManager::eraseBookFilesFromComputer(const QString fileToRemove)
 
 void ContentManager::eraseBook(const QString& id)
 {
+    auto tabBar = KiwixApp::instance()->getTabWidget();
+    int i = 1;
+    while (i < tabBar->count() - 1) {
+        WebView* webView = tabBar->widget(i);
+        if (webView->zimId() == id) {
+            tabBar->closeTab(i);
+        } else {
+            i++;
+        }
+    }
     kiwix::Book book = mp_library->getBookById(id);
     QString fileToRemove = QString::fromUtf8(getLastPathElement(book.getPath()).c_str()) + "*";
     eraseBookFilesFromComputer(fileToRemove);
