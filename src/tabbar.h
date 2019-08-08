@@ -6,6 +6,7 @@
 #include <memory>
 #include "webview.h"
 #include "contentmanagerview.h"
+#include <QMouseEvent>
 
 class TabBar : public QTabBar
 {
@@ -35,6 +36,10 @@ public:
     QString currentArticleUrl();
     QString currentArticleTitle();
     virtual QSize tabSizeHint(int index) const;
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void currentZimIdChanged(const QString& zimId);

@@ -196,7 +196,7 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, WebView *web
 
 void TabBar::closeTab(int index)
 {
-    if (index == 0)
+    if (index == 0 || index == this->count() - 1)
         return;
     setSelectionBehaviorOnRemove(index);
     auto webview = widget(index);
@@ -233,5 +233,12 @@ void TabBar::onCurrentChanged(int index)
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
+    }
+}
+
+void TabBar::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::MiddleButton) {
+        closeTab(this->tabAt(event->pos()));
     }
 }
