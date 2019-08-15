@@ -156,6 +156,16 @@ void KiwixApp::openZimFile(const QString &zimfile)
     openUrl(QUrl("zim://"+zimId+".zim/"));
 }
 
+void KiwixApp::savePage()
+{
+    if(!mp_tabWidget->currentWidget())
+        return;
+    QString fileName = QFileDialog::getSaveFileName(getMainWindow(),
+                                                       tr("Save File as"), "",
+                                                       tr("HTML files (*.html)"));
+    mp_tabWidget->currentWidget()->page()->save(fileName, QWebEngineDownloadItem::CompleteHtmlSaveFormat);
+}
+
 void KiwixApp::printPage()
 {
     if(!mp_tabWidget->currentWidget())
@@ -307,7 +317,8 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(SavePageAsAction, tr("Save page as ..."));
     SET_SHORTCUT(SavePageAsAction, QKeySequence::SaveAs);
-    HIDE_ACTION(SavePageAsAction);
+    connect(mpa_actions[SavePageAsAction], &QAction::triggered,
+            this, [=]() { savePage(); });
 
     CREATE_ACTION(SearchArticleAction, tr("Search article"));
     SET_SHORTCUT(SearchArticleAction, QKeySequence(Qt::CTRL+Qt::Key_L));

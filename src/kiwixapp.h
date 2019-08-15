@@ -89,6 +89,7 @@ public slots:
     void setSideBar(SideBarType type);
     void toggleSideBar(KiwixApp::SideBarType type);
     void printPage();
+    void savePage();
 
 protected:
     void createAction();
