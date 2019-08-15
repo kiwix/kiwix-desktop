@@ -81,7 +81,11 @@ SearchBar::SearchBar(QWidget *parent) :
 
 void SearchBar::on_currentTitleChanged(const QString& title)
 {
-    setText(title);
+    if (!title.startsWith("zim://")) {
+        setText(title);
+    } else {
+        setText("");
+    }
     m_button.set_searchMode(title.isEmpty());
 }
 
