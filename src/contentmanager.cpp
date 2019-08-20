@@ -68,7 +68,6 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         ADD_V("date", getDate);
         ADD_V("url", getUrl);
         ADD_V("name", getName);
-        ADD_V("tags", getTags);
         ADD_V("origId", getOrigId);
         ADD_V("faviconMimeType", getFaviconMimeType);
         ADD_V("downloadId", getDownloadId);
@@ -85,6 +84,12 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         }
         if (key == "mediaCount") {
             values.append(QString::number(b->getMediaCount()));
+        }
+        if (key == "tags") {
+            QStringList tagList = QString::fromStdString(b->getTags()).split(';');
+            tagList = tagList.filter(QRegExp("^(?!_).*"));
+            QString s = tagList.join(" ");
+            values.append(s);
         }
     }
     return values;
