@@ -154,3 +154,5 @@ unix {
     system(lupdate -locations relative -no-ui-lines $$_PRO_FILE_)
     system(lrelease $$_PRO_FILE_)
 }
+
+RC_ICONS = resources/icons/kiwix/app_icon.ico
