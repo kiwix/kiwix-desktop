@@ -5,6 +5,7 @@
 #include <iostream>
 #include "kiwixapp.h"
 #include "webpage.h"
+#include <QToolTip>
 
 WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
@@ -63,4 +64,14 @@ void WebView::wheelEvent(QWheelEvent *event) {
             KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->activate(QAction::Trigger);
         }
     }
+}
+
+bool WebView::event(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        return true;
+    } else {
+        return QWebEngineView::event(event);
+    }
+    return true;
 }
