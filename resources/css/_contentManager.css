@@ -21,8 +21,8 @@ html, body {
 #searchInput {
     background-image: url('qrc:///icons/search.svg');
     background-repeat: no-repeat;
-    background-position: left top;
-    background-size: 40px 40px;
+    background-position: left 10px top 10px;
+    background-size: 23px 23px;
     padding: 0px;
     margin: 0px;
     padding-left: 45px;
