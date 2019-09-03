@@ -21,9 +21,6 @@ function getIndexById(id) {
 function createDict(keys, values) {
     var d = {}
     for(var i=0; i<keys.length; i++) {
-      if (keys[i] == "tags") {
-          values[i] = values[i].replace(/;/g, " ");
-      }
       d[keys[i]] = values[i];
     }
     return d;
