@@ -20,6 +20,7 @@ void SearchButton::set_searchMode(bool searchMode)
     m_searchMode = searchMode;
     if (m_searchMode) {
         setIcon(QIcon(":/icons/search.svg"));
+        setIconSize(QSize(27, 27));
     } else {
         auto kiwixApp = KiwixApp::instance();
         if (kiwixApp->isCurrentArticleBookmarked()) {
@@ -27,6 +28,7 @@ void SearchButton::set_searchMode(bool searchMode)
         } else {
             setIcon(QIcon(":/icons/reading-list.svg"));
         }
+        setIconSize(QSize(25, 25));
     }
 }
 

@@ -33,7 +33,7 @@ SearchBar {
     background-color: white;
     padding: 2px 2px 2px 40px;
     max-height: 38px;
-    margin-bottom: 2px;
+    margin: 2px 5px 2px 5px;
     color: #666;
     font-size: 16px;
     border: 1px solid #ccc;
@@ -41,12 +41,12 @@ SearchBar {
 }
 
 SearchBar > QPushButton {
-    margin: 8px;
+    margin: 8px 0px 8px 12px;
     padding: 0px;
     border: 0px solid #fff;
     background-color: white;
-    height: 30px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
 }
 
 /* ----------------------------------------
@@ -57,7 +57,7 @@ TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;
     background-color: #D9E9FF;
-    border-radius: 1px;
+    border-radius: 3px;
 }
 
 TopWidget QToolButton::menu-button {
