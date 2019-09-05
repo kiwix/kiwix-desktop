@@ -15,6 +15,7 @@ protected:
 signals:
 
 public slots:
+    void startDownload(QWebEngineDownloadItem*);
 };
 
 #endif // WEBPAGE_H
