@@ -277,7 +277,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION(OpenHomePageAction, tr("Home page"));
     SET_SHORTCUT(OpenHomePageAction, QKeySequence(Qt::ALT + Qt::Key_Home));
-    
+
     CREATE_ACTION_ICON(PrintAction, "print", tr("Print"));
     SET_SHORTCUT(PrintAction, QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
@@ -305,9 +305,11 @@ void KiwixApp::createAction()
     CREATE_ACTION(OpenRecentAction, tr("Open recent"));
     HIDE_ACTION(OpenRecentAction);
 
+    /* TODO See https://github.com/kiwix/kiwix-desktop/issues/77
     CREATE_ACTION(SavePageAsAction, tr("Save page as ..."));
     SET_SHORTCUT(SavePageAsAction, QKeySequence::SaveAs);
     HIDE_ACTION(SavePageAsAction);
+    */
 
     CREATE_ACTION(SearchArticleAction, tr("Search article"));
     SET_SHORTCUT(SearchArticleAction, QKeySequence(Qt::CTRL+Qt::Key_L));
