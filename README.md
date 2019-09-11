@@ -4,7 +4,7 @@ Kiwix Desktop
 The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
 Microsoft Windows OSes.
 
-<a href="https://flathub.org/apps/details/org.kiwix.des">
+<a href="https://flathub.org/apps/details/org.kiwix.desktop">
 <img width="100" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png" />
 </a>
 
