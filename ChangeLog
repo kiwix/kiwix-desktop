@@ -1,3 +1,15 @@
+kiwix-desktop rc2
+=================
+
+ * Close tab on middle (scroll wheel) click.
+ * Do not display hidden zim tag (starting with `_`) in the content manager.
+ * Close all tabs displaying a book when we remove the book from the library.
+ * Fix icons around the top bar.
+ * Do not display the zim id in the searchbar.
+ * Add a icons to the windows executable.
+ * Remove the "Save page ..." action.
+ * Correctly run kiwix-serve with the correct library.xml.
+
 kiwix-desktop rc1
 =================
 
