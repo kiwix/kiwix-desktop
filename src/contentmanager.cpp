@@ -127,6 +127,7 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         QString tmp(QString::fromStdString(d->getPath()));
         b.setPath(QDir::toNativeSeparators(tmp).toStdString());
         b.setDownloadId("");
+        b.setPathValid(true);
         mp_library->save();
         if (!m_local) {
             emit(oneBookChanged(id));
