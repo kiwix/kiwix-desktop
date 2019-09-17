@@ -234,6 +234,7 @@ void ContentManager::eraseBook(const QString& id)
     eraseBookFilesFromComputer(fileToRemove);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
+    emit mp_library->bookmarksChanged();
     if (m_local) {
         emit(bookRemoved(id));
     } else {
