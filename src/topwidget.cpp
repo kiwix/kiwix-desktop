@@ -42,6 +42,7 @@ TopWidget::TopWidget(QWidget *parent) :
     menuAction->setMenu(menu);
 
     addAction(menuAction);
+    setContextMenuPolicy( Qt::PreventContextMenu );
 
 
 #if !SYSTEMTITLEBAR
