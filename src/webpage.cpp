@@ -2,6 +2,7 @@
 
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QMessageBox>
 #include "kiwixapp.h"
 #include <QWebEngineProfile>
 
@@ -32,5 +33,13 @@ void WebPage::startDownload(QWebEngineDownloadItem* download)
         fileName.append(extension);
     }
     download->setPath(fileName);
+    connect(download, &QWebEngineDownloadItem::finished, this, &WebPage::downloadFinished);
     download->accept();
+}
+
+void WebPage::downloadFinished()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("The document has been downloaded."));
+    msgBox.exec();
 }
