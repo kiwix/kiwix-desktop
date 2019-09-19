@@ -392,5 +392,17 @@ void KiwixApp::postInit() {
             mp_mainWindow->getTopWidget(), &TopWidget::handleWebActionEnabledChanged);
     connect(mp_tabWidget, &TabBar::currentTitleChanged, this,
             [=](const QString& title) { emit currentTitleChanged(title); });
+    connect(mp_tabWidget, &TabBar::libraryPageDisplayed, this, &KiwixApp::disableItemsOnLibraryPage);
     emit(m_library.booksChanged());
+    disableItemsOnLibraryPage(true);
+}
+
+void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
+{
+    KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryDisplayed);
+    KiwixApp::instance()->getAction(KiwixApp::CloseTabAction)->setDisabled(libraryDisplayed);
+    KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryDisplayed);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryDisplayed);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryDisplayed);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryDisplayed);
 }

@@ -226,11 +226,13 @@ void TabBar::onCurrentChanged(int index)
         auto view = widget(index);
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
+        emit libraryPageDisplayed(false);        
         KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
     } else {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
+        emit libraryPageDisplayed(true);
         KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     }
