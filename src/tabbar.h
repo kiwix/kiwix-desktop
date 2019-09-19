@@ -42,6 +42,7 @@ protected:
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
+    void libraryPageDisplayed(bool displayed);
     void currentZimIdChanged(const QString& zimId);
     void currentTitleChanged(const QString& title);
 
