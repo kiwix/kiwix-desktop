@@ -7,6 +7,7 @@
 #include "kconstants.h"
 
 #include <QWebEngineProfile>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
+    connect(app->getAction(KiwixApp::DonateAction), &QAction::triggered,
+            this, [=]() { QDesktopServices::openUrl(QUrl("https://donate.kiwix.org")); });
     connect(app->getAction(KiwixApp::KiwixServeAction), &QAction::triggered,
             mp_localKiwixServer, &QDialog::show);
     connect(app, &KiwixApp::currentTitleChanged, this, [=](const QString& title) {
