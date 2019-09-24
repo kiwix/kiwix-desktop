@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QWebEnginePage>
 #include <QToolButton>
+#include <QToolTip>
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
@@ -121,6 +122,21 @@ WebView* TabBar::createNewTab(bool setCurrent)
             [=]() {
                 QUITIFNOTCURRENT(webView);
                 emit webActionEnabledChanged(QWebEnginePage::Forward, webView->isWebActionEnabled(QWebEnginePage::Forward));
+            });
+    connect(webView->page(), &QWebEnginePage::linkHovered, this, 
+            [=](const QString& url) {
+                auto tabbar = KiwixApp::instance()->getTabWidget();
+                if (url.isEmpty()) {
+                    QToolTip::hideText();
+                } else {
+                    auto link = url;
+                    if (url.startsWith("zim://")) {
+                        link = QUrl(url).path();
+                    }
+                    auto height = tabbar->currentWidget()->height() + 1;
+                    auto pos = tabbar->mapToGlobal(QPoint(-3, height));
+                    QToolTip::showText(pos, link);
+                }
             });
     // Ownership of webview is passed to the tabWidget
     auto index = count() - 1;
