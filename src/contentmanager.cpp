@@ -129,6 +129,7 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         b.setDownloadId("");
         b.setPathValid(true);
         mp_library->save();
+        mp_library->bookmarksChanged();
         if (!m_local) {
             emit(oneBookChanged(id));
         } else {
