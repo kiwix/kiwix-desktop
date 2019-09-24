@@ -9,6 +9,7 @@
 #include "tabbar.h"
 #include "tocsidebar.h"
 #include "urlschemehandler.h"
+#include "settingsmanager.h"
 
 #include <QApplication>
 #include <QErrorMessage>
@@ -75,6 +76,7 @@ public:
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
     kiwix::KiwixServe* getLocalServer() { return mp_server; }
+    SettingsManager* getSettingsManager() { return &m_settingsManager; };
 
     bool isCurrentArticleBookmarked();
 
@@ -97,6 +99,7 @@ protected:
 
 private:
     QTranslator m_qtTranslator, m_appTranslator;
+    SettingsManager m_settingsManager;
     UrlSchemeHandler m_schemeHandler;
     QString m_libraryDirectory;
     Library m_library;

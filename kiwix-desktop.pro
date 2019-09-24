@@ -46,6 +46,8 @@ SOURCES += \
     src/kiwixapp.cpp \
     src/blobbuffer.cpp \
     src/library.cpp \
+    src/settingsmanager.cpp \
+    src/settingsmanagerview.cpp \
     src/topwidget.cpp \
     src/urlschemehandler.cpp \
     src/webview.cpp \
@@ -68,6 +70,8 @@ HEADERS += \
     src/kiwixapp.h \
     src/blobbuffer.h \
     src/library.h \
+    src/settingsmanager.h \
+    src/settingsmanagerview.h \
     src/topwidget.h \
     src/kconstants.h \
     src/urlschemehandler.h \
@@ -148,6 +152,7 @@ RESOURCES += \
     resources/kiwix.qrc \
     resources/translations.qrc \
     resources/contentmanager.qrc \
+    resources/settingsmanager.qrc \
     resources/style.qrc
 
 unix {

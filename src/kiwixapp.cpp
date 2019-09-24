@@ -27,6 +27,7 @@ kiwix::Downloader* createDownloader() {
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
+      m_settingsManager(),
       m_libraryDirectory(findLibraryDirectory()),
       m_library(),
       mp_downloader(createDownloader()),
@@ -378,7 +379,6 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(SettingAction, "settings", tr("Settings"));
     SET_SHORTCUT(SettingAction, QKeySequence::Preferences);
-    HIDE_ACTION(SettingAction);
 
     CREATE_ACTION_ICON(DonateAction, "donate", tr("Donate to support Kiwix"));
     SET_SHORTCUT(DonateAction, QKeySequence("Ctrl+<,3"));

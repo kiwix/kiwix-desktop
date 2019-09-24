@@ -53,6 +53,7 @@ public slots:
 private:
     ContentManagerView* mp_contentManagerView;
     QStackedWidget*     mp_stackedWidget;
+    int                 m_settingsIndex;
 
     void setSelectionBehaviorOnRemove(int index);
 

@@ -1,0 +1,12 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+#settings {
+    height: 100%;
+    position: relative;
+}
