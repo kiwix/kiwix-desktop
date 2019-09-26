@@ -27,10 +27,9 @@ Library::Library()
     auto manipulator = LibraryManipulator(this);
     auto manager = kiwix::Manager(&manipulator);
     m_libraryDirectory = KiwixApp::instance()->getLibraryDirectory();
-    qInfo() << m_libraryDirectory;
+    qInfo() << "Library directory :" << m_libraryDirectory;
     manager.readFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
     manager.readBookmarkFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
-    qInfo() << getBookIds().length();
     emit(booksChanged());
 }
 
