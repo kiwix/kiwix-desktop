@@ -1,3 +1,17 @@
+kiwix-desktop rc3
+=================
+
+ * Correctly display a book in the local library at the end of download.
+ * Do not display the context menu on the toolbar.
+ * Remove the status bar.
+ * Disable useless actions when displaying the library page.
+ * Allow user to download files (epub) from a zim files.
+ * Do not display obsolet bookmarks after removing a book from a library.
+ * Correctly display zim's icons in the local library page.
+ * Add "donate" action in the menu.
+ * Display a tooltip with the url when a link is "mouse over".
+ * Fix some debug information print on the console.
+
 kiwix-desktop rc2
 =================
 
