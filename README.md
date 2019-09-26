@@ -59,7 +59,7 @@ make
 
 `qmake` will use pkg-config to locate libraries. Depending of where
 you've installed kiwix-lib (and other libraries) you may have to
-update the env variable `PKG_CONFIG_PATH`. It can be set as follows, 
+update the env variable `PKG_CONFIG_PATH`. It can be set as follows,
 for example, for x86-64 native systems:
 
 ```bash
@@ -91,7 +91,7 @@ You might have to refresh the `ld` database before:
 sudo ldconfig
 ```
 
-If you face problems such as `library not found...`, add the following 
+If you face problems such as `library not found...`, add the following
 environment variable:
 
 ```bash
@@ -101,4 +101,5 @@ LD_LIBRARY_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu"
 License
 -------
 
-GPLv3 or later, see COPYING for more details.
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0) or later, see
+[LICENSE](LICENSE) for more details.
