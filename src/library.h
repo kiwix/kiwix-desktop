@@ -30,7 +30,7 @@ public:
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     QStringList getBookIds();
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending);
-    const std::vector<kiwix::Bookmark>& getBookmarks() { return m_library.getBookmarks(); }
+    const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) { return m_library.getBookmarks(onlyValidBookmarks); }
     void addBookToLibrary(kiwix::Book& book);
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
