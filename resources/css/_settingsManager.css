@@ -1,12 +1,28 @@
 html, body {
     padding: 0;
-    margin: 0;
+    margin: auto;
     height: 100%;
     position: relative;
-    width: 100%;
+    width: 75%;
     overflow: hidden;
 }
+
 #settings {
     height: 100%;
     position: relative;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid grey;
+    height: 40px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+   opacity: 1;
 }
