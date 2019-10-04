@@ -9,6 +9,10 @@
 <body onload="init()">
 <div id="settings">
     <h1>Settings</h1>
+    <div>
+        <label>Port for local Kiwix server : </label>
+        <input type="text" ref="kiwixServerPort" v-model="kiwixServerPort" v-on:blur="setPort()">
+    </div>
 </div>
 </body></html>
  

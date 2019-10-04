@@ -34,7 +34,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_manager(&m_library, mp_downloader),
       mp_server(new kiwix::KiwixServe(
         appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"),
-        8181))
+        m_settingsManager.getKiwixServerPort()))
 {
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
