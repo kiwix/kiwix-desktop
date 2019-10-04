@@ -2,6 +2,7 @@
 #define SETTINGSMANAGER_H
 
 #include <QObject>
+#include <QSettings>
 #include "settingsmanagerview.h"
 
 class SettingsManager : public QObject
@@ -26,6 +27,7 @@ signals:
     void portChanged(int port);
 
 private:
+    QSettings m_settings;
     bool m_settingsViewDisplayed;
     int m_kiwixServerPort;
 };

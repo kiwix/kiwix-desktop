@@ -1,7 +1,9 @@
 #include "settingsmanager.h"
 
 SettingsManager::SettingsManager(QObject *parent)
-    : QObject(parent), m_settingsViewDisplayed(false)
+    : QObject(parent),
+    m_settings("Kiwix", "Kiwix-desktop"),
+    m_settingsViewDisplayed(false)
 {
     setSettings();
 }
@@ -19,10 +21,11 @@ SettingsManagerView* SettingsManager::getView()
 void SettingsManager::setKiwixServerPort(int port)
 {
     m_kiwixServerPort = port;
+    m_settings.setValue("localKiwixServer/port", port);
     emit(portChanged(port));
 }
 
 void SettingsManager::setSettings()
 {
-    m_kiwixServerPort = 8181;
+    m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
 }
