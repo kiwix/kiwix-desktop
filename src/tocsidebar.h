@@ -17,6 +17,7 @@ public:
     ~TocSideBar();
 
     void postInit();
+    QLineEdit* getFindLineEdit() { return mp_findLineEdit; };
 
 public slots:
     void findNext();
