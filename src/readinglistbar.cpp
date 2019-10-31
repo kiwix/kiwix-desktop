@@ -50,7 +50,7 @@ void ReadingListBar::setupList()
 void ReadingListBar::on_itemActivated(QListWidgetItem* item)
 {
     int index = ui->listWidget->row(item);
-    auto bookmark = KiwixApp::instance()->getLibrary()->getBookmarks().at(index);
+    auto bookmark = KiwixApp::instance()->getLibrary()->getBookmarks(true).at(index);
     QUrl url;
     url.setScheme("zim");
     url.setHost(QString::fromStdString(bookmark.getBookId())+".zim");

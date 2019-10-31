@@ -107,6 +107,10 @@ void Library::addBookToLibrary(kiwix::Book &book)
 }
 
 void Library::removeBookFromLibraryById(const QString& id) {
+    auto it = m_readersMap.find(id);
+    if (it != m_readersMap.end()) {
+        m_readersMap.erase(it);
+    }
     m_library.removeBookById(id.toStdString());
 }
 
