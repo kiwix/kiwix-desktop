@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>texts/_settingsManager.html</file>
+        <file>css/_settingsManager.css</file>
+        <file>js/_settingsManager.js</file>
+    </qresource>
+</RCC>

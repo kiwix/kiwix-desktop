@@ -12,7 +12,8 @@
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentWidget();}
 
 TabBar::TabBar(QWidget *parent) :
-    QTabBar(parent)
+    QTabBar(parent),
+    m_settingsIndex(-1)
 {
     setTabsClosable(true);
     setElideMode(Qt::ElideRight);
@@ -66,6 +67,18 @@ TabBar::TabBar(QWidget *parent) :
                 auto current = this->currentWidget();
                 QUITIFNULL(current);
                 current->setUrl("zim://" + current->zimId() + ".zim/");
+            });
+    connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
+            this, [=]() {
+                if (KiwixApp::instance()->getSettingsManager()->isSettingsViewdisplayed()) {
+                    return;
+                }
+                auto index = currentIndex() + 1;
+                auto view = KiwixApp::instance()->getSettingsManager()->getView();
+                mp_stackedWidget->insertWidget(index, view);
+                insertTab(index,QIcon(":/icons/settings.svg"), tr("Settings"));
+                setCurrentIndex(index);
+                m_settingsIndex = index;
             });
 }
 
@@ -214,6 +227,12 @@ void TabBar::closeTab(int index)
 {
     if (index == 0 || index == this->count() - 1)
         return;
+    if (index == m_settingsIndex) {
+        m_settingsIndex = -1;
+    }
+    if (index < m_settingsIndex) {
+        m_settingsIndex--;
+    }
     setSelectionBehaviorOnRemove(index);
     auto webview = widget(index);
     mp_stackedWidget->removeWidget(webview);
@@ -237,8 +256,13 @@ void TabBar::onCurrentChanged(int index)
 {
     if (index == -1)
         return;
-    if (index)
-    {
+    if (index == m_settingsIndex) {
+        emit webActionEnabledChanged(QWebEnginePage::Back, false);
+        emit webActionEnabledChanged(QWebEnginePage::Forward, false);
+        emit libraryPageDisplayed(false);                
+        KiwixApp::instance()->setSideBar(KiwixApp::NONE);
+        QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
+    } else if (index) {
         auto view = widget(index);
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));

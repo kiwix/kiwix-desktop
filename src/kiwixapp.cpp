@@ -27,13 +27,14 @@ kiwix::Downloader* createDownloader() {
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
+      m_settingsManager(),
       m_libraryDirectory(findLibraryDirectory()),
       m_library(),
       mp_downloader(createDownloader()),
       m_manager(&m_library, mp_downloader),
       mp_server(new kiwix::KiwixServe(
         appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"),
-        8181))
+        m_settingsManager.getKiwixServerPort()))
 {
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
@@ -377,8 +378,7 @@ void KiwixApp::createAction()
     CREATE_ACTION(AboutAction, tr("About Kiwix"));
 
     CREATE_ACTION_ICON(SettingAction, "settings", tr("Settings"));
-    SET_SHORTCUT(SettingAction, QKeySequence::Preferences);
-    HIDE_ACTION(SettingAction);
+    SET_SHORTCUT(SettingAction, QKeySequence(Qt::Key_F12));
 
     CREATE_ACTION_ICON(DonateAction, "donate", tr("Donate to support Kiwix"));
     SET_SHORTCUT(DonateAction, QKeySequence("Ctrl+<,3"));

@@ -23,6 +23,8 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
 
     connect(ui->KiwixServerButton, SIGNAL(clicked()), this, SLOT(runOrStopServer()));
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged,
+            this, [=](int port) { m_port = port; });
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
     for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost) {
@@ -44,13 +46,14 @@ void LocalKiwixServer::openInBrowser()
     QUrl url;
     url.setScheme("http");
     url.setHost(m_ipAddress);
-    url.setPort(m_port);
+    url.setPort(mp_server->getPort());
     QDesktopServices::openUrl(url);
 }
 
 void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
+        mp_server->setPort(m_port);
         mp_server->run();
         ui->IpAddress->setText(m_ipAddress + ":" + QString::number(m_port));
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
