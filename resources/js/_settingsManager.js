@@ -6,6 +6,7 @@ function init() {
         data: {
           settingsManager: settingsManager,
           kiwixServerPort: settingsManager.kiwixServerPort,
+          zoomFactor: Math.floor(settingsManager.zoomFactor * 100),
         },
         methods: {
             setPort : function() {
@@ -17,6 +18,11 @@ function init() {
                     alert("invalid port");
                     this.kiwixServerPort = settingsManager.kiwixServerPort;
                 }
+            },
+            setZoomFactor : function() {
+                this.zoomFactor = (this.zoomFactor < 30) ? 30 : this.zoomFactor;
+                this.zoomFactor = (this.zoomFactor > 500) ? 500 : this.zoomFactor;
+                settingsManager.setZoomFactor(this.zoomFactor / 100);
             }
         }
       });

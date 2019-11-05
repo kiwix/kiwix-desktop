@@ -25,7 +25,14 @@ void SettingsManager::setKiwixServerPort(int port)
     emit(portChanged(port));
 }
 
+void SettingsManager::setZoomFactor(qreal zoomFactor)
+{
+    m_zoomFactor = zoomFactor;
+    m_settings.setValue("view/zoomFactor", zoomFactor);
+}
+
 void SettingsManager::setSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
+    m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
 }

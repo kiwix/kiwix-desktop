@@ -22,7 +22,16 @@ html, body {
     height: 40px;
 }
 
+input {
+    width: 80px;
+}
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
    opacity: 1;
+}
+
+div.percentage-symbol::after{
+    content: "%";
+    margin-left: -35px;
 }

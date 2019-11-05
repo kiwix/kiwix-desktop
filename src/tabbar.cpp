@@ -170,6 +170,8 @@ void TabBar::openUrl(const QUrl& url, bool newTab)
     }
     QUITIFNULL(webView);
     webView->setUrl(url);
+    auto zoomFactor = KiwixApp::instance()->getSettingsManager()->getZoomFactor();
+    webView->setZoomFactor(zoomFactor);
 }
 
 void TabBar::setTitleOf(const QString& title, WebView* webView)
