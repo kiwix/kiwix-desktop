@@ -30,7 +30,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     mp_categorySelector = mp_ui->categorySelector;
     connect(mp_categoryButton, &QCheckBox::toggled, this, [=](bool checked) { mp_categorySelector->setHidden(!checked); });
     mp_categorySelector->setHidden(true);
-
+    mp_ui->contentTypeButton->hide();
 
     for (auto lang:
         {
