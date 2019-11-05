@@ -6,6 +6,7 @@ kiwix-desktop rc4
  * Fix Reading list with bookmarks from missing books
  * Support video fullscreen mode
  * Support the default zoom level setting
+ * Support zoom level per zim
 
 kiwix-desktop rc3
 =================

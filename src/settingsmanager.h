@@ -17,6 +17,11 @@ public:
 
     SettingsManagerView* getView();
     bool isSettingsViewdisplayed() { return m_settingsViewDisplayed; };
+    void setSettings(const QString &key, const QVariant &value);
+    void deleteSettings(const QString &key);
+    bool settingsExists(const QString &key);
+    QVariant getSettings(const QString &key);
+    qreal getZoomFactorByZimId(const QString &id);
 
 public slots:
     void setKiwixServerPort(int port);
@@ -25,7 +30,7 @@ public slots:
     qreal getZoomFactor() { return m_zoomFactor; };
 
 private:
-    void setSettings();
+    void initSettings();
 
 signals:
     void portChanged(int port);

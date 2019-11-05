@@ -46,6 +46,8 @@ TabBar::TabBar(QWidget *parent) :
                 zoomFactor += 0.1;
                 zoomFactor = max(min(zoomFactor, 5.0), 0.25);
                 current->setZoomFactor(zoomFactor);
+                auto key = this->currentZimId() + "/zoomFactor";
+                KiwixApp::instance()->getSettingsManager()->setSettings(key, zoomFactor);
             });
     connect(app->getAction(KiwixApp::ZoomOutAction), &QAction::triggered,
             this, [=]() {
@@ -55,12 +57,17 @@ TabBar::TabBar(QWidget *parent) :
                 zoomFactor -= 0.1;
                 zoomFactor = max(min(zoomFactor, 5.0), 0.25);
                 current->setZoomFactor(zoomFactor);
+                auto key = this->currentZimId() + "/zoomFactor";
+                KiwixApp::instance()->getSettingsManager()->setSettings(key, zoomFactor);
             });
     connect(app->getAction(KiwixApp::ZoomResetAction), &QAction::triggered,
             this, [=]() {
                 auto current = this->currentWidget();
                 QUITIFNULL(current);
-                current->setZoomFactor(1.0);
+                auto settingsManager = KiwixApp::instance()->getSettingsManager();
+                current->setZoomFactor(settingsManager->getZoomFactor());
+                auto key = this->currentZimId() + "/zoomFactor";
+                settingsManager->deleteSettings(key);
             });
     connect(app->getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
             this, [=]() {
@@ -170,8 +177,6 @@ void TabBar::openUrl(const QUrl& url, bool newTab)
     }
     QUITIFNULL(webView);
     webView->setUrl(url);
-    auto zoomFactor = KiwixApp::instance()->getSettingsManager()->getZoomFactor();
-    webView->setZoomFactor(zoomFactor);
 }
 
 void TabBar::setTitleOf(const QString& title, WebView* webView)

@@ -241,6 +241,7 @@ void ContentManager::eraseBook(const QString& id)
     } else {
         emit(oneBookChanged(id));
     }
+    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
 }
 
 void ContentManager::pauseBook(const QString& id)
