@@ -10,13 +10,13 @@ Microsoft Windows OSes.
 Distribution
 ------------
 
-; Official binaries
+#### Official binaries
 
 <a href="https://flathub.org/apps/details/org.kiwix.desktop">
 <img width="100" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png" />
 </a>
 
-* Contribution binaries
+#### Contribution binaries
 
 [![AUR version](https://img.shields.io/aur/version/kiwix-desktop)](https://aur.archlinux.org/packages/kiwix-desktop/)
 
