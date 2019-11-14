@@ -113,6 +113,7 @@ void TabBar::setNewTabButton()
 WebView* TabBar::createNewTab(bool setCurrent)
 {
     WebView* webView = new WebView();
+    connect(webView->page(), &QWebEnginePage::fullScreenRequested, this, &TabBar::fullScreenRequested);
     connect(webView, &WebView::titleChanged, this,
             [=](const QString& str) {
         setTitleOf(str, webView);
@@ -275,6 +276,21 @@ void TabBar::onCurrentChanged(int index)
         emit libraryPageDisplayed(true);
         KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
+    }
+}
+
+void TabBar::fullScreenRequested(QWebEngineFullScreenRequest request)
+{
+    if (request.toggleOn()) {
+        if (m_fullScreenWindow)
+            return;
+        request.accept();
+        m_fullScreenWindow.reset(new FullScreenWindow(this->currentWidget()));
+    } else {
+        if (!m_fullScreenWindow)
+            return;
+        request.accept();
+        m_fullScreenWindow.reset();
     }
 }
 
