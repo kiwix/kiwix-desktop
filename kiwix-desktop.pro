@@ -63,7 +63,9 @@ SOURCES += \
     src/readinglistbar.cpp \
     src/klistwidgetitem.cpp \
     src/opdsrequestmanager.cpp \
-    src/localkiwixserver.cpp
+    src/localkiwixserver.cpp \
+    src/fullscreenwindow.cpp \
+    src/fullscreennotification.cpp
 
 HEADERS += \
     src/mainwindow.h \
@@ -88,7 +90,9 @@ HEADERS += \
     src/readinglistbar.h \
     src/klistwidgetitem.h \
     src/opdsrequestmanager.h \
-    src/localkiwixserver.h
+    src/localkiwixserver.h \
+    src/fullscreenwindow.h \
+    src/fullscreennotification.h
 
 FORMS += \
     ui/mainwindow.ui \

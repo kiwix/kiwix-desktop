@@ -6,7 +6,9 @@
 #include <memory>
 #include "webview.h"
 #include "contentmanagerview.h"
+#include "fullscreenwindow.h"
 #include <QMouseEvent>
+#include <QWebEngineFullScreenRequest>
 
 class TabBar : public QTabBar
 {
@@ -49,11 +51,13 @@ signals:
 public slots:
     void closeTab(int index);
     void onCurrentChanged(int index);
+    void fullScreenRequested(QWebEngineFullScreenRequest request);
 
 private:
     ContentManagerView* mp_contentManagerView;
     QStackedWidget*     mp_stackedWidget;
     int                 m_settingsIndex;
+    QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
     void setSelectionBehaviorOnRemove(int index);
 

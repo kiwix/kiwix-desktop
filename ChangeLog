@@ -4,6 +4,7 @@ kiwix-desktop rc4
  * New Settings page
  * Better aria2c error message
  * Fix Reading list with bookmarks from missing books
+ * Support video fullscreen mode
 
 kiwix-desktop rc3
 =================
