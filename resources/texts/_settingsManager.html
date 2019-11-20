@@ -13,6 +13,10 @@
         <label>Port for local Kiwix server : </label>
         <input type="number" min="1" max="65535" v-model="kiwixServerPort" v-on:change="setPort()">
     </div>
+    <div class="row">
+        <label>Zoom level : </label>
+        <div class="percentage-symbol"><input type="number" step="10" min="30" max="500" v-model="zoomFactor" v-on:change="setZoomFactor()"></div>
+    </div>
 </div>
 </body></html>
  

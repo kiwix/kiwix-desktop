@@ -54,6 +54,8 @@ void WebView::onUrlChanged(const QUrl& url) {
         pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
         m_icon = QIcon(pixmap);
         emit iconChanged(m_icon);
+        auto zoomFactor = app->getSettingsManager()->getZoomFactorByZimId(zimId);
+        this->setZoomFactor(zoomFactor);
     }
 }
 
