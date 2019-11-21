@@ -10,6 +10,7 @@ WebPage::WebPage(QObject *parent) :
     QWebEnginePage(parent)
 {
     action(QWebEnginePage::SavePage)->setVisible(false);
+    action(QWebEnginePage::ViewSource)->setVisible(false);
     connect(QWebEngineProfile::defaultProfile(), &QWebEngineProfile::downloadRequested, this, &WebPage::startDownload);
 }
 
