@@ -1,12 +1,13 @@
 kiwix-desktop rc4
 =================
 
- * New Settings page
+ * New "Settings" page
  * Better aria2c error message
  * Fix Reading list with bookmarks from missing books
  * Support video fullscreen mode
  * Support the default zoom level setting
- * Support zoom level per zim
+ * Support zoom level per content
+ * Remove page view source feature
 
 kiwix-desktop rc3
 =================
