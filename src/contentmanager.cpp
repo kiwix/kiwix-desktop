@@ -201,7 +201,12 @@ QString ContentManager::downloadBook(const QString &id)
     for (auto b : booksList)
         if (b.toStdString() == book.getId())
             return "";
-    auto download = mp_downloader->startDownload(book.getUrl());
+    kiwix::Download *download;
+    try {
+        download = mp_downloader->startDownload(book.getUrl());
+    } catch (std::exception& e) {
+        return "";
+    }
     book.setDownloadId(download->getDid());
     mp_library->addBookToLibrary(book);
     mp_library->save();

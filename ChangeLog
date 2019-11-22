@@ -8,6 +8,7 @@ kiwix-desktop rc4
  * Support the default zoom level setting
  * Support zoom level per content
  * Remove page view source feature
+ * Stop crashing if a download fails
 
 kiwix-desktop rc3
 =================
