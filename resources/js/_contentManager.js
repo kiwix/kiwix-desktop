@@ -71,6 +71,12 @@ function getDownloadInfo(id) {
       clearInterval(downloadUpdaters[id]);
       Vue.delete(app.downloads, id);
       return;
+    } else if (d.status == "error") {
+      clearInterval(downloadUpdaters[id]);
+      Vue.delete(app.downloads, id);
+      alert("Error: download failed.");
+      contentManager.eraseBook(id);
+      return;
     }
     d["completedLengthInDegree"] = Math.trunc(d["completedLength"] * 180 / d["totalLength"]).toString() + "deg";
     Vue.set(app.downloads, id, d);
@@ -106,8 +112,10 @@ function init() {
         },
         downloadBook : function(book) {
           contentManager.downloadBook(book.id, function(did)  {
-            if (did.length == 0)
+            if (did.length == 0) {
+                alert("Error: this download is not available.");
                 return;
+            }
             if (did == "storage_error") {
                 alert("not enough storage available.");
                 return;
