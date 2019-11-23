@@ -20,7 +20,6 @@ Distribution
 
 [![AUR version](https://img.shields.io/aur/version/kiwix-desktop)](https://aur.archlinux.org/packages/kiwix-desktop/)
 
-
 Disclaimer
 ----------
 
