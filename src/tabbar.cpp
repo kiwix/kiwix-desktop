@@ -144,7 +144,7 @@ WebView* TabBar::createNewTab(bool setCurrent)
                 QUITIFNOTCURRENT(webView);
                 emit webActionEnabledChanged(QWebEnginePage::Forward, webView->isWebActionEnabled(QWebEnginePage::Forward));
             });
-    connect(webView->page(), &QWebEnginePage::linkHovered, this, 
+    connect(webView->page(), &QWebEnginePage::linkHovered, this,
             [=](const QString& url) {
                 auto tabbar = KiwixApp::instance()->getTabWidget();
                 if (url.isEmpty()) {
@@ -267,14 +267,14 @@ void TabBar::onCurrentChanged(int index)
     if (index == m_settingsIndex) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
-        emit libraryPageDisplayed(false);                
+        emit libraryPageDisplayed(false);
         KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     } else if (index) {
         auto view = widget(index);
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
-        emit libraryPageDisplayed(false);        
+        emit libraryPageDisplayed(false);
         KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
     } else {
