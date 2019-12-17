@@ -381,7 +381,7 @@ void KiwixApp::createAction()
     SET_SHORTCUT(SettingAction, QKeySequence(Qt::Key_F12));
 
     CREATE_ACTION_ICON(DonateAction, "donate", tr("Donate to support Kiwix"));
-    SET_SHORTCUT(DonateAction, QKeySequence("Ctrl+<,3"));
+    SET_SHORTCUT(DonateAction, QKeySequence(Qt::CTRL+Qt::Key_D));
 
     CREATE_ACTION_ICON(ExitAction, "exit", tr("Exit"));
     SET_SHORTCUT(ExitAction, QKeySequence::Quit);
