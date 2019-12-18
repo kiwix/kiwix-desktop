@@ -19,6 +19,7 @@ TopWidget::TopWidget(QWidget *parent) :
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
     addAction(mp_historyBackAction);
+    widgetForAction(mp_historyBackAction)->setObjectName("backButton");
     mp_historyForwardAction = new QAction(this);
     mp_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
     mp_historyForwardAction->setText(tr("forward"));
@@ -49,6 +50,7 @@ TopWidget::TopWidget(QWidget *parent) :
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
 #endif
     addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction));
+    widgetForAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction))->setObjectName("fullScreenButton");
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/close.svg"), "close", parent, SLOT(close()));
 #endif
