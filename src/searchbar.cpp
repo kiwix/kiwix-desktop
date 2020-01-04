@@ -133,6 +133,6 @@ void SearchBar::openCompletion(const QModelIndex &index)
     qurl.setScheme("zim");
     qurl.setHost(m_currentZimId+".zim");
     qurl.setPath(QString::fromStdString(url));
-    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, true);});
+    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, false);});
 }
 
