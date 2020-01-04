@@ -274,7 +274,9 @@ void TabBar::onCurrentChanged(int index)
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit libraryPageDisplayed(false);
-        KiwixApp::instance()->setSideBar(KiwixApp::NONE);
+        if (KiwixApp::instance()->getSideType() == KiwixApp::CONTENTMANAGER_BAR) {
+            KiwixApp::instance()->setSideBar(KiwixApp::NONE);
+        }
         QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
     } else {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
