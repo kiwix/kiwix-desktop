@@ -77,6 +77,7 @@ public:
     QString getLibraryDirectory() { return m_libraryDirectory; };
     kiwix::KiwixServe* getLocalServer() { return mp_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
+    SideBarType getSideType() { return m_currentSideType; }
 
     bool isCurrentArticleBookmarked();
 
