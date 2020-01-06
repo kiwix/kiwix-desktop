@@ -17,6 +17,12 @@ WebPage::WebPage(QObject *parent) :
 bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame)
 {
     if (url.scheme() != "zim") {
+        auto tabWidget = KiwixApp::instance()->getTabWidget();
+        for (auto i = 1; i < tabWidget->count() - 1; i++) {
+            if (tabWidget->widget(i)->url().isEmpty()) {
+                tabWidget->closeTab(i);
+            }
+        }
         QDesktopServices::openUrl(url);
         return false;
     }
