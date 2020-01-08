@@ -290,8 +290,9 @@ void KiwixApp::createAction()
     CREATE_ACTION(NewTabAction, tr("New tab"));
     SET_SHORTCUT(NewTabAction, QKeySequence::AddTab);
 
-    CREATE_ACTION(CloseTabAction, tr("Close tab"));
+    CREATE_ACTION_ICON(CloseTabAction, "close", tr("Close tab"));
     SET_SHORTCUT(CloseTabAction, QKeySequence::Close);
+    mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
 
     CREATE_ACTION(ReopenClosedTabAction, tr("Reopen closed tab"));
     SET_SHORTCUT(ReopenClosedTabAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));

@@ -163,6 +163,9 @@ WebView* TabBar::createNewTab(bool setCurrent)
     auto index = count() - 1;
     mp_stackedWidget->insertWidget(index, webView);
     insertTab(index, "");
+    QToolButton *tb = new QToolButton(this);
+    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
+    setTabButton(index, QTabBar::RightSide, tb);
     if (setCurrent) {
         setCurrentIndex(index);
     }
