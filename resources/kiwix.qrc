@@ -69,6 +69,7 @@
         <file>icons/play-button.png</file>
         <file>icons/pause-button.png</file>
         <file>icons/cancel-button.png</file>
+        <file>icons/new-tab-icon.svg</file>
     </qresource>
     <qresource lang="fr" prefix="/">
         <file alias="texts/about.html">texts/fr/about.html</file>

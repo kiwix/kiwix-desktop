@@ -109,7 +109,7 @@ void TabBar::setNewTabButton()
 {
     QToolButton *tb = new QToolButton();
     tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::NewTabAction));
-    tb->setText("+");
+    tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
     addTab("");
     setTabEnabled(1, false);
     setTabButton(1, QTabBar::LeftSide, tb);

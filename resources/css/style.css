@@ -149,7 +149,13 @@ QTabBar::tab:last {
 
 QTabBar::tab:last QToolButton {
     font-size: 30px;
-    margin-bottom: 5px;
+    width: 30px; min-width: 30px; max-width: 30px;
+    height: 30px; min-height:30px; max-height:30px;
+    border-radius: 5px;
+}
+
+QTabBar::tab:last QToolButton::hover {
+    background-color: grey;
 }
 
 /* -----------------------------------------
