@@ -88,7 +88,7 @@ QMenu::item {
     min-height: 40px;
     max-height: 40px;
     border: 1px solid transparent;
-    padding: 2px 12px 2px 40px;
+    padding: 2px 12px 2px 20px;
 }
 
 QMenu::icon {
