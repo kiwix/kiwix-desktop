@@ -69,6 +69,15 @@ TopWidget QToolButton::menu-arrow {
     image: none;
 }
 
+TopWidget QToolButton#backButton {
+    margin-left: 6px;
+}
+
+
+TopWidget QToolButton#fullScreenButton {
+    margin-right: 6px;
+}
+
 QMenu {
     border: none;
     min-width: 320px;
