@@ -194,6 +194,7 @@ void KiwixApp::setSideBar(KiwixApp::SideBarType type)
         case SEARCH_BAR:
             mp_mainWindow->findChild<TocSideBar*>("tocsidebar")->getFindLineEdit()->setFocus();
         case CONTENTMANAGER_BAR:
+            mp_mainWindow->getTocBar()->findCloseByIndex(mp_tabWidget->getPreviousIndex());
         case READINGLIST_BAR:
             sideDockWidget->setCurrentIndex(type);
             sideDockWidget->show();
@@ -324,9 +325,9 @@ void KiwixApp::createAction()
     HIDE_ACTION(SearchLibraryAction);
 
     CREATE_ACTION(FindInPageAction, tr("Find in page"));
-    SET_SHORTCUT(FindInPageAction, QKeySequence::Find);
+    mpa_actions[FindInPageAction]->setShortcuts({QKeySequence::Find, Qt::Key_F3});
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
-            this, [=]() { toggleSideBar(SEARCH_BAR); });
+            this, [=]() { mp_mainWindow->openTocBar(); });
 
     CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", tr("Set fullScreen"));
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);

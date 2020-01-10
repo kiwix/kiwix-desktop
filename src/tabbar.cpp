@@ -14,7 +14,8 @@
 
 TabBar::TabBar(QWidget *parent) :
     QTabBar(parent),
-    m_settingsIndex(-1)
+    m_settingsIndex(-1),
+    m_previousIndex(0)
 {
     setTabsClosable(true);
     setElideMode(Qt::ElideRight);
@@ -147,6 +148,9 @@ WebView* TabBar::createNewTab(bool setCurrent)
     connect(webView->page(), &QWebEnginePage::linkHovered, this,
             [=](const QString& url) {
                 auto tabbar = KiwixApp::instance()->getTabWidget();
+                if (tabbar->currentIndex() == 0) {
+                    return;
+                }
                 if (url.isEmpty()) {
                     QToolTip::hideText();
                 } else {
@@ -288,6 +292,7 @@ void TabBar::onCurrentChanged(int index)
         KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     }
+    m_previousIndex = index;
 }
 
 void TabBar::fullScreenRequested(QWebEngineFullScreenRequest request)

@@ -38,6 +38,7 @@ public:
     QString currentArticleUrl();
     QString currentArticleTitle();
     virtual QSize tabSizeHint(int index) const;
+    int getPreviousIndex() { return m_previousIndex; }
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -58,6 +59,7 @@ private:
     QStackedWidget*     mp_stackedWidget;
     int                 m_settingsIndex;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
+    int                 m_previousIndex;
 
     void setSelectionBehaviorOnRemove(int index);
 

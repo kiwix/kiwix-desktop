@@ -13,9 +13,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     mp_ui(new Ui::MainWindow),
     mp_about(new About(this)),
-    mp_localKiwixServer(new LocalKiwixServer(this))
+    mp_localKiwixServer(new LocalKiwixServer(this)),
+    mp_tocBar(new TocBar(this))
 {
     mp_ui->setupUi(this);
+    addDockWidget(Qt::BottomDockWidgetArea, mp_tocBar);
+    mp_tocBar->hide();
     mp_ui->tabBar->setExpanding(false);
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
     auto app = KiwixApp::instance();
@@ -46,6 +49,12 @@ MainWindow::~MainWindow()
     delete mp_ui;
 }
 
+void MainWindow::openTocBar()
+{
+    mp_tocBar->show();
+    mp_tocBar->getFindLineEdit()->setFocus();
+}
+
 void MainWindow::toggleFullScreen() {
     if (isFullScreen())
         showNormal();
@@ -71,4 +80,9 @@ QStackedWidget *MainWindow::getSideDockWidget()
 ContentManagerSide *MainWindow::getSideContentManager()
 {
     return mp_ui->contentmanagerside;
+}
+
+TocBar* MainWindow::getTocBar()
+{
+    return mp_tocBar;
 }

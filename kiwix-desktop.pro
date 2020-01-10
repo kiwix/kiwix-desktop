@@ -52,6 +52,7 @@ SOURCES += \
     src/library.cpp \
     src/settingsmanager.cpp \
     src/settingsmanagerview.cpp \
+    src/tocbar.cpp \
     src/topwidget.cpp \
     src/urlschemehandler.cpp \
     src/webview.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     src/library.h \
     src/settingsmanager.h \
     src/settingsmanagerview.h \
+    src/tocbar.h \
     src/topwidget.h \
     src/kconstants.h \
     src/urlschemehandler.h \
@@ -100,6 +102,7 @@ HEADERS += \
     src/menuproxystyle.h
 
 FORMS += \
+    src/tocbar.ui \
     ui/mainwindow.ui \
     ui/about.ui \
     src/tocsidebar.ui \
