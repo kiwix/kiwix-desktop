@@ -67,7 +67,6 @@
         <property name="lineWidth">
          <number>0</number>
         </property>
-        <widget class="TocSideBar" name="tocsidebar"/>
         <widget class="ContentManagerSide" name="contentmanagerside">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -107,12 +106,6 @@
    <class>TopWidget</class>
    <extends>QToolBar</extends>
    <header>src/topwidget.h</header>
-  </customwidget>
-  <customwidget>
-   <class>TocSideBar</class>
-   <extends>QWidget</extends>
-   <header>src/tocsidebar.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>TabBar</class>

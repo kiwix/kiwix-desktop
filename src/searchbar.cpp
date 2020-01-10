@@ -122,7 +122,7 @@ void SearchBar::updateCompletion(const QString &text)
 {
     QStringList wordList;
     m_urlList.clear();
-    auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWidget();
+    auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWebView();
     if (!currentWidget) {
         m_completionModel.setStringList(wordList);
         return;

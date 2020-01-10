@@ -230,7 +230,7 @@ void ContentManager::eraseBook(const QString& id)
     auto tabBar = KiwixApp::instance()->getTabWidget();
     int i = 1;
     while (i < tabBar->count() - 1) {
-        WebView* webView = tabBar->widget(i);
+        WebView* webView = tabBar->widget(i)->getWebView();
         if (webView->zimId() == id) {
             tabBar->closeTab(i);
         } else {

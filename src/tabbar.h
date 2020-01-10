@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include <memory>
 #include "webview.h"
+#include "zimview.h"
 #include "contentmanagerview.h"
 #include "fullscreenwindow.h"
 #include <QMouseEvent>
@@ -21,24 +22,29 @@ public:
 
     void     setContentManagerView(ContentManagerView* view);
     void     setNewTabButton();
-    WebView* createNewTab(bool setCurrent);
-    WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(mp_stackedWidget->widget(index)) : nullptr; }
-    WebView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
-                               if (current == mp_contentManagerView ||
+    ZimView* createNewTab(bool setCurrent);
+    ZimView* widget(int index) { return (index != 0) ? static_cast<ZimView*>(mp_stackedWidget->widget(index)) : nullptr; }
+    WebView* currentWebView() { auto current = mp_stackedWidget->currentWidget();
+                               if (mp_stackedWidget->currentIndex() == 0) return nullptr;
+                               return static_cast<ZimView*>(current)->getWebView();
+                             }
+    ZimView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
+                               if (mp_stackedWidget->currentIndex() == 0 ||
                                    mp_stackedWidget->currentIndex() == m_settingsIndex) return nullptr;
-                               return static_cast<WebView*>(current);
+                               return static_cast<ZimView*>(current);
                              }
 
     void openUrl(const QUrl &url, bool newTab);
 // Redirect call to sub-webView
-    void setTitleOf(const QString& title, WebView* webView=nullptr);
-    void setIconOf(const QIcon& icon, WebView* webView=nullptr);
+    void setTitleOf(const QString& title, ZimView* tab=nullptr);
+    void setIconOf(const QIcon& icon, ZimView* tab=nullptr);
     QString currentZimId();
 
-    void triggerWebPageAction(QWebEnginePage::WebAction action, WebView* webView=nullptr);
+    void triggerWebPageAction(QWebEnginePage::WebAction action, ZimView* widget=nullptr);
     QString currentArticleUrl();
     QString currentArticleTitle();
     virtual QSize tabSizeHint(int index) const;
+    void openFindInPageBar();
 
 protected:
     void mousePressEvent(QMouseEvent *event);

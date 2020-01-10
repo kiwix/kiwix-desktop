@@ -174,6 +174,10 @@ QTabBar::tab:last QToolButton::hover {
     Find Search page
 */
 
+#FindInPageBar {
+    border-top: 1px solid #ccc;
+}
+
 #findEdit {
     background-color: white;
     padding: 2px;
@@ -182,28 +186,23 @@ QTabBar::tab:last QToolButton::hover {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 0px;
-    border-bottom-left-radius: 5px;
-    border-top-left-radius: 5px;
 }
 
 #fNextButton,
-#fPreviousButton {
+#fPreviousButton,
+#hideButton {
+    outline: none;
     max-height: 36px;
     max-width: 36px;
     border: 1px solid #ccc;
     border-radius: 0px;
-    margin-left: -2px;
 }
 
 #fNextButton:pressed,
-#fPreviousButton:pressed {
+#fPreviousButton:pressed,
+#hideButton:pressed {
     background-color: #D9E9FF;
     border: 1px solid #3366CC;
-}
-
-#fPreviousButton {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
 }
 
 /* ----------------------------------------
