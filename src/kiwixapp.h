@@ -7,7 +7,6 @@
 #include "kiwix/downloader.h"
 #include <kiwix/kiwixserve.h>
 #include "tabbar.h"
-#include "tocsidebar.h"
 #include "urlschemehandler.h"
 #include "settingsmanager.h"
 
@@ -54,7 +53,6 @@ public:
         MAX_ACTION
     };
     enum SideBarType {
-        SEARCH_BAR,
         CONTENTMANAGER_BAR,
         READINGLIST_BAR,
         NONE

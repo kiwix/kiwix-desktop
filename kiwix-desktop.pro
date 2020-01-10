@@ -60,7 +60,6 @@ SOURCES += \
     src/mainmenu.cpp \
     src/webpage.cpp \
     src/about.cpp \
-    src/tocsidebar.cpp \
     src/contentmanager.cpp \
     src/contentmanagerview.cpp \
     src/tabbar.cpp \
@@ -88,7 +87,6 @@ HEADERS += \
     src/mainmenu.h \
     src/webpage.h \
     src/about.h \
-    src/tocsidebar.h \
     src/contentmanager.h \
     src/contentmanagerview.h \
     src/tabbar.h \
@@ -105,7 +103,6 @@ FORMS += \
     src/tocbar.ui \
     ui/mainwindow.ui \
     ui/about.ui \
-    src/tocsidebar.ui \
     src/contentmanagerside.ui \
     src/readinglistbar.ui \
     ui/localkiwixserver.ui

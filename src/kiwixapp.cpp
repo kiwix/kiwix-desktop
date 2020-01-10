@@ -191,8 +191,6 @@ void KiwixApp::setSideBar(KiwixApp::SideBarType type)
 {
     auto sideDockWidget = mp_mainWindow->getSideDockWidget();
     switch(type) {
-        case SEARCH_BAR:
-            mp_mainWindow->findChild<TocSideBar*>("tocsidebar")->getFindLineEdit()->setFocus();
         case CONTENTMANAGER_BAR:
             mp_mainWindow->getTocBar()->findCloseByIndex(mp_tabWidget->getPreviousIndex());
         case READINGLIST_BAR:
