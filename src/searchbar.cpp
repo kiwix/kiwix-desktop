@@ -93,6 +93,9 @@ void SearchBar::focusInEvent( QFocusEvent* event)
 {
     if (event->reason() == Qt::MouseFocusReason) {
         clear();
+    }
+    if (event->reason() == Qt::ActiveWindowFocusReason ||
+        event->reason() == Qt::MouseFocusReason) {
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
         this, &SearchBar::openCompletion);
     }
