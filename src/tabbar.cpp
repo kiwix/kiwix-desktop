@@ -252,11 +252,10 @@ void TabBar::closeTab(int index)
 
 void TabBar::setSelectionBehaviorOnRemove(int index)
 {
-    if (index == count() - 2)
-    {
-        QTabBar::setSelectionBehaviorOnRemove(QTabBar::SelectLeftTab);
+    if (index == count() - 2) {
+        setCurrentIndex(0);
     } else {
-        QTabBar::setSelectionBehaviorOnRemove(QTabBar::SelectRightTab);
+        setCurrentIndex(index + 1);
     }
 }
 
