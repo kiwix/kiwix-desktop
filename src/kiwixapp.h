@@ -105,7 +105,7 @@ private:
     QString m_libraryDirectory;
     Library m_library;
     kiwix::Downloader* mp_downloader;
-    ContentManager m_manager;
+    ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
     TabBar* mp_tabWidget;
     SideBarType m_currentSideType;
