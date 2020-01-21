@@ -1,0 +1,55 @@
+name: CI
+
+on: [pull_request]
+
+jobs:
+  Linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - bionic
+        include:
+          - target: bionic
+            image_variant: bionic
+            lib_postfix: '/x86_64-linux-gnu'
+    env:
+      HOME: /home/runner
+    runs-on: ubuntu-latest
+    container:
+      image: kiwix/kiwix-build_ci:bionic-26
+    steps:
+    - name: Checkout code
+      shell: python
+      run: |
+        import json
+        from subprocess import check_call
+        from os import environ
+        with open(environ['GITHUB_EVENT_PATH'], 'r') as f:
+            content = f.read()
+        event_data = json.loads(content)
+        try:
+            branch_ref = event_data['ref'].split('/')[-1]
+        except KeyError:
+            branch_ref = event_data['pull_request']['head']['ref']
+        print("Cloning branch", branch_ref)
+        command = [
+          'git', 'clone',
+          'https://github.com/${{github.repository}}',
+          '--depth=1',
+          '--branch', branch_ref
+        ]
+        check_call(command, cwd=environ['HOME'])
+    - name: Install deps
+      shell: bash
+      run: |
+        ARCHIVE_NAME=deps2_bionic_native_dyn_kiwix-desktop.tar.xz
+        wget -O- http://tmp.kiwix.org/ci/${ARCHIVE_NAME} | tar -xJ -C /home/runner
+    - name: Compile
+      shell: bash
+      run: |
+        cd $HOME/kiwix-desktop
+        qmake PREFIX=$HOME/BUILD_native_dyn/INSTALL
+        make
+      env:
+        PKG_CONFIG_PATH: "/home/runner/BUILD_native_dyn/INSTALL/lib/pkgconfig:/home/runner/BUILD_native_dyn/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
