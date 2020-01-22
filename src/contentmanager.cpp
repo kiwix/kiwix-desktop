@@ -203,7 +203,10 @@ QString ContentManager::downloadBook(const QString &id)
             return "";
     kiwix::Download *download;
     try {
-        download = mp_downloader->startDownload(book.getUrl());
+        auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+        std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
+        const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
+        download = mp_downloader->startDownload(book.getUrl(), options);
     } catch (std::exception& e) {
         return "";
     }

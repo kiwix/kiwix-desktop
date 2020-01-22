@@ -8,14 +8,23 @@
 </head>
 <body onload="init()">
 <div id="settings">
-    <h1>Settings</h1>
+    <div id="header">
+        <h1>Settings</h1>
+        <input id="save-button" type="button" value="Apply" v-on:click="saveSettings()">
+    </div>
     <div class="row">
         <label>Port for local Kiwix server : </label>
-        <input type="number" min="1" max="65535" v-model="kiwixServerPort" v-on:change="setPort()">
+        <input type="number" min="1" max="65535" v-model="kiwixServerPort" > 
     </div>
     <div class="row">
         <label>Zoom level : </label>
-        <div class="percentage-symbol"><input type="number" step="10" min="30" max="500" v-model="zoomFactor" v-on:change="setZoomFactor()"></div>
+        <div class="percentage-symbol"><input type="number" step="10" min="30" max="500" v-model="zoomFactor" ></div>
+    </div>
+    <div class="row">
+        <label>Download directory : </label>
+        <input style="flex: 1;" type="text" v-model="downloadDir" >
+        <input type="button" value="Reset" v-on:click="resetDownloadDir()">
+        <input type="button" value="Browse" v-on:click="browseDownloadDir()">
     </div>
 </div>
 </body></html>
