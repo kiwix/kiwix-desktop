@@ -40,7 +40,7 @@ private:
     bool m_sortOrderAsc = true;
 
     QStringList getBookIds();
-    void eraseBookFilesFromComputer(const QString fileSelection);
+    void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
 
 signals:
     void filterParamsChanged();
