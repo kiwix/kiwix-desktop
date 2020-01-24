@@ -257,7 +257,7 @@ void TabBar::closeTab(int index)
 void TabBar::setSelectionBehaviorOnRemove(int index)
 {
     if (index == count() - 2) {
-        setCurrentIndex(0);
+        setCurrentIndex(index - 1);
     } else {
         setCurrentIndex(index + 1);
     }
