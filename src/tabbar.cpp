@@ -6,6 +6,7 @@
 #include <QWebEnginePage>
 #include <QToolButton>
 #include <QToolTip>
+#include <QCursor>
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
@@ -20,7 +21,6 @@ TabBar::TabBar(QWidget *parent) :
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
     setIconSize(QSize(30, 30));
-    connect(this, &QTabBar::tabCloseRequested, this, &TabBar::closeTab);
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged);
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
@@ -33,7 +33,7 @@ TabBar::TabBar(QWidget *parent) :
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
-                auto index = this->currentIndex();
+                auto index = this->tabAt(mapFromGlobal(QCursor::pos()));
                 if (index <= 0) {
                     return;
                 }

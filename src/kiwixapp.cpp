@@ -400,7 +400,6 @@ void KiwixApp::postInit() {
 void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
 {
     KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::CloseTabAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryDisplayed);
