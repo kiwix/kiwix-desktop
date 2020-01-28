@@ -96,7 +96,8 @@ HEADERS += \
     src/opdsrequestmanager.h \
     src/localkiwixserver.h \
     src/fullscreenwindow.h \
-    src/fullscreennotification.h
+    src/fullscreennotification.h \
+    src/menuproxystyle.h
 
 FORMS += \
     ui/mainwindow.ui \
