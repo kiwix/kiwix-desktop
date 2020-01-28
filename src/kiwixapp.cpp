@@ -47,7 +47,6 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     icon.addFile(":/icons/kiwix-app-icons-square.svg");
     setWindowIcon(icon);
 
-    setApplicationDisplayName("Kiwix");
     setApplicationName("Kiwix");
     setDesktopFileName("kiwix.desktop");
 
