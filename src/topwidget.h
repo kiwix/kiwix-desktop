@@ -14,6 +14,7 @@ public:
     explicit TopWidget(QWidget *parent = nullptr);
     virtual ~TopWidget();
 
+    SearchBar &getSearchBar() { return m_searchEntry; };
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
