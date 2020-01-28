@@ -81,6 +81,9 @@ SearchBar::SearchBar(QWidget *parent) :
 
 void SearchBar::on_currentTitleChanged(const QString& title)
 {
+    if (this->hasFocus()) {
+        return;
+    }
     if (!title.startsWith("zim://")) {
         setText(title);
     } else {
