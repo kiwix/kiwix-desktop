@@ -63,31 +63,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         }
     }
 
-    for (auto category: {
-         "All",
-         "Gutenberg", // Gutenberg book has wrong tag
-         "Other",
-         "Phet", // Phet books have no tags
-         "Psiram",
-         "Stack Exchange",
-         "Ted",  // Ted books have wrong tags
-         "Vikidia",
-         "Wikibooks", // wikibooks have no tags
-         "Wikinews",
-         "Wikipedia",
-         "Wikiquote",
-         "Wikisource",
-        //  "Wikispecies", // Wikispecies books have wrong tags
-         "Wikiversity",
-         "Wikivoyage",
-         "Wiktionary"
-    })
+    for (auto category: S_CATEGORIES)
     {
-        auto c = QString(category);
-        m_categoryList.append(c);
-        auto item = new KListWidgetItem(c);
+        auto item = new KListWidgetItem(category.second);
+        item->setData(Qt::UserRole, category.first);
         mp_categorySelector->addItem(item);
-        if (c ==  "All")
+        if (category.first ==  "all")
         {
             item->setSelected(true);
         }
@@ -121,10 +102,7 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
             this, [=]() {
                 auto item = mp_categorySelector->selectedItems().at(0);
                 if (!item) return;
-                auto category = item->text();
-                if (category == "Stack Exchange") {
-                    category = "Stackexchange";
-                }
+                auto category = item->data(Qt::UserRole).toString();
                 mp_contentManager->setCurrentCategoryFilter(category);
     });
 }

@@ -1,6 +1,7 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
+#include "static_content.h"
 #include <kiwix/tools/networkTools.h>
 #include <kiwix/tools/otherTools.h>
 #include <kiwix/manager.h>
@@ -365,14 +366,13 @@ QStringList ContentManager::getBookIds()
     kiwix::Filter filter;
     std::vector<std::string> tags;
     if (m_categoryFilter != "all" && m_categoryFilter != "other") {
-        tags.push_back(m_categoryFilter.toStdString());
+        tags.push_back("_category:"+m_categoryFilter.toStdString());
         filter.acceptTags(tags);
     }
     if (m_categoryFilter == "other") {
-        auto categoryList = KiwixApp::instance()->getMainWindow()->getSideContentManager()->getCategoryList();
-        for (auto& category: categoryList) {
-            if (category != "Other") {
-                tags.push_back(category.toLower().toStdString());
+        for (auto& category: S_CATEGORIES) {
+            if (category.first != "other" && category.first != "all") {
+                tags.push_back("_category:"+category.first.toStdString());
             }
         }
         filter.rejectTags(tags);
