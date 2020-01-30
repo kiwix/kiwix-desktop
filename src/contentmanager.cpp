@@ -98,8 +98,19 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         }
         if (key == "tags") {
             QStringList tagList = QString::fromStdString(b->getTags()).split(';');
-            tagList = tagList.filter(QRegExp("^(?!_).*"));
-            QString s = tagList.join(" ");
+            QMap<QString, bool> displayTagMap;
+            for(auto tag: tagList) {
+              if (tag[0] == "_") {
+                auto splitTag = tag.split(":");
+                displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
+              }
+            }
+            QStringList displayTagList;
+            if (displayTagMap["_videos"]) displayTagList << tr("Videos");
+            if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
+            if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
+            if (displayTagMap["_ftindex"]) displayTagList << tr("Fulltext index");
+            QString s = displayTagList.join(", ");
             values.append(s);
         }
     }
