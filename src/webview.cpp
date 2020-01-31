@@ -70,8 +70,28 @@ void WebView::wheelEvent(QWheelEvent *event) {
     }
 }
 
+bool WebView::eventFilter(QObject *src, QEvent *e)
+{
+    Q_UNUSED(src)
+    // work around QTBUG-43602
+    if (e->type() == QEvent::Wheel) {
+        auto we = static_cast<QWheelEvent *>(e);
+        if (we->modifiers() == Qt::ControlModifier)
+            return true;
+    }
+    return false;
+}
+
 bool WebView::event(QEvent *event)
 {
+    // work around QTBUG-43602
+    if (event->type() == QEvent::ChildAdded) {
+        auto ce = static_cast<QChildEvent *>(event);
+        ce->child()->installEventFilter(this);
+    } else if (event->type() == QEvent::ChildRemoved) {
+        auto ce = static_cast<QChildEvent *>(event);
+        ce->child()->removeEventFilter(this);
+    }
     if (event->type() == QEvent::ToolTip) {
         return true;
     } else {
