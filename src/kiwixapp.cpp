@@ -31,6 +31,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         QMessageBox::critical(nullptr, "Translation error", e.what());
         return;
     }
+    qInfo() << "Compiled with Qt Version " << QT_VERSION_STR;
+    qInfo() << "Runtime Qt Version " << qVersion();
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     installTranslator(&m_qtTranslator);
@@ -103,7 +105,6 @@ void KiwixApp::init()
     mp_mainWindow->getSideContentManager()->setContentManager(mp_manager);
     setSideBar(CONTENTMANAGER_BAR);
     postInit();
-
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     mp_mainWindow->show();
 }

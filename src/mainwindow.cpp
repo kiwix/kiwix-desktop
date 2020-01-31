@@ -7,6 +7,9 @@
 #include "kconstants.h"
 
 #include <QDesktopServices>
+#ifdef Q_OS_WIN
+#include <QtPlatformHeaders\QWindowsWindowFunctions>
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,6 +40,13 @@ MainWindow::MainWindow(QWidget *parent) :
     addAction(app->getAction(KiwixApp::OpenHomePageAction));
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+#endif
+#ifdef Q_OS_WIN
+    QWindow *window = windowHandle();
+    if (!window) {
+        return;
+    }
+    QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
 #endif
 }
 
