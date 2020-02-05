@@ -99,7 +99,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     mp_mainWindow->show();
     if (!mp_downloader) {
-        showMessage("Impossible to launch downloader<br><br>Aria2 launch command : " + QString::fromStdString(mp_downloader->getAria2LaunchCmd()));
+        showMessage("Impossible to launch downloader.");
         mpa_actions[ExitAction]->trigger();
     }
 }
