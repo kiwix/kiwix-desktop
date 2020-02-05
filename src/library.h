@@ -37,7 +37,6 @@ public:
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
 public slots:
-    QString openBookById(const QString& _id);
     kiwix::Book& getBookById(QString id);
 
 signals:
@@ -46,7 +45,6 @@ signals:
 
 private:
     kiwix::Library m_library;
-    QMap<QString, std::shared_ptr<kiwix::Reader>> m_readersMap;
     QString m_libraryDirectory;
 friend class LibraryManipulator;
 };
