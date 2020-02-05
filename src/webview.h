@@ -32,6 +32,7 @@ protected:
     virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
     void wheelEvent(QWheelEvent *event);
     bool event(QEvent *event);
+    bool eventFilter(QObject *src, QEvent *e);
 
     QString m_currentZimId;
     QIcon m_icon;
