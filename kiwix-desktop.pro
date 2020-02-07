@@ -48,6 +48,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/kiwixapp.cpp \
+    src/kprofile.cpp \
     src/blobbuffer.cpp \
     src/library.cpp \
     src/settingsmanager.cpp \
@@ -74,6 +75,7 @@ SOURCES += \
 HEADERS += \
     src/mainwindow.h \
     src/kiwixapp.h \
+    src/kprofile.h \
     src/blobbuffer.h \
     src/library.h \
     src/settingsmanager.h \

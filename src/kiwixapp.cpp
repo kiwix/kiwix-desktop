@@ -16,6 +16,7 @@
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QApplication(argc, argv),
       m_settingsManager(),
+      m_profile(),
       m_libraryDirectory(findLibraryDirectory()),
       m_library(),
       mp_downloader(nullptr),

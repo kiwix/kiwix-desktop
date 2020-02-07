@@ -1,7 +1,6 @@
 #include "webview.h"
 
 #include <QAction>
-#include <QWebEngineProfile>
 #include <iostream>
 #include "kiwixapp.h"
 #include "webpage.h"
@@ -12,10 +11,6 @@ WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
 {
     setPage(new WebPage(this));
-    auto profile = page()->profile();
-    auto app = KiwixApp::instance();
-    profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
-    this->settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
 }
 

@@ -1,7 +1,6 @@
 #include "settingsmanagerview.h"
 #include "kiwixapp.h"
 #include <QFile>
-#include <QWebEngineProfile>
 
 SettingsManagerView::SettingsManagerView(QWidget *parent) : QWebEngineView(parent)
 {
