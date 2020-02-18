@@ -25,8 +25,9 @@ bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Navigatio
 
 void WebPage::startDownload(QWebEngineDownloadItem* download)
 {
+    QString defaultFileName = QString::fromStdString(getLastPathElement(download->url().toString().toStdString()));
     QString fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(),
-                                                       tr("Save File as"));
+                                                       tr("Save File as"), defaultFileName);
     if (fileName.isEmpty()) {
         return;
     }
