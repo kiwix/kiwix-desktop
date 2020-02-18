@@ -138,6 +138,11 @@ QTabBar::tab:selected {
     border-bottom: 2px solid white;
 }
 
+QTabBar::tab:first {
+    padding-top: 6px;
+    padding-left: 5px;
+}
+
 QTabBar::tab:last {
     border: none;
 }
