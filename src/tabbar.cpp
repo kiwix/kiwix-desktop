@@ -29,7 +29,7 @@ TabBar::TabBar(QWidget *parent) :
                 auto current = this->currentWidget();
                 auto widget = this->createNewTab(true)->getWebView();
                 QUITIFNULL(current);
-                KiwixApp::instance()->getMainWindow()->getTopWidget()->getSearchBar().setFocus(Qt::MouseFocusReason);
+                app->getMainWindow()->getTopWidget()->getSearchBar().setFocus(Qt::MouseFocusReason);
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
@@ -120,9 +120,8 @@ void TabBar::setNewTabButton()
 
 Tab* TabBar::createNewTab(bool setCurrent)
 {
-    auto tab = new Tab(this);
     WebView* webView = new WebView();
-    tab->setWebView(webView);
+    auto tab = new Tab(webView, this);
     connect(webView->page(), &QWebEnginePage::fullScreenRequested, this, &TabBar::fullScreenRequested);
     connect(webView, &WebView::titleChanged, this,
             [=](const QString& str) {
