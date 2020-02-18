@@ -30,12 +30,14 @@ public slots:
     void on_currentTitleChanged(const QString &title);
 protected:
     virtual void focusInEvent(QFocusEvent *);
+    virtual void focusOutEvent(QFocusEvent *);
 private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
     std::vector<std::string> m_urlList;
     QString m_currentZimId;
     SearchButton m_button;
+    QString m_title;
 
 private slots:
     void updateCompletion(const QString& text);

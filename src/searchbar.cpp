@@ -90,11 +90,13 @@ void SearchBar::on_currentTitleChanged(const QString& title)
         setText("");
     }
     m_button.set_searchMode(title.isEmpty());
+    m_title = title;
 }
 
 void SearchBar::focusInEvent( QFocusEvent* event)
 {
-    if (event->reason() == Qt::MouseFocusReason) {
+    setReadOnly(false);
+    if (event->reason() == Qt::MouseFocusReason && text() == m_title) {
         clear();
     }
     if (event->reason() == Qt::ActiveWindowFocusReason ||
@@ -104,6 +106,16 @@ void SearchBar::focusInEvent( QFocusEvent* event)
     }
     QLineEdit::focusInEvent(event);
     m_button.set_searchMode(true);
+}
+
+void SearchBar::focusOutEvent(QFocusEvent* event)
+{
+    setReadOnly(true);
+    if (event->reason() == Qt::MouseFocusReason && text().isEmpty()) {
+        m_button.set_searchMode(false);
+        setText(m_title);
+    }
+    return QLineEdit::focusInEvent(event);
 }
 
 void SearchBar::updateCompletion(const QString &text)
