@@ -6,6 +6,7 @@
 #include <QWheelEvent>
 
 #include <kiwix/reader.h>
+#include "findinpagebar.h"
 
 class WebView : public QWebEngineView
 {
@@ -36,6 +37,8 @@ protected:
 
     QString m_currentZimId;
     QIcon m_icon;
+    FindInPageBar* mp_findInPageBar;
+
 };
 
 #endif // WEBVIEW_H

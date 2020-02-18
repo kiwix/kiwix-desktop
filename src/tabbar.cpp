@@ -27,7 +27,7 @@ TabBar::TabBar(QWidget *parent) :
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
                 auto current = this->currentWidget();
-                auto widget = this->createNewTab(true);
+                auto widget = this->createNewTab(true)->getWebView();
                 QUITIFNULL(current);
                 KiwixApp::instance()->getMainWindow()->getTopWidget()->getSearchBar().setFocus(Qt::MouseFocusReason);
           });
@@ -118,9 +118,11 @@ void TabBar::setNewTabButton()
     setTabButton(1, QTabBar::RightSide, 0);
 }
 
-WebView* TabBar::createNewTab(bool setCurrent)
+Tab* TabBar::createNewTab(bool setCurrent)
 {
+    auto tab = new Tab(this);
     WebView* webView = new WebView();
+    tab->setWebView(webView);
     connect(webView->page(), &QWebEnginePage::fullScreenRequested, this, &TabBar::fullScreenRequested);
     connect(webView, &WebView::titleChanged, this,
             [=](const QString& str) {
@@ -165,7 +167,7 @@ WebView* TabBar::createNewTab(bool setCurrent)
             });
     // Ownership of webview is passed to the tabWidget
     auto index = count() - 1;
-    mp_stackedWidget->insertWidget(index, webView);
+    mp_stackedWidget->insertWidget(index, tab);
     insertTab(index, "");
     QToolButton *tb = new QToolButton(this);
     tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
@@ -173,14 +175,14 @@ WebView* TabBar::createNewTab(bool setCurrent)
     if (setCurrent) {
         setCurrentIndex(index);
     }
-    return webView;
+    return tab;
 }
 
 void TabBar::openUrl(const QUrl& url, bool newTab)
 {
     WebView* webView = currentWidget();
     if (newTab || !webView) {
-        webView = createNewTab(true);
+        webView = createNewTab(true)->getWebView();
     }
     QUITIFNULL(webView);
     webView->setUrl(url);
@@ -277,7 +279,7 @@ void TabBar::onCurrentChanged(int index)
         KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     } else if (index) {
-        auto view = widget(index);
+        auto view = widget(index)->getWebView();
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit libraryPageDisplayed(false);

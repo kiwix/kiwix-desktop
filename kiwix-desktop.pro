@@ -45,6 +45,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    src/findinpagebar.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/kiwixapp.cpp \
@@ -52,6 +53,7 @@ SOURCES += \
     src/library.cpp \
     src/settingsmanager.cpp \
     src/settingsmanagerview.cpp \
+    src/tab.cpp \
     src/tocbar.cpp \
     src/topwidget.cpp \
     src/urlschemehandler.cpp \
@@ -72,12 +74,14 @@ SOURCES += \
     src/fullscreennotification.cpp
 
 HEADERS += \
+    src/findinpagebar.h \
     src/mainwindow.h \
     src/kiwixapp.h \
     src/blobbuffer.h \
     src/library.h \
     src/settingsmanager.h \
     src/settingsmanagerview.h \
+    src/tab.h \
     src/tocbar.h \
     src/topwidget.h \
     src/kconstants.h \
@@ -100,6 +104,7 @@ HEADERS += \
     src/menuproxystyle.h
 
 FORMS += \
+    src/findinpagebar.ui \
     src/tocbar.ui \
     ui/mainwindow.ui \
     ui/about.ui \

@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include <memory>
 #include "webview.h"
+#include "tab.h"
 #include "contentmanagerview.h"
 #include "fullscreenwindow.h"
 #include <QMouseEvent>
@@ -21,11 +22,11 @@ public:
 
     void     setContentManagerView(ContentManagerView* view);
     void     setNewTabButton();
-    WebView* createNewTab(bool setCurrent);
-    WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(mp_stackedWidget->widget(index)) : nullptr; }
+    Tab* createNewTab(bool setCurrent);
+    Tab* widget(int index) { return (index != 0) ? static_cast<Tab*>(mp_stackedWidget->widget(index)) : nullptr; }
     WebView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
-                               if (current == mp_contentManagerView) return nullptr;
-                               return static_cast<WebView*>(current);
+                               if (mp_stackedWidget->currentIndex() == 0) return nullptr;
+                               return static_cast<Tab*>(current)->getWebView();
                              }
 
     void openUrl(const QUrl &url, bool newTab);

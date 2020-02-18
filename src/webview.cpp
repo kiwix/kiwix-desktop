@@ -7,11 +7,18 @@
 #include "webpage.h"
 #include <QToolTip>
 #include <QWebEngineSettings>
+#include <QVBoxLayout>
 
 WebView::WebView(QWidget *parent)
-    : QWebEngineView(parent)
+    : QWebEngineView(parent),
+      mp_findInPageBar(new FindInPageBar(this))
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(mp_findInPageBar);
+    setLayout(layout);
+    mp_findInPageBar->show();
     setPage(new WebPage(this));
+    // mp_findInPageBar->setGeometry(0,0, 10, 10);
     auto profile = page()->profile();
     auto app = KiwixApp::instance();
     profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
@@ -33,7 +40,7 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
       || type==QWebEnginePage::WebBrowserTab )
     {
         auto tabWidget = KiwixApp::instance()->getTabWidget();
-        return tabWidget->createNewTab(type==QWebEnginePage::WebBrowserTab);
+        return tabWidget->createNewTab(type==QWebEnginePage::WebBrowserTab)->getWebView();
     }
     return nullptr;
 }
