@@ -25,9 +25,7 @@ TabBar::TabBar(QWidget *parent) :
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
-                auto current = this->currentWidget();
-                auto widget = this->createNewTab(true);
-                QUITIFNULL(current);
+                this->createNewTab(true);
                 KiwixApp::instance()->getMainWindow()->getTopWidget()->getSearchBar().setFocus(Qt::MouseFocusReason);
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
