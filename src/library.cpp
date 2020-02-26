@@ -61,6 +61,17 @@ std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
     }
 }
 
+std::shared_ptr<kiwix::Searcher> Library::getSearcher(const QString &zimId)
+{
+    auto searcher = std::make_shared<kiwix::Searcher>();
+    try {
+        searcher->add_reader(m_library.getReaderById(zimId.toStdString()).get());
+    } catch(std::out_of_range& e) {
+        return nullptr;
+    }
+    return searcher;
+}
+
 QStringList Library::getBookIds()
 {
     QStringList list;
