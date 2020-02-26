@@ -15,7 +15,7 @@ KProfile::KProfile(QObject *parent) :
 
 void KProfile::startDownload(QWebEngineDownloadItem* download)
 {
-    QString defaultFileName = QString::fromStdString(getLastPathElement(download->url().toString().toStdString()));
+    QString defaultFileName = download->url().fileName();
     QString fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(),
                                                        tr("Save File as"), defaultFileName);
     if (fileName.isEmpty()) {
