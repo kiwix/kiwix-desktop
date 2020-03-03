@@ -1,4 +1,8 @@
 #include "settingsmanager.h"
+#include "kiwix/tools/pathTools.h"
+#include "kiwixapp.h"
+#include <QDir>
+#include <QFileDialog>
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
@@ -61,8 +65,35 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
     m_settings.setValue("view/zoomFactor", zoomFactor);
 }
 
+void SettingsManager::validDownloadDir(QString dir)
+{
+    emit(settingsChecked(fileExists(dir.toStdString())));
+}
+
+bool SettingsManager::setDownloadDir(QString downloadDir)
+{
+    m_downloadDir = downloadDir;
+    m_settings.setValue("download/dir", downloadDir);
+    return true;
+}
+
+void SettingsManager::resetDownloadDir()
+{
+    emit(downloadDirChanged(QString::fromStdString(getDataDirectory())));
+}
+
+void SettingsManager::browseDownloadDir()
+{
+    QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
+                                                    tr("Browse Directory"),
+                                                    QString(),
+                                                    QFileDialog::ShowDirsOnly);
+    emit(downloadDirChanged(dir));
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
+    m_downloadDir = m_settings.value("download/dir", QString::fromStdString(getDataDirectory())).toString();
 }

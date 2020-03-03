@@ -12,6 +12,13 @@ html, body {
     position: relative;
 }
 
+#header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
 .row {
     display: flex;
     flex-direction: row;
@@ -22,8 +29,39 @@ html, body {
     height: 40px;
 }
 
+#save-button {
+    color: black;
+    font-weight: bold;
+    font-size: 14px;
+    border: 1px solid black;
+    background: transparent;
+    border-radius: 2px;
+    height: 20px;
+}
+
+#save-button:hover {
+    color: white;
+    background: black;
+}
+
 input {
     width: 80px;
+    margin: 5px;
+}
+
+input[type=button] {
+    width: 65px;
+    color: blue;
+    font-weight: bold;
+    font-size: 14px;
+    border: 0;
+    background: transparent;
+    border-radius: 2px;
+}
+
+input[type=button]:hover {
+    color: white;
+    background: blue;
 }
 
 input[type=number]::-webkit-inner-spin-button,
