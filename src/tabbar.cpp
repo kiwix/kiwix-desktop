@@ -82,6 +82,9 @@ TabBar::TabBar(QWidget *parent) :
                 auto view = KiwixApp::instance()->getSettingsManager()->getView();
                 mp_stackedWidget->insertWidget(index, view);
                 insertTab(index,QIcon(":/icons/settings.svg"), tr("Settings"));
+                QToolButton *tb = new QToolButton(this);
+                tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
+                setTabButton(index, QTabBar::RightSide, tb);
                 setCurrentIndex(index);
                 m_settingsIndex = index;
             });
