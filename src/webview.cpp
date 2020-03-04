@@ -34,24 +34,25 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 }
 
 void WebView::onUrlChanged(const QUrl& url) {
-    auto zimId = url.host();
-    zimId.resize(zimId.length()-4);
-    if (m_currentZimId != zimId ) {
-        m_currentZimId = zimId;
-        emit zimIdChanged(m_currentZimId);
-        auto app = KiwixApp::instance();
-        auto reader = app->getLibrary()->getReader(m_currentZimId);
-        if (!reader)
-            return;
-        std::string favicon, _mimetype;
-        reader->getFavicon(favicon, _mimetype);
-        QPixmap pixmap;
-        pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
-        m_icon = QIcon(pixmap);
-        emit iconChanged(m_icon);
-        auto zoomFactor = app->getSettingsManager()->getZoomFactorByZimId(zimId);
-        this->setZoomFactor(zoomFactor);
+    auto zimId = url.host().split('.')[0];
+    if (m_currentZimId == zimId ) {
+        return;
     }
+    m_currentZimId = zimId;
+    emit zimIdChanged(m_currentZimId);
+    auto app = KiwixApp::instance();
+    auto reader = app->getLibrary()->getReader(m_currentZimId);
+    if (!reader) {
+        return;
+    }
+    std::string favicon, _mimetype;
+    reader->getFavicon(favicon, _mimetype);
+    QPixmap pixmap;
+    pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
+    m_icon = QIcon(pixmap);
+    emit iconChanged(m_icon);
+    auto zoomFactor = app->getSettingsManager()->getZoomFactorByZimId(zimId);
+    this->setZoomFactor(zoomFactor);
 }
 
 void WebView::wheelEvent(QWheelEvent *event) {

@@ -6,6 +6,9 @@
 #include <QTextStream>
 #include <iostream>
 
+#include <kiwix/search_renderer.h>
+#include <kiwix/name_mapper.h>
+
 UrlSchemeHandler::UrlSchemeHandler()
 {
 
@@ -17,7 +20,6 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
 {
     auto qurl = request->requestUrl();
     std::string url = qurl.path().toUtf8().constData();
-    qDebug() << "Handling request" << qurl;
     if (url[0] == '/')
         url = url.substr(1);
     auto library = KiwixApp::instance()->getLibrary();
@@ -78,6 +80,52 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
     request->fail(QWebEngineUrlRequestJob::UrlNotFound);
 }
 
+
+class IdNameMapper : public kiwix::NameMapper {
+  std::string getNameForId(const std::string& id) { return id + ".zim"; }
+  std::string getIdForName(const std::string& id) { return id.substr(0, id.size()-4); }
+};
+
+
+void
+UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
+{
+    auto qurl = request->requestUrl();
+    auto app = KiwixApp::instance();
+    auto host = qurl.host();
+    auto bookId = host.split('.')[0];
+    qInfo() << "Handling request" << qurl;
+    QUrlQuery query(qurl.query());
+    if (bookId == "library") {
+      bookId = query.queryItemValue("content");
+    }
+    auto searchQuery = query.queryItemValue("pattern").toStdString();
+    int start = 0;
+    bool ok;
+    int temp = query.queryItemValue("start").toInt(&ok);
+    if (ok)
+      start = temp;
+    int end = 25;
+    temp = query.queryItemValue("end").toInt(&ok);
+    if (ok)
+      end = temp;
+
+    auto searcher = app->getLibrary()->getSearcher(bookId);
+    searcher->search(searchQuery, start, end);
+
+    IdNameMapper nameMapper;
+    kiwix::SearchRenderer renderer(searcher.get(), &nameMapper);
+    renderer.setSearchPattern(searchQuery);
+    renderer.setSearchContent(bookId.toStdString());
+    renderer.setProtocolPrefix("zim://");
+    renderer.setSearchProtocolPrefix("zim://" + host.toStdString() + "/?");
+    auto content = renderer.getHtml();
+    QBuffer *buffer = new QBuffer;
+    buffer->setData(content.data(), content.size());
+    connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
+    request->reply("text/html", buffer);
+}
+
 void
 UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
 {
@@ -87,6 +135,8 @@ UrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *request)
         handleContentRequest(request);
     } else if (host.endsWith(".meta")) {
         handleMetaRequest(request);
+    } else if (host.endsWith(".search")) {
+        handleSearchRequest(request);
     } else {
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
     }
