@@ -128,21 +128,38 @@ void SearchBar::updateCompletion(const QString &text)
         return;
     }
     auto qurl = currentWidget->url();
-    auto reader = KiwixApp::instance()->getLibrary()->getReader(m_currentZimId);
-    if (!reader) {
-        m_completionModel.setStringList(wordList);
-        return;
-    }
+    qInfo() << "Search bar url is " << qurl;
+    auto currentZimId = qurl.host().split(".")[0];
+    auto reader = KiwixApp::instance()->getLibrary()->getReader(currentZimId);
     QUrl url;
     url.setScheme("zim");
-    url.setHost(qurl.host());
-    reader->searchSuggestionsSmart(text.toStdString(), 15);
-    std::string title, path;
-    while (reader->getNextSuggestion(title, path)) {
-         url.setPath(QString::fromStdString(path));
-         wordList << QString::fromStdString(title);
-         m_urlList.push_back(url);
+    if (reader) {
+        url.setHost(qurl.host());
+        reader->searchSuggestionsSmart(text.toStdString(), 15);
+        std::string title, path;
+        while (reader->getNextSuggestion(title, path)) {
+            url.setPath(QString::fromStdString(path));
+            wordList << QString::fromStdString(title);
+            m_urlList.push_back(url);
+        }
     }
+    QUrlQuery query;
+    url.setPath("");
+    if (reader) {
+        // The host is used to determine the currentZimId
+        // The content query item is used to know in which zim search (as for kiwix-serve)
+        url.setHost(currentZimId + ".search");
+        query.addQueryItem("content", currentZimId);
+    } else {
+        // We do not allow multi zim search for now.
+        // We don't have a correct UI to select on which zim search,
+        // how to display results, ...
+        //url.setHost("library.search");
+    }
+    query.addQueryItem("pattern", text);
+    url.setQuery(query);
+    wordList << QString("Search for ")  + text;
+    m_urlList.push_back(url);
     m_completionModel.setStringList(wordList);
 }
 
