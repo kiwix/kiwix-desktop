@@ -24,7 +24,8 @@ public:
     WebView* createNewTab(bool setCurrent);
     WebView* widget(int index) { return (index != 0) ? static_cast<WebView*>(mp_stackedWidget->widget(index)) : nullptr; }
     WebView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
-                               if (current == mp_contentManagerView) return nullptr;
+                               if (current == mp_contentManagerView ||
+                                   mp_stackedWidget->currentIndex() == m_settingsIndex) return nullptr;
                                return static_cast<WebView*>(current);
                              }
 
