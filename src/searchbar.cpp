@@ -128,18 +128,20 @@ void SearchBar::updateCompletion(const QString &text)
         return;
     }
     auto qurl = currentWidget->url();
-    m_currentZimId = qurl.host();
-    m_currentZimId.resize(m_currentZimId.length()-4);
     auto reader = KiwixApp::instance()->getLibrary()->getReader(m_currentZimId);
     if (!reader) {
         m_completionModel.setStringList(wordList);
         return;
     }
+    QUrl url;
+    url.setScheme("zim");
+    url.setHost(qurl.host());
     reader->searchSuggestionsSmart(text.toStdString(), 15);
-    std::string title, url;
-    while (reader->getNextSuggestion(title, url)) {
-        wordList << QString::fromStdString(title);
-        m_urlList.push_back(url);
+    std::string title, path;
+    while (reader->getNextSuggestion(title, path)) {
+         url.setPath(QString::fromStdString(path));
+         wordList << QString::fromStdString(title);
+         m_urlList.push_back(url);
     }
     m_completionModel.setStringList(wordList);
 }
@@ -147,10 +149,6 @@ void SearchBar::updateCompletion(const QString &text)
 void SearchBar::openCompletion(const QModelIndex &index)
 {
     auto url = m_urlList.at(index.row());
-    QUrl qurl;
-    qurl.setScheme("zim");
-    qurl.setHost(m_currentZimId+".zim");
-    qurl.setPath(QString::fromStdString(url));
-    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(qurl, false);});
+    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
 }
 
