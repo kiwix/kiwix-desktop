@@ -17,7 +17,8 @@ TabBar::TabBar(QWidget *parent) :
     m_settingsIndex(-1)
 {
     setTabsClosable(true);
-    setElideMode(Qt::ElideRight);
+//    setElideMode(QTabBar::tab:elide);
+    setElideMode(Qt::ElideRight);//TODO: Add fade out effect here.
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
     setIconSize(QSize(30, 30));
@@ -120,8 +121,10 @@ WebView* TabBar::createNewTab(bool setCurrent)
     WebView* webView = new WebView();
     connect(webView->page(), &QWebEnginePage::fullScreenRequested, this, &TabBar::fullScreenRequested);
     connect(webView, &WebView::titleChanged, this,
-            [=](const QString& str) {
+            [=](const QString& str) {//can we add the style here?
         setTitleOf(str, webView);
+        //    setStyle();
+        //    QTabBar::initStyleOption();
         QUITIFNOTCURRENT(webView);
         emit currentTitleChanged(str);
     });

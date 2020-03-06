@@ -100,7 +100,9 @@ QMenu::item:selected {
     background-color: #D9E9FF;
     border: 1px solid #3366CC;
 }
-
+Qt::ElideRight{
+    top: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));
+}
 QMenu::indicator {
     color: #666666;
     width: 13px;
@@ -125,7 +127,9 @@ QTabWidget::pane {
     border: none;
     border-top: 1px solid #ccc;
 }
-
+QTabBar elide{
+    top: linear-gradient(to right, rgba(255,0,0,0), rgba(255,0,0,1));
+}
 QTabBar::tab {
     border: none;
     border-right: 1px solid #ccc;
@@ -146,6 +150,7 @@ QTabBar::tab:first {
 QTabBar::tab:last {
     border: none;
 }
+
 
 QTabBar::tab:last QToolButton {
     font-size: 30px;
