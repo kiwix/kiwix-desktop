@@ -70,11 +70,10 @@ void SettingsManager::validDownloadDir(QString dir)
     emit(settingsChecked(fileExists(dir.toStdString())));
 }
 
-bool SettingsManager::setDownloadDir(QString downloadDir)
+void SettingsManager::setDownloadDir(QString downloadDir)
 {
     m_downloadDir = downloadDir;
     m_settings.setValue("download/dir", downloadDir);
-    return true;
 }
 
 void SettingsManager::resetDownloadDir()
@@ -91,9 +90,30 @@ void SettingsManager::browseDownloadDir()
     emit(downloadDirChanged(dir));
 }
 
+void SettingsManager::setProfileDir(QString profileDir)
+{
+    m_profileDir = profileDir;
+    m_settings.setValue("profile/dir", profileDir);
+}
+
+void SettingsManager::resetProfileDir()
+{
+    emit(profileDirChanged(QString::fromStdString(getDataDirectory())));
+}
+
+void SettingsManager::browseProfileDir()
+{
+    QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
+                                                    tr("Browse Directory"),
+                                                    QString(),
+                                                    QFileDialog::ShowDirsOnly);
+    emit(profileDirChanged(dir));
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
     m_downloadDir = m_settings.value("download/dir", QString::fromStdString(getDataDirectory())).toString();
+    m_profileDir = m_settings.value("profile/dir", QString::fromStdString(getDataDirectory())).toString();
 }

@@ -31,7 +31,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     installTranslator(&m_appTranslator);
     
     try {
-        mp_downloader = new kiwix::Downloader();
+        mp_downloader = new kiwix::Downloader(m_settingsManager.getProfileDir().toStdString());
     } catch (exception& e) {
         QMessageBox::critical(nullptr, tr("Cannot create downloader"),
         tr("Impossible to launch downloader, Kiwix-desktop will start but all download functions will not working !<br><br>") + e.what());

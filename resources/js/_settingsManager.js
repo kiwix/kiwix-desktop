@@ -2,6 +2,10 @@ function onDownloadDirChanged (downloadDir) {
     app.downloadDir = downloadDir;
 }
 
+function onProfileDirChanged (profileDir) {
+    app.profileDir = profileDir;
+}
+
 function onSettingsChecked (valid) {
     if (!valid) {
         alert("Invalid download path");
@@ -33,6 +37,7 @@ function init() {
           kiwixServerPort: settingsManager.kiwixServerPort,
           zoomFactor: Math.floor(settingsManager.zoomFactor * 100),
           downloadDir: settingsManager.downloadDir,
+          profileDir: settingsManager.profileDir,
         },
         methods: {
             saveSettings : function() {
@@ -48,10 +53,17 @@ function init() {
             },
             browseDownloadDir : function() {
                 settingsManager.browseDownloadDir();
+            },
+            resetProfileDir : function() {
+                settingsManager.resetprofileDir();
+            },
+            browseProfileDir : function() {
+                settingsManager.browseprofileDir();
             }
         }
       });
       settingsManager.downloadDirChanged.connect(onDownloadDirChanged)
+      settingsManager.profileDirChanged.connect(onProfileDirChanged)
       settingsManager.settingsChecked.connect(onSettingsChecked)
     });
 }
