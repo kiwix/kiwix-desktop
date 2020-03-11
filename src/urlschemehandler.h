@@ -11,6 +11,7 @@ public:
 private:
     void handleMetaRequest(QWebEngineUrlRequestJob *request);
     void handleContentRequest(QWebEngineUrlRequestJob *request);
+    void handleSearchRequest(QWebEngineUrlRequestJob *request);
 };
 
 #endif // URLSCHEMEHANDLER_H

@@ -6,6 +6,7 @@
 #include <QCompleter>
 #include <QIcon>
 #include <QPushButton>
+#include <QUrl>
 
 class SearchButton : public QPushButton {
     Q_OBJECT
@@ -34,8 +35,7 @@ protected:
 private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
-    std::vector<std::string> m_urlList;
-    QString m_currentZimId;
+    std::vector<QUrl> m_urlList;
     SearchButton m_button;
     QString m_title;
 

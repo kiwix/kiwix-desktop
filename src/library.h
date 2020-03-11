@@ -4,6 +4,7 @@
 #include <kiwix/book.h>
 #include <kiwix/library.h>
 #include <kiwix/reader.h>
+#include <kiwix/searcher.h>
 #include <qstring.h>
 #include <memory>
 
@@ -28,6 +29,7 @@ public:
     virtual ~Library();
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
+    std::shared_ptr<kiwix::Searcher> getSearcher(const QString& zimId);
     QStringList getBookIds();
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending);
     const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) { return m_library.getBookmarks(onlyValidBookmarks); }
@@ -37,7 +39,6 @@ public:
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
 public slots:
-    QString openBookById(const QString& _id);
     kiwix::Book& getBookById(QString id);
 
 signals:
@@ -46,7 +47,6 @@ signals:
 
 private:
     kiwix::Library m_library;
-    QMap<QString, std::shared_ptr<kiwix::Reader>> m_readersMap;
     QString m_libraryDirectory;
 friend class LibraryManipulator;
 };

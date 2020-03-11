@@ -6,7 +6,6 @@
 #include "kiwixapp.h"
 #include "kconstants.h"
 
-#include <QWebEngineProfile>
 #include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) :

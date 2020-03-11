@@ -8,7 +8,7 @@
 #include <kiwix/kiwixserve.h>
 #include "tabbar.h"
 #include "tocsidebar.h"
-#include "urlschemehandler.h"
+#include "kprofile.h"
 #include "settingsmanager.h"
 
 #include <QApplication>
@@ -68,7 +68,7 @@ public:
 
     void showMessage(const QString& message);
 
-    UrlSchemeHandler* getSchemeHandler() { return &m_schemeHandler; }
+    KProfile* getProfile() { return &m_profile; }
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
     kiwix::Downloader* getDownloader() { return mp_downloader; }
@@ -101,7 +101,7 @@ protected:
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     SettingsManager m_settingsManager;
-    UrlSchemeHandler m_schemeHandler;
+    KProfile m_profile;
     QString m_libraryDirectory;
     Library m_library;
     kiwix::Downloader* mp_downloader;

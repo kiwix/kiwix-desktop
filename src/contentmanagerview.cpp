@@ -6,10 +6,9 @@
 ContentManagerView::ContentManagerView(QWidget *parent)
     : QWebEngineView(parent)
 {
-    page()->setWebChannel(&m_webChannel);
-    auto profile = page()->profile();
-    auto app = KiwixApp::instance();
-    profile->installUrlSchemeHandler("zim", app->getSchemeHandler());
+    QWebEnginePage* page = new QWebEnginePage(KiwixApp::instance()->getProfile(), this);
+    setPage(page);
+    page->setWebChannel(&m_webChannel);
     setContextMenuPolicy( Qt::NoContextMenu );
 }
 

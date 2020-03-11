@@ -40,45 +40,36 @@ Library::~Library()
 
 QString Library::openBookFromPath(const QString &zimPath)
 {
-    for(auto it=m_readersMap.begin();
-        it != m_readersMap.end();
-        it++)
-    {
-        if(QString::fromStdString(it.value()->getZimFilePath()) == zimPath)
-            return it.key();
-    }
-    qInfo() << "Opening" << zimPath;
-    auto zimPath_ = zimPath.toStdString();
-    auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(zimPath_));
-    auto id = QString::fromStdString(reader->getId());
-    kiwix::Book b;
-    b.update(*reader);
-    m_library.addBook(b);
-    m_readersMap[id] = reader;
+    try {
+        auto& book = m_library.getBookByPath(zimPath.toStdString());
+        return QString::fromStdString(book.getId());
+    } catch(std::out_of_range& e) { }
+
+    kiwix::Manager manager(&m_library);
+    auto id =  manager.addBookFromPathAndGetId(zimPath.toStdString());
     save();
     emit(booksChanged());
-    return id;
-}
-
-QString Library::openBookById(const QString& id)
-{
-    auto& b = m_library.getBookById(id.toStdString());
-    auto reader = std::shared_ptr<kiwix::Reader>(new kiwix::Reader(b.getPath()));
-    m_readersMap[id] = reader;
-    return id;
+    return QString::fromStdString(id);
 }
 
 std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
 {
-    auto it = m_readersMap.find(zimId);
-    if (it != m_readersMap.end())
-        return it.value();
-    // No reader, try to open the file
     try {
-        openBookById(zimId);
-        return m_readersMap.find(zimId).value();
-    } catch(...) {}
-    return nullptr;
+      return m_library.getReaderById(zimId.toStdString());
+    } catch (std::out_of_range& e) {
+      return nullptr;
+    }
+}
+
+std::shared_ptr<kiwix::Searcher> Library::getSearcher(const QString &zimId)
+{
+    auto searcher = std::make_shared<kiwix::Searcher>();
+    try {
+        searcher->add_reader(m_library.getReaderById(zimId.toStdString()).get());
+    } catch(std::out_of_range& e) {
+        return nullptr;
+    }
+    return searcher;
 }
 
 QStringList Library::getBookIds()
@@ -107,10 +98,6 @@ void Library::addBookToLibrary(kiwix::Book &book)
 }
 
 void Library::removeBookFromLibraryById(const QString& id) {
-    auto it = m_readersMap.find(id);
-    if (it != m_readersMap.end()) {
-        m_readersMap.erase(it);
-    }
     m_library.removeBookById(id.toStdString());
 }
 
