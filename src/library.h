@@ -36,6 +36,8 @@ public:
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
+    void setLibraryDirectory(QString dir) { m_libraryDirectory = dir; }
+
 public slots:
     QString openBookById(const QString& _id);
     kiwix::Book& getBookById(QString id);

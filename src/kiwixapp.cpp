@@ -118,7 +118,7 @@ QString KiwixApp::findLibraryDirectory()
     if (libraryFile.exists())
         return QString::fromStdString(removeLastPathElement(getExecutablePath()));
     else
-        return QString::fromStdString(getDataDirectory());
+        return m_settingsManager.getProfileDir();
 }
 
 KiwixApp *KiwixApp::instance()
@@ -385,6 +385,10 @@ void KiwixApp::postInit() {
     connect(mp_tabWidget, &TabBar::currentTitleChanged, this,
             [=](const QString& title) { emit currentTitleChanged(title); });
     connect(mp_tabWidget, &TabBar::libraryPageDisplayed, this, &KiwixApp::disableItemsOnLibraryPage);
+    connect(&m_settingsManager, &SettingsManager::profileFilesMoved, this, [=] (QString dir) { 
+        setLibraryDirectory(dir);
+        mp_server->setLibraryPath(appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
+    });
     emit(m_library.booksChanged());
     disableItemsOnLibraryPage(true);
 }

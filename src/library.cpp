@@ -30,6 +30,8 @@ Library::Library()
     qInfo() << "Library directory :" << m_libraryDirectory;
     manager.readFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
     manager.readBookmarkFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::profileFilesMoved, this, 
+            [=](QString dir) { setLibraryDirectory(dir); });
     emit(booksChanged());
 }
 

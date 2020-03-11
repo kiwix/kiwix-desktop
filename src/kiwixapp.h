@@ -75,6 +75,7 @@ public:
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
+    void setLibraryDirectory(QString dir) { m_libraryDirectory = dir; }
     kiwix::KiwixServe* getLocalServer() { return mp_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     SideBarType getSideType() { return m_currentSideType; }

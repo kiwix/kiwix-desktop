@@ -6,25 +6,36 @@ function onProfileDirChanged (profileDir) {
     app.profileDir = profileDir;
 }
 
-function onSettingsChecked (valid) {
+function onDownloadDirChecked (valid) {
     if (!valid) {
-        alert("Invalid download path");
+        alert("Invalid download directory");
         app.downloadDir = settingsManager.downloadDir;
         return;
     }
+    settingsManager.validProfileDir(app.profileDir);
+}
+
+function onProfileDirChecked (valid) {
+    if (!valid) {
+        alert("Invalid profile directory");
+        app.profileDir = settingsManager.profileDir;
+        return;
+    }
+    settingsManager.moveProfileFiles(app.profileDir);
+    setAllSettings();
+}
+
+function setAllSettings() {
     settingsManager.setKiwixServerPort(app.kiwixServerPort);
     app.zoomFactor = (app.zoomFactor < 30) ? 30 : app.zoomFactor;
     app.zoomFactor = (app.zoomFactor > 500) ? 500 : app.zoomFactor;
     settingsManager.setZoomFactor(app.zoomFactor / 100);
     settingsManager.setDownloadDir(app.downloadDir);
+    settingsManager.setProfileDir(app.profileDir);
 }
 
 function validPort (port) {
     return /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/.test(port);
-}
-
-function validDownloadDir (dir) {
-    settingsManager.validDownloadDir(dir);
 }
 
 function init() {
@@ -46,7 +57,7 @@ function init() {
                     this.kiwixServerPort = settingsManager.kiwixServerPort;
                     return;
                 }
-                validDownloadDir(this.downloadDir);
+                settingsManager.validDownloadDir(this.downloadDir);
             },
             resetDownloadDir : function() {
                 settingsManager.resetDownloadDir();
@@ -55,15 +66,16 @@ function init() {
                 settingsManager.browseDownloadDir();
             },
             resetProfileDir : function() {
-                settingsManager.resetprofileDir();
+                settingsManager.resetProfileDir();
             },
             browseProfileDir : function() {
-                settingsManager.browseprofileDir();
+                settingsManager.browseProfileDir();
             }
         }
       });
       settingsManager.downloadDirChanged.connect(onDownloadDirChanged)
       settingsManager.profileDirChanged.connect(onProfileDirChanged)
-      settingsManager.settingsChecked.connect(onSettingsChecked)
+      settingsManager.downloadDirChecked.connect(onDownloadDirChecked)
+      settingsManager.profileDirChecked.connect(onProfileDirChecked)
     });
 }

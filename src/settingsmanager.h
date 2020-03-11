@@ -35,10 +35,12 @@ public slots:
     QString getDownloadDir() { return m_downloadDir; }
     void resetDownloadDir();
     void browseDownloadDir();
+    void validProfileDir(QString dir);
     void setProfileDir(QString profileDir);
     QString getProfileDir() { return m_profileDir; }
     void resetProfileDir();
     void browseProfileDir();
+    void moveProfileFiles(QString newDir);
 
 private:
     void initSettings();
@@ -48,7 +50,9 @@ signals:
     void zoomChanged(qreal zoomFactor);
     void downloadDirChanged(QString downloadDir);
     void profileDirChanged(QString profileDir);
-    void settingsChecked(bool valid);
+    void downloadDirChecked(bool valid);
+    void profileDirChecked(bool valid);
+    void profileFilesMoved(QString dir);
 
 private:
     QSettings m_settings;

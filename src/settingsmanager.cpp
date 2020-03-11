@@ -67,7 +67,7 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
 
 void SettingsManager::validDownloadDir(QString dir)
 {
-    emit(settingsChecked(fileExists(dir.toStdString())));
+    emit(downloadDirChecked(fileExists(dir.toStdString())));
 }
 
 void SettingsManager::setDownloadDir(QString downloadDir)
@@ -90,6 +90,11 @@ void SettingsManager::browseDownloadDir()
     emit(downloadDirChanged(dir));
 }
 
+void SettingsManager::validProfileDir(QString dir)
+{
+    emit(profileDirChecked(fileExists(dir.toStdString())));
+}
+
 void SettingsManager::setProfileDir(QString profileDir)
 {
     m_profileDir = profileDir;
@@ -108,6 +113,19 @@ void SettingsManager::browseProfileDir()
                                                     QString(),
                                                     QFileDialog::ShowDirsOnly);
     emit(profileDirChanged(dir));
+}
+
+void SettingsManager::moveProfileFiles(QString newDir)
+{
+    QFile libraryFile(m_profileDir + "/library.xml");
+    qInfo() << libraryFile.rename(newDir + "/library.xml");
+    
+    QFile bookmarksFile(m_profileDir + "/library.bookmarks.xml");
+    qInfo() << bookmarksFile.rename(newDir + "/library.bookmarks.xml");
+
+    QFile kiwixSessionFile(m_profileDir + "/kiwix.session");
+    qInfo() << kiwixSessionFile.rename(newDir + "/kiwix.session");
+    emit(profileFilesMoved(newDir));
 }
 
 void SettingsManager::initSettings()
