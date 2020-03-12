@@ -36,6 +36,7 @@ protected:
 
     QString m_currentZimId;
     QIcon m_icon;
+    QString m_linkHovered;
 };
 
 #endif // WEBVIEW_H
