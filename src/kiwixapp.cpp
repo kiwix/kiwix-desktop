@@ -24,6 +24,12 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"),
         m_settingsManager.getKiwixServerPort()))
 {
+    try {
+        m_translation.setTranslation(QLocale());
+    } catch (exception& e) {
+        QMessageBox::critical(nullptr, "Translation error", e.what());
+        return;
+    }
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     installTranslator(&m_qtTranslator);
