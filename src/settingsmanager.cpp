@@ -85,7 +85,7 @@ void SettingsManager::resetDownloadDir()
 void SettingsManager::browseDownloadDir()
 {
     QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
-                                                    tr("Browse Directory"),
+                                                    gt("browse-directory"),
                                                     QString(),
                                                     QFileDialog::ShowDirsOnly);
     emit(downloadDirChanged(dir));

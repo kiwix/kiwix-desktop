@@ -17,7 +17,7 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
 {
     QString defaultFileName = download->url().fileName();
     QString fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(),
-                                                       tr("Save File as"), defaultFileName);
+                                                       gt("save-file-as-window-title"), defaultFileName);
     if (fileName.isEmpty()) {
         return;
     }
@@ -33,6 +33,6 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
 void KProfile::downloadFinished()
 {
     QMessageBox msgBox;
-    msgBox.setText(tr("The document has been downloaded."));
+    msgBox.setText(gt("download-finished-message"));
     msgBox.exec();
 }
