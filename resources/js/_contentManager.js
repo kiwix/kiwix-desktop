@@ -18,6 +18,10 @@ function getIndexById(id) {
     return index;
 }
 
+function setTranslations(translations) {
+    app.translations = createDict(TRANSLATION_KEYS, translations);
+}
+
 function createDict(keys, values) {
     var d = {}
     for(var i=0; i<keys.length; i++) {
@@ -92,6 +96,18 @@ function displayLoadIcon(display) {
         document.getElementById("bookList").classList.remove("do-not-display")      
     }
 }
+const TRANSLATION_KEYS = ["search-files",
+                          "title",
+                          "size",
+                          "date",
+                          "content-type",
+                          "reset-sort",
+                          "open",
+                          "delete",
+                          "download",
+                          "resume",
+                          "pause",
+                          "cancel"];
 
 function init() {
   new QWebChannel(qt.webChannelTransport, function(channel) {
@@ -104,9 +120,13 @@ function init() {
         books: [],
         downloads: {},
         activeSortType:"",
-        sortOrderAsc:true
+        sortOrderAsc:true,
+        translations:{}
       },
       methods: {
+        gt : function(key) {
+            return this.translations[key];
+        },
         openBook : function(book) {
           contentManager.openBook(book.id, function() {});
         },
@@ -195,6 +215,7 @@ function init() {
     contentManager.oneBookChanged.connect(onOneBookChanged);
     contentManager.bookRemoved.connect(onBookRemoved);
     contentManager.pendingRequest.connect(displayLoadIcon);
+    contentManager.getTranslations(TRANSLATION_KEYS, setTranslations);
     onBooksChanged();
     displayLoadIcon(false);
   });

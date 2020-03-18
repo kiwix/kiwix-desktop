@@ -36,6 +36,16 @@ void ContentManager::setLocal(bool local) {
     emit(filterParamsChanged());
 }
 
+QStringList ContentManager::getTranslations(const QStringList &keys)
+{
+    QStringList translations;
+
+    for(auto& key: keys) {
+        translations.append(KiwixApp::instance()->getText(key));
+    }
+    return translations;
+}
+
 #define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b->METH())));}
 QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
