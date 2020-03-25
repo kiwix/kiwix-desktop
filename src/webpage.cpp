@@ -11,6 +11,7 @@ WebPage::WebPage(QObject *parent) :
 {
     action(QWebEnginePage::SavePage)->setVisible(false);
     action(QWebEnginePage::ViewSource)->setVisible(false);
+    action(QWebEnginePage::Reload)->setVisible(false);
 }
 
 bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame)
