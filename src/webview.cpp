@@ -1,5 +1,6 @@
 #include "webview.h"
 
+#include <QDesktopServices>
 #include <QAction>
 #include <iostream>
 #include "kiwixapp.h"
@@ -12,6 +13,9 @@ WebView::WebView(QWidget *parent)
 {
     setPage(new WebPage(this));
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
+    connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
+        m_linkHovered = url;
+    });
 }
 
 WebView::~WebView()
@@ -74,6 +78,15 @@ bool WebView::eventFilter(QObject *src, QEvent *e)
         auto we = static_cast<QWheelEvent *>(e);
         if (we->modifiers() == Qt::ControlModifier)
             return true;
+    }
+    if (e->type() == QEvent::MouseButtonRelease) {
+        auto me = static_cast<QMouseEvent *>(e);
+        if (!m_linkHovered.startsWith("zim://")
+         && (me->modifiers() == Qt::ControlModifier || me->button() == Qt::MiddleButton))
+        {
+            QDesktopServices::openUrl(m_linkHovered);
+            return true;
+        }
     }
     return false;
 }
