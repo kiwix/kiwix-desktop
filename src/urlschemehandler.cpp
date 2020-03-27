@@ -42,10 +42,16 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
             return;
         }
     }
-    try {
-        entry = entry.getFinalEntry();
-    } catch (kiwix::NoEntry&) {
-        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+    if (entry.isRedirect()) {
+        try {
+            entry = entry.getFinalEntry();
+        } catch (kiwix::NoEntry&) {
+            request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+            return;
+        }
+        auto path = QString("/") + QString::fromStdString(entry.getPath());
+        qurl.setPath(path);
+        request->redirect(qurl);
         return;
     }
     BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
