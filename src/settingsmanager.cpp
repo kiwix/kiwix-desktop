@@ -91,6 +91,16 @@ void SettingsManager::browseDownloadDir()
     emit(downloadDirChanged(dir));
 }
 
+QStringList SettingsManager::getTranslations(const QStringList &keys)
+{
+    QStringList translations;
+
+    for(auto& key: keys) {
+        translations.append(KiwixApp::instance()->getText(key));
+    }
+    return translations;
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();

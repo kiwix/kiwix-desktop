@@ -22,13 +22,6 @@ function setTranslations(translations) {
     app.translations = createDict(TRANSLATION_KEYS, translations);
 }
 
-function createDict(keys, values) {
-    var d = {}
-    for(var i=0; i<keys.length; i++) {
-      d[keys[i]] = values[i];
-    }
-    return d;
-}
 const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "faviconUrl", "faviconMimeType", "downloadId"];
 function addBook(values) {
   var b = createDict(BOOK_KEYS, values);

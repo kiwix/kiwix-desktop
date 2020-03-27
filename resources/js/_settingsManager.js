@@ -23,6 +23,18 @@ function validDownloadDir (dir) {
     settingsManager.validDownloadDir(dir);
 }
 
+function setTranslations(translations) {
+    app.translations = createDict(TRANSLATION_KEYS, translations);
+}
+
+const TRANSLATION_KEYS = ["settings",
+                          "apply",
+                          "port-for-local-kiwix-server-setting",
+                          "zoom-level-setting",
+                          "download-directory-setting",
+                          "reset",
+                          "browse"];
+
 function init() {
     new QWebChannel(qt.webChannelTransport, function(channel) {
       settingsManager = channel.objects.settingsManager;
@@ -33,8 +45,12 @@ function init() {
           kiwixServerPort: settingsManager.kiwixServerPort,
           zoomFactor: Math.floor(settingsManager.zoomFactor * 100),
           downloadDir: settingsManager.downloadDir,
+          translations:{}
         },
         methods: {
+            gt : function(key) {
+                return this.translations[key];
+            },
             saveSettings : function() {
                 if (!validPort(this.kiwixServerPort)) {
                     alert("Invalid port");
@@ -53,5 +69,6 @@ function init() {
       });
       settingsManager.downloadDirChanged.connect(onDownloadDirChanged)
       settingsManager.settingsChecked.connect(onSettingsChecked)
+      settingsManager.getTranslations(TRANSLATION_KEYS, setTranslations);
     });
 }

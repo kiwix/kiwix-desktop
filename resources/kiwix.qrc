@@ -72,6 +72,7 @@
         <file>icons/new-tab-icon.svg</file>
         <file>icons/library-icon.svg</file>
         <file>icons/open-file.svg</file>
+        <file>js/tools.js</file>
     </qresource>
     <qresource lang="fr" prefix="/">
         <file alias="texts/about.html">texts/fr/about.html</file>
