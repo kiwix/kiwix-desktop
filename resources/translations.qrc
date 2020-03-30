@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>i18n/kiwix-desktop_fr.qm</file>
         <file>i18n/en.json</file>
     </qresource>
 </RCC>
