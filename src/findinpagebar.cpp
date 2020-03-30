@@ -8,6 +8,7 @@ FindInPageBar::FindInPageBar(QWidget *parent) :
 {
     mp_ui->setupUi(this);
     mp_findLineEdit = mp_ui->findEdit;
+    mp_ui->hideButton->setText(gt("hide"));
     connect(mp_ui->hideButton, &QPushButton::released,
             this, &FindInPageBar::findClose);
     connect(mp_ui->fNextButton, &QPushButton::released,
