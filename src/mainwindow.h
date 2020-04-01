@@ -6,7 +6,6 @@
 #include "webview.h"
 #include "tabbar.h"
 #include "topwidget.h"
-#include "tocsidebar.h"
 #include "about.h"
 #include "contentmanagerside.h"
 #include "localkiwixserver.h"

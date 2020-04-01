@@ -7,6 +7,7 @@
 #include "webpage.h"
 #include <QToolTip>
 #include <QWebEngineSettings>
+#include <QVBoxLayout>
 
 WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
@@ -32,7 +33,7 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
       || type==QWebEnginePage::WebBrowserTab )
     {
         auto tabWidget = KiwixApp::instance()->getTabWidget();
-        return tabWidget->createNewTab(type==QWebEnginePage::WebBrowserTab);
+        return tabWidget->createNewTab(type==QWebEnginePage::WebBrowserTab)->getWebView();
     }
     return nullptr;
 }
