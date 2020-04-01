@@ -16,6 +16,7 @@ TabBar::TabBar(QWidget *parent) :
     QTabBar(parent),
     m_settingsIndex(-1)
 {
+    QTabBar::setDrawBase(false);
     setTabsClosable(true);
     setElideMode(Qt::ElideRight);
     setDocumentMode(true);
