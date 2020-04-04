@@ -1,6 +1,6 @@
 name: CI
 
-on: [pull_request]
+on: [push]
 
 jobs:
   Linux:
@@ -19,25 +19,20 @@ jobs:
     container:
       image: kiwix/kiwix-build_ci:bionic-26
     steps:
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
     - name: Checkout code
       shell: python
       run: |
-        import json
         from subprocess import check_call
         from os import environ
-        with open(environ['GITHUB_EVENT_PATH'], 'r') as f:
-            content = f.read()
-        event_data = json.loads(content)
-        try:
-            branch_ref = event_data['ref'].split('/')[-1]
-        except KeyError:
-            branch_ref = event_data['pull_request']['head']['ref']
-        print("Cloning branch", branch_ref)
         command = [
           'git', 'clone',
           'https://github.com/${{github.repository}}',
           '--depth=1',
-          '--branch', branch_ref
+          '--branch', '${{steps.extract_branch.outputs.branch}}'
         ]
         check_call(command, cwd=environ['HOME'])
     - name: Install deps
