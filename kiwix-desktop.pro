@@ -46,6 +46,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     src/findinpagebar.cpp \
+    src/translation.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/kiwixapp.cpp \
@@ -75,6 +76,7 @@ SOURCES += \
 
 HEADERS += \
     src/findinpagebar.h \
+    src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \
     src/kprofile.h \

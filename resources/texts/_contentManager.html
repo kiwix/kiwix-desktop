@@ -4,36 +4,37 @@
 <script src="qrc:///js/vue.js"></script>
 <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
 <script src="qrc:///js/_contentManager.js"></script>
+<script src="qrc:///js/tools.js"></script>
 <link rel="stylesheet" type="text/css" href="qrc:///css/_contentManager.css"/>
 </head>
 <body onload="init()">
 <div id="app">
   <div id="searchBar">
     <form>
-      <input id="searchInput" type="text" placeholder="Search files" oninput="setSearch(this.value)"/>
+      <input id="searchInput" type="text" :placeholder="gt('search-files')" oninput="setSearch(this.value)"/>
     </form>
   </div>
   <div id="bookTable">
     <div class="header">
       <span class="tablecell cell0"></span>
-      <span v-on:click="sortBookBy('title')" :class="{ sortableBold: isActive('title') }" class="tablecell cell1 sortable"><i :class="{ arrowDown: isUpOrDown('title', true), arrowUp: isUpOrDown('title', false) }"></i> Title</span>
-      <span v-on:click="sortBookBy('size')" :class="{ sortableBold: isActive('size') }" class="tablecell cell2 sortable"><i :class="{ arrowDown: isUpOrDown('size', true), arrowUp: isUpOrDown('size', false) }"></i> Size</span>
-      <span v-on:click="sortBookBy('date')" :class="{ sortableBold: isActive('date') }" class="tablecell cell3 sortable"><i :class="{ arrowDown: isUpOrDown('date', true), arrowUp: isUpOrDown('date', false) }"></i> Date</span>
-      <span class="tablecell cell4">Content type</span>
+      <span v-on:click="sortBookBy('title')" :class="{ sortableBold: isActive('title') }" class="tablecell cell1 sortable"><i :class="{ arrowDown: isUpOrDown('title', true), arrowUp: isUpOrDown('title', false) }"></i> {{ gt("title") }}</span>
+      <span v-on:click="sortBookBy('size')" :class="{ sortableBold: isActive('size') }" class="tablecell cell2 sortable"><i :class="{ arrowDown: isUpOrDown('size', true), arrowUp: isUpOrDown('size', false) }"></i> {{ gt("size") }} </span>
+      <span v-on:click="sortBookBy('date')" :class="{ sortableBold: isActive('date') }" class="tablecell cell3 sortable"><i :class="{ arrowDown: isUpOrDown('date', true), arrowUp: isUpOrDown('date', false) }"></i> {{ gt("date") }} </span>
+      <span class="tablecell cell4"> {{ gt("content-type") }} </span>
       <span class="tablecell cell5 tablerow">
-          <button v-on:click="resetSort()">reset sort</button>
+          <button v-on:click="resetSort()"> {{ gt("reset-sort") }} </button>
       </span>
     </div>
     <div id="load-icon" class="loader"></div>
     <div id="bookList" onscroll=scrolled(this)>
       <div id="menu" class="menu">
         <ul class="menu-options">
-          <li v-on:click="openBook(getBookFromMousePosition())" class="menu-option local-option">Open</li>
-          <li v-on:click="eraseBook(getBookFromMousePosition())" class="menu-option local-option">Delete</li>
-          <li v-on:click="downloadBook(getBookFromMousePosition())" class="menu-option download-option">Download</li>
-          <li v-on:click="resumeBook(getBookFromMousePosition())" class="menu-option resume-option">Resume</li>
-          <li v-on:click="pauseBook(getBookFromMousePosition())" class="menu-option pause-option">Pause</li>
-          <li v-on:click="cancelBook(getBookFromMousePosition())" class="menu-option cancel-option">Cancel</li>
+          <li v-on:click="openBook(getBookFromMousePosition())" class="menu-option local-option">{{ gt("open") }}</li>
+          <li v-on:click="eraseBook(getBookFromMousePosition())" class="menu-option local-option">{{ gt("delete") }}</li>
+          <li v-on:click="downloadBook(getBookFromMousePosition())" class="menu-option download-option">{{ gt("download") }}</li>
+          <li v-on:click="resumeBook(getBookFromMousePosition())" class="menu-option resume-option">{{ gt("resume") }}</li>
+          <li v-on:click="pauseBook(getBookFromMousePosition())" class="menu-option pause-option">{{ gt("pause") }}</li>
+          <li v-on:click="cancelBook(getBookFromMousePosition())" class="menu-option cancel-option">{{ gt("cancel") }}</li>
         </ul>
       </div>
       <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">

@@ -24,6 +24,12 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"),
         m_settingsManager.getKiwixServerPort()))
 {
+    try {
+        m_translation.setTranslation(QLocale());
+    } catch (exception& e) {
+        QMessageBox::critical(nullptr, "Translation error", e.what());
+        return;
+    }
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     installTranslator(&m_qtTranslator);
@@ -34,8 +40,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     try {
         mp_downloader = new kiwix::Downloader();
     } catch (exception& e) {
-        QMessageBox::critical(nullptr, tr("Cannot create downloader"),
-        tr("Impossible to launch downloader, Kiwix-desktop will start but all download functions will not working !<br><br>") + e.what());
+        QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
+        gt("error-downloader-launch-message") + "<br><br>" + e.what());
     }
     mp_manager = new ContentManager(&m_library, mp_downloader);
 
@@ -126,13 +132,17 @@ KiwixApp *KiwixApp::instance()
     return static_cast<KiwixApp*>(QApplication::instance());
 }
 
+QString gt(const QString &key) {
+    return KiwixApp::instance()->getText(key);
+}
+
 void KiwixApp::openZimFile(const QString &zimfile)
 {
     QString _zimfile = zimfile;
     if (_zimfile.isEmpty()) {
         _zimfile = QFileDialog::getOpenFileName(
             getMainWindow(),
-            tr("Open Zim"),
+            gt("open-zim"),
             QString(),
             "ZimFile (*.zim*)");
         _zimfile = QDir::toNativeSeparators(_zimfile);
@@ -260,43 +270,43 @@ bool KiwixApp::isCurrentArticleBookmarked()
 
 void KiwixApp::createAction()
 {
-    CREATE_ACTION_ICON(KiwixServeAction, "share", tr("Local Kiwix Server"));
+    CREATE_ACTION_ICON(KiwixServeAction, "share", gt("local-kiwix-server"));
     SET_SHORTCUT(KiwixServeAction, QKeySequence(Qt::CTRL+Qt::Key_I));
 
-    CREATE_ACTION_ICON(RandomArticleAction, "random", tr("Random Article"));
+    CREATE_ACTION_ICON(RandomArticleAction, "random", gt("random-article"));
     SET_SHORTCUT(RandomArticleAction, QKeySequence(Qt::CTRL+Qt::Key_R));
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
             this, [=]() { this->openRandomUrl(false); });
 
-    CREATE_ACTION(OpenHomePageAction, tr("Home page"));
+    CREATE_ACTION(OpenHomePageAction, gt("random-article"));
     SET_SHORTCUT(OpenHomePageAction, QKeySequence(Qt::ALT + Qt::Key_Home));
 
-    CREATE_ACTION_ICON(PrintAction, "print", tr("Print"));
+    CREATE_ACTION_ICON(PrintAction, "print", gt("print"));
     SET_SHORTCUT(PrintAction, QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
             this, &KiwixApp::printPage);
 
-    CREATE_ACTION(NewTabAction, tr("New tab"));
+    CREATE_ACTION(NewTabAction, gt("new-tab"));
     SET_SHORTCUT(NewTabAction, QKeySequence::AddTab);
 
-    CREATE_ACTION_ICON(CloseTabAction, "close", tr("Close tab"));
+    CREATE_ACTION_ICON(CloseTabAction, "close", gt("close-tab"));
     SET_SHORTCUT(CloseTabAction, QKeySequence::Close);
     mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
 
-    CREATE_ACTION(ReopenClosedTabAction, tr("Reopen closed tab"));
+    CREATE_ACTION(ReopenClosedTabAction, gt("reopen-closed-tab"));
     SET_SHORTCUT(ReopenClosedTabAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
     HIDE_ACTION(ReopenClosedTabAction);
 
-    CREATE_ACTION(BrowseLibraryAction, tr("Browse library"));
+    CREATE_ACTION(BrowseLibraryAction, gt("browse-library"));
     SET_SHORTCUT(BrowseLibraryAction, QKeySequence(Qt::CTRL+Qt::Key_E));
     HIDE_ACTION(BrowseLibraryAction);
 
-    CREATE_ACTION_ICON(OpenFileAction, "open-file", tr("Open file"));
+    CREATE_ACTION_ICON(OpenFileAction, "open-file", gt("open-file"));
     SET_SHORTCUT(OpenFileAction, QKeySequence::Open);
     connect(mpa_actions[OpenFileAction], &QAction::triggered,
             this, [=]() { openZimFile(); });
 
-    CREATE_ACTION(OpenRecentAction, tr("Open recent"));
+    CREATE_ACTION(OpenRecentAction, gt("open-recent"));
     HIDE_ACTION(OpenRecentAction);
 
     /* TODO See https://github.com/kiwix/kiwix-desktop/issues/77
@@ -305,35 +315,35 @@ void KiwixApp::createAction()
     HIDE_ACTION(SavePageAsAction);
     */
 
-    CREATE_ACTION(SearchArticleAction, tr("Search article"));
+    CREATE_ACTION(SearchArticleAction, gt("search-article"));
     SET_SHORTCUT(SearchArticleAction, QKeySequence(Qt::CTRL+Qt::Key_L));
     HIDE_ACTION(SearchArticleAction);
 
-    CREATE_ACTION(SearchLibraryAction, tr("Search in library"));
+    CREATE_ACTION(SearchLibraryAction, gt("search-in-library"));
     SET_SHORTCUT(SearchLibraryAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
     HIDE_ACTION(SearchLibraryAction);
 
-    CREATE_ACTION(FindInPageAction, tr("Find in page"));
+    CREATE_ACTION(FindInPageAction, gt("find-in-page"));
     mpa_actions[FindInPageAction]->setShortcuts({QKeySequence::Find, Qt::Key_F3});
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
             this, [=]() { mp_tabWidget->openFindInPageBar(); });
 
-    CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", tr("Set fullScreen"));
+    CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"));
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
         auto action = mpa_actions[ToggleFullscreenAction];
         action->setIcon(
             QIcon(checked ? ":/icons/full-screen-exit.svg" : ":/icons/full-screen-enter.svg"));
-        action->setText(checked ? tr("Quit fullScreen") : tr("Set fullScreen"));
+        action->setText(checked ? gt("quit-fullscreen") : gt("set-fullscreen"));
     });
     mpa_actions[ToggleFullscreenAction]->setCheckable(true);
 
-    CREATE_ACTION(ToggleTOCAction, tr("Table of content"));
+    CREATE_ACTION(ToggleTOCAction, gt("table-of-content"));
     SET_SHORTCUT(ToggleTOCAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_1));
     HIDE_ACTION(ToggleTOCAction);
 
-    CREATE_ACTION_ICON(ToggleReadingListAction, "reading-list" ,tr("Reading list"));
+    CREATE_ACTION_ICON(ToggleReadingListAction, "reading-list" ,gt("reading-list"));
     SET_SHORTCUT(ToggleReadingListAction, QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_2));
     connect(mpa_actions[ToggleReadingListAction], &QAction::triggered,
             this, [=]() { toggleSideBar(READINGLIST_BAR); });
@@ -343,37 +353,37 @@ void KiwixApp::createAction()
             QIcon((type == READINGLIST_BAR) ? ":/icons/reading-list-active.svg" : ":/icons/reading-list.svg"));
     });
 
-    CREATE_ACTION(ZoomInAction, tr("Zoom in"));
+    CREATE_ACTION(ZoomInAction, gt("zoom-in"));
     SET_SHORTCUT(ZoomInAction, QKeySequence::ZoomIn);
 
-    CREATE_ACTION(ZoomOutAction, tr("Zoom out"));
+    CREATE_ACTION(ZoomOutAction, gt("zoom-out"));
     SET_SHORTCUT(ZoomOutAction, QKeySequence::ZoomOut);
 
-    CREATE_ACTION(ZoomResetAction, tr("Zoom reset"));
+    CREATE_ACTION(ZoomResetAction, gt("zoom-reset"));
     SET_SHORTCUT(ZoomResetAction, QKeySequence(Qt::CTRL+Qt::Key_0));
 
-    CREATE_ACTION(HelpAction, tr("Help"));
+    CREATE_ACTION(HelpAction, gt("help"));
     SET_SHORTCUT(HelpAction, QKeySequence::HelpContents);
     HIDE_ACTION(HelpAction);
 
-    CREATE_ACTION(FeedbackAction, tr("Feedback"));
+    CREATE_ACTION(FeedbackAction, gt("feedback"));
     HIDE_ACTION(FeedbackAction);
 
-    CREATE_ACTION(ReportBugAction, tr("Repost a bug"));
+    CREATE_ACTION(ReportBugAction, gt("report-a-bug"));
     HIDE_ACTION(ReportBugAction);
 
-    CREATE_ACTION(RequestFeatureAction, tr("Request a feature"));
+    CREATE_ACTION(RequestFeatureAction, gt("request-a-feature"));
     HIDE_ACTION(RequestFeatureAction);
 
-    CREATE_ACTION(AboutAction, tr("About Kiwix"));
+    CREATE_ACTION(AboutAction, gt("about-kiwix"));
 
-    CREATE_ACTION_ICON(SettingAction, "settings", tr("Settings"));
+    CREATE_ACTION_ICON(SettingAction, "settings", gt("settings"));
     SET_SHORTCUT(SettingAction, QKeySequence(Qt::Key_F12));
 
-    CREATE_ACTION_ICON(DonateAction, "donate", tr("Donate to support Kiwix"));
+    CREATE_ACTION_ICON(DonateAction, "donate", gt("donate-to-support-kiwix"));
     SET_SHORTCUT(DonateAction, QKeySequence(Qt::CTRL+Qt::Key_D));
 
-    CREATE_ACTION_ICON(ExitAction, "exit", tr("Exit"));
+    CREATE_ACTION_ICON(ExitAction, "exit", gt("exit"));
     SET_SHORTCUT(ExitAction, QKeySequence::Quit);
 }
 

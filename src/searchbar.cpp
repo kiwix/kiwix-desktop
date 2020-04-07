@@ -62,7 +62,7 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer(&m_completionModel, this),
     m_button(this)
 {
-    setPlaceholderText(tr("Search"));
+    setPlaceholderText(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
     setCompleter(&m_completer);

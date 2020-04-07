@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
         if (!title.isEmpty() && !title.startsWith("zim://"))
             setWindowTitle(title + " - Kiwix");
         else
-            setWindowTitle(tr("Library") + " - Kiwix");
+            setWindowTitle(gt("window-title"));
     });
     addAction(app->getAction(KiwixApp::OpenHomePageAction));
 #if !SYSTEMTITLEBAR

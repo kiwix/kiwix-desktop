@@ -18,13 +18,10 @@ function getIndexById(id) {
     return index;
 }
 
-function createDict(keys, values) {
-    var d = {}
-    for(var i=0; i<keys.length; i++) {
-      d[keys[i]] = values[i];
-    }
-    return d;
+function setTranslations(translations) {
+    app.translations = createDict(TRANSLATION_KEYS, translations);
 }
+
 const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "faviconUrl", "faviconMimeType", "downloadId"];
 function addBook(values) {
   var b = createDict(BOOK_KEYS, values);
@@ -92,6 +89,18 @@ function displayLoadIcon(display) {
         document.getElementById("bookList").classList.remove("do-not-display")      
     }
 }
+const TRANSLATION_KEYS = ["search-files",
+                          "title",
+                          "size",
+                          "date",
+                          "content-type",
+                          "reset-sort",
+                          "open",
+                          "delete",
+                          "download",
+                          "resume",
+                          "pause",
+                          "cancel"];
 
 function init() {
   new QWebChannel(qt.webChannelTransport, function(channel) {
@@ -104,9 +113,13 @@ function init() {
         books: [],
         downloads: {},
         activeSortType:"",
-        sortOrderAsc:true
+        sortOrderAsc:true,
+        translations:{}
       },
       methods: {
+        gt : function(key) {
+            return this.translations[key];
+        },
         openBook : function(book) {
           contentManager.openBook(book.id, function() {});
         },
@@ -195,6 +208,7 @@ function init() {
     contentManager.oneBookChanged.connect(onOneBookChanged);
     contentManager.bookRemoved.connect(onBookRemoved);
     contentManager.pendingRequest.connect(displayLoadIcon);
+    contentManager.getTranslations(TRANSLATION_KEYS, setTranslations);
     onBooksChanged();
     displayLoadIcon(false);
   });

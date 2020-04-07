@@ -32,6 +32,11 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
             break;
         }
     }
+    ui->label->setText(gt("local-kiwix-server"));
+    ui->label->setStyleSheet("font-weight: bold;");
+    ui->KiwixServerText->setText(gt("kiwix-server-description"));
+    ui->OpenInBrowserButton->setText(gt("open-in-browser"));
+    ui->KiwixServerButton->setText(gt("start-kiwix-server"));
     ui->OpenInBrowserButton->setVisible(false);
     ui->IpAddress->setVisible(false);
 }
@@ -69,15 +74,13 @@ void LocalKiwixServer::runOrStopServer()
     }
 
     if (m_active) {
-        ui->KiwixServerButton->setText("Stop Kiwix Server");
-        QUrl url("qrc:/texts/kiwixServerRunningText.html");
-        ui->KiwixServerText->setSource(url);
+        ui->KiwixServerButton->setText(gt("stop-kiwix-server"));
+        ui->KiwixServerText->setText(gt("kiwix-server-running-message"));
         ui->OpenInBrowserButton->setVisible(true);
         ui->IpAddress->setVisible(true);
     } else {
-        ui->KiwixServerButton->setText("Start Kiwix Server");
-        QUrl url("qrc:/texts/kiwixServerText.html");
-        ui->KiwixServerText->setSource(url);
+        ui->KiwixServerButton->setText(gt("start-kiwix-server"));
+        ui->KiwixServerText->setText(gt("kiwix-server-description"));
         ui->OpenInBrowserButton->setVisible(false);
         ui->IpAddress->setVisible(false);
     }

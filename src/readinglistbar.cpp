@@ -15,6 +15,7 @@ ReadingListBar::ReadingListBar(QWidget *parent) :
             this, &ReadingListBar::on_itemActivated);
     setupList();
 
+    ui->label->setText(gt("reading-list-title"));
 }
 
 ReadingListBar::~ReadingListBar()

@@ -1,4 +1,5 @@
 #include "fullscreennotification.h"
+#include "kiwixapp.h"
 #include <QSequentialAnimationGroup>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
@@ -7,7 +8,7 @@ FullScreenNotification::FullScreenNotification(QWidget *parent)
     : QLabel(parent)
     , m_previouslyVisible(false)
 {
-    setText(tr("You are now in full screen mode. Press ESC to quit!"));
+    setText(gt("fullscreen-notification"));
     setStyleSheet(
         "font-size: 24px;"
         "color: white;"

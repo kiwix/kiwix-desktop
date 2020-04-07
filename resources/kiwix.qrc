@@ -61,8 +61,6 @@
         <file>fonts/SegoeUI/seguisb.ttf</file>
         <file>fonts/SegoeUI/segoeui.ttf</file>
         <file>texts/about.html</file>
-        <file>texts/kiwixServerText.html</file>
-        <file>texts/kiwixServerRunningText.html</file>
         <file>icons/search_backward.svg</file>
         <file>icons/search_forward.svg</file>
         <file>icons/kiwix-app-icons-square.svg</file>
@@ -72,6 +70,7 @@
         <file>icons/new-tab-icon.svg</file>
         <file>icons/library-icon.svg</file>
         <file>icons/open-file.svg</file>
+        <file>js/tools.js</file>
     </qresource>
     <qresource lang="fr" prefix="/">
         <file alias="texts/about.html">texts/fr/about.html</file>

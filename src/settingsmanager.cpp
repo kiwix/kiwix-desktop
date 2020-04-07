@@ -85,10 +85,20 @@ void SettingsManager::resetDownloadDir()
 void SettingsManager::browseDownloadDir()
 {
     QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
-                                                    tr("Browse Directory"),
+                                                    gt("browse-directory"),
                                                     QString(),
                                                     QFileDialog::ShowDirsOnly);
     emit(downloadDirChanged(dir));
+}
+
+QStringList SettingsManager::getTranslations(const QStringList &keys)
+{
+    QStringList translations;
+
+    for(auto& key: keys) {
+        translations.append(KiwixApp::instance()->getText(key));
+    }
+    return translations;
 }
 
 void SettingsManager::initSettings()

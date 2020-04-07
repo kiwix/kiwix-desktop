@@ -10,6 +10,7 @@
 #include "kprofile.h"
 #include "urlschemehandler.h"
 #include "settingsmanager.h"
+#include "translation.h"
 
 #include <QApplication>
 #include <QErrorMessage>
@@ -77,6 +78,7 @@ public:
     kiwix::KiwixServe* getLocalServer() { return mp_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     SideBarType getSideType() { return m_currentSideType; }
+    QString getText(const QString &key) { return m_translation.getText(key); };
 
     bool isCurrentArticleBookmarked();
 
@@ -110,10 +112,13 @@ private:
     SideBarType m_currentSideType;
     QErrorMessage* mp_errorDialog;
     kiwix::KiwixServe* mp_server;
+    Translation m_translation;
 
     QAction*     mpa_actions[MAX_ACTION];
 
     QString findLibraryDirectory();
 };
+
+QString gt(const QString &key);
 
 #endif // KIWIXAPP_H
