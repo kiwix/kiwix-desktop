@@ -63,6 +63,7 @@ public:
     KiwixApp(int& argc, char *argv[]);
     virtual ~KiwixApp();
     static KiwixApp* instance();
+    void init();
 
     void openRandomUrl(bool newTab=true);
 
