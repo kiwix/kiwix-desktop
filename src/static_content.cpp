@@ -1,30 +1,30 @@
 
 #include "static_content.h"
-#include <QTranslator>
+#include "kiwixapp.h"
 
 
 std::vector<QLocale::Language> S_LANGUAGES;
 std::vector<std::pair<QString, QString>> S_CATEGORIES;
 
 void initStaticContent() {
-#define PUSH(key, value) S_CATEGORIES.push_back(std::make_pair(QString::fromStdString(key), QObject::tr(value)))
-  PUSH("all", "All");
-  PUSH("other", "Other");
-//  PUSH("gutenberg", "Gutenberg"); // Gutenberg book has wrong tag
-//  PUSH("phet", "Phet"); // Phet books have no tags
-  PUSH("psiram", "Psiram");
-  PUSH("stack_exchange", "Stack Exchange");
-//  PUSH("ted", "Ted");  // Ted books have wrong tags
-  PUSH("vikidia", "Vikidia");
-//  PUSH("wikibooks", "Wikibooks"); // wikibooks have no tags
-  PUSH("wikinews", "Wikinews");
-  PUSH("wikipedia", "Wikipedia");
-  PUSH("wikiquote", "Wikiquote");
-  PUSH("wikisource", "Wikisource");
-//  PUSH("wikispecies", "Wikispecies"); // Wikispecies books have wrong tags
-  PUSH("wikiversity", "Wikiversity");
-  PUSH("wikivoyage", "Wikivoyage");
-  PUSH("wiktionary", "Wiktionary");
+#define PUSH(key) S_CATEGORIES.push_back(std::make_pair(QString::fromStdString(key), gt(key)))
+  PUSH("all");
+  PUSH("other");
+//  PUSH("gutenberg"); // Gutenberg book has wrong tag
+//  PUSH("phet"); // Phet books have no tags
+  PUSH("psiram");
+  PUSH("stack_exchange");
+//  PUSH("ted");  // Ted books have wrong tags
+  PUSH("vikidia");
+//  PUSH("wikibooks"); // wikibooks have no tags
+  PUSH("wikinews");
+  PUSH("wikipedia");
+  PUSH("wikiquote");
+  PUSH("wikisource");
+//  PUSH("wikispecies"); // Wikispecies books have wrong tags
+  PUSH("wikiversity");
+  PUSH("wikivoyage");
+  PUSH("wiktionary");
 #undef PUSH
 
 #define PUSH(value) S_LANGUAGES.push_back(value)
