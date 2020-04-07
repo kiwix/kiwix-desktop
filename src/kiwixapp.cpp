@@ -107,7 +107,6 @@ KiwixApp::~KiwixApp()
         delete mp_downloader;
     }
     delete mp_manager;
-    delete mp_errorDialog;
     delete mp_mainWindow;
 }
 
