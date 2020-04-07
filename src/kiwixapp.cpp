@@ -292,7 +292,7 @@ void KiwixApp::createAction()
     SET_SHORTCUT(BrowseLibraryAction, QKeySequence(Qt::CTRL+Qt::Key_E));
     HIDE_ACTION(BrowseLibraryAction);
 
-    CREATE_ACTION(OpenFileAction, tr("Open file"));
+    CREATE_ACTION_ICON(OpenFileAction, "open-file", tr("Open file"));
     SET_SHORTCUT(OpenFileAction, QKeySequence::Open);
     connect(mpa_actions[OpenFileAction], &QAction::triggered,
             this, [=]() { openZimFile(); });

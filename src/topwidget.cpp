@@ -36,6 +36,7 @@ TopWidget::TopWidget(QWidget *parent) :
 
     addSeparator();
 
+    addAction(KiwixApp::instance()->getAction(KiwixApp::OpenFileAction));
 
     QMenu* menu = new MainMenu();
     QAction* menuAction = new QAction(this);
