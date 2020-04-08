@@ -1,6 +1,7 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
+#include "static_content.h"
 #include <kiwix/tools/networkTools.h>
 #include <kiwix/tools/otherTools.h>
 #include <kiwix/manager.h>
@@ -97,8 +98,19 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         }
         if (key == "tags") {
             QStringList tagList = QString::fromStdString(b->getTags()).split(';');
-            tagList = tagList.filter(QRegExp("^(?!_).*"));
-            QString s = tagList.join(" ");
+            QMap<QString, bool> displayTagMap;
+            for(auto tag: tagList) {
+              if (tag[0] == "_") {
+                auto splitTag = tag.split(":");
+                displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
+              }
+            }
+            QStringList displayTagList;
+            if (displayTagMap["_videos"]) displayTagList << tr("Videos");
+            if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
+            if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
+            if (displayTagMap["_ftindex"]) displayTagList << tr("Fulltext index");
+            QString s = displayTagList.join(", ");
             values.append(s);
         }
     }
@@ -365,14 +377,13 @@ QStringList ContentManager::getBookIds()
     kiwix::Filter filter;
     std::vector<std::string> tags;
     if (m_categoryFilter != "all" && m_categoryFilter != "other") {
-        tags.push_back(m_categoryFilter.toStdString());
+        tags.push_back("_category:"+m_categoryFilter.toStdString());
         filter.acceptTags(tags);
     }
     if (m_categoryFilter == "other") {
-        auto categoryList = KiwixApp::instance()->getMainWindow()->getSideContentManager()->getCategoryList();
-        for (auto& category: categoryList) {
-            if (category != "Other") {
-                tags.push_back(category.toLower().toStdString());
+        for (auto& category: S_CATEGORIES) {
+            if (category.first != "other" && category.first != "all") {
+                tags.push_back("_category:"+category.first.toStdString());
             }
         }
         filter.rejectTags(tags);

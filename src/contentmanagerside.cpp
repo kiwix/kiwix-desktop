@@ -5,6 +5,7 @@
 #include <QLocale>
 
 #include "klistwidgetitem.h"
+#include "static_content.h"
 
 ContentManagerSide::ContentManagerSide(QWidget *parent) :
     QWidget(parent),
@@ -37,153 +38,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     mp_categorySelector->setHidden(true);
     mp_ui->contentTypeButton->hide();
 
-    for (auto lang:
-        {
-         QLocale::AnyLanguage,
-         QLocale::Afar,
-         QLocale::Afrikaans,
-         QLocale::Akan,
-         QLocale::Amharic,
-         QLocale::Arabic,
-         QLocale::Assamese,
-         QLocale::Azerbaijani,
-         QLocale::Bashkir,
-         QLocale::Belarusian,
-         QLocale::Bulgarian,
-         QLocale::Bambara,
-         QLocale::Bengali,
-         QLocale::Tibetan,
-         QLocale::Breton,
-         QLocale::Bosnian,
-         QLocale::Catalan,
-         QLocale::Chechen,
-         QLocale::Corsican,
-         QLocale::Czech,
-         QLocale::Church,
-         QLocale::Chuvash,
-         QLocale::Welsh,
-         QLocale::Danish,
-         QLocale::German,
-         QLocale::Divehi,
-         QLocale::Dzongkha,
-         QLocale::Ewe,
-         QLocale::Greek,
-         QLocale::English,
-         QLocale::Spanish,
-         QLocale::Estonian,
-         QLocale::Basque,
-         QLocale::Persian,
-         QLocale::Fulah,
-         QLocale::Finnish,
-         QLocale::Faroese,
-         QLocale::French,
-         QLocale::WesternFrisian,
-         QLocale::Irish,
-         QLocale::Gaelic,
-         QLocale::Galician,
-         QLocale::Guarani,
-         QLocale::Gujarati,
-         QLocale::Manx,
-         QLocale::Hausa,
-         QLocale::Hebrew,
-         QLocale::Hindi,
-         QLocale::Croatian,
-         QLocale::Hungarian,
-         QLocale::Armenian,
-         QLocale::Interlingua,
-         QLocale::Indonesian,
-         QLocale::Igbo,
-         QLocale::Icelandic,
-         QLocale::Italian,
-         QLocale::Inuktitut,
-         QLocale::Japanese,
-         QLocale::Javanese,
-         QLocale::Georgian,
-         QLocale::Kikuyu,
-         QLocale::Kazakh,
-         QLocale::Greenlandic,
-         QLocale::Khmer,
-         QLocale::Kannada,
-         QLocale::Korean,
-         QLocale::Kashmiri,
-         QLocale::Kurdish,
-         QLocale::Cornish,
-         QLocale::Kirghiz,
-         QLocale::Luxembourgish,
-         QLocale::Ganda,
-         QLocale::Lingala,
-         QLocale::Lao,
-         QLocale::Lithuanian,
-         QLocale::Latvian,
-         QLocale::Malagasy,
-         QLocale::Maori,
-         QLocale::Maori,
-         QLocale::Macedonian,
-         QLocale::Malayalam,
-         QLocale::Mongolian,
-         QLocale::Marathi,
-         QLocale::Malay,
-         QLocale::Maltese,
-         QLocale::Burmese,
-         QLocale::Nepali,
-         QLocale::Dutch,
-         QLocale::NorwegianNynorsk,
-         QLocale::NorwegianBokmal,
-         QLocale::Nyanja,
-         QLocale::Occitan,
-         QLocale::Oromo,
-         QLocale::Oriya,
-         QLocale::Ossetic,
-         QLocale::Punjabi,
-         QLocale::Polish,
-         QLocale::Pashto,
-         QLocale::Portuguese,
-         QLocale::Quechua,
-         QLocale::Romansh,
-         QLocale::Rundi,
-         QLocale::Romanian,
-         QLocale::Russian,
-         QLocale::Kinyarwanda,
-         QLocale::Sanskrit,
-         QLocale::Sindhi,
-         QLocale::NorthernSami,
-         QLocale::Sango,
-         QLocale::Sinhala,
-         QLocale::Slovak,
-         QLocale::Slovenian,
-         QLocale::Shona,
-         QLocale::Somali,
-         QLocale::Albanian,
-         QLocale::Serbian,
-         QLocale::Swati,
-         QLocale::SouthernSotho,
-         QLocale::Swedish,
-         QLocale::Swahili,
-         QLocale::Tamil,
-         QLocale::Telugu,
-         QLocale::Tajik,
-         QLocale::Thai,
-         QLocale::Tigrinya,
-         QLocale::Turkmen,
-         QLocale::Filipino,
-         QLocale::Tswana,
-         QLocale::Tongan,
-         QLocale::Turkish,
-         QLocale::Tsonga,
-         QLocale::Tatar,
-         QLocale::Uighur,
-         QLocale::Ukrainian,
-         QLocale::Urdu,
-         QLocale::Uzbek,
-         QLocale::Venda,
-         QLocale::Vietnamese,
-         QLocale::Walloon,
-         QLocale::Wolof,
-         QLocale::Xhosa,
-         QLocale::Yoruba,
-         QLocale::Chinese,
-         QLocale::Zulu,
-    })
+    for(auto lang: S_LANGUAGES)
     {
         auto currentLang = QLocale().language();
         if (lang == QLocale::AnyLanguage) {
@@ -208,31 +63,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         }
     }
 
-    for (auto category: {
-         "All",
-         "Gutenberg", // Gutenberg book has wrong tag
-         "Other",
-         "Phet", // Phet books have no tags
-         "Psiram",
-         "Stack Exchange",
-         "Ted",  // Ted books have wrong tags
-         "Vikidia",
-         "Wikibooks", // wikibooks have no tags
-         "Wikinews",
-         "Wikipedia",
-         "Wikiquote",
-         "Wikisource",
-        //  "Wikispecies", // Wikispecies books have wrong tags
-         "Wikiversity",
-         "Wikivoyage",
-         "Wiktionary"
-    })
+    for (auto category: S_CATEGORIES)
     {
-        auto c = QString(category);
-        m_categoryList.append(c);
-        auto item = new KListWidgetItem(c);
+        auto item = new KListWidgetItem(category.second);
+        item->setData(Qt::UserRole, category.first);
         mp_categorySelector->addItem(item);
-        if (c ==  "All")
+        if (category.first ==  "all")
         {
             item->setSelected(true);
         }
@@ -253,22 +89,20 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
             this, [=]() {
                 auto item = mp_languageSelector->selectedItems().at(0);
                 if (!item) return;
-                auto lang = QLocale::Language(item->data(Qt::UserRole).toInt());
+                auto langId = item->data(Qt::UserRole).toInt();
+                auto lang = QLocale::Language(langId);
                 if (lang == QLocale::AnyLanguage) {
                     mp_contentManager->setCurrentLanguage("*");
                     return;
                 }
-                auto locale = QLocale(QLocale::Language(item->data(Qt::UserRole).toInt()));
+                auto locale = QLocale(lang);
                 mp_contentManager->setCurrentLanguage(locale.name().split("_").at(0));
     });
     connect(mp_categorySelector, &QListWidget::itemSelectionChanged,
             this, [=]() {
                 auto item = mp_categorySelector->selectedItems().at(0);
                 if (!item) return;
-                auto category = item->text();
-                if (category == "Stack Exchange") {
-                    category = "Stackexchange";
-                }
+                auto category = item->data(Qt::UserRole).toString();
                 mp_contentManager->setCurrentCategoryFilter(category);
     });
 }

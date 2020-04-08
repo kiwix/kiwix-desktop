@@ -86,5 +86,22 @@
     "hide":"Hide",
     "open-in-browser":"Open in browser",
     "start-kiwix-server":"Start Kiwix Server",
-    "stop-kiwix-server":"Stop Kiwix Server"
+    "stop-kiwix-server":"Stop Kiwix Server",
+    "all":"All",
+    "other":"Other",
+    "gutemberg":"Gutenberg",
+    "phet":"Phet",
+    "psiram":"Psiram",
+    "stack_exchange":"Stack Exchange",
+    "ted":"Ted",
+    "vikidia":"Vikidia",
+    "wikibooks":"Wikibooks",
+    "wikinews":"Wikinews",
+    "wikipedia":"Wikipedia",
+    "wikiquote":"Wikiquote",
+    "wikisource":"Wikisource",
+    "wikispecies":"Wikispecies",
+    "wikiversity":"Wikiversity",
+    "wikivoyage":"Wikivoyage",
+    "wiktionary":"Wiktionary"
 }

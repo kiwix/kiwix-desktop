@@ -72,7 +72,8 @@ SOURCES += \
     src/localkiwixserver.cpp \
     src/fullscreenwindow.cpp \
     src/fullscreennotification.cpp \
-    src/zimview.cpp
+    src/zimview.cpp \
+    src/static_content.cpp
 
 HEADERS += \
     src/findinpagebar.h \
@@ -103,7 +104,8 @@ HEADERS += \
     src/fullscreenwindow.h \
     src/fullscreennotification.h \
     src/menuproxystyle.h \
-    src/zimview.h
+    src/zimview.h \
+    src/static_content.h
 
 FORMS += \
     src/findinpagebar.ui \
