@@ -1,6 +1,17 @@
-kiwix-desktop rc5
+kiwix-desktop 2.0
 =================
+
  * Readinglist doesn't close automatically
+ * Move the search bar (in article) at the bottom of the view.
+ * Fix zoom using mouse wheel.
+ * Make new tab empty (instead of reusing the previous url).
+ * Restore title tab when search bar loses focus.
+ * Allow user to set the download directory in the setting.
+ * Add search (in zim file) feature.
+ * Correctly handle redirection article in zimfile.
+ * Add a translation system using translatewiki.
+ * Use the new tag system of library.kiwix.org.
+ * Lot of UI tweaking and bug fixes.
 
 kiwix-desktop rc4
 =================
