@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     QWebEngineUrlScheme::registerScheme(scheme);
 #endif
     KiwixApp a(argc, argv);
+    a.init();
 
     QCommandLineParser parser;
     parser.addPositionalArgument("zimfile", "The zim file");

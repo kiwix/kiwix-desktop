@@ -37,30 +37,6 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     m_appTranslator.load(QLocale(), "kiwix-desktop", "_", ":/i18n/");
     installTranslator(&m_appTranslator);
     
-    try {
-        mp_downloader = new kiwix::Downloader();
-    } catch (exception& e) {
-        QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
-        gt("error-downloader-launch-message") + "<br><br>" + e.what());
-    }
-    mp_manager = new ContentManager(&m_library, mp_downloader);
-
-    auto icon = QIcon();
-    icon.addFile(":/icons/kiwix-app-icons-square.svg");
-    setWindowIcon(icon);
-
-    setApplicationName("Kiwix");
-    setDesktopFileName("kiwix.desktop");
-
-    setStyle(QStyleFactory::create("Windows"));
-    QFile styleFile(":/css/style.css");
-    styleFile.open(QIODevice::ReadOnly);
-    auto byteContent = styleFile.readAll();
-    styleFile.close();
-    QString style(byteContent);
-    setStyleSheet(style);
-
-
     QString fontName;
     if (platformName() == "windows") {
         QFontDatabase::addApplicationFont(":/fonts/SegoeUI/segoeuib.ttf");
@@ -88,6 +64,33 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 
     auto font = QFont(fontName);
     setFont(font);
+}
+
+void KiwixApp::init()
+{
+    try {
+        mp_downloader = new kiwix::Downloader();
+    } catch (exception& e) {
+        QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
+        gt("error-downloader-launch-message") + "<br><br>" + e.what());
+    }
+    mp_manager = new ContentManager(&m_library, mp_downloader);
+
+    auto icon = QIcon();
+    icon.addFile(":/icons/kiwix-app-icons-square.svg");
+    setWindowIcon(icon);
+
+    setApplicationName("Kiwix");
+    setDesktopFileName("kiwix.desktop");
+
+    setStyle(QStyleFactory::create("Windows"));
+    QFile styleFile(":/css/style.css");
+    styleFile.open(QIODevice::ReadOnly);
+    auto byteContent = styleFile.readAll();
+    styleFile.close();
+    QString style(byteContent);
+    setStyleSheet(style);
+
 
     createAction();
     mp_mainWindow = new MainWindow;
