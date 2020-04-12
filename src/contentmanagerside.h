@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QCheckBox>
 #include "contentmanager.h"
+#include "contenttypefilter.h"
 
 namespace Ui {
 class contentmanagerside;
@@ -27,6 +28,8 @@ private:
     QListWidget* mp_languageSelector;
     QCheckBox* mp_categoryButton;
     QListWidget* mp_categorySelector;
+    QCheckBox* mp_contentTypeButton;
+    QList<ContentTypeFilter*> m_contentTypeFilters;
 };
 
 #endif // CONTENTMANAGERSIDE_H

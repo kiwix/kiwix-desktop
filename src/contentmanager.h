@@ -7,6 +7,7 @@
 #include "contentmanagerview.h"
 #include <kiwix/downloader.h>
 #include "opdsrequestmanager.h"
+#include "contenttypefilter.h"
 
 class ContentManager : public QObject
 {
@@ -25,6 +26,7 @@ public:
     QStringList getDownloadIds();
     void setCurrentLanguage(QString language);
     void setCurrentCategoryFilter(QString category);
+    void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
 
 private:
     Library* mp_library;
@@ -36,6 +38,7 @@ private:
     QString m_currentLanguage;
     QString m_searchQuery;
     QString m_categoryFilter = "all";
+    QList<ContentTypeFilter*> m_contentTypeFilters;
     kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
     bool m_sortOrderAsc = true;
 

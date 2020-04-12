@@ -28,15 +28,58 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     mp_ui->localFileButton ->setText(gt("local-files"));
     mp_ui->languageButton->setText(gt("browse-by-language"));
     mp_ui->categoryButton->setText(gt("browse-by-category"));
+    mp_ui->contentTypeButton->setText(gt("content-type"));
+
     mp_languageButton = mp_ui->languageButton;
     mp_languageSelector = mp_ui->languageSelector;
     connect(mp_languageButton, &QCheckBox::toggled, this, [=](bool checked) { mp_languageSelector->setHidden(!checked); });
     mp_languageSelector->setHidden(true);
+
     mp_categoryButton = mp_ui->categoryButton;
     mp_categorySelector = mp_ui->categorySelector;
     connect(mp_categoryButton, &QCheckBox::toggled, this, [=](bool checked) { mp_categorySelector->setHidden(!checked); });
     mp_categorySelector->setHidden(true);
-    mp_ui->contentTypeButton->hide();
+
+    mp_contentTypeButton = mp_ui->contentTypeButton;
+    connect(mp_contentTypeButton, &QCheckBox::toggled, this, [=](bool checked) { mp_ui->contentTypeSelector->setHidden(!checked); });
+    mp_ui->contentTypeSelector->setHidden(true);
+
+    mp_ui->contentTypeAllButton->setText(gt("all"));
+    mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: bold}");
+    connect(mp_ui->contentTypeAllButton, &QCheckBox::clicked, this, [=](bool checked) {
+        Q_UNUSED(checked);
+        mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: bold}");
+        for (auto &contentTypeFilter : m_contentTypeFilters) {
+            contentTypeFilter->setCheckState(Qt::Unchecked);
+        }
+        mp_contentManager->setCurrentContentTypeFilter(m_contentTypeFilters);
+    });
+    
+    ContentTypeFilter* videosFilter = new ContentTypeFilter("pictures", this);
+    ContentTypeFilter* picturesFilter = new ContentTypeFilter("videos", this);
+    ContentTypeFilter* detailsFilter = new ContentTypeFilter("details", this);
+    ContentTypeFilter* ftindexFilter = new ContentTypeFilter("ftindex", this);
+    m_contentTypeFilters.push_back(videosFilter);
+    m_contentTypeFilters.push_back(picturesFilter);
+    m_contentTypeFilters.push_back(detailsFilter);
+    m_contentTypeFilters.push_back(ftindexFilter);
+
+    auto layout = static_cast<QVBoxLayout*>(mp_ui->contentTypeSelector->layout());
+    for (auto &contentTypeFilter : m_contentTypeFilters) {
+        layout->addWidget(contentTypeFilter, 0, Qt::AlignTop);
+        connect(contentTypeFilter, &QCheckBox::clicked, this, [=](bool checked) {
+            Q_UNUSED(checked);
+            bool activeFilter = false;
+            for (auto &contentTypeFilter : m_contentTypeFilters) {
+                if (contentTypeFilter->checkState() != Qt::Unchecked) {
+                    activeFilter = true;
+                    break;
+                }
+            }
+            mp_ui->contentTypeAllButton->setStyleSheet(activeFilter ? "" : "*{font-weight: bold}");
+            mp_contentManager->setCurrentContentTypeFilter(m_contentTypeFilters);
+        });
+    }
 
     for(auto lang: S_LANGUAGES)
     {
@@ -71,14 +114,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
             item->setSelected(true);
         }
     }
-
 }
 
 ContentManagerSide::~ContentManagerSide()
 {
     delete mp_ui;
 }
-
 
 void ContentManagerSide::setContentManager(ContentManager *contentManager)
 {
