@@ -35,9 +35,11 @@ protected:
 private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
-    std::vector<QUrl> m_urlList;
+    QVector<QUrl> m_urlList;
     SearchButton m_button;
     QString m_title;
+    QString m_searchbarInput;
+    bool m_returnPressed = false;
 
 private slots:
     void updateCompletion(const QString& text);

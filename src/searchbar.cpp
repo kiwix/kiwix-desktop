@@ -78,6 +78,20 @@ SearchBar::SearchBar(QWidget *parent) :
     connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);
     connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
             this, &SearchBar::on_currentTitleChanged);
+    connect(this, &QLineEdit::textEdited, this,
+            [=](const QString &text) {
+                m_searchbarInput = text;
+                m_returnPressed = false;
+    });
+    connect(this, &QLineEdit::textChanged, this,
+            [=](const QString &text) {
+                if (m_returnPressed) {
+                    this->setText(m_searchbarInput);
+                }
+    });
+    connect(this, &QLineEdit::returnPressed, this, [=]() {
+        m_returnPressed = true;
+    });
 }
 
 void SearchBar::on_currentTitleChanged(const QString& title)
@@ -159,14 +173,18 @@ void SearchBar::updateCompletion(const QString &text)
     }
     query.addQueryItem("pattern", text);
     url.setQuery(query);
-    wordList << QString("Search for ")  + text;
+    wordList << text + " (" + gt("fulltext-search") + ")";
     m_urlList.push_back(url);
     m_completionModel.setStringList(wordList);
 }
 
 void SearchBar::openCompletion(const QModelIndex &index)
 {
-    auto url = m_urlList.at(index.row());
+    QUrl url;
+    if (this->text().compare(index.data().toString(), Qt::CaseInsensitive) == 0) {
+        url = m_urlList.at(index.row());
+    } else {
+        url = m_urlList.last();
+    }
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
 }
-
