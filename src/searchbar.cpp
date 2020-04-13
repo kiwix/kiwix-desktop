@@ -149,7 +149,7 @@ void SearchBar::updateCompletion(const QString &text)
     QUrl url;
     url.setScheme("zim");
     if (reader) {
-        url.setHost(qurl.host());
+        url.setHost(currentZimId + ".zim");
         reader->searchSuggestionsSmart(text.toStdString(), 15);
         std::string title, path;
         while (reader->getNextSuggestion(title, path)) {
