@@ -65,6 +65,7 @@ SearchBar::SearchBar(QWidget *parent) :
     setPlaceholderText(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
+    m_completer.setMaxVisibleItems(16);
     setCompleter(&m_completer);
 
     QFile styleFile(":/css/popup.css");
