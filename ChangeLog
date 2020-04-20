@@ -1,3 +1,10 @@
+kiwix-desktop 2.0.1
+===================
+
+ * Automatically migrate data from the old data dir to the new one.
+ * Improve UX of the fulltext search/suggestions.
+ * Fix menu in fullscreen on Windows.
+
 kiwix-desktop 2.0
 =================
 
