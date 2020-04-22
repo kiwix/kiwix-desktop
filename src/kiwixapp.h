@@ -12,12 +12,13 @@
 #include "settingsmanager.h"
 #include "translation.h"
 
+#include <QtSingleApplication>
 #include <QApplication>
 #include <QErrorMessage>
 #include <QTranslator>
 
 
-class KiwixApp : public QApplication
+class KiwixApp : public QtSingleApplication
 {
     Q_OBJECT
     Q_PROPERTY(SideBarType currentSideType MEMBER m_currentSideType NOTIFY currentSideTypeChanged)

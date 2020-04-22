@@ -16,16 +16,21 @@ int main(int argc, char *argv[])
     QWebEngineUrlScheme::registerScheme(scheme);
 #endif
     KiwixApp a(argc, argv);
-    a.init();
-
     QCommandLineParser parser;
-    parser.addPositionalArgument("zimfile", "The zim file");
-
-    parser.process(a);
     QString zimfile;
+
+    parser.addPositionalArgument("zimfile", "The zim file");
+    parser.process(a);
     auto positionalArguments = parser.positionalArguments();
-    if (positionalArguments.size() >= 1){
+    if (positionalArguments.size() >= 1) {
         zimfile = parser.positionalArguments().at(0);
+    }
+    if (a.isRunning()) {
+        a.sendMessage(zimfile);
+        return 0;
+    }
+    a.init();
+    if (!zimfile.isEmpty()) {
         a.openZimFile(zimfile);
     }
     return a.exec();

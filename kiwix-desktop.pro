@@ -111,6 +111,7 @@ FORMS += \
     src/readinglistbar.ui \
     ui/localkiwixserver.ui
 
+include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8
 
 isEmpty(PREFIX) {
