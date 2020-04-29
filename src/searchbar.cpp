@@ -1,10 +1,10 @@
 #include "searchbar.h"
 
 #include <QCompleter>
-#include <QTimer>
 #include <QFocusEvent>
 
 #include "kiwixapp.h"
+#include "suggestionlistworker.h"
 
 SearchButton::SearchButton(QWidget *parent) :
     QPushButton(parent),
@@ -62,6 +62,8 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer(&m_completionModel, this),
     m_button(this)
 {
+    mp_typingTimer = new QTimer(this);
+    mp_typingTimer->setSingleShot(true);
     setPlaceholderText(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
@@ -75,13 +77,15 @@ SearchBar::SearchBar(QWidget *parent) :
     QString style(byteContent);
     m_completer.popup()->setStyleSheet(style);
 
-    connect(this, &QLineEdit::textEdited, this, &SearchBar::updateCompletion);
+    qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
+    connect(mp_typingTimer, &QTimer::timeout, this, &SearchBar::updateCompletion);
     connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
             this, &SearchBar::on_currentTitleChanged);
     connect(this, &QLineEdit::textEdited, this,
             [=](const QString &text) {
                 m_searchbarInput = text;
                 m_returnPressed = false;
+                mp_typingTimer->start(100);
     });
     connect(this, &QLineEdit::textChanged, this,
             [=](const QString &text) {
@@ -92,6 +96,18 @@ SearchBar::SearchBar(QWidget *parent) :
     connect(this, &QLineEdit::returnPressed, this, [=]() {
         m_returnPressed = true;
     });
+}
+
+void SearchBar::hideSuggestions()
+{
+    m_completer.popup()->hide();
+}
+
+void SearchBar::clearSuggestions()
+{
+    QStringList empty;
+    m_completionModel.setStringList(empty);
+    m_urlList.clear();
 }
 
 void SearchBar::on_currentTitleChanged(const QString& title)
@@ -117,7 +133,7 @@ void SearchBar::focusInEvent( QFocusEvent* event)
     if (event->reason() == Qt::ActiveWindowFocusReason ||
         event->reason() == Qt::MouseFocusReason) {
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
-        this, &SearchBar::openCompletion);
+        this, QOverload<const QModelIndex &>::of(&SearchBar::openCompletion));
     }
     QLineEdit::focusInEvent(event);
     m_button.set_searchMode(true);
@@ -134,56 +150,46 @@ void SearchBar::focusOutEvent(QFocusEvent* event)
     return QLineEdit::focusOutEvent(event);
 }
 
-void SearchBar::updateCompletion(const QString &text)
+void SearchBar::updateCompletion()
 {
-    QStringList wordList;
-    m_urlList.clear();
+    mp_typingTimer->stop();
+    clearSuggestions();
     auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if (!currentWidget) {
-        m_completionModel.setStringList(wordList);
+    if (!currentWidget || currentWidget->url().isEmpty() || m_searchbarInput.isEmpty()) {
+        hideSuggestions();
         return;
     }
-    auto qurl = currentWidget->url();
-    qInfo() << "Search bar url is " << qurl;
-    auto currentZimId = qurl.host().split(".")[0];
-    auto reader = KiwixApp::instance()->getLibrary()->getReader(currentZimId);
-    QUrl url;
-    url.setScheme("zim");
-    if (reader) {
-        url.setHost(currentZimId + ".zim");
-        reader->searchSuggestionsSmart(text.toStdString(), 15);
-        std::string title, path;
-        while (reader->getNextSuggestion(title, path)) {
-            url.setPath(QString::fromStdString(path));
-            wordList << QString::fromStdString(title);
-            m_urlList.push_back(url);
+    m_token++;
+    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, this);
+    connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
+    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, int token) {
+        if (token != m_token) {
+            return;
         }
-    }
-    QUrlQuery query;
-    url.setPath("");
-    if (reader) {
-        // The host is used to determine the currentZimId
-        // The content query item is used to know in which zim search (as for kiwix-serve)
-        url.setHost(currentZimId + ".search");
-        query.addQueryItem("content", currentZimId);
-    } else {
-        // We do not allow multi zim search for now.
-        // We don't have a correct UI to select on which zim search,
-        // how to display results, ...
-        //url.setHost("library.search");
-    }
-    query.addQueryItem("pattern", text);
-    url.setQuery(query);
-    wordList << text + " (" + gt("fulltext-search") + ")";
-    m_urlList.push_back(url);
-    m_completionModel.setStringList(wordList);
+        m_urlList = urlList;
+        if (m_returnPressed) {
+            openCompletion(suggestions.first(), 0);
+            return;
+        }
+        m_completionModel.setStringList(suggestions);
+        m_completer.complete();
+    });
+    connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
+    suggestionWorker->start();
 }
 
 void SearchBar::openCompletion(const QModelIndex &index)
 {
+    if (m_urlList.size() != 0) {
+        openCompletion(index.data().toString(), index.row());
+    }
+}
+
+void SearchBar::openCompletion(const QString& text, int index)
+{
     QUrl url;
-    if (this->text().compare(index.data().toString(), Qt::CaseInsensitive) == 0) {
-        url = m_urlList.at(index.row());
+    if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
+        url = m_urlList.at(index);
     } else {
         url = m_urlList.last();
     }
