@@ -29,6 +29,7 @@ public:
 
 protected slots:
     void toggleFullScreen();
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     Ui::MainWindow *mp_ui;

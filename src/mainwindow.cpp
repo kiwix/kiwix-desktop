@@ -62,6 +62,19 @@ void MainWindow::toggleFullScreen() {
         showFullScreen();
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    auto key = event->key();
+    auto modifier = event->modifiers();
+    if (key == Qt::Key_F6 ||
+        (key == Qt::Key_L && modifier == Qt::ControlModifier) ||
+        (key == Qt::Key_D && modifier == Qt::AltModifier)) {
+        getTopWidget()->getSearchBar().selectAll();
+        getTopWidget()->getSearchBar().setFocus();
+    }
+    return QWidget::keyPressEvent(event);
+}
+
 TabBar* MainWindow::getTabBar()
 {
     return mp_ui->tabBar;

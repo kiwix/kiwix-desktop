@@ -130,7 +130,8 @@ void SearchBar::focusOutEvent(QFocusEvent* event)
         m_button.set_searchMode(false);
         setText(m_title);
     }
-    return QLineEdit::focusInEvent(event);
+    deselect();
+    return QLineEdit::focusOutEvent(event);
 }
 
 void SearchBar::updateCompletion(const QString &text)
