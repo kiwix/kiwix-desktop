@@ -111,7 +111,6 @@ FORMS += \
     src/readinglistbar.ui \
     ui/localkiwixserver.ui
 
-TRANSLATIONS = "resources/i18n/kiwix-desktop_fr.ts"
 CODECFORSRC = UTF-8
 
 isEmpty(PREFIX) {
@@ -167,10 +166,5 @@ RESOURCES += \
     resources/contentmanager.qrc \
     resources/settingsmanager.qrc \
     resources/style.qrc
-
-unix {
-    system(lupdate -locations relative -no-ui-lines $$_PRO_FILE_)
-    system(lrelease $$_PRO_FILE_)
-}
 
 RC_ICONS = resources/icons/kiwix/app_icon.ico
