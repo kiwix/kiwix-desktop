@@ -30,7 +30,6 @@ public slots:
     int getKiwixServerPort() { return m_kiwixServerPort; };
     void setZoomFactor(qreal zoomFactor);
     qreal getZoomFactor() { return m_zoomFactor; };
-    void validDownloadDir(QString dir);
     bool setDownloadDir(QString downloadDir);
     QString getDownloadDir() { return m_downloadDir; }
     void resetDownloadDir();
@@ -38,12 +37,12 @@ public slots:
 
 private:
     void initSettings();
+    int downloadDirConfirmDialog(const QString& dir);
 
 signals:
     void portChanged(int port);
     void zoomChanged(qreal zoomFactor);
     void downloadDirChanged(QString downloadDir);
-    void settingsChecked(bool valid);
 
 private:
     QSettings m_settings;

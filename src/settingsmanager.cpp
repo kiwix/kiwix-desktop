@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 #include <QDir>
 #include <QFileDialog>
+#include <QMessageBox>
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
@@ -65,11 +66,6 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
     m_settings.setValue("view/zoomFactor", zoomFactor);
 }
 
-void SettingsManager::validDownloadDir(QString dir)
-{
-    emit(settingsChecked(fileExists(dir.toStdString())));
-}
-
 bool SettingsManager::setDownloadDir(QString downloadDir)
 {
     m_downloadDir = downloadDir;
@@ -77,18 +73,40 @@ bool SettingsManager::setDownloadDir(QString downloadDir)
     return true;
 }
 
+int SettingsManager::downloadDirConfirmDialog(const QString& dir)
+{
+    QMessageBox msgBox;
+    msgBox.setText(gt("download-dir-dialog-title"));
+    msgBox.setInformativeText(gt("download-dir-dialog-msg") + "\n" + dir);
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+
+    int ret = msgBox.exec();
+    if (ret == QMessageBox::Save) {
+        setDownloadDir(dir);
+        emit(downloadDirChanged(dir));
+    }
+}
+
 void SettingsManager::resetDownloadDir()
 {
-    emit(downloadDirChanged(QString::fromStdString(getDataDirectory())));
+    auto dir = QString::fromStdString(getDataDirectory());
+    if (dir == m_downloadDir) {
+        return;
+    }
+    downloadDirConfirmDialog(dir);
 }
 
 void SettingsManager::browseDownloadDir()
 {
     QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
                                                     gt("browse-directory"),
-                                                    QString(),
+                                                    m_downloadDir,
                                                     QFileDialog::ShowDirsOnly);
-    emit(downloadDirChanged(dir));
+    if (dir == m_downloadDir || dir.isEmpty()) {
+        return;
+    }
+    downloadDirConfirmDialog(dir);
 }
 
 QStringList SettingsManager::getTranslations(const QStringList &keys)

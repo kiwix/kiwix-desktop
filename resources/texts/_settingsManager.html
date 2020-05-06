@@ -11,19 +11,18 @@
 <div id="settings">
     <div id="header">
         <h1>{{ gt("settings") }}</h1>
-        <input id="save-button" type="button" :value="gt('apply')" v-on:click="saveSettings()">
     </div>
     <div class="row">
         <label>{{ gt("port-for-local-kiwix-server-setting") }}</label>
-        <input type="number" min="1" max="65535" v-model="kiwixServerPort" > 
+        <input type="number" min="1" max="65535" v-on:change="setPort()" v-model="kiwixServerPort">
     </div>
     <div class="row">
         <label>{{ gt("zoom-level-setting") }}</label>
-        <div class="percentage-symbol"><input type="number" step="10" min="30" max="500" v-model="zoomFactor" ></div>
+        <div class="percentage-symbol"><input type="number" step="10" min="30" max="500" v-on:change="setZoomFactor()" v-model="zoomFactor" ></div>
     </div>
     <div class="row">
         <label>{{ gt("download-directory-setting") }}</label>
-        <input style="flex: 1;" type="text" v-model="downloadDir" >
+        <input style="flex: 1;" type="text" v-model="downloadDir" readonly>
         <input type="button" :value="gt('reset')" v-on:click="resetDownloadDir()">
         <input type="button" :value="gt('browse')" v-on:click="browseDownloadDir()">
     </div>

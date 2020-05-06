@@ -111,5 +111,8 @@
     "yes":"yes",
     "no":"no",
     "no-filter":"no filter",
-    "open-link-in-web-browser":"Open link in web browser"
+    "open-link-in-web-browser":"Open link in web browser",
+    "download-dir-dialog-title":"Are you sure you want to change the download directory ?",
+    "download-dir-dialog-msg":"The new download directory path will be :",
+    "invalid-port":"Invalid port"
 }
