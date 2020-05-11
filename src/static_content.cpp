@@ -28,7 +28,6 @@ void initStaticContent() {
 #undef PUSH
 
 #define PUSH(value) S_LANGUAGES.push_back(value)
-  PUSH(QLocale::AnyLanguage);
   PUSH(QLocale::Afar);
   PUSH(QLocale::Afrikaans);
   PUSH(QLocale::Akan);

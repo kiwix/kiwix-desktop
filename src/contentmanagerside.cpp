@@ -41,12 +41,6 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     for(auto lang: S_LANGUAGES)
     {
         auto currentLang = QLocale().language();
-        if (lang == QLocale::AnyLanguage) {
-            auto item = new KListWidgetItem("All");
-            item->setData(Qt::UserRole, lang);
-            mp_languageSelector->addItem(item);
-            continue;
-        }
         auto locale = QLocale(lang);
         if (locale.language() != lang) {
             // Qt may not find the locale for the lang :/
@@ -62,6 +56,10 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
             item->setSelected(true);
         }
     }
+    mp_languageSelector->sortItems();
+    auto item = new KListWidgetItem("All");
+    item->setData(Qt::UserRole, QLocale::AnyLanguage);
+    mp_languageSelector->insertItem(0, item);
 
     for (auto category: S_CATEGORIES)
     {
