@@ -38,12 +38,15 @@ Following libraries need to be available:
 * [kiwix-lib](https://github.com/kiwix/kiwix-lib/)
 * [Qt](https://www.qt.io/)
 * [aria2](https://aria2.github.io/)
+* [vue.js](https://vuejs.org/js/vue.js)
 
 These dependencies may or may not be packaged by your operating
 system. They may also be packaged but only in an older version. The
 compilation script will tell you if one of them is missing or too old.
 In the worse case, you will have to download and compile bleeding edge
 version by hand.
+
+The [vue.js](https://vuejs.org/js/vue.js) file has to be moved in the `kiwix-desktop/resources/js` directory. This is done automatically if you use [kiwix-build](https://github.com/kiwix/kiwix-build).
 
 kiwix-lib has to be compiled dynamically, the best way to have it is
 to use [kiwix-build](https://github.com/kiwix/kiwix-build).
