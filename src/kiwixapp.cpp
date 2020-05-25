@@ -15,12 +15,14 @@
 #include <QMessageBox>
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
-    : QApplication(argc, argv),
+    : QtSingleApplication("kiwix-desktop", argc, argv),
       m_settingsManager(),
       m_profile(),
       m_libraryDirectory(findLibraryDirectory()),
       m_library(),
       mp_downloader(nullptr),
+      mp_manager(nullptr),
+      mp_mainWindow(nullptr),
       mp_server(new kiwix::KiwixServe(
         appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"),
         m_settingsManager.getKiwixServerPort()))
@@ -106,7 +108,13 @@ void KiwixApp::init()
     setSideBar(CONTENTMANAGER_BAR);
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
+    setActivationWindow(mp_mainWindow);
     mp_mainWindow->show();
+    connect(this, &QtSingleApplication::messageReceived, this, [=](const QString &message) {
+        if (!message.isEmpty()) {
+            this->openZimFile(message);
+        }
+    });
 }
 
 KiwixApp::~KiwixApp()
@@ -119,8 +127,12 @@ KiwixApp::~KiwixApp()
         mp_downloader->close();
         delete mp_downloader;
     }
-    delete mp_manager;
-    delete mp_mainWindow;
+    if (mp_manager) {
+        delete mp_manager;
+    }
+    if (mp_mainWindow) {
+        delete mp_mainWindow;
+    }
 }
 
 QString KiwixApp::findLibraryDirectory()
