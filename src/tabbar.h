@@ -49,6 +49,9 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event);
 
+private:
+    QString textWithoutEllipsis(QString text);
+
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void libraryPageDisplayed(bool displayed);

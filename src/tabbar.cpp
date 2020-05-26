@@ -113,15 +113,27 @@ void TabBar::openUrl(const QUrl& url, bool newTab)
     webView->setUrl(url);
 }
 
+QString TabBar::textWithoutEllipsis(QString text)
+{
+    auto elidedText = this->fontMetrics().elidedText(text, Qt::ElideRight, 145);
+    if (text.size() != elidedText.size()) {
+        elidedText.remove(elidedText.size() - 1, 1);
+    }
+    qInfo() << elidedText;
+    return elidedText;
+}
+
 void TabBar::setTitleOf(const QString& title, ZimView* tab)
 {
     CURRENTIFNULL(tab);
+    QString text;
     if (title.startsWith("zim://")) {
         auto url = QUrl(title);
-        setTabText(mp_stackedWidget->indexOf(tab), url.path());
+        text = textWithoutEllipsis(url.path());
     } else {
-        setTabText(mp_stackedWidget->indexOf(tab), title);
+        text = textWithoutEllipsis(title);
     }
+    setTabText(mp_stackedWidget->indexOf(tab), text);
 }
 
 void TabBar::setIconOf(const QIcon &icon, ZimView *tab)
