@@ -34,6 +34,7 @@ protected:
     void wheelEvent(QWheelEvent *event);
     bool event(QEvent *event);
     bool eventFilter(QObject *src, QEvent *e);
+    void contextMenuEvent(QContextMenuEvent *event);
 
     QString m_currentZimId;
     QIcon m_icon;

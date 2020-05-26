@@ -110,5 +110,6 @@
     "details":"Full article",
     "yes":"yes",
     "no":"no",
-    "no-filter":"no filter"
+    "no-filter":"no filter",
+    "open-link-in-web-browser":"Open link in web browser"
 }
