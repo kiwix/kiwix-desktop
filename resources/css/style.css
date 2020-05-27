@@ -237,6 +237,10 @@ QTabBar::tab:last QToolButton::hover {
     show-decoration-selected: 0;
 }
 
+#contentTypeSelector QCheckBox {
+    padding: 0;
+}
+
 #categorySelector QScrollBar,
 #languageSelector QScrollBar,
 #readinglistbar QScrollBar {
@@ -256,6 +260,11 @@ QTabBar::tab:last QToolButton::hover {
     background-color: white;
     color: black;
     outline: none;
+}
+
+#contentTypeAllButton,
+ContentTypeFilter {
+    spacing: 10;
 }
 
 #readinglistbar QLabel {

@@ -345,6 +345,12 @@ void ContentManager::setCurrentCategoryFilter(QString category)
     emit(filterParamsChanged());
 }
 
+void ContentManager::setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilters)
+{
+    m_contentTypeFilters = contentTypeFilters;
+    emit(filterParamsChanged());
+}
+
 void ContentManager::updateLibrary() {
     if (m_local) {
         emit(pendingRequest(false));
@@ -378,7 +384,6 @@ QStringList ContentManager::getBookIds()
     std::vector<std::string> tags;
     if (m_categoryFilter != "all" && m_categoryFilter != "other") {
         tags.push_back("_category:"+m_categoryFilter.toStdString());
-        filter.acceptTags(tags);
     }
     if (m_categoryFilter == "other") {
         for (auto& category: S_CATEGORIES) {
@@ -388,6 +393,18 @@ QStringList ContentManager::getBookIds()
         }
         filter.rejectTags(tags);
     }
+
+    for (auto &contentTypeFilter : m_contentTypeFilters) {
+        auto state = contentTypeFilter->checkState();
+        auto filter = contentTypeFilter->getName();
+        if (state == Qt::PartiallyChecked) {
+            tags.push_back("_" + filter.toStdString() +":yes");
+        } else if (state == Qt::Checked) {
+            tags.push_back("_" + filter.toStdString() +":no");
+        }
+    }
+
+    filter.acceptTags(tags);
     filter.query(m_searchQuery.toStdString());
 
     if (m_local) {
