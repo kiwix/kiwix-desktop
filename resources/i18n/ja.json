@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"Object＊tofu",
+			"Omotecho"
+		]
+	},
+	"print": "印刷",
+	"new-tab": "新しいタブ",
+	"close-tab": "タブを閉じる",
+	"search-article": "記事を検索",
+	"find-in-page": "ページ内検索",
+	"feedback": "フィードバック",
+	"file": "ファイル",
+	"edit": "編集",
+	"view": "閲覧",
+	"search": "検索",
+	"settings": "設定",
+	"back": "戻る",
+	"search-files": "ファイルを検索",
+	"title": "タイトル",
+	"size": "サイズ",
+	"date": "日付",
+	"open": "開く",
+	"reporting-problem": "問題を報告",
+	"all-files": "すべてのファイル",
+	"browse-by-language": "言語一覧",
+	"hide": "非表示",
+	"open-in-browser": "ブラウザを開く",
+	"all": "すべて",
+	"wikibooks": "ウィキブックス",
+	"wikinews": "ウィキニュース",
+	"wikipedia": "ウィキペディア",
+	"wikiquote": "ウィキクォート",
+	"wikisource": "ウィキソース",
+	"wikispecies": "ウィキスピーシーズ",
+	"wikiversity": "ウィキバーシティ",
+	"wikivoyage": "ウィキボヤージュ",
+	"wiktionary": "ウィクショナリー"
+}

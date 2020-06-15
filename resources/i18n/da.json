@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Saederup92"
+		]
+	},
+	"name": "Engelsk",
+	"random-article": "Tilfældig artikel",
+	"new-tab": "Ny fane",
+	"browse-library": "Gennemse biblioteket",
+	"open-file": "Åbn fil",
+	"table-of-content": "Indholdsfortegnelse",
+	"zoom-in": "Zoom ind",
+	"zoom-out": "Zoom ud",
+	"help": "Hjælp",
+	"file": "Fil",
+	"tools": "Værktøjer",
+	"back": "Tilbage",
+	"title": "Titel",
+	"size": "Størrelse",
+	"date": "Dato",
+	"delete": "Slet",
+	"pause": "Sæt på pause",
+	"reset": "Nulstil",
+	"libraries": "Biblioteker",
+	"all-files": "Alle filer",
+	"local-files": "Lokale filer",
+	"hide": "Skjul",
+	"all": "Alle",
+	"other": "Andet",
+	"wikinews": "Wikinews",
+	"wikipedia": "Wikipedia",
+	"wikiquote": "Wikiquote",
+	"wikisource": "Wikisource",
+	"wikispecies": "Wikispecies",
+	"wikivoyage": "Wikivoyage",
+	"pictures": "Billeder",
+	"videos": "Videoer",
+	"yes": "ja",
+	"no": "nej"
+}

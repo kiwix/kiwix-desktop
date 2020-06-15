@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Fulup"
+		]
+	},
+	"open-zim": "Digeriñ Zim",
+	"print": "Moullañ",
+	"open-recent": "Digeriñ ar re nevez",
+	"search-article": "Klask ur pennad",
+	"reading-list": "Roll lenn",
+	"reading-list-title": "Roll lenn",
+	"zoom-reset": "Adderaouekaat ar zoum",
+	"help": "Skoazell",
+	"feedback": "Sonjoù",
+	"report-a-bug": "Disklêriañ un draen",
+	"tools": "Ostilhoù",
+	"back": "Distreiñ",
+	"search-files": "Klask restroù",
+	"title": "Titl",
+	"size": "Ment",
+	"resume": "Adstagañ ganti",
+	"cancel": "Nullañ",
+	"apply": "Lakaat da dalvezout",
+	"version": "Stumm",
+	"hide": "Kuzhat",
+	"start-kiwix-server": "Enaouiñ servijer Kiwix",
+	"other": "Traoù all",
+	"phet": "Phet",
+	"ted": "Ted",
+	"vikidia": "Vikidia",
+	"wikibooks": "Wikilevrioù",
+	"wikisource": "Wikimammenn",
+	"wiktionary": "Wikeriadur",
+	"fulltext-search": "Klask en destenn glok"
+}
