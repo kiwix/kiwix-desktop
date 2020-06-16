@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"আফতাবুজ্জামান"
+		]
+	},
+	"name": "ইংরেজি",
+	"print": "মুদ্রিত করুন",
+	"new-tab": "নতুন ট্যাব",
+	"close-tab": "ট্যাব বন্ধ করুন",
+	"search-article": "নিবন্ধ অনুসন্ধান করুন",
+	"help": "সাহায্য",
+	"feedback": "প্রতিক্রিয়া",
+	"exit": "প্রস্থান",
+	"view": "দেখুন",
+	"tools": "সরঞ্জাম",
+	"search": "অনুসন্ধান",
+	"back": "পিছন",
+	"forward": "সামনে",
+	"title": "শিরোনাম",
+	"size": "আকার",
+	"date": "তারিখ",
+	"release": "মুক্তি",
+	"version": "সংস্করণ",
+	"all": "সব",
+	"other": "অন্য",
+	"ted": "টেড",
+	"vikidia": "ভিকিডিয়া",
+	"wikibooks": "উইকিবই",
+	"wikinews": "উইকিসংবাদ",
+	"wikipedia": "উইকিপিডিয়া",
+	"wikiquote": "উইকিউক্তি",
+	"wikisource": "উইকিসংকলন",
+	"wikispecies": "উইকিপ্রজাতি",
+	"wikiversity": "উইকিবিশ্ববিদ্যালয়",
+	"wikivoyage": "উইকিভ্রমণ",
+	"wiktionary": "উইকিঅভিধান",
+	"fulltext-search": "পূর্ণপাঠ অনুসন্ধান",
+	"yes": "হ্যাঁ",
+	"no": "না"
+}

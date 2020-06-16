@@ -1,0 +1,24 @@
+{
+	"@metadata": {
+		"authors": [
+			"Abijeet Patro",
+			"Robby"
+		]
+	},
+	"name": "Current language to which the string is being translated to.",
+	"print": "{{identical|Print}}",
+	"help": "{{identical|Help}}",
+	"search": "{{identical|Search}}",
+	"back": "{{identical|Back}}",
+	"title": "{{identical|title}}",
+	"size": "{{identical|size}}",
+	"date": "{{identical|Date}}",
+	"delete": "{{identical|Delete}}",
+	"pause": "{{identical|Pause}}",
+	"cancel": "{{identical|Cancel}}",
+	"apply": "{{identical|apply}}",
+	"pictures": "{{identical|Picture}}",
+	"videos": "{{identical|Video}}",
+	"yes": "{{identical|yes}}",
+	"no": "{{identical|no}}"
+}
