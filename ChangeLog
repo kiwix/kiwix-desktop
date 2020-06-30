@@ -1,3 +1,13 @@
+kiwix-desktop 2.0.2
+===================
+
+ * Add shortcut to set focus on the searchbar
+ * Udpate logo
+ * Create only one instance of the application.
+ * Add content type filter
+ * Fluid suggestion list UX
+ * Fix text and add several translations
+
 kiwix-desktop 2.0.1
 ===================
 
