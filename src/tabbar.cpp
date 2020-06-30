@@ -27,7 +27,11 @@ TabBar::TabBar(QWidget *parent) :
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
                 this->createNewTab(true);
-                KiwixApp::instance()->getMainWindow()->getTopWidget()->getSearchBar().setFocus(Qt::MouseFocusReason);
+                auto topWidget = KiwixApp::instance()->getMainWindow()->getTopWidget();
+                topWidget->getSearchBar().setFocus(Qt::MouseFocusReason);
+                topWidget->getSearchBar().clear();
+                topWidget->getSearchBar().clearSuggestions();
+                topWidget->getSearchBar().hideSuggestions();
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
