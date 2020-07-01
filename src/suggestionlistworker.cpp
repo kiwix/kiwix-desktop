@@ -21,11 +21,11 @@ void SuggestionListWorker::run()
     url.setScheme("zim");
     if (reader) {
         url.setHost(currentZimId + ".zim");
-        reader->searchSuggestionsSmart(m_text.toStdString(), 15);
-        std::string title, path;
-        while (reader->getNextSuggestion(title, path)) {
-            url.setPath(QString::fromStdString(path));
-            suggestionList.append(QString::fromStdString(title));
+        kiwix::SuggestionsList_t suggestions;
+        reader->searchSuggestionsSmart(m_text.toStdString(), 15, suggestions);
+        for (auto& suggestion: suggestions) {
+            url.setPath(QString::fromStdString(suggestion[1]));
+            suggestionList.append(QString::fromStdString(suggestion[0]));
             urlList.append(url);
         }
     }
