@@ -1,3 +1,9 @@
+kiwix-desktop 2.0.3
+===================
+
+ * Update logo
+ * Use new threadsafe api of kiwix-lib to do suggestions search.
+
 kiwix-desktop 2.0.2
 ===================
 
