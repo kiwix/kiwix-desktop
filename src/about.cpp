@@ -16,9 +16,7 @@ About::About(QWidget *parent) :
     htmlText = htmlText.replace("%%RELEASE%%", gt("release"));
     htmlText = htmlText.replace("%%SOURCE_CODE%%", gt("source-code"));
     htmlText = htmlText.replace("%%VERSION_LABEL%%", gt("version"));
-    htmlText = htmlText.replace("%%VERSION%%", STR(GIT_VERSION));
-    htmlText = htmlText.replace("%%BUILD_DATE_LABEL%%", gt("build-date"));
-    htmlText = htmlText.replace("%%BUILD_DATE%%", STR(BUILD_DATE));
+    htmlText = htmlText.replace("%%VERSION%%", STR(VERSION));
     htmlText = htmlText.replace("%%REPORTING_PROBLEM%%", gt("reporting-problem"));
     htmlText = htmlText.replace("%%REPORT_ISSUE_1%%", gt("report-issue-1/3"));
     htmlText = htmlText.replace("%%REPORT_ISSUE_2%%", gt("report-issue-2/3"));
