@@ -18,11 +18,13 @@
     </div>
     <div class="row">
         <label>{{ gt("zoom-level-setting") }}</label>
-        <div class="percentage-symbol"><input type="number" step="10" min="30" max="500" v-on:change="setZoomFactor()" v-model="zoomFactor" ></div>
+        <div class="percentage-symbol">
+          <input type="number" step="10" min="30" max="500" v-on:change="setZoomFactor()" v-model="zoomFactor" >
+        </div>
     </div>
     <div class="row">
         <label>{{ gt("download-directory-setting") }}</label>
-        <input style="flex: 1;" type="text" v-model="downloadDir" readonly>
+        <span id="download_dir"><span>{{ downloadDir }}</span></span>
         <input type="button" :value="gt('reset')" v-on:click="resetDownloadDir()">
         <input type="button" :value="gt('browse')" v-on:click="browseDownloadDir()">
     </div>

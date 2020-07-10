@@ -3,7 +3,7 @@ html, body {
     margin: auto;
     height: 100%;
     position: relative;
-    width: 75%;
+    width: 80%;
     overflow: hidden;
 }
 
@@ -29,28 +29,31 @@ html, body {
     height: 40px;
 }
 
-#save-button {
-    color: black;
-    font-weight: bold;
-    font-size: 14px;
-    border: 1px solid black;
-    background: transparent;
-    border-radius: 2px;
-    height: 20px;
-}
-
-#save-button:hover {
-    color: white;
-    background: black;
-}
 
 input {
-    width: 80px;
     margin: 5px;
 }
 
+#download_dir {
+  flex: 1;
+  margin: 5px;
+  overflow: hidden;
+  direction: rtl;
+}
+
+#download_dir > span {
+  display: block;
+  float: right;
+  direction: ltr;
+  min-width: 100%;
+  font-size: 0.9em;
+}
+
+input[type=number] {
+    width: 80px;
+}
+
 input[type=button] {
-    width: 65px;
     color: blue;
     font-weight: bold;
     font-size: 14px;
@@ -66,10 +69,20 @@ input[type=button]:hover {
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-   opacity: 1;
+    opacity: 1;
 }
 
-div.percentage-symbol::after{
+div.percentage-symbol {
+    position: relative;
+}
+
+div.percentage-symbol:before {
+    position: absolute;
     content: "%";
-    margin-left: -35px;
+    top: 0.4em;
+    right: 1.5em;
+}
+
+div.percentage-symbol input {
+    text-align: left;
 }
