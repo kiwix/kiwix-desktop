@@ -73,19 +73,20 @@ bool SettingsManager::setDownloadDir(QString downloadDir)
     return true;
 }
 
-int SettingsManager::downloadDirConfirmDialog(const QString& dir)
+bool SettingsManager::confirmDialogDownloadDir(const QString& dir)
 {
-    QMessageBox msgBox;
-    msgBox.setText(gt("download-dir-dialog-title"));
-    msgBox.setInformativeText(gt("download-dir-dialog-msg") + "\n" + dir);
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
+    auto text = gt("download-dir-dialog-msg");
+    text = text.replace("{{DIRECTORY}}", dir);
+    QMessageBox msgBox(
+        QMessageBox::Question, //Icon
+        gt("download-dir-dialog-title"), //Title
+        text, //Text
+        QMessageBox::Ok | QMessageBox::Cancel //Buttons
+    );
+    msgBox.setDefaultButton(QMessageBox::Ok);
 
     int ret = msgBox.exec();
-    if (ret == QMessageBox::Save) {
-        setDownloadDir(dir);
-        emit(downloadDirChanged(dir));
-    }
+    return (ret == QMessageBox::Ok);
 }
 
 void SettingsManager::resetDownloadDir()
@@ -94,7 +95,10 @@ void SettingsManager::resetDownloadDir()
     if (dir == m_downloadDir) {
         return;
     }
-    downloadDirConfirmDialog(dir);
+    if (confirmDialogDownloadDir(dir)) {
+      setDownloadDir(dir);
+      emit(downloadDirChanged(dir));
+    }
 }
 
 void SettingsManager::browseDownloadDir()
@@ -106,7 +110,11 @@ void SettingsManager::browseDownloadDir()
     if (dir == m_downloadDir || dir.isEmpty()) {
         return;
     }
-    downloadDirConfirmDialog(dir);
+
+    if (confirmDialogDownloadDir(dir)) {
+      setDownloadDir(dir);
+      emit(downloadDirChanged(dir));
+    }
 }
 
 QStringList SettingsManager::getTranslations(const QStringList &keys)

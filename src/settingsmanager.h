@@ -37,7 +37,7 @@ public slots:
 
 private:
     void initSettings();
-    int downloadDirConfirmDialog(const QString& dir);
+    bool confirmDialogDownloadDir(const QString& dir);
 
 signals:
     void portChanged(int port);
