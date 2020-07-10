@@ -2,25 +2,8 @@ function onDownloadDirChanged (downloadDir) {
     app.downloadDir = downloadDir;
 }
 
-function onSettingsChecked (valid) {
-    if (!valid) {
-        alert("Invalid download path");
-        app.downloadDir = settingsManager.downloadDir;
-        return;
-    }
-    settingsManager.setKiwixServerPort(app.kiwixServerPort);
-    app.zoomFactor = (app.zoomFactor < 30) ? 30 : app.zoomFactor;
-    app.zoomFactor = (app.zoomFactor > 500) ? 500 : app.zoomFactor;
-    settingsManager.setZoomFactor(app.zoomFactor / 100);
-    settingsManager.setDownloadDir(app.downloadDir);
-}
-
 function validPort (port) {
     return /^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$/.test(port);
-}
-
-function validDownloadDir (dir) {
-    settingsManager.validDownloadDir(dir);
 }
 
 function setTranslations(translations) {
@@ -28,12 +11,12 @@ function setTranslations(translations) {
 }
 
 const TRANSLATION_KEYS = ["settings",
-                          "apply",
                           "port-for-local-kiwix-server-setting",
                           "zoom-level-setting",
                           "download-directory-setting",
                           "reset",
-                          "browse"];
+                          "browse",
+                          "invalid-port"];
 
 function init() {
     new QWebChannel(qt.webChannelTransport, function(channel) {
@@ -51,13 +34,18 @@ function init() {
             gt : function(key) {
                 return this.translations[key];
             },
-            saveSettings : function() {
+            setPort : function() {
                 if (!validPort(this.kiwixServerPort)) {
-                    alert("Invalid port");
+                    alert(this.gt("invalid-port"));
                     this.kiwixServerPort = settingsManager.kiwixServerPort;
                     return;
                 }
-                validDownloadDir(this.downloadDir);
+                settingsManager.setKiwixServerPort(this.kiwixServerPort);
+            },
+            setZoomFactor : function() {
+                this.zoomFactor = (this.zoomFactor < 30) ? 30 : this.zoomFactor;
+                this.zoomFactor = (this.zoomFactor > 500) ? 500 : this.zoomFactor;
+                settingsManager.setZoomFactor(this.zoomFactor / 100);
             },
             resetDownloadDir : function() {
                 settingsManager.resetDownloadDir();
@@ -68,7 +56,6 @@ function init() {
         }
       });
       settingsManager.downloadDirChanged.connect(onDownloadDirChanged)
-      settingsManager.settingsChecked.connect(onSettingsChecked)
       settingsManager.getTranslations(TRANSLATION_KEYS, setTranslations);
     });
 }

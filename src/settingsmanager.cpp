@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 #include <QDir>
 #include <QFileDialog>
+#include <QMessageBox>
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
@@ -65,11 +66,6 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
     m_settings.setValue("view/zoomFactor", zoomFactor);
 }
 
-void SettingsManager::validDownloadDir(QString dir)
-{
-    emit(settingsChecked(fileExists(dir.toStdString())));
-}
-
 bool SettingsManager::setDownloadDir(QString downloadDir)
 {
     m_downloadDir = downloadDir;
@@ -77,18 +73,48 @@ bool SettingsManager::setDownloadDir(QString downloadDir)
     return true;
 }
 
+bool SettingsManager::confirmDialogDownloadDir(const QString& dir)
+{
+    auto text = gt("download-dir-dialog-msg");
+    text = text.replace("{{DIRECTORY}}", dir);
+    QMessageBox msgBox(
+        QMessageBox::Question, //Icon
+        gt("download-dir-dialog-title"), //Title
+        text, //Text
+        QMessageBox::Ok | QMessageBox::Cancel //Buttons
+    );
+    msgBox.setDefaultButton(QMessageBox::Ok);
+
+    int ret = msgBox.exec();
+    return (ret == QMessageBox::Ok);
+}
+
 void SettingsManager::resetDownloadDir()
 {
-    emit(downloadDirChanged(QString::fromStdString(getDataDirectory())));
+    auto dir = QString::fromStdString(getDataDirectory());
+    if (dir == m_downloadDir) {
+        return;
+    }
+    if (confirmDialogDownloadDir(dir)) {
+      setDownloadDir(dir);
+      emit(downloadDirChanged(dir));
+    }
 }
 
 void SettingsManager::browseDownloadDir()
 {
     QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
                                                     gt("browse-directory"),
-                                                    QString(),
+                                                    m_downloadDir,
                                                     QFileDialog::ShowDirsOnly);
-    emit(downloadDirChanged(dir));
+    if (dir == m_downloadDir || dir.isEmpty()) {
+        return;
+    }
+
+    if (confirmDialogDownloadDir(dir)) {
+      setDownloadDir(dir);
+      emit(downloadDirChanged(dir));
+    }
 }
 
 QStringList SettingsManager::getTranslations(const QStringList &keys)
