@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Gomoko",
 			"Stephane",
 			"Wladek92"
@@ -10,7 +11,7 @@
 	"error-downloader-window-title": "Impossible de lancer le système de téléchargement",
 	"error-downloader-launch-message": "Impossible de lancer le système de téléchargement, Kiwix-desktop fonctionnera mais sans les fonctionnalités de téléchargement !",
 	"open-zim": "Ouvrir un Zim",
-	"local-kiwix-server": "Serveur local kiwix",
+	"local-kiwix-server": "Serveur local Kiwix",
 	"random-article": "Article au hasard",
 	"home-page": "Page principale",
 	"print": "Imprimer",
@@ -68,17 +69,15 @@
 	"download-directory-setting": "Dossier de téléchargement :",
 	"reset": "Réinitialiser",
 	"browse": "Parcourir",
-	"kiwix-desktop-description": "Kiwix vous permet d'avoir tout Wikipedia à portée de main où que vous alliez! Sur un bateau, au milieu de nulle part ou en prison, Kiwix vous donne accès à l'ensemble du savoir humain. Vous n'avez pas besoin d'internet, tout est conservé dans votre ordinateur.",
-	"learn-more-about-kiwix": "En apprendre plus sur Kiwix",
-	"release": "Release",
-	"source-code": "Ce logiciel est publié selon les conditions de la licence GNU General Public License version 3. Voir le code source sur",
-	"version": "Version",
-	"build-date": "Date de compilation",
-	"reporting-problem": "Rapporter un problème",
-	"report-issue-1/3": "Pour ouvrir un rapport de bogue, visitez",
-	"report-issue-2/3": "et ouvrez un ticket en décrivant votre problème.",
-	"report-issue-3/3": "Veuillez mentionner la version et la date de compilation dans le rapport.",
-	"libraries": "Bibliothèques",
+	"about-kiwix-desktop-title": "Bureau Kiwix",
+	"about-kiwix-desktop-description": "Kiwix vous permet d'avoir tout Wikipedia à portée de main où que vous alliez! Sur un bateau, au milieu de nulle part ou en prison, Kiwix vous donne accès à l'ensemble du savoir humain. Vous n'avez pas besoin d'internet, tout est conservé dans votre ordinateur.",
+	"about-learn-more-about-kiwix": "En apprendre plus sur Kiwix",
+	"about-release-title": "Release",
+	"about-version": "Version : {{VERSION}}",
+	"about-reporting-problem-title": "Rapporter un problème",
+	"about-report-issue": "Pour déclarer une faute, allez sur <a href='{{TRACKER_URL}}'>Suivi des problèmes du bureau Kiwix</a> et ouvrez un ticket en décrivant votre problème.",
+	"about-report-issue-2": "Veuillez indiquer la version dans le problème.",
+	"about-libraries-title": "Bibliothèques",
 	"kiwix-server-running-message": "Le serveur kiwix est lancé et peut être accédé sur le réseau local à :",
 	"kiwix-server-description": "Démmarrer un serveur permet à d'autres ordinateurs du réseau local d'accéder à votre bibliothèque kiwix avec un navigateur web classique.",
 	"fullscreen-notification": "Vous êtes maintenant en plein-écran. Appuyez sur ESC pour quitter !",
@@ -114,5 +113,9 @@
 	"details": "Article complet",
 	"yes": "oui",
 	"no": "non",
-	"no-filter": "pas de filtre"
+	"no-filter": "pas de filtre",
+	"open-link-in-web-browser": "Ouvrir le lien dans votre navigateur web",
+	"download-dir-dialog-title": "Etes vous sûr de vouloir modifier le répertoire de téléchargement ?",
+	"download-dir-dialog-msg": "Le nouveau chemin du répertoire de téléchargement sera : \n{{DIRECTORY}}",
+	"invalid-port": "Port non valide"
 }

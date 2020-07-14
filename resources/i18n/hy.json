@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Kareyac"
 		]
 	},
@@ -26,8 +27,7 @@
 	"pause": "Դադար",
 	"cancel": "Չեղարկել",
 	"apply": "Կիրառել",
-	"version": "Տարբերակ",
-	"libraries": "Գրադարաններ",
+	"about-libraries-title": "Գրադարաններ",
 	"all-files": "Բոլոր Նիշքեր",
 	"hide": "Թաքցնել",
 	"all": "Բոլորը",

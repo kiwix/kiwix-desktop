@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"FarsiNevis"
 		]
 	},
@@ -44,9 +45,8 @@
 	"cancel": "لغو",
 	"apply": "اِعمال کن",
 	"browse": "مرور",
-	"version": "نسخه",
-	"reporting-problem": "گزارش مشکل",
-	"libraries": "کتابخانه‌ها",
+	"about-reporting-problem-title": "گزارش مشکل",
+	"about-libraries-title": "کتابخانه‌ها",
 	"all-files": "همهٔ پرونده‌ها",
 	"local-files": "پرونده‌های محلی",
 	"hide": "پنهان کن",

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Eduardo Addad de Oliveira"
 		]
 	},
@@ -66,17 +67,16 @@
 	"download-directory-setting": "Diretório de download :",
 	"reset": "Redefinir",
 	"browse": "Explorar",
-	"kiwix-desktop-description": "O Kiwix permite que você tenha toda a Wikipédia em mãos, onde quer que você vá! Em um barco, no meio do nada ou na cadeia, o Kiwix fornece acesso a todo o conhecimento humano. Você não precisa da Internet, tudo está armazenado no seu computador.",
-	"learn-more-about-kiwix": "Saiba mais sobre o Kiwix",
-	"release": "Lançamento",
-	"source-code": "Este software é lançado sob os termos da GNU General Public License versão 3. Veja o código fonte em",
-	"version": "Versão",
-	"build-date": "Data de construção",
-	"reporting-problem": "Reportar um problema",
-	"report-issue-1/3": "Para abrir um problema, visite",
-	"report-issue-2/3": "e abra um problema descrevendo o seu problema.",
-	"report-issue-3/3": "Mencione a versão e a data de compilação no problema.",
-	"libraries": "Bibliotecas",
+	"about-kiwix-desktop-title": "Kiwix Desktop",
+	"about-kiwix-desktop-description": "O Kiwix permite que você tenha toda a Wikipédia em mãos, onde quer que você vá! Em um barco, no meio do nada ou na cadeia, o Kiwix fornece acesso a todo o conhecimento humano. Você não precisa da Internet, tudo está armazenado no seu computador.",
+	"about-learn-more-about-kiwix": "Saiba mais sobre o Kiwix",
+	"about-release-title": "Lançamento",
+	"about-source-code": "Este software é lançado sob os termos da GNU General Public License version 3. Veja o código fonte em <a href='{{GITHUB_URL}}'>Github</a>.",
+	"about-version": "Versão : {{VERSION}}",
+	"about-reporting-problem-title": "Reportar um problema",
+	"about-report-issue": "Para abrir um problema, visite <a href='{{TRACKER_URL}}'>Kiwix-desktop issue tracker</a> e abra um problema descrevendo o seu problema.",
+	"about-report-issue-2": "Por favor mencione a versão na edição.",
+	"about-libraries-title": "Bibliotecas",
 	"kiwix-server-running-message": "O servidor Kiwix está em execução e pode ser acessado na rede local em:",
 	"kiwix-server-description": "Iniciar um servidor permite que outros computadores na rede local acessem sua biblioteca Kiwix com um navegador da Web padrão.",
 	"fullscreen-notification": "Agora você está no modo de tela cheia. Pressione ESC para sair!",
@@ -112,5 +112,9 @@
 	"details": "Artigo completo",
 	"yes": "sim",
 	"no": "não",
-	"no-filter": "sem filtro"
+	"no-filter": "sem filtro",
+	"open-link-in-web-browser": "Abrir link no navegador da web",
+	"download-dir-dialog-title": "Tem certeza de que deseja alterar o diretório de download?",
+	"download-dir-dialog-msg": "O novo caminho do diretório de download será:\n{{DIRECTORY}}",
+	"invalid-port": "Porta inválida"
 }

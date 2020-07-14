@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Joetaras"
 		]
 	},
@@ -48,9 +49,9 @@
 	"download-directory-setting": "Cartelle de le scarecaminde:",
 	"reset": "Azzere",
 	"browse": "Sfoglie",
-	"version": "Versione",
-	"reporting-problem": "Segnale 'nu probbleme",
-	"libraries": "Libbrerie",
+	"about-version": "Versione : {{VERSION}}",
+	"about-reporting-problem-title": "Segnale 'nu probbleme",
+	"about-libraries-title": "Libbrerie",
 	"all-files": "Tutte le file",
 	"local-files": "File locale",
 	"hide": "Scunne",

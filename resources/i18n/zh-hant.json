@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Kly"
 		]
 	},
@@ -66,17 +67,15 @@
 	"download-directory-setting": "下載目錄：",
 	"reset": "重新設定",
 	"browse": "瀏覽",
-	"kiwix-desktop-description": "Kiwix 能讓您隨時隨地擁有整個維基百科！不論是在船上、荒郊野外、甚至是待在監獄，Kiwix 都可讓您取用全人類的知識。您不必需要網際網路，因為所有一切內容都可以存放在您的電腦裡。",
-	"learn-more-about-kiwix": "了解更多有關 Kiwix",
-	"release": "釋出",
-	"source-code": "此軟體是基於 GNU 通用公眾授權條款第 3 版本釋出。要檢視程式原始碼請在",
-	"version": "版本",
-	"build-date": "編譯日期",
-	"reporting-problem": "回報問題",
-	"report-issue-1/3": "要開啟問題，請訪問",
-	"report-issue-2/3": "然後開啟一個問題來描述您遇到的情況。",
-	"report-issue-3/3": "請在問題中提及版本與編制日期。",
-	"libraries": "圖書館",
+	"about-kiwix-desktop-title": "Kiwix 桌機版",
+	"about-kiwix-desktop-description": "Kiwix 能讓您隨時隨地擁有整個維基百科！不論是在船上、荒郊野外、甚至是待在監獄，Kiwix 都可讓您取用全人類的知識。您不必需要網際網路，因為所有一切內容都可以存放在您的電腦裡。",
+	"about-learn-more-about-kiwix": "了解更多有關 Kiwix",
+	"about-release-title": "釋出",
+	"about-version": "版本：{{VERSION}}",
+	"about-reporting-problem-title": "回報問題",
+	"about-report-issue": "要開啟問題，請參訪 <a href='{{TRACKER_URL}}'>Kiwix-桌機版問題追蹤</a>，並開啟一個問題來描述您遇到的情況。",
+	"about-report-issue-2": "請在問題中提及版本。",
+	"about-libraries-title": "圖書館",
 	"kiwix-server-running-message": "Kiwix 伺服器正運作中，要在本地網路存取請在：",
 	"kiwix-server-description": "啟動伺服器能允許在本地網路上的其它台電腦以標準網頁瀏覽器來存取您的 Kiwix 圖書館。",
 	"fullscreen-notification": "您現在是處在全螢幕模式。若要離開請按下 ESC 鍵！",
@@ -112,5 +111,9 @@
 	"details": "整個條目",
 	"yes": "是",
 	"no": "否",
-	"no-filter": "無篩選"
+	"no-filter": "無篩選",
+	"open-link-in-web-browser": "在網路瀏覽器開啟連結",
+	"download-dir-dialog-title": "您確定您要更改下載目錄嗎？",
+	"download-dir-dialog-msg": "新目錄路徑會是：\n{{DIRECTORY}}",
+	"invalid-port": "無效通訊埠"
 }

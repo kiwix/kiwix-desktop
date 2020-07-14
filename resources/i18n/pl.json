@@ -1,7 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
+			"Pietrasagh",
 			"Rail",
+			"Rainbow P",
 			"WaldiSt"
 		]
 	},
@@ -67,15 +70,15 @@
 	"download-directory-setting": "Pobierz katalog:",
 	"reset": "Resetuj",
 	"browse": "Przeglądaj",
-	"kiwix-desktop-description": "Kiwix daje ci całą Wikipedię na wyciągnięcie ręki, gdziekolwiek się nie udasz! Na łodzi, na środku pustkowia lub w więzeniu, Kiwix umożliwia ci dostęp do całej ludzkiej wiedzy. Nie potrzebujesz internetu, wszystko jest przechowywane na twoim komputerze.",
-	"learn-more-about-kiwix": "Dowiedz się więcej o Kiwix",
-	"release": "Wydanie",
-	"source-code": "To oprogramowanie jest wydane na warunkach licencji GNU General Public License w wersji 3. Zobacz kod źródłowy na",
-	"version": "Wersja",
-	"build-date": "Data kompilacji",
-	"reporting-problem": "Zgłaszanie błędów",
-	"report-issue-1/3": "Aby otworzyć problem, odwiedź",
-	"libraries": "Biblioteki",
+	"about-kiwix-desktop-description": "Kiwix daje ci całą Wikipedię na wyciągnięcie ręki, gdziekolwiek się nie udasz! Na łodzi, na środku pustkowia lub w więzeniu, Kiwix umożliwia ci dostęp do całej ludzkiej wiedzy. Nie potrzebujesz internetu, wszystko jest przechowywane na twoim komputerze.",
+	"about-learn-more-about-kiwix": "Dowiedz się więcej o Kiwix",
+	"about-release-title": "Wydanie",
+	"about-source-code": "To oprogramowanie jest udostępniane na warunkach licencji GNU General Public License w wersji 3. Zobacz kod źródłowy w serwisie <a href='{{GITHUB_URL}}'>GitHub</a>.",
+	"about-version": "Wersja: {{VERSION}}",
+	"about-reporting-problem-title": "Zgłaszanie błędów",
+	"about-report-issue": "Aby zgłosić problem odwiedź <a href='{{TRACKER_URL}}'>system śledzenia błędów w aplikacji Kiwix na komputery</a> i stwórz nowy wpis opisujący Twój problem.",
+	"about-report-issue-2": "Wspomnij proszę używaną przez Ciebie wersję we wpisie.",
+	"about-libraries-title": "Biblioteki",
 	"kiwix-server-running-message": "Serwer Kiwix jest uruchomiony i można uzyskać do niego dostęp w sieci lokalnej pod adresem:",
 	"kiwix-server-description": "Uruchomienie serwera umożliwia innym komputerom w sieci lokalnej dostęp do biblioteki Kiwix za pomocą standardowej przeglądarki internetowej.",
 	"fullscreen-notification": "Znajdujesz się w trybie pełnoekranowym. Naciśnij ESC aby z niego wyjść!",
@@ -89,6 +92,12 @@
 	"stop-kiwix-server": "Zatrzymaj serwer Kiwix",
 	"all": "Wszystkie",
 	"other": "Inne",
+	"gutemberg": "Gutenberg",
+	"phet": "Phet",
+	"psiram": "Psiram",
+	"stack_exchange": "Stack Exchange",
+	"ted": "Ted",
+	"vikidia": "Vikidia",
 	"wikibooks": "Wikiksiążki",
 	"wikinews": "Wikinews",
 	"wikipedia": "Wikipedia",
@@ -105,5 +114,9 @@
 	"details": "Cały artykuł",
 	"yes": "tak",
 	"no": "nie",
-	"no-filter": "brak filtra"
+	"no-filter": "brak filtra",
+	"open-link-in-web-browser": "Otwórz link w przeglądarce",
+	"download-dir-dialog-title": "Czy na pewno chcesz zmienić katalog pobierania?",
+	"download-dir-dialog-msg": "Nową ścieżką katalogu pobieranych plików będzie: {{DIRECTORY}}",
+	"invalid-port": "Nieprawidłowy port"
 }

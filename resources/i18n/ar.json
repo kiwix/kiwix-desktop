@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Meno25",
 			"Tala Ali",
 			"محمد أحمد عبد الفتاح"
@@ -36,8 +37,8 @@
 	"apply": "تطبيق",
 	"reset": "إعادة الضبط",
 	"browse": "تصفح",
-	"release": "الإصدار",
-	"reporting-problem": "الإبلاغ عن مشكلة",
+	"about-release-title": "الإصدار",
+	"about-reporting-problem-title": "الإبلاغ عن مشكلة",
 	"all-files": "كل الملفات",
 	"browse-by-language": "التصفح حسب اللغة",
 	"hide": "إخفاء",
@@ -48,5 +49,6 @@
 	"wikiversity": "ويكي الجامعة",
 	"wiktionary": "ويكاموس",
 	"pictures": "الصور",
-	"details": "المقالة كاملة"
+	"details": "المقالة كاملة",
+	"open-link-in-web-browser": "فتح الوصلة في متصفح الويب"
 }

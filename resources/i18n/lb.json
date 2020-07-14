@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Robby"
 		]
 	},
@@ -46,9 +47,9 @@
 	"apply": "Uwenden",
 	"reset": "Zrécksetzen",
 	"browse": "Duerchsichen",
-	"learn-more-about-kiwix": "Méi iwwer Kiwix gewuer ginn",
-	"version": "Versioun",
-	"libraries": "Bibliothéiken",
+	"about-learn-more-about-kiwix": "Méi iwwer Kiwix gewuer ginn",
+	"about-version": "Versioun : {{VERSION}}",
+	"about-libraries-title": "Bibliothéiken",
 	"all-files": "All Fichieren",
 	"local-files": "Lokal Fichieren",
 	"hide": "Verstoppen",

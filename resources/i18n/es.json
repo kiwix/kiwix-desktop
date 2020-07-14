@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Fitoschido",
 			"Geryescalier",
 			"Ncr"
@@ -68,17 +69,11 @@
 	"download-directory-setting": "Directorio de descargas:",
 	"reset": "Restablecer",
 	"browse": "Explorar",
-	"kiwix-desktop-description": "¡Kiwix te permite tener toda la Wikipedia a mano donde quiera que vayas! En un bote, en medio de la nada o en la cárcel, Kiwix te da acceso a todo el conocimiento humano. No necesita Internet, todo está almacenado en su computadora.",
-	"learn-more-about-kiwix": "Para conocer más sobre Kiwix",
-	"release": "Lanzamiento",
-	"source-code": "Este programa se publica en virtud de la Licencia Pública General de GNU, versión 3. El código fuente se encuentra en",
-	"version": "Versión",
-	"build-date": "Fecha de compilación",
-	"reporting-problem": "Informar un problema",
-	"report-issue-1/3": "Para abrir un problema, visite",
-	"report-issue-2/3": "y abra un problema que describa su problema.",
-	"report-issue-3/3": "Mencione la versión y la fecha de compilación en el número.",
-	"libraries": "Bibliotecas",
+	"about-kiwix-desktop-description": "¡Kiwix te permite tener toda la Wikipedia a mano donde quiera que vayas! En un bote, en medio de la nada o en la cárcel, Kiwix te da acceso a todo el conocimiento humano. No necesita Internet, todo está almacenado en su computadora.",
+	"about-learn-more-about-kiwix": "Para conocer más sobre Kiwix",
+	"about-release-title": "Lanzamiento",
+	"about-reporting-problem-title": "Informar un problema",
+	"about-libraries-title": "Bibliotecas",
 	"kiwix-server-running-message": "El servidor Kiwix se está ejecutando y se puede acceder a él en la red local en:",
 	"kiwix-server-description": "Iniciar un servidor permite que otras computadoras en la red local accedan a su biblioteca Kiwix con un navegador web estándar.",
 	"fullscreen-notification": "Ahora estás en modo de pantalla completa. Presione ESC para salir!",
@@ -112,5 +107,7 @@
 	"videos": "Vídeos",
 	"details": "Artículo completo",
 	"yes": "sí",
-	"no": "no"
+	"no": "no",
+	"open-link-in-web-browser": "Abrir enlace en navegador web",
+	"invalid-port": "Puerto no válido"
 }

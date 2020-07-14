@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"L2212"
 		]
 	},
@@ -66,17 +67,12 @@
 	"download-directory-setting": "Cartella de iscarrigamentu:",
 	"reset": "Reseta",
 	"browse": "Esplora",
-	"kiwix-desktop-description": "Kiwix ti permitit de tènnere sa Wikipedia intrea a portada de manu in cale si siat logu tue ue as a andare! In una barca, in mesu a su nudda o in presone, Kiwix ti daet atzessu a totu sa connoschèntzia umana. Non bisòngias de Internèt, totu est sarvadu in s'elaboradore tuo.",
-	"learn-more-about-kiwix": "Impara de prus in subra de Kiwix",
-	"release": "Intregada",
-	"source-code": "Custu programma est publicadu in suta de sos tèrmines de sa litzèntzia GNU General Public License versione 3. Leghe·ti su còdighe in",
-	"version": "Versione",
-	"build-date": "Data de cumpilatzione",
-	"reporting-problem": "Sinnalare unu problema",
-	"report-issue-1/3": "Pro abèrrere una sinnalatzione pro un'errore, bìsita",
-	"report-issue-2/3": "e aberi una sinnalatzione de errore descriende su problema tuo.",
-	"report-issue-3/3": "Pro praghere mentova sa versione e sa data de cumpilatzione in sa sinnalatzione.",
-	"libraries": "Librerias",
+	"about-kiwix-desktop-description": "Kiwix ti permitit de tènnere sa Wikipedia intrea a portada de manu in cale si siat logu tue ue as a andare! In una barca, in mesu a su nudda o in presone, Kiwix ti daet atzessu a totu sa connoschèntzia umana. Non bisòngias de Internèt, totu est sarvadu in s'elaboradore tuo.",
+	"about-learn-more-about-kiwix": "Impara de prus in subra de Kiwix",
+	"about-release-title": "Intregada",
+	"about-version": "Versione : {{VERSION}}",
+	"about-reporting-problem-title": "Sinnalare unu problema",
+	"about-libraries-title": "Librerias",
 	"kiwix-server-running-message": "Su serbidore de Kiwix est in funtzione e bi podes atzèdere in sa retza locale dae:",
 	"kiwix-server-description": "Aviare unu serbidore permitit a sos àteros eleboradores in sa retza locale de tènnere atzessu a sa biblioteca locale de Kiwix tua cun unu navigadore (browser) istandard.",
 	"fullscreen-notification": "Como ses in modalidade a ischermu intreu. Incarca ESC pro essire!",
@@ -105,5 +101,12 @@
 	"wikiversity": "Wikiversity",
 	"wikivoyage": "Wikivoyage",
 	"wiktionary": "Wikitzionàriu",
-	"fulltext-search": "Chirca in su testu intreu"
+	"fulltext-search": "Chirca in su testu intreu",
+	"pictures": "Immàgines",
+	"videos": "Vìdeos",
+	"ftindex": "Ìnditze in testu intreu",
+	"details": "Artìculu intreu",
+	"yes": "eja",
+	"no": "nono",
+	"no-filter": "perunu filtru"
 }

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"1917 Ekim Devrimi",
+			"Abijeet Patro",
 			"Orbot707"
 		]
 	},
@@ -67,14 +68,10 @@
 	"download-directory-setting": "Rêzey ronayışi:",
 	"reset": "Reset kerê",
 	"browse": "Çımberze",
-	"learn-more-about-kiwix": "Heqa Kiwixi teyna melumat",
-	"release": "Ramate",
-	"version": "Versiyon",
-	"build-date": "Terıxê sazbiyayışi",
-	"reporting-problem": "Xırabey rapor kerê",
-	"report-issue-1/3": "Xırabeyi rê ziyaret kerê",
-	"report-issue-2/3": "Xırabeya ho rê yew mewzu akerê",
-	"libraries": "Kıtıbxaney",
+	"about-learn-more-about-kiwix": "Heqa Kiwixi teyna melumat",
+	"about-release-title": "Ramate",
+	"about-reporting-problem-title": "Xırabey rapor kerê",
+	"about-libraries-title": "Kıtıbxaney",
 	"all-files": "Dosyay pêro",
 	"local-files": "Dosya mehali",
 	"browse-by-category": "Gorey kategori çımberze",
