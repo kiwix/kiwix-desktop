@@ -66,7 +66,7 @@
     "reset":"Reset",
     "browse":"Browse",
     "about-kiwix-desktop-title":"Kiwix Desktop",
-    "about-kiwix-desktop-description":"Kiwix enables you to have the whole Wikipedia at hand wherever you go! On a boat, in the middle of nowhere or in jail, Kiwix gives you access to the whole human knowledge. You don't need Internet, everything is store on your computer.",
+    "about-kiwix-desktop-description":"Kiwix enables you to have the whole Wikipedia at hand wherever you go! On a boat, in the middle of nowhere or in jail, Kiwix gives you access to the whole human knowledge. You don't need Internet, everything is stored on your computer.",
     "about-learn-more-about-kiwix":"Learn more about Kiwix",
     "about-release-title":"Release",
     "about-source-code":"This software is released under the terms of the GNU General Public License version 3. View the source code on <a href='{{GITHUB_URL}}'>Github</a>.",
