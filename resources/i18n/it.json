@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Albe Albe460",
 			"Beta16",
 			"Scompo"
@@ -54,14 +55,10 @@
 	"zoom-level-setting": "Livello di ingrandimento:",
 	"download-directory-setting": "Cartella dati scaricati:",
 	"reset": "Ripristina",
-	"learn-more-about-kiwix": "Leggi di più su Kiwix",
-	"source-code": "Questo programma è rilasciato in base alla GNU General Public License versione 3. Vedi il codice sorgente su",
-	"version": "Versione",
-	"reporting-problem": "Segnala un problema",
-	"report-issue-1/3": "Per aprire una segnalazione, visita",
-	"report-issue-2/3": "e apri una segnalazione descrivendo il tuo problema.",
-	"report-issue-3/3": "Per favore menziona la versione e la data di build nella segnalazione.",
-	"libraries": "Librerie",
+	"about-learn-more-about-kiwix": "Leggi di più su Kiwix",
+	"about-version": "Versione: {{VERSION}}",
+	"about-reporting-problem-title": "Segnala un problema",
+	"about-libraries-title": "Librerie",
 	"fullscreen-notification": "Ora sei in modalità a schermo intero. Premi ESC per uscire!",
 	"all-files": "Tutti i file",
 	"local-files": "File locali",
@@ -81,5 +78,6 @@
 	"pictures": "Immagini",
 	"videos": "Video",
 	"yes": "sì",
-	"no": "no"
+	"no": "no",
+	"open-link-in-web-browser": "Apri collegamento nel browser web"
 }

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Robin van der Vliet"
 		]
 	},
@@ -28,8 +29,7 @@
 	"resume": "Daŭrigi",
 	"cancel": "Nuligi",
 	"browse": "Foliumi",
-	"version": "Versio",
-	"libraries": "Bibliotekoj",
+	"about-libraries-title": "Bibliotekoj",
 	"all-files": "Ĉiuj dosieroj",
 	"local-files": "Lokaj dosieroj",
 	"hide": "Kaŝi",

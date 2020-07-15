@@ -41,7 +41,7 @@
 	"zoom-level-setting": "ज़ूम स्तर :",
 	"reset": "रीसेट करें",
 	"browse": "ब्राउज़",
-	"version": "संस्करण",
+	"about-version": "संस्करण : {{VERSION}}",
 	"all-files": "सारे दस्तावेज",
 	"hide": "छुपाएँ",
 	"all": "सभी",

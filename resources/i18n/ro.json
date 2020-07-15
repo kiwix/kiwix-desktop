@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"MSClaudiu"
 		]
 	},
@@ -66,17 +67,12 @@
 	"download-directory-setting": "Director de descărcare :",
 	"reset": "Resetează",
 	"browse": "Caută",
-	"kiwix-desktop-description": "Kiwix vă permite să aveți întreaga Wikipedia la îndemână oriunde mergeți! Pe o barcă, în mijlocul la nicăieri sau în închisoare, Kiwix vă oferă acces la toată cunoașterea umană. Nu aveți nevoie de internet, totul este stocat pe computerul dumneavoastră.",
-	"learn-more-about-kiwix": "Aflați mai multe despre Kiwix",
-	"release": "Lansat",
-	"source-code": "Acest software este lansat în condițiile licenței publice generale GNU versiunea 3. Vizualizați codul sursă activat",
-	"version": "Versiunea",
-	"build-date": "Data constructiei",
-	"reporting-problem": "Semnalare problemă",
-	"report-issue-1/3": "Pentru a deschide o problemă, vizitați",
-	"report-issue-2/3": "și deschideți un rând care descrie problema dvs.",
-	"report-issue-3/3": "Vă rugăm să menționați versiunea și data de construire din număr.",
-	"libraries": "Biblioteci",
+	"about-kiwix-desktop-description": "Kiwix vă permite să aveți întreaga Wikipedia la îndemână oriunde mergeți! Pe o barcă, în mijlocul la nicăieri sau în închisoare, Kiwix vă oferă acces la toată cunoașterea umană. Nu aveți nevoie de internet, totul este stocat pe computerul dumneavoastră.",
+	"about-learn-more-about-kiwix": "Aflați mai multe despre Kiwix",
+	"about-release-title": "Lansat",
+	"about-version": "Versiunea : {{VERSION}}",
+	"about-reporting-problem-title": "Semnalare problemă",
+	"about-libraries-title": "Biblioteci",
 	"kiwix-server-running-message": "Serverul Kiwix rulează și poate fi accesat în rețeaua locală la:",
 	"kiwix-server-description": "Pornirea unui server permite altor computere din rețeaua locală să acceseze biblioteca dvs. Kiwix cu un browser web standard.",
 	"fullscreen-notification": "Acum sunteți în modul ecran complet. Apăsați ESC pentru a renunța!",

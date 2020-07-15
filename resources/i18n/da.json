@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Saederup92"
 		]
 	},
@@ -22,7 +23,7 @@
 	"delete": "Slet",
 	"pause": "Sæt på pause",
 	"reset": "Nulstil",
-	"libraries": "Biblioteker",
+	"about-libraries-title": "Biblioteker",
 	"all-files": "Alle filer",
 	"local-files": "Lokale filer",
 	"hide": "Skjul",
@@ -37,5 +38,6 @@
 	"pictures": "Billeder",
 	"videos": "Videoer",
 	"yes": "ja",
-	"no": "nej"
+	"no": "nej",
+	"invalid-port": "Ugyldig port"
 }

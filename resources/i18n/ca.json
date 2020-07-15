@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Fitoschido"
 		]
 	},
@@ -39,9 +40,7 @@
 	"download-directory-setting": "Directori de baixades:",
 	"reset": "Reinicialitza",
 	"browse": "Explora",
-	"version": "Versió",
-	"build-date": "Data de muntatge",
-	"libraries": "Biblioteques",
+	"about-libraries-title": "Biblioteques",
 	"all-files": "Tots els fitxers",
 	"local-files": "Fitxers locals",
 	"hide": "Amaga",

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"BadDog"
 		]
 	},
@@ -51,10 +52,10 @@
 	"zoom-level-setting": "Ниво зумирања:",
 	"reset": "Ресетуј",
 	"browse": "Прегледај",
-	"learn-more-about-kiwix": "Детаљније о Kiwix-у",
-	"version": "Верзија",
-	"reporting-problem": "Пријављивање проблема",
-	"libraries": "Библиотеке",
+	"about-learn-more-about-kiwix": "Детаљније о Kiwix-у",
+	"about-version": "Верзија : {{VERSION}}",
+	"about-reporting-problem-title": "Пријављивање проблема",
+	"about-libraries-title": "Библиотеке",
 	"fullscreen-notification": "Сада сте у режиму целог екрана. Притисните Esc да бисте изашли.",
 	"all-files": "Све датотеке",
 	"local-files": "Локалне датотеке",

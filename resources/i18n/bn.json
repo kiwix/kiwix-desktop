@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"আফতাবুজ্জামান"
 		]
 	},
@@ -20,8 +21,7 @@
 	"title": "শিরোনাম",
 	"size": "আকার",
 	"date": "তারিখ",
-	"release": "মুক্তি",
-	"version": "সংস্করণ",
+	"about-release-title": "মুক্তি",
 	"all": "সব",
 	"other": "অন্য",
 	"ted": "টেড",

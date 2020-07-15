@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"BaRaN6161 TURK"
 		]
 	},
@@ -66,17 +67,15 @@
 	"download-directory-setting": "İndirme dizini:",
 	"reset": "Sıfırla",
 	"browse": "Göz at",
-	"kiwix-desktop-description": "Kiwix nereye giderseniz gidin tüm Vikipedi'nin elinizde olmasını sağlar! Bir teknede, hiçbir yerin ortasında veya hapiste, Kiwix size tüm insan bilgisine erişmenizi sağlar. İnternete ihtiyacınız yok, her şey bilgisayarınızda saklanıyor.",
-	"learn-more-about-kiwix": "Kiwix hakkında daha fazla bilgi edinin",
-	"release": "Sürüm",
-	"source-code": "Bu yazılım GNU Genel Kamu Lisansı sürüm 3 koşulları altında yayınlanmıştır.",
-	"version": "Sürüm",
-	"build-date": "Kuruluş tarihi",
-	"reporting-problem": "Sorun bildirme",
-	"report-issue-1/3": "Bir sorun açmak için şu adresi ziyaret edin",
-	"report-issue-2/3": "ve sorununuzu açıklayan bir sorun açın.",
-	"report-issue-3/3": "Lütfen sürümdeki ve derleme tarihini belirtin.",
-	"libraries": "Kütüphaneler",
+	"about-kiwix-desktop-title": "Kiwix Masaüstü",
+	"about-kiwix-desktop-description": "Kiwix nereye giderseniz gidin tüm Vikipedi'nin elinizde olmasını sağlar! Bir teknede, hiçbir yerin ortasında veya hapiste, Kiwix size tüm insan bilgisine erişmenizi sağlar. İnternete ihtiyacınız yok, her şey bilgisayarınızda saklanıyor.",
+	"about-learn-more-about-kiwix": "Kiwix hakkında daha fazla bilgi edinin",
+	"about-release-title": "Sürüm",
+	"about-version": "Sürüm: {{VERSION}}",
+	"about-reporting-problem-title": "Sorun bildirme",
+	"about-report-issue": "Bir sorun açmak için <a href='{{TRACKER_URL}}'>Kiwix masaüstü sorun izleyiciyiyi</a> ziyaret edin ve sorununuzu açıklayan bir sorun açın.",
+	"about-report-issue-2": "Lütfen sorundaki sürümü belirtin.",
+	"about-libraries-title": "Kütüphaneler",
 	"kiwix-server-running-message": "Kiwix Sunucusu çalışıyor ve yerel ağdan şu adresten erişilebilir:",
 	"kiwix-server-description": "Sunucu başlatmak, yerel ağdaki diğer bilgisayarların standart bir web tarayıcısıyla Kiwix kitaplığınıza erişmesine izin verir.",
 	"fullscreen-notification": "Şimdi tam ekran modundasınız. Çıkmak için ESC tuşuna basın!",
@@ -112,5 +111,9 @@
 	"details": "Tam madde",
 	"yes": "evet",
 	"no": "hayır",
-	"no-filter": "filtre yok"
+	"no-filter": "filtre yok",
+	"open-link-in-web-browser": "Bağlantıyı web tarayıcısında aç",
+	"download-dir-dialog-title": "İndirme dizinini değiştirmek istediğinizden emin misiniz?",
+	"download-dir-dialog-msg": "Yeni indirme dizini yolu şunu olacaktır:\n {{DIRECTORY}}",
+	"invalid-port": "Geçersiz bağlantı noktası"
 }

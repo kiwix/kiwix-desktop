@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Abijeet Patro",
+			"Eihel",
 			"Robby"
 		]
 	},
@@ -20,5 +21,6 @@
 	"pictures": "{{identical|Picture}}",
 	"videos": "{{identical|Video}}",
 	"yes": "{{identical|yes}}",
-	"no": "{{identical|no}}"
+	"no": "{{identical|no}}",
+	"open-link-in-web-browser": "Ouvrir le lien dans le navigateur"
 }

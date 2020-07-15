@@ -3,9 +3,11 @@
     <qresource prefix="/">
         <file>i18n/hi.json</file>
         <file>i18n/zh-hans.json</file>
+        <file>i18n/nl.json</file>
         <file>i18n/ca.json</file>
         <file>i18n/ja.json</file>
         <file>i18n/ru.json</file>
+        <file>i18n/he.json</file>
         <file>i18n/roa-tara.json</file>
         <file>i18n/sr-ec.json</file>
         <file>i18n/en.json</file>
@@ -14,14 +16,17 @@
         <file>i18n/eo.json</file>
         <file>i18n/qqq.json</file>
         <file>i18n/ar.json</file>
+        <file>i18n/de.json</file>
         <file>i18n/es.json</file>
         <file>i18n/tr.json</file>
         <file>i18n/ko.json</file>
         <file>i18n/fa.json</file>
+        <file>i18n/cs.json</file>
         <file>i18n/bn.json</file>
         <file>i18n/hy.json</file>
         <file>i18n/sc.json</file>
         <file>i18n/diq.json</file>
+        <file>i18n/gsw.json</file>
         <file>i18n/ro.json</file>
         <file>i18n/fr.json</file>
         <file>i18n/io.json</file>

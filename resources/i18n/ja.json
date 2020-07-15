@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Object＊tofu",
 			"Omotecho"
 		]
@@ -22,7 +23,7 @@
 	"size": "サイズ",
 	"date": "日付",
 	"open": "開く",
-	"reporting-problem": "問題を報告",
+	"about-reporting-problem-title": "問題を報告",
 	"all-files": "すべてのファイル",
 	"browse-by-language": "言語一覧",
 	"hide": "非表示",

@@ -1,8 +1,10 @@
 {
 	"@metadata": {
 		"authors": [
+			"Abijeet Patro",
 			"Josephine W.",
 			"Nadine Siak",
+			"Shuiwater",
 			"SomeyaMako"
 		]
 	},
@@ -60,9 +62,9 @@
 	"download-directory-setting": "下载文件夹：",
 	"reset": "重置",
 	"browse": "浏览",
-	"release": "发布",
-	"version": "版本",
-	"reporting-problem": "报告问题",
+	"about-kiwix-desktop-title": "Kiwix 桌面",
+	"about-release-title": "发布",
+	"about-reporting-problem-title": "报告问题",
 	"fullscreen-notification": "您现已进入全屏模式。点击Esc键以退出全屏！",
 	"all-files": "所有文件",
 	"local-files": "本地文件",
@@ -88,5 +90,6 @@
 	"details": "完整条目",
 	"yes": "是",
 	"no": "否",
-	"no-filter": "无过滤器"
+	"no-filter": "无过滤器",
+	"invalid-port": "无效的接口"
 }
