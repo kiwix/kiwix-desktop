@@ -1,3 +1,14 @@
+kiwix-desktop 2.0.4
+===================
+
+ * Add "open link in web browser" action in context menu.
+ * Improve setting UX (no apply button. Download directory dialog).
+ * Change fonts to the free "Selawik".
+ * Do not call `date` and `git describe` during build step to allow
+   reproducible build.
+ * Better about.html text.
+ * Update translations.
+
 kiwix-desktop 2.0.3
 ===================
 
