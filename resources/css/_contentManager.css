@@ -57,6 +57,7 @@ html, body {
 }
 .tablecell{
     flex-basis:20%;
+    font-family: sans-serif;
 }
 
 .sortable:hover {
@@ -135,16 +136,22 @@ button {
   border: 0px;
 }
 .tablerow button {
-  color: blue;
-  font-weight: bold;
-  font-size: 14px;
+  /* color: blue; */
+  color:#555;
+  /* font-weight: bold; */
+  font-size: 16px;
   border: 0px;
   background: transparent;
   border-radius: 2px;
 }
+.tablerow button::first-letter {
+  text-transform: uppercase;
+}
 .tablerow button:hover {
-  color: white;
-  background: blue;
+  /* color: white;
+  background: blue; */
+  cursor: pointer;
+  font-weight: bold;
 }
 details:hover {
   background-color: #d9e9ff;
