@@ -1,0 +1,70 @@
+name: Packages
+on: [push, pull_request]
+
+jobs:
+  build-deb:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ubuntu-groovy, ubuntu-focal]
+    steps:
+      - uses: actions/checkout@v2
+
+      # Determine which PPA we should upload to
+      - name: PPA
+        id: ppa
+        run: |
+          if [[ $REF == refs/tags* ]]
+          then
+            echo "::set-output name=ppa::kiwixteam/release"
+          else
+            echo "::set-output name=ppa::kiwixteam/dev"
+          fi
+        env:
+          REF: ${{ github.ref }}
+
+      - uses: legoktm/gh-action-auto-dch@master
+        with:
+          fullname: Kiwix builder
+          email: release+launchpad@kiwix.org
+          distro: ${{ matrix.distro }}
+
+      - uses: legoktm/gh-action-build-deb@ubuntu-groovy
+        if: matrix.distro == 'ubuntu-groovy'
+        name: Build package for ubuntu-groovy
+        id: build-ubuntu-groovy
+        with:
+          args: --no-sign
+          ppa: ${{ steps.ppa.outputs.ppa }}
+
+      - uses: legoktm/gh-action-build-deb@ubuntu-focal
+        if: matrix.distro == 'ubuntu-focal'
+        name: Build package for ubuntu-focal
+        id: build-ubuntu-focal
+        with:
+          args: --no-sign
+          ppa: ${{ steps.ppa.outputs.ppa }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Packages for ${{ matrix.distro }}
+          path: output
+
+      - uses: legoktm/gh-action-dput@master
+        name: Upload dev package
+        # Only upload on pushes to master
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/master' && startswith(matrix.distro, 'ubuntu-')
+        with:
+          gpg_key: ${{ secrets.LAUNCHPAD_GPG }}
+          repository: ppa:kiwixteam/dev
+          packages: output/*_source.changes
+
+      - uses: legoktm/gh-action-dput@master
+        name: Upload release package
+        # Only upload on pushes to master or tag
+        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && startswith(matrix.distro, 'ubuntu-')
+        with:
+          gpg_key: ${{ secrets.LAUNCHPAD_GPG }}
+          repository: ppa:kiwixteam/release
+          packages: output/*_source.changes
