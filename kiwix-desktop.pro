@@ -17,7 +17,7 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -std=c++11
 
-DEFINES += VERSION="2.0.3"
+DEFINES += VERSION="2.0.4"
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
