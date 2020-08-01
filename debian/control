@@ -1,0 +1,34 @@
+Source: kiwix
+Section: misc
+Priority: optional
+Maintainer: Kiwix team <kiwix@kiwix.org>
+Build-Depends: debhelper-compat (= 13),
+ pkg-config,
+ qtbase5-dev,
+ qtwebengine5-dev,
+ libkiwix-dev (>= 9.3.0),
+ aria2
+Standards-Version: 4.5.0
+Homepage: https://www.kiwix.org/
+Rules-Requires-Root: no
+
+Package: kiwix
+Architecture: any
+Depends: ${shlibs:Depends},
+ ${misc:Depends}
+Recommends: kiwix-tools
+Description: offline Wikipedia reader
+ Kiwix allows you to read and search through offline content
+ as they were online. Similar to a browser, Kiwix works with
+ the highly compressed ZIM file format.
+ .
+ Features:
+   * Pure ZIM file reader
+   * Case and diacritics insensitive full text search engine
+   * Bookmarks & Notes
+   * ZIM base HTTP server
+   * PDF/HTML export
+   * Localized
+   * Search suggestions
+   * ZIM file Index capacity
+   * Tabs navigation
