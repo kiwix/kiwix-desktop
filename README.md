@@ -19,7 +19,7 @@ Distribution
 
 #### Contribution binaries
 
-[![AUR version](https://img.shields.io/aur/version/kiwix-desktop)](https://aur.archlinux.org/packages/kiwix-desktop/)
+[![Packaging status](https://repology.org/badge/vertical-allrepos/kiwix-desktop.svg)](https://repology.org/project/kiwix-desktop/versions)
 
 Disclaimer
 ----------
