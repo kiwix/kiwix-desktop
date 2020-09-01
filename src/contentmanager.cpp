@@ -215,7 +215,8 @@ QString ContentManager::downloadBook(const QString &id)
             return mp_library->getBookById(id);
         }
     }();
-    QStorageInfo storage(QString::fromStdString(getDataDirectory()));
+    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+    QStorageInfo storage(downloadPath);
     if (book.getSize() > storage.bytesAvailable()) {
         return "storage_error";
     }
@@ -225,7 +226,6 @@ QString ContentManager::downloadBook(const QString &id)
             return "";
     kiwix::Download *download;
     try {
-        auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
         std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
         const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
         download = mp_downloader->startDownload(book.getUrl(), options);
