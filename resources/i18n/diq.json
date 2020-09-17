@@ -68,10 +68,13 @@
 	"download-directory-setting": "Rêzey ronayışi:",
 	"reset": "Reset kerê",
 	"browse": "Çımberze",
+	"about-kiwix-desktop-title": "Kiwix Desktop",
 	"about-learn-more-about-kiwix": "Heqa Kiwixi teyna melumat",
 	"about-release-title": "Ramate",
+	"about-version": "Versiyon: {{VERSION}}",
 	"about-reporting-problem-title": "Xırabey rapor kerê",
-	"about-libraries-title": "Kıtıbxaney",
+	"about-report-issue-2": "Xerpiyaye versiyoni bınısne",
+	"about-libraries-title": "Kıtabxaney",
 	"all-files": "Dosyay pêro",
 	"local-files": "Dosya mehali",
 	"browse-by-category": "Gorey kategori çımberze",
@@ -104,5 +107,9 @@
 	"details": "Meqale pêro",
 	"yes": "eya",
 	"no": "nê",
-	"no-filter": "parzûn çıniyo"
+	"no-filter": "parzûn çıniyo",
+	"open-link-in-web-browser": "Browserê webi de gırey akerê",
+	"download-dir-dialog-title": "Şıma qayılê rêza ronayışi bıvurne?",
+	"download-dir-dialog-msg": "Rêza ronayışiya newi do ena ray bo:\n {{DIRECTORY}}",
+	"invalid-port": "Nuqtaya xırab"
 }

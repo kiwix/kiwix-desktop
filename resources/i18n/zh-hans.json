@@ -64,6 +64,7 @@
 	"browse": "浏览",
 	"about-kiwix-desktop-title": "Kiwix 桌面",
 	"about-release-title": "发布",
+	"about-version": "版本：{{VERSION}}",
 	"about-reporting-problem-title": "报告问题",
 	"fullscreen-notification": "您现已进入全屏模式。点击Esc键以退出全屏！",
 	"all-files": "所有文件",
@@ -91,5 +92,8 @@
 	"yes": "是",
 	"no": "否",
 	"no-filter": "无过滤器",
+	"open-link-in-web-browser": "在网页浏览器中打开链接",
+	"download-dir-dialog-title": "您确定您要更改下载路径吗？",
+	"download-dir-dialog-msg": "新的下载路径为：\n{{DIRECTORY}}",
 	"invalid-port": "无效的接口"
 }

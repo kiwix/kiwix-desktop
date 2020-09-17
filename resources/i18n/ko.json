@@ -111,5 +111,9 @@
 	"details": "모든 문서",
 	"yes": "예",
 	"no": "아니오",
-	"no-filter": "필터 없음"
+	"no-filter": "필터 없음",
+	"open-link-in-web-browser": "웹 브라우저로 링크 열기",
+	"download-dir-dialog-title": "다운로드 디렉터리를 변경하시겠습니까?",
+	"download-dir-dialog-msg": "새 다운로드 경로는 다음과 같습니다 :\n{{DIRECTORY}}",
+	"invalid-port": "유효하지 않은 포트"
 }

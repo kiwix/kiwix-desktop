@@ -71,6 +71,7 @@
 	"about-kiwix-desktop-description": "Kiwix nereye giderseniz gidin tüm Vikipedi'nin elinizde olmasını sağlar! Bir teknede, hiçbir yerin ortasında veya hapiste, Kiwix size tüm insan bilgisine erişmenizi sağlar. İnternete ihtiyacınız yok, her şey bilgisayarınızda saklanıyor.",
 	"about-learn-more-about-kiwix": "Kiwix hakkında daha fazla bilgi edinin",
 	"about-release-title": "Sürüm",
+	"about-source-code": "Bu yazılım GNU Genel Kamu Lisansı sürüm 3 koşulları altında yayınlanmıştır. Kaynak kodunu <a href='{{GITHUB_URL}}'>Github</a>'ta öğrenin.",
 	"about-version": "Sürüm: {{VERSION}}",
 	"about-reporting-problem-title": "Sorun bildirme",
 	"about-report-issue": "Bir sorun açmak için <a href='{{TRACKER_URL}}'>Kiwix masaüstü sorun izleyiciyiyi</a> ziyaret edin ve sorununuzu açıklayan bir sorun açın.",

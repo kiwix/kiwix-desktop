@@ -66,10 +66,15 @@
 	"download-directory-setting": "Verzeichnis für Downloads:",
 	"reset": "Zurücksetzen",
 	"browse": "Durchsuchen",
+	"about-kiwix-desktop-title": "Kiwix Desktop",
 	"about-kiwix-desktop-description": "Kiwix ermöglicht es Ihnen, die gesamte Wikipedia immer und überall zur Hand zu haben! Auf einem Boot, mitten im Nirgendwo oder im Gefängnis, Kiwix ermöglicht Ihnen den Zugang zum gesamten menschlichen Wissen. Sie brauchen kein Internet, alles ist auf Ihrem Computer gespeichert.",
 	"about-learn-more-about-kiwix": "Mehr über Kiwix erfahren",
 	"about-release-title": "Veröffentlichung",
+	"about-source-code": "Diese Software unterliegt einer Lizenz, der GNU General Public License Version 3. Anzeige des Quellcodes unter <a href='{{GITHUB_URL}}'>Github</a>.",
+	"about-version": "Version: {{VERSION}}",
 	"about-reporting-problem-title": "Probleme melden",
+	"about-report-issue": "Um ein Problem zu melden, bitte <a href='{{TRACKER_URL}}'>Kiwix-Desktop Issue tracker</a> aufrufen und dort ein Thema erstellen, das Ihr Problem beschreibt.",
+	"about-report-issue-2": "Bitte im Thema die Version angeben.",
 	"about-libraries-title": "Bibliotheken",
 	"kiwix-server-running-message": "Der Kiwix-Server ist aktiv und ein Zugriff ist möglich im lokalen Netzwerk unter:",
 	"kiwix-server-description": "Wenn ein Server gestartet wird, eröffnet das anderen Rechnern im lokalen Netzwerk die Möglichkeit, mit einem normalen Browser auf Ihre Kiwix-Bibliothek zuzugreifen.",
@@ -106,5 +111,9 @@
 	"details": "Ganzer Artikel",
 	"yes": "ja",
 	"no": "nein",
-	"no-filter": "kein Filter"
+	"no-filter": "kein Filter",
+	"open-link-in-web-browser": "Link im Browser öffnen",
+	"download-dir-dialog-title": "Sind Sie sicher, dass Sie das Download-Verzeichnis wechseln möchten?",
+	"download-dir-dialog-msg": "Der neue Download-Verzeichnis-Pfad wird:\n{{DIRECTORY}}",
+	"invalid-port": "Ungültiger Port"
 }

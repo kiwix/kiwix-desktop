@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Abijeet Patro",
+			"Carlespera",
 			"Fitoschido",
 			"Geryescalier",
 			"Ncr"
@@ -69,10 +70,13 @@
 	"download-directory-setting": "Directorio de descargas:",
 	"reset": "Restablecer",
 	"browse": "Explorar",
+	"about-kiwix-desktop-title": "Escritorio Kiwix",
 	"about-kiwix-desktop-description": "¡Kiwix te permite tener toda la Wikipedia a mano donde quiera que vayas! En un bote, en medio de la nada o en la cárcel, Kiwix te da acceso a todo el conocimiento humano. No necesita Internet, todo está almacenado en su computadora.",
 	"about-learn-more-about-kiwix": "Para conocer más sobre Kiwix",
 	"about-release-title": "Lanzamiento",
+	"about-version": "Versión : {{VERSION}}",
 	"about-reporting-problem-title": "Informar un problema",
+	"about-report-issue-2": "Menciona la versión en el problema.",
 	"about-libraries-title": "Bibliotecas",
 	"kiwix-server-running-message": "El servidor Kiwix se está ejecutando y se puede acceder a él en la red local en:",
 	"kiwix-server-description": "Iniciar un servidor permite que otras computadoras en la red local accedan a su biblioteca Kiwix con un navegador web estándar.",
@@ -108,6 +112,7 @@
 	"details": "Artículo completo",
 	"yes": "sí",
 	"no": "no",
+	"no-filter": "Sin filtro",
 	"open-link-in-web-browser": "Abrir enlace en navegador web",
 	"invalid-port": "Puerto no válido"
 }
