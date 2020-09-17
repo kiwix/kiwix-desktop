@@ -68,5 +68,6 @@
 	"details": "Kompletten Artikel",
 	"yes": "jo",
 	"no": "neen",
-	"no-filter": "kee Filter"
+	"no-filter": "kee Filter",
+	"invalid-port": "Net valabele Port"
 }

@@ -8,6 +8,8 @@
 		]
 	},
 	"name": "Svenska",
+	"error-downloader-window-title": "Kan inte skapa nedladdare",
+	"error-downloader-launch-message": "Omöjligt att starta nedladdare, Kiwix-desktop kommer starta men alla nedladdningsfunktioner kommer inte fungera !",
 	"open-zim": "Öppna Zim",
 	"local-kiwix-server": "Lokal Kiwix-server",
 	"random-article": "Slumpartikel",
@@ -67,11 +69,19 @@
 	"download-directory-setting": "Katalog för nedladdningar:",
 	"reset": "Återställ",
 	"browse": "Bläddra",
+	"about-kiwix-desktop-title": "Kiwix Desktop",
+	"about-kiwix-desktop-description": "Kiwix gör det möjligt för dig att ha hela Wikipedia till hands var du än är! På en båt, mitt i ingenstans eller i fängelse, Kiwix ger dig tillgång till mänsklighetens samlade kunskap. Du behöver inget internet, allt sparas i din dator.",
 	"about-learn-more-about-kiwix": "Lär dig mer om Kiwix",
 	"about-release-title": "Utgåva",
+	"about-source-code": "Mjukvaran släpps under GNU General Public License version 3. Läs källkoden på <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "Version : {{VERSION}}",
 	"about-reporting-problem-title": "Rapportera problem",
+	"about-report-issue": "För att rapportera ett problem, besök <a href='{{TRACKER_URL}}'>Kiwix-desktop issue tracker</a> och öppna ett ärende som beskriver ditt problem.",
+	"about-report-issue-2": "Vänligen nämn versionen problemet uppstod i.",
 	"about-libraries-title": "Bibliotek",
+	"kiwix-server-running-message": "Kiwix-servern fungerar och kan nås i det lokala nätverket via:",
+	"kiwix-server-description": "Att starta en server låter andra datorer i det lokala nätverket att få tillgång till ditt Kiwix-bibliotek med en vanlig webbläsare.",
+	"fullscreen-notification": "Du har aktiverat fullskärmsläge. Tryck ESC för att avsluta!",
 	"all-files": "Alla filer",
 	"local-files": "Lokala filer",
 	"browse-by-category": "Bläddra efter kategori",
@@ -105,5 +115,7 @@
 	"yes": "ja",
 	"no": "nej",
 	"no-filter": "inget filter",
-	"open-link-in-web-browser": "Öppna länk i webbläsaren"
+	"open-link-in-web-browser": "Öppna länk i webbläsaren",
+	"download-dir-dialog-title": "Är du säker på att du vill byta nedladdningskatalog?",
+	"invalid-port": "Ogiltig port"
 }

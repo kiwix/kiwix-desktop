@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Abijeet Patro",
+			"Sibabrata Banerjee",
 			"আফতাবুজ্জামান"
 		]
 	},
@@ -21,7 +22,10 @@
 	"title": "শিরোনাম",
 	"size": "আকার",
 	"date": "তারিখ",
+	"about-kiwix-desktop-title": "কিউইক্স ডেস্কটপ",
 	"about-release-title": "মুক্তি",
+	"about-version": "সংস্করণ: {{VERSION}}",
+	"about-report-issue-2": "দয়া করে সমস্যাটিতে সংস্করণের নামটি লিখুন।",
 	"all": "সব",
 	"other": "অন্য",
 	"ted": "টেড",
@@ -37,5 +41,7 @@
 	"wiktionary": "উইকিঅভিধান",
 	"fulltext-search": "পূর্ণপাঠ অনুসন্ধান",
 	"yes": "হ্যাঁ",
-	"no": "না"
+	"no": "না",
+	"open-link-in-web-browser": "ওয়েব ব্রাউজারে সংযোগ খুলুন",
+	"invalid-port": "পাতা অবৈধ"
 }

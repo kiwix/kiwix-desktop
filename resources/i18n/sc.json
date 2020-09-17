@@ -67,11 +67,15 @@
 	"download-directory-setting": "Cartella de iscarrigamentu:",
 	"reset": "Reseta",
 	"browse": "Esplora",
+	"about-kiwix-desktop-title": "Kiwix pro iscrivania",
 	"about-kiwix-desktop-description": "Kiwix ti permitit de tènnere sa Wikipedia intrea a portada de manu in cale si siat logu tue ue as a andare! In una barca, in mesu a su nudda o in presone, Kiwix ti daet atzessu a totu sa connoschèntzia umana. Non bisòngias de Internèt, totu est sarvadu in s'elaboradore tuo.",
 	"about-learn-more-about-kiwix": "Impara de prus in subra de Kiwix",
 	"about-release-title": "Intregada",
+	"about-source-code": "Custu programma benit intregadu sighende sos tèrmines de sa litzèntzia GNU General Public License versione 3. Pòmpia·ti su còdighe de orìgine in <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "Versione : {{VERSION}}",
 	"about-reporting-problem-title": "Sinnalare unu problema",
+	"about-report-issue": "Pro abèrrere una sinnalatzione, bìsita <a href='{{TRACKER_URL}}'>s'arrastadore pro Kiwix pro elaboradores de iscrivania (Kiwix-desktop)</a> e aberi una sinnalatzione in ue descries su problema tuo.",
+	"about-report-issue-2": "Pro praghere mentova sa versione in sa sinnalatzione.",
 	"about-libraries-title": "Librerias",
 	"kiwix-server-running-message": "Su serbidore de Kiwix est in funtzione e bi podes atzèdere in sa retza locale dae:",
 	"kiwix-server-description": "Aviare unu serbidore permitit a sos àteros eleboradores in sa retza locale de tènnere atzessu a sa biblioteca locale de Kiwix tua cun unu navigadore (browser) istandard.",
@@ -108,5 +112,9 @@
 	"details": "Artìculu intreu",
 	"yes": "eja",
 	"no": "nono",
-	"no-filter": "perunu filtru"
+	"no-filter": "perunu filtru",
+	"open-link-in-web-browser": "Aberi su ligàmene in su navigadore web",
+	"download-dir-dialog-title": "Ses seguru de chèrrere mudare sa cartella de iscarrigamentu?",
+	"download-dir-dialog-msg": "S'àndala pro sa cartella de iscarrigamentu noa at a èssere:\n{{DIRECTORY}}",
+	"invalid-port": "Ghenna non bàlida"
 }

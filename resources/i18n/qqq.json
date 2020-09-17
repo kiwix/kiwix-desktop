@@ -22,5 +22,6 @@
 	"videos": "{{identical|Video}}",
 	"yes": "{{identical|yes}}",
 	"no": "{{identical|no}}",
-	"open-link-in-web-browser": "Ouvrir le lien dans le navigateur"
+	"open-link-in-web-browser": "Ouvrir le lien dans le navigateur",
+	"download-dir-dialog-msg": "Please note that <code><nowiki>{{DIRECTORY}}</nowiki></code> should be placed on a newline."
 }

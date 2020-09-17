@@ -12,6 +12,7 @@
         <file>i18n/sr-ec.json</file>
         <file>i18n/en.json</file>
         <file>i18n/mk.json</file>
+        <file>i18n/id.json</file>
         <file>i18n/pl.json</file>
         <file>i18n/eo.json</file>
         <file>i18n/qqq.json</file>
@@ -34,6 +35,8 @@
         <file>i18n/da.json</file>
         <file>i18n/it.json</file>
         <file>i18n/br.json</file>
+        <file>i18n/uk.json</file>
+        <file>i18n/fi.json</file>
         <file>i18n/sv.json</file>
         <file>i18n/pt-br.json</file>
         <file>i18n/lb.json</file>

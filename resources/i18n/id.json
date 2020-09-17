@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Esiahaan"
+		]
+	},
+	"name": "Bahasa Inggris",
+	"error-downloader-window-title": "Tidak dapat membuat pengunduh",
+	"open-zim": "Buka Zim",
+	"random-article": "Artikel Acak",
+	"home-page": "Beranda",
+	"print": "Cetak",
+	"new-tab": "Tab baru",
+	"close-tab": "Tutup tab",
+	"reopen-closed-tab": "Buka kembali tab yang telah tertutup",
+	"browse-library": "Lihat isi perpustakaan",
+	"open-file": "Buka file",
+	"open-recent": "Buka yang terbaru",
+	"search-article": "Cari artikel",
+	"search-in-library": "Cari di perpustakaan",
+	"find-in-page": "Temukan di halaman",
+	"set-fullscreen": "Setel layar penuh",
+	"quit-fullscreen": "Keluar dari layar penuh",
+	"table-of-content": "Daftar isi",
+	"reading-list": "Daftar bacaan",
+	"reading-list-title": "Daftar bacaan",
+	"zoom-in": "Perbesar",
+	"zoom-out": "Perkecil",
+	"help": "Bantuan",
+	"about-kiwix": "Tentang Kiwix",
+	"donate-to-support-kiwix": "Berikan donasi untuk mendukung Kiwix",
+	"exit": "Keluar",
+	"file": "File",
+	"edit": "Sunting",
+	"view": "Lihat"
+}
