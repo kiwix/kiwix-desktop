@@ -2,7 +2,7 @@
 #define LOCALKIWIXSERVER_H
 
 #include <QDialog>
-#include <kiwix/kiwixserve.h>
+#include <kiwix/server.h>
 
 namespace Ui {
 class LocalKiwixServer;
@@ -22,7 +22,7 @@ public slots:
 
 private:
     Ui::LocalKiwixServer *ui;
-    kiwix::KiwixServe* mp_server;
+    kiwix::Server* mp_server;
     bool m_active = false;
     QString m_ipAddress;
     int m_port;

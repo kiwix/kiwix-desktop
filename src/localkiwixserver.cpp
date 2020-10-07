@@ -19,7 +19,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     setStyleSheet(style);
 
     mp_server = KiwixApp::instance()->getLocalServer();
-    m_port = mp_server->getPort();
+    m_port = KiwixApp::instance()->getSettingsManager()->getKiwixServerPort();
 
     connect(ui->KiwixServerButton, SIGNAL(clicked()), this, SLOT(runOrStopServer()));
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
@@ -51,7 +51,7 @@ void LocalKiwixServer::openInBrowser()
     QUrl url;
     url.setScheme("http");
     url.setHost(m_ipAddress);
-    url.setPort(mp_server->getPort());
+    url.setPort(m_port);
     QDesktopServices::openUrl(url);
 }
 
@@ -59,17 +59,15 @@ void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
         mp_server->setPort(m_port);
-        mp_server->run();
         ui->IpAddress->setText(m_ipAddress + ":" + QString::number(m_port));
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        if (!mp_server->isRunning()) {
+        if (!mp_server->start()) {
             QMessageBox messageBox;
             messageBox.critical(0,"Error","An error has occured !");
             return;
         }
         m_active = true;
     } else {
-        mp_server->shutDown();
+        mp_server->stop();
         m_active = false;
     }
 

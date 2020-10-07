@@ -77,7 +77,7 @@ public:
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
-    kiwix::KiwixServe* getLocalServer() { return mp_server; }
+    kiwix::Server* getLocalServer() { return mp_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     SideBarType getSideType() { return m_currentSideType; }
     QString getText(const QString &key) { return m_translation.getText(key); };
@@ -113,7 +113,7 @@ private:
     TabBar* mp_tabWidget;
     SideBarType m_currentSideType;
     QErrorMessage* mp_errorDialog;
-    kiwix::KiwixServe* mp_server;
+    kiwix::Server* mp_server;
     Translation m_translation;
 
     QAction*     mpa_actions[MAX_ACTION];
