@@ -23,7 +23,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      mp_server(new kiwix::Server(&m_library.getKiwixLibrary()))
+      m_server(&m_library.getKiwixLibrary())
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -96,10 +96,7 @@ void KiwixApp::init()
 
 KiwixApp::~KiwixApp()
 {
-    if (mp_server) {
-        mp_server->stop();
-        delete mp_server;
-    }
+    m_server.stop();
     if (mp_downloader) {
         mp_downloader->close();
         delete mp_downloader;
