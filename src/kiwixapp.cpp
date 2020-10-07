@@ -19,7 +19,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_settingsManager(),
       m_profile(),
       m_libraryDirectory(findLibraryDirectory()),
-      m_library(),
+      m_library(m_libraryDirectory),
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
