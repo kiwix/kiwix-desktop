@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QDebug>
+#include <stdexcept>
 
 Translation::Translation()
 {

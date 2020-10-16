@@ -19,13 +19,11 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_settingsManager(),
       m_profile(),
       m_libraryDirectory(findLibraryDirectory()),
-      m_library(),
+      m_library(m_libraryDirectory),
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      mp_server(new kiwix::KiwixServe(
-        appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"),
-        m_settingsManager.getKiwixServerPort()))
+      m_server(&m_library.getKiwixLibrary())
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -98,10 +96,7 @@ void KiwixApp::init()
 
 KiwixApp::~KiwixApp()
 {
-    if (mp_server) {
-        mp_server->shutDown();
-        delete mp_server;
-    }
+    m_server.stop();
     if (mp_downloader) {
         mp_downloader->close();
         delete mp_downloader;

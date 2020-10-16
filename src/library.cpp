@@ -22,12 +22,11 @@ class LibraryManipulator: public kiwix::LibraryManipulator {
     Library* mp_library;
 };
 
-Library::Library()
+Library::Library(const QString& libraryDirectory)
+  : m_libraryDirectory(libraryDirectory)
 {
     auto manipulator = LibraryManipulator(this);
     auto manager = kiwix::Manager(&manipulator);
-    m_libraryDirectory = KiwixApp::instance()->getLibraryDirectory();
-    qInfo() << "Library directory :" << m_libraryDirectory;
     manager.readFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
     manager.readBookmarkFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
     emit(booksChanged());
