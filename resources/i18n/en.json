@@ -78,6 +78,7 @@
     "kiwix-server-running-message":"The Kiwix Server is running and can be accessed in the local network at :",
     "kiwix-server-description":"Starting a server allows other computers in the local network to access your Kiwix library with a standard web browser.",
     "fullscreen-notification":"You are now in full screen mode. Press ESC to quit!",
+    "book_removed_info":"The book {{BOOK_NAME}} has been removed from the library. But not from your computer. You may want to delete yourself the corresponding files in {{BOOK_DIR}}.",
     "all-files":"All Files",
     "local-files":"Local Files",
     "browse-by-category":"Browse By Category",

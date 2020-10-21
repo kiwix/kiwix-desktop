@@ -249,7 +249,8 @@ void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QSt
 
 void ContentManager::eraseBook(const QString& id)
 {
-    auto tabBar = KiwixApp::instance()->getTabWidget();
+    auto kiwixapp = KiwixApp::instance();
+    auto tabBar = kiwixapp->getTabWidget();
     int i = 1;
     while (i < tabBar->count() - 1) {
         WebView* webView = tabBar->widget(i)->getWebView();
@@ -260,9 +261,9 @@ void ContentManager::eraseBook(const QString& id)
         }
     }
     kiwix::Book book = mp_library->getBookById(id);
-    QString dirPath = QString::fromStdString(removeLastPathElement(book.getPath()));
-    QString filename = QString::fromStdString(getLastPathElement(book.getPath())) + "*";
-    eraseBookFilesFromComputer(dirPath, filename);
+    auto dirPath = QString::fromStdString(removeLastPathElement(book.getPath()));
+    auto bookName = QString::fromStdString(book.getName());
+
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit mp_library->bookmarksChanged();
@@ -272,6 +273,12 @@ void ContentManager::eraseBook(const QString& id)
         emit(oneBookChanged(id));
     }
     KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+
+    auto message = KiwixApp::instance()->getText("book_removed_info");
+    message = message.replace("{{BOOK_NAME}}", bookName);
+    message = message.replace("{{BOOK_DIR}}", dirPath);
+
+    kiwixapp->showMessage(message);
 }
 
 void ContentManager::pauseBook(const QString& id)
