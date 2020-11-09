@@ -3,14 +3,15 @@
 		"authors": [
 			"Abijeet Patro",
 			"Diman Russkov",
+			"Helpau",
 			"Kareyac",
 			"Pacha Tchernof",
 			"Smavrina"
 		]
 	},
 	"name": "английский",
-	"error-downloader-window-title": "Невозможно создать скачивальщик",
-	"error-downloader-launch-message": "Невозможно запустить скачивальщик, Kiwix для рабочего стола будет запущен, но все функции скачивания будут недоступны!",
+	"error-downloader-window-title": "Невозможно создать загрузчик",
+	"error-downloader-launch-message": "Невозможно запустить загрузчик, Kiwix для рабочего стола будет запущен, но все функции скачивания будут недоступны!",
 	"open-zim": "Открыть Zim",
 	"local-kiwix-server": "Локальный сервер Kiwix",
 	"random-article": "Случайная статья",
@@ -47,7 +48,7 @@
 	"view": "Посмотреть",
 	"tools": "Инструменты",
 	"window-title": "Библиотека - Kiwix",
-	"search": "Найти",
+	"search": "Поиск",
 	"browse-directory": "Просмотр Папки",
 	"settings": "Настройки",
 	"back": "Назад",
