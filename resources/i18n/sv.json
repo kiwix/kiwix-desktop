@@ -117,5 +117,6 @@
 	"no-filter": "inget filter",
 	"open-link-in-web-browser": "Öppna länk i webbläsaren",
 	"download-dir-dialog-title": "Är du säker på att du vill byta nedladdningskatalog?",
+	"download-dir-dialog-msg": "Den nya sökvägen till nedladdningsfilkatalogen kommer vara:\n{{DIRECTORY}}",
 	"invalid-port": "Ogiltig port"
 }
