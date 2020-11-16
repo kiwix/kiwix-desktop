@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Balyozxane",
 			"Bikarhêner"
 		]
 	},
@@ -60,7 +61,7 @@
 	"resume": "Dewam bike",
 	"pause": "Rawestîne",
 	"cancel": "Betal bike",
-	"apply": "Miracaet bike",
+	"apply": "Bisepîne",
 	"port-for-local-kiwix-server-setting": "Nuqteya girêdanê ji bo servera Kiwixê yê lokal :",
 	"zoom-level-setting": "Dereceya nêzîkkirinê :",
 	"download-directory-setting": "Pelrêçê daxîne :",
