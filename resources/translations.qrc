@@ -24,6 +24,7 @@
         <file>i18n/fa.json</file>
         <file>i18n/cs.json</file>
         <file>i18n/bn.json</file>
+        <file>i18n/skr-arab.json</file>
         <file>i18n/hy.json</file>
         <file>i18n/sc.json</file>
         <file>i18n/diq.json</file>
@@ -33,12 +34,14 @@
         <file>i18n/io.json</file>
         <file>i18n/zh-hant.json</file>
         <file>i18n/da.json</file>
+        <file>i18n/zgh.json</file>
         <file>i18n/it.json</file>
         <file>i18n/br.json</file>
         <file>i18n/uk.json</file>
         <file>i18n/fi.json</file>
         <file>i18n/sv.json</file>
         <file>i18n/pt-br.json</file>
+        <file>i18n/ku-latn.json</file>
         <file>i18n/lb.json</file>
     </qresource>
 </RCC>
