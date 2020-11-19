@@ -15,7 +15,6 @@ Package: kiwix
 Architecture: any
 Depends: ${shlibs:Depends},
  ${misc:Depends}
-Recommends: kiwix-tools
 Description: offline Wikipedia reader
  Kiwix allows you to read and search through offline content
  as they were online. Similar to a browser, Kiwix works with
