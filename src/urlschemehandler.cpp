@@ -30,35 +30,25 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
         request->fail(QWebEngineUrlRequestJob::UrlNotFound);
         return;
     }
-    kiwix::Entry entry;
     try {
-        entry = reader->getEntryFromPath(url);
-    } catch (kiwix::NoEntry&) {
-        url = "A/" + url;
-        try {
-            entry = reader->getEntryFromPath(url);
-        } catch (kiwix::NoEntry&) {
-            request->fail(QWebEngineUrlRequestJob::UrlNotFound);
-            return;
-        }
-    }
-    if (entry.isRedirect()) {
-        try {
+        kiwix::Entry entry = reader->getEntryFromPath(url);
+        if (entry.isRedirect()) {
             entry = entry.getFinalEntry();
-        } catch (kiwix::NoEntry&) {
-            request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+            auto path = QString("/") + QString::fromStdString(entry.getPath());
+            qurl.setPath(path);
+            request->redirect(qurl);
             return;
         }
-        auto path = QString("/") + QString::fromStdString(entry.getPath());
-        qurl.setPath(path);
-        request->redirect(qurl);
-        return;
+
+        BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
+        auto mimeType = QByteArray::fromStdString(entry.getMimetype());
+        mimeType = mimeType.split(';')[0];
+        connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
+        request->reply(mimeType, buffer);
+    } catch (kiwix::NoEntry&) {
+      request->fail(QWebEngineUrlRequestJob::UrlNotFound);
     }
-    BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
-    auto mimeType = QByteArray::fromStdString(entry.getMimetype());
-    mimeType = mimeType.split(';')[0];
-    connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
-    request->reply(mimeType, buffer);
+
 }
 
 void
