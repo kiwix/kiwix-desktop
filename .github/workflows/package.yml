@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        distro: [ubuntu-groovy, ubuntu-focal, ubuntu-bionic]
+        distro: [ubuntu-hirsute, ubuntu-groovy, ubuntu-focal, ubuntu-bionic]
     steps:
       - uses: actions/checkout@v2
 
@@ -29,6 +29,14 @@ jobs:
           fullname: Kiwix builder
           email: release+launchpad@kiwix.org
           distro: ${{ matrix.distro }}
+
+      - uses: legoktm/gh-action-build-deb@ubuntu-hirsute
+        if: matrix.distro == 'ubuntu-hirsute'
+        name: Build package for ubuntu-hirsute
+        id: build-ubuntu-hirsute
+        with:
+          args: --no-sign
+          ppa: ${{ steps.ppa.outputs.ppa }}
 
       - uses: legoktm/gh-action-build-deb@ubuntu-groovy
         if: matrix.distro == 'ubuntu-groovy'
