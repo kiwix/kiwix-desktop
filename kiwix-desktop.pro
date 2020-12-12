@@ -6,6 +6,7 @@
 
 QT       += core gui network
 QT       += webenginewidgets
+QT       += printsupport
 
 CONFIG += link_pkgconfig
 
