@@ -11,17 +11,16 @@ void initStaticContent() {
   PUSH("all");
   PUSH("other");
 //  PUSH("gutenberg"); // Gutenberg book has wrong tag
-//  PUSH("phet"); // Phet books have no tags
+  PUSH("phet"); // Phet books have no tags
   PUSH("psiram");
   PUSH("stack_exchange");
-//  PUSH("ted");  // Ted books have wrong tags
+  PUSH("ted");  // Ted books have wrong tags
   PUSH("vikidia");
-//  PUSH("wikibooks"); // wikibooks have no tags
+  PUSH("wikibooks"); // wikibooks have no tags
   PUSH("wikinews");
   PUSH("wikipedia");
   PUSH("wikiquote");
   PUSH("wikisource");
-//  PUSH("wikispecies"); // Wikispecies books have wrong tags
   PUSH("wikiversity");
   PUSH("wikivoyage");
   PUSH("wiktionary");
