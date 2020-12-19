@@ -10,7 +10,7 @@ void initStaticContent() {
 #define PUSH(key) S_CATEGORIES.push_back(std::make_pair(QString::fromStdString(key), gt(key)))
   PUSH("all");
   PUSH("other");
-//  PUSH("gutenberg"); // Gutenberg book has wrong tag
+  PUSH("gutenberg"); // Gutenberg book has wrong tag
   PUSH("phet"); // Phet books have no tags
   PUSH("psiram");
   PUSH("stack_exchange");
