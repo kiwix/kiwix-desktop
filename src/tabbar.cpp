@@ -50,6 +50,7 @@ TabBar::TabBar(QWidget *parent) :
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
                 if (KiwixApp::instance()->getSettingsManager()->isSettingsViewdisplayed()) {
+                    setCurrentIndex(m_settingsIndex);
                     return;
                 }
                 auto index = currentIndex() + 1;
