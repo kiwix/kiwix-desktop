@@ -14,6 +14,8 @@ void SuggestionListWorker::run()
     QVector<QUrl> urlList;
 
     auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWebView();
+    if(!currentWidget)
+        return;
     auto qurl = currentWidget->url();
     auto currentZimId = qurl.host().split(".")[0];
     auto reader = KiwixApp::instance()->getLibrary()->getReader(currentZimId);
