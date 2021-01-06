@@ -25,7 +25,8 @@ public:
     ZimView* createNewTab(bool setCurrent);
     ZimView* widget(int index) { return (index != 0) ? static_cast<ZimView*>(mp_stackedWidget->widget(index)) : nullptr; }
     WebView* currentWebView() { auto current = mp_stackedWidget->currentWidget();
-                               if (mp_stackedWidget->currentIndex() == 0) return nullptr;
+                               if (mp_stackedWidget->currentIndex() == 0 ||
+                                   mp_stackedWidget->currentIndex() == m_settingsIndex) return nullptr;
                                return static_cast<ZimView*>(current)->getWebView();
                              }
     ZimView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
