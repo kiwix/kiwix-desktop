@@ -42,6 +42,7 @@ TopWidget::TopWidget(QWidget *parent) :
     QAction* menuAction = new QAction(this);
     menuAction->setIcon(QIcon(":/icons/more.svg"));
     menuAction->setMenu(menu);
+    menuAction->setToolTip(gt("main-menu"));
 
     addAction(menuAction);
     setContextMenuPolicy( Qt::PreventContextMenu );
