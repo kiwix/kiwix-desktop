@@ -406,6 +406,8 @@ QStringList ContentManager::getBookIds()
 
     filter.acceptTags(tags);
     filter.query(m_searchQuery.toStdString());
+    if (m_currentLanguage != "*")
+        filter.lang(m_currentLanguage.toStdString());
 
     if (m_local) {
         filter.local(true);
