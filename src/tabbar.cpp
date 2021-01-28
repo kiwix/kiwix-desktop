@@ -177,6 +177,7 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *wid
 
 void TabBar::closeTab(int index)
 {
+    setSelectionBehaviorOnRemove(index);
     if (index == 0 || index == this->count() - 1)
         return;
     if (index == m_settingsIndex) {
@@ -185,7 +186,6 @@ void TabBar::closeTab(int index)
     if (index < m_settingsIndex) {
         m_settingsIndex--;
     }
-    setSelectionBehaviorOnRemove(index);
     auto webview = widget(index);
     mp_stackedWidget->removeWidget(webview);
     webview->setParent(nullptr);
