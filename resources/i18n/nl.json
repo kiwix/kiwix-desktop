@@ -2,9 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"Dutchy45",
-			"Mainframe98"
+			"Mainframe98",
+			"SPQRobin"
 		]
 	},
+	"main-menu": "Hoofdmenu",
 	"print": "Afdrukken",
 	"new-tab": "Nieuw tabblad",
 	"close-tab": "Tabblad sluiten",
