@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Abijeet Patro",
-			"Fitoschido"
+			"Fitoschido",
+			"Mguix"
 		]
 	},
 	"name": "Català",
@@ -45,6 +46,7 @@
 	"local-files": "Fitxers locals",
 	"hide": "Amaga",
 	"all": "Tot",
+	"mooc": "MOOC",
 	"stack_exchange": "Stack Exchange",
 	"vikidia": "Vikidia",
 	"wikibooks": "Viquillibres",
