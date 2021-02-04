@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Abijeet Patro",
+			"Florian COLLIN",
 			"Gomoko",
 			"Stephane",
 			"Verdy p",
@@ -94,7 +95,8 @@
 	"stop-kiwix-server": "Arrêter le serveur Kiwix",
 	"all": "Tout",
 	"other": "Autre",
-	"gutemberg": "Gutenberg",
+	"gutenberg": "Gutenberg",
+	"mooc": "MOOC",
 	"phet": "Phet",
 	"psiram": "Psiram",
 	"stack_exchange": "Stack Exchange",

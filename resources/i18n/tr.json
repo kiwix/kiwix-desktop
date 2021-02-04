@@ -4,6 +4,7 @@
 			"1917 Ekim Devrimi",
 			"Abijeet Patro",
 			"BaRaN6161 TURK",
+			"Joseph",
 			"SaldırganSincap"
 		]
 	},
@@ -93,7 +94,8 @@
 	"stop-kiwix-server": "Kiwix Sunucusunu Durdur",
 	"all": "Hepsi",
 	"other": "Diğer",
-	"gutemberg": "Gutenberg",
+	"gutenberg": "Gutenberg",
+	"mooc": "KAÇD",
 	"phet": "Phet",
 	"psiram": "Psiram",
 	"stack_exchange": "Yığın Değişimi",
