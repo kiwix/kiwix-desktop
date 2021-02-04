@@ -40,7 +40,7 @@
       <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">
         <summary v-bind:id="book.id" class="tablerow book-summary">
           <span class="tablecell cell0">
-            <img v-if="book.faviconUrl" v-bind:src="'http://' + book.faviconUrl" />
+            <img v-if="book.faviconUrl" v-bind:src="'https://' + book.faviconUrl" />
             <img v-else-if="book.faviconMimeType" v-bind:src="'zim://' + book.id + '.favicon.meta'" />
           </span>
           <span class="tablecell cell1">
