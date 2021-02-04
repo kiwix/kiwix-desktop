@@ -8,7 +8,7 @@ OpdsRequestManager::OpdsRequestManager()
 }
 
 #define CATALOG_HOST "library.kiwix.org"
-#define CATALOG_PORT 80
+#define CATALOG_PORT 443
 void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString& categoryFilter)
 {
     QUrlQuery query;
@@ -32,7 +32,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
 
 
     QUrl url;
-    url.setScheme("http");
+    url.setScheme("https");
     url.setHost(CATALOG_HOST);
     url.setPort(CATALOG_PORT);
     url.setPath("/catalog/search");
