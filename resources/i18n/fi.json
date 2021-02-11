@@ -1,12 +1,14 @@
 {
 	"@metadata": {
 		"authors": [
+			"Nike",
 			"Pyscowicz"
 		]
 	},
 	"name": "suomi",
 	"random-article": "Satunnainen artikkeli",
 	"home-page": "Kotisivu",
+	"main-menu": "Päävalikko",
 	"print": "Tulosta",
 	"new-tab": "Uusi välilehti",
 	"close-tab": "Sulje välilehti",
@@ -72,6 +74,7 @@
 	"all": "Kaikki",
 	"other": "Muu",
 	"gutenberg": "Gutenberg",
+	"mooc": "MOOC",
 	"wikibooks": "Wikikirjasto",
 	"wikinews": "Wikiuutiset",
 	"wikipedia": "Wikipedia",
