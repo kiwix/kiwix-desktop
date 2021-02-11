@@ -1,7 +1,6 @@
 {
 	"@metadata": {
 		"authors": [
-			"Abijeet Patro",
 			"Steeve815",
 			"YaronSh"
 		]
@@ -13,6 +12,7 @@
 	"local-kiwix-server": "שרת Kiwix מקומי",
 	"random-article": "ערך אקראי",
 	"home-page": "דף הבית",
+	"main-menu": "תפריט ראשי",
 	"print": "הדפסה",
 	"new-tab": "כרטיסייה חדשה",
 	"close-tab": "סגירת לשונית",

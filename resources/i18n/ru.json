@@ -1,7 +1,6 @@
 {
 	"@metadata": {
 		"authors": [
-			"Abijeet Patro",
 			"Diman Russkov",
 			"Helpau",
 			"Kareyac",
@@ -96,6 +95,7 @@
 	"all": "Все",
 	"other": "Другое",
 	"gutenberg": "Gutenberg",
+	"mooc": "Онлайн-курсы",
 	"phet": "Phet",
 	"psiram": "Psiram",
 	"stack_exchange": "Stack Exchange",

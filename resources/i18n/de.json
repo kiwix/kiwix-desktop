@@ -1,9 +1,9 @@
 {
 	"@metadata": {
 		"authors": [
-			"Abijeet Patro",
 			"DraconicDark",
-			"Susann Schweden"
+			"Susann Schweden",
+			"Wolfdietmann"
 		]
 	},
 	"name": "Deutsch",
@@ -11,6 +11,7 @@
 	"local-kiwix-server": "Lokaler Kiwix-Server",
 	"random-article": "Zufälliger Artikel",
 	"home-page": "Startseite",
+	"main-menu": "Hauptmenü",
 	"print": "Drucken",
 	"new-tab": "Neue Registerkarte",
 	"close-tab": "Registerkarte schließen",
