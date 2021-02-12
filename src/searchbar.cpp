@@ -155,8 +155,8 @@ void SearchBar::updateCompletion()
 {
     mp_typingTimer->stop();
     clearSuggestions();
-    auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if (!currentWidget || currentWidget->url().isEmpty() || m_searchbarInput.isEmpty()) {
+    WebView* current = KiwixApp::instance()->getTabWidget()->currentWebView();
+    if (!current || current->url().isEmpty() || m_searchbarInput.isEmpty()) {
         hideSuggestions();
         return;
     }

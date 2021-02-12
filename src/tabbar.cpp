@@ -55,9 +55,9 @@ TabBar::TabBar(QWidget *parent) :
                     setCurrentIndex(m_settingsIndex);
                     return;
                 }
-                auto index = currentIndex() + 1;
+                int index = currentIndex() + 1;
                 m_settingsIndex = index;
-                auto view = KiwixApp::instance()->getSettingsManager()->getView();
+                SettingsManagerView* view = KiwixApp::instance()->getSettingsManager()->getView();
                 mp_stackedWidget->insertWidget(index, view);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
                 QToolButton *tb = new QToolButton(this);
