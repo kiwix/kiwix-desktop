@@ -200,6 +200,19 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *wid
     widget->getWebView()->setFocus();
 }
 
+void TabBar::closeTabsByZimId(const QString &id)
+{
+    // the last tab is + button, skip it
+    for (int i = count() - 2 ; i >= 0 ; i--) {
+        auto *zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(i));
+        if (!zv)
+            continue;
+        if (zv->getWebView()->zimId() == id) {
+            closeTab(i);
+        }
+    }
+}
+
 void TabBar::closeTab(int index)
 {
     setSelectionBehaviorOnRemove(index);
@@ -211,7 +224,7 @@ void TabBar::closeTab(int index)
     if (index < m_settingsIndex) {
         m_settingsIndex--;
     }
-    auto webview = widget(index);
+    auto webview = mp_stackedWidget->widget(index);
     mp_stackedWidget->removeWidget(webview);
     webview->setParent(nullptr);
     removeTab(index);
@@ -239,7 +252,7 @@ void TabBar::onCurrentChanged(int index)
         KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     } else if (index) {
-        auto view = widget(index)->getWebView();
+        auto view = static_cast<ZimView*>(mp_stackedWidget->widget(index))->getWebView();
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit libraryPageDisplayed(false);

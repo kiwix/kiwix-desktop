@@ -23,7 +23,6 @@ public:
     void     setContentManagerView(ContentManagerView* view);
     void     setNewTabButton();
     ZimView* createNewTab(bool setCurrent);
-    ZimView* widget(int index) { return (index != 0) ? static_cast<ZimView*>(mp_stackedWidget->widget(index)) : nullptr; }
     WebView* currentWebView() { auto current = mp_stackedWidget->currentWidget();
                                if (mp_stackedWidget->currentIndex() == 0 ||
                                    mp_stackedWidget->currentIndex() == m_settingsIndex) return nullptr;
@@ -46,6 +45,7 @@ public:
     QString currentArticleTitle();
     virtual QSize tabSizeHint(int index) const;
     void openFindInPageBar();
+    void closeTabsByZimId(const QString &id);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
