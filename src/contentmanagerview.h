@@ -6,6 +6,7 @@
 
 class ContentManagerView : public QWebEngineView
 {
+    Q_OBJECT
 public:
     ContentManagerView(QWidget *parent = Q_NULLPTR);
     void registerObject(const QString &id, QObject *object);
