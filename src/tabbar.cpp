@@ -7,6 +7,7 @@
 #include <QToolButton>
 #include <QToolTip>
 #include <QCursor>
+#include <QPainter>
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
@@ -18,12 +19,13 @@ TabBar::TabBar(QWidget *parent) :
 {
     QTabBar::setDrawBase(false);
     setTabsClosable(true);
-    setElideMode(Qt::ElideRight);
+    setElideMode(Qt::ElideNone);
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
     setIconSize(QSize(30, 30));
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged);
     auto app = KiwixApp::instance();
+
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
                 this->createNewTab(true);
@@ -125,7 +127,30 @@ void TabBar::setTitleOf(const QString& title, ZimView* tab)
         auto url = QUrl(title);
         setTabText(mp_stackedWidget->indexOf(tab), url.path());
     } else {
-        setTabText(mp_stackedWidget->indexOf(tab), title);
+        int idx = mp_stackedWidget->indexOf(tab);
+        setTabToolTip(idx, title);
+
+        // This logic is taken from the implementation:
+        // <QTDIR>/5.12.6/Src/qtbase/src/widgets/widgets/qtabbar.cpp
+        // void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
+        QStyleOptionTab tab;
+        initStyleOption(&tab, idx);
+        QRect textRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tab, this);
+
+        // but instead of eliding text as QTabBar::initStyleOption() does
+        // we cut it and store the flag if it was cut
+        QString cut = fontMetrics().elidedText(title, Qt::ElideRight, textRect.width());
+        // strip ... from the end (this three dots are one char)
+        if (cut.size() < title.size()) {
+            cut = cut.mid(0, cut.size() - 1);
+            // set flag that the text was too long, was cut and this tab
+            // need 'fade out' effect while drawing
+            setTabData(idx, QVariant::fromValue(true));
+        }
+        else {
+            setTabData(idx, QVariant::fromValue(false));
+        }
+        setTabText(idx, cut);
     }
 }
 
@@ -252,5 +277,77 @@ void TabBar::mousePressEvent(QMouseEvent *event)
         closeTab(this->tabAt(event->pos()));
     } else {
        QTabBar::mousePressEvent(event);
+    }
+}
+
+void TabBar::paintEvent(QPaintEvent *e)
+{
+    // Please keep it in sync with resources/css/style.css
+    // QTabBar::tab:selected { background-color: <value> }
+    const QColor selected_tab_bg_color = QColor(Qt::white);
+
+    // first, let Qt draw QTabBar normally
+    QTabBar::paintEvent(e);
+
+    // Then apply fade-out effect for long tab title on top:
+    QPainter p(this);
+
+    for (int i = 0; i < count(); ++i) {
+        bool need_fade_out = tabData(i).toBool();
+        if (! need_fade_out)
+            continue;
+
+        QStyleOptionTab tab;
+        initStyleOption(&tab, i);
+
+        QRect textRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tab, this);
+
+        QRect tail = textRect;
+        tail.setWidth(textRect.width() * 0.2);
+
+        // isRightToLeft() gives inherrited from application layout direction,
+        // but we need the direction of each individual tab header text here
+        bool right_to_left = tabText(i).isRightToLeft();
+
+        if (! right_to_left) {
+            // Normal left-to-right text layout: move fading-out box to the right
+            tail.moveRight(textRect.right());
+        }
+
+        bool selected = tab.state & QStyle::State_Selected;
+
+        /* This gets the color from our style.css rule:
+         * QWidget {
+         *   background-color: #EAECF0;
+         * }
+         */
+        QColor c0 = tab.palette.background().color();
+
+        if (selected) {
+            /* We cannot just get back from QStyleSheetStyle (Qt private classes)
+             * the value of QTabBar::tab:selected { background-color: <value> }
+             * so have to use hard-coded value here:
+             */
+            c0 = selected_tab_bg_color;
+        }
+
+        QColor c1(c0);
+
+        if (right_to_left) {
+            c0.setAlpha(255);
+            c1.setAlpha(0);
+        }
+        else {
+            c0.setAlpha(0);
+            c1.setAlpha(255);
+        }
+
+        QLinearGradient gr(tail.topLeft(), tail.topRight());
+        gr.setSpread(QGradient::PadSpread);
+        gr.setColorAt(0.0, c0);
+        gr.setColorAt(1.0, c1);
+
+        QBrush br(gr);
+        p.fillRect(tail, br);
     }
 }

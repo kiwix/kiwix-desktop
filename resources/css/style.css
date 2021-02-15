@@ -135,7 +135,9 @@ QTabBar::tab {
 }
 
 QTabBar::tab:selected {
+    /* please keep it in sync with 'selected_tab_bg_color' in src/tabbar.cpp */
     background-color: white;
+
     border-bottom: 2px solid white;
 }
 
