@@ -49,6 +49,7 @@ public:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *);
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
