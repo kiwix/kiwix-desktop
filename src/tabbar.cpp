@@ -10,20 +10,19 @@
 #include <QPainter>
 
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
-#define QUITIFNOTCURRENT(VIEW) if((VIEW)!=currentWidget()) {return;}
-#define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentWidget();}
+#define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentZimView();}
 
 TabBar::TabBar(QWidget *parent) :
-    QTabBar(parent),
-    m_settingsIndex(-1)
+    QTabBar(parent)
 {
     QTabBar::setDrawBase(false);
     setTabsClosable(true);
     setElideMode(Qt::ElideNone);
     setDocumentMode(true);
     setFocusPolicy(Qt::NoFocus);
+    setMovable(true);
     setIconSize(QSize(30, 30));
-    connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged);
+    connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
     auto app = KiwixApp::instance();
 
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
@@ -38,7 +37,12 @@ TabBar::TabBar(QWidget *parent) :
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
                 auto index = this->tabAt(mapFromGlobal(QCursor::pos()));
-                if (index <= 0) {
+                if (index < 0)
+                    return;
+
+                // library tab cannot be closed
+                QWidget *w = mp_stackedWidget->widget(index);
+                if (qobject_cast<ContentManagerView*>(w)) {
                     return;
                 }
                 this->closeTab(index);
@@ -51,13 +55,14 @@ TabBar::TabBar(QWidget *parent) :
             });
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
-                if (KiwixApp::instance()->getSettingsManager()->isSettingsViewdisplayed()) {
-                    setCurrentIndex(m_settingsIndex);
-                    return;
+                for (int i = 0 ; i < (mp_stackedWidget->count() - 1) ; i++) {
+                    if (qobject_cast<SettingsManagerView*>(mp_stackedWidget->widget(i))) {
+                        setCurrentIndex(i);
+                        return;
+                    }
                 }
-                auto index = currentIndex() + 1;
-                m_settingsIndex = index;
-                auto view = KiwixApp::instance()->getSettingsManager()->getView();
+                int index = currentIndex() + 1;
+                SettingsManagerView* view = KiwixApp::instance()->getSettingsManager()->getView();
                 mp_stackedWidget->insertWidget(index, view);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
                 QToolButton *tb = new QToolButton(this);
@@ -65,6 +70,10 @@ TabBar::TabBar(QWidget *parent) :
                 setTabButton(index, QTabBar::RightSide, tb);
                 setCurrentIndex(index);
             });
+
+    // the slot relies the connection will be direct to reverting back the tab
+    connect(this, SIGNAL(tabMoved(int,int)),
+            this, SLOT(onTabMoved(int,int)), Qt::DirectConnection);
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {
@@ -76,11 +85,10 @@ void TabBar::setStackedWidget(QStackedWidget *widget) {
 void TabBar::setContentManagerView(ContentManagerView* view)
 {
     qInfo() << "add widget";
-    mp_contentManagerView = view;
-    mp_stackedWidget->addWidget(mp_contentManagerView);
+    mp_stackedWidget->addWidget(view);
     mp_stackedWidget->show();
-    addTab(QIcon(":/icons/library-icon.svg"), "");
-    setTabButton(0, RightSide, nullptr);
+    int idx = addTab(QIcon(":/icons/library-icon.svg"), "");
+    setTabButton(idx, RightSide, nullptr);
 }
 
 void TabBar::setNewTabButton()
@@ -88,19 +96,19 @@ void TabBar::setNewTabButton()
     QToolButton *tb = new QToolButton();
     tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::NewTabAction));
     tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
-    addTab("");
-    setTabEnabled(1, false);
-    setTabButton(1, QTabBar::LeftSide, tb);
-    tabButton(1, QTabBar::RightSide)->deleteLater();
-    setTabButton(1, QTabBar::RightSide, 0);
+    int idx = addTab("");
+    setTabEnabled(idx, false);
+    setTabButton(idx, QTabBar::LeftSide, tb);
+    tabButton(idx, QTabBar::RightSide)->deleteLater();
+    setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
 }
 
 ZimView* TabBar::createNewTab(bool setCurrent)
 {
     auto tab = new ZimView(this, this);
-    auto index = count() - 1;
+    int index = count() - 1; // the last tab is + button, insert before
     mp_stackedWidget->insertWidget(index, tab);
-    insertTab(index, "");
+    index = insertTab(index, "");
     QToolButton *tb = new QToolButton(this);
     tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
     setTabButton(index, QTabBar::RightSide, tb);
@@ -162,34 +170,39 @@ void TabBar::setIconOf(const QIcon &icon, ZimView *tab)
 
 QString TabBar::currentZimId()
 {
-    if (!currentWidget())
-        return "";
-    return currentWebView()->zimId();
+    if (WebView *w = currentWebView())
+        return w->zimId();
+    return "";
 }
 
 QString TabBar::currentArticleUrl()
 {
-    if(!currentWidget())
-        return "";
-    return currentWebView()->url().path();
+    if (WebView *w = currentWebView())
+        return w->url().path();
+    return "";
 }
 
 QString TabBar::currentArticleTitle()
 {
-    if(!currentWidget())
-        return "";
-    return currentWebView()->title();
+    if (WebView *w = currentWebView())
+        return w->title();
+    return "";
 }
 
-QSize TabBar::tabSizeHint(int index) const {
-    if (index)
-        return QSize(205, 40);
-    return QSize(40, 40);
+QSize TabBar::tabSizeHint(int index) const
+{
+    QWidget *w = mp_stackedWidget->widget(index);
+
+    if (w && qobject_cast<ContentManagerView*>(w))
+        return QSize(40, 40); // the "Library" tab is only icon
+
+    return QSize(205, 40); // "Settings" and content tabs have text
 }
 
 void TabBar::openFindInPageBar()
 {
-    currentWidget()->openFindInPageBar();    
+    if (ZimView *zv = currentZimView())
+        zv->openFindInPageBar();
 }
 
 void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *widget)
@@ -200,23 +213,39 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *wid
     widget->getWebView()->setFocus();
 }
 
+void TabBar::closeTabsByZimId(const QString &id)
+{
+    // the last tab is + button, skip it
+    for (int i = count() - 2 ; i >= 0 ; i--) {
+        auto *zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(i));
+        if (!zv)
+            continue;
+        if (zv->getWebView()->zimId() == id) {
+            closeTab(i);
+        }
+    }
+}
+
 void TabBar::closeTab(int index)
 {
-    setSelectionBehaviorOnRemove(index);
-    if (index == 0 || index == this->count() - 1)
+    // the last tab is + button, cannot be closed
+    if (index == this->count() - 1)
         return;
-    if (index == m_settingsIndex) {
-        m_settingsIndex = -1;
+
+    setSelectionBehaviorOnRemove(index);
+
+    QWidget *view = mp_stackedWidget->widget(index);
+
+    // library tab cannot be closed
+    if (qobject_cast<ContentManagerView*>(view)) {
+        return;
     }
-    if (index < m_settingsIndex) {
-        m_settingsIndex--;
-    }
-    auto webview = widget(index);
-    mp_stackedWidget->removeWidget(webview);
-    webview->setParent(nullptr);
+
+    mp_stackedWidget->removeWidget(view);
+    view->setParent(nullptr);
     removeTab(index);
-    webview->close();
-    delete webview;
+    view->close();
+    view->deleteLater();
 }
 
 void TabBar::setSelectionBehaviorOnRemove(int index)
@@ -232,14 +261,23 @@ void TabBar::onCurrentChanged(int index)
 {
     if (index == -1)
         return;
-    if (index == m_settingsIndex) {
+
+    // if somehow the last tab (+ button) became active, switch to the previous
+    if (index >= (count() - 1)) {
+        setCurrentIndex(count() - 2);
+        return;
+    }
+
+    QWidget *w = mp_stackedWidget->widget(index);
+
+    if (qobject_cast<SettingsManagerView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit libraryPageDisplayed(false);
         KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
-    } else if (index) {
-        auto view = widget(index)->getWebView();
+    } else if (auto zv = qobject_cast<ZimView*>(w)) {
+        auto view = zv->getWebView();
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit libraryPageDisplayed(false);
@@ -247,12 +285,17 @@ void TabBar::onCurrentChanged(int index)
             KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         }
         QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
-    } else {
+    } else if (qobject_cast<ContentManagerView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit libraryPageDisplayed(true);
         KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
+    }
+    else {
+        Q_ASSERT(false);
+        // In the future, other types of tabs can be added.
+        // For example, About dialog, or Kiwix Server control panel.
     }
 }
 
@@ -350,4 +393,30 @@ void TabBar::paintEvent(QPaintEvent *e)
         QBrush br(gr);
         p.fillRect(tail, br);
     }
+}
+
+void TabBar::onTabMoved(int from, int to)
+{
+    // avoid infinitive recursion
+    static bool reverting = false;
+    if (reverting)
+        return;
+
+    // on attempt to move the last tab (+ button) just move it back
+    // and the library should stick the first (zero) tab
+    int last = mp_stackedWidget->count();
+    if (
+         (from == last || to == last) ||
+         (from == 0 || to == 0)
+       ) {
+        reverting = true;
+        moveTab(to, from);
+        reverting = false;
+        return;
+    }
+
+    // swap widgets
+    QWidget *w_from = mp_stackedWidget->widget(from);
+    mp_stackedWidget->removeWidget(w_from);
+    mp_stackedWidget->insertWidget(to, w_from);
 }

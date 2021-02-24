@@ -23,17 +23,16 @@ public:
     void     setContentManagerView(ContentManagerView* view);
     void     setNewTabButton();
     ZimView* createNewTab(bool setCurrent);
-    ZimView* widget(int index) { return (index != 0) ? static_cast<ZimView*>(mp_stackedWidget->widget(index)) : nullptr; }
-    WebView* currentWebView() { auto current = mp_stackedWidget->currentWidget();
-                               if (mp_stackedWidget->currentIndex() == 0 ||
-                                   mp_stackedWidget->currentIndex() == m_settingsIndex) return nullptr;
-                               return static_cast<ZimView*>(current)->getWebView();
-                             }
-    ZimView* currentWidget() { auto current = mp_stackedWidget->currentWidget();
-                               if (mp_stackedWidget->currentIndex() == 0 ||
-                                   mp_stackedWidget->currentIndex() == m_settingsIndex) return nullptr;
-                               return static_cast<ZimView*>(current);
-                             }
+
+    ZimView* currentZimView() {
+        return qobject_cast<ZimView*>(mp_stackedWidget->currentWidget());
+    }
+
+    WebView* currentWebView() {
+        if (ZimView *zv = currentZimView())
+            return zv->getWebView();
+        return nullptr;
+    }
 
     void openUrl(const QUrl &url, bool newTab);
 // Redirect call to sub-webView
@@ -46,6 +45,7 @@ public:
     QString currentArticleTitle();
     virtual QSize tabSizeHint(int index) const;
     void openFindInPageBar();
+    void closeTabsByZimId(const QString &id);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -63,13 +63,13 @@ public slots:
     void fullScreenRequested(QWebEngineFullScreenRequest request);
 
 private:
-    ContentManagerView* mp_contentManagerView;
     QStackedWidget*     mp_stackedWidget;
-    int                 m_settingsIndex;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
     void setSelectionBehaviorOnRemove(int index);
 
+private slots:
+    void onTabMoved(int from, int to);
 };
 
 #endif // TABWIDGET_H

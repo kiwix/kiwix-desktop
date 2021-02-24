@@ -6,6 +6,7 @@
 
 class SettingsManagerView : public QWebEngineView
 {
+    Q_OBJECT
 public:
     SettingsManagerView(QWidget *parent = nullptr);
     void registerObject(const QString &id, QObject *object);

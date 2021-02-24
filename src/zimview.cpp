@@ -47,7 +47,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     connect(mp_webView, &WebView::titleChanged, this,
             [=](const QString& str) {
                 mp_tabBar->setTitleOf(str, this);
-                if (mp_tabBar->currentWidget() != this) {
+                if (mp_tabBar->currentZimView() != this) {
                     return;
                 }
                 emit mp_tabBar->currentTitleChanged(str);
@@ -56,21 +56,21 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
             [=](const QIcon& icon) { mp_tabBar->setIconOf(icon, this); });
     connect(mp_webView, &WebView::zimIdChanged, this,
             [=](const QString& zimId) {
-                if (mp_tabBar->currentWidget() != this) {
+                if (mp_tabBar->currentZimView() != this) {
                     return;
                 }
                 emit mp_tabBar->currentZimIdChanged(zimId);
             });
     connect(mp_webView->page()->action(QWebEnginePage::Back), &QAction::changed,
             [=]() {
-                if (mp_tabBar->currentWidget() != this) {
+                if (mp_tabBar->currentZimView() != this) {
                     return;
                 }
                 emit mp_tabBar->webActionEnabledChanged(QWebEnginePage::Back, mp_webView->isWebActionEnabled(QWebEnginePage::Back));
             });
     connect(mp_webView->page()->action(QWebEnginePage::Forward), &QAction::changed,
             [=]() {
-                if (mp_tabBar->currentWidget() != this) {
+                if (mp_tabBar->currentZimView() != this) {
                     return;
                 }
                 emit mp_tabBar->webActionEnabledChanged(QWebEnginePage::Forward, mp_webView->isWebActionEnabled(QWebEnginePage::Forward));
@@ -87,7 +87,13 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                     if (url.startsWith("zim://")) {
                         link = QUrl(url).path();
                     }
+
+                    /* because we use QWebEnginePage::linkHovered signal,
+                     * we can be sure the current tab is a web page
+                     * (mp_tabBar->currentWebView() is not nullptr)
+                     */
                     auto height = mp_tabBar->currentWebView()->height() + 1;
+
                     auto pos = mp_tabBar->mapToGlobal(QPoint(-3, height));
                     QToolTip::showText(pos, link);
                 }

@@ -180,7 +180,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
 
 void KiwixApp::printPage()
 {
-    if(!mp_tabWidget->currentWidget())
+    if(!mp_tabWidget->currentZimView())
         return;
     QPrinter* printer = new QPrinter();
     QPrintDialog printDialog(printer, mp_mainWindow);

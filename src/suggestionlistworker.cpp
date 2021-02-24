@@ -13,10 +13,10 @@ void SuggestionListWorker::run()
     QStringList suggestionList;
     QVector<QUrl> urlList;
 
-    auto currentWidget = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if(!currentWidget)
+    WebView *current = KiwixApp::instance()->getTabWidget()->currentWebView();
+    if(!current)
         return;
-    auto qurl = currentWidget->url();
+    auto qurl = current->url();
     auto currentZimId = qurl.host().split(".")[0];
     auto reader = KiwixApp::instance()->getLibrary()->getReader(currentZimId);
     QUrl url;

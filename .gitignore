@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# QtCreator Environment Settings (not suitable for sharing)
+kiwix-desktop.pro.user
