@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"Alan Mena",
 			"Fitoschido",
 			"Mguix"
 		]
 	},
 	"name": "Català",
+	"main-menu": "Menú principal",
 	"print": "Imprimeix",
 	"new-tab": "Pestanya nova",
 	"close-tab": "Tanca la pestanya",
