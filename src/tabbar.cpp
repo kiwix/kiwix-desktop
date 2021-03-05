@@ -71,6 +71,30 @@ TabBar::TabBar(QWidget *parent) :
                 setCurrentIndex(index);
             });
 
+    for (int i = 0 ; i <= 9 ; i++) {
+        QAction *a = new QAction(this);
+        a->setData(QVariant::fromValue(i));
+        QKeySequence ks(Qt::ALT + (Qt::Key_0 + i));
+        a->setShortcut(ks);
+        addAction(a);
+        connect(a, &QAction::triggered, this, [=](){
+            QAction *a = qobject_cast<QAction*>(QObject::sender());
+            if (!a)
+                return;
+
+            bool ok;
+            int tab_n = a->data().toInt(&ok);
+            if (tab_n==0)
+                tab_n=10;
+            if (!ok)
+                return;
+            if (tab_n >= count())
+                return;
+
+            setCurrentIndex(tab_n-1);
+        });
+    }
+
     // the slot relies the connection will be direct to reverting back the tab
     connect(this, SIGNAL(tabMoved(int,int)),
             this, SLOT(onTabMoved(int,int)), Qt::DirectConnection);
