@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Andreyyshore",
 			"MSClaudiu"
 		]
 	},
@@ -56,7 +57,7 @@
 	"content-type": "Tipul de conținut",
 	"reset-sort": "resetare sort",
 	"open": "Deschis",
-	"delete": "Şterge",
+	"delete": "Șterge",
 	"download": "Descarcă",
 	"resume": "Reia",
 	"pause": "Pauză",
