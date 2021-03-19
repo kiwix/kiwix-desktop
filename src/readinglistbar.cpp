@@ -1,6 +1,6 @@
+#include "kiwixapp.h"
 #include "readinglistbar.h"
 #include "ui_readinglistbar.h"
-#include "kiwixapp.h"
 
 #include <QListWidgetItem>
 

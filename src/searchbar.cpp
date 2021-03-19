@@ -1,9 +1,9 @@
+#include "kiwixapp.h"
 #include "searchbar.h"
 
 #include <QCompleter>
 #include <QFocusEvent>
 
-#include "kiwixapp.h"
 #include "suggestionlistworker.h"
 
 SearchButton::SearchButton(QWidget *parent) :

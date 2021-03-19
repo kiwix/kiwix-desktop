@@ -1,7 +1,7 @@
+#include "kiwixapp.h"
 #include "contentmanagerview.h"
 #include <QFile>
 #include <QWebEngineProfile>
-#include "kiwixapp.h"
 
 ContentManagerView::ContentManagerView(QWidget *parent)
     : QWebEngineView(parent)

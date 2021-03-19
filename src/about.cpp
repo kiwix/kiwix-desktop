@@ -1,6 +1,6 @@
+#include "kiwixapp.h"
 #include "about.h"
 #include "ui_about.h"
-#include "kiwixapp.h"
 
 #define _STR(...) # __VA_ARGS__
 #define STR(X) _STR(X)

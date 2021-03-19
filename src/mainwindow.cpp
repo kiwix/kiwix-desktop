@@ -1,9 +1,8 @@
-
+#include "kiwixapp.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_about.h"
 
-#include "kiwixapp.h"
 #include "kconstants.h"
 
 #include <QDesktopServices>

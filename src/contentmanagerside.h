@@ -1,11 +1,12 @@
 #ifndef CONTENTMANAGERSIDE_H
 #define CONTENTMANAGERSIDE_H
 
+#include "contentmanager.h"
+#include "contenttypefilter.h"
+
 #include <QWidget>
 #include <QListWidget>
 #include <QCheckBox>
-#include "contentmanager.h"
-#include "contenttypefilter.h"
 
 namespace Ui {
 class contentmanagerside;
