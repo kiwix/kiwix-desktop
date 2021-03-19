@@ -1,6 +1,6 @@
+#include "kiwixapp.h"
 #include "localkiwixserver.h"
 #include "ui_localkiwixserver.h"
-#include "kiwixapp.h"
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <thread>

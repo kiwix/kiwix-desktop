@@ -1,7 +1,6 @@
-#include "topwidget.h"
-
-#include "kconstants.h"
 #include "kiwixapp.h"
+#include "topwidget.h"
+#include "kconstants.h"
 #include "mainmenu.h"
 
 #include <QMouseEvent>

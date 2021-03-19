@@ -1,5 +1,5 @@
-#include "suggestionlistworker.h"
 #include "kiwixapp.h"
+#include "suggestionlistworker.h"
 
 SuggestionListWorker::SuggestionListWorker(const QString& text, int token, QObject *parent)
 : QThread(parent),

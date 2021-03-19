@@ -1,10 +1,10 @@
+#include "kiwixapp.h"
 #include "webview.h"
 
 #include <QDesktopServices>
 #include <QMenu>
 #include <QAction>
 #include <iostream>
-#include "kiwixapp.h"
 #include "webpage.h"
 #include <QToolTip>
 #include <QWebEngineSettings>

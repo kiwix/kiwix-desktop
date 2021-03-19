@@ -1,7 +1,5 @@
-
-#include "static_content.h"
 #include "kiwixapp.h"
-
+#include "static_content.h"
 
 std::vector<QLocale::Language> S_LANGUAGES;
 std::vector<std::pair<QString, QString>> S_CATEGORIES;

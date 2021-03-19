@@ -1,9 +1,9 @@
+#include "kiwixapp.h"
 #include "webpage.h"
 
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "kiwixapp.h"
 #include <QWebEngineProfile>
 
 WebPage::WebPage(QObject *parent) :

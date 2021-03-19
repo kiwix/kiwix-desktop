@@ -1,5 +1,5 @@
-#include "settingsmanagerview.h"
 #include "kiwixapp.h"
+#include "settingsmanagerview.h"
 #include <QFile>
 
 SettingsManagerView::SettingsManagerView(QWidget *parent) : QWebEngineView(parent)
