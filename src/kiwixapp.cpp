@@ -298,7 +298,7 @@ void KiwixApp::createAction()
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
             this, [=]() { this->openRandomUrl(false); });
 
-    CREATE_ACTION(OpenHomePageAction, gt("random-article"));
+    CREATE_ACTION(OpenHomePageAction, gt("home-page"));
     SET_SHORTCUT(OpenHomePageAction, QKeySequence(Qt::ALT + Qt::Key_Home));
 
     CREATE_ACTION_ICON(PrintAction, "print", gt("print"));
