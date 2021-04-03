@@ -10,25 +10,21 @@
 TopWidget::TopWidget(QWidget *parent) :
     QToolBar(parent)
 {
-    mp_historyBackAction = new QAction(this);
-    mp_historyBackAction->setIcon(QIcon(":/icons/back.svg"));
-    mp_historyBackAction->setText(gt("back"));
-    mp_historyBackAction->setToolTip(gt("back"));
-    mp_historyBackAction->setEnabled(false);
-    connect(mp_historyBackAction, &QAction::triggered, [](){
+    auto app = KiwixApp::instance();
+
+    QAction *back = app->getAction(KiwixApp::HistoryBackAction);
+    connect(back, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
-    addAction(mp_historyBackAction);
-    widgetForAction(mp_historyBackAction)->setObjectName("backButton");
-    mp_historyForwardAction = new QAction(this);
-    mp_historyForwardAction->setIcon(QIcon(":/icons/forward.svg"));
-    mp_historyForwardAction->setText(gt("forward"));
-    mp_historyForwardAction->setToolTip(gt("forward"));
-    mp_historyForwardAction->setEnabled(false);
-    connect(mp_historyForwardAction, &QAction::triggered, [](){
+    addAction(back);
+    widgetForAction(back)->setObjectName("backButton"); // For CSS
+
+    QAction *forward = app->getAction(KiwixApp::HistoryForwardAction);
+    connect(forward, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
-    addAction(mp_historyForwardAction);
+    addAction(forward);
+
     addSeparator();
 
     addWidget(&m_searchEntry);
@@ -61,18 +57,18 @@ TopWidget::TopWidget(QWidget *parent) :
 
 TopWidget::~TopWidget()
 {
-    delete mp_historyBackAction;
-    delete mp_historyForwardAction;
 }
 
 void TopWidget::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled)
 {
+    auto app = KiwixApp::instance();
+
     switch (action) {
     case QWebEnginePage::Back:
-        mp_historyBackAction->setEnabled(enabled);
+        app->getAction(KiwixApp::HistoryBackAction)->setEnabled(enabled);
         break;
     case QWebEnginePage::Forward:
-        mp_historyForwardAction->setEnabled(enabled);
+        app->getAction(KiwixApp::HistoryForwardAction)->setEnabled(enabled);
         break;
     default:
         break;
