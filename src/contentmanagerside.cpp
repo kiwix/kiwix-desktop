@@ -1,6 +1,6 @@
-#include "kiwixapp.h"
 #include "contentmanagerside.h"
 #include "ui_contentmanagerside.h"
+#include "kiwixapp.h"
 
 #include <QLocale>
 

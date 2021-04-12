@@ -1,6 +1,6 @@
-#include "kiwixapp.h"
 #include "settingsmanager.h"
 #include "kiwix/tools/pathTools.h"
+#include "kiwixapp.h"
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>

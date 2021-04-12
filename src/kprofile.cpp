@@ -1,5 +1,6 @@
-#include "kiwixapp.h"
 #include "kprofile.h"
+
+#include "kiwixapp.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QWebEngineSettings>

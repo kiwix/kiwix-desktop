@@ -1,6 +1,6 @@
-#include "kiwixapp.h"
 #include "tabbar.h"
 
+#include "kiwixapp.h"
 #include <QAction>
 #include <QTimer>
 #include <QWebEnginePage>

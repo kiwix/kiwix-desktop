@@ -1,5 +1,5 @@
-#include "kiwixapp.h"
 #include "zimview.h"
+#include "kiwixapp.h"
 #include <QAction>
 #include <QVBoxLayout>
 #include <QToolTip>

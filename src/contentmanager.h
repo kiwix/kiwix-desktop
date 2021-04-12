@@ -1,14 +1,13 @@
 #ifndef CONTENTMANAGER_H
 #define CONTENTMANAGER_H
 
+#include <QObject>
+#include <math.h>
 #include "library.h"
 #include "contentmanagerview.h"
 #include <kiwix/downloader.h>
 #include "opdsrequestmanager.h"
 #include "contenttypefilter.h"
-
-#include <QObject>
-#include <math.h>
 
 class ContentManager : public QObject
 {

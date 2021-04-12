@@ -1,11 +1,10 @@
 #ifndef OPDSREQUESTMANAGER_H
 #define OPDSREQUESTMANAGER_H
 
-#include <kiwix/library.h>
-#include <kiwix/manager.h>
-
 #include <QObject>
 #include <QtNetwork>
+#include <kiwix/library.h>
+#include <kiwix/manager.h>
 
 class OpdsRequestManager : public QObject
 {
