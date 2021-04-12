@@ -1,5 +1,5 @@
-#include "kiwixapp.h"
 #include "contenttypefilter.h"
+#include "kiwixapp.h"
 
 ContentTypeFilter::ContentTypeFilter(QString name, QWidget *parent)
 : QCheckBox(parent),

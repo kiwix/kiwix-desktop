@@ -1,6 +1,6 @@
-#include "kiwixapp.h"
 #include "opdsrequestmanager.h"
 #include "static_content.h"
+#include "kiwixapp.h"
 
 OpdsRequestManager::OpdsRequestManager()
 : mp_reply(nullptr)

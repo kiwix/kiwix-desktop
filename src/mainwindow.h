@@ -1,15 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "contentmanagerside.h"
-#include "localkiwixserver.h"
+#include <QMainWindow>
+#include <QDockWidget>
 #include "webview.h"
 #include "tabbar.h"
 #include "topwidget.h"
 #include "about.h"
-
-#include <QMainWindow>
-#include <QDockWidget>
+#include "contentmanagerside.h"
+#include "localkiwixserver.h"
 
 namespace Ui {
 class MainWindow;

@@ -1,6 +1,6 @@
-#include "kiwixapp.h"
 #include "findinpagebar.h"
 #include "ui_findinpagebar.h"
+#include "kiwixapp.h"
 
 FindInPageBar::FindInPageBar(QWidget *parent) :
     QFrame(parent),

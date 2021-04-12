@@ -1,5 +1,5 @@
-#include "kiwixapp.h"
 #include "fullscreennotification.h"
+#include "kiwixapp.h"
 #include <QSequentialAnimationGroup>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
