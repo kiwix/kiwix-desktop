@@ -101,10 +101,12 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     int temp = query.queryItemValue("start").toInt(&ok);
     if (ok)
       start = temp;
-    int end = 25;
-    temp = query.queryItemValue("end").toInt(&ok);
+    int pageLength = 25;
+    temp = query.queryItemValue("pageLength").toInt(&ok);
     if (ok)
-      end = temp;
+      pageLength = temp;
+
+    auto end = start + pageLength;
 
     auto searcher = app->getLibrary()->getSearcher(bookId);
     searcher->search(searchQuery, start, end);
@@ -115,6 +117,7 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     renderer.setSearchContent(bookId.toStdString());
     renderer.setProtocolPrefix("zim://");
     renderer.setSearchProtocolPrefix("zim://" + host.toStdString() + "/?");
+    renderer.setPageLength(pageLength);
     auto content = renderer.getHtml();
     QBuffer *buffer = new QBuffer;
     buffer->setData(content.data(), content.size());
