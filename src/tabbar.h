@@ -60,7 +60,6 @@ signals:
 public slots:
     void closeTab(int index);
     void onCurrentChanged(int index);
-    void fullScreenRequested(QWebEngineFullScreenRequest request);
 
 private:
     QStackedWidget*     mp_stackedWidget;

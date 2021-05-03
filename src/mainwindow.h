@@ -28,7 +28,6 @@ public:
     ContentManagerSide* getSideContentManager();
 
 protected slots:
-    void toggleFullScreen();
     void keyPressEvent(QKeyEvent *event);
 
 private:

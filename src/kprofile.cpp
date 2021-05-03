@@ -10,7 +10,6 @@ KProfile::KProfile(QObject *parent) :
 {
     connect(this, &QWebEngineProfile::downloadRequested, this, &KProfile::startDownload);
     installUrlSchemeHandler("zim", &m_schemeHandler);
-    settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
 }
 
 void KProfile::startDownload(QWebEngineDownloadItem* download)

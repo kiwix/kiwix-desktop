@@ -25,6 +25,13 @@ TabBar::TabBar(QWidget *parent) :
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
     auto app = KiwixApp::instance();
 
+    connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
+        [this]{
+        if (m_fullScreenWindow) {
+            m_fullScreenWindow.reset();
+        } else
+            m_fullScreenWindow.reset(new FullScreenWindow(this->currentWebView()));
+    });
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
                 this->createNewTab(true);
@@ -320,21 +327,6 @@ void TabBar::onCurrentChanged(int index)
         Q_ASSERT(false);
         // In the future, other types of tabs can be added.
         // For example, About dialog, or Kiwix Server control panel.
-    }
-}
-
-void TabBar::fullScreenRequested(QWebEngineFullScreenRequest request)
-{
-    if (request.toggleOn()) {
-        if (m_fullScreenWindow)
-            return;
-        request.accept();
-        m_fullScreenWindow.reset(new FullScreenWindow(this->currentWebView()));
-    } else {
-        if (!m_fullScreenWindow)
-            return;
-        request.accept();
-        m_fullScreenWindow.reset();
     }
 }
 

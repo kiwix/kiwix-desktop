@@ -23,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
-    connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
-            this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
     connect(app->getAction(KiwixApp::DonateAction), &QAction::triggered,
@@ -53,13 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete mp_ui;
-}
-
-void MainWindow::toggleFullScreen() {
-    if (isFullScreen())
-        showNormal();
-    else
-        showFullScreen();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)

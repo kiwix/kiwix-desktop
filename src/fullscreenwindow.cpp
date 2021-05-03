@@ -1,4 +1,5 @@
 #include "fullscreenwindow.h"
+#include "kiwixapp.h"
 #include <QAction>
 
 FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
@@ -12,8 +13,8 @@ FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
 
     auto exitAction = new QAction(this);
     exitAction->setShortcut(Qt::Key_Escape);
-    connect(exitAction, &QAction::triggered, [this]() {
-        m_view->triggerPageAction(QWebEnginePage::ExitFullScreen);
+    connect(exitAction, &QAction::triggered, []{
+        KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction)->trigger();
     });
     addAction(exitAction);
 

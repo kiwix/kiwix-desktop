@@ -43,7 +43,6 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                 auto key = mp_webView->zimId() + "/zoomFactor";
                 settingsManager->deleteSettings(key);
             });
-    connect(mp_webView->page(), &QWebEnginePage::fullScreenRequested, mp_tabBar, &TabBar::fullScreenRequested);
     connect(mp_webView, &WebView::titleChanged, this,
             [=](const QString& str) {
                 mp_tabBar->setTitleOf(str, this);
