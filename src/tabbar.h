@@ -7,7 +7,6 @@
 #include "webview.h"
 #include "zimview.h"
 #include "contentmanagerview.h"
-#include "fullscreenwindow.h"
 #include <QMouseEvent>
 #include <QWebEngineFullScreenRequest>
 
@@ -63,7 +62,6 @@ public slots:
 
 private:
     QStackedWidget*     mp_stackedWidget;
-    QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
     void setSelectionBehaviorOnRemove(int index);
 

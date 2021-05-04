@@ -6,7 +6,8 @@
 
 FullScreenNotification::FullScreenNotification(QWidget *parent)
     : QLabel(parent)
-    , m_previouslyVisible(false)
+    , m_animations(new QSequentialAnimationGroup(this))
+    , m_effect(new QGraphicsOpacityEffect(this))
 {
     setText(gt("fullscreen-notification"));
     setStyleSheet(
@@ -19,30 +20,23 @@ FullScreenNotification::FullScreenNotification(QWidget *parent)
         "padding: 100px");
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    auto effect = new QGraphicsOpacityEffect;
-    effect->setOpacity(1);
-    setGraphicsEffect(effect);
+    m_effect->setOpacity(1);
+    setGraphicsEffect(m_effect);
 
-    auto animations = new QSequentialAnimationGroup(this);
-    animations->addPause(3000);
-    auto opacityAnimation = new QPropertyAnimation(effect, "opacity", animations);
+    m_animations->addPause(3000);
+    auto opacityAnimation = new QPropertyAnimation(m_effect, "opacity", m_animations);
     opacityAnimation->setDuration(2000);
     opacityAnimation->setStartValue(1.0);
     opacityAnimation->setEndValue(0.0);
     opacityAnimation->setEasingCurve(QEasingCurve::OutQuad);
-    animations->addAnimation(opacityAnimation);
+    m_animations->addAnimation(opacityAnimation);
 
-    connect(this, &FullScreenNotification::shown,
-            [animations](){ animations->start(); });
-
-    connect(animations, &QAbstractAnimation::finished,
-            [this](){ this->hide(); });
+    connect(m_animations, &QAbstractAnimation::finished,
+            [this]{ hide(); });
 }
-
-void FullScreenNotification::showEvent(QShowEvent *event)
+void FullScreenNotification::show()
 {
-    QLabel::showEvent(event);
-    if (!m_previouslyVisible && isVisible())
-        emit shown();
-    m_previouslyVisible = isVisible();
+    m_effect->setOpacity(1);
+    m_animations->start();
+    QLabel::show();
 }

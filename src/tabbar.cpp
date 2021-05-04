@@ -1,5 +1,5 @@
 #include "tabbar.h"
-
+#include "fullscreenwindow.h"
 #include "kiwixapp.h"
 #include <QAction>
 #include <QTimer>
@@ -27,10 +27,11 @@ TabBar::TabBar(QWidget *parent) :
 
     connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
         [this]{
-        if (m_fullScreenWindow) {
-            m_fullScreenWindow.reset();
+        auto &fullscreenWin = FullScreenWindow::instance();
+        if (fullscreenWin.isFullScreen()) {
+            fullscreenWin.exit();
         } else if (currentWebView())
-            m_fullScreenWindow.reset(new FullScreenWindow(currentWebView()));
+            fullscreenWin.reset(currentWebView());
     });
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {

@@ -15,17 +15,21 @@ class FullScreenWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit FullScreenWindow(QWebEngineView *oldView, QWidget *parent = nullptr);
-    ~FullScreenWindow();
-
+    static FullScreenWindow &instance() {
+        static FullScreenWindow singleton;
+        return singleton;
+    }
+    void reset(QWebEngineView *oldView);
+    void exit();
+    bool isFullScreen();
 protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    QWebEngineView *m_view;
-    FullScreenNotification *m_notification;
-    QWebEngineView *m_oldView;
-    QRect m_oldGeometry;
+    FullScreenWindow();
+    QWebEngineView *m_view {nullptr};
+    FullScreenNotification *m_notification {nullptr};
+    QWebEngineView *m_oldView {nullptr};
 };
 
 #endif // FULLSCREENWINDOW_H
