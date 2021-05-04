@@ -348,6 +348,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"));
     SET_SHORTCUT(ToggleFullscreenAction, QKeySequence::FullScreen);
+    SET_SHORTCUT(ToggleFullscreenAction, {Qt::CTRL + Qt::Key_F11});
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
         auto action = mpa_actions[ToggleFullscreenAction];

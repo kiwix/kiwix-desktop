@@ -29,8 +29,8 @@ TabBar::TabBar(QWidget *parent) :
         [this]{
         if (m_fullScreenWindow) {
             m_fullScreenWindow.reset();
-        } else
-            m_fullScreenWindow.reset(new FullScreenWindow(this->currentWebView()));
+        } else if (currentWebView())
+            m_fullScreenWindow.reset(new FullScreenWindow(currentWebView()));
     });
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
