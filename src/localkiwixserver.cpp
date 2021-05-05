@@ -32,8 +32,12 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
             break;
         }
     }
+    ui->KiwixServerButton->setStyleSheet("QPushButton {background-color: RoyalBlue;"
+                                                      "color: white;"
+                                                      "padding: 5px;"
+                                                      "border-radius: 3px;}"
+                                         "QPushButton:hover {background-color: DodgerBlue;}");
     ui->label->setText(gt("local-kiwix-server"));
-    ui->label->setStyleSheet("font-weight: bold;");
     ui->KiwixServerText->setText(gt("kiwix-server-description"));
     ui->OpenInBrowserButton->setText(gt("open-in-browser"));
     ui->KiwixServerButton->setText(gt("start-kiwix-server"));

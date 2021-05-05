@@ -3,13 +3,13 @@ QWidget {
 }
 
 QPushButton {
+    opacity: 1;
     border: none;
     padding: 3px;
-    color:blue;
+    color: RoyalBlue;
     outline: 0;
 }
 
 QPushButton:hover {
-    background-color: blue;
-    color: white;
+    color: DeepSkyBlue;
 }
