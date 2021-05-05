@@ -9,6 +9,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LocalKiwixServer)
 {
+    setWindowModality(Qt::WindowModal);
     ui->setupUi(this);
 
     QFile styleFile(":/css/localServer.css");
@@ -63,7 +64,7 @@ void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
         mp_server->setPort(m_port);
-        ui->IpAddress->setText(m_ipAddress + ":" + QString::number(m_port));
+        ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         if (!mp_server->start()) {
             QMessageBox messageBox;
             messageBox.critical(0,"Error","An error has occured !");
