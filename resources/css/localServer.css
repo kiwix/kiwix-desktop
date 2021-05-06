@@ -11,5 +11,10 @@ QPushButton {
 }
 
 QPushButton:hover {
-    color: DeepSkyBlue;
+    color: rgba(65, 105, 225, 0.9);
+}
+
+QLineEdit {
+    border: 2px solid gray;
+    border-radius: 3px;
 }

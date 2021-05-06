@@ -74,7 +74,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
     return QWidget::keyPressEvent(event);
 }
-
+void MainWindow::moveEvent(QMoveEvent *event)
+{
+    Q_UNUSED(event);
+    const auto global = mapToGlobal(rect().center());
+    mp_localKiwixServer->move(global.x() - mp_localKiwixServer->width() / 2, global.y() - mp_localKiwixServer->height() / 2);
+}
 TabBar* MainWindow::getTabBar()
 {
     return mp_ui->tabBar;

@@ -30,7 +30,8 @@ public:
 protected slots:
     void toggleFullScreen();
     void keyPressEvent(QKeyEvent *event);
-
+protected:
+    void moveEvent(QMoveEvent *event) override;
 private:
     Ui::MainWindow *mp_ui;
     About     *mp_about;

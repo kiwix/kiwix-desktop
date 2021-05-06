@@ -9,7 +9,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LocalKiwixServer)
 {
-    setWindowModality(Qt::WindowModal);
+    setWindowFlag(Qt::FramelessWindowHint, true);
     ui->setupUi(this);
 
     QFile styleFile(":/css/localServer.css");
@@ -26,6 +26,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged,
             this, [=](int port) { m_port = port; });
+    connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
     const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
     for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
         if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost) {
@@ -42,6 +43,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     ui->KiwixServerText->setText(gt("kiwix-server-description"));
     ui->OpenInBrowserButton->setText(gt("open-in-browser"));
     ui->KiwixServerButton->setText(gt("start-kiwix-server"));
+    ui->closeButton->setText(gt("close-dialog"));
     ui->OpenInBrowserButton->setVisible(false);
     ui->IpAddress->setVisible(false);
 }
@@ -67,7 +69,7 @@ void LocalKiwixServer::runOrStopServer()
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         if (!mp_server->start()) {
             QMessageBox messageBox;
-            messageBox.critical(0,"Error","An error has occured !");
+            messageBox.critical(0,gt("error-title"),gt("error-launch-server-message"));
             return;
         }
         m_active = true;

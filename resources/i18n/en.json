@@ -4,8 +4,10 @@
 		]
 	},
     "name":"English",
+    "error-title":"Error",
     "error-downloader-window-title":"Cannot create downloader",
     "error-downloader-launch-message":"Impossible to launch downloader, Kiwix-desktop will start but all download functions will not working !",
+    "error-launch-server-message":"An error has occured !",
     "open-zim":"Open Zim",
     "local-kiwix-server":"Local Kiwix Server",
     "random-article":"Random Article",
@@ -14,6 +16,7 @@
     "print":"Print",
     "new-tab":"New tab",
     "close-tab":"Close tab",
+    "close-dialog":"Close",
     "reopen-closed-tab":"Reopen closed tab",
     "browse-library":"Browse library",
     "open-file":"Open file",
