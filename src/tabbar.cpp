@@ -56,13 +56,13 @@ TabBar::TabBar(QWidget *parent) :
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
                 for (int i = 0 ; i < (mp_stackedWidget->count() - 1) ; i++) {
-                    if (qobject_cast<SettingsManagerView*>(mp_stackedWidget->widget(i))) {
+                    if (qobject_cast<SettingsView*>(mp_stackedWidget->widget(i))) {
                         setCurrentIndex(i);
                         return;
                     }
                 }
                 int index = currentIndex() + 1;
-                SettingsManagerView* view = KiwixApp::instance()->getSettingsManager()->getView();
+                SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
                 mp_stackedWidget->insertWidget(index, view);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
                 QToolButton *tb = new QToolButton(this);
@@ -294,7 +294,7 @@ void TabBar::onCurrentChanged(int index)
 
     QWidget *w = mp_stackedWidget->widget(index);
 
-    if (qobject_cast<SettingsManagerView*>(w)) {
+    if (qobject_cast<SettingsView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit libraryPageDisplayed(false);
