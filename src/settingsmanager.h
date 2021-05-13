@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QSettings>
-#include "settingsmanagerview.h"
+#include "settingsview.h"
 
 class SettingsManager : public QObject
 {
@@ -16,7 +16,7 @@ public:
     explicit SettingsManager(QObject *parent = nullptr);
     virtual ~SettingsManager() {};
 
-    SettingsManagerView* getView();
+    SettingsView* getView();
     bool isSettingsViewdisplayed() { return m_settingsViewDisplayed; };
     void setSettings(const QString &key, const QVariant &value);
     void deleteSettings(const QString &key);
