@@ -105,7 +105,8 @@ FORMS += \
     ui/about.ui \
     src/contentmanagerside.ui \
     src/readinglistbar.ui \
-    ui/localkiwixserver.ui
+    ui/localkiwixserver.ui \
+    ui/settings.ui
 
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8
