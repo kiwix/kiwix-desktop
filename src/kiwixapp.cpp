@@ -70,7 +70,6 @@ void KiwixApp::init()
     QFile styleFile(":/css/style.css");
     styleFile.open(QIODevice::ReadOnly);
     auto byteContent = styleFile.readAll();
-    styleFile.close();
     QString style(byteContent);
     setStyleSheet(style);
 
@@ -155,23 +154,26 @@ QString gt(const QString &key) {
 
 void KiwixApp::openZimFile(const QString &zimfile)
 {
-    QString _zimfile = zimfile;
-    if (_zimfile.isEmpty()) {
+    QString _zimfile;
+    if (zimfile.isEmpty()) {
         _zimfile = QFileDialog::getOpenFileName(
-            getMainWindow(),
-            gt("open-zim"),
-            QString(),
-            "ZimFile (*.zim*)");
+                    getMainWindow(),
+                    gt("open-zim"),
+                    QString(),
+                    "ZimFile (*.zim*)");
+
+        if (_zimfile.isEmpty()) {
+            return;
+        }
         _zimfile = QDir::toNativeSeparators(_zimfile);
     }
-    if (_zimfile.isEmpty()) {
-        return;
-    }
+
     QString zimId;
+    const auto &validZimFile = zimfile.isEmpty() ? _zimfile : zimfile;
     try {
-        zimId = m_library.openBookFromPath(_zimfile);
+        zimId = m_library.openBookFromPath(validZimFile);
     } catch (const std::exception& e) {
-        showMessage("Cannot open " + _zimfile + ": \n" + e.what());
+        showMessage("Cannot open " + validZimFile + ": \n" + e.what());
         return;
     }
     openUrl(QUrl("zim://"+zimId+".zim/"));
