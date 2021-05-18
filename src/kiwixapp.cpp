@@ -67,7 +67,6 @@ void KiwixApp::init()
     setApplicationName("Kiwix");
     setDesktopFileName("kiwix.desktop");
 
-    setStyle(QStyleFactory::create("Windows"));
     QFile styleFile(":/css/style.css");
     styleFile.open(QIODevice::ReadOnly);
     auto byteContent = styleFile.readAll();
