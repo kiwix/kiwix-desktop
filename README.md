@@ -35,7 +35,7 @@ Dependencies
 The Kiwix Desktop application relies on many third parts software libraries.
 Following libraries need to be available:
 
-* [kiwix-lib](https://github.com/kiwix/kiwix-lib/)
+* [libkiwix](https://github.com/kiwix/libkiwix/)
 * [Qt](https://www.qt.io/)
 * [aria2](https://aria2.github.io/)
 
@@ -45,7 +45,7 @@ compilation script will tell you if one of them is missing or too old.
 In the worse case, you will have to download and compile bleeding edge
 version by hand.
 
-kiwix-lib has to be compiled dynamically, the best way to have it is
+Libkiwix has to be compiled dynamically, the best way to have it is
 to use [kiwix-build](https://github.com/kiwix/kiwix-build).
 
 Install needed packages (on Ubuntu 18.04+):
@@ -67,7 +67,7 @@ make
 ```
 
 `qmake` will use pkg-config to locate libraries. Depending of where
-you've installed kiwix-lib (and other libraries) you may have to
+you've installed libkiwix (and other libraries) you may have to
 update the env variable `PKG_CONFIG_PATH`. It can be set as follows,
 for example, for x86-64 native systems:
 
