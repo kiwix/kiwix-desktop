@@ -2,9 +2,6 @@
 #include "ui_about.h"
 #include "kiwixapp.h"
 
-#define _STR(...) # __VA_ARGS__
-#define STR(X) _STR(X)
-
 About::About(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
@@ -23,7 +20,7 @@ About::About(QWidget *parent) :
     htmlText = htmlText.replace("{{LIBRARIES}}", gt("about-libraries-title"));
 
     htmlText = htmlText.replace("{{GITHUB_URL}}", "https://github.com/kiwix/kiwix-desktop");
-    htmlText = htmlText.replace("{{VERSION}}", STR(VERSION));
+    htmlText = htmlText.replace("{{VERSION}}", version);
     htmlText = htmlText.replace("{{TRACKER_URL}}", "https://github.com/kiwix/kiwix-desktop/issues");
     ui->aboutText->setHtml(htmlText);
 }
