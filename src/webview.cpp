@@ -112,6 +112,16 @@ bool WebView::eventFilter(QObject *src, QEvent *e)
             QDesktopServices::openUrl(m_linkHovered);
             return true;
         }
+        if (me->button() == Qt::BackButton)
+        {
+            back();
+            return true;
+        }
+        if (me->button() == Qt::ForwardButton)
+        {
+            forward();
+            return true;
+        }
     }
     return false;
 }
