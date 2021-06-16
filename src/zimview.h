@@ -17,13 +17,10 @@ public:
     FindInPageBar *getFindInPageBar() { return mp_findInPageBar; }
     void openFindInPageBar();
 
-signals:
-
 private:
     WebView *mp_webView;
     TabBar *mp_tabBar;
     FindInPageBar *mp_findInPageBar;
-
 };
 
 #endif // ZIMVIEW_H

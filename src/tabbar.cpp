@@ -338,6 +338,18 @@ void TabBar::fullScreenRequested(QWebEngineFullScreenRequest request)
     }
 }
 
+void TabBar::on_webview_titleChanged(const QString& title)
+{
+    ZimView* tab = qobject_cast<ZimView*>(sender()->parent());
+    if (! tab)
+        return;
+
+    setTitleOf(title, tab);
+
+    if (currentZimView() == tab)
+        emit currentTitleChanged(title);
+}
+
 void TabBar::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::MiddleButton) {

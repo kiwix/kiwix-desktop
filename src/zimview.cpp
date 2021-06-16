@@ -15,7 +15,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     layout->addWidget(mp_findInPageBar);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
-    setLayout(layout);
+    setLayout(layout); // now 'mp_webView' has 'this' as the parent QObject
     mp_findInPageBar->hide();
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
@@ -44,23 +44,10 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                 settingsManager->deleteSettings(key);
             });
     connect(mp_webView->page(), &QWebEnginePage::fullScreenRequested, mp_tabBar, &TabBar::fullScreenRequested);
-    connect(mp_webView, &WebView::titleChanged, this,
-            [=](const QString& str) {
-                mp_tabBar->setTitleOf(str, this);
-                if (mp_tabBar->currentZimView() != this) {
-                    return;
-                }
-                emit mp_tabBar->currentTitleChanged(str);
-            });
+    connect(mp_webView, &WebView::titleChanged, mp_tabBar, &TabBar::on_webview_titleChanged);
     connect(mp_webView, &WebView::iconChanged, this,
             [=](const QIcon& icon) { mp_tabBar->setIconOf(icon, this); });
-    connect(mp_webView, &WebView::zimIdChanged, this,
-            [=](const QString& zimId) {
-                if (mp_tabBar->currentZimView() != this) {
-                    return;
-                }
-                emit mp_tabBar->currentZimIdChanged(zimId);
-            });
+
     connect(mp_webView->page()->action(QWebEnginePage::Back), &QAction::changed,
             [=]() {
                 if (mp_tabBar->currentZimView() != this) {
