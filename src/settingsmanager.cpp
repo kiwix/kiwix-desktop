@@ -1,9 +1,9 @@
 #include "settingsmanager.h"
-#include "kiwix/tools/pathTools.h"
 #include "kiwixapp.h"
 #include <QDir>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <kiwix/tools.h>
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
@@ -91,7 +91,7 @@ bool SettingsManager::confirmDialogDownloadDir(const QString& dir)
 
 void SettingsManager::resetDownloadDir()
 {
-    auto dir = QString::fromStdString(getDataDirectory());
+    auto dir = QString::fromStdString(kiwix::getDataDirectory());
     if (dir == m_downloadDir) {
         return;
     }
@@ -131,5 +131,5 @@ void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
-    m_downloadDir = m_settings.value("download/dir", QString::fromStdString(getDataDirectory())).toString();
+    m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
 }
