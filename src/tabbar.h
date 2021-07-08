@@ -14,8 +14,6 @@
 class TabBar : public QTabBar
 {
     Q_OBJECT
-    Q_PROPERTY(QString currentZimId READ currentZimId NOTIFY currentZimIdChanged)
-
 public:
     TabBar(QWidget* parent=nullptr);
     void setStackedWidget(QStackedWidget* widget);
@@ -54,13 +52,13 @@ protected:
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void libraryPageDisplayed(bool displayed);
-    void currentZimIdChanged(const QString& zimId);
     void currentTitleChanged(const QString& title);
 
 public slots:
     void closeTab(int index);
     void onCurrentChanged(int index);
     void fullScreenRequested(QWebEngineFullScreenRequest request);
+    void on_webview_titleChanged(const QString& title);
 
 private:
     QStackedWidget*     mp_stackedWidget;
