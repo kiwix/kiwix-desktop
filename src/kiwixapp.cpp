@@ -1,6 +1,7 @@
 #include "kiwixapp.h"
 #include "static_content.h"
 #include "zim/error.h"
+#include "kiwix/tools.h"
 
 #include <QLocale>
 #include <QLibraryInfo>
@@ -110,13 +111,13 @@ KiwixApp::~KiwixApp()
 QString KiwixApp::findLibraryDirectory()
 {
   // Check for library.xml in the same directory than the executable (portable kiwix-desktop)
-  auto currentDataDir = QString::fromStdString(removeLastPathElement(getExecutablePath()));
+  auto currentDataDir = QString::fromStdString(kiwix::removeLastPathElement(kiwix::getExecutablePath()));
   auto libraryFile = QFileInfo(currentDataDir, "library.xml");
   if (libraryFile.exists())
     return currentDataDir;
 
   // Check for default dataDirectory.
-  currentDataDir = QString::fromStdString(getDataDirectory());
+  currentDataDir = QString::fromStdString(kiwix::getDataDirectory());
   libraryFile = QFileInfo(currentDataDir, "library.xml");
   if (libraryFile.exists())
     return currentDataDir;
