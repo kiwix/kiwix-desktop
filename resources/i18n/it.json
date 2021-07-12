@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Albe Albe460",
 			"Beta16",
 			"Gianfranco",
@@ -33,9 +34,11 @@
 	"about-kiwix": "Su Kiwix",
 	"donate-to-support-kiwix": "Dona per sostenere Kiwix",
 	"exit": "Esci",
+	"save-file-as-window-title": "Salva file come",
 	"download-finished-message": "Il documento è stato scaricato.",
 	"file": "File",
 	"edit": "Modifica",
+	"view": "Visualizza",
 	"tools": "Strumenti",
 	"search": "Ricerca",
 	"settings": "Impostazioni",
@@ -71,6 +74,7 @@
 	"start-kiwix-server": "Avvia server Kiwix",
 	"all": "Tutto",
 	"other": "Altro",
+	"vikidia": "Vikidia",
 	"wikibooks": "Wikibooks",
 	"wikinews": "Wikinotizie",
 	"wikipedia": "Wikipedia",

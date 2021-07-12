@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Asokolov",
-			"Renamerr"
+			"Renamerr",
+			"Ата"
 		]
 	},
 	"name": "Англійська",
@@ -12,6 +13,7 @@
 	"local-kiwix-server": "Локальний сервер Kiwik",
 	"random-article": "Випадкова стаття",
 	"home-page": "Домашня сторінка",
+	"main-menu": "Головне меню",
 	"print": "Друк",
 	"new-tab": "Нова вкладка",
 	"close-tab": "Закрити вкладку",
@@ -91,6 +93,7 @@
 	"all": "Усе",
 	"other": "Інше",
 	"gutenberg": "Ґутенберг",
+	"mooc": "Онлайн-курси",
 	"phet": "Phet",
 	"psiram": "Psiram",
 	"stack_exchange": "Stack Exchange",
