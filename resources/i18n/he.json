@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Steeve815",
 			"YaronSh"
 		]
@@ -92,6 +93,7 @@
 	"all": "הכל",
 	"other": "אחר",
 	"gutenberg": "Gutenberg",
+	"mooc": "קורס פתוח מקוון מרובה משתתפים",
 	"phet": "Phet",
 	"psiram": "Psiram",
 	"stack_exchange": "Stack Exchange",
@@ -109,6 +111,7 @@
 	"fulltext-search": "חיפוש טקסט מלא",
 	"pictures": "תמונות",
 	"videos": "סרטונים",
+	"ftindex": "מפתח כל הטקסט",
 	"details": "ערך מלא",
 	"yes": "כן",
 	"no": "לא",

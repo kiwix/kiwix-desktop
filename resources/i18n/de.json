@@ -2,11 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"DraconicDark",
+			"Falwye",
 			"Susann Schweden",
 			"Wolfdietmann"
 		]
 	},
 	"name": "Deutsch",
+	"error-downloader-window-title": "Erstellen von Downloader nicht möglich",
 	"open-zim": "Öffne ZIM",
 	"local-kiwix-server": "Lokaler Kiwix-Server",
 	"random-article": "Zufälliger Artikel",

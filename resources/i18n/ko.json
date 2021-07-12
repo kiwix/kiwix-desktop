@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Apzp79",
 			"Codenstory",
 			"Fitoschido",
 			"Nuevo Paso",
@@ -71,7 +72,7 @@
 	"download-directory-setting": "다운로드 디렉터리 :",
 	"reset": "재설정",
 	"browse": "찾아보기",
-	"about-kiwix-desktop-description": "Kiwix를 사용하면 어디에 가더라도 위키백과를 가까이에 둘 수 있습니다! 보트 위, 인적이 드문 곳, 투옥 중이더라도 Kiwix는 인간의 모든 지식에 접근할 수 있게 해줍니다. 인터넷이 필요 없으며 모든 것이 컴퓨터에 저장됩니다.",
+	"about-kiwix-desktop-description": "Kiwix를 사용하면 어느 곳에 있든지 위키백과를 사용할 수 있습니다! 보트 위에서도, 인적이 드문 곳, 심지어 감옥에서도 Kiwix는 인류의 모든 지식에 접근하게 해 줍니다. 인터넷이 필요 없꼬 모든 것이 컴퓨터에 저장됩니다.",
 	"about-learn-more-about-kiwix": "Kiwix에 관해 더 알아보기",
 	"about-release-title": "릴리스",
 	"about-version": "버전: {{VERSION}}",

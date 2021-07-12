@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Kareyac"
 		]
 	},
@@ -36,6 +37,7 @@
 	"all": "Բոլորը",
 	"other": "Այլ",
 	"gutenberg": "Գուտենբերգ",
+	"vikidia": "Vikidia",
 	"wikibooks": "Վիքիգրքեր",
 	"wikinews": "Վիքիլուրեր",
 	"wikipedia": "Վիքիպեդիա",
