@@ -45,6 +45,8 @@ public:
         ZoomInAction,
         ZoomOutAction,
         ZoomResetAction,
+        HistoryBackAction,
+        HistoryForwardAction,
         HelpAction,
         FeedbackAction,
         ReportBugAction,
