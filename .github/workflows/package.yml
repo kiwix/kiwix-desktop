@@ -10,7 +10,6 @@ jobs:
         distro:
           - ubuntu-impish
           - ubuntu-hirsute
-          - ubuntu-groovy
           - ubuntu-focal
           - ubuntu-bionic
     steps:
@@ -47,14 +46,6 @@ jobs:
         if: matrix.distro == 'ubuntu-hirsute'
         name: Build package for ubuntu-hirsute
         id: build-ubuntu-hirsute
-        with:
-          args: --no-sign
-          ppa: ${{ steps.ppa.outputs.ppa }}
-
-      - uses: legoktm/gh-action-build-deb@ubuntu-groovy
-        if: matrix.distro == 'ubuntu-groovy'
-        name: Build package for ubuntu-groovy
-        id: build-ubuntu-groovy
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
