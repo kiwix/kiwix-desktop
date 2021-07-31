@@ -25,7 +25,7 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
     if (!fileName.endsWith(extension)) {
         fileName.append(extension);
     }
-    download->setPath(fileName);
+    download->setDownloadFileName(fileName);
     connect(download, &QWebEngineDownloadItem::finished, this, &KProfile::downloadFinished);
     download->accept();
 }

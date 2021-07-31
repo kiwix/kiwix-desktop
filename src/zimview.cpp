@@ -79,9 +79,9 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                      * we can be sure the current tab is a web page
                      * (mp_tabBar->currentWebView() is not nullptr)
                      */
-                    auto height = mp_tabBar->currentWebView()->height() + 1;
-
-                    auto pos = mp_tabBar->mapToGlobal(QPoint(-3, height));
+                    // new height value
+                    auto heigth = mp_tabBar->currentWebView()->height() - mp_tabBar->PdmHeightMM;
+                    auto pos = mp_tabBar->mapToGlobal(QPoint(0,heigth));
                     QToolTip::showText(pos, link);
                 }
             });
