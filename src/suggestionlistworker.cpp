@@ -26,9 +26,9 @@ void SuggestionListWorker::run()
         kiwix::SuggestionsList_t suggestions;
         reader->searchSuggestionsSmart(m_text.toStdString(), 15, suggestions);
         for (auto& suggestion: suggestions) {
-            QString path = QString("/") + QString::fromStdString(suggestion.getPath());
+            QString path = QString("/") + QString::fromStdString(suggestion[0]);
             url.setPath(path);
-            suggestionList.append(QString::fromStdString(suggestion.getTitle()));
+            suggestionList.append(QString::fromStdString(suggestion[1]));
             urlList.append(url);
         }
     }

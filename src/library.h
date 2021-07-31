@@ -12,6 +12,7 @@
 #include <QSharedPointer>
 #include <QMap>
 
+
 #define TQS(v) (QString::fromStdString(v))
 #define FORWARD_GETTER(METH) QString METH() const { return TQS(mp_book->METH()); }
 

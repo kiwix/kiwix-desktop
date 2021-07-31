@@ -2,8 +2,9 @@
 
 #include "kiwixapp.h"
 #include "static_content.h"
+#include <kiwix/tools/networkTools.h>
+#include <kiwix/tools/otherTools.h>
 #include <kiwix/manager.h>
-#include <kiwix/tools.h>
 
 #include <QDebug>
 #include <QUrlQuery>
@@ -251,8 +252,8 @@ void ContentManager::eraseBook(const QString& id)
     auto tabBar = KiwixApp::instance()->getTabWidget();
     tabBar->closeTabsByZimId(id);
     kiwix::Book book = mp_library->getBookById(id);
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-    QString filename = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
+    QString dirPath = QString::fromStdString(removeLastPathElement(book.getPath()));
+    QString filename = QString::fromStdString(getLastPathElement(book.getPath())) + "*";
     eraseBookFilesFromComputer(dirPath, filename);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
@@ -297,8 +298,8 @@ void ContentManager::cancelBook(const QString& id)
     if (download->getStatus() != kiwix::Download::K_COMPLETE) {
         download->cancelDownload();
     }
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
-    QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
+    QString dirPath = QString::fromStdString(removeLastPathElement(download->getPath()));
+    QString filename = QString::fromStdString(getLastPathElement(download->getPath())) + "*";
     eraseBookFilesFromComputer(dirPath, filename);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
@@ -397,8 +398,6 @@ QStringList ContentManager::getBookIds()
 
     filter.acceptTags(tags);
     filter.query(m_searchQuery.toStdString());
-    if (m_currentLanguage != "*")
-        filter.lang(m_currentLanguage.toStdString());
 
     if (m_local) {
         filter.local(true);

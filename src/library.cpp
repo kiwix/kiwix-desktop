@@ -2,7 +2,7 @@
 #include "kiwixapp.h"
 
 #include <kiwix/manager.h>
-#include <kiwix/tools.h>
+#include "kiwixapp.h"
 
 #include <QtDebug>
 
@@ -27,8 +27,8 @@ Library::Library(const QString& libraryDirectory)
 {
     auto manipulator = LibraryManipulator(this);
     auto manager = kiwix::Manager(&manipulator);
-    manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
-    manager.readBookmarkFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
+    manager.readFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
+    manager.readBookmarkFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
     emit(booksChanged());
 }
 
@@ -114,8 +114,8 @@ void Library::removeBookmark(const QString &zimId, const QString &url)
 
 void Library::save()
 {
-    m_library.writeToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
-    m_library.writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
+    m_library.writeToFile(appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
+    m_library.writeBookmarksToFile(appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
 kiwix::Book &Library::getBookById(QString id)
