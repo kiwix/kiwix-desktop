@@ -80,8 +80,9 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                      * (mp_tabBar->currentWebView() is not nullptr)
                      */
                     // new height value
-                    auto heigth = mp_tabBar->currentWebView()->height() - mp_tabBar->PdmHeightMM;
-                    auto pos = mp_tabBar->mapToGlobal(QPoint(0,heigth));
+                    auto height = mp_tabBar->currentWebView()->height() + 1;
+                    auto pos = mp_tabBar->mapToGlobal(QPoint(-3, height));
+                    auto pos = mp_tabBar->mapToGlobal(QPoint(-3, mp_tabBar->currentWebView()->height() - mp_tabBar->PdmHeightMM + 1));
                     QToolTip::showText(pos, link);
                 }
             });
