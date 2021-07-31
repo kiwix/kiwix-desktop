@@ -74,7 +74,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
     return QWidget::keyPressEvent(event);
 }
-
 TabBar* MainWindow::getTabBar()
 {
     return mp_ui->tabBar;
