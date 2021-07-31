@@ -16,7 +16,7 @@
     "print":"Print",
     "new-tab":"New tab",
     "close-tab":"Close tab",
-    "close-dialog":"Close",
+    "close":"Close",
     "reopen-closed-tab":"Reopen closed tab",
     "browse-library":"Browse library",
     "open-file":"Open file",
