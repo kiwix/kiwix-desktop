@@ -43,7 +43,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     ui->KiwixServerText->setText(gt("kiwix-server-description"));
     ui->OpenInBrowserButton->setText(gt("open-in-browser"));
     ui->KiwixServerButton->setText(gt("start-kiwix-server"));
-    ui->closeButton->setText(gt("close-dialog"));
+    ui->closeButton->setText(gt("close"));
     ui->OpenInBrowserButton->setVisible(false);
     ui->IpAddress->setVisible(false);
 }
