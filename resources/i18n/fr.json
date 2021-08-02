@@ -9,8 +9,10 @@
 		]
 	},
 	"name": "français",
+	"error-title": "Erreur",
 	"error-downloader-window-title": "Impossible de lancer le téléchargeur",
 	"error-downloader-launch-message": "Impossible de lancer le téléchargeur, Kiwix-bureau fonctionnera mais sans les fonctions de téléchargement !",
+	"error-launch-server-message": "Une erreur s’est produite !",
 	"open-zim": "Ouvrir un Zim",
 	"local-kiwix-server": "Serveur local Kiwix",
 	"random-article": "Article au hasard",
@@ -19,6 +21,7 @@
 	"print": "Imprimer",
 	"new-tab": "Nouvel onglet",
 	"close-tab": "Fermer l’onglet",
+	"close": "Fermer",
 	"reopen-closed-tab": "Rouvrir l’onglet fermé",
 	"browse-library": "Parcourir la bibliothèque",
 	"open-file": "Ouvrir un fichier",

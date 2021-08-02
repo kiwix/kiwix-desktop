@@ -2,13 +2,16 @@
 	"@metadata": {
 		"authors": [
 			"Asokolov",
+			"DDPAT",
 			"Renamerr",
 			"Ата"
 		]
 	},
 	"name": "Англійська",
+	"error-title": "Помилка",
 	"error-downloader-window-title": "Неможливо створити завантажника",
 	"error-downloader-launch-message": "Неможливо запустити заванжника. Kiwik-десктоп буде все-одно запущено, але всі завантажувальні функції не будуть працювати!",
+	"error-launch-server-message": "Сталася помилка!",
 	"open-zim": "Відкрити Zim",
 	"local-kiwix-server": "Локальний сервер Kiwik",
 	"random-article": "Випадкова стаття",
@@ -17,6 +20,7 @@
 	"print": "Друк",
 	"new-tab": "Нова вкладка",
 	"close-tab": "Закрити вкладку",
+	"close": "Закрити",
 	"reopen-closed-tab": "Відкрити закриту вкладку наново",
 	"browse-library": "Перегляд бібліотеки",
 	"open-file": "Відкрити файл",

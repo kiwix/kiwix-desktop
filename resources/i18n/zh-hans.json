@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GuoPC",
 			"Josephine W.",
 			"Nadine Siak",
 			"Shuiwater",
@@ -8,12 +9,15 @@
 		]
 	},
 	"name": "英语",
+	"error-title": "错误",
 	"error-downloader-window-title": "无法创建下载器",
+	"error-launch-server-message": "发生错误！",
 	"random-article": "随机条目",
 	"home-page": "主页",
 	"print": "打印",
 	"new-tab": "新建标签页",
 	"close-tab": "关闭标签页",
+	"close": "关闭",
 	"reopen-closed-tab": "重新打开关闭的标签页",
 	"browse-library": "浏览图书馆",
 	"open-file": "打开文件",
