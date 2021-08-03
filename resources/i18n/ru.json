@@ -9,8 +9,10 @@
 		]
 	},
 	"name": "английский",
+	"error-title": "Ошибка",
 	"error-downloader-window-title": "Невозможно создать загрузчик",
 	"error-downloader-launch-message": "Невозможно запустить загрузчик, Kiwix для рабочего стола будет запущен, но все функции скачивания будут недоступны!",
+	"error-launch-server-message": "Произошла ошибка !",
 	"open-zim": "Открыть Zim",
 	"local-kiwix-server": "Локальный сервер Kiwix",
 	"random-article": "Случайная статья",
@@ -19,6 +21,7 @@
 	"print": "Печать",
 	"new-tab": "Новая вкладка",
 	"close-tab": "Закрыть вкладку",
+	"close": "Закрыть",
 	"reopen-closed-tab": "Открыть закрытую вкладку снова",
 	"browse-library": "Просмотр библиотеки",
 	"open-file": "Открыть файл",

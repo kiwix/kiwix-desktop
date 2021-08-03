@@ -5,8 +5,10 @@
 		]
 	},
 	"name": "繁體中文",
+	"error-title": "錯誤",
 	"error-downloader-window-title": "無法建立下載程序",
 	"error-downloader-launch-message": "無法啟用下載程序，Kiwix-桌機版將啟動；但所有的下載功能無法運作！",
+	"error-launch-server-message": "發生錯誤！",
 	"open-zim": "開啟 Zim",
 	"local-kiwix-server": "本地 Kiwix 伺服器",
 	"random-article": "隨機條目",
@@ -15,6 +17,7 @@
 	"print": "列印",
 	"new-tab": "新分頁",
 	"close-tab": "關閉分頁",
+	"close": "關閉",
 	"reopen-closed-tab": "重新開啟已關閉的分頁",
 	"browse-library": "瀏覽圖書館",
 	"open-file": "開啟檔案",

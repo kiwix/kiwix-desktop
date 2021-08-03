@@ -1,17 +1,20 @@
 {
 	"@metadata": {
 		"authors": [
+			"MITO",
 			"Nike",
 			"Pyscowicz"
 		]
 	},
 	"name": "suomi",
+	"error-title": "Virhe",
 	"random-article": "Satunnainen artikkeli",
 	"home-page": "Kotisivu",
 	"main-menu": "Päävalikko",
 	"print": "Tulosta",
 	"new-tab": "Uusi välilehti",
 	"close-tab": "Sulje välilehti",
+	"close": "Sulje",
 	"reopen-closed-tab": "Avaa suljettu välilehti uudelleen",
 	"browse-library": "Selaa kirjastoa",
 	"open-file": "Avaa tiedosto",

@@ -6,8 +6,10 @@
 		]
 	},
 	"name": "Inglês",
+	"error-title": "Erro",
 	"error-downloader-window-title": "Não é possível criar o downloader",
 	"error-downloader-launch-message": "Impossível de baixar, o Kiwix-desktop será iniciado, mas todas as funções não funcionarão!",
+	"error-launch-server-message": "Ocorreu um erro!",
 	"open-zim": "Abrir Zim",
 	"local-kiwix-server": "Servidor Kiwix local",
 	"random-article": "Artigo aleatório",
@@ -16,6 +18,7 @@
 	"print": "Imprimir",
 	"new-tab": "Nova guia",
 	"close-tab": "Fechar guia",
+	"close": "Fechar",
 	"reopen-closed-tab": "Reabrir guia fechada",
 	"browse-library": "Navegar na biblioteca",
 	"open-file": "Abrir arquivo",
