@@ -1,25 +1,17 @@
+<a href="https://flathub.org/apps/details/org.kiwix.desktop">
+<img width="100" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png" />
+</a>
+
 Kiwix Desktop
 =============
 
 The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
 Microsoft Windows OSes.
 
+[![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-dekstop/wiki/Repology)
 [![Build Status](https://github.com/kiwix/kiwix-desktop/workflows/CI/badge.svg?query=branch%3Amaster)](https://github.com/kiwix/kiwix-desktop/actions?query=branch%3Amaster)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-Distribution
-------------
-
-#### Official binaries
-
-<a href="https://flathub.org/apps/details/org.kiwix.desktop">
-<img width="100" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png" />
-</a>
-
-#### Contribution binaries
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/kiwix-desktop.svg)](https://repology.org/project/kiwix-desktop/versions)
 
 Disclaimer
 ----------
