@@ -8,7 +8,7 @@ Kiwix Desktop
 The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
 Microsoft Windows OSes.
 
-[![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-dekstop/wiki/Repology)
+[![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-desktop/wiki/Repology)
 [![Build Status](https://github.com/kiwix/kiwix-desktop/workflows/CI/badge.svg?query=branch%3Amaster)](https://github.com/kiwix/kiwix-desktop/actions?query=branch%3Amaster)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
