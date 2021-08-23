@@ -4,6 +4,7 @@
 #include <QToolBar>
 #include <QLineEdit>
 #include <QWebEnginePage>
+#include <QScopedPointer>
 
 #include "searchbar.h"
 
@@ -15,19 +16,24 @@ public:
     virtual ~TopWidget();
 
     SearchBar &getSearchBar() { return m_searchEntry; };
+
+public slots:
+    void handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
+    void updateBackForwardButtons();
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 
 private:
     SearchBar m_searchEntry;
-    QAction* mp_historyBackAction;
-    QAction* mp_historyForwardAction;
     QPoint m_cursorPos;
     ulong m_timestamp;
+    QScopedPointer<QMenu, QScopedPointerDeleteLater> back_menu;
+    QScopedPointer<QMenu, QScopedPointerDeleteLater> forward_menu;
 
-public slots:
-    void handleWebActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
+    QToolButton* getBackButton() const;
+    QToolButton* getForwardButton() const;
 };
 
 #endif // TOPWIDGET_H

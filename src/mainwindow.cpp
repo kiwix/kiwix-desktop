@@ -49,6 +49,9 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
 #endif
+
+    connect(mp_ui->tabBar, &QTabBar::currentChanged,
+            mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
 }
 
 MainWindow::~MainWindow()

@@ -50,10 +50,6 @@ SearchBar > QPushButton {
     width: 32px;
 }
 
-/* ----------------------------------------
-   Menu
-*/
-
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;
@@ -70,17 +66,25 @@ TopWidget QToolButton::menu-arrow {
     image: none;
 }
 
-TopWidget QToolButton#leftHistoryButton {
-    margin-left: 4px;
+TopWidget QToolButton::menu-indicator {
+    width: 0px; /* it can be hidden at all by setting 0px */
+    height: 0px;
+    subcontrol-origin: padding;
 }
 
-TopWidget QToolButton#rightHistoryButton {
-    margin-right: 4px;
+TopWidget QToolButton#backButton {
+    margin-left: 6px;  /* see also: void WebViewBackMenu::showEvent(QShowEvent *) { geo.setX(geo.x() + 6); } */
 }
 
 TopWidget QToolButton#fullScreenButton {
     margin-right: 6px;
 }
+
+
+
+/* ----------------------------------------
+   Menu
+*/
 
 QMenu {
     border: none;
@@ -92,7 +96,7 @@ QMenu::item {
     min-height: 40px;
     max-height: 40px;
     border: 1px solid transparent;
-    padding: 2px 12px 2px 40px;
+    padding: 2px 12px 2px 40px;     /* top right bottom left */
 }
 
 QMenu::icon {
@@ -105,11 +109,22 @@ QMenu::item:selected {
     border: 1px solid #3366CC;
 }
 
-QMenu::indicator {
+
+MainMenu::indicator {
     color: #666666;
     width: 13px;
     height: 13px;
 }
+
+WebViewForwardMenu::item, WebViewBackMenu::item {
+    padding: 2px 12px;
+}
+
+WebViewForwardMenu::icon, WebViewBackMenu::icon {
+    min-width: 2px;
+    min-height: 2px;
+}
+
 
 /* -----------------------------------------
     TabWidget

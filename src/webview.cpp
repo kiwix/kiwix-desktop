@@ -1,14 +1,45 @@
 #include "webview.h"
 
 #include <QDesktopServices>
-#include <QMenu>
 #include <QAction>
 #include <iostream>
 #include "kiwixapp.h"
 #include "webpage.h"
 #include <QToolTip>
 #include <QWebEngineSettings>
+#include <QWebEngineHistory>
 #include <QVBoxLayout>
+
+
+void WebViewBackMenu::showEvent(QShowEvent *)
+{
+    /* In Qt 5.12 CSS options for shifting this menu didn't work.
+     * In particular:
+     *   - toolbar->setContentsMargins(0,0,0,0);
+     *   - toolbar->layout()->setContentsMargins(0,0,0,0);
+     *   - QToolBar {   padding-left: }
+     *   - QToolBar {   margin-left; }
+     *   - QToolBar {   padding: 5px 12px 5px 12px; }
+     *   - QToolBar::separator:first { width: 10px; }
+     *  (that was attempts to set some spacing on left and right in toolbar
+     *  so back button will be shifted right.
+     *  If in Qt 6.x QToolButton shows its menu in the right position
+     *  this code can be removed.
+     */
+
+    QRect geo = geometry();
+    geo.moveLeft(geo.left() + 6);  // see also: style.css: QToolButton#backButton { margin-left: 6px; }
+    geo.moveTop(geo.top() + 2);
+    setGeometry(geo);
+}
+
+void WebViewForwardMenu::showEvent(QShowEvent *)
+{
+    QRect geo = geometry();
+    geo.moveTop(geo.top() + 2);
+    setGeometry(geo);
+}
+
 
 WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
@@ -27,6 +58,60 @@ bool WebView::isWebActionEnabled(QWebEnginePage::WebAction webAction) const
 {
     return page()->action(webAction)->isEnabled();
 }
+
+QMenu* WebView::getHistoryBackMenu() const
+{
+    QWebEngineHistory *h = history();
+
+    const int cur = h->currentItemIndex();
+    if (cur <= 0) {
+        return Q_NULLPTR;
+    }
+
+    auto ret = new WebViewBackMenu();
+    for (int i = cur - 1 ; i >= 0 ; i--) {
+        addHistoryItemAction(ret, h->itemAt(i), i);
+    }
+    return ret;
+}
+
+QMenu* WebView::getHistoryForwardMenu() const
+{
+    QWebEngineHistory *h = history();
+
+    const int cur = h->currentItemIndex();
+    if (cur + 1 >= h->count()) {
+        return Q_NULLPTR;
+    }
+
+    auto ret = new WebViewForwardMenu();
+    for (int i = cur + 1 ; i < h->count() ; i++) {
+        addHistoryItemAction(ret, h->itemAt(i), i);
+    }
+    return ret;
+}
+
+void WebView::addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const
+{
+    QAction *a = menu->addAction(item.title());
+    a->setData(QVariant::fromValue(n));
+    connect(a, &QAction::triggered, this, &WebView::gotoTriggeredHistoryItemAction);
+}
+
+void WebView::gotoTriggeredHistoryItemAction()
+{
+    QAction *a = qobject_cast<QAction*>(QObject::sender());
+    if (!a)
+        return;
+
+    int n = a->data().toInt();
+    QWebEngineHistory *h = history();
+    if (n < 0 || n >= h->count())
+        return;
+
+    h->goToItem(h->itemAt(n));
+}
+
 
 QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 {
