@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_about(new About(this)),
     mp_localKiwixServer(new LocalKiwixServer(this))
 {
+    QWidget::setAttribute(Qt::WA_AlwaysShowToolTips);
     mp_ui->setupUi(this);
     mp_ui->tabBar->setExpanding(false);
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
