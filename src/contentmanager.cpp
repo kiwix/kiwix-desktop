@@ -149,6 +149,8 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         b.setPath(QDir::toNativeSeparators(tmp).toStdString());
         b.setDownloadId("");
         b.setPathValid(true);
+        // removing book url so that download link in kiwix-serve is not displayed.
+        b.setUrl("");
         mp_library->save();
         mp_library->bookmarksChanged();
         if (!m_local) {
