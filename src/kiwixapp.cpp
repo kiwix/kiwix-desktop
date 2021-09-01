@@ -24,7 +24,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      m_server(&m_library.getKiwixLibrary())
+      m_nameMapper(m_library.getKiwixLibrary(), false),
+      m_server(&m_library.getKiwixLibrary(), &m_nameMapper)
 {
     try {
         m_translation.setTranslation(QLocale());
