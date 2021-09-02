@@ -5,12 +5,14 @@
 			"Josephine W.",
 			"Nadine Siak",
 			"Shuiwater",
-			"SomeyaMako"
+			"SomeyaMako",
+			"Zhang8569"
 		]
 	},
 	"name": "英语",
 	"error-title": "错误",
 	"error-downloader-window-title": "无法创建下载器",
+	"error-downloader-launch-message": "发送一个下载器是不可能的，Kiwix-座机将开始但是下载功能将不会工作！",
 	"error-launch-server-message": "发生错误！",
 	"random-article": "随机条目",
 	"home-page": "主页",

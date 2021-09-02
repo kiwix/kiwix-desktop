@@ -3,13 +3,16 @@
 		"authors": [
 			"1917 Ekim Devrimi",
 			"BaRaN6161 TURK",
+			"Hedda",
 			"Joseph",
 			"SaldırganSincap"
 		]
 	},
 	"name": "Türkçe",
+	"error-title": "Hata",
 	"error-downloader-window-title": "İndirici oluşturulamıyor",
 	"error-downloader-launch-message": "İndiriciyi başlatmak imkansız, Kiwix-masaüstü başlayacak, ancak tüm indirme işlevleri çalışmaz!",
+	"error-launch-server-message": "Bir hata oluştu!",
 	"open-zim": "Zim'i aç",
 	"local-kiwix-server": "Yerel Kiwix Sunucusu",
 	"random-article": "Rastgele Madde",
@@ -18,6 +21,7 @@
 	"print": "Yazdır",
 	"new-tab": "Yeni sekme",
 	"close-tab": "Sekmeyi kapat",
+	"close": "Kapat",
 	"reopen-closed-tab": "Kapatılan sekmeyi yeniden aç",
 	"browse-library": "Kütüphaneye göz at",
 	"open-file": "Dosyayı aç",

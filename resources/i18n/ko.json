@@ -12,6 +12,7 @@
 	"name": "영어",
 	"error-downloader-window-title": "다운로더를 만들 수 없습니다",
 	"error-downloader-launch-message": "다운로더를 시작할 수 없습니다. Kiwix-desktop이 시작되더라도 모든 다운로드 기능이 작동하지 않을 것입니다!",
+	"error-launch-server-message": "오류가 발생했습니다!",
 	"open-zim": "Zim 열기",
 	"local-kiwix-server": "로컬 Kiwix 서버",
 	"random-article": "임의의 문서",

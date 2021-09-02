@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"MathXplore",
 			"Object＊tofu",
 			"Omotecho",
 			"Tmv"
 		]
 	},
+	"error-launch-server-message": "エラーが発生しました。",
 	"print": "印刷",
 	"new-tab": "新しいタブ",
 	"close-tab": "タブを閉じる",

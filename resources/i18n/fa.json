@@ -1,14 +1,17 @@
 {
 	"@metadata": {
 		"authors": [
-			"FarsiNevis"
+			"FarsiNevis",
+			"Jeeputer"
 		]
 	},
 	"name": "انگلیسی",
+	"error-title": "خطا",
 	"random-article": "مقالهٔ تصادفی",
 	"print": "چاپ",
 	"new-tab": "برگهٔ جدید",
 	"close-tab": "بستن برگه",
+	"close": "بستن",
 	"reopen-closed-tab": "برگهٔ بسته‌شده را دوباره باز کن",
 	"browse-library": "مرور کتابخانه",
 	"open-file": "باز کردن پرونده",

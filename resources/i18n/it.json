@@ -5,10 +5,13 @@
 			"Albe Albe460",
 			"Beta16",
 			"Gianfranco",
-			"Scompo"
+			"Scompo",
+			"Stefano"
 		]
 	},
 	"name": "Inglese",
+	"error-downloader-launch-message": "Impossibile avviare il downloader, Kiwix-desktop si avvierà ma tutte le funzioni di download non funzioneranno!",
+	"error-launch-server-message": "Si è verificato un errore.",
 	"local-kiwix-server": "Server Kiwix locale",
 	"home-page": "Pagina principale",
 	"main-menu": "Menu principale",
