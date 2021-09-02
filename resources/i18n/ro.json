@@ -6,8 +6,10 @@
 		]
 	},
 	"name": "Română",
+	"error-title": "Eroare",
 	"error-downloader-window-title": "Nu se poate lansa sistemul de descărcare",
 	"error-downloader-launch-message": "Imposibil de lansat programul de descărcare, Kiwix-desktop va începe, dar toate funcțiile de descărcare nu vor funcționa !",
+	"error-launch-server-message": "A apărut o eroare !",
 	"open-zim": "Deschide Zim",
 	"local-kiwix-server": "Server Kiwix Local",
 	"random-article": "Articol Aleatoriu",
@@ -16,6 +18,7 @@
 	"print": "Imprimă",
 	"new-tab": "Filă nouă",
 	"close-tab": "Închide fila",
+	"close": "Închide",
 	"reopen-closed-tab": "Redeschideți fila închisă",
 	"browse-library": "Căutați în bibliotecă",
 	"open-file": "Deschide fișierul",

@@ -5,8 +5,10 @@
 		]
 	},
 	"name": "Sardu",
+	"error-title": "Faddina",
 	"error-downloader-window-title": "Impossìbile creare s'iscarrigadore",
 	"error-downloader-launch-message": "Impossìbile carrigare s'iscarrigadore, Kiwix-desktop s'at a abèrrere ma totu sas funtzionalidades de iscarrigamentu no ant a funtzionare!",
+	"error-launch-server-message": "B'at àpidu una faddina|",
 	"open-zim": "Aberi unu Zim",
 	"local-kiwix-server": "Serbidore Kiwix locale",
 	"random-article": "Artìculu a sa tzurpa",
@@ -15,6 +17,7 @@
 	"print": "Imprenta",
 	"new-tab": "Ischeda noa",
 	"close-tab": "Serra s'ischeda",
+	"close": "Serra",
 	"reopen-closed-tab": "Torra a abèrrere s'ischeda serrada",
 	"browse-library": "Esplora sa biblioteca",
 	"open-file": "Aberi unu documentu",

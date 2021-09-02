@@ -12,7 +12,7 @@
 	"error-title": "Ошибка",
 	"error-downloader-window-title": "Невозможно создать загрузчик",
 	"error-downloader-launch-message": "Невозможно запустить загрузчик, Kiwix для рабочего стола будет запущен, но все функции скачивания будут недоступны!",
-	"error-launch-server-message": "Произошла ошибка !",
+	"error-launch-server-message": "Произошла ошибка!",
 	"open-zim": "Открыть Zim",
 	"local-kiwix-server": "Локальный сервер Kiwix",
 	"random-article": "Случайная статья",
