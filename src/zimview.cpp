@@ -20,6 +20,8 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
+                if (mp_tabBar->currentZimView() != this)
+                    return;
                 auto zoomFactor = mp_webView->zoomFactor();
                 zoomFactor += 0.1;
                 zoomFactor = max(min(zoomFactor, 5.0), 0.25);
@@ -29,6 +31,8 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
             });
     connect(app->getAction(KiwixApp::ZoomOutAction), &QAction::triggered,
             this, [=]() {
+                if (mp_tabBar->currentZimView() != this)
+                    return;
                 auto zoomFactor = mp_webView->zoomFactor();
                 zoomFactor -= 0.1;
                 zoomFactor = max(min(zoomFactor, 5.0), 0.25);
