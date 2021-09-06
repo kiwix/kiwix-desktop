@@ -42,6 +42,8 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
             });
     connect(app->getAction(KiwixApp::ZoomResetAction), &QAction::triggered,
             this, [=]() {
+                if (mp_tabBar->currentZimView() != this)
+                    return;
                 auto settingsManager = KiwixApp::instance()->getSettingsManager();
                 mp_webView->setZoomFactor(settingsManager->getZoomFactor());
                 auto key = mp_webView->zimId() + "/zoomFactor";
