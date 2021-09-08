@@ -395,12 +395,7 @@ void TabBar::paintEvent(QPaintEvent *e)
 
         bool selected = tab.state & QStyle::State_Selected;
 
-        /* This gets the color from our style.css rule:
-         * QWidget {
-         *   background-color: #EAECF0;
-         * }
-         */
-        QColor c0 = tab.palette.background().color();
+        QColor c0 = tab.palette.button().color();
 
         if (selected) {
             /* We cannot just get back from QStyleSheetStyle (Qt private classes)
