@@ -4,7 +4,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <kiwix/tools.h>
-
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
     m_settings("Kiwix", "Kiwix-desktop"),
@@ -15,17 +14,11 @@ SettingsManager::SettingsManager(QObject *parent)
 
 SettingsView* SettingsManager::getView()
 {
-    static SettingsView *view = nullptr;
-
-    if (!view || !m_settingsViewDisplayed)
-        view = new SettingsView();
-
+    auto view = new SettingsView();
     view->init(m_kiwixServerPort, m_zoomFactor * 100, m_downloadDir);
-    connect(view, &QObject::destroyed, this, [=]() { m_settingsViewDisplayed = false;});
     connect(view, &SettingsView::serverPortChanged, this, &SettingsManager::setKiwixServerPort);
     connect(view, &SettingsView::downloadDirChanged, this, &SettingsManager::setDownloadDir);
-    connect(view, &SettingsView::zoomFactorChanged, this, &SettingsManager::setZoomFactor);
-    m_settingsViewDisplayed = true;
+    connect(view, &SettingsView::zoomFactorChanged, this, &SettingsManager::setZoom);
     return view;
 }
 
@@ -66,11 +59,14 @@ void SettingsManager::setKiwixServerPort(int port)
     emit(portChanged(port));
 }
 
+void SettingsManager::setZoom(int factor)
+{
+    qreal zoomFactor = (double)factor/100;
+    setZoomFactor(zoomFactor);
+}
+
 void SettingsManager::setZoomFactor(qreal zoomFactor)
 {
-    if (zoomFactor > 1)
-        zoomFactor /= 100;
-
     m_zoomFactor = zoomFactor;
     m_settings.setValue("view/zoomFactor", zoomFactor);
 }

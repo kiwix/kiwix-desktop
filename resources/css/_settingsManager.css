@@ -1,88 +1,23 @@
-html, body {
-    padding: 0;
-    margin: auto;
-    height: 100%;
-    position: relative;
-    width: 80%;
-    overflow: hidden;
+QLabel,
+QPushButton {
+    font: 12pt "Cantarell";
 }
 
-#settings {
-    height: 100%;
-    position: relative;
+QLabel#settingsLabel {
+    font: bold 32pt "Cantarell";
 }
-
-#header {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
+QSpinBox, QLabel#downloadDirPath{
+    font: bold 12pt "Cantarell";
 }
-
-.row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid grey;
-    height: 40px;
-}
-
-
-input {
-    margin: 5px;
-}
-
-#download_dir {
-  flex: 1;
-  margin: 5px;
-  overflow: hidden;
-  direction: rtl;
-}
-
-#download_dir > span {
-  display: block;
-  float: right;
-  direction: ltr;
-  min-width: 100%;
-  font-size: 0.9em;
-}
-
-input[type=number] {
-    width: 80px;
-}
-
-input[type=button] {
+QPushButton {
+    background-color: white;
     color: blue;
-    font-weight: bold;
-    font-size: 14px;
-    border: 0;
-    background: transparent;
-    border-radius: 2px;
+    padding: 5px;
+    font:bold;
+    border-radius: 3px;
 }
 
-input[type=button]:hover {
+QPushButton:hover {
+    background-color: RoyalBlue;
     color: white;
-    background: blue;
-}
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    opacity: 1;
-}
-
-div.percentage-symbol {
-    position: relative;
-}
-
-div.percentage-symbol:before {
-    position: absolute;
-    content: "%";
-    top: 0.4em;
-    right: 1.5em;
-}
-
-div.percentage-symbol input {
-    text-align: left;
 }

@@ -1,7 +1,7 @@
 #include "settingsview.h"
 #include "ui_settings.h"
 #include "kiwixapp.h"
-
+#include <kiwix/tools.h>
 #include <QMessageBox>
 #include <QFileDialog>
 SettingsView::SettingsView(QWidget *parent)
@@ -9,6 +9,10 @@ SettingsView::SettingsView(QWidget *parent)
     , ui(new Ui::Settings)
 {
     ui->setupUi(this);
+    QFile file("./resources/css/_settingsManager.css");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    ui->widget->setStyleSheet(styleSheet);
     connect(ui->serverPortSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::serverPortChanged);
     connect(ui->zoomLevelSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::zoomFactorChanged);
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
@@ -44,7 +48,7 @@ bool SettingsView::confirmDialogDownloadDir(const QString& dir)
 
 void SettingsView::resetDownloadDir()
 {
-    auto dir = QString::fromStdString(getDataDirectory());
+    auto dir = QString::fromStdString(kiwix::getDataDirectory());
     const auto &downloadDir = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     if (dir == downloadDir) {
         return;

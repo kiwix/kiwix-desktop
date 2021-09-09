@@ -34,7 +34,7 @@ public slots:
     QString getDownloadDir() { return m_downloadDir; }
     void resetDownloadDir();
     void browseDownloadDir();
-
+    void setZoom(int factor);
 private:
     void initSettings();
     bool confirmDialogDownloadDir(const QString& dir);
