@@ -9,7 +9,7 @@ SettingsView::SettingsView(QWidget *parent)
     , ui(new Ui::Settings)
 {
     ui->setupUi(this);
-    QFile file("./resources/css/_settingsManager.css");
+    QFile file(QString::fromUtf8(":/css/_settingsManager.css"));
     file.open(QFile::ReadOnly);
     QString styleSheet = QString(file.readAll());
     ui->widget->setStyleSheet(styleSheet);
