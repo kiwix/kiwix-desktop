@@ -55,7 +55,7 @@ TabBar::TabBar(QWidget *parent) :
             });
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
-                for (int i = 0 ; i < (mp_stackedWidget->count() - 1) ; i++) {
+                for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
                     if (qobject_cast<SettingsView*>(mp_stackedWidget->widget(i))) {
                         setCurrentIndex(i);
                         return;
