@@ -8,8 +8,10 @@
 		]
 	},
 	"name": "Angielski",
+	"error-title": "Błąd",
 	"error-downloader-window-title": "Nie można utworzyć pobierania",
 	"error-downloader-launch-message": "Nie można uruchomić pobierania, uruchomi się Kiwix-desktop, ale wszystkie funkcje pobierania nie będą działać!",
+	"error-launch-server-message": "Wystąpił błąd!",
 	"open-zim": "Otwórz Zim",
 	"local-kiwix-server": "Lokalny serwer Kiwix",
 	"random-article": "Losowy artykuł",
@@ -18,6 +20,7 @@
 	"print": "Drukuj",
 	"new-tab": "Nowa zakładka",
 	"close-tab": "Zamknij kartę",
+	"close": "Zamknij",
 	"reopen-closed-tab": "Otwórz zamknięta kartę ponownie",
 	"browse-library": "Przeglądaj bibliotekę",
 	"open-file": "Otwórz plik",
