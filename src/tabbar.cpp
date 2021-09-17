@@ -395,7 +395,8 @@ void TabBar::paintEvent(QPaintEvent *e)
 
         bool selected = tab.state & QStyle::State_Selected;
 
-        QColor c0 = tab.palette.button().color();
+        QPalette tabbar_palette = QApplication::palette("QTabBar");
+        QColor c0 = tabbar_palette.window().color();
 
         if (selected) {
             /* We cannot just get back from QStyleSheetStyle (Qt private classes)

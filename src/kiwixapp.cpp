@@ -15,6 +15,22 @@
 #include <thread>
 #include <QMessageBox>
 
+namespace {
+void log_QStyle_class_name(const char *descr, const QStyle *style)
+{
+    QStringList h;
+    h << style->metaObject()->className();
+
+    auto sc = style->metaObject()->superClass();
+    while(sc) {
+        h << sc->className();
+        sc = sc->superClass();
+    }
+
+    qDebug() << descr << h;
+}
+}
+
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_settingsManager(),
@@ -69,12 +85,24 @@ void KiwixApp::init()
     setApplicationName("Kiwix");
     setDesktopFileName("kiwix.desktop");
 
+    log_QStyle_class_name("------ QStyle before CSS is set:", qApp->style());
+    if (qApp->style() != qApp->style()->proxy())
+        log_QStyle_class_name("Its proxy style is:", qApp->style()->proxy());
+    QPalette tbp1 = QApplication::palette("QTabBar");
+    qDebug() << "tabbar pallete:" << tbp1;
+
     QFile styleFile(":/css/style.css");
     styleFile.open(QIODevice::ReadOnly);
     auto byteContent = styleFile.readAll();
     QString style(byteContent);
     setStyleSheet(style);
 
+    log_QStyle_class_name("------ QStyle after CSS was set:", qApp->style());
+    if (qApp->style() != qApp->style()->proxy())
+        log_QStyle_class_name("Its proxy style is:", qApp->style()->proxy());
+    QPalette tbp2 = QApplication::palette("QTabBar");
+    qDebug() << "tabbar pallete:" << tbp2;
+    qDebug() << "-----------------------------";
 
     createAction();
     mp_mainWindow = new MainWindow;
