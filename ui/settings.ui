@@ -30,7 +30,7 @@
     <widget class="QWidget" name="widget" native="true">
      <property name="maximumSize">
       <size>
-       <width>600</width>
+       <width>16777215</width>
        <height>16777215</height>
       </size>
      </property>
@@ -102,6 +102,12 @@
         </item>
         <item>
          <widget class="Line" name="line">
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -155,6 +161,9 @@
         </item>
         <item>
          <widget class="Line" name="line_2">
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
