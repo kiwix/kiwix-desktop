@@ -17,7 +17,6 @@ public:
     virtual ~SettingsManager() {};
 
     SettingsView* getView();
-    bool isSettingsViewdisplayed() { return m_settingsViewDisplayed; };
     void setSettings(const QString &key, const QVariant &value);
     void deleteSettings(const QString &key);
     bool settingsExists(const QString &key);
@@ -32,12 +31,9 @@ public slots:
     qreal getZoomFactor() { return m_zoomFactor; };
     bool setDownloadDir(QString downloadDir);
     QString getDownloadDir() { return m_downloadDir; }
-    void resetDownloadDir();
-    void browseDownloadDir();
     void setZoom(int factor);
 private:
     void initSettings();
-    bool confirmDialogDownloadDir(const QString& dir);
 
 signals:
     void portChanged(int port);
@@ -46,7 +42,7 @@ signals:
 
 private:
     QSettings m_settings;
-    bool m_settingsViewDisplayed;
+    SettingsView *m_view;
     int m_kiwixServerPort;
     qreal m_zoomFactor;
     QString m_downloadDir;

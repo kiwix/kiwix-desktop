@@ -1,5 +1,5 @@
-QWidget#widget{
-    max-width:500;
+QWidget#widget {
+    max-width: 500;
 }
 
 QLabel,
@@ -10,30 +10,31 @@ QSpinBox {
     padding: 8px;
 }
 
-QFrame[frameShape="4"] { /*frameShape 4 is HLine */
-    border:1px solid #eaecf0;
-    min-height:0pt;
-    max-height:1pt;
+QFrame[frameShape="4"] {
+    /*frameShape 4 is HLine */
+    border: 1px solid #eaecf0;
+    min-height: 0pt;
+    max-height: 1pt;
 }
 
 QLabel#settingsLabel {
     font-size: 32px;
     line-height: 44px;
     font-weight: bold;
-
 }
-QSpinBox, QLabel#downloadDirPath{
+QSpinBox,
+QLabel#downloadDirPath {
     font: bold 12pt "Cantarell";
 }
 QPushButton {
     background-color: white;
-    color: #3366cc;;
+    color: #3366cc;
     padding: 4px;
-    font:bold;
+    font: bold;
     border-radius: 4px;
 }
 
 QPushButton:hover {
-    background-color: #3366cc;;
+    background-color: #3366cc;
     color: white;
 }

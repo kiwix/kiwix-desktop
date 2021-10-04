@@ -8,7 +8,6 @@
 #include <QToolTip>
 #include <QCursor>
 #include <QPainter>
-
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentZimView();}
 
@@ -56,7 +55,7 @@ TabBar::TabBar(QWidget *parent) :
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
                 for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
-                    if (qobject_cast<SettingsView*>(mp_stackedWidget->widget(i))) {
+                    if (mp_stackedWidget->widget(i) == KiwixApp::instance()->getSettingsManager()->getView()) {
                         setCurrentIndex(i);
                         return;
                     }
