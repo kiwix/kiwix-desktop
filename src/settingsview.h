@@ -15,10 +15,11 @@ public:
 public Q_SLOTS:
     void resetDownloadDir();
     void browseDownloadDir();
-signals:
-    void serverPortChanged(int port);
     void zoomFactorChanged(int factor);
-    void downloadDirChanged(const QString &dir);
+    void setDownloadDir(const QString &dir);
+    void setZoom(qreal factor);
+    void setKiwixServerPort(int port);
+    void serverPortChanged(int port);
 private:
     bool confirmDialogDownloadDir(const QString& dir);
 

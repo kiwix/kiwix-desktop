@@ -15,8 +15,11 @@ SettingsView::SettingsView(QWidget *parent)
     ui->widget->setStyleSheet(styleSheet);
     connect(ui->serverPortSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::serverPortChanged);
     connect(ui->zoomLevelSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::zoomFactorChanged);
-    connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
+    connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::setDownloadDir);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, &SettingsView::setZoom);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged, this, &SettingsView::setKiwixServerPort);
     ui->settingsLabel->setText(gt("settings"));
     ui->serverPortLabel->setText(gt("port-for-local-kiwix-server-setting"));
     ui->zoomLevelLabel->setText(gt("zoom-level-setting"));
@@ -54,8 +57,7 @@ void SettingsView::resetDownloadDir()
         return;
     }
     if (confirmDialogDownloadDir(dir)) {
-      ui->downloadDirPath->setText(dir);
-      emit(downloadDirChanged(dir));
+        KiwixApp::instance()->getSettingsManager()->setDownloadDir(dir);
     }
 }
 
@@ -71,7 +73,32 @@ void SettingsView::browseDownloadDir()
     }
 
     if (confirmDialogDownloadDir(dir)) {
-      ui->downloadDirPath->setText(dir);
-      emit(downloadDirChanged(dir));
+        KiwixApp::instance()->getSettingsManager()->setDownloadDir(dir);
     }
+}
+
+void SettingsView::zoomFactorChanged(int factor)
+{
+    qreal zoomFactor = (qreal) factor/100;
+    KiwixApp::instance()->getSettingsManager()->setZoomFactor(zoomFactor);
+}
+
+void SettingsView::serverPortChanged(int port)
+{
+    KiwixApp::instance()->getSettingsManager()->setKiwixServerPort(port);
+}
+
+void SettingsView::setDownloadDir(const QString &dir)
+{
+    ui->downloadDirPath->setText(dir);
+}
+
+void SettingsView::setZoom(qreal factor)
+{
+    ui->zoomLevelSpinBox->setValue(factor*100);
+}
+
+void SettingsView::setKiwixServerPort(int port)
+{
+    ui->serverPortSpinBox->setValue(port);
 }

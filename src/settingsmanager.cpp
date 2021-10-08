@@ -15,13 +15,10 @@ SettingsManager::SettingsManager(QObject *parent)
 SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
-    auto view = new SettingsView();
-    view->init(m_kiwixServerPort, m_zoomFactor * 100, m_downloadDir);
-    connect(view, &SettingsView::serverPortChanged, this, &SettingsManager::setKiwixServerPort);
-    connect(view, &SettingsView::downloadDirChanged, this, &SettingsManager::setDownloadDir);
-    connect(view, &SettingsView::zoomFactorChanged, this, &SettingsManager::setZoom);
-    connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
-    m_view = view;
+        auto view = new SettingsView();
+        view->init(m_kiwixServerPort, m_zoomFactor * 100, m_downloadDir);
+        connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
+        m_view = view;
     }
     return m_view;
 }
@@ -63,22 +60,18 @@ void SettingsManager::setKiwixServerPort(int port)
     emit(portChanged(port));
 }
 
-void SettingsManager::setZoom(int factor)
-{
-    qreal zoomFactor = (double)factor/100;
-    setZoomFactor(zoomFactor);
-}
-
 void SettingsManager::setZoomFactor(qreal zoomFactor)
 {
     m_zoomFactor = zoomFactor;
     m_settings.setValue("view/zoomFactor", zoomFactor);
+    emit(zoomChanged(zoomFactor));
 }
 
 bool SettingsManager::setDownloadDir(QString downloadDir)
 {
     m_downloadDir = downloadDir;
     m_settings.setValue("download/dir", downloadDir);
+    emit(downloadDirChanged(downloadDir));
     return true;
 }
 
