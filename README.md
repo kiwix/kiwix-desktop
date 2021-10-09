@@ -44,8 +44,9 @@ Install needed packages (on Ubuntu 18.04+):
 
 ```bash
 sudo apt-get install libqt5gui5 qtbase5-dev qtwebengine5-dev \
-     libqt5svg5-dev qt5-image-formats-plugins qt5-default aria2 \
-     qttools5-dev-tools
+     libqt5svg5-dev qt5-image-formats-plugins aria2 \
+     qttools5-dev-tools qtchooser qt5-qmake \
+     qtbase5-dev-tools
 ```
 
 Compilation
