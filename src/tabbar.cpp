@@ -54,14 +54,14 @@ TabBar::TabBar(QWidget *parent) :
             });
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
+                SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
                 for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
-                    if (mp_stackedWidget->widget(i) == KiwixApp::instance()->getSettingsManager()->getView()) {
+                    if (mp_stackedWidget->widget(i) == view) {
                         setCurrentIndex(i);
                         return;
                     }
                 }
                 int index = currentIndex() + 1;
-                SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
                 mp_stackedWidget->insertWidget(index, view);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
                 KiwixApp::instance()->setSideBar(KiwixApp::SideBarType::NONE);

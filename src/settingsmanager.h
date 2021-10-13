@@ -9,8 +9,8 @@ class SettingsManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int kiwixServerPort READ getKiwixServerPort NOTIFY portChanged)
-    Q_PROPERTY(qreal zoomFactor MEMBER m_zoomFactor NOTIFY zoomChanged)
-    Q_PROPERTY(QString downloadDir MEMBER m_downloadDir NOTIFY downloadDirChanged)
+    Q_PROPERTY(qreal zoomFactor MEMBER m_zoomFactor WRITE setZoomFactor NOTIFY zoomChanged)
+    Q_PROPERTY(QString downloadDir MEMBER m_downloadDir WRITE setDownloadDir NOTIFY downloadDirChanged)
 
 public:
     explicit SettingsManager(QObject *parent = nullptr);

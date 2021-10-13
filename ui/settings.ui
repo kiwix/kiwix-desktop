@@ -116,7 +116,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLabel" name="zoomLevelLabel">
+           <widget class="QLabel" name="zoomPercentLabel">
             <property name="text">
              <string>Zoom level:</string>
             </property>
@@ -136,7 +136,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QSpinBox" name="zoomLevelSpinBox">
+           <widget class="QSpinBox" name="zoomPercentSpinBox">
             <property name="frame">
              <bool>false</bool>
             </property>
