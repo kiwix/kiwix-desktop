@@ -13,13 +13,13 @@ SettingsView::SettingsView(QWidget *parent)
     file.open(QFile::ReadOnly);
     QString styleSheet = QString(file.readAll());
     ui->widget->setStyleSheet(styleSheet);
-    connect(ui->serverPortSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::serverPortChanged);
+    connect(ui->serverPortSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setKiwixServerPort);
     connect(ui->zoomPercentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setZoom);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::setDownloadDir);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::onDownloadDirChanged);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, &SettingsView::onZoomChanged);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged, this, &SettingsView::setKiwixServerPort);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged, this, &SettingsView::onServerPortChanged);
     ui->settingsLabel->setText(gt("settings"));
     ui->serverPortLabel->setText(gt("port-for-local-kiwix-server-setting"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
@@ -27,10 +27,10 @@ SettingsView::SettingsView(QWidget *parent)
     ui->resetButton->setText(gt("reset"));
     ui->browseButton->setText(gt("browse"));
 }
-void SettingsView::init(int port, int zoomFactor, const QString &dir)
+void SettingsView::init(int port, int zoomPercent, const QString &dir)
 {
     ui->serverPortSpinBox->setValue(port);
-    ui->zoomPercentSpinBox->setValue(zoomFactor);
+    ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(dir);
 }
 bool SettingsView::confirmDialogDownloadDir(const QString& dir)
@@ -83,12 +83,12 @@ void SettingsView::setZoom(int zoomPercent)
     KiwixApp::instance()->getSettingsManager()->setZoomFactor(zoomFactor);
 }
 
-void SettingsView::serverPortChanged(int port)
+void SettingsView::setKiwixServerPort(int port)
 {
     KiwixApp::instance()->getSettingsManager()->setKiwixServerPort(port);
 }
 
-void SettingsView::setDownloadDir(const QString &dir)
+void SettingsView::onDownloadDirChanged(const QString &dir)
 {
     ui->downloadDirPath->setText(dir);
 }
@@ -99,7 +99,7 @@ void SettingsView::onZoomChanged(qreal zoomFactor)
     ui->zoomPercentSpinBox->setValue(zoomPercent);
 }
 
-void SettingsView::setKiwixServerPort(int port)
+void SettingsView::onServerPortChanged(int port)
 {
     ui->serverPortSpinBox->setValue(port);
 }
