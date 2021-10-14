@@ -24,7 +24,6 @@ public:
     qreal getZoomFactorByZimId(const QString &id);
 
 public slots:
-    QStringList getTranslations(const QStringList &keys);
     void setKiwixServerPort(int port);
     int getKiwixServerPort() { return m_kiwixServerPort; };
     void setZoomFactor(qreal zoomFactor);
