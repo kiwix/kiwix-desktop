@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
+			"Amire80",
 			"Balyozxane",
 			"Bikarhêner"
 		]
 	},
-	"name": "Îngilîzî",
+	"name": "Kurdî",
 	"error-downloader-window-title": "Nikare daxînerê çêke",
 	"error-downloader-launch-message": "Nemimkun e ku daxînerê veke, wê Kîwîks-sermase dest pê bike lê wê hemû fonksiyonên daxistinê nexebitin !",
 	"open-zim": "Zim-ê Veke",
