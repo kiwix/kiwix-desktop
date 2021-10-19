@@ -3,21 +3,20 @@
 
 #include <QObject>
 #include <QSettings>
-#include "settingsmanagerview.h"
+#include "settingsview.h"
 
 class SettingsManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int kiwixServerPort READ getKiwixServerPort NOTIFY portChanged)
-    Q_PROPERTY(qreal zoomFactor READ getZoomFactor NOTIFY zoomChanged)
-    Q_PROPERTY(QString downloadDir READ getDownloadDir NOTIFY downloadDirChanged)
+    Q_PROPERTY(qreal zoomFactor MEMBER m_zoomFactor WRITE setZoomFactor NOTIFY zoomChanged)
+    Q_PROPERTY(QString downloadDir MEMBER m_downloadDir WRITE setDownloadDir NOTIFY downloadDirChanged)
 
 public:
     explicit SettingsManager(QObject *parent = nullptr);
     virtual ~SettingsManager() {};
 
-    SettingsManagerView* getView();
-    bool isSettingsViewdisplayed() { return m_settingsViewDisplayed; };
+    SettingsView* getView();
     void setSettings(const QString &key, const QVariant &value);
     void deleteSettings(const QString &key);
     bool settingsExists(const QString &key);
@@ -25,19 +24,14 @@ public:
     qreal getZoomFactorByZimId(const QString &id);
 
 public slots:
-    QStringList getTranslations(const QStringList &keys);
     void setKiwixServerPort(int port);
     int getKiwixServerPort() { return m_kiwixServerPort; };
     void setZoomFactor(qreal zoomFactor);
     qreal getZoomFactor() { return m_zoomFactor; };
     bool setDownloadDir(QString downloadDir);
     QString getDownloadDir() { return m_downloadDir; }
-    void resetDownloadDir();
-    void browseDownloadDir();
-
 private:
     void initSettings();
-    bool confirmDialogDownloadDir(const QString& dir);
 
 signals:
     void portChanged(int port);
@@ -46,7 +40,7 @@ signals:
 
 private:
     QSettings m_settings;
-    bool m_settingsViewDisplayed;
+    SettingsView *m_view;
     int m_kiwixServerPort;
     qreal m_zoomFactor;
     QString m_downloadDir;

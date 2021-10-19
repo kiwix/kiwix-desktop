@@ -17,7 +17,6 @@
 
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
-      m_settingsManager(),
       m_profile(),
       m_libraryDirectory(findLibraryDirectory()),
       m_library(m_libraryDirectory),
