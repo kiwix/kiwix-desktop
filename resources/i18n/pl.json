@@ -4,6 +4,7 @@
 			"Pietrasagh",
 			"Rail",
 			"Rainbow P",
+			"SRakestraw",
 			"WaldiSt"
 		]
 	},
@@ -97,6 +98,7 @@
 	"all": "Wszystkie",
 	"other": "Inne",
 	"gutenberg": "Gutenberg",
+	"mooc": "MOOC",
 	"phet": "Phet",
 	"psiram": "Psiram",
 	"stack_exchange": "Stack Exchange",
