@@ -291,6 +291,12 @@ bool KiwixApp::isCurrentArticleBookmarked()
 #define CREATE_ACTION_ICON_SHORTCUT(ID, ICON, TEXT, SHORTCUT) \
     mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT); \
     SET_SHORTCUT(ID, TEXT, SHORTCUT)
+#define SET_SHORTCUTS(ID, TEXT, SHORTCUTS) \
+    mpa_actions[ID]->setShortcuts(SHORTCUTS); \
+    mpa_actions[ID]->setToolTip(TEXT + " (" + SHORTCUTS.first().toString() + ")" )
+#define CREATE_ACTION_SHORTCUTS(ID, TEXT, SHORTCUTS) \
+    CREATE_ACTION(ID, TEXT); \
+    SET_SHORTCUTS(ID, TEXT, SHORTCUTS)
 #define HIDE_ACTION(ID) mpa_actions[ID]->setVisible(false)
 #define DISABLE_ACTION(ID) mpa_actions[ID]->setDisabled(true)
 
@@ -371,7 +377,7 @@ void KiwixApp::createAction()
             QIcon((type == READINGLIST_BAR) ? ":/icons/reading-list-active.svg" : ":/icons/reading-list.svg"));
     });
 
-    CREATE_ACTION_SHORTCUT(ZoomInAction, gt("zoom-in"), QKeySequence::ZoomIn);
+    CREATE_ACTION_SHORTCUTS(ZoomInAction, gt("zoom-in"), QList<QKeySequence>({QKeySequence::ZoomIn, QKeySequence(Qt::CTRL+Qt::Key_Equal)}));
 
     CREATE_ACTION_SHORTCUT(ZoomOutAction, gt("zoom-out"), QKeySequence::ZoomOut);
 
