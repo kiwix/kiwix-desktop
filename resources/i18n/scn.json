@@ -1,0 +1,42 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ajeje Brazorf"
+		]
+	},
+	"name": "Sicilianu",
+	"error-title": "Erruri",
+	"home-page": "Pàggina principali",
+	"main-menu": "Menu principali",
+	"close": "Chiudi",
+	"help": "Aiutu",
+	"about-kiwix": "Nfurmazzioni supra Kiwix",
+	"exit": "Nesci",
+	"save-file-as-window-title": "Sarva file comu",
+	"file": "File",
+	"edit": "Cancia",
+	"view": "Talìa",
+	"tools": "Strummenta",
+	"settings": "Mpustazzioni",
+	"title": "Tìtulu",
+	"delete": "Cancella",
+	"cancel": "Annulla",
+	"about-version": "Virsioni: {{VERSION}}",
+	"all-files": "Tutti li file",
+	"hide": "Ammuccia",
+	"all": "Tuttu",
+	"other": "Àutru",
+	"gutenberg": "Gutenberg",
+	"vikidia": "Vikidia",
+	"wikibooks": "Wikibooks",
+	"wikinews": "Wikinutizzi",
+	"wikipedia": "Wikipedia",
+	"wikiquote": "Wikiquote",
+	"wikisource": "Wikisource",
+	"wikispecies": "Wikispecies",
+	"wikiversity": "Wikiversità",
+	"wikivoyage": "Wikivoyage",
+	"wiktionary": "Wikizziunariu",
+	"yes": "sì",
+	"no": "no"
+}
