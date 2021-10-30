@@ -155,35 +155,28 @@ void TabBar::openUrl(const QUrl& url, bool newTab)
 void TabBar::setTitleOf(const QString& title, ZimView* tab)
 {
     CURRENTIFNULL(tab);
+    int idx = mp_stackedWidget->indexOf(tab);
+    if (idx < 0)
+        return;
+
+    QString t = title;
+
     if (title.startsWith("zim://")) {
         auto url = QUrl(title);
-        setTabText(mp_stackedWidget->indexOf(tab), url.path());
-    } else {
-        int idx = mp_stackedWidget->indexOf(tab);
-        setTabToolTip(idx, title);
-
-        // This logic is taken from the implementation:
-        // <QTDIR>/5.12.6/Src/qtbase/src/widgets/widgets/qtabbar.cpp
-        // void QTabBar::initStyleOption(QStyleOptionTab *option, int tabIndex) const
-        QStyleOptionTab tab;
-        initStyleOption(&tab, idx);
-        QRect textRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tab, this);
-
-        // but instead of eliding text as QTabBar::initStyleOption() does
-        // we cut it and store the flag if it was cut
-        QString cut = fontMetrics().elidedText(title, Qt::ElideRight, textRect.width());
-        // strip ... from the end (this three dots are one char)
-        if (cut.size() < title.size()) {
-            cut = cut.mid(0, cut.size() - 1);
-            // set flag that the text was too long, was cut and this tab
-            // need 'fade out' effect while drawing
-            setTabData(idx, QVariant::fromValue(true));
-        }
-        else {
-            setTabData(idx, QVariant::fromValue(false));
-        }
-        setTabText(idx, cut);
+        t = url.path();
     }
+
+    setTabToolTip(idx, t);
+
+    /* we don't use setTabText() because Qt can't draw text with
+     * fade-out gradient selectively (only for large texts).
+     * So we just store tab's title, and will draw it later ourselves.
+     */
+    setTabData(idx, QVariant::fromValue(t));
+
+    // need to initiate repaint
+    // because setTabData() didn't do it as setTabText() before.
+    repaint();
 }
 
 void TabBar::setIconOf(const QIcon &icon, ZimView *tab)
@@ -361,73 +354,73 @@ void TabBar::mousePressEvent(QMouseEvent *event)
 
 void TabBar::paintEvent(QPaintEvent *e)
 {
-    // Please keep it in sync with resources/css/style.css
-    // QTabBar::tab:selected { background-color: <value> }
-    const QColor selected_tab_bg_color = QColor(Qt::white);
-
-    // first, let Qt draw QTabBar normally
+    /* first, let Qt draw QTabBar normally.
+     * QTabbar will leave tabs titles empty because we didn't set these values into QTabBar.
+     */
     QTabBar::paintEvent(e);
 
-    // Then apply fade-out effect for long tab title on top:
+    // Then, for each tab, we draw titles, using fade-out effect when needed.
     QPainter p(this);
 
     for (int i = 0; i < count(); ++i) {
-        bool need_fade_out = tabData(i).toBool();
-        if (! need_fade_out)
+        QString tab_title = tabData(i).toString();
+        if (tab_title.isEmpty())
             continue;
 
-        QStyleOptionTab tab;
-        initStyleOption(&tab, i);
-
-        QRect textRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tab, this);
-
-        QRect tail = textRect;
-        tail.setWidth(textRect.width() * 0.2);
-
-        // isRightToLeft() gives inherrited from application layout direction,
-        // but we need the direction of each individual tab header text here
-        bool right_to_left = tabText(i).isRightToLeft();
-
-        if (! right_to_left) {
-            // Normal left-to-right text layout: move fading-out box to the right
-            tail.moveRight(textRect.right());
-        }
-
-        bool selected = tab.state & QStyle::State_Selected;
-
-        /* This gets the color from our style.css rule:
-         * QWidget {
-         *   background-color: #EAECF0;
-         * }
+        /* See the implementation of QTabBar for better understanding this code:
+         * <QTDIR>/5.12.6/Src/qtbase/src/widgets/widgets/qtabbar.cpp
+         * in particular, QTabBar::initStyleOption()
          */
-        QColor c0 = tab.palette.background().color();
+        QStyleOptionTab tabopt;
+        initStyleOption(&tabopt, i);
 
-        if (selected) {
-            /* We cannot just get back from QStyleSheetStyle (Qt private classes)
-             * the value of QTabBar::tab:selected { background-color: <value> }
-             * so have to use hard-coded value here:
-             */
-            c0 = selected_tab_bg_color;
+        bool need_fade_out = false;
+
+        QRect tabTextRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tabopt, this);
+
+        QRect fontTextRect = fontMetrics().boundingRect(tab_title);
+
+        if (fontTextRect.width() > tabTextRect.width())
+            need_fade_out = true;
+
+        bool right_to_left = tab_title.isRightToLeft();
+
+        if (need_fade_out) {
+            // draw the most of tab text extent with the normal color,
+            // and draw the rest with alpha channel gradient
+            QColor c0 = tabopt.palette.brush(QPalette::ButtonText).color();
+            QColor c1(c0);
+
+            c0.setAlpha(255);   // color of font
+            c1.setAlpha(0);     // transparent
+
+            const int mid_Y = tabTextRect.center().y();
+            QLinearGradient gr;
+
+            if (right_to_left) {
+                // arabic right-to-left text
+                gr.setStart(tabTextRect.x(), mid_Y);
+                gr.setFinalStop(tabTextRect.x() + 0.2 * tabTextRect.width(), mid_Y);
+                gr.setColorAt(0.0, c1);
+                gr.setColorAt(1.0, c0);
+            }
+            else {
+                // normal left-to-right text direction
+                gr.setStart(tabTextRect.x() + 0.8 * tabTextRect.width(), mid_Y);
+                gr.setFinalStop(tabTextRect.right(), mid_Y);
+                gr.setColorAt(0.0, c0);
+                gr.setColorAt(1.0, c1);
+            }
+            tabopt.palette.setBrush(QPalette::ButtonText, QBrush(gr));
         }
 
-        QColor c1(c0);
-
-        if (right_to_left) {
-            c0.setAlpha(255);
-            c1.setAlpha(0);
-        }
-        else {
-            c0.setAlpha(0);
-            c1.setAlpha(255);
+        int align = Qt::AlignVCenter;
+        if (need_fade_out) {
+            align |= (right_to_left)? Qt::AlignRight : Qt::AlignLeft;
         }
 
-        QLinearGradient gr(tail.topLeft(), tail.topRight());
-        gr.setSpread(QGradient::PadSpread);
-        gr.setColorAt(0.0, c0);
-        gr.setColorAt(1.0, c1);
-
-        QBrush br(gr);
-        p.fillRect(tail, br);
+        style()->drawItemText(&p, tabTextRect, align,
+                  tabopt.palette, true, tab_title, QPalette::ButtonText);
     }
 }
 
