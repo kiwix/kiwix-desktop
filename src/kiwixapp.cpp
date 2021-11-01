@@ -19,18 +19,25 @@
 // KiwixApp::NameMapperProxy
 ////////////////////////////////////////////////////////////////////////////////
 
-KiwixApp::NameMapperProxy::NameMapperProxy(kiwix::Library& library)
-  : impl(new kiwix::HumanReadableNameMapper(library, false))
-{}
+KiwixApp::NameMapperProxy::NameMapperProxy(kiwix::Library& lib)
+  : library(lib)
+{
+  update();
+}
+
+void KiwixApp::NameMapperProxy::update()
+{
+  nameMapper.reset(new kiwix::HumanReadableNameMapper(library, false));
+}
 
 std::string KiwixApp::NameMapperProxy::getNameForId(const std::string& id)
 {
-  return impl->getNameForId(id);
+  return nameMapper->getNameForId(id);
 }
 
 std::string KiwixApp::NameMapperProxy::getIdForName(const std::string& name)
 {
-  return impl->getIdForName(name);
+  return nameMapper->getIdForName(name);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -433,6 +440,7 @@ void KiwixApp::postInit() {
             [=](const QString& title) { emit currentTitleChanged(title); });
     connect(mp_tabWidget, &TabBar::libraryPageDisplayed, this, &KiwixApp::disableItemsOnLibraryPage);
     emit(m_library.booksChanged());
+    connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
     disableItemsOnLibraryPage(true);
 }
 
@@ -443,4 +451,9 @@ void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
     KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryDisplayed);
+}
+
+void KiwixApp::updateNameMapper()
+{
+  m_nameMapper.update();
 }

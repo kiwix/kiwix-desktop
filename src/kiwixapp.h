@@ -99,6 +99,7 @@ public slots:
     void toggleSideBar(KiwixApp::SideBarType type);
     void printPage();
     void disableItemsOnLibraryPage(bool displayed);
+    void updateNameMapper();
 
 protected:
     void createAction();
@@ -112,7 +113,11 @@ private: // types
       virtual std::string getNameForId(const std::string& id);
       virtual std::string getIdForName(const std::string& name);
 
-      std::shared_ptr<kiwix::NameMapper> impl;
+      void update();
+
+    private:
+      kiwix::Library& library;
+      std::shared_ptr<kiwix::NameMapper> nameMapper;
   };
 
 
