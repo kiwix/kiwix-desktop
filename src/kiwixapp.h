@@ -18,6 +18,8 @@
 #include <QTranslator>
 #include <kiwix/name_mapper.h>
 
+#include <mutex>
+
 
 class KiwixApp : public QtSingleApplication
 {
@@ -107,6 +109,7 @@ protected:
 
 private: // types
   class NameMapperProxy : public kiwix::NameMapper {
+      typedef std::shared_ptr<kiwix::NameMapper> NameMapperHandle;
     public:
       explicit NameMapperProxy(kiwix::Library& library);
 
@@ -116,8 +119,12 @@ private: // types
       void update();
 
     private:
+      NameMapperHandle currentNameMapper() const;
+
+    private:
+      mutable std::mutex mutex;
       kiwix::Library& library;
-      std::shared_ptr<kiwix::NameMapper> nameMapper;
+      NameMapperHandle nameMapper;
   };
 
 
