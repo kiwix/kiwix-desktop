@@ -15,6 +15,28 @@
 #include <thread>
 #include <QMessageBox>
 
+////////////////////////////////////////////////////////////////////////////////
+// KiwixApp::NameMapperProxy
+////////////////////////////////////////////////////////////////////////////////
+
+KiwixApp::NameMapperProxy::NameMapperProxy(kiwix::Library& library)
+  : impl(new kiwix::HumanReadableNameMapper(library, false))
+{}
+
+std::string KiwixApp::NameMapperProxy::getNameForId(const std::string& id)
+{
+  return impl->getNameForId(id);
+}
+
+std::string KiwixApp::NameMapperProxy::getIdForName(const std::string& name)
+{
+  return impl->getIdForName(name);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// KiwixApp
+////////////////////////////////////////////////////////////////////////////////
+
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_profile(),
@@ -23,7 +45,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      m_nameMapper(m_library.getKiwixLibrary(), false),
+      m_nameMapper(m_library.getKiwixLibrary()),
       m_server(&m_library.getKiwixLibrary(), &m_nameMapper)
 {
     try {
