@@ -51,6 +51,32 @@ QString Library::openBookFromPath(const QString &zimPath)
     return QString::fromStdString(id);
 }
 
+QStringList Library::getBooksFromDir(std::string dir)
+{
+    auto downloadDir = QDir(QString::fromStdString(dir));
+    auto zimFilesInDir = downloadDir.entryList({"*.zim"});
+    return zimFilesInDir;
+}
+
+void Library::syncNewBooksInLibrary(std::string dir)
+{
+    QStringList allBooks = Library::getBooksFromDir(dir);
+    for (auto bookPath : allBooks) {
+        auto fullBookPath = QDir::cleanPath(QString::fromStdString(kiwix::getDataDirectory()) + '/' + bookPath);
+        try {
+            m_library.getBookByPath(fullBookPath.toStdString());
+        }  catch (std::out_of_range& e) {
+            kiwix::Manager manager(&m_library);
+            if(!manager.addBookFromPath(fullBookPath.toStdString())) {
+                qWarning()<<"Couldn't add "<<fullBookPath<<" in the library.";
+            }
+            save();
+        }
+    }
+    emit(booksChanged());
+}
+
+
 std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
 {
     try {

@@ -34,6 +34,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     }
     qInfo() << "Compiled with Qt Version " << QT_VERSION_STR;
     qInfo() << "Runtime Qt Version " << qVersion();
+    m_library.syncNewBooksInLibrary(kiwix::getDataDirectory());
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     installTranslator(&m_qtTranslator);
