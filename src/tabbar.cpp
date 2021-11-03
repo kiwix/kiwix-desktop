@@ -26,7 +26,7 @@ TabBar::TabBar(QWidget *parent) :
 
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
-                this->createNewTab(true);
+                this->createNewTab(true, false);
                 auto topWidget = KiwixApp::instance()->getMainWindow()->getTopWidget();
                 topWidget->getSearchBar().setFocus(Qt::MouseFocusReason);
                 topWidget->getSearchBar().clear();
@@ -127,10 +127,15 @@ void TabBar::setNewTabButton()
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
 }
 
-ZimView* TabBar::createNewTab(bool setCurrent)
+ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
 {
     auto tab = new ZimView(this, this);
-    int index = count() - 1; // the last tab is + button, insert before
+    int index;
+    if(adjacentToCurrentTab) {
+        index = currentIndex() + 1;
+    } else {
+        index = count() - 1; // for New Tab Button
+    }
     mp_stackedWidget->insertWidget(index, tab);
     index = insertTab(index, "");
     QToolButton *tb = new QToolButton(this);
@@ -146,7 +151,7 @@ void TabBar::openUrl(const QUrl& url, bool newTab)
 {
     WebView* webView = currentWebView();
     if (newTab || !webView) {
-        webView = createNewTab(true)->getWebView();
+        webView = createNewTab(true, true)->getWebView();
     }
     QUITIFNULL(webView);
     webView->setUrl(url);

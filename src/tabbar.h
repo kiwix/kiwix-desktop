@@ -20,7 +20,7 @@ public:
 
     void     setContentManagerView(ContentManagerView* view);
     void     setNewTabButton();
-    ZimView* createNewTab(bool setCurrent);
+    ZimView* createNewTab(bool setCurrent, bool adjacentToCurrentTab);
 
     ZimView* currentZimView() {
         return qobject_cast<ZimView*>(mp_stackedWidget->currentWidget());

@@ -34,7 +34,7 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
       || type==QWebEnginePage::WebBrowserTab )
     {
         auto tabWidget = KiwixApp::instance()->getTabWidget();
-        return tabWidget->createNewTab(false)->getWebView();
+        return tabWidget->createNewTab(false, true)->getWebView();
     }
     return nullptr;
 }
