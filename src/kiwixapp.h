@@ -18,6 +18,8 @@
 #include <QTranslator>
 #include <kiwix/name_mapper.h>
 
+#include <mutex>
+
 
 class KiwixApp : public QtSingleApplication
 {
@@ -99,10 +101,32 @@ public slots:
     void toggleSideBar(KiwixApp::SideBarType type);
     void printPage();
     void disableItemsOnLibraryPage(bool displayed);
+    void updateNameMapper();
 
 protected:
     void createAction();
     void postInit();
+
+private: // types
+  class NameMapperProxy : public kiwix::NameMapper {
+      typedef std::shared_ptr<kiwix::NameMapper> NameMapperHandle;
+    public:
+      explicit NameMapperProxy(kiwix::Library& library);
+
+      virtual std::string getNameForId(const std::string& id);
+      virtual std::string getIdForName(const std::string& name);
+
+      void update();
+
+    private:
+      NameMapperHandle currentNameMapper() const;
+
+    private:
+      mutable std::mutex mutex;
+      kiwix::Library& library;
+      NameMapperHandle nameMapper;
+  };
+
 
 private:
     QTranslator m_qtTranslator, m_appTranslator;
@@ -116,7 +140,7 @@ private:
     TabBar* mp_tabWidget;
     SideBarType m_currentSideType;
     QErrorMessage* mp_errorDialog;
-    kiwix::HumanReadableNameMapper m_nameMapper;
+    NameMapperProxy m_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
 
