@@ -70,7 +70,7 @@ TopWidget QToolButton::menu-arrow {
     image: none;
 }
 
-TopWidget QToolButton#backButton {
+TopWidget QToolButton#leftHistoryButton {
     margin-left: 6px;
 }
 

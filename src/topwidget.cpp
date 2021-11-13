@@ -24,13 +24,15 @@ TopWidget::TopWidget(QWidget *parent) :
 
     if (QGuiApplication::isLeftToRight()) {
         addAction(back);
-        widgetForAction(back)->setObjectName("backButton"); // For CSS
         addAction(forward);
     } else {
         addAction(forward);
         addAction(back);
-        widgetForAction(back)->setObjectName("backButton"); // For CSS
     }
+
+    // For CSS
+    widgetForAction(back)->setObjectName("leftHistoryButton");
+    widgetForAction(back)->setObjectName("rightHistoryButton");
 
     addSeparator();
 
