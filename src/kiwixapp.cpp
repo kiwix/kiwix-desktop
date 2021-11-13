@@ -355,10 +355,18 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_SHORTCUT(OpenHomePageAction, gt("home-page"), QKeySequence(Qt::ALT + Qt::Key_Home));
 
-    CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "back", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Left));
+    if (QGuiApplication::isLeftToRight()) {
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "back", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Left));
+    } else {
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "forward", gt("back"), QKeySequence(Qt::ALT + Qt::Key_RightLeft));
+    }
     DISABLE_ACTION(HistoryBackAction);
 
-    CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "forward", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Right));
+    if (QGuiApplication::isLeftToRight()) {
+      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "forward", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Right));
+    } else {
+      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "back", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Left));
+    }
     DISABLE_ACTION(HistoryForwardAction);
 
     CREATE_ACTION_ICON_SHORTCUT(PrintAction, "print", gt("print"), QKeySequence::Print);
