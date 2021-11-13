@@ -356,16 +356,16 @@ void KiwixApp::createAction()
     CREATE_ACTION_SHORTCUT(OpenHomePageAction, gt("home-page"), QKeySequence(Qt::ALT + Qt::Key_Home));
 
     if (QGuiApplication::isLeftToRight()) {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "back", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Left));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-left", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Left));
     } else {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "forward", gt("back"), QKeySequence(Qt::ALT + Qt::Key_RightLeft));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-right", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Right));
     }
     DISABLE_ACTION(HistoryBackAction);
 
     if (QGuiApplication::isLeftToRight()) {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "forward", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Right));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-right", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Right));
     } else {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "back", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Left));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-left", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Left));
     }
     DISABLE_ACTION(HistoryForwardAction);
 
