@@ -22,7 +22,7 @@ TopWidget::TopWidget(QWidget *parent) :
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
 
-    if(QGuiApplication::isLeftToRight()) {
+    if (QGuiApplication::isLeftToRight()) {
         addAction(back);
         widgetForAction(back)->setObjectName("backButton"); // For CSS
         addAction(forward);
@@ -84,7 +84,7 @@ void TopWidget::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, 
 
 
 void TopWidget::mousePressEvent(QMouseEvent *event) {
-    if(event->button() != Qt::LeftButton)
+    if (event->button() != Qt::LeftButton)
         return;
 
     m_cursorPos = event->globalPos() + frameGeometry().topLeft() - parentWidget()->frameGeometry().topLeft();
@@ -93,7 +93,7 @@ void TopWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void TopWidget::mouseMoveEvent(QMouseEvent *event) {
-    if(event->timestamp() <= m_timestamp)
+    if (event->timestamp() <= m_timestamp)
         return;
 
     m_timestamp = event->timestamp();
