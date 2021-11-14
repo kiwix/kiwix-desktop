@@ -16,23 +16,22 @@ TopWidget::TopWidget(QWidget *parent) :
     connect(back, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
+    addAction(back);
 
     QAction *forward = app->getAction(KiwixApp::HistoryForwardAction);
     connect(forward, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
-
-    if (QGuiApplication::isLeftToRight()) {
-        addAction(back);
-        addAction(forward);
-    } else {
-        addAction(forward);
-        addAction(back);
-    }
+    addAction(forward);
 
     // For CSS
-    widgetForAction(back)->setObjectName("leftHistoryButton");
-    widgetForAction(back)->setObjectName("rightHistoryButton");
+    if (QGuiApplication::isLeftToRight()) {
+        widgetForAction(back)->setObjectName("leftHistoryButton");
+        widgetForAction(forward)->setObjectName("rightHistoryButton");
+    } else {
+        widgetForAction(forward)->setObjectName("leftHistoryButton");
+        widgetForAction(back)->setObjectName("rightHistoryButton");
+    }
 
     addSeparator();
 
