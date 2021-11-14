@@ -71,9 +71,12 @@ TopWidget QToolButton::menu-arrow {
 }
 
 TopWidget QToolButton#leftHistoryButton {
-    margin-left: 6px;
+    margin-left: 4px;
 }
 
+TopWidget QToolButton#rightHistoryButton {
+    margin-right: 4px;
+}
 
 TopWidget QToolButton#fullScreenButton {
     margin-right: 6px;
