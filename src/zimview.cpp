@@ -49,6 +49,13 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                 auto key = mp_webView->zimId() + "/zoomFactor";
                 settingsManager->deleteSettings(key);
             });
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, [=]() {
+        auto key = mp_webView->zimId() + "/zoomFactor";
+        auto zimZoomFactor = KiwixApp::instance()->getSettingsManager()->getSettings(key);
+        if(!zimZoomFactor.toBool()) {
+            mp_webView->setZoomFactor(KiwixApp::instance()->getSettingsManager()->getZoomFactor());
+        }
+    });
     connect(mp_webView->page(), &QWebEnginePage::fullScreenRequested, mp_tabBar, &TabBar::fullScreenRequested);
     connect(mp_webView, &WebView::titleChanged, mp_tabBar, &TabBar::on_webview_titleChanged);
     connect(mp_webView, &WebView::iconChanged, this,
