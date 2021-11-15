@@ -17,13 +17,21 @@ TopWidget::TopWidget(QWidget *parent) :
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
     addAction(back);
-    widgetForAction(back)->setObjectName("backButton"); // For CSS
 
     QAction *forward = app->getAction(KiwixApp::HistoryForwardAction);
     connect(forward, &QAction::triggered, [](){
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
     addAction(forward);
+
+    // For CSS
+    if (QGuiApplication::isLeftToRight()) {
+        widgetForAction(back)->setObjectName("leftHistoryButton");
+        widgetForAction(forward)->setObjectName("rightHistoryButton");
+    } else {
+        widgetForAction(forward)->setObjectName("leftHistoryButton");
+        widgetForAction(back)->setObjectName("rightHistoryButton");
+    }
 
     addSeparator();
 
@@ -77,7 +85,7 @@ void TopWidget::handleWebActionEnabledChanged(QWebEnginePage::WebAction action, 
 
 
 void TopWidget::mousePressEvent(QMouseEvent *event) {
-    if(event->button() != Qt::LeftButton)
+    if (event->button() != Qt::LeftButton)
         return;
 
     m_cursorPos = event->globalPos() + frameGeometry().topLeft() - parentWidget()->frameGeometry().topLeft();
@@ -86,7 +94,7 @@ void TopWidget::mousePressEvent(QMouseEvent *event) {
 }
 
 void TopWidget::mouseMoveEvent(QMouseEvent *event) {
-    if(event->timestamp() <= m_timestamp)
+    if (event->timestamp() <= m_timestamp)
         return;
 
     m_timestamp = event->timestamp();

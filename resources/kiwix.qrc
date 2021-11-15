@@ -4,8 +4,8 @@
         <file>icons/minimize.svg</file>
         <file>icons/download.svg</file>
         <file>icons/checkbox.svg</file>
-        <file>icons/back.svg</file>
-        <file>icons/forward.svg</file>
+        <file>icons/history-left.svg</file>
+        <file>icons/history-right.svg</file>
         <file>icons/help.svg</file>
         <file>icons/tick.svg</file>
         <file>icons/menu.svg</file>
