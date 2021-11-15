@@ -65,7 +65,7 @@
     "cancel":"Cancel",
     "apply":"Apply",
     "port-for-local-kiwix-server-setting":"Port for local Kiwix server :",
-    "zoom-level-setting":"Zoom level :",
+    "zoom-level-setting":"Default zoom level :",
     "download-directory-setting":"Download directory :",
     "reset":"Reset",
     "browse":"Browse",
