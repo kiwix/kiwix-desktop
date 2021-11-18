@@ -63,7 +63,7 @@
 	"cancel": "取消",
 	"apply": "应用",
 	"port-for-local-kiwix-server-setting": "本地Kiwix服务器端口：",
-	"zoom-level-setting": "缩放级别",
+	"zoom-level-setting": "默认缩放级别：",
 	"download-directory-setting": "下载文件夹：",
 	"reset": "重置",
 	"browse": "浏览",

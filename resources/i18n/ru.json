@@ -70,7 +70,7 @@
 	"cancel": "Отменить",
 	"apply": "Применить",
 	"port-for-local-kiwix-server-setting": "Порт для локального сервера Kiwix:",
-	"zoom-level-setting": "Уровень масштабирования",
+	"zoom-level-setting": "Уровень масштабирования по умолчанию:",
 	"download-directory-setting": "Скачать директорию :",
 	"reset": "Сбросить",
 	"browse": "Обзор",
