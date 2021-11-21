@@ -11,7 +11,7 @@
 	"name": "français",
 	"error-title": "Erreur",
 	"error-downloader-window-title": "Impossible de lancer le téléchargeur",
-	"error-downloader-launch-message": "Impossible de lancer le téléchargeur, Kiwix-bureau fonctionnera mais sans les fonctions de téléchargement !",
+	"error-downloader-launch-message": "Impossible de lancer le téléchargeur, Kiwix-desktop démarrera mais toutes les fonctions de téléchargement ne fonctionneront pas !",
 	"error-launch-server-message": "Une erreur s’est produite !",
 	"open-zim": "Ouvrir un Zim",
 	"local-kiwix-server": "Serveur local Kiwix",

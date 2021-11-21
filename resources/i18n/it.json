@@ -61,7 +61,7 @@
 	"cancel": "Annulla",
 	"apply": "Applica",
 	"port-for-local-kiwix-server-setting": "Porta per il server Kiwix locale:",
-	"zoom-level-setting": "Livello di ingrandimento:",
+	"zoom-level-setting": "Livello di ingrandimento predefinito :",
 	"download-directory-setting": "Cartella dati scaricati:",
 	"reset": "Ripristina",
 	"browse": "Esplora",
