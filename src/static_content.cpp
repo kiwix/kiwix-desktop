@@ -18,6 +18,7 @@ void initStaticContent() {
   PUSH("ted");
   PUSH("vikidia");
   PUSH("wikibooks");
+  PUSH("wikihow");
   PUSH("wikinews");
   PUSH("wikipedia");
   PUSH("wikiquote");
