@@ -90,6 +90,7 @@ SearchBar::SearchBar(QWidget *parent) :
     });
     connect(this, &QLineEdit::textChanged, this,
             [=](const QString &text) {
+                Q_UNUSED(text)
                 if (m_returnPressed) {
                     this->setText(m_searchbarInput);
                 }

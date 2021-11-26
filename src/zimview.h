@@ -2,10 +2,10 @@
 #define ZIMVIEW_H
 
 #include <QWidget>
-#include "webview.h"
 #include "findinpagebar.h"
 
 class TabBar;
+class WebView;
 
 class ZimView : public QWidget
 {

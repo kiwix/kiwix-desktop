@@ -6,7 +6,6 @@
 #include "mainwindow.h"
 #include "kiwix/downloader.h"
 #include <kiwix/kiwixserve.h>
-#include "tabbar.h"
 #include "kprofile.h"
 #include "urlschemehandler.h"
 #include "settingsmanager.h"
