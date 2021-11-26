@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Carlespera",
+			"Destinid10 2",
 			"Fitoschido",
 			"Geryescalier",
 			"Ncr"
@@ -66,7 +67,7 @@
 	"apply": "Aplicar",
 	"port-for-local-kiwix-server-setting": "Puerto del servidor Kiwix local:",
 	"zoom-level-setting": "Nivel de escala:",
-	"download-directory-setting": "Directorio de descargas:",
+	"download-directory-setting": "Directorio de descargas",
 	"reset": "Restablecer",
 	"browse": "Explorar",
 	"about-kiwix-desktop-title": "Escritorio Kiwix",
@@ -74,7 +75,7 @@
 	"about-learn-more-about-kiwix": "Para conocer más sobre Kiwix",
 	"about-release-title": "Lanzamiento",
 	"about-source-code": "Este software se ha publicado en virtud de la Licencia Pública General de GNU, versión 3. El código fuente puede verse en <a href='{{GITHUB_URL}}'>GitHub</a>.",
-	"about-version": "Versión : {{VERSION}}",
+	"about-version": "Versión: {{VERSION}}",
 	"about-reporting-problem-title": "Informar un problema",
 	"about-report-issue-2": "Menciona la versión en el problema.",
 	"about-libraries-title": "Bibliotecas",
