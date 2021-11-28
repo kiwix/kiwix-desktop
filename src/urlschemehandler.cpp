@@ -78,8 +78,8 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
 
 
 class IdNameMapper : public kiwix::NameMapper {
-  std::string getNameForId(const std::string& id) { return id + ".zim"; }
-  std::string getIdForName(const std::string& id) { return id.substr(0, id.size()-4); }
+  std::string getNameForId(const std::string& id) const { return id + ".zim"; }
+  std::string getIdForName(const std::string& id) const { return id.substr(0, id.size()-4); }
 };
 
 

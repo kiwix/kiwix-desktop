@@ -50,7 +50,7 @@ QStringList ContentManager::getTranslations(const QStringList &keys)
 QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
     QStringList values;
-    kiwix::Book* b = [=]()->kiwix::Book* {
+    const kiwix::Book* b = [=]()->const kiwix::Book* {
         try {
             return &mp_library->getBookById(id);
         } catch (...) {
@@ -137,7 +137,9 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
-        b.setDownloadId("");
+        kiwix::Book bCopy(b);
+        bCopy.setDownloadId("");
+        mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
         mp_library->save();
         emit(mp_library->booksChanged());
         return values;
@@ -146,11 +148,13 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
     d->updateStatus(true);
     if (d->getStatus() == kiwix::Download::K_COMPLETE) {
         QString tmp(QString::fromStdString(d->getPath()));
-        b.setPath(QDir::toNativeSeparators(tmp).toStdString());
-        b.setDownloadId("");
-        b.setPathValid(true);
+        kiwix::Book bCopy(b);
+        bCopy.setPath(QDir::toNativeSeparators(tmp).toStdString());
+        bCopy.setDownloadId("");
+        bCopy.setPathValid(true);
         // removing book url so that download link in kiwix-serve is not displayed.
-        b.setUrl("");
+        bCopy.setUrl("");
+        mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
         mp_library->save();
         mp_library->bookmarksChanged();
         if (!m_local) {
@@ -209,7 +213,7 @@ QString ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
         return "";
-    auto& book = [&]()->kiwix::Book& {
+    const auto& book = [&]()->const kiwix::Book& {
         try {
             return m_remoteLibrary.getBookById(id.toStdString());
         } catch (...) {
@@ -233,8 +237,9 @@ QString ContentManager::downloadBook(const QString &id)
     } catch (std::exception& e) {
         return "";
     }
-    book.setDownloadId(download->getDid());
-    mp_library->addBookToLibrary(book);
+    kiwix::Book bookCopy(book);
+    bookCopy.setDownloadId(download->getDid());
+    mp_library->addBookToLibrary(bookCopy);
     mp_library->save();
     emit(oneBookChanged(id));
     return QString::fromStdString(download->getDid());

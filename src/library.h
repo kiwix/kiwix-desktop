@@ -40,7 +40,7 @@ public:
     void save();
     kiwix::Library& getKiwixLibrary() { return m_library; }
 public slots:
-    kiwix::Book& getBookById(QString id);
+    const kiwix::Book& getBookById(QString id) const;
 
 signals:
     void booksChanged();

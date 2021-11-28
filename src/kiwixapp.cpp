@@ -16,47 +16,6 @@
 #include <QMessageBox>
 
 ////////////////////////////////////////////////////////////////////////////////
-// KiwixApp::NameMapperProxy
-////////////////////////////////////////////////////////////////////////////////
-
-KiwixApp::NameMapperProxy::NameMapperProxy(kiwix::Library& lib)
-  : library(lib)
-{
-  update();
-}
-
-void KiwixApp::NameMapperProxy::update()
-{
-  const auto newNameMapper = new kiwix::HumanReadableNameMapper(library, false);
-  std::lock_guard<std::mutex> lock(mutex);
-  nameMapper.reset(newNameMapper);
-}
-
-KiwixApp::NameMapperProxy::NameMapperHandle
-KiwixApp::NameMapperProxy::currentNameMapper() const
-{
-  // Return a copy of the handle to the current NameMapper object. It will
-  // ensure that the object survives any call to NameMapperProxy::update()
-  // made before the completion of any pending operation on that object.
-  std::lock_guard<std::mutex> lock(mutex);
-  return nameMapper;
-}
-
-std::string KiwixApp::NameMapperProxy::getNameForId(const std::string& id)
-{
-  // Ensure that the current nameMapper object survives a concurrent call
-  // to NameMapperProxy::update()
-  return currentNameMapper()->getNameForId(id);
-}
-
-std::string KiwixApp::NameMapperProxy::getIdForName(const std::string& name)
-{
-  // Ensure that the current nameMapper object survives a concurrent call
-  // to NameMapperProxy::update()
-  return currentNameMapper()->getIdForName(name);
-}
-
-////////////////////////////////////////////////////////////////////////////////
 // KiwixApp
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -68,7 +27,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      m_nameMapper(m_library.getKiwixLibrary()),
+      m_nameMapper(m_library.getKiwixLibrary(), false),
       m_server(&m_library.getKiwixLibrary(), &m_nameMapper)
 {
     try {

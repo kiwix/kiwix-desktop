@@ -106,27 +106,6 @@ protected:
     void createAction();
     void postInit();
 
-private: // types
-  class NameMapperProxy : public kiwix::NameMapper {
-      typedef std::shared_ptr<kiwix::NameMapper> NameMapperHandle;
-    public:
-      explicit NameMapperProxy(kiwix::Library& library);
-
-      virtual std::string getNameForId(const std::string& id);
-      virtual std::string getIdForName(const std::string& name);
-
-      void update();
-
-    private:
-      NameMapperHandle currentNameMapper() const;
-
-    private:
-      mutable std::mutex mutex;
-      kiwix::Library& library;
-      NameMapperHandle nameMapper;
-  };
-
-
 private:
     QTranslator m_qtTranslator, m_appTranslator;
     SettingsManager m_settingsManager;
@@ -139,7 +118,7 @@ private:
     TabBar* mp_tabWidget;
     SideBarType m_currentSideType;
     QErrorMessage* mp_errorDialog;
-    NameMapperProxy m_nameMapper;
+    kiwix::UpdatableNameMapper m_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
 
