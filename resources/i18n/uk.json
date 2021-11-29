@@ -4,6 +4,7 @@
 			"Asokolov",
 			"DDPAT",
 			"Renamerr",
+			"Renvoy",
 			"Ата"
 		]
 	},
@@ -68,9 +69,9 @@
 	"pause": "Призупинити",
 	"cancel": "Скасувати",
 	"apply": "Застосувати",
-	"port-for-local-kiwix-server-setting": "Порт для локального серверу Kiwik:",
-	"zoom-level-setting": "Рівень масштабування:",
-	"download-directory-setting": "Каталог для завантажень:",
+	"port-for-local-kiwix-server-setting": "Порт для локального серверу Kiwik",
+	"zoom-level-setting": "Рівень масштабування за замовчуванням",
+	"download-directory-setting": "Каталог для завантажень",
 	"reset": "Скинути",
 	"browse": "Переглянути",
 	"about-kiwix-desktop-title": "Kiwik-десктоп",
@@ -104,6 +105,7 @@
 	"ted": "ТЕД",
 	"vikidia": "Вікідія",
 	"wikibooks": "Вікіпідручник",
+	"wikihow": "wikiHow",
 	"wikinews": "Вікіновини",
 	"wikipedia": "Вікіпедія",
 	"wikiquote": "Вікіцитати",
@@ -122,6 +124,6 @@
 	"no-filter": "Без фільтру",
 	"open-link-in-web-browser": "Відкрити посилання у навігаторі",
 	"download-dir-dialog-title": "Ви впевнені, що хочете змінити каталог для завантажень?",
-	"download-dir-dialog-msg": "Новий каталог для завантажень тепер :\n{{DIRECTORY}}",
+	"download-dir-dialog-msg": "Новий каталог для завантажень тепер:\n{{DIRECTORY}}",
 	"invalid-port": "Недійсний порт"
 }

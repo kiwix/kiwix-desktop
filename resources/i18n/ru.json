@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"DDPAT",
 			"Diman Russkov",
 			"Helpau",
 			"Kareyac",
@@ -105,6 +106,7 @@
 	"ted": "Ted",
 	"vikidia": "Викидия",
 	"wikibooks": "Викиучебник",
+	"wikihow": "wikiHow",
 	"wikinews": "Викиновости",
 	"wikipedia": "Википедия",
 	"wikiquote": "Викицитатник",
