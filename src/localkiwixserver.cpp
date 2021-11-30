@@ -44,8 +44,6 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     ui->OpenInBrowserButton->setText(gt("open-in-browser"));
     ui->KiwixServerButton->setText(gt("start-kiwix-server"));
     ui->closeButton->setText(gt("close"));
-    ui->OpenInBrowserButton->setVisible(false);
-    ui->IpAddress->setVisible(false);
 }
 
 LocalKiwixServer::~LocalKiwixServer()
@@ -81,12 +79,10 @@ void LocalKiwixServer::runOrStopServer()
     if (m_active) {
         ui->KiwixServerButton->setText(gt("stop-kiwix-server"));
         ui->KiwixServerText->setText(gt("kiwix-server-running-message"));
-        ui->OpenInBrowserButton->setVisible(true);
-        ui->IpAddress->setVisible(true);
+        ui->stackedWidget->setCurrentIndex(1);
     } else {
         ui->KiwixServerButton->setText(gt("start-kiwix-server"));
         ui->KiwixServerText->setText(gt("kiwix-server-description"));
-        ui->OpenInBrowserButton->setVisible(false);
-        ui->IpAddress->setVisible(false);
+        ui->stackedWidget->setCurrentIndex(0);
     }
 }
