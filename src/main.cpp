@@ -17,22 +17,20 @@ int main(int argc, char *argv[])
     KiwixApp a(argc, argv);
     a.setApplicationVersion(version);
     QCommandLineParser parser;
-    QString zimfile;
     parser.setApplicationDescription(QStringLiteral("The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and Microsoft Windows OSes."));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument("zimfile", "The zim file");
     parser.process(a);
     auto positionalArguments = parser.positionalArguments();
-    if (positionalArguments.size() >= 1) {
-        zimfile = parser.positionalArguments().at(0);
-    }
     if (a.isRunning()) {
-        a.sendMessage(zimfile);
+        for (QString zimfile : positionalArguments) {
+            a.sendMessage(zimfile);
+        }
         return 0;
     }
     a.init();
-    if (!zimfile.isEmpty()) {
+    for (QString zimfile : positionalArguments) {
         a.openZimFile(zimfile);
     }
     return a.exec();
