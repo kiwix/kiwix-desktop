@@ -27,13 +27,15 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged,
             this, [=](int port) { m_port = port; });
     connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
-    const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
-    for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
-        if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost) {
-            m_ipAddress = address.toString();
-            break;
-        }
+
+    const auto interfacesMap = mp_server->getNetworkInterfaces();
+    for(auto interfacePair : interfacesMap) {
+        QString ip = QString::fromStdString(interfacePair.second);
+        ui->IpChooser->addItem(ip);
     }
+    ui->IpChooser->addItem("0.0.0.0");
+    ui->IpChooser->setCurrentText(QString::fromStdString(mp_server->getBestPublicIp())); // put best Public Ip as default
+    ui->PortChooser->setText(QString::number(m_port));
     ui->KiwixServerButton->setStyleSheet("QPushButton {background-color: RoyalBlue;"
                                                       "color: white;"
                                                       "padding: 5px;"
@@ -63,7 +65,10 @@ void LocalKiwixServer::openInBrowser()
 void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
+        m_port = ui->PortChooser->text().toInt();
+        m_ipAddress = (ui->IpChooser->currentText() != "0.0.0.0") ? ui->IpChooser->currentText() : QString::fromStdString(mp_server->getBestPublicIp());
         mp_server->setPort(m_port);
+        mp_server->setAddress(ui->IpChooser->currentText().toStdString());
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         if (!mp_server->start()) {
             QMessageBox messageBox;
