@@ -9,7 +9,9 @@
 class LibraryManipulator: public kiwix::LibraryManipulator {
   public:
     LibraryManipulator(Library* p_library)
-        : mp_library(p_library) {}
+        : kiwix::LibraryManipulator(&p_library->getKiwixLibrary())
+        , mp_library(p_library)
+    {}
     virtual ~LibraryManipulator() {}
     bool addBookToLibrary(kiwix::Book book) {
         auto ret = mp_library->m_library.addBook(book);
@@ -118,7 +120,7 @@ void Library::save()
     m_library.writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
-kiwix::Book &Library::getBookById(QString id)
+const kiwix::Book &Library::getBookById(QString id) const
 {
     return m_library.getBookById(id.toStdString());
 }
