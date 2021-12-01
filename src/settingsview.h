@@ -18,8 +18,6 @@ public Q_SLOTS:
     void setZoom(int zoomPercent);
     void onDownloadDirChanged(const QString &dir);
     void onZoomChanged(qreal zoomFactor);
-    void onServerPortChanged(int port);
-    void setKiwixServerPort(int port);
 private:
     bool confirmDialogDownloadDir(const QString& dir);
 
