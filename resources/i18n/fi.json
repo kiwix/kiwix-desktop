@@ -3,7 +3,8 @@
 		"authors": [
 			"MITO",
 			"Nike",
-			"Pyscowicz"
+			"Pyscowicz",
+			"Rönttönen"
 		]
 	},
 	"name": "suomi",
@@ -58,7 +59,7 @@
 	"pause": "Tauko",
 	"cancel": "Peruuta",
 	"apply": "Käytä",
-	"download-directory-setting": "Lataushakemisto:",
+	"download-directory-setting": "Lataushakemisto",
 	"reset": "Nollaa",
 	"browse": "Selaa",
 	"about-kiwix-desktop-title": "Kiwix-työpöytä",
