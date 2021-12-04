@@ -1,6 +1,7 @@
 #include "localkiwixserver.h"
 #include "ui_localkiwixserver.h"
 #include "kiwixapp.h"
+#include <kiwix/tools.h>
 #include <QDesktopServices>
 #include <QMessageBox>
 #include <thread>
@@ -28,7 +29,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
             this, [=](int port) { m_port = port; });
     connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
 
-    const auto interfacesMap = mp_server->getNetworkInterfaces();
+    const auto interfacesMap = kiwix::getNetworkInterfaces();
     for(auto interfacePair : interfacesMap) {
         QString ip = QString::fromStdString(interfacePair.second);
         ui->IpChooser->addItem(ip);
