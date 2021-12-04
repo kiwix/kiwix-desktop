@@ -24,7 +24,7 @@ SettingsView::SettingsView(QWidget *parent)
     ui->resetButton->setText(gt("reset"));
     ui->browseButton->setText(gt("browse"));
 }
-void SettingsView::init(int port, int zoomPercent, const QString &dir)
+void SettingsView::init(int zoomPercent, const QString &dir)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(dir);

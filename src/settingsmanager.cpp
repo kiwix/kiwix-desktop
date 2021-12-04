@@ -16,7 +16,7 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_kiwixServerPort, m_zoomFactor * 100, m_downloadDir);
+        view->init(m_zoomFactor * 100, m_downloadDir);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }

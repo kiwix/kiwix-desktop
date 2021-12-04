@@ -11,7 +11,7 @@ class SettingsView : public QWidget
 public:
     SettingsView(QWidget *parent = nullptr);
     ~SettingsView(){};
-    void init(int port, int zoomPercent, const QString &dir);
+    void init(int zoomPercent, const QString &dir);
 public Q_SLOTS:
     void resetDownloadDir();
     void browseDownloadDir();
