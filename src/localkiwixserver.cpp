@@ -72,6 +72,7 @@ void LocalKiwixServer::runOrStopServer()
         KiwixApp::instance()->getSettingsManager()->setKiwixServerPort(m_port);
         mp_server->setAddress(ui->IpChooser->currentText().toStdString());
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
+        ui->IpAddress->setReadOnly(true);
         if (!mp_server->start()) {
             QMessageBox messageBox;
             messageBox.critical(0,gt("error-title"),gt("error-launch-server-message"));
