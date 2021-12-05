@@ -100,6 +100,18 @@ environment variable:
 LD_LIBRARY_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu"
 ```
 
+## Communication
+
+Available communication channels:
+* [Web Public Chat channel](https://chat.kiwix.org)
+* [Email](mailto:contact+android@kiwix.org)
+* [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
+* [Slack](https://kiwixoffline.slack.com): #android channel [Get an invite](https://join.slack.com/t/kiwixoffline/shared_invite/enQtOTUyMTg4NzMxMTM4LTU0MzYyZDliYjdmMDYzYWMzNDA0MDc4MWE5OGM0ODFhYjAxNWIxMjVjZTU4MTkyODJlZWFkMmQ2YTZkYTUzZDY)
+* IRC: #kiwix on irc.freenode.net
+
+For more information, please refer to
+[https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
+
 License
 -------
 
