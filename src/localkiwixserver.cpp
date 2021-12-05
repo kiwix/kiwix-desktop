@@ -26,6 +26,13 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     connect(ui->KiwixServerButton, SIGNAL(clicked()), this, SLOT(runOrStopServer()));
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
     connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
+    connect(ui->PortChooser, &QLineEdit::textChanged, ui->PortChooser, [=](const QString &text){
+        if(text.toInt() > 65535) {
+            QString validText = text;
+            validText.chop(1);
+            ui->PortChooser->setText(validText);
+        }
+    });
 
     const auto interfacesMap = kiwix::getNetworkInterfaces();
     QVector<QString> interfaces;
@@ -72,9 +79,6 @@ void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
         m_port = ui->PortChooser->text().toInt();
-        if (m_port > 65535) {
-            m_port = 65535;
-        }
         mp_server->setPort(m_port);
         m_ipAddress = ui->IpChooser->currentText();
         auto settingsManager = KiwixApp::instance()->getSettingsManager();
