@@ -25,18 +25,23 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
 
     connect(ui->KiwixServerButton, SIGNAL(clicked()), this, SLOT(runOrStopServer()));
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::portChanged,
-            this, [=](int port) { m_port = port; });
     connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
 
     const auto interfacesMap = kiwix::getNetworkInterfaces();
-    for(auto interfacePair : interfacesMap) {
+    QVector<QString> interfaces;
+    interfaces.reserve(interfacesMap.size() + 1);
+    for (const auto &interfacePair : interfacesMap) {
         QString ip = QString::fromStdString(interfacePair.second);
-        ui->IpChooser->addItem(ip);
+        interfaces.push_back(ip);
     }
-    ui->IpChooser->addItem("0.0.0.0");
-    ui->IpChooser->setCurrentText(QString::fromStdString(mp_server->getBestPublicIp())); // put best Public Ip as default
+    interfaces.push_back(QString("0.0.0.0"));
+    std::sort(interfaces.begin(), interfaces.end());
+    for (const auto &interface : interfaces) {
+        ui->IpChooser->addItem(interface);
+    }
+    ui->IpChooser->setCurrentText(KiwixApp::instance()->getSettingsManager()->getKiwixServerIp());
     ui->PortChooser->setText(QString::number(m_port));
+    ui->PortChooser->setValidator(new QIntValidator(0, 65535, this));
     ui->KiwixServerButton->setStyleSheet("QPushButton {background-color: RoyalBlue;"
                                                       "color: white;"
                                                       "padding: 5px;"
@@ -67,9 +72,15 @@ void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
         m_port = ui->PortChooser->text().toInt();
-        m_ipAddress = (ui->IpChooser->currentText() != "0.0.0.0") ? ui->IpChooser->currentText() : QString::fromStdString(mp_server->getBestPublicIp());
+        if (m_port > 65535) {
+            m_port = 65535;
+        }
         mp_server->setPort(m_port);
-        KiwixApp::instance()->getSettingsManager()->setKiwixServerPort(m_port);
+        m_ipAddress = ui->IpChooser->currentText();
+        auto settingsManager = KiwixApp::instance()->getSettingsManager();
+        settingsManager->setKiwixServerPort(m_port);
+        settingsManager->setKiwixServerIpAddress(m_ipAddress);
+        m_ipAddress = (m_ipAddress != "0.0.0.0") ? ui->IpChooser->currentText() : QString::fromStdString(kiwix::getBestPublicIp());
         mp_server->setAddress(ui->IpChooser->currentText().toStdString());
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         ui->IpAddress->setReadOnly(true);
