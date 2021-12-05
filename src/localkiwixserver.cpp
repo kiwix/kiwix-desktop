@@ -27,7 +27,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
     connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
     connect(ui->PortChooser, &QLineEdit::textChanged, ui->PortChooser, [=](const QString &text){
-        if(text.toInt() > 65535) {
+        if(text.toInt() > 65535 || text.toInt() < 1) {
             QString validText = text;
             validText.chop(1);
             ui->PortChooser->setText(validText);
@@ -48,7 +48,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     }
     ui->IpChooser->setCurrentText(KiwixApp::instance()->getSettingsManager()->getKiwixServerIp());
     ui->PortChooser->setText(QString::number(m_port));
-    ui->PortChooser->setValidator(new QIntValidator(0, 65535, this));
+    ui->PortChooser->setValidator(new QIntValidator(1, 65535, this));
     ui->KiwixServerButton->setStyleSheet("QPushButton {background-color: RoyalBlue;"
                                                       "color: white;"
                                                       "padding: 5px;"
@@ -78,10 +78,13 @@ void LocalKiwixServer::openInBrowser()
 void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
+        auto settingsManager = KiwixApp::instance()->getSettingsManager();
         m_port = ui->PortChooser->text().toInt();
+        if (m_port == 0) {
+            m_port = settingsManager->getKiwixServerPort();
+        }
         mp_server->setPort(m_port);
         m_ipAddress = ui->IpChooser->currentText();
-        auto settingsManager = KiwixApp::instance()->getSettingsManager();
         settingsManager->setKiwixServerPort(m_port);
         settingsManager->setKiwixServerIpAddress(m_ipAddress);
         m_ipAddress = (m_ipAddress != "0.0.0.0") ? ui->IpChooser->currentText() : QString::fromStdString(kiwix::getBestPublicIp());
