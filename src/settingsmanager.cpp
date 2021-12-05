@@ -83,7 +83,7 @@ bool SettingsManager::setDownloadDir(QString downloadDir)
 
 void SettingsManager::initSettings()
 {
-    m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
+    m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
     m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
     m_kiwixServerIp = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
