@@ -60,10 +60,10 @@ void SettingsManager::setKiwixServerPort(int port)
     emit(portChanged(port));
 }
 
-void SettingsManager::setKiwixServerIp(QString ip)
+void SettingsManager::setKiwixServerIpAddress(QString ipAddress)
 {
-    m_kiwixServerIp = ip;
-    m_settings.setValue("localKiwixServer/ipAddress", ip);
+    m_kiwixServerIpAddress = ipAddress;
+    m_settings.setValue("localKiwixServer/ipAddress", ipAddress);
 }
 
 void SettingsManager::setZoomFactor(qreal zoomFactor)
@@ -86,5 +86,5 @@ void SettingsManager::initSettings()
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
     m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
-    m_kiwixServerIp = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
+    m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
 }

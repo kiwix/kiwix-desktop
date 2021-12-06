@@ -26,8 +26,8 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     connect(ui->KiwixServerButton, SIGNAL(clicked()), this, SLOT(runOrStopServer()));
     connect(ui->OpenInBrowserButton, SIGNAL(clicked()), this, SLOT(openInBrowser()));
     connect(ui->closeButton, &QPushButton::clicked, this, &LocalKiwixServer::close);
-    connect(ui->PortChooser, &QLineEdit::textChanged, ui->PortChooser, [=](const QString &text){
-        if(text.toInt() > 65535 || text.toInt() < 1) {
+    connect(ui->PortChooser, &QLineEdit::textChanged, ui->PortChooser, [=](const QString &text) {
+        if (text.toInt() > 65535 || text.toInt() < 1) {
             QString validText = text;
             validText.chop(1);
             ui->PortChooser->setText(validText);
@@ -46,7 +46,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     for (const auto &interface : interfaces) {
         ui->IpChooser->addItem(interface);
     }
-    ui->IpChooser->setCurrentText(KiwixApp::instance()->getSettingsManager()->getKiwixServerIp());
+    ui->IpChooser->setCurrentText(KiwixApp::instance()->getSettingsManager()->getKiwixServerIpAddress());
     ui->PortChooser->setText(QString::number(m_port));
     ui->PortChooser->setValidator(new QIntValidator(1, 65535, this));
     ui->KiwixServerButton->setStyleSheet("QPushButton {background-color: RoyalBlue;"
