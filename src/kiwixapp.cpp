@@ -249,13 +249,17 @@ void KiwixApp::openRandomUrl(bool newTab)
         return;
     }
     auto reader = m_library.getReader(zimId);
-    auto entry = reader->getRandomPage();
+    try {
+        auto entry = reader->getRandomPage();
 
-    QUrl url;
-    url.setScheme("zim");
-    url.setHost(zimId + ".zim");
-    url.setPath("/" + QString::fromStdString(entry.getPath()));
-    openUrl(url, newTab);
+        QUrl url;
+        url.setScheme("zim");
+        url.setHost(zimId + ".zim");
+        url.setPath("/" + QString::fromStdString(entry.getPath()));
+        openUrl(url, newTab);
+    } catch ( const kiwix::NoEntry& ) {
+        showMessage(gt("random-article-error"));
+    }
 }
 
 void KiwixApp::showMessage(const QString &message)
