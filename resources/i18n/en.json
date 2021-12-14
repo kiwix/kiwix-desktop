@@ -11,6 +11,7 @@
     "open-zim":"Open Zim",
     "local-kiwix-server":"Local Kiwix Server",
     "random-article":"Random Article",
+    "random-article-error":"Failed to open a random article.",
     "home-page":"Home page",
     "main-menu":"Main menu",
     "print":"Print",
