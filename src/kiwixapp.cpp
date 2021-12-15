@@ -84,8 +84,6 @@ void KiwixApp::init()
     mp_tabWidget = mp_mainWindow->getTabBar();
     mp_tabWidget->setContentManagerView(mp_manager->getView());
     mp_tabWidget->setNewTabButton();
-    mp_mainWindow->getSideContentManager()->setContentManager(mp_manager);
-    setSideBar(CONTENTMANAGER_BAR);
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
@@ -213,35 +211,6 @@ void KiwixApp::openUrl(const QUrl &url, bool newTab) {
     mp_tabWidget->openUrl(url, newTab);
 }
 
-void KiwixApp::setSideBar(KiwixApp::SideBarType type)
-{
-    auto sideDockWidget = mp_mainWindow->getSideDockWidget();
-    switch(type) {
-        case CONTENTMANAGER_BAR:
-        case READINGLIST_BAR:
-            sideDockWidget->setCurrentIndex(type);
-            sideDockWidget->show();
-            break;
-        case NONE:
-            sideDockWidget->hide();
-            break;
-    }
-    m_currentSideType = type;
-    emit(currentSideTypeChanged(type));
-}
-
-void KiwixApp::toggleSideBar(KiwixApp::SideBarType type) {
-    if (m_currentSideType == type) {
-        setSideBar(NONE);
-        return;
-    }
-
-    if (m_currentSideType == CONTENTMANAGER_BAR) {
-        return;
-    }
-    setSideBar(type);
-}
-
 void KiwixApp::openRandomUrl(bool newTab)
 {
     auto zimId = mp_tabWidget->currentZimId();
@@ -299,6 +268,14 @@ bool KiwixApp::isCurrentArticleBookmarked()
 #define CREATE_ACTION_ICON_SHORTCUT(ID, ICON, TEXT, SHORTCUT) \
     mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT); \
     SET_SHORTCUT(ID, TEXT, SHORTCUT)
+#define CREATE_ACTION_ONOFF_ICON_SHORTCUT(ID, ON_ICON, OFF_ICON, TEXT, SHORTCUT) \
+    CREATE_ACTION(ID, TEXT); \
+    SET_SHORTCUT(ID, TEXT, SHORTCUT); \
+    mpa_actions[ID]->setCheckable(true); \
+    {   QIcon icon; \
+        icon.addPixmap(QPixmap(":/icons/" ON_ICON ".svg"), QIcon::Normal, QIcon::On); \
+        icon.addPixmap(QPixmap(":/icons/" OFF_ICON, ".svg"), QIcon::Normal, QIcon::Off); \
+        mpa_actions[ID]->setIcon(icon); }
 #define SET_SHORTCUTS(ID, TEXT, SHORTCUTS) \
     mpa_actions[ID]->setShortcuts(SHORTCUTS); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + SHORTCUTS.first().toString() + ")" )
@@ -384,14 +361,7 @@ void KiwixApp::createAction()
     CREATE_ACTION_SHORTCUT(ToggleTOCAction, gt("table-of-content"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_1));
     HIDE_ACTION(ToggleTOCAction);
 
-    CREATE_ACTION_ICON_SHORTCUT(ToggleReadingListAction, "reading-list" ,gt("reading-list"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_2));
-    connect(mpa_actions[ToggleReadingListAction], &QAction::triggered,
-            this, [=]() { toggleSideBar(READINGLIST_BAR); });
-    connect(this, &KiwixApp::currentSideTypeChanged,
-            this, [=](SideBarType type) {
-        mpa_actions[ToggleReadingListAction]->setIcon(
-            QIcon((type == READINGLIST_BAR) ? ":/icons/reading-list-active.svg" : ":/icons/reading-list.svg"));
-    });
+    CREATE_ACTION_ONOFF_ICON_SHORTCUT(ToggleReadingListAction, "reading-list-active", "reading-list", gt("reading-list"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_2));
 
     CREATE_ACTION_SHORTCUTS(ZoomInAction, gt("zoom-in"), QList<QKeySequence>({QKeySequence::ZoomIn, QKeySequence(Qt::CTRL+Qt::Key_Equal)}));
 
@@ -425,7 +395,8 @@ void KiwixApp::postInit() {
             mp_mainWindow->getTopWidget(), &TopWidget::handleWebActionEnabledChanged);
     connect(mp_tabWidget, &TabBar::currentTitleChanged, this,
             [=](const QString& title) { emit currentTitleChanged(title); });
-    connect(mp_tabWidget, &TabBar::libraryPageDisplayed, this, &KiwixApp::disableItemsOnLibraryPage);
+    connect(mp_tabWidget, &TabBar::libraryPageDisplayed,
+            this, &KiwixApp::disableItemsOnLibraryPage);
     emit(m_library.booksChanged());
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
     disableItemsOnLibraryPage(true);

@@ -19,29 +19,38 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     QWidget::setAttribute(Qt::WA_AlwaysShowToolTips);
     mp_ui->setupUi(this);
+
     mp_ui->tabBar->setExpanding(false);
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
+
     auto app = KiwixApp::instance();
+
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
     connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
             this, &MainWindow::toggleFullScreen);
+    connect(app->getAction(KiwixApp::ToggleReadingListAction), &QAction::toggled,
+            this, &MainWindow::when_ReadingList_toggled);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
     connect(app->getAction(KiwixApp::DonateAction), &QAction::triggered,
             this, [=]() { QDesktopServices::openUrl(QUrl("https://donate.kiwix.org")); });
     connect(app->getAction(KiwixApp::KiwixServeAction), &QAction::triggered,
             mp_localKiwixServer, &QDialog::show);
+
     connect(app, &KiwixApp::currentTitleChanged, this, [=](const QString& title) {
         if (!title.isEmpty() && !title.startsWith("zim://"))
             setWindowTitle(title + " - Kiwix");
         else
             setWindowTitle(gt("window-title"));
     });
+
     addAction(app->getAction(KiwixApp::OpenHomePageAction));
+
 #if !SYSTEMTITLEBAR
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
 #endif
+
 #ifdef Q_OS_WIN
     QWindow *window = windowHandle();
     if (!window) {
@@ -52,6 +61,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mp_ui->tabBar, &QTabBar::currentChanged,
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
+    connect(mp_ui->tabBar, &TabBar::libraryPageDisplayed,
+            this, &MainWindow::when_libraryPageDisplayed);
+
+    mp_ui->contentmanagerside->setContentManager(app->getContentManager());
+    mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);
 }
 
 MainWindow::~MainWindow()
@@ -64,6 +78,33 @@ void MainWindow::toggleFullScreen() {
         showNormal();
     else
         showFullScreen();
+}
+
+void MainWindow::when_ReadingList_toggled(bool state)
+{
+    if (state) {
+        mp_ui->sideBar->setCurrentWidget(mp_ui->readinglistbar);
+        mp_ui->sideBar->show();
+    }
+    else {
+        mp_ui->sideBar->hide();
+    }
+}
+
+void MainWindow::when_libraryPageDisplayed(bool showed)
+{
+    auto app = KiwixApp::instance();
+
+    // When library sidebar appeared, or hidden, reading list is always hidden.
+    app->getAction(KiwixApp::ToggleReadingListAction)->setChecked(false);
+
+    if (showed) {
+        mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);
+        mp_ui->sideBar->show();
+    }
+    else {
+        mp_ui->sideBar->hide();
+    }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -86,14 +127,4 @@ TabBar* MainWindow::getTabBar()
 TopWidget *MainWindow::getTopWidget()
 {
     return mp_ui->mainToolBar;
-}
-
-QStackedWidget *MainWindow::getSideDockWidget()
-{
-    return mp_ui->sideBar;
-}
-
-ContentManagerSide *MainWindow::getSideContentManager()
-{
-    return mp_ui->contentmanagerside;
 }
