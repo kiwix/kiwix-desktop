@@ -10,6 +10,7 @@
 	"name": "suomi",
 	"error-title": "Virhe",
 	"random-article": "Satunnainen artikkeli",
+	"random-article-error": "Virhe avattaessa satunnaista artikkelia.",
 	"home-page": "Kotisivu",
 	"main-menu": "Päävalikko",
 	"print": "Tulosta",
