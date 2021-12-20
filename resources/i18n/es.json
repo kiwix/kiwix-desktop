@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Carlespera",
+			"DDPAT",
 			"Destinid10 2",
 			"Fitoschido",
 			"Geryescalier",
@@ -10,7 +11,7 @@
 	},
 	"name": "Español",
 	"error-downloader-window-title": "No se puede crear el descargador",
-	"error-downloader-launch-message": "No se puede iniciar el descargador. Kiwix-desktop se iniciará pero no funcionarán las prestaciones de descarga.",
+	"error-downloader-launch-message": "No se puede iniciar el descargador. Kiwix-desktop se iniciará pero no funcionarán las prestaciones de descarga!",
 	"open-zim": "Abrir Zim",
 	"local-kiwix-server": "Servidor Kiwix local",
 	"random-article": "Artículo al azar",
@@ -65,7 +66,7 @@
 	"pause": "Pausar",
 	"cancel": "Cancelar",
 	"apply": "Aplicar",
-	"port-for-local-kiwix-server-setting": "Puerto del servidor Kiwix local:",
+	"port-for-local-kiwix-server-setting": "Puerto del servidor Kiwix local",
 	"zoom-level-setting": "Nivel de escala:",
 	"download-directory-setting": "Directorio de descargas",
 	"reset": "Restablecer",

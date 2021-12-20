@@ -16,6 +16,7 @@
 	"open-zim": "Ouvrir un Zim",
 	"local-kiwix-server": "Serveur local Kiwix",
 	"random-article": "Article au hasard",
+	"random-article-error": "Échec à l’ouverture d’un article au hasard.",
 	"home-page": "Page principale",
 	"main-menu": "Menu principal",
 	"print": "Imprimer",

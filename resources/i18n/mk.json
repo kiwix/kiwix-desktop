@@ -12,6 +12,7 @@
 	"open-zim": "Отвори Zim",
 	"local-kiwix-server": "Месен опслужувач на Кивикс",
 	"random-article": "Случајна статија",
+	"random-article-error": "Не успеав да отворам случајна статија.",
 	"home-page": "Почетна страница",
 	"main-menu": "Главно мени",
 	"print": "Печати",

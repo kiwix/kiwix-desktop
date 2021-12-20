@@ -16,6 +16,7 @@
 	"open-zim": "Відкрити Zim",
 	"local-kiwix-server": "Локальний сервер Kiwik",
 	"random-article": "Випадкова стаття",
+	"random-article-error": "Не вдалося відкрити випадкову статтю.",
 	"home-page": "Домашня сторінка",
 	"main-menu": "Головне меню",
 	"print": "Друк",

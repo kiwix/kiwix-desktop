@@ -3,6 +3,7 @@
 		"authors": [
 			"Dutchy45",
 			"Mainframe98",
+			"McDutchie",
 			"SPQRobin"
 		]
 	},
@@ -36,7 +37,7 @@
 	"pause": "Pauzeren",
 	"cancel": "Annuleren",
 	"apply": "Toepassen",
-	"about-version": "Versie : {{VERSION}}",
+	"about-version": "Versie: {{VERSION}}",
 	"all-files": "Alle bestanden",
 	"hide": "Verbergen",
 	"open-in-browser": "In browser openen",

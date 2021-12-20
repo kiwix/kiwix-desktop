@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"BadDog"
+			"BadDog",
+			"Kizule"
 		]
 	},
 	"name": "енглески",
@@ -48,11 +49,11 @@
 	"pause": "Паузирај",
 	"cancel": "Откажи",
 	"apply": "Примени",
-	"zoom-level-setting": "Ниво зумирања:",
+	"zoom-level-setting": "Подразумевани ниво зумирања:",
 	"reset": "Ресетуј",
 	"browse": "Прегледај",
 	"about-learn-more-about-kiwix": "Детаљније о Kiwix-у",
-	"about-version": "Верзија : {{VERSION}}",
+	"about-version": "Верзија: {{VERSION}}",
 	"about-reporting-problem-title": "Пријављивање проблема",
 	"about-libraries-title": "Библиотеке",
 	"fullscreen-notification": "Сада сте у режиму целог екрана. Притисните Esc да бисте изашли.",

@@ -17,6 +17,7 @@
 	"open-zim": "Zim 열기",
 	"local-kiwix-server": "로컬 Kiwix 서버",
 	"random-article": "임의의 문서",
+	"random-article-error": "임의의 문서 열기를 실패했습니다.",
 	"home-page": "홈페이지",
 	"main-menu": "주 메뉴",
 	"print": "인쇄",

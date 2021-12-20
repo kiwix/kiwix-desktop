@@ -13,6 +13,7 @@
 	"open-zim": "開啟 Zim",
 	"local-kiwix-server": "本地 Kiwix 伺服器",
 	"random-article": "隨機條目",
+	"random-article-error": "開啟隨機條目失敗。",
 	"home-page": "首頁",
 	"main-menu": "主選單",
 	"print": "列印",

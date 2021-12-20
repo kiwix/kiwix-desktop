@@ -3,6 +3,7 @@
 		"authors": [
 			"1917 Ekim Devrimi",
 			"BaRaN6161 TURK",
+			"DDPAT",
 			"Hedda",
 			"Joseph",
 			"SaldırganSincap"
@@ -69,9 +70,9 @@
 	"pause": "Duraklat",
 	"cancel": "İptal",
 	"apply": "Uygula",
-	"port-for-local-kiwix-server-setting": "Yerel Kiwix sunucusu için bağlantı noktası:",
-	"zoom-level-setting": "Yakınlaştırma düzeyi:",
-	"download-directory-setting": "İndirme dizini:",
+	"port-for-local-kiwix-server-setting": "Yerel Kiwix sunucusu için bağlantı noktası",
+	"zoom-level-setting": "Varsayılan yakınlaştırma düzeyi",
+	"download-directory-setting": "İndirme dizini",
 	"reset": "Sıfırla",
 	"browse": "Göz at",
 	"about-kiwix-desktop-title": "Kiwix Masaüstü",
