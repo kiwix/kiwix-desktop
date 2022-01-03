@@ -101,6 +101,7 @@ public slots:
     void printPage();
     void disableItemsOnLibraryPage(bool displayed);
     void updateNameMapper();
+    void printVersions(std::ostream& out = std::cout);
 
 protected:
     void createAction();
