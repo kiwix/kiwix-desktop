@@ -1,7 +1,9 @@
 #include "kiwixapp.h"
 #include "static_content.h"
 #include "zim/error.h"
+#include "zim/version.h"
 #include "kiwix/tools.h"
+#include "kiwix/version.h"
 
 #include <QLocale>
 #include <QLibraryInfo>
@@ -36,8 +38,6 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         QMessageBox::critical(nullptr, "Translation error", e.what());
         return;
     }
-    qInfo() << "Compiled with Qt Version " << QT_VERSION_STR;
-    qInfo() << "Runtime Qt Version " << qVersion();
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     installTranslator(&m_qtTranslator);
@@ -443,4 +443,13 @@ void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
 void KiwixApp::updateNameMapper()
 {
   m_nameMapper.update();
+}
+
+void KiwixApp::printVersions(std::ostream& out) {
+  out << version.toStdString() << std::endl;
+  out << "+ libqt (compile time) " << QT_VERSION_STR << std::endl;
+  out << "+ libqt (run time) " << qVersion() << std::endl << std::endl;
+  kiwix::printVersions(out);
+  out << std::endl;
+  zim::printVersions(out);
 }

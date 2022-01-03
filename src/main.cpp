@@ -15,12 +15,18 @@ int main(int argc, char *argv[])
     QWebEngineUrlScheme::registerScheme(scheme);
 #endif
     KiwixApp a(argc, argv);
-    a.setApplicationVersion(version);
+
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and Microsoft Windows OSes."));
     parser.addHelpOption();
-    parser.addVersionOption();
     parser.addPositionalArgument("zimfile", "The zim file");
+
+    // Set version string
+    std::ostringstream versions;
+    a.printVersions(versions);
+    a.setApplicationVersion(QString::fromStdString(versions.str()));
+    parser.addVersionOption();
+
     parser.process(a);
     auto positionalArguments = parser.positionalArguments();
     if (a.isRunning()) {
