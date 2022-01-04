@@ -48,6 +48,9 @@ QString Library::openBookFromPath(const QString &zimPath)
 
     kiwix::Manager manager(&m_library);
     auto id =  manager.addBookFromPathAndGetId(zimPath.toStdString());
+    if (id == "") {
+        throw std::invalid_argument("invalid zim file");
+    }
     save();
     emit(booksChanged());
     return QString::fromStdString(id);
