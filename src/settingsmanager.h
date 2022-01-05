@@ -26,6 +26,8 @@ public:
 public slots:
     void setKiwixServerPort(int port);
     int getKiwixServerPort() { return m_kiwixServerPort; };
+    void setKiwixServerIpAddress(QString ipAddress);
+    QString getKiwixServerIpAddress() { return m_kiwixServerIpAddress; };
     void setZoomFactor(qreal zoomFactor);
     qreal getZoomFactor() { return m_zoomFactor; };
     bool setDownloadDir(QString downloadDir);
@@ -42,6 +44,7 @@ private:
     QSettings m_settings;
     SettingsView *m_view;
     int m_kiwixServerPort;
+    QString m_kiwixServerIpAddress;
     qreal m_zoomFactor;
     QString m_downloadDir;
 };

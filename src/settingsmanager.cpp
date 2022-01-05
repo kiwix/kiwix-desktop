@@ -16,7 +16,7 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_kiwixServerPort, m_zoomFactor * 100, m_downloadDir);
+        view->init(m_zoomFactor * 100, m_downloadDir);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }
@@ -60,6 +60,12 @@ void SettingsManager::setKiwixServerPort(int port)
     emit(portChanged(port));
 }
 
+void SettingsManager::setKiwixServerIpAddress(QString ipAddress)
+{
+    m_kiwixServerIpAddress = ipAddress;
+    m_settings.setValue("localKiwixServer/ipAddress", ipAddress);
+}
+
 void SettingsManager::setZoomFactor(qreal zoomFactor)
 {
     m_zoomFactor = zoomFactor;
@@ -77,7 +83,8 @@ bool SettingsManager::setDownloadDir(QString downloadDir)
 
 void SettingsManager::initSettings()
 {
-    m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8181).toInt();
+    m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
     m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
+    m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
 }
