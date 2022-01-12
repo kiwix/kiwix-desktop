@@ -24,12 +24,15 @@ public:
 
     TabBar*   getTabBar();
     TopWidget* getTopWidget();
-    QStackedWidget* getSideDockWidget();
-    ContentManagerSide* getSideContentManager();
 
-protected slots:
-    void toggleFullScreen();
+protected:
     void keyPressEvent(QKeyEvent *event);
+
+private slots:
+    void toggleFullScreen();
+    void when_ReadingList_toggled(bool state);
+    void when_libraryPageDisplayed(bool showed);
+
 private:
     Ui::MainWindow *mp_ui;
     About     *mp_about;

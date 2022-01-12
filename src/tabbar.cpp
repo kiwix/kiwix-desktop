@@ -64,7 +64,6 @@ TabBar::TabBar(QWidget *parent) :
                 int index = currentIndex() + 1;
                 mp_stackedWidget->insertWidget(index, view);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
-                KiwixApp::instance()->setSideBar(KiwixApp::SideBarType::NONE);
                 QToolButton *tb = new QToolButton(this);
                 tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
                 setTabButton(index, QTabBar::RightSide, tb);
@@ -296,22 +295,17 @@ void TabBar::onCurrentChanged(int index)
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit libraryPageDisplayed(false);
-        KiwixApp::instance()->setSideBar(KiwixApp::NONE);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     } else if (auto zv = qobject_cast<ZimView*>(w)) {
         auto view = zv->getWebView();
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit libraryPageDisplayed(false);
-        if (KiwixApp::instance()->getSideType() == KiwixApp::CONTENTMANAGER_BAR) {
-            KiwixApp::instance()->setSideBar(KiwixApp::NONE);
-        }
         QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
     } else if (qobject_cast<ContentManagerView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit libraryPageDisplayed(true);
-        KiwixApp::instance()->setSideBar(KiwixApp::CONTENTMANAGER_BAR);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     }
     else {

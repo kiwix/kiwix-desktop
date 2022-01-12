@@ -23,7 +23,6 @@
 class KiwixApp : public QtSingleApplication
 {
     Q_OBJECT
-    Q_PROPERTY(SideBarType currentSideType MEMBER m_currentSideType NOTIFY currentSideTypeChanged)
 
 public:
     enum Actions {
@@ -59,11 +58,6 @@ public:
         ExitAction,
         MAX_ACTION
     };
-    enum SideBarType {
-        CONTENTMANAGER_BAR,
-        READINGLIST_BAR,
-        NONE
-    };
 
     KiwixApp(int& argc, char *argv[]);
     virtual ~KiwixApp();
@@ -77,27 +71,24 @@ public:
     KProfile* getProfile() { return &m_profile; }
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
+    ContentManager* getContentManager() { return mp_manager; }
     kiwix::Downloader* getDownloader() { return mp_downloader; }
     TabBar* getTabWidget() { return mp_tabWidget; }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
     kiwix::Server* getLocalServer() { return &m_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
-    SideBarType getSideType() { return m_currentSideType; }
     QString getText(const QString &key) { return m_translation.getText(key); };
 
     bool isCurrentArticleBookmarked();
 
 signals:
     void currentTitleChanged(const QString& title);
-    void currentSideTypeChanged(SideBarType type);
 
 public slots:
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
-    void setSideBar(SideBarType type);
-    void toggleSideBar(KiwixApp::SideBarType type);
     void printPage();
     void disableItemsOnLibraryPage(bool displayed);
     void updateNameMapper();
@@ -117,7 +108,6 @@ private:
     ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
     TabBar* mp_tabWidget;
-    SideBarType m_currentSideType;
     QErrorMessage* mp_errorDialog;
     kiwix::UpdatableNameMapper m_nameMapper;
     kiwix::Server m_server;
