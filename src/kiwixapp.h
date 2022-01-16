@@ -14,6 +14,7 @@
 #include <QtSingleApplication>
 #include <QApplication>
 #include <QErrorMessage>
+#include <QMessageBox>
 #include <QTranslator>
 #include <kiwix/name_mapper.h>
 
@@ -66,7 +67,7 @@ public:
 
     void openRandomUrl(bool newTab=true);
 
-    void showMessage(const QString& message);
+    void showMessage(const QString& message, const QString& title, const enum QMessageBox::Icon& icon);
 
     KProfile* getProfile() { return &m_profile; }
     Library* getLibrary() { return &m_library; }

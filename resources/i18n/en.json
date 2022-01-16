@@ -15,6 +15,7 @@
     "home-page":"Home page",
     "main-menu":"Main menu",
     "print":"Print",
+    "print-page-error": "An error has occured while printing.",
     "new-tab":"New tab",
     "close-tab":"Close tab",
     "close":"Close",

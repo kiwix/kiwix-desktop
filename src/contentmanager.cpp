@@ -128,13 +128,8 @@ void ContentManager::openBook(const QString &id)
         tabBar->closeTab(1);
         auto text = gt("zim-open-fail-text");
         text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getPath()));
-        QMessageBox msgBox(
-            QMessageBox::Warning, //Icon
-            gt("zim-open-fail-title"), //Title
-            text, //Text
-            QMessageBox::Ok //Buttons
-        );
-        msgBox.exec();
+        auto title = gt("zim-open-fail-title");
+        KiwixApp::instance()->showMessage(text, title, QMessageBox::Warning);
         mp_library->removeBookFromLibraryById(id);
         tabBar->setCurrentIndex(0);
         emit(booksChanged());
