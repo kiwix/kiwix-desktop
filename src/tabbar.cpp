@@ -63,6 +63,7 @@ TabBar::TabBar(QWidget *parent) :
                 }
                 int index = currentIndex() + 1;
                 mp_stackedWidget->insertWidget(index, view);
+                emit libraryPageDisplayed(false);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
                 QToolButton *tb = new QToolButton(this);
                 tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
