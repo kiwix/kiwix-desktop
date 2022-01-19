@@ -1,3 +1,36 @@
+kiwix-desktop 2.1.0
+===================
+
+ * Add a IPChooser in the server dialog windows and display a best IP address
+   on which the user can connect to (@juuz0 #735)
+ * Open multiple zim files from the command line (@juuz0 #720)
+ * Setting's zoom level change the zoom in all open tabs (@juuz0 #719)
+ * Properly display back and forward buttons on RTL environment (@juuz0 #721)
+ * Open new tabs just after the current tab (@juuz0 #716)
+ * Always open new url in background (@juuz0 #717)
+ * Make the server follow modification made in the library (@veloman-yunkan #714)
+ * Improved setting tab (@juuz0 #696)
+ * Display the shortcut of the action in its tootips (@juuz0 #682)
+ * Limit zoom changes to the current tab only (@juuz0 #689)
+ * Make the server use human-friendly name for zim files (@MananJethwany #676)
+ * Fix tooltips' position (@kelson42 #672)
+ * Improved server dialog (@HanYoung-uwu #638)
+ * Add shortcuts to navigate in web history :
+   - `BackButton`/`ForwardButton` (mouse buttons) (@Goutte #646)
+   - `Alt+Left`/`Alt+Right` (@kelson42 #621)
+ * Add `--version` and `--help` options (@HanYoung-uwu #631)
+ * Fix file dialog style on Windows (@HanYoung-uwu #634)
+ * Fix search result pagination (@maneeshpm #628)
+ * Add shortcut `Alt + <digit>` to switch between tabs (@rishabh-soni #567)
+ * Fix fade-out tab when title is too long (@asashnov #573)
+ * Use secure connection (https) when possible (@kelson42 #589)
+ * Apply language filter to local library (@HanYoung-uwu #581)
+ * Make `Search` and `Main Menu` buttons visible to screen reader (@asashnov #583)
+ * Fix print support (@Ambrevar #557)
+ * Adpat to new libkiwix 10.0.0 API
+ * New SVG logo (@kelson42 #539)
+ * Various fixes (@legoktm @HanYoung-uwu @Saket-07 @rishabh-soni @asashnov @manneshpm @MananJethwany)
+
 kiwix-desktop 2.0.5
 ===================
 
