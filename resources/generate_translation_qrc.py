@@ -38,7 +38,7 @@ for json in translation_dir.glob("*.json"):
     if node is not None:
         node.tail += " " * 8
     node = ET.SubElement(qresource, "file")
-    node.text = str(json)
+    node.text = str(json.relative_to(script_path.parent))
     node.tail = "\n"
 
 node.tail += " "*4
