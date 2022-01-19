@@ -15,6 +15,7 @@
     "home-page":"Home page",
     "main-menu":"Main menu",
     "print":"Print",
+    "print-page-error": "An error has occured while printing.",
     "new-tab":"New tab",
     "close-tab":"Close tab",
     "close":"Close",
@@ -121,5 +122,7 @@
     "open-link-in-web-browser":"Open link in web browser",
     "download-dir-dialog-title":"Are you sure you want to change the download directory?",
     "download-dir-dialog-msg":"The new download directory path will be:\n{{DIRECTORY}}",
-    "invalid-port":"Invalid port"
+    "invalid-port":"Invalid port",
+    "zim-open-fail-title":"Invalid file",
+    "zim-open-fail-text":"The ZIM file <b>{{ZIM}}</b> cannot be open properly. It will be removed from your library."
 }

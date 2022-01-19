@@ -176,7 +176,9 @@ void KiwixApp::openZimFile(const QString &zimfile)
     try {
         zimId = m_library.openBookFromPath(validZimFile);
     } catch (const std::exception& e) {
-        showMessage("Cannot open " + validZimFile + ": \n" + e.what());
+        auto text = gt("zim-open-fail-text");
+        text = text.replace("{{ZIM}}", validZimFile);
+        showMessage(text, gt("zim-open-fail-title"), QMessageBox::Warning);
         return;
     }
     openUrl(QUrl("zim://"+zimId+".zim/"));
@@ -196,7 +198,7 @@ void KiwixApp::printPage()
             return;
         webview->page()->print(printer, [=](bool success) {
             if (!success) {
-                showMessage("An error has occured while printing.");
+                showMessage(gt("print-page-error"), gt("error-title"), QMessageBox::Critical);
             }
             delete printer;
         });
@@ -227,13 +229,19 @@ void KiwixApp::openRandomUrl(bool newTab)
         url.setPath("/" + QString::fromStdString(entry.getPath()));
         openUrl(url, newTab);
     } catch ( const kiwix::NoEntry& ) {
-        showMessage(gt("random-article-error"));
+        showMessage(gt("random-article-error"), gt("error-title"), QMessageBox::Information);
     }
 }
 
-void KiwixApp::showMessage(const QString &message)
+void KiwixApp::showMessage(const QString &message, const QString &title, const enum QMessageBox::Icon &icon)
 {
-    mp_errorDialog->showMessage(message);
+    QMessageBox msgBox(
+        icon, //Icon
+        title, //Title
+        message, //Text
+        QMessageBox::Ok //Buttons
+    );
+    msgBox.exec();
 }
 
 QAction *KiwixApp::getAction(KiwixApp::Actions action)
