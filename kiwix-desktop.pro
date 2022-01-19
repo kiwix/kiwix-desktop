@@ -153,12 +153,12 @@ unix {
   INSTALLS += mime_file
 }
 
-PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION kiwix)
+PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 10.0.0 libzim >= 7.2.0\")
 
 QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
-LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
+LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 10.0.0 libzim >= 7.2.0\")
 
 RESOURCES += \
     resources/kiwix.qrc \
