@@ -91,5 +91,6 @@
 	"videos": "Video",
 	"yes": "sì",
 	"no": "no",
-	"open-link-in-web-browser": "Apri collegamento nel browser web"
+	"open-link-in-web-browser": "Apri collegamento nel browser web",
+	"zim-open-fail-title": "File non valido"
 }
