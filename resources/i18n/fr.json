@@ -20,6 +20,7 @@
 	"home-page": "Page principale",
 	"main-menu": "Menu principal",
 	"print": "Imprimer",
+	"print-page-error": "Une erreur s’est produite lors de l’impression.",
 	"new-tab": "Nouvel onglet",
 	"close-tab": "Fermer l’onglet",
 	"close": "Fermer",
@@ -126,5 +127,7 @@
 	"open-link-in-web-browser": "Ouvrir le lien dans votre navigateur web",
 	"download-dir-dialog-title": "Voulez-vous vraiment modifier le répertoire de téléchargement ?",
 	"download-dir-dialog-msg": "Le nouveau chemin du répertoire de téléchargement sera :\n{{DIRECTORY}}",
-	"invalid-port": "Port non valide"
+	"invalid-port": "Port non valide",
+	"zim-open-fail-title": "Fichier non valide",
+	"zim-open-fail-text": "Le fichier ZIM <b>{{ZIM}}</b> n’a pas pu être ouvert correctement. Il sera supprimé de votre bibliothèque."
 }
