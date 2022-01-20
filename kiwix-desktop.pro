@@ -18,7 +18,7 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -std=c++11
 
-DEFINES += VERSION="2.0.5"
+DEFINES += VERSION="2.1.0"
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -153,12 +153,12 @@ unix {
   INSTALLS += mime_file
 }
 
-PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION kiwix)
+PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 10.0.0 libzim >= 7.2.0\")
 
 QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
-LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION kiwix)
+LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 10.0.0 libzim >= 7.2.0\")
 
 RESOURCES += \
     resources/kiwix.qrc \

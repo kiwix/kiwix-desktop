@@ -1,47 +1,56 @@
 <?xml version='1.0' encoding='utf8'?>
 <RCC>
     <qresource prefix="/">
-        <file>i18n/hi.json</file>
-        <file>i18n/zh-hans.json</file>
-        <file>i18n/nl.json</file>
-        <file>i18n/ca.json</file>
-        <file>i18n/ja.json</file>
-        <file>i18n/ru.json</file>
-        <file>i18n/he.json</file>
-        <file>i18n/roa-tara.json</file>
-        <file>i18n/sr-ec.json</file>
-        <file>i18n/en.json</file>
-        <file>i18n/mk.json</file>
-        <file>i18n/id.json</file>
-        <file>i18n/pl.json</file>
-        <file>i18n/eo.json</file>
-        <file>i18n/qqq.json</file>
-        <file>i18n/ar.json</file>
-        <file>i18n/de.json</file>
-        <file>i18n/es.json</file>
-        <file>i18n/tr.json</file>
-        <file>i18n/ko.json</file>
-        <file>i18n/fa.json</file>
-        <file>i18n/cs.json</file>
-        <file>i18n/bn.json</file>
-        <file>i18n/skr-arab.json</file>
-        <file>i18n/hy.json</file>
-        <file>i18n/sc.json</file>
-        <file>i18n/diq.json</file>
-        <file>i18n/gsw.json</file>
-        <file>i18n/ro.json</file>
-        <file>i18n/fr.json</file>
-        <file>i18n/io.json</file>
-        <file>i18n/zh-hant.json</file>
-        <file>i18n/da.json</file>
-        <file>i18n/zgh.json</file>
-        <file>i18n/it.json</file>
         <file>i18n/br.json</file>
-        <file>i18n/uk.json</file>
-        <file>i18n/fi.json</file>
+        <file>i18n/hi.json</file>
+        <file>i18n/id.json</file>
+        <file>i18n/skr-arab.json</file>
+        <file>i18n/zgh.json</file>
+        <file>i18n/ar.json</file>
+        <file>i18n/bn.json</file>
+        <file>i18n/ca.json</file>
+        <file>i18n/cs.json</file>
+        <file>i18n/da.json</file>
+        <file>i18n/gsw.json</file>
+        <file>i18n/ie.json</file>
+        <file>i18n/ms.json</file>
+        <file>i18n/roa-tara.json</file>
         <file>i18n/sv.json</file>
+        <file>i18n/eo.json</file>
+        <file>i18n/hy.json</file>
         <file>i18n/pt-br.json</file>
+        <file>i18n/pt.json</file>
+        <file>i18n/de.json</file>
+        <file>i18n/ja.json</file>
+        <file>i18n/my.json</file>
+        <file>i18n/ro.json</file>
+        <file>i18n/sc.json</file>
+        <file>i18n/ta.json</file>
+        <file>i18n/diq.json</file>
         <file>i18n/ku-latn.json</file>
+        <file>i18n/pl.json</file>
+        <file>i18n/qqq.json</file>
+        <file>i18n/en.json</file>
+        <file>i18n/es.json</file>
+        <file>i18n/fa.json</file>
+        <file>i18n/fi.json</file>
+        <file>i18n/fr.json</file>
+        <file>i18n/he.json</file>
+        <file>i18n/io.json</file>
+        <file>i18n/it.json</file>
+        <file>i18n/ko.json</file>
         <file>i18n/lb.json</file>
+        <file>i18n/mk.json</file>
+        <file>i18n/nl.json</file>
+        <file>i18n/ru.json</file>
+        <file>i18n/scn.json</file>
+        <file>i18n/sk.json</file>
+        <file>i18n/sq.json</file>
+        <file>i18n/sr-ec.json</file>
+        <file>i18n/th.json</file>
+        <file>i18n/tr.json</file>
+        <file>i18n/uk.json</file>
+        <file>i18n/zh-hans.json</file>
+        <file>i18n/zh-hant.json</file>
     </qresource>
 </RCC>
