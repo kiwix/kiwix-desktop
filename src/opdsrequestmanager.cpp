@@ -15,7 +15,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
     if (currentLanguage != "*") {
         query.addQueryItem("lang", currentLanguage);
     }
-    query.addQueryItem("count", QString::number(0));
+    query.addQueryItem("count", QString::number(-1));
     if (categoryFilter != "all" && categoryFilter != "other") {
         query.addQueryItem("tag", "_category:"+categoryFilter);
     }
