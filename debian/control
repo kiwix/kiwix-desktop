@@ -6,7 +6,7 @@ Build-Depends: debhelper-compat (= 13),
  pkg-config,
  qtbase5-dev,
  qtwebengine5-dev,
- libkiwix-dev (>= 10.0.0)
+ libkiwix-dev (>= 10.0.0~)
 Standards-Version: 4.5.0
 Homepage: https://www.kiwix.org/
 Rules-Requires-Root: no
