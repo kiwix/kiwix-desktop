@@ -40,6 +40,29 @@ void WebViewForwardMenu::showEvent(QShowEvent *)
     setGeometry(geo);
 }
 
+QString getZimIdFromUrl(QUrl url)
+{
+    return url.host().split('.')[0];
+}
+
+QString getResultTypeFromUrl(QUrl url)
+{
+    return url.host().split('.')[1];
+}
+
+void WebView::applyCorrectZoomFactor() {
+    auto url = this->url();
+    auto settingsManager = KiwixApp::instance()->getSettingsManager();
+    qreal zoomFactor;
+    const bool isSearchResultsView = QUrlQuery(url).hasQueryItem("pattern") && (getResultTypeFromUrl(url) == "search");
+    if (isSearchResultsView) {
+        zoomFactor = settingsManager->getZoomFactor();
+    } else {
+        auto zimId = getZimIdFromUrl(url);
+        zoomFactor = settingsManager->getZoomFactorByZimId(zimId);
+    }
+    this->setZoomFactor(zoomFactor);
+}
 
 WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
@@ -48,6 +71,18 @@ WebView::WebView(QWidget *parent)
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
     connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
         m_linkHovered = url;
+    });
+
+    /* In Qt 5.12, the zoom factor is not correctly passed after a fulltext search
+     * Bug Report: https://bugreports.qt.io/browse/QTBUG-51851
+     * This rezooms the page to its correct zoom (default/by ZIM ID) after loading is finished.
+     * If the page is search results, we put the default zoom factor
+     * If in Qt 6.x, the bug is fixed this code can be removed.
+     */
+    connect(this, &QWebEngineView::loadFinished, this, [=] (bool ok) {
+        if (ok) {
+            applyCorrectZoomFactor();
+        }
     });
 }
 
@@ -125,7 +160,7 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 }
 
 void WebView::onUrlChanged(const QUrl& url) {
-    auto zimId = url.host().split('.')[0];
+    auto zimId = getZimIdFromUrl(url);
     if (m_currentZimId == zimId ) {
         return;
     }
