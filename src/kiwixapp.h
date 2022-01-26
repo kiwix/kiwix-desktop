@@ -74,7 +74,7 @@ public:
     MainWindow* getMainWindow() { return mp_mainWindow; }
     ContentManager* getContentManager() { return mp_manager; }
     kiwix::Downloader* getDownloader() { return mp_downloader; }
-    TabBar* getTabWidget() { return mp_tabWidget; }
+    TabBar* getTabWidget() { return getMainWindow()->getTabBar(); }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
     kiwix::Server* getLocalServer() { return &m_server; }
@@ -108,7 +108,6 @@ private:
     kiwix::Downloader* mp_downloader;
     ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
-    TabBar* mp_tabWidget;
     QErrorMessage* mp_errorDialog;
     kiwix::UpdatableNameMapper m_nameMapper;
     kiwix::Server m_server;
