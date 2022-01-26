@@ -3,8 +3,8 @@
 
 #include <QWidget>
 #include <QWebEnginePage>
-#include "findinpagebar.h"
 
+class FindInPageBar;
 class TabBar;
 class WebView;
 

@@ -7,7 +7,6 @@
 #include "kiwix/downloader.h"
 #include <kiwix/kiwixserve.h>
 #include "kprofile.h"
-#include "urlschemehandler.h"
 #include "settingsmanager.h"
 #include "translation.h"
 
