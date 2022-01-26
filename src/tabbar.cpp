@@ -144,6 +144,10 @@ ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
     if (setCurrent) {
         setCurrentIndex(index);
     }
+
+    connect(tab, &ZimView::webActionEnabledChanged,
+            this, &TabBar::onWebviewHistoryActionChanged);
+
     return tab;
 }
 
@@ -341,6 +345,16 @@ void TabBar::on_webview_titleChanged(const QString& title)
 
     if (currentZimView() == tab)
         emit currentTitleChanged(title);
+}
+
+void TabBar::onWebviewHistoryActionChanged(QWebEnginePage::WebAction action, bool enabled)
+{
+    ZimView *zv = qobject_cast<ZimView*>(sender());
+
+    if (!zv || zv != this->currentZimView())
+        return;
+
+    emit webActionEnabledChanged(action, enabled);
 }
 
 void TabBar::mousePressEvent(QMouseEvent *event)

@@ -68,6 +68,7 @@ private:
 private slots:
     void onTabMoved(int from, int to);
     void onCurrentChanged(int index);
+    void onWebviewHistoryActionChanged(QWebEnginePage::WebAction action, bool enabled);
 };
 
 #endif // TABWIDGET_H

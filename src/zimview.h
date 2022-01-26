@@ -2,6 +2,7 @@
 #define ZIMVIEW_H
 
 #include <QWidget>
+#include <QWebEnginePage>
 #include "findinpagebar.h"
 
 class TabBar;
@@ -16,6 +17,9 @@ public:
     WebView *getWebView() { return mp_webView; }
     FindInPageBar *getFindInPageBar() { return mp_findInPageBar; }
     void openFindInPageBar();
+
+signals:
+    void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
 
 private:
     WebView *mp_webView;
