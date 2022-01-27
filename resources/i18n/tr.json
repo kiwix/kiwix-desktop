@@ -3,6 +3,7 @@
 		"authors": [
 			"1917 Ekim Devrimi",
 			"BaRaN6161 TURK",
+			"Can",
 			"DDPAT",
 			"Hedda",
 			"Joseph",
@@ -17,9 +18,11 @@
 	"open-zim": "Zim'i aç",
 	"local-kiwix-server": "Yerel Kiwix Sunucusu",
 	"random-article": "Rastgele Madde",
+	"random-article-error": "Rastgele madde açılamadı.",
 	"home-page": "Anasayfa",
 	"main-menu": "Ana Menü",
 	"print": "Yazdır",
+	"print-page-error": "Yazım sırasında bir hata meydana geldi.",
 	"new-tab": "Yeni sekme",
 	"close-tab": "Sekmeyi kapat",
 	"close": "Kapat",
@@ -106,6 +109,7 @@
 	"ted": "Ted",
 	"vikidia": "Vikidia",
 	"wikibooks": "Vikikitap",
+	"wikihow": "wikiHow",
 	"wikinews": "Vikihaber",
 	"wikipedia": "Vikipedi",
 	"wikiquote": "Vikisöz",
@@ -125,5 +129,7 @@
 	"open-link-in-web-browser": "Bağlantıyı web tarayıcısında aç",
 	"download-dir-dialog-title": "İndirme dizinini değiştirmek istediğinizden emin misiniz?",
 	"download-dir-dialog-msg": "Yeni indirme dizini yolu şunu olacaktır:\n {{DIRECTORY}}",
-	"invalid-port": "Geçersiz bağlantı noktası"
+	"invalid-port": "Geçersiz bağlantı noktası",
+	"zim-open-fail-title": "Geçersiz dosya",
+	"zim-open-fail-text": "ZIM dosyası <b>{{ZIM}}</b> düzgün açılamadı. Kütüphanenizden kaldırılacaktır."
 }
