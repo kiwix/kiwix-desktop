@@ -9,6 +9,7 @@
 	},
 	"error-launch-server-message": "エラーが発生しました。",
 	"print": "印刷",
+	"print-page-error": "印刷中にエラーが発生しました。",
 	"new-tab": "新しいタブ",
 	"close-tab": "タブを閉じる",
 	"search-article": "記事を検索",
@@ -42,5 +43,6 @@
 	"wikivoyage": "ウィキボヤージュ",
 	"wiktionary": "ウィクショナリー",
 	"open-link-in-web-browser": "Webブラウザでリンクを開く",
-	"invalid-port": "不正なポート"
+	"invalid-port": "不正なポート",
+	"zim-open-fail-title": "無効なファイル"
 }

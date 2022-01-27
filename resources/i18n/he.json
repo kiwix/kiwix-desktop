@@ -18,6 +18,7 @@
 	"home-page": "דף הבית",
 	"main-menu": "תפריט ראשי",
 	"print": "הדפסה",
+	"print-page-error": "אירעה שגיאה בעת הדפסה.",
 	"new-tab": "כרטיסייה חדשה",
 	"close-tab": "סגירת לשונית",
 	"close": "סגירה",
@@ -124,5 +125,7 @@
 	"open-link-in-web-browser": "פתיחת קישור בדפדפן",
 	"download-dir-dialog-title": "להחליף את תיקיית ההורדה?",
 	"download-dir-dialog-msg": "נתיב תיקיית ההורדה החדש הוא:\n{{DIRECTORY}}",
-	"invalid-port": "פתחה שגויה"
+	"invalid-port": "פתחה שגויה",
+	"zim-open-fail-title": "קובץ בלתי־תקין",
+	"zim-open-fail-text": "קובץ ה־ZIM בשם <b>{{ZIM}}</b> אינו יכול להיפתח באופן הולם. הוא יוסר מהספרייה שלך."
 }

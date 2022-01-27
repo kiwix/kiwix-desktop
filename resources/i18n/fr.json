@@ -129,5 +129,5 @@
 	"download-dir-dialog-msg": "Le nouveau chemin du répertoire de téléchargement sera :\n{{DIRECTORY}}",
 	"invalid-port": "Port non valide",
 	"zim-open-fail-title": "Fichier non valide",
-	"zim-open-fail-text": "Le fichier ZIM <b>{{ZIM}}</b> n’a pas pu être ouvert correctement. Il sera supprimé de votre bibliothèque."
+	"zim-open-fail-text": "Le fichier ZIM <b>{{ZIM}}</b> ne peut être ouvert correctement. Il sera supprimé de votre bibliothèque."
 }

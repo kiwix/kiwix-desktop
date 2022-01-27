@@ -96,5 +96,6 @@
 	"no": "ei",
 	"open-link-in-web-browser": "Avaa linkki verkkoselaimessa",
 	"download-dir-dialog-title": "Haluatko varmasti vaihtaa lataushakemistoa?",
-	"download-dir-dialog-msg": "Uusi lataushakemiston polku on:\n{{DIRECTORY}}"
+	"download-dir-dialog-msg": "Uusi lataushakemiston polku on:\n{{DIRECTORY}}",
+	"zim-open-fail-title": "Virheellinen tiedosto"
 }

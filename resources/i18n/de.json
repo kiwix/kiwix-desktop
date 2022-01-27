@@ -15,9 +15,11 @@
 	"open-zim": "Öffne ZIM",
 	"local-kiwix-server": "Lokaler Kiwix-Server",
 	"random-article": "Zufälliger Artikel",
+	"random-article-error": "Ein zufälliger Artikel kann nicht geöffnet werden.",
 	"home-page": "Startseite",
 	"main-menu": "Hauptmenü",
 	"print": "Drucken",
+	"print-page-error": "Beim Drucken ist ein Fehler aufgetreten.",
 	"new-tab": "Neue Registerkarte",
 	"close-tab": "Registerkarte schließen",
 	"close": "Schließen",
@@ -122,6 +124,7 @@
 	"no-filter": "kein Filter",
 	"open-link-in-web-browser": "Link im Browser öffnen",
 	"download-dir-dialog-title": "Sind Sie sicher, dass Sie das Download-Verzeichnis wechseln möchten?",
-	"download-dir-dialog-msg": "Der neue Download-Verzeichnis-Pfad wird:\n{{DIRECTORY}}",
-	"invalid-port": "Ungültiger Port"
+	"download-dir-dialog-msg": "Der neue Download-Verzeichnis-Pfad ist:\n{{DIRECTORY}}",
+	"invalid-port": "Ungültiger Port",
+	"zim-open-fail-title": "Ungültige Datei"
 }
