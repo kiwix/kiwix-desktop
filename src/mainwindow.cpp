@@ -72,6 +72,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
 
+    connect(mp_ui->tabBar, &TabBar::webActionEnabledChanged,
+            mp_ui->mainToolBar, &TopWidget::handleWebActionEnabledChanged);
+
     mp_ui->contentmanagerside->setContentManager(app->getContentManager());
     mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);
 }
