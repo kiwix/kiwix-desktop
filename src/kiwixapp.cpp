@@ -400,8 +400,6 @@ void KiwixApp::createAction()
 void KiwixApp::postInit() {
     connect(getTabWidget(), &TabBar::webActionEnabledChanged,
             mp_mainWindow->getTopWidget(), &TopWidget::handleWebActionEnabledChanged);
-    connect(getTabWidget(), &TabBar::currentTitleChanged, this,
-            [=](const QString& title) { emit currentTitleChanged(title); });
     connect(getTabWidget(), &TabBar::libraryPageDisplayed,
             this, &KiwixApp::disableItemsOnLibraryPage);
     emit(m_library.booksChanged());
