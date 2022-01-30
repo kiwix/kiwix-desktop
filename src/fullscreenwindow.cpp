@@ -1,4 +1,5 @@
 #include "fullscreenwindow.h"
+#include "kiwixapp.h"
 #include <QAction>
 
 FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
@@ -11,9 +12,9 @@ FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
     m_view->stackUnder(m_notification);
 
     auto exitAction = new QAction(this);
-    exitAction->setShortcut(Qt::Key_Escape);
-    connect(exitAction, &QAction::triggered, [this]() {
-        m_view->triggerPageAction(QWebEnginePage::ExitFullScreen);
+    exitAction->setShortcut(QKeySequence::FullScreen);
+    connect(exitAction, &QAction::triggered, [=]() {
+        KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction)->trigger();
     });
     addAction(exitAction);
 
@@ -21,6 +22,7 @@ FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
     setGeometry(m_oldGeometry);
     showFullScreen();
     m_oldView->window()->hide();
+
 }
 
 FullScreenWindow::~FullScreenWindow()
@@ -29,6 +31,11 @@ FullScreenWindow::~FullScreenWindow()
     m_oldView->window()->setGeometry(m_oldGeometry);
     m_oldView->window()->show();
     hide();
+}
+
+void FullScreenWindow::setWebEnginePage()
+{
+    m_oldView->setPage(m_view->page());
 }
 
 void FullScreenWindow::resizeEvent(QResizeEvent *event)

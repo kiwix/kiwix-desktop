@@ -8,6 +8,7 @@
 #include <QToolTip>
 #include <QCursor>
 #include <QPainter>
+#include "fullscreenwindow.h"
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentZimView();}
 
@@ -52,6 +53,17 @@ TabBar::TabBar(QWidget *parent) :
                 QUITIFNULL(current);
                 current->setUrl("zim://" + current->zimId() + ".zim/");
             });
+    connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
+            [=]() {
+            if (m_fullScreenWindow) {
+                m_fullScreenWindow.reset();
+            } else if (currentWebView()) {
+                m_fullScreenWindow.reset(new FullScreenWindow(this->currentWebView()));
+            }
+            else {
+                KiwixApp::instance()->getMainWindow()->toggleFullScreen();
+            }
+        });
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, [=]() {
                 SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
@@ -324,7 +336,7 @@ void TabBar::fullScreenRequested(QWebEngineFullScreenRequest request)
 {
     if (request.toggleOn()) {
         if (m_fullScreenWindow)
-            return;
+            m_fullScreenWindow->setWebEnginePage(); // if a video is clicked full screen inside a full screen view
         request.accept();
         m_fullScreenWindow.reset(new FullScreenWindow(this->currentWebView()));
     } else {

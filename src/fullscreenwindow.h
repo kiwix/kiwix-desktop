@@ -17,6 +17,7 @@ class FullScreenWindow : public QWidget
 public:
     explicit FullScreenWindow(QWebEngineView *oldView, QWidget *parent = nullptr);
     ~FullScreenWindow();
+    void setWebEnginePage();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

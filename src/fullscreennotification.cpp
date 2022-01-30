@@ -8,7 +8,9 @@ FullScreenNotification::FullScreenNotification(QWidget *parent)
     : QLabel(parent)
     , m_previouslyVisible(false)
 {
-    setText(gt("fullscreen-notification"));
+    auto text = gt("fullscreen-notification");
+    text = text.replace("{{FullScreenKey}}", QKeySequence(QKeySequence::FullScreen).toString());
+    setText(text);
     setStyleSheet(
         "font-size: 24px;"
         "color: white;"

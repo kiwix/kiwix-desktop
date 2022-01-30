@@ -25,8 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
-    connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
-            this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::ToggleReadingListAction), &QAction::toggled,
             this, &MainWindow::when_ReadingList_toggled);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
