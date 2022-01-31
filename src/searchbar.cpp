@@ -80,8 +80,7 @@ SearchBar::SearchBar(QWidget *parent) :
 
     qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBar::updateCompletion);
-    connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
-            this, &SearchBar::on_currentTitleChanged);
+
     connect(this, &QLineEdit::textEdited, this,
             [=](const QString &text) {
                 m_searchbarInput = text;

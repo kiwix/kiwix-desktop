@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(app->getAction(KiwixApp::KiwixServeAction), &QAction::triggered,
             mp_localKiwixServer, &QDialog::show);
 
-    connect(app, &KiwixApp::currentTitleChanged, this, [=](const QString& title) {
+    connect(mp_ui->tabBar, &TabBar::currentTitleChanged, this, [=](const QString& title) {
         if (!title.isEmpty() && !title.startsWith("zim://"))
             setWindowTitle(title + " - Kiwix");
         else
@@ -63,6 +63,17 @@ MainWindow::MainWindow(QWidget *parent) :
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
     connect(mp_ui->tabBar, &TabBar::libraryPageDisplayed,
             this, &MainWindow::when_libraryPageDisplayed);
+
+    connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
+            &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::on_currentTitleChanged);
+
+    // This signal emited more often than the history really updated
+    // but for now we have no better signal for it.
+    connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
+            mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
+
+    connect(mp_ui->tabBar, &TabBar::webActionEnabledChanged,
+            mp_ui->mainToolBar, &TopWidget::handleWebActionEnabledChanged);
 
     mp_ui->contentmanagerside->setContentManager(app->getContentManager());
     mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);

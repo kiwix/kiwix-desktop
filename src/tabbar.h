@@ -56,7 +56,6 @@ signals:
 
 public slots:
     void closeTab(int index);
-    void onCurrentChanged(int index);
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);
 
@@ -68,6 +67,8 @@ private:
 
 private slots:
     void onTabMoved(int from, int to);
+    void onCurrentChanged(int index);
+    void onWebviewHistoryActionChanged(QWebEnginePage::WebAction action, bool enabled);
 };
 
 #endif // TABWIDGET_H

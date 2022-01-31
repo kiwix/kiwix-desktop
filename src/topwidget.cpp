@@ -53,11 +53,6 @@ TopWidget::TopWidget(QWidget *parent) :
     addAction(menuAction);
     setContextMenuPolicy( Qt::PreventContextMenu );
 
-    // This signal emited more often than the history really updated
-    // but for now we have no better signal for it.
-    connect(KiwixApp::instance(), &KiwixApp::currentTitleChanged,
-            this, &TopWidget::updateBackForwardButtons);
-
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
 #endif

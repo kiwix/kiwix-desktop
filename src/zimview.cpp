@@ -62,18 +62,12 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
             [=](const QIcon& icon) { mp_tabBar->setIconOf(icon, this); });
 
     connect(mp_webView->page()->action(QWebEnginePage::Back), &QAction::changed,
-            [=]() {
-                if (mp_tabBar->currentZimView() != this) {
-                    return;
-                }
-                emit mp_tabBar->webActionEnabledChanged(QWebEnginePage::Back, mp_webView->isWebActionEnabled(QWebEnginePage::Back));
+            [this]() {
+                emit webActionEnabledChanged(QWebEnginePage::Back, this->mp_webView->isWebActionEnabled(QWebEnginePage::Back));
             });
     connect(mp_webView->page()->action(QWebEnginePage::Forward), &QAction::changed,
-            [=]() {
-                if (mp_tabBar->currentZimView() != this) {
-                    return;
-                }
-                emit mp_tabBar->webActionEnabledChanged(QWebEnginePage::Forward, mp_webView->isWebActionEnabled(QWebEnginePage::Forward));
+            [this]() {
+                emit webActionEnabledChanged(QWebEnginePage::Forward, this->mp_webView->isWebActionEnabled(QWebEnginePage::Forward));
             });
     connect(mp_webView->page(), &QWebEnginePage::linkHovered, this,
             [=](const QString& url) {

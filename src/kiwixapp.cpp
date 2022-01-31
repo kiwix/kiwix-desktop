@@ -81,9 +81,8 @@ void KiwixApp::init()
 
     createAction();
     mp_mainWindow = new MainWindow;
-    mp_tabWidget = mp_mainWindow->getTabBar();
-    mp_tabWidget->setContentManagerView(mp_manager->getView());
-    mp_tabWidget->setNewTabButton();
+    getTabWidget()->setContentManagerView(mp_manager->getView());
+    getTabWidget()->setNewTabButton();
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
@@ -186,14 +185,14 @@ void KiwixApp::openZimFile(const QString &zimfile)
 
 void KiwixApp::printPage()
 {
-    if(!mp_tabWidget->currentZimView())
+    if(!getTabWidget()->currentZimView())
         return;
     QPrinter* printer = new QPrinter();
     QPrintDialog printDialog(printer, mp_mainWindow);
     printDialog.setStyle(nullptr);
     printDialog.setStyleSheet("");
     if (printDialog.exec() == QDialog::Accepted) {
-        auto webview = mp_tabWidget->currentWebView();
+        auto webview = getTabWidget()->currentWebView();
         if(!webview)
             return;
         webview->page()->print(printer, [=](bool success) {
@@ -210,12 +209,12 @@ void KiwixApp::openUrl(const QString &url, bool newTab) {
 }
 
 void KiwixApp::openUrl(const QUrl &url, bool newTab) {
-    mp_tabWidget->openUrl(url, newTab);
+    getTabWidget()->openUrl(url, newTab);
 }
 
 void KiwixApp::openRandomUrl(bool newTab)
 {
-    auto zimId = mp_tabWidget->currentZimId();
+    auto zimId = getTabWidget()->currentZimId();
     if (zimId.isEmpty()) {
         return;
     }
@@ -354,7 +353,7 @@ void KiwixApp::createAction()
     CREATE_ACTION(FindInPageAction, gt("find-in-page"));
     mpa_actions[FindInPageAction]->setShortcuts({QKeySequence::Find, Qt::Key_F3});
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
-            this, [=]() { mp_tabWidget->openFindInPageBar(); });
+            this, [=]() { getTabWidget()->openFindInPageBar(); });
 
     CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"),  QKeySequence::FullScreen);
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
@@ -399,11 +398,7 @@ void KiwixApp::createAction()
 }
 
 void KiwixApp::postInit() {
-    connect(mp_tabWidget, &TabBar::webActionEnabledChanged,
-            mp_mainWindow->getTopWidget(), &TopWidget::handleWebActionEnabledChanged);
-    connect(mp_tabWidget, &TabBar::currentTitleChanged, this,
-            [=](const QString& title) { emit currentTitleChanged(title); });
-    connect(mp_tabWidget, &TabBar::libraryPageDisplayed,
+    connect(getTabWidget(), &TabBar::libraryPageDisplayed,
             this, &KiwixApp::disableItemsOnLibraryPage);
     emit(m_library.booksChanged());
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
