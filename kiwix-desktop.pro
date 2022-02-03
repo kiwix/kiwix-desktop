@@ -140,7 +140,7 @@ unix {
   app_icon128.files = resources/icons/kiwix/128/kiwix-desktop.png
   app_icon256.path = $$PREFIX/share/icons/hicolor/256x256/apps
   app_icon256.files = resources/icons/kiwix/256/kiwix-desktop.png
-  app_svg.path = $$PREFIX/share/icons/hicolor/scalable/kiwix-desktop.svg
+  app_svg.path = $$PREFIX/share/icons/hicolor/scalable/apps
   app_svg.files = resources/icons/kiwix/scalable/kiwix-desktop.svg
   INSTALLS += app_icon24 app_icon32 app_icon48 app_icon128 app_icon256 app_svg
 
