@@ -16,6 +16,7 @@
 	"home-page": "Domovská stránka",
 	"main-menu": "Hlavné menu",
 	"print": "Tlač",
+	"print-page-error": "Počas tlači došlo k chybe.",
 	"new-tab": "Nová karta",
 	"close-tab": "Zavrieť kartu",
 	"close": "Zavrieť",
@@ -122,5 +123,7 @@
 	"open-link-in-web-browser": "Otvoriť odkaz vo webovom prehliadači",
 	"download-dir-dialog-title": "Ste si istý/á, že chcete zmeniť adresár pre sťahovanie?",
 	"download-dir-dialog-msg": "Nová cesta k adresáru pre sťahovanie bude: {{DIRECTORY}}",
-	"invalid-port": "Neplatný port"
+	"invalid-port": "Neplatný port",
+	"zim-open-fail-title": "Neplatný súbor",
+	"zim-open-fail-text": "Súbor ZIM <b>{{ZIM}}</b>sa nedá správne otvoriť. Bude v vašej knižnice odstránený."
 }
