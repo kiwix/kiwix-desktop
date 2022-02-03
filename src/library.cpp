@@ -130,6 +130,19 @@ void Library::setMonitorDirZims(QStringList zimList)
     m_monitorDirZims = zimList;
 }
 
+QStringList Library::getLibraryZimsFromDir(QString dir) const
+{
+    QStringList zimsInDir;
+    for (auto str : getBookIds()) {
+        auto filePath = QString::fromStdString(getBookById(str).getPath());
+        QDir absoluteDir = QFileInfo(filePath).absoluteDir();
+        if (absoluteDir == dir) {
+            zimsInDir.push_back(filePath);
+        }
+    }
+    return zimsInDir;
+}
+
 void Library::loadMonitorDir(QString monitorDir)
 {
     QMutex mutex;

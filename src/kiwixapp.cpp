@@ -101,6 +101,11 @@ void KiwixApp::init()
             this->openZimFile(message);
         }
     });
+    QString monitorDir = m_settingsManager.getMonitorDir();
+    if (monitorDir != "") {
+        m_library.setMonitorDirZims(m_library.getLibraryZimsFromDir(monitorDir));
+        m_library.asyncLoadMonitorDir(monitorDir);
+    }
 }
 
 KiwixApp::~KiwixApp()
