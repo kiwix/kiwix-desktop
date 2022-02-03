@@ -79,7 +79,7 @@ public:
     kiwix::Server* getLocalServer() { return &m_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     QString getText(const QString &key) { return m_translation.getText(key); };
-
+    void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
 
 public slots:

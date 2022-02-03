@@ -273,6 +273,10 @@ bool KiwixApp::isCurrentArticleBookmarked()
     return false;
 }
 
+void KiwixApp::setMonitorDir(const QString &dir) {
+    m_settingsManager.setMonitorDir(dir);
+}
+
 #define CREATE_ACTION(ID, TEXT) \
     mpa_actions[ID] = new QAction(TEXT)
 #define SET_SHORTCUT(ID, TEXT, SHORTCUT) \

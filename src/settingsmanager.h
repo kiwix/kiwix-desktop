@@ -26,12 +26,14 @@ public:
     QString getKiwixServerIpAddress() const { return m_kiwixServerIpAddress; }
     qreal getZoomFactor() const { return m_zoomFactor; }
     QString getDownloadDir() const { return m_downloadDir; }
+    QString getMonitorDir() const { return m_monitorDir; }
 
 public slots:
     void setKiwixServerPort(int port);
     void setKiwixServerIpAddress(QString ipAddress);
     void setZoomFactor(qreal zoomFactor);
     void setDownloadDir(QString downloadDir);
+    void setMonitorDir(QString monitorDir);
 private:
     void initSettings();
 
@@ -39,6 +41,7 @@ signals:
     void portChanged(int port);
     void zoomChanged(qreal zoomFactor);
     void downloadDirChanged(QString downloadDir);
+    void monitorDirChanged(QString monitorDir);
 
 private:
     QSettings m_settings;
@@ -47,6 +50,7 @@ private:
     QString m_kiwixServerIpAddress;
     qreal m_zoomFactor;
     QString m_downloadDir;
+    QString m_monitorDir;
 };
 
 #endif // SETTINGSMANAGER_H

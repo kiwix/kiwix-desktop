@@ -11,16 +11,20 @@ class SettingsView : public QWidget
 public:
     SettingsView(QWidget *parent = nullptr);
     ~SettingsView(){};
-    void init(int zoomPercent, const QString &dir);
+    void init(int zoomPercent, const QString &downloadDir, const QString &monitorDir);
 public Q_SLOTS:
     void resetDownloadDir();
     void browseDownloadDir();
+    void browseMonitorDir();
+    void clearMonitorDir();
     void setZoom(int zoomPercent);
     void onDownloadDirChanged(const QString &dir);
+    void onMonitorDirChanged(const QString &dir);
     void onZoomChanged(qreal zoomFactor);
 private:
     bool confirmDialogDownloadDir(const QString& dir);
     bool confirmDialog(QString messageText, QString messageTitle);
+    bool confirmDialogMonitorDir(const QString& dir);
     Ui::Settings *ui;
 };
 
