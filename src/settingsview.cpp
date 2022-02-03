@@ -24,25 +24,31 @@ SettingsView::SettingsView(QWidget *parent)
     ui->resetButton->setText(gt("reset"));
     ui->browseButton->setText(gt("browse"));
 }
+
 void SettingsView::init(int zoomPercent, const QString &dir)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(dir);
 }
-bool SettingsView::confirmDialogDownloadDir(const QString& dir)
+
+bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
 {
-    auto text = gt("download-dir-dialog-msg");
-    text = text.replace("{{DIRECTORY}}", dir);
     QMessageBox msgBox(
         QMessageBox::Question, //Icon
-        gt("download-dir-dialog-title"), //Title
-        text, //Text
+        messageTitle, //Title
+        messageText, //Text
         QMessageBox::Ok | QMessageBox::Cancel //Buttons
     );
     msgBox.setDefaultButton(QMessageBox::Ok);
 
     int ret = msgBox.exec();
     return (ret == QMessageBox::Ok);
+}
+
+bool SettingsView::confirmDialogDownloadDir(const QString &dir) {
+    auto messageText = gt("download-dir-dialog-msg");
+    messageText = messageText.replace("{{DIRECTORY}}", dir);
+    return confirmDialog(messageText, gt("download-dir-dialog-title"));
 }
 
 void SettingsView::resetDownloadDir()

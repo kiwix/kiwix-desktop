@@ -20,7 +20,7 @@ public Q_SLOTS:
     void onZoomChanged(qreal zoomFactor);
 private:
     bool confirmDialogDownloadDir(const QString& dir);
-
+    bool confirmDialog(QString messageText, QString messageTitle);
     Ui::Settings *ui;
 };
 
