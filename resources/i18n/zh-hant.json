@@ -17,6 +17,7 @@
 	"home-page": "首頁",
 	"main-menu": "主選單",
 	"print": "列印",
+	"print-page-error": "當列印時發生錯誤。",
 	"new-tab": "新分頁",
 	"close-tab": "關閉分頁",
 	"close": "關閉",
@@ -123,5 +124,7 @@
 	"open-link-in-web-browser": "在網路瀏覽器開啟連結",
 	"download-dir-dialog-title": "您確定您要更改下載目錄嗎？",
 	"download-dir-dialog-msg": "新目錄路徑會是：\n{{DIRECTORY}}",
-	"invalid-port": "無效通訊埠"
+	"invalid-port": "無效通訊埠",
+	"zim-open-fail-title": "無效檔案",
+	"zim-open-fail-text": "ZIM 檔案 <b>{{ZIM}}</b> 無法正常開啓。這將會從您的圖書館裡移除。"
 }
