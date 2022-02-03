@@ -30,9 +30,9 @@ public:
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     std::shared_ptr<kiwix::Searcher> getSearcher(const QString& zimId);
-    QStringList getBookIds();
-    QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending);
-    const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) { return m_library.getBookmarks(onlyValidBookmarks); }
+    QStringList getBookIds() const;
+    QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
+    const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return m_library.getBookmarks(onlyValidBookmarks); }
     void addBookToLibrary(kiwix::Book& book);
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);

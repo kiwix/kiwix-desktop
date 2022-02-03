@@ -76,7 +76,7 @@ std::shared_ptr<kiwix::Searcher> Library::getSearcher(const QString &zimId)
     return searcher;
 }
 
-QStringList Library::getBookIds()
+QStringList Library::getBookIds() const
 {
     QStringList list;
     for(auto& id: m_library.getBooksIds()) {
@@ -85,7 +85,7 @@ QStringList Library::getBookIds()
     return list;
 }
 
-QStringList Library::listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending)
+QStringList Library::listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const
 {
     QStringList list;
     auto bookIds = m_library.filter(filter);
