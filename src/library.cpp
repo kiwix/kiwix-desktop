@@ -5,6 +5,8 @@
 #include <kiwix/tools.h>
 
 #include <QtDebug>
+#include <QtConcurrent/QtConcurrentRun>
+
 
 class LibraryManipulator: public kiwix::LibraryManipulator {
   public:
@@ -121,6 +123,45 @@ void Library::save()
 {
     m_library.writeToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
     m_library.writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
+}
+
+void Library::setMonitorDirZims(QStringList zimList)
+{
+    m_monitorDirZims = zimList;
+}
+
+void Library::loadMonitorDir(QString monitorDir)
+{
+    QMutex mutex;
+    QMutexLocker locker(&mutex);
+    const QDir dir(monitorDir);
+    QStringList newDirEntries = dir.entryList({"*.zim"});
+    for (auto &str : newDirEntries) {
+        str = monitorDir + QDir::separator() + str;
+    }
+    QSet<QString> newDir = QSet<QString>::fromList(newDirEntries);
+    QStringList oldDirEntries = m_monitorDirZims;
+    QSet<QString> oldDir = QSet<QString>::fromList(oldDirEntries);
+    QStringList addedZims = (newDir - oldDir).values();
+    QStringList removedZims = (oldDir - newDir).values();
+    setMonitorDirZims(newDir.values());
+    auto manipulator = LibraryManipulator(this);
+    auto manager = kiwix::Manager(&manipulator);
+    for (auto book : addedZims) {
+        manager.addBookFromPath(book.toStdString());
+    }
+    for (auto bookPath : removedZims) {
+        removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
+    }
+    emit(booksChanged());
+    save();
+}
+
+void Library::asyncLoadMonitorDir(QString dir)
+{
+    QtConcurrent::run( [=]() {
+        loadMonitorDir(dir);
+    });
 }
 
 const kiwix::Book &Library::getBookById(QString id) const

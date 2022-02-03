@@ -275,6 +275,10 @@ bool KiwixApp::isCurrentArticleBookmarked()
 
 void KiwixApp::setMonitorDir(const QString &dir) {
     m_settingsManager.setMonitorDir(dir);
+    m_library.setMonitorDirZims(QStringList());
+    if (dir != "") {
+        m_library.asyncLoadMonitorDir(dir);
+    }
 }
 
 #define CREATE_ACTION(ID, TEXT) \
