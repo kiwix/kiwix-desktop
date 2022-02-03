@@ -101,9 +101,13 @@ void KiwixApp::init()
             this->openZimFile(message);
         }
     });
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, [=](QString monitorDir) {
+        m_library.asyncLoadMonitorDir(monitorDir);
+    });
     QString monitorDir = m_settingsManager.getMonitorDir();
     if (monitorDir != "") {
         m_library.setMonitorDirZims(m_library.getLibraryZimsFromDir(monitorDir));
+        m_watcher.addPath(monitorDir);
         m_library.asyncLoadMonitorDir(monitorDir);
     }
 }
@@ -281,7 +285,11 @@ bool KiwixApp::isCurrentArticleBookmarked()
 void KiwixApp::setMonitorDir(const QString &dir) {
     m_settingsManager.setMonitorDir(dir);
     m_library.setMonitorDirZims(QStringList());
+    for (auto path : m_watcher.directories()) {
+        m_watcher.removePath(path);
+    }
     if (dir != "") {
+        m_watcher.addPath(dir);
         m_library.asyncLoadMonitorDir(dir);
     }
 }

@@ -108,6 +108,7 @@ private:
     kiwix::UpdatableNameMapper m_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
+    QFileSystemWatcher m_watcher;
 
     QAction*     mpa_actions[MAX_ACTION];
 
