@@ -16,6 +16,9 @@
 #include <QPrintDialog>
 #include <thread>
 #include <QMessageBox>
+#ifdef Q_OS_WIN
+#include <QtPlatformHeaders\QWindowsWindowFunctions>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 // KiwixApp
@@ -88,6 +91,12 @@ void KiwixApp::init()
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
     mp_mainWindow->show();
+#ifdef Q_OS_WIN
+    QWindow *window = mp_mainWindow->windowHandle();
+    if (window) {
+        QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
+    }
+#endif
     connect(this, &QtSingleApplication::messageReceived, this, [=](const QString &message) {
         if (!message.isEmpty()) {
             this->openZimFile(message);
