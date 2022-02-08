@@ -31,7 +31,7 @@ public slots:
     void setKiwixServerPort(int port);
     void setKiwixServerIpAddress(QString ipAddress);
     void setZoomFactor(qreal zoomFactor);
-    bool setDownloadDir(QString downloadDir);
+    void setDownloadDir(QString downloadDir);
 private:
     void initSettings();
 

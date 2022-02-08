@@ -73,12 +73,11 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
     emit(zoomChanged(zoomFactor));
 }
 
-bool SettingsManager::setDownloadDir(QString downloadDir)
+void SettingsManager::setDownloadDir(QString downloadDir)
 {
     m_downloadDir = downloadDir;
     m_settings.setValue("download/dir", downloadDir);
     emit(downloadDirChanged(downloadDir));
-    return true;
 }
 
 void SettingsManager::initSettings()
