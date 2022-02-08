@@ -1,5 +1,5 @@
 QWidget#widget {
-    max-width: 500;
+    max-width: 600;
 }
 
 QLabel,
@@ -23,8 +23,8 @@ QLabel#settingsLabel {
     font-weight: bold;
 }
 QSpinBox,
-QLabel#downloadDirPath {
-    font: bold 12pt "Cantarell";
+QLabel#downloadDirPath, #monitorDirPath {
+    font: bold 12pt;
 }
 QPushButton {
     background-color: white;
@@ -37,4 +37,19 @@ QPushButton {
 QPushButton:hover {
     background-color: #3366cc;
     color: white;
+}
+
+#monitorDirLabel {
+    padding-right: 0;
+}
+
+#monitorHelp {
+    padding: 1;
+    margin: 0;
+    background: #666666;
+    color: white;
+    border-radius: 2px;
+    max-height: 18px;
+    min-width: 14px;
+    font: bold;
 }

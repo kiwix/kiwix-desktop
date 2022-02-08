@@ -16,7 +16,7 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_zoomFactor * 100, m_downloadDir);
+        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }
@@ -73,12 +73,18 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
     emit(zoomChanged(zoomFactor));
 }
 
-bool SettingsManager::setDownloadDir(QString downloadDir)
+void SettingsManager::setDownloadDir(QString downloadDir)
 {
     m_downloadDir = downloadDir;
     m_settings.setValue("download/dir", downloadDir);
     emit(downloadDirChanged(downloadDir));
-    return true;
+}
+
+void SettingsManager::setMonitorDir(QString monitorDir)
+{
+    m_monitorDir = monitorDir;
+    m_settings.setValue("monitor/dir", monitorDir);
+    emit(monitorDirChanged(monitorDir));
 }
 
 void SettingsManager::initSettings()
@@ -87,4 +93,5 @@ void SettingsManager::initSettings()
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
     m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
+    m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
 }

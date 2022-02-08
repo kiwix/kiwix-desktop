@@ -79,7 +79,7 @@ public:
     kiwix::Server* getLocalServer() { return &m_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     QString getText(const QString &key) { return m_translation.getText(key); };
-
+    void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
 
 public slots:
@@ -108,6 +108,7 @@ private:
     kiwix::UpdatableNameMapper m_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
+    QFileSystemWatcher m_watcher;
 
     QAction*     mpa_actions[MAX_ACTION];
 

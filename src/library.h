@@ -30,14 +30,18 @@ public:
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
     std::shared_ptr<kiwix::Searcher> getSearcher(const QString& zimId);
-    QStringList getBookIds();
-    QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending);
-    const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) { return m_library.getBookmarks(onlyValidBookmarks); }
+    QStringList getBookIds() const;
+    QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
+    const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return m_library.getBookmarks(onlyValidBookmarks); }
+    QStringList getLibraryZimsFromDir(QString dir) const;
+    void setMonitorDirZims(QStringList zimList);
     void addBookToLibrary(kiwix::Book& book);
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
+    void loadMonitorDir(QString dir);
+    void asyncLoadMonitorDir(QString dir);
     kiwix::Library& getKiwixLibrary() { return m_library; }
 public slots:
     const kiwix::Book& getBookById(QString id) const;
@@ -49,6 +53,7 @@ signals:
 private:
     kiwix::Library m_library;
     QString m_libraryDirectory;
+    QStringList m_monitorDirZims;
 friend class LibraryManipulator;
 };
 

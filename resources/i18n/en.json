@@ -69,7 +69,10 @@
     "port-for-local-kiwix-server-setting":"Port for local Kiwix server",
     "zoom-level-setting":"Default zoom level",
     "download-directory-setting":"Download directory",
+    "monitor-directory-setting":"Monitor directory",
+    "monitor-directory-default":"Not set",
     "reset":"Reset",
+    "clear":"Clear",
     "browse":"Browse",
     "about-kiwix-desktop-title":"Kiwix Desktop",
     "about-kiwix-desktop-description":"Kiwix enables you to have the whole Wikipedia at hand wherever you go! On a boat, in the middle of nowhere or in jail, Kiwix gives you access to the whole human knowledge. You don't need Internet, everything is stored on your computer.",
@@ -124,5 +127,10 @@
     "download-dir-dialog-msg":"The new download directory path will be:\n{{DIRECTORY}}",
     "invalid-port":"Invalid port",
     "zim-open-fail-title":"Invalid file",
-    "zim-open-fail-text":"The ZIM file <b>{{ZIM}}</b> cannot be opened properly. It will be removed from your library."
+    "zim-open-fail-text":"The ZIM file <b>{{ZIM}}</b> cannot be opened properly. It will be removed from your library.",
+    "monitor-dir-dialog-title":"Are you sure you want to change the monitor directory?",
+    "monitor-dir-dialog-msg":"The new monitor directory path will be:\n{{DIRECTORY}}",
+    "monitor-clear-dir-dialog-title":"Are you sure you want to clear the monitor directory?",
+    "monitor-clear-dir-dialog-msg":"This will stop checking the monitor directory for new ZIM files.",
+    "monitor-directory-tooltip":"All ZIM files in this directory will be automatically added to the library."
 }
