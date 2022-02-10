@@ -6,7 +6,8 @@
 			"Helpau",
 			"Kareyac",
 			"Pacha Tchernof",
-			"Smavrina"
+			"Smavrina",
+			"Tanzun"
 		]
 	},
 	"name": "английский",
@@ -74,7 +75,10 @@
 	"port-for-local-kiwix-server-setting": "Порт для локального сервера Kiwix",
 	"zoom-level-setting": "Уровень масштабирования по умолчанию",
 	"download-directory-setting": "Скачать директорию",
+	"monitor-directory-setting": "Директория на дисплее",
+	"monitor-directory-default": "Не задано",
 	"reset": "Сбросить",
+	"clear": "Очистить",
 	"browse": "Обзор",
 	"about-kiwix-desktop-title": "Kiwix для ПК",
 	"about-kiwix-desktop-description": "С Kiwix вся Википедия у вас под рукой, куда бы вы не отправились! На корабле, в далёкой глуши или даже в тюрьме, с Kiwix вам доступны все знания человечества. Для доступа вам не понадобится интернет, всё сохранено на вашем компьютере.",
@@ -127,5 +131,10 @@
 	"open-link-in-web-browser": "Открыть ссылку в веб-браузере",
 	"download-dir-dialog-title": "Вы действительно хотите изменить директорию для загрузки?",
 	"download-dir-dialog-msg": "Новая директория для загрузки будет установлена на: {{DIRECTORY}}",
-	"invalid-port": "Некорректный порт"
+	"invalid-port": "Некорректный порт",
+	"monitor-dir-dialog-title": "Вы действительно хотите изменить директорию монитора?",
+	"monitor-dir-dialog-msg": "Путь к новой директории монитора: \n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "Вы действительно хотите очистить директорию монитора?",
+	"monitor-clear-dir-dialog-msg": "Это остановит проверку директории монитора на наличие новых файлов в формате ZIM.",
+	"monitor-directory-tooltip": "Все файлы ZIM в этой директории будут автоматически добавлены в библиотеку."
 }

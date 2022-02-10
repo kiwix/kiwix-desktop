@@ -72,7 +72,10 @@
 	"port-for-local-kiwix-server-setting": "פתחה לשרת Kiwix מקומי",
 	"zoom-level-setting": "רמת תקריב כברירת מחדל",
 	"download-directory-setting": "תיקיית הורדה",
+	"monitor-directory-setting": "תיקיית ניטור",
+	"monitor-directory-default": "לא הוגדרה",
 	"reset": "איפוס",
+	"clear": "ניקוי",
 	"browse": "עיון",
 	"about-kiwix-desktop-title": "Kiwix לשולחן העבודה",
 	"about-kiwix-desktop-description": "Kiwix מאפשר לך לקחת אתך את ויקיפדיה לכל מקום שהוא! סירה, באמצע שום מקום או בכלא, Kiwix מעניק לך גישה לכל הידע האנושי. אין צורך באינטרנט, הכול מאוחסן אצלך במחשב.",
@@ -127,5 +130,10 @@
 	"download-dir-dialog-msg": "נתיב תיקיית ההורדה החדש הוא:\n{{DIRECTORY}}",
 	"invalid-port": "פתחה שגויה",
 	"zim-open-fail-title": "קובץ בלתי־תקין",
-	"zim-open-fail-text": "קובץ ה־ZIM בשם <b>{{ZIM}}</b> אינו יכול להיפתח באופן הולם. הוא יוסר מהספרייה שלך."
+	"zim-open-fail-text": "קובץ ה־ZIM בשם <b>{{ZIM}}</b> אינו יכול להיפתח באופן הולם. הוא יוסר מהספרייה שלך.",
+	"monitor-dir-dialog-title": "האם ברצונך באמת לשנות את תיקיית הניטור?",
+	"monitor-dir-dialog-msg": "הנתיב החדש לתיקיית הניתור יהיה:\n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "האם ברצונך באמת לנקות את תיקיית הניטור?",
+	"monitor-clear-dir-dialog-msg": "זה יפסיק לדגום את תיקיית הניטור ולחפש בה קובצי ZIM חדשים.",
+	"monitor-directory-tooltip": "כל קובצי ה־ZIM בתיקייה הזאת יוספו אוטומטית לספרייה."
 }
