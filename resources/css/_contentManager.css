@@ -23,8 +23,8 @@ html, body {
     background-repeat: no-repeat;
     background-position: left 10px top 10px;
     background-size: 23px 23px;
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
     padding-left: 45px;
     height: 40px;
     width: 90%;
@@ -106,7 +106,7 @@ i {
 .cell4,
 .cell5 {
     flex-grow: 1;
-    margin: 0px 10px;
+    margin: 0 10px;
 }
 
 .cell2,
@@ -133,14 +133,14 @@ summary {
 }
 button {
   background: transparent;
-  border: 0px;
+  border: 0;
 }
 .tablerow button {
   /* color: blue; */
   color:#555;
   /* font-weight: bold; */
   font-size: 16px;
-  border: 0px;
+  border: 0;
   background: transparent;
   border-radius: 2px;
 }
@@ -169,8 +169,8 @@ details:hover {
 
 .menu-options {
     list-style: none;
-    padding: 0 0 0 0;
-    margin: 2px 0px 2px;
+    padding: 0;
+    margin: 2px 0;
 }
 
 .menu-option {
@@ -230,11 +230,11 @@ details:hover {
 }
 
 .circle-wrap .circle .mask {
-    clip: rect(0px, var(--circle-wrap-dimension), var(--circle-wrap-dimension), calc(var(--circle-wrap-dimension) / 2));
+    clip: rect(0, var(--circle-wrap-dimension), var(--circle-wrap-dimension), calc(var(--circle-wrap-dimension) / 2));
 }
 
 .circle-wrap .circle .mask .fill {
-    clip: rect(0px, calc(var(--circle-wrap-dimension) / 2), var(--circle-wrap-dimension), 0px);
+    clip: rect(0, calc(var(--circle-wrap-dimension) / 2), var(--circle-wrap-dimension), 0);
     background-color: #3498db;
 }
 .circle-wrap .circle .mask.full,

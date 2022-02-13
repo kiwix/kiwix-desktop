@@ -44,4 +44,3 @@ for json in translation_dir.glob("*.json"):
 node.tail += " "*4
 
 out_qrc_file.write_bytes(ET.tostring(root, encoding='utf8'))
-

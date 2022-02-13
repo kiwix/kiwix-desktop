@@ -3,7 +3,6 @@
 KListWidgetItem::KListWidgetItem(QString text)
     : QListWidgetItem (text)
 {
-
 }
 
 QVariant KListWidgetItem::data(int role) const
