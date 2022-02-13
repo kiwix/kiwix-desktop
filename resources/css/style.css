@@ -34,7 +34,7 @@ SearchBar {
     background-color: white;
     padding: 2px 2px 2px 40px;
     max-height: 38px;
-    margin: 2px 5px 2px 5px;
+    margin: 2px 5px;
     color: #666;
     font-size: 16px;
     border: 1px solid #ccc;
