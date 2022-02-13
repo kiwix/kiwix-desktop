@@ -255,10 +255,10 @@ function displayMenu(book) {
     document.getElementsByClassName("pause-option")[0].style.display = (app.downloads[book.id] && app.downloads[book.id].status == 'active') ? "block" : "none";
     document.getElementsByClassName("resume-option")[0].style.display = (app.downloads[book.id] && app.downloads[book.id].status == 'paused') ? "block" : "none";
     document.getElementsByClassName("cancel-option")[0].style.display = (app.downloads[book.id]) ? "block" : "none";
-};
+}
 
 function setContextMenuPosition() {
     var menu = document.getElementById("menu");
     menu.style.left = `${mouseX}px`;
     menu.style.top = `${mouseY}px`;
-};
+}
