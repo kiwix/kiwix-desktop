@@ -11,9 +11,7 @@
 
 UrlSchemeHandler::UrlSchemeHandler()
 {
-
 }
-
 
 void
 UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
@@ -48,7 +46,6 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
     } catch (kiwix::NoEntry&) {
       request->fail(QWebEngineUrlRequestJob::UrlNotFound);
     }
-
 }
 
 void

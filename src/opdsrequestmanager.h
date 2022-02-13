@@ -11,7 +11,6 @@ class OpdsRequestManager : public QObject
     Q_OBJECT
 
 public:
-
     OpdsRequestManager();
     ~OpdsRequestManager() {}
 
