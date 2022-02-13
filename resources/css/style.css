@@ -11,7 +11,7 @@ QWidget {
 TopWidget {
     min-height: 48px;
     max-height: 48px;
-    margin: 0px;
+    margin: 0;
     padding: 5px;
     border: none;
     border-bottom: 1px solid #ccc;
@@ -43,8 +43,8 @@ SearchBar {
 
 SearchBar > QPushButton {
     margin: 8px 0px 8px 12px;
-    padding: 0px;
-    border: 0px solid #fff;
+    padding: 0;
+    border: 0 solid #fff;
     background-color: white;
     height: 32px;
     width: 32px;
@@ -67,8 +67,8 @@ TopWidget QToolButton::menu-arrow {
 }
 
 TopWidget QToolButton::menu-indicator {
-    width: 0px; /* it can be hidden at all by setting 0px */
-    height: 0px;
+    width: 0; /* it can be hidden at all by setting 0px */
+    height: 0;
     subcontrol-origin: padding;
 }
 
@@ -149,7 +149,7 @@ QTabWidget::pane {
 QTabBar::tab {
     border: none;
     border-right: 1px solid #ccc;
-    border-radius: 0px;
+    border-radius: 0;
     padding: 2px;
 }
 
@@ -204,7 +204,7 @@ QTabBar::tab:last QToolButton::hover {
     color: #666;
     font-size: 16px;
     border: 1px solid #ccc;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 #fNextButton,
@@ -214,7 +214,7 @@ QTabBar::tab:last QToolButton::hover {
     max-height: 36px;
     max-width: 36px;
     border: 1px solid #ccc;
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 #fNextButton:pressed,
