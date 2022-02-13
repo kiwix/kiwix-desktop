@@ -288,7 +288,7 @@ ContentTypeFilter {
 
 #readinglistbar QLabel {
     font-size: 24px;
-    font: bold;
+    font-weight: bold;
     padding: 5px;
 }
 
