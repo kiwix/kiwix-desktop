@@ -396,6 +396,7 @@ QStringList ContentManager::getBookIds()
     std::vector<std::string> tags;
     if (m_categoryFilter != "all" && m_categoryFilter != "other") {
         tags.push_back("_category:"+m_categoryFilter.toStdString());
+        filter.acceptTags(tags);
     }
     if (m_categoryFilter == "other") {
         for (auto& category: S_CATEGORIES) {
@@ -416,7 +417,6 @@ QStringList ContentManager::getBookIds()
         }
     }
 
-    filter.acceptTags(tags);
     filter.query(m_searchQuery.toStdString());
     if (m_currentLanguage != "*")
         filter.lang(m_currentLanguage.toStdString());
