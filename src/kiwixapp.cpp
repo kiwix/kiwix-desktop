@@ -110,6 +110,9 @@ void KiwixApp::init()
         m_watcher.addPath(monitorDir);
         m_library.asyncLoadMonitorDir(monitorDir);
     }
+
+    qDebug() << "Build with ssl version :" << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << "Running with ssl version :" << QSslSocket::sslLibraryVersionNumber();
 }
 
 KiwixApp::~KiwixApp()
