@@ -109,7 +109,6 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
             if (displayTagMap["_videos"]) displayTagList << tr("Videos");
             if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
             if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
-            if (displayTagMap["_ftindex"]) displayTagList << tr("Fulltext index");
             QString s = displayTagList.join(", ");
             values.append(s);
         }
