@@ -58,11 +58,9 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     ContentTypeFilter* videosFilter = new ContentTypeFilter("pictures", this);
     ContentTypeFilter* picturesFilter = new ContentTypeFilter("videos", this);
     ContentTypeFilter* detailsFilter = new ContentTypeFilter("details", this);
-    ContentTypeFilter* ftindexFilter = new ContentTypeFilter("ftindex", this);
     m_contentTypeFilters.push_back(videosFilter);
     m_contentTypeFilters.push_back(picturesFilter);
     m_contentTypeFilters.push_back(detailsFilter);
-    m_contentTypeFilters.push_back(ftindexFilter);
 
     auto layout = static_cast<QVBoxLayout*>(mp_ui->contentTypeSelector->layout());
     for (auto &contentTypeFilter : m_contentTypeFilters) {
