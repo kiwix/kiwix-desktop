@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QWebEngineView>
+#include <QMouseEvent>
 #include "fullscreennotification.h"
 
 QT_BEGIN_NAMESPACE
@@ -18,10 +19,9 @@ public:
     explicit FullScreenWindow(QWebEngineView *oldView, QWidget *parent = nullptr);
     ~FullScreenWindow();
     void setWebEnginePage();
-
 protected:
     void resizeEvent(QResizeEvent *event) override;
-
+    bool eventFilter(QObject* object, QEvent* event) override;
 private:
     QWebEngineView *m_view;
     FullScreenNotification *m_notification;

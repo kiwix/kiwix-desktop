@@ -1,6 +1,7 @@
 #include "fullscreenwindow.h"
 #include "kiwixapp.h"
 #include <QAction>
+#include <QDebug>
 
 FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
     : QWidget(parent)
@@ -22,7 +23,8 @@ FullScreenWindow::FullScreenWindow(QWebEngineView *oldView, QWidget *parent)
     setGeometry(m_oldGeometry);
     showFullScreen();
     m_oldView->window()->hide();
-
+    QApplication::instance()->installEventFilter(this);
+    setMouseTracking(true);
 }
 
 FullScreenWindow::~FullScreenWindow()
@@ -31,6 +33,20 @@ FullScreenWindow::~FullScreenWindow()
     m_oldView->window()->setGeometry(m_oldGeometry);
     m_oldView->window()->show();
     hide();
+}
+
+bool FullScreenWindow::eventFilter(QObject* object, QEvent* event)
+{
+    if (event->type() == QEvent::MouseMove)
+    {
+        const auto mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->y() == 0) {
+            KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction)->trigger();
+            KiwixApp::instance()->getMainWindow()->toggleFullScreen();
+        }
+        return true;
+    }
+    return false;
 }
 
 void FullScreenWindow::setWebEnginePage()
