@@ -167,7 +167,6 @@ void Library::loadMonitorDir(QString monitorDir)
         removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
     }
     emit(booksChanged());
-    save();
 }
 
 void Library::asyncLoadMonitorDir(QString dir)
