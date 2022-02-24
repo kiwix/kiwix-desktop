@@ -3,6 +3,7 @@
 		"authors": [
 			"Asokolov",
 			"DDPAT",
+			"Ice bulldog",
 			"Renamerr",
 			"Renvoy",
 			"Ата"
@@ -74,7 +75,10 @@
 	"port-for-local-kiwix-server-setting": "Порт для локального серверу Kiwik",
 	"zoom-level-setting": "Рівень масштабування за замовчуванням",
 	"download-directory-setting": "Каталог для завантажень",
+	"monitor-directory-setting": "Каталог монітора",
+	"monitor-directory-default": "Не задано",
 	"reset": "Скинути",
+	"clear": "Очистити",
 	"browse": "Переглянути",
 	"about-kiwix-desktop-title": "Kiwik-десктоп",
 	"about-kiwix-desktop-description": "З Kiwix уся Вікіпедія буде у вас під рукою, куди б ви не запроторилися! Будь-де, на човні чи хоч у в'язниці, з Kiwix вам будуть доступні всі знання людства. Для доступу вам не потрібний Інтернет, оскільки все буде збережене на вашому комп'ютері.",
@@ -129,5 +133,10 @@
 	"download-dir-dialog-msg": "Новий каталог для завантажень тепер:\n{{DIRECTORY}}",
 	"invalid-port": "Недійсний порт",
 	"zim-open-fail-title": "Недійсний файл",
-	"zim-open-fail-text": "Файл ZIM <b>{{ZIM}}</b> неможливо відкрити належним чином. Його буде видалено з вашої бібліотеки."
+	"zim-open-fail-text": "Файл ZIM <b>{{ZIM}}</b> неможливо відкрити належним чином. Його буде видалено з вашої бібліотеки.",
+	"monitor-dir-dialog-title": "Ви впевнені, що хочете змінити каталог монітора?",
+	"monitor-dir-dialog-msg": "Новий шлях до каталогу монітора буде таким:\n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "Ви впевнені, що хочете очистити каталог монітора?",
+	"monitor-clear-dir-dialog-msg": "Це припинить перевірку каталогу монітора на наявність нових файлів ZIM.",
+	"monitor-directory-tooltip": "Усі ZIM-файли в цьому каталозі будуть автоматично додані до бібліотеки."
 }
