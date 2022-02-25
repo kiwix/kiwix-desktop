@@ -70,5 +70,7 @@
 	"yes": "jes",
 	"no": "ne",
 	"no-filter": "neniu filtro",
-	"open-link-in-web-browser": "Malfermi ligilon en retumilo"
+	"open-link-in-web-browser": "Malfermi ligilon en retumilo",
+	"invalid-port": "Nevalida pordo",
+	"zim-open-fail-title": "Nevalida dosiero"
 }

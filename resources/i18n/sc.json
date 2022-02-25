@@ -70,7 +70,10 @@
 	"port-for-local-kiwix-server-setting": "Ghenna pro su serbidore locale de Kiwix",
 	"zoom-level-setting": "Livellu de ismanniamentu predefinidu",
 	"download-directory-setting": "Cartella de iscarrigamentu",
+	"monitor-directory-setting": "Cartella de compidada",
+	"monitor-directory-default": "No impostadu",
 	"reset": "Reseta",
+	"clear": "Isbòida",
 	"browse": "Esplora",
 	"about-kiwix-desktop-title": "Kiwix pro iscrivania",
 	"about-kiwix-desktop-description": "Kiwix ti permitit de tènnere sa Wikipedia intrea a portada de manu in cale si siat logu tue ue as a andare! In una barca, in mesu a su nudda o in presone, Kiwix ti daet atzessu a totu sa connoschèntzia umana. Non bisòngias de Internèt, totu est sarvadu in s'elaboradore tuo.",
@@ -125,5 +128,10 @@
 	"download-dir-dialog-msg": "S'àndala pro sa cartella de iscarrigamentu noa at a èssere:\n{{DIRECTORY}}",
 	"invalid-port": "Ghenna non bàlida",
 	"zim-open-fail-title": "Documentu non bàlidu",
-	"zim-open-fail-text": "Su documentu ZIM <b>{{ZIM}}</b> non si podet abèrrere comente si tocat. S'at a bogare dae sa biblioteca tua."
+	"zim-open-fail-text": "Su documentu ZIM <b>{{ZIM}}</b> non si podet abèrrere comente si tocat. S'at a bogare dae sa biblioteca tua.",
+	"monitor-dir-dialog-title": "Ses seguru de chèrrere mudare sa cartella de compidada?",
+	"monitor-dir-dialog-msg": "S'àndala pro sa cartella de compidada noa at a èssere:\n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "Ses seguru de chèrrere isboidare sa cartella de compidada?",
+	"monitor-clear-dir-dialog-msg": "Custu at a firmare sa chirca de archìvios ZIM noos in sa cartella de compidada.",
+	"monitor-directory-tooltip": "Totu sos archìvios ZIM in custa cartella s'ant a annànghere in automàticu a sa biblioteca."
 }
