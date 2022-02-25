@@ -7,7 +7,11 @@ QPushButton,
 QSpinBox {
     font-size: 16px;
     line-height: 24px;
-    padding: 8px;
+}
+
+QLabel,
+QPushButton {
+    padding: 12px 8px;
 }
 
 QFrame[frameShape="4"] {
