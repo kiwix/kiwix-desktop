@@ -392,30 +392,30 @@ void ContentManager::setSearch(const QString &search)
 QStringList ContentManager::getBookIds()
 {
     kiwix::Filter filter;
-    std::vector<std::string> tags;
+    std::vector<std::string> acceptTags, rejectTags;
     if (m_categoryFilter != "all" && m_categoryFilter != "other") {
-        tags.push_back("_category:"+m_categoryFilter.toStdString());
-        filter.acceptTags(tags);
+        acceptTags.push_back("_category:"+m_categoryFilter.toStdString());
     }
     if (m_categoryFilter == "other") {
         for (auto& category: S_CATEGORIES) {
             if (category.first != "other" && category.first != "all") {
-                tags.push_back("_category:"+category.first.toStdString());
+                rejectTags.push_back("_category:"+category.first.toStdString());
             }
         }
-        filter.rejectTags(tags);
     }
 
     for (auto &contentTypeFilter : m_contentTypeFilters) {
         auto state = contentTypeFilter->checkState();
         auto filter = contentTypeFilter->getName();
         if (state == Qt::PartiallyChecked) {
-            tags.push_back("_" + filter.toStdString() +":yes");
+            acceptTags.push_back("_" + filter.toStdString() +":yes");
         } else if (state == Qt::Checked) {
-            tags.push_back("_" + filter.toStdString() +":no");
+            acceptTags.push_back("_" + filter.toStdString() +":no");
         }
     }
 
+    filter.acceptTags(acceptTags);
+    filter.rejectTags(rejectTags);
     filter.query(m_searchQuery.toStdString());
     if (m_currentLanguage != "*")
         filter.lang(m_currentLanguage.toStdString());
