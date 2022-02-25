@@ -75,6 +75,7 @@ void SettingsManager::setZoomFactor(qreal zoomFactor)
 
 void SettingsManager::setDownloadDir(QString downloadDir)
 {
+    downloadDir = QDir::toNativeSeparators(downloadDir);
     m_downloadDir = downloadDir;
     m_settings.setValue("download/dir", downloadDir);
     emit(downloadDirChanged(downloadDir));
@@ -82,6 +83,7 @@ void SettingsManager::setDownloadDir(QString downloadDir)
 
 void SettingsManager::setMonitorDir(QString monitorDir)
 {
+    monitorDir = QDir::toNativeSeparators(monitorDir);
     m_monitorDir = monitorDir;
     m_settings.setValue("monitor/dir", monitorDir);
     emit(monitorDirChanged(monitorDir));
