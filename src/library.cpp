@@ -150,7 +150,7 @@ void Library::loadMonitorDir(QString monitorDir)
     const QDir dir(monitorDir);
     QStringList newDirEntries = dir.entryList({"*.zim"});
     for (auto &str : newDirEntries) {
-        str = monitorDir + QDir::separator() + str;
+        str = QDir::toNativeSeparators(monitorDir + "/" + str);
     }
     QSet<QString> newDir = QSet<QString>::fromList(newDirEntries);
     QStringList oldDirEntries = m_monitorDirZims;
@@ -167,7 +167,6 @@ void Library::loadMonitorDir(QString monitorDir)
         removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
     }
     emit(booksChanged());
-    save();
 }
 
 void Library::asyncLoadMonitorDir(QString dir)
