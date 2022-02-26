@@ -41,7 +41,6 @@ public:
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
     void loadMonitorDir(QString dir);
-    void asyncLoadMonitorDir(QString dir);
     kiwix::Library& getKiwixLibrary() { return m_library; }
 public slots:
     const kiwix::Book& getBookById(QString id) const;

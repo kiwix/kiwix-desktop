@@ -5,7 +5,6 @@
 #include <kiwix/tools.h>
 
 #include <QtDebug>
-#include <QtConcurrent/QtConcurrentRun>
 
 
 class LibraryManipulator: public kiwix::LibraryManipulator {
@@ -167,13 +166,6 @@ void Library::loadMonitorDir(QString monitorDir)
         removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
     }
     emit(booksChanged());
-}
-
-void Library::asyncLoadMonitorDir(QString dir)
-{
-    QtConcurrent::run( [=]() {
-        loadMonitorDir(dir);
-    });
 }
 
 const kiwix::Book &Library::getBookById(QString id) const

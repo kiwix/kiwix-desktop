@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QStorageInfo>
 #include <QMessageBox>
+#include <QtConcurrent/QtConcurrentRun>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -36,6 +37,16 @@ void ContentManager::setLocal(bool local) {
     m_local = local;
     emit(filterParamsChanged());
 }
+
+void ContentManager::asyncLoadMonitorDir(QString dir)
+{
+    if (m_local) {
+        QtConcurrent::run( [=]() {
+            mp_library->loadMonitorDir(dir);
+        });
+    }
+}
+
 
 QStringList ContentManager::getTranslations(const QStringList &keys)
 {

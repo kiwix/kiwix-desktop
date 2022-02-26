@@ -26,6 +26,7 @@ public:
     void setCurrentLanguage(QString language);
     void setCurrentCategoryFilter(QString category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
+    void asyncLoadMonitorDir(QString dir);
 
 private:
     Library* mp_library;
