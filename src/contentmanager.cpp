@@ -35,6 +35,9 @@ void ContentManager::setLocal(bool local) {
         return;
     }
     m_local = local;
+    if (m_local) {
+        asyncLoadMonitorDir(KiwixApp::instance()->getSettingsManager()->getMonitorDir());
+    }
     emit(filterParamsChanged());
 }
 
