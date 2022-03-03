@@ -74,7 +74,10 @@
 	"port-for-local-kiwix-server-setting": "로컬 Kiwix 서버 포트",
 	"zoom-level-setting": "기본 확대/축소 수준",
 	"download-directory-setting": "다운로드 디렉터리",
+	"monitor-directory-setting": "모니터 디렉터리",
+	"monitor-directory-default": "설정되지 않음",
 	"reset": "재설정",
+	"clear": "비우기",
 	"browse": "찾아보기",
 	"about-kiwix-desktop-title": "Kiwix 데스크톱",
 	"about-kiwix-desktop-description": "Kiwix를 사용하면 어느 곳에 있든지 위키백과를 사용할 수 있습니다! 보트 위에서도, 인적이 드문 곳, 심지어 감옥에서도 Kiwix는 인류의 모든 지식에 접근하게 해 줍니다. 인터넷이 필요 없꼬 모든 것이 컴퓨터에 저장됩니다.",
@@ -127,5 +130,10 @@
 	"open-link-in-web-browser": "웹 브라우저로 링크 열기",
 	"download-dir-dialog-title": "다운로드 디렉터리를 변경하시겠습니까?",
 	"download-dir-dialog-msg": "새 다운로드 디렉터리 경로는 다음과 같습니다:\n{{DIRECTORY}}",
-	"invalid-port": "유효하지 않은 포트"
+	"invalid-port": "유효하지 않은 포트",
+	"monitor-dir-dialog-title": "모니터 디렉터리를 변경하시겠습니까?",
+	"monitor-dir-dialog-msg": "새 모니터 디렉터리는 다음과 같습니다: {{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "모니터 디렉터리를 비우시겠습니까?",
+	"monitor-clear-dir-dialog-msg": "새 ZIM 파일의 모니터 디렉터리의 확인을 중단합니다.",
+	"monitor-directory-tooltip": "이 디렉터리의 모든 ZIM 파일은 자동으로 라이브러리에 추가됩니다."
 }
