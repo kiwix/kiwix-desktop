@@ -157,16 +157,19 @@ void Library::loadMonitorDir(QString monitorDir)
     QSet<QString> oldDir = QSet<QString>::fromList(oldDirEntries);
     QStringList addedZims = (newDir - oldDir).values();
     QStringList removedZims = (oldDir - newDir).values();
-    setMonitorDirZims(newDir.values());
     auto manipulator = LibraryManipulator(this);
     auto manager = kiwix::Manager(&manipulator);
+    bool needsRefresh = !removedZims.empty();
     for (auto book : addedZims) {
-        manager.addBookFromPath(book.toStdString());
+        needsRefresh |= manager.addBookFromPath(book.toStdString());
     }
     for (auto bookPath : removedZims) {
         removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
     }
-    emit(booksChanged());
+    if (needsRefresh) {
+        setMonitorDirZims(newDir.values());
+        emit(booksChanged());
+    }
 }
 
 void Library::asyncLoadMonitorDir(QString dir)
