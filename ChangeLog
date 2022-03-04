@@ -1,3 +1,25 @@
+kiwix-desktop 2.2.0
+===================
+
+ * Force the request to be explicit about the fact we don't want a book count limit.
+   Fix case when server returns 0 books. (@juuz0 #769)
+ * Correctly initialize mainWindows/contentManager. Fix crash on Windows. (@mgautierfr #783)
+ * New Feature: Monitor a local directory for new/removed zim files (@juuz0 #743)
+ * Fix library filtering on "other" category (@mgautier #791 #798)
+ * Correctly set the zoom level on new pages (@juuz0 #774)
+ * Fix setting UI when zoom level may be hidden by QSpinBox arroys (@juuz0 #799)
+ * Remove filtering by fulltext index presence (@kelson42 #795)
+ * Refactor internal code for better signal management (@asashnov #751)
+ * Fix svg icon installation path (@xvitaly #773)
+ * Fix typos and translations
+
+Known bugs:
+ * AppImage build by our CI is buggy on recent Fedora, nothing is displayed
+   in the WebView. This works correctly on AppImage build on Fedora or rpm
+   packaged version.
+ * Kiwix-desktop fails to download huge zim files because of too big metadata
+   describing the download.
+
 kiwix-desktop 2.1.0
 ===================
 
