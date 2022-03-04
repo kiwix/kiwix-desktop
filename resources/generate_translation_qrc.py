@@ -34,7 +34,7 @@ qresource.tail = "\n"
 json_files = translation_dir.glob("*.json")
 
 node = None
-for json in translation_dir.glob("*.json"):
+for json in sorted(translation_dir.glob("*.json")):
     if node is not None:
         node.tail += " " * 8
     node = ET.SubElement(qresource, "file")
