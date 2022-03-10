@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Kly",
-			"Weather Top Wizard"
+			"Weather Top Wizard",
+			"Winston Sung"
 		]
 	},
 	"name": "繁體中文",
@@ -30,7 +31,7 @@
 	"find-in-page": "在頁面裡尋找",
 	"set-fullscreen": "設定全螢幕",
 	"quit-fullscreen": "結束全螢幕",
-	"table-of-content": "目錄",
+	"table-of-content": "目次",
 	"reading-list": "閱讀清單",
 	"reading-list-title": "閱讀清單",
 	"zoom-in": "放大",
