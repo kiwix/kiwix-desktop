@@ -258,9 +258,12 @@ QString ContentManager::downloadBook(const QString &id)
     return QString::fromStdString(download->getDid());
 }
 
-void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString filename)
+void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName)
 {
-    QDir dir(dirPath, filename);
+    if (fileName == "*") {
+        return;
+    }
+    QDir dir(dirPath, fileName);
     for(const QString& file: dir.entryList()) {
         dir.remove(file);
     }
@@ -272,8 +275,8 @@ void ContentManager::eraseBook(const QString& id)
     tabBar->closeTabsByZimId(id);
     kiwix::Book book = mp_library->getBookById(id);
     QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-    QString filename = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-    eraseBookFilesFromComputer(dirPath, filename);
+    QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
+    eraseBookFilesFromComputer(dirPath, fileName);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit mp_library->bookmarksChanged();
