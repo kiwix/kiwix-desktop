@@ -1,3 +1,11 @@
+kiwix-desktop 2.2.1
+===================
+
+ * [HOTFIX] Fix a bug making kiwix-desktop removing ALL file in the library directory
+   when a download fails (@juuz0 #816)
+ * Improve update of the library view when downloading a book (@juuz0 #811)
+ * Update translations.
+
 kiwix-desktop 2.2.0
 ===================
 
