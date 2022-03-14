@@ -8,6 +8,7 @@
 			"Kareyac",
 			"Pacha Tchernof",
 			"Smavrina",
+			"StarryFairy",
 			"Tanzun"
 		]
 	},
@@ -23,6 +24,7 @@
 	"home-page": "Домашняя страница",
 	"main-menu": "Главное меню",
 	"print": "Печать",
+	"print-page-error": "Во время печати возникла ошибка.",
 	"new-tab": "Новая вкладка",
 	"close-tab": "Закрыть вкладку",
 	"close": "Закрыть",
@@ -133,6 +135,8 @@
 	"download-dir-dialog-title": "Вы действительно хотите изменить директорию для загрузки?",
 	"download-dir-dialog-msg": "Новая директория для загрузки будет установлена на: {{DIRECTORY}}",
 	"invalid-port": "Некорректный порт",
+	"zim-open-fail-title": "Недопустимый файл",
+	"zim-open-fail-text": "Указанный ZIM-файл <b>{{ZIM}}</b> не может быть открыт корректно. Он будет удалён из вашей библиотеки.",
 	"monitor-dir-dialog-title": "Вы действительно хотите изменить директорию монитора?",
 	"monitor-dir-dialog-msg": "Путь к новой директории монитора: \n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Вы действительно хотите очистить директорию монитора?",
