@@ -7,6 +7,7 @@
 			"Fitoschido",
 			"Geryescalier",
 			"Ice bulldog",
+			"Josuert",
 			"Ncr"
 		]
 	},
@@ -20,6 +21,7 @@
 	"print": "Imprimir",
 	"new-tab": "Pestaña nueva",
 	"close-tab": "Cerrar pestaña",
+	"close": "Cerrar",
 	"reopen-closed-tab": "Reabrir pestaña cerrada",
 	"browse-library": "Explorar biblioteca",
 	"open-file": "Abrir archivo",
@@ -68,12 +70,15 @@
 	"cancel": "Cancelar",
 	"apply": "Aplicar",
 	"port-for-local-kiwix-server-setting": "Puerto del servidor Kiwix local",
-	"zoom-level-setting": "Nivel de escala:",
+	"zoom-level-setting": "Nivel de zoom predeterminado",
 	"download-directory-setting": "Directorio de descargas",
+	"monitor-directory-setting": "Supervisar directorio",
+	"monitor-directory-default": "No establecido",
 	"reset": "Restablecer",
+	"clear": "Limpiar",
 	"browse": "Explorar",
 	"about-kiwix-desktop-title": "Escritorio Kiwix",
-	"about-kiwix-desktop-description": "¡Kiwix te permite tener toda la Wikipedia a mano donde quiera que vayas! En un bote, en medio de la nada o en la cárcel, Kiwix te da acceso a todo el conocimiento humano. No necesita Internet, todo está almacenado en su computadora.",
+	"about-kiwix-desktop-description": "¡Kiwix te permite tener toda la Wikipedia a mano donde quiera que vayas! En un barco, en medio de la nada o en la cárcel, Kiwix te da acceso a todo el conocimiento humano. No necesitas Internet, todo está almacenado en tu computadora.",
 	"about-learn-more-about-kiwix": "Para conocer más sobre Kiwix",
 	"about-release-title": "Lanzamiento",
 	"about-source-code": "Este software se ha publicado en virtud de la Licencia Pública General de GNU, versión 3. El código fuente puede verse en <a href='{{GITHUB_URL}}'>GitHub</a>.",
@@ -101,6 +106,7 @@
 	"ted": "Ted",
 	"vikidia": "Vikidia",
 	"wikibooks": "Wikilibros",
+	"wikihow": "wikiHow",
 	"wikinews": "Wikinoticias",
 	"wikipedia": "Wikipedia",
 	"wikiquote": "Wikiquote",
@@ -117,5 +123,6 @@
 	"no": "no",
 	"no-filter": "Sin filtro",
 	"open-link-in-web-browser": "Abrir enlace en navegador web",
-	"invalid-port": "Puerto no válido"
+	"invalid-port": "Puerto no válido",
+	"zim-open-fail-title": "Archivo invalido"
 }
