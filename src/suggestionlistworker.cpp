@@ -32,22 +32,26 @@ void SuggestionListWorker::run()
             urlList.append(url);
         }
     }
-    QUrlQuery query;
+
+    // Propose fulltext search
     url.setPath("");
     if (reader) {
-        // The host is used to determine the currentZimId
-        // The content query item is used to know in which zim search (as for kiwix-serve)
-        url.setHost(currentZimId + ".search");
-        query.addQueryItem("content", currentZimId);
+        if (reader->hasFulltextIndex()) {
+            // The host is used to determine the currentZimId
+            // The content query item is used to know in which zim search (as for kiwix-serve)
+            url.setHost(currentZimId + ".search");
+            QUrlQuery query;
+            query.addQueryItem("content", currentZimId);
+            query.addQueryItem("pattern", m_text);
+            url.setQuery(query);
+            suggestionList.append(m_text + " (" + gt("fulltext-search") + ")");
+            urlList.append(url);
+        }
     } else {
         // We do not allow multi zim search for now.
         // We don't have a correct UI to select on which zim search,
         // how to display results, ...
         //url.setHost("library.search");
     }
-    query.addQueryItem("pattern", m_text);
-    url.setQuery(query);
-    suggestionList.append(m_text + " (" + gt("fulltext-search") + ")");
-    urlList.append(url);
     emit(searchFinished(suggestionList, urlList, m_token));
 }
