@@ -106,7 +106,12 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     auto end = start + pageLength;
 
     auto searcher = app->getLibrary()->getSearcher(bookId);
-    searcher->search(searchQuery, start, end);
+    try {
+        searcher->search(searchQuery, start, end);
+    } catch(std::runtime_error&) {
+        request->fail(QWebEngineUrlRequestJob::UrlInvalid);
+        return;
+    }
 
     IdNameMapper nameMapper;
     kiwix::SearchRenderer renderer(searcher.get(), &nameMapper);
