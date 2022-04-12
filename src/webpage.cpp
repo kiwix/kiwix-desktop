@@ -14,7 +14,7 @@ WebPage::WebPage(QObject *parent) :
     action(QWebEnginePage::Reload)->setVisible(false);
 }
 
-bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool isMainFrame)
+bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType /*type*/, bool /*isMainFrame*/)
 {
     if (url.scheme() != "zim") {
         QDesktopServices::openUrl(url);

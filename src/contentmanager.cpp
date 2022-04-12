@@ -63,6 +63,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
 
     if (nullptr == b){
         for(auto& key:keys) {
+            (void) key;
             values.append("");
         }
         return values;
@@ -165,8 +166,10 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
 {
     QStringList values;
     if (!mp_downloader) {
-        for(auto& key: keys)
+        for(auto& key: keys) {
+            (void) key;
             values.append("");
+        }
         return values;
     }
     auto& b = mp_library->getBookById(id);
@@ -259,7 +262,8 @@ QString ContentManager::downloadBook(const QString &id)
     }();
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     QStorageInfo storage(downloadPath);
-    if (book.getSize() > storage.bytesAvailable()) {
+    auto bytesAvailable = storage.bytesAvailable();
+    if (bytesAvailable == -1 || book.getSize() > (unsigned) bytesAvailable) {
         return "storage_error";
     }
     auto booksList = mp_library->getBookIds();
