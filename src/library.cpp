@@ -58,24 +58,14 @@ QString Library::openBookFromPath(const QString &zimPath)
     return QString::fromStdString(id);
 }
 
-std::shared_ptr<kiwix::Reader> Library::getReader(const QString &zimId)
+std::shared_ptr<zim::Archive> Library::getArchive(const QString &zimId)
 {
-    try {
-      return m_library.getReaderById(zimId.toStdString());
-    } catch (std::out_of_range& e) {
-      return nullptr;
-    }
+    return m_library.getArchiveById(zimId.toStdString());
 }
 
-std::shared_ptr<kiwix::Searcher> Library::getSearcher(const QString &zimId)
+std::shared_ptr<zim::Searcher> Library::getSearcher(const QString &zimId)
 {
-    auto searcher = std::make_shared<kiwix::Searcher>();
-    try {
-        searcher->add_reader(m_library.getReaderById(zimId.toStdString()));
-    } catch(std::out_of_range& e) {
-        return nullptr;
-    }
-    return searcher;
+    return m_library.getSearcherById(zimId.toStdString());
 }
 
 QStringList Library::getBookIds() const

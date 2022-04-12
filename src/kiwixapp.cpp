@@ -236,17 +236,20 @@ void KiwixApp::openRandomUrl(bool newTab)
     if (zimId.isEmpty()) {
         return;
     }
-    auto reader = m_library.getReader(zimId);
+    
     try {
-        auto entry = reader->getRandomPage();
+        auto archive = m_library.getArchive(zimId);
+        auto entry = archive->getRandomEntry();
 
         QUrl url;
         url.setScheme("zim");
         url.setHost(zimId + ".zim");
         url.setPath("/" + QString::fromStdString(entry.getPath()));
         openUrl(url, newTab);
-    } catch ( const kiwix::NoEntry& ) {
+    } catch (const zim::EntryNotFound& e) {
         showMessage(gt("random-article-error"), gt("error-title"), QMessageBox::Information);
+    } catch (std::out_of_range& e) {
+        showMessage(gt("error-archive"), gt("error-title"), QMessageBox::Information);
     }
 }
 

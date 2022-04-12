@@ -80,12 +80,36 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         ADD_V("url", getUrl);
         ADD_V("name", getName);
         ADD_V("origId", getOrigId);
-        ADD_V("faviconMimeType", getFaviconMimeType);
         ADD_V("downloadId", getDownloadId);
-        ADD_V("faviconUrl", getFaviconUrl);
         if (key == "favicon") {
-            auto s = b->getFavicon();
-            values.append(QByteArray::fromStdString(s).toBase64());
+            try {
+                auto s = b->getIllustration(48)->getData();
+                values.append(QByteArray::fromStdString(s).toBase64());
+            } catch(...) {
+                values.append(QByteArray());
+            }
+        }
+        if (key == "faviconMimeType") {
+            std::string mimeType;
+            try {
+                auto item = b->getIllustration(48);
+                mimeType = item->mimeType;
+            } catch (...) {
+                const kiwix::Book::Illustration tempIllustration;
+                mimeType = tempIllustration.mimeType;
+            }
+            values.append(QString::fromStdString(mimeType));
+        }
+        if (key == "faviconUrl") {
+            std::string url;
+            try {
+                auto item = b->getIllustration(48);
+                url = item->url;
+            } catch (...) {
+                const kiwix::Book::Illustration tempIllustration;
+                url = tempIllustration.url;
+            }
+            values.append(QString::fromStdString(url));
         }
         if (key == "size") {
             values.append(QString::number(b->getSize()));
