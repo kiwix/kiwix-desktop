@@ -32,23 +32,14 @@ QToolButton {
 
 SearchBar {
     background-color: white;
-    padding: 2px 2px 2px 40px;
+    padding: 2px;
     max-height: 38px;
-    margin: 2px 5px;
     color: #666;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 3px;
 }
 
-SearchBar > QPushButton {
-    margin: 8px 0px 8px 12px;
-    padding: 0;
-    border: 0 solid #fff;
-    background-color: white;
-    height: 32px;
-    width: 32px;
-}
 
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
