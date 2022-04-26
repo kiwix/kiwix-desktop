@@ -71,7 +71,9 @@
 	"port-for-local-kiwix-server-setting": "Port pro místní server Kiwix",
 	"zoom-level-setting": "Výchozí stupeň přiblížení",
 	"download-directory-setting": "Složka stahování",
+	"monitor-directory-default": "Nenastaveno",
 	"reset": "Resetovat",
+	"clear": "Vymazat",
 	"browse": "Procházet",
 	"about-kiwix-desktop-title": "Kiwix Desktop",
 	"about-kiwix-desktop-description": "Kiwix vám umožňuje mít po ruce celou Wikipedii, ať už jste kdekoli! Na lodi, uprostřed ničeho nebo ve vězení, Kiwix vám poskytuje přístup k celému lidskému poznání. Nepotřebujete internet, vše je uloženo v počítači.",
@@ -126,5 +128,7 @@
 	"download-dir-dialog-msg": "Nová cesta ke složce pro stahování bude:\n{{DIRECTORY}}",
 	"invalid-port": "Neplatný port",
 	"zim-open-fail-title": "Neplatný soubor",
-	"zim-open-fail-text": "Soubor ZIM <b>{{ZIM}}</b> nelze správně otevřít. Bude z vaší knihovny odstraněn."
+	"zim-open-fail-text": "Soubor ZIM <b>{{ZIM}}</b> nelze správně otevřít. Bude z vaší knihovny odstraněn.",
+	"monitor-dir-dialog-title": "Opravdu chcete změnit adresář monitorování?",
+	"monitor-clear-dir-dialog-title": "Opravdu chcete vymazat adresář monitorování?"
 }
