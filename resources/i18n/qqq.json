@@ -4,10 +4,11 @@
 			"Abijeet Patro",
 			"Ajeje Brazorf",
 			"Eihel",
-			"Robby"
+			"Robby",
+			"Verdy p"
 		]
 	},
-	"name": "Current language to which the string is being translated to.",
+	"name": "{{Doc-important|Don't write \"English\" in your language!}}\n\n'''Write the name of ''your'' language in its native script.'''\n\nCurrent language to which the string is being translated to.\n\nFor example, write \"français\" when translating to French, or \"Deutsch\" when translating to German.\n\n'''Important:''' Do not use your language’s word for “English”. Use the word that your language uses to refer to itself. If you translate this message to mean “English” in your language, your change will be reverted.",
 	"error-title": "{{Identical|Error}}",
 	"print": "{{identical|Print}}",
 	"help": "{{identical|Help}}",
