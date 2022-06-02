@@ -118,7 +118,7 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     renderer.setSearchPattern(searchQuery);
     renderer.setSearchBookQuery("content="+bookId.toStdString());
     renderer.setProtocolPrefix("zim://");
-    renderer.setSearchProtocolPrefix("zim://" + host.toStdString() + "/?");
+    renderer.setSearchProtocolPrefix("zim://" + host.toStdString() + "/");
     renderer.setPageLength(pageLength);
     auto content = renderer.getHtml();
     QBuffer *buffer = new QBuffer;
