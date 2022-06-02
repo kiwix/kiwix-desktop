@@ -116,7 +116,7 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     IdNameMapper nameMapper;
     kiwix::SearchRenderer renderer(searcher.get(), &nameMapper);
     renderer.setSearchPattern(searchQuery);
-    renderer.setSearchContent(bookId.toStdString());
+    renderer.setSearchBookQuery("content="+bookId.toStdString());
     renderer.setProtocolPrefix("zim://");
     renderer.setSearchProtocolPrefix("zim://" + host.toStdString() + "/?");
     renderer.setPageLength(pageLength);
