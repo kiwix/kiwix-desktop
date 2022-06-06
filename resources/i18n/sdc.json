@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"F Samaritani"
+		]
+	},
+	"name": "Sassaresu",
+	"error-title": "Errori",
+	"print": "Sthampa",
+	"find-in-page": "Acciappà in pàgina",
+	"help": "Aggiuddu",
+	"feedback": "Feedback",
+	"file": "File",
+	"view": "Liggì",
+	"tools": "Isthrumenti",
+	"search": "Zercha",
+	"settings": "Prifirènzi",
+	"back": "Indareddu",
+	"search-files": "Zirchà dati",
+	"title": "Tìturu",
+	"size": "Misuri in byte",
+	"date": "Data",
+	"content-type": "Pagina di cuntinuddu",
+	"delete": "Canzella",
+	"download": "Ischarriggà",
+	"cancel": "Annullà",
+	"clear": "Ibbiuddà",
+	"browse": "Iffuglia",
+	"hide": "Cuà",
+	"other": "Althru",
+	"wikibooks": "Vichilibri",
+	"wikinews": "Vichinobiddai",
+	"wikipedia": "Vichipedìa",
+	"wikiquote": "Vichizitazioni",
+	"wikisource": "Vichifonti",
+	"wikiversity": "Vichiunibèssiddai",
+	"wikivoyage": "Vichiviàggiu",
+	"wiktionary": "Vichizionàriu",
+	"videos": "Vìdeo",
+	"yes": "eja",
+	"no": "no",
+	"zim-open-fail-title": "Tìturu nò vàriddu"
+}
