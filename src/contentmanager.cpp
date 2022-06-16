@@ -63,6 +63,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
 
     if (nullptr == b){
         for(auto& key:keys) {
+            (void) key;
             values.append("");
         }
         return values;
@@ -80,12 +81,36 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         ADD_V("url", getUrl);
         ADD_V("name", getName);
         ADD_V("origId", getOrigId);
-        ADD_V("faviconMimeType", getFaviconMimeType);
         ADD_V("downloadId", getDownloadId);
-        ADD_V("faviconUrl", getFaviconUrl);
         if (key == "favicon") {
-            auto s = b->getFavicon();
-            values.append(QByteArray::fromStdString(s).toBase64());
+            try {
+                auto s = b->getIllustration(48)->getData();
+                values.append(QByteArray::fromStdString(s).toBase64());
+            } catch(...) {
+                values.append(QByteArray());
+            }
+        }
+        if (key == "faviconMimeType") {
+            std::string mimeType;
+            try {
+                auto item = b->getIllustration(48);
+                mimeType = item->mimeType;
+            } catch (...) {
+                const kiwix::Book::Illustration tempIllustration;
+                mimeType = tempIllustration.mimeType;
+            }
+            values.append(QString::fromStdString(mimeType));
+        }
+        if (key == "faviconUrl") {
+            std::string url;
+            try {
+                auto item = b->getIllustration(48);
+                url = item->url;
+            } catch (...) {
+                const kiwix::Book::Illustration tempIllustration;
+                url = tempIllustration.url;
+            }
+            values.append(QString::fromStdString(url));
         }
         if (key == "size") {
             values.append(QString::number(b->getSize()));
@@ -141,8 +166,10 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
 {
     QStringList values;
     if (!mp_downloader) {
-        for(auto& key: keys)
+        for(auto& key: keys) {
+            (void) key;
             values.append("");
+        }
         return values;
     }
     auto& b = mp_library->getBookById(id);
@@ -235,7 +262,8 @@ QString ContentManager::downloadBook(const QString &id)
     }();
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     QStorageInfo storage(downloadPath);
-    if (book.getSize() > storage.bytesAvailable()) {
+    auto bytesAvailable = storage.bytesAvailable();
+    if (bytesAvailable == -1 || book.getSize() > (unsigned) bytesAvailable) {
         return "storage_error";
     }
     auto booksList = mp_library->getBookIds();

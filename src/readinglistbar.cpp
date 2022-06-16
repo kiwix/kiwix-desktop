@@ -1,6 +1,7 @@
 #include "readinglistbar.h"
 #include "ui_readinglistbar.h"
 #include "kiwixapp.h"
+#include "zim/error.h"
 
 #include <QListWidgetItem>
 
@@ -31,20 +32,30 @@ void ReadingListBar::setupList()
     auto listWidget = ui->listWidget;
     listWidget->clear();
     for(auto& bookmark:bookmarks) {
-        auto reader = library->getReader(QString::fromStdString(bookmark.getBookId()));
-        if (reader == nullptr)
+        std::shared_ptr<zim::Archive> archive;
+        try {
+            archive = library->getArchive(QString::fromStdString(bookmark.getBookId()));
+        } catch (std::out_of_range& e) {
             continue;
-        std::string content;
-        std::string mimeType;
-        reader->getFavicon(content, mimeType);
-        QPixmap pixmap;
-        pixmap.loadFromData(reinterpret_cast<const uchar*>(content.data()), content.size());
-        auto icon = QIcon(pixmap);
-        auto item = new QListWidgetItem(
-            icon,
-            QString::fromStdString(bookmark.getTitle()),
-            listWidget);
-        item->setTextAlignment(Qt::TextWordWrap);
+        }
+        try {
+            auto illustration = archive->getIllustrationItem(48);
+            std::string content = illustration.getData();
+            std::string mimeType = illustration.getMimetype();
+            QPixmap pixmap;
+            pixmap.loadFromData(reinterpret_cast<const uchar*>(content.data()), content.size());
+            auto icon = QIcon(pixmap);
+            auto item = new QListWidgetItem(
+                icon,
+                QString::fromStdString(bookmark.getTitle()),
+                listWidget);
+            item->setTextAlignment(Qt::TextWordWrap);
+        } catch (zim::EntryNotFound& e) {
+            auto item = new QListWidgetItem(
+                QString::fromStdString(bookmark.getTitle()),
+                listWidget);
+            item->setTextAlignment(Qt::TextWordWrap);
+        }
     }
 }
 

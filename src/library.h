@@ -5,6 +5,8 @@
 #include <kiwix/library.h>
 #include <kiwix/reader.h>
 #include <kiwix/searcher.h>
+#include <zim/archive.h>
+#include <zim/search.h>
 #include <qstring.h>
 #include <memory>
 
@@ -28,8 +30,8 @@ public:
     Library(const QString& libraryDirectory);
     virtual ~Library();
     QString openBookFromPath(const QString& zimPath);
-    std::shared_ptr<kiwix::Reader> getReader(const QString& zimId);
-    std::shared_ptr<kiwix::Searcher> getSearcher(const QString& zimId);
+    std::shared_ptr<zim::Archive> getArchive(const QString& zimId);
+    std::shared_ptr<zim::Searcher> getSearcher(const QString& zimId);
     QStringList getBookIds() const;
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
     const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return m_library.getBookmarks(onlyValidBookmarks); }

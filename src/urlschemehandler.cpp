@@ -8,9 +8,25 @@
 
 #include <kiwix/search_renderer.h>
 #include <kiwix/name_mapper.h>
+#include <zim/search.h>
+#include <zim/entry.h>
+#include <zim/error.h>
+
 
 UrlSchemeHandler::UrlSchemeHandler()
 {
+}
+
+zim::Entry getEntryFromPath(const zim::Archive& archive, const std::string& path)
+{
+  try {
+    return archive.getEntryByPath(path);
+  } catch (zim::EntryNotFound& e) {
+    if (path.empty() || path == "/") {
+      return archive.getMainEntry();
+    }
+  }
+  throw zim::EntryNotFound("Cannot find entry for non empty path");
 }
 
 void
@@ -23,27 +39,29 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
     auto library = KiwixApp::instance()->getLibrary();
     auto zim_id = qurl.host();
     zim_id.resize(zim_id.length()-4);
-    auto reader = library->getReader(zim_id);
-    if ( reader == nullptr) {
-        request->fail(QWebEngineUrlRequestJob::UrlNotFound);
-        return;
+    std::shared_ptr<zim::Archive> archive;
+    try {
+      archive = library->getArchive(zim_id);
+    } catch (std::out_of_range& e) {
+      request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+      return;
     }
     try {
-        kiwix::Entry entry = reader->getEntryFromPath(url);
+        auto entry = getEntryFromPath(*archive, url);
+        auto item = entry.getItem(true);
         if (entry.isRedirect()) {
-            entry = entry.getFinalEntry();
-            auto path = QString("/") + QString::fromStdString(entry.getPath());
+            auto path = QString("/") + QString::fromStdString(item.getPath());
             qurl.setPath(path);
             request->redirect(qurl);
             return;
         }
 
-        BlobBuffer* buffer = new BlobBuffer(entry.getBlob());
-        auto mimeType = QByteArray::fromStdString(entry.getMimetype());
+        BlobBuffer* buffer = new BlobBuffer(item.getData(0));
+        auto mimeType = QByteArray::fromStdString(item.getMimetype());
         mimeType = mimeType.split(';')[0];
         connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
         request->reply(mimeType, buffer);
-    } catch (kiwix::NoEntry&) {
+    } catch (zim::EntryNotFound&) {
       request->fail(QWebEngineUrlRequestJob::UrlNotFound);
     }
 }
@@ -61,8 +79,9 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
         try {
           auto library = KiwixApp::instance()->getLibrary();
           auto book = library->getBookById(zimId);
-          std::string content= book.getFavicon();
-          std::string mimeType = book.getFaviconMimeType();
+          auto illustration = book.getIllustration(48);
+          std::string content = illustration->getData();
+          std::string mimeType = illustration->mimeType;
           QBuffer* buffer = new QBuffer;
           buffer->setData(content.data(), content.size());
           connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
@@ -103,18 +122,17 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     if (ok)
       pageLength = temp;
 
-    auto end = start + pageLength;
-
-    auto searcher = app->getLibrary()->getSearcher(bookId);
+    std::shared_ptr<zim::Search> search;
     try {
-        searcher->search(searchQuery, start, end);
-    } catch(std::runtime_error&) {
+        auto searcher = app->getLibrary()->getSearcher(bookId);
+        search = make_shared<zim::Search>(searcher->search(searchQuery));
+    } catch(...) {
         request->fail(QWebEngineUrlRequestJob::UrlInvalid);
         return;
     }
-
     IdNameMapper nameMapper;
-    kiwix::SearchRenderer renderer(searcher.get(), &nameMapper);
+    kiwix::SearchRenderer renderer(search->getResults(start, pageLength), &nameMapper, search->getEstimatedMatches(),
+                            start);
     renderer.setSearchPattern(searchQuery);
     renderer.setSearchBookQuery("content="+bookId.toStdString());
     renderer.setProtocolPrefix("zim://");
