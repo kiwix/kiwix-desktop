@@ -70,7 +70,7 @@
 	"cancel": "Cancelar",
 	"apply": "Aplicar",
 	"port-for-local-kiwix-server-setting": "Puerto del servidor Kiwix local",
-	"zoom-level-setting": "Nivel de zoom predeterminado",
+	"zoom-level-setting": "Nivel de escala predeterminado",
 	"download-directory-setting": "Directorio de descargas",
 	"monitor-directory-setting": "Supervisar directorio",
 	"monitor-directory-default": "No establecido",

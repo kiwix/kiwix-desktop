@@ -1,11 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
-			"Esiahaan"
+			"Esiahaan",
+			"Farras"
 		]
 	},
 	"name": "Bahasa Inggris",
 	"error-downloader-window-title": "Tidak dapat membuat pengunduh",
+	"error-archive": "Gagal memuat arsip",
 	"open-zim": "Buka Zim",
 	"random-article": "Artikel Acak",
 	"home-page": "Beranda",
