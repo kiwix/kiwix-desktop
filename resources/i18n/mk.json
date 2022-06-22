@@ -9,6 +9,7 @@
 	"error-downloader-window-title": "Не можам да го создадам преземачот",
 	"error-downloader-launch-message": "Не можам да го пуштам преземачот. Кивикс за сметач ќе се пушти, нема да работи ниедна од можностите за преземање!",
 	"error-launch-server-message": "Се појави грешка!",
+	"error-archive": "Не можам да го добијам архивот",
 	"open-zim": "Отвори Zim",
 	"local-kiwix-server": "Месен опслужувач на Кивикс",
 	"random-article": "Случајна статија",

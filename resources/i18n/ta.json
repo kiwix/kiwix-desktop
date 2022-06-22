@@ -1,13 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Gurulenin"
+			"Gurulenin",
+			"Siddhan"
 		]
 	},
 	"name": "ஆங்கிலம்",
 	"error-title": "பிழை",
 	"error-downloader-window-title": "பதிவிறக்கியை உருவாக்க முடியவில்லை",
 	"error-downloader-launch-message": "பதிவிறக்கியைத் தொடங்க சாத்தியமில்லை, கிவிக்ஸ்-டெஸ்க்டாப் தொடங்கும், ஆனால் அனைத்து பதிவிறக்க செயல்பாடுகளும் இயங்காது!",
+	"error-archive": "இந்த காப்பகத்தை பெற இயலவில்லை",
 	"open-zim": "Zim கோப்பினைத் திற",
 	"local-kiwix-server": "உள்ளிட கிவிக்ஸ் சேவையகம்",
 	"random-article": "ஏதாவதொரு கட்டுரை",

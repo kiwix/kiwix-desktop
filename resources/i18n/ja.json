@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Funa-enpitu",
 			"MathXplore",
 			"Object＊tofu",
 			"Omotecho",
@@ -8,6 +9,7 @@
 		]
 	},
 	"error-launch-server-message": "エラーが発生しました。",
+	"error-archive": "アーカイブを取得できない",
 	"print": "印刷",
 	"print-page-error": "印刷中にエラーが発生しました。",
 	"new-tab": "新しいタブ",
