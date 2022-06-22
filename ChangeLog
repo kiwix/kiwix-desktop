@@ -1,7 +1,11 @@
-kiwix-desktop 2.3.0
+kiwix-desktop 2.2.2
 ===================
 
- *
+ * Remove usage of deprecated libkiwix function (@juzz0 @mgautiefr #831)
+ * Adapt kiwix-desktop to last libkiwix api (@mgautierfr #842, @veloman-yunkan #844)
+ * Do not search (and crash) on a zim file without fulltext index (@mgautierfr #830)
+ * Update translations.
+ * [Flathub] Update link to screenshot
 
 kiwix-desktop 2.2.1
 ===================
