@@ -25,7 +25,11 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
     if (!fileName.endsWith(extension)) {
         fileName.append(extension);
     }
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     download->setPath(fileName);
+#else
+    download->setDownloadFileName(fileName);
+#endif
     connect(download, &QWebEngineDownloadItem::finished, this, &KProfile::downloadFinished);
     download->accept();
 }

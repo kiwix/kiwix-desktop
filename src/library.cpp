@@ -139,12 +139,18 @@ void Library::loadMonitorDir(QString monitorDir)
     QMutexLocker locker(&mutex);
     const QDir dir(monitorDir);
     QStringList newDirEntries = dir.entryList({"*.zim"});
+    QStringList oldDirEntries = m_monitorDirZims;
     for (auto &str : newDirEntries) {
         str = QDir::toNativeSeparators(monitorDir + "/" + str);
     }
-    QSet<QString> newDir = QSet<QString>::fromList(newDirEntries);
-    QStringList oldDirEntries = m_monitorDirZims;
-    QSet<QString> oldDir = QSet<QString>::fromList(oldDirEntries);
+    QSet<QString> newDir, oldDir;
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    newDir = QSet<QString>::fromList(newDirEntries);
+    oldDir = QSet<QString>::fromList(oldDirEntries);
+#else
+    newDir = QSet<QString>(newDirEntries.begin(), newDirEntries.end());
+    oldDir = QSet<QString>(oldDirEntries.begin(), oldDirEntries.end());
+#endif
     QStringList addedZims = (newDir - oldDir).values();
     QStringList removedZims = (oldDir - newDir).values();
     auto manipulator = LibraryManipulator(this);
