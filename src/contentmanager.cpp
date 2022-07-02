@@ -263,7 +263,7 @@ QString ContentManager::downloadBook(const QString &id)
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     QStorageInfo storage(downloadPath);
     auto bytesAvailable = storage.bytesAvailable();
-    if (bytesAvailable == -1 || book.getSize() > (unsigned) bytesAvailable) {
+    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
         return "storage_error";
     }
     auto booksList = mp_library->getBookIds();
