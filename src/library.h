@@ -3,8 +3,6 @@
 
 #include <kiwix/book.h>
 #include <kiwix/library.h>
-#include <kiwix/reader.h>
-#include <kiwix/searcher.h>
 #include <zim/archive.h>
 #include <zim/search.h>
 #include <qstring.h>

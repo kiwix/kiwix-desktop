@@ -6,7 +6,6 @@
 #include <QWheelEvent>
 #include <QMenu>
 
-#include <kiwix/reader.h>
 #include "findinpagebar.h"
 
 class QWebEngineHistoryItem;
