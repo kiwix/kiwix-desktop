@@ -37,7 +37,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
 {
     try {
         m_translation.setTranslation(QLocale());
-    } catch (exception& e) {
+    } catch (std::exception& e) {
         QMessageBox::critical(nullptr, "Translation error", e.what());
         return;
     }
@@ -60,7 +60,7 @@ void KiwixApp::init()
 {
     try {
         mp_downloader = new kiwix::Downloader();
-    } catch (exception& e) {
+    } catch (std::exception& e) {
         QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
         gt("error-downloader-launch-message") + "<br><br>" + e.what());
     }
@@ -236,7 +236,7 @@ void KiwixApp::openRandomUrl(bool newTab)
     if (zimId.isEmpty()) {
         return;
     }
-    
+
     try {
         auto archive = m_library.getArchive(zimId);
         auto entry = archive->getRandomEntry();
