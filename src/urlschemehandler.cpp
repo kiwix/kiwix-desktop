@@ -10,6 +10,7 @@
 #include <kiwix/name_mapper.h>
 #include <zim/search.h>
 #include <zim/entry.h>
+#include <zim/item.h>
 #include <zim/error.h>
 
 

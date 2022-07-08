@@ -18,6 +18,7 @@
 #include <kiwix/name_mapper.h>
 
 #include <mutex>
+#include <iostream>
 
 
 class KiwixApp : public QtSingleApplication
