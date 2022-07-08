@@ -2,6 +2,7 @@
 #include "ui_readinglistbar.h"
 #include "kiwixapp.h"
 #include "zim/error.h"
+#include "zim/item.h"
 
 #include <QListWidgetItem>
 

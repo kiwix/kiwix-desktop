@@ -24,7 +24,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                     return;
                 auto zoomFactor = mp_webView->zoomFactor();
                 zoomFactor += 0.1;
-                zoomFactor = max(min(zoomFactor, 5.0), 0.25);
+                zoomFactor = std::max(std::min(zoomFactor, 5.0), 0.25);
                 mp_webView->setZoomFactor(zoomFactor);
                 auto key = mp_webView->zimId() + "/zoomFactor";
                 KiwixApp::instance()->getSettingsManager()->setSettings(key, zoomFactor);
@@ -35,7 +35,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                     return;
                 auto zoomFactor = mp_webView->zoomFactor();
                 zoomFactor -= 0.1;
-                zoomFactor = max(min(zoomFactor, 5.0), 0.25);
+                zoomFactor = std::max(std::min(zoomFactor, 5.0), 0.25);
                 mp_webView->setZoomFactor(zoomFactor);
                 auto key = mp_webView->zimId() + "/zoomFactor";
                 KiwixApp::instance()->getSettingsManager()->setSettings(key, zoomFactor);

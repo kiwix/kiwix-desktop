@@ -4,6 +4,7 @@
 
 #include <QCommandLineParser>
 #include <iostream>
+#include <sstream>
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   #include <QWebEngineUrlScheme>
 #endif

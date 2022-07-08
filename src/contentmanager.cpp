@@ -402,7 +402,7 @@ void ContentManager::updateLibrary() {
     try {
         emit(pendingRequest(true));
         m_remoteLibraryManager.doUpdate(m_currentLanguage, m_categoryFilter);
-    } catch (runtime_error&) {}
+    } catch (std::runtime_error&) {}
 }
 
 #define CATALOG_URL "library.kiwix.org"

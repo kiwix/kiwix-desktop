@@ -10,6 +10,7 @@
 #include <QWebEngineHistory>
 #include <QVBoxLayout>
 #include <zim/error.h>
+#include <zim/item.h>
 
 void WebViewBackMenu::showEvent(QShowEvent *)
 {

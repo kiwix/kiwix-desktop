@@ -10,6 +10,7 @@
 #include <kiwix/name_mapper.h>
 #include <zim/search.h>
 #include <zim/entry.h>
+#include <zim/item.h>
 #include <zim/error.h>
 
 
@@ -125,7 +126,7 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     std::shared_ptr<zim::Search> search;
     try {
         auto searcher = app->getLibrary()->getSearcher(bookId);
-        search = make_shared<zim::Search>(searcher->search(searchQuery));
+        search = std::make_shared<zim::Search>(searcher->search(searchQuery));
     } catch(...) {
         request->fail(QWebEngineUrlRequestJob::UrlInvalid);
         return;
