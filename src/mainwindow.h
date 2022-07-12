@@ -27,11 +27,14 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:
     void toggleFullScreen();
     void when_ReadingList_toggled(bool state);
     void when_libraryPageDisplayed(bool showed);
+    void hideTabAndTop();
+    void showTabAndTop();
 
 private:
     Ui::MainWindow *mp_ui;
