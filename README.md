@@ -20,13 +20,13 @@ Disclaimer
 This document assumes you have a little knowledge about software
 compilation. If you experience difficulties with the dependencies or
 with the Kiwix libary compilation itself, we recommend to have a look
-to [kiwix-build](https://github.com/kiwix/kiwix-build).
+at [kiwix-build](https://github.com/kiwix/kiwix-build).
 
 Dependencies
 ------------
 
-The Kiwix Desktop application relies on many third parts software libraries.
-Following libraries need to be available:
+The Kiwix Desktop application relies on many third party software libraries.
+The following libraries need to be available:
 
 * [libkiwix](https://github.com/kiwix/libkiwix/)
 * [Qt](https://www.qt.io/)
@@ -35,7 +35,7 @@ Following libraries need to be available:
 These dependencies may or may not be packaged by your operating
 system. They may also be packaged but only in an older version. The
 compilation script will tell you if one of them is missing or too old.
-In the worse case, you will have to download and compile bleeding edge
+In the worst case, you will have to download and compile a bleeding edge
 version by hand.
 
 Libkiwix has to be compiled dynamically, the best way to have it is
@@ -60,7 +60,7 @@ qmake .
 make
 ```
 
-`qmake` will use pkg-config to locate libraries. Depending of where
+`qmake` will use pkg-config to locate libraries. Depending on where
 you've installed libkiwix (and other libraries) you may have to
 update the env variable `PKG_CONFIG_PATH`. It can be set as follows,
 for example, for x86-64 native systems:
