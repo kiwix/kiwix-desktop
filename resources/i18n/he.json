@@ -11,6 +11,7 @@
 	"error-downloader-window-title": "לא ניתן ליצור מנגנון הורדה",
 	"error-downloader-launch-message": "אי אפשר לטעון מנגנון הורדה, Kiwix לשולחן העבודה יופעל אך יכולות ההורדה לא תפעלנה!",
 	"error-launch-server-message": "אירעה שגיאה!",
+	"error-archive": "לא ניתן לקבל את הארכיון",
 	"open-zim": "פתיחת Zim",
 	"local-kiwix-server": "שרת Kiwix מקומי",
 	"random-article": "ערך אקראי",
