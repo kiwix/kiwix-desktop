@@ -11,6 +11,7 @@
 	"error-downloader-window-title": "無法建立下載程序",
 	"error-downloader-launch-message": "無法啟用下載程序，Kiwix-桌機版將啟動；但所有的下載功能將無法運作！",
 	"error-launch-server-message": "發生錯誤！",
+	"error-archive": "無法取得存檔",
 	"open-zim": "開啟 Zim",
 	"local-kiwix-server": "本地 Kiwix 伺服器",
 	"random-article": "隨機條目",
