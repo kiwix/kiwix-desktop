@@ -102,7 +102,8 @@ void KiwixApp::init()
         }
     });
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, [=](QString monitorDir) {
-        m_library.asyncLoadMonitorDir(monitorDir);
+        if (getContentManager()->isLocalLibrary())
+            m_library.asyncLoadMonitorDir(monitorDir);
     });
     QString monitorDir = m_settingsManager.getMonitorDir();
     if (monitorDir != "") {

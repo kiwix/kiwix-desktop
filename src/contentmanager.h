@@ -26,6 +26,7 @@ public:
     void setCurrentLanguage(QString language);
     void setCurrentCategoryFilter(QString category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
+    bool isLocalLibrary() const { return m_local; }
 
 private:
     Library* mp_library;

@@ -22,6 +22,13 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     connect(mp_ui->localFileButton, &QRadioButton::toggled,
             this, [=](bool checked) { mp_ui->localFileButton->setStyleSheet(
                     checked ?"*{font-weight: bold}" : "");});
+    connect(mp_ui->localFileButton, &QRadioButton::toggled,
+            this, [=](bool checked) {
+        if (checked) {
+            QString monitorDir = KiwixApp::instance()->getSettingsManager()->getMonitorDir();
+            KiwixApp::instance()->getLibrary()->asyncLoadMonitorDir(monitorDir);
+        }
+    });
     mp_ui->localFileButton->setStyleSheet("*{font-weight: bold}");
 
     mp_ui->allFileButton->setText(gt("all-files"));
