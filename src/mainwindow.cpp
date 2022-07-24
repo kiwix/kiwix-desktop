@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
 
     auto app = KiwixApp::instance();
+    addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction));
 
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
@@ -75,11 +76,45 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::toggleFullScreen() {
-    if (isFullScreen())
+    if (isFullScreen()) {
+        QApplication::instance()->removeEventFilter(this);
+        showTabAndTop();
         showNormal();
-    else
+    }
+    else {
+        QApplication::instance()->installEventFilter(this);
+        hideTabAndTop();
         showFullScreen();
+    }
 }
+
+void MainWindow::hideTabAndTop() {
+    getTabBar()->hide();
+    getTopWidget()->hide();
+}
+
+void MainWindow::showTabAndTop() {
+    getTabBar()->show();
+    getTopWidget()->show();
+}
+
+bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
+{
+    if (event->type() == QEvent::MouseMove && isFullScreen())
+    {
+        const auto mouseEvent = static_cast<QMouseEvent*>(event);
+        const int tabRegion = getTabBar()->height() + getTopWidget()->height() + 30;
+        // We don't have to check for visibilty as calling hide() on a hidden widget, or show() on a non-hidden widget is a no-op
+        if (mouseEvent->y() == 0) {
+            showTabAndTop();
+        } else if(mouseEvent->y() >= tabRegion) {
+            hideTabAndTop();
+        }
+        return true;
+    }
+    return false;
+}
+
 
 void MainWindow::when_ReadingList_toggled(bool state)
 {
