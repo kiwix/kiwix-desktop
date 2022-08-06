@@ -58,6 +58,8 @@ public slots:
     void closeTab(int index);
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);
+    void moveToNextTab();
+    void moveToPreviousTab();
 
 private:
     QStackedWidget*     mp_stackedWidget;

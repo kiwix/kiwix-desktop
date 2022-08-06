@@ -24,6 +24,8 @@ TabBar::TabBar(QWidget *parent) :
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
     auto app = KiwixApp::instance();
 
+    connect(app->getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
+    connect(app->getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
                 this->createNewTab(true, false);
@@ -133,6 +135,18 @@ int TabBar::realTabCount() const
     if (count() < 1)
         return 0;
     return count() - 1;
+}
+
+void TabBar::moveToNextTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index == realTabCount() - 1 ? 0 : index + 1);
+}
+
+void TabBar::moveToPreviousTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
 }
 
 ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)

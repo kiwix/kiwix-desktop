@@ -47,6 +47,8 @@ public:
         ZoomInAction,
         ZoomOutAction,
         ZoomResetAction,
+        NextTabAction,
+        PreviousTabAction,
         HistoryBackAction,
         HistoryForwardAction,
         HelpAction,
