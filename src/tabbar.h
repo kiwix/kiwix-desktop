@@ -64,7 +64,10 @@ private:
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
     void setSelectionBehaviorOnRemove(int index);
-
+    // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
+    // This function returns the count of real tabs.
+    int realTabCount() const;
+    
 private slots:
     void onTabMoved(int from, int to);
     void onCurrentChanged(int index);
