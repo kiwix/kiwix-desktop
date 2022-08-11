@@ -22,7 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
 
     auto app = KiwixApp::instance();
-    addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction));
+    addAction(app->getAction(KiwixApp::ToggleFullscreenAction));
+    addAction(app->getAction(KiwixApp::NextTabAction));
+    addAction(app->getAction(KiwixApp::PreviousTabAction));
 
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);

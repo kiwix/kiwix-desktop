@@ -24,6 +24,8 @@ TabBar::TabBar(QWidget *parent) :
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
     auto app = KiwixApp::instance();
 
+    connect(app->getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
+    connect(app->getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
     connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
             this, [=]() {
                 this->createNewTab(true, false);
@@ -127,6 +129,26 @@ void TabBar::setNewTabButton()
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
 }
 
+int TabBar::realTabCount() const
+{
+    // The last tab is "+" in TabBar, but that isn't a real tab which displays any content hence the real count is tab count - 1
+    if (count() < 1)
+        return 0;
+    return count() - 1;
+}
+
+void TabBar::moveToNextTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index == realTabCount() - 1 ? 0 : index + 1);
+}
+
+void TabBar::moveToPreviousTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
+}
+
 ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
 {
     auto tab = new ZimView(this, this);
@@ -134,7 +156,7 @@ ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
     if(adjacentToCurrentTab) {
         index = currentIndex() + 1;
     } else {
-        index = count() - 1; // for New Tab Button
+        index = realTabCount(); // for New Tab Button
     }
     mp_stackedWidget->insertWidget(index, tab);
     index = insertTab(index, "");
@@ -255,7 +277,7 @@ void TabBar::closeTabsByZimId(const QString &id)
 void TabBar::closeTab(int index)
 {
     // the last tab is + button, cannot be closed
-    if (index == this->count() - 1)
+    if (index == this->realTabCount())
         return;
 
     setSelectionBehaviorOnRemove(index);
@@ -289,8 +311,8 @@ void TabBar::onCurrentChanged(int index)
         return;
 
     // if somehow the last tab (+ button) became active, switch to the previous
-    if (index >= (count() - 1)) {
-        setCurrentIndex(count() - 2);
+    if (index >= realTabCount()) {
+        setCurrentIndex(realTabCount() - 1);
         return;
     }
 
