@@ -24,11 +24,13 @@ function setTranslations(translations) {
 
 const BOOK_KEYS = ["id", "name", "path", "url", "size", "description", "title", "tags", "date", "faviconUrl", "faviconMimeType", "downloadId"];
 function addBook(values) {
-  var b = createDict(BOOK_KEYS, values);
-  if (b.downloadId && !downloadUpdaters.hasOwnProperty(b.id)) {
-    downloadUpdaters[b.id] = setInterval(function() { getDownloadInfo(b.id); }, 1000);
+  if (values.length > 0) {
+    var b = createDict(BOOK_KEYS, values);
+    if (b.downloadId && !downloadUpdaters.hasOwnProperty(b.id)) {
+      downloadUpdaters[b.id] = setInterval(function() { getDownloadInfo(b.id); }, 1000);
+    }
+    app.books.push(b);
   }
-  app.books.push(b);
 }
 function onBooksChanged () {
   app.books = [];

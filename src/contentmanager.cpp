@@ -134,6 +134,8 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
             if (displayTagMap["_videos"]) displayTagList << tr("Videos");
             if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
             if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
+            // Temporary: Hide ZIMIt books (they contain a _sw tag)
+            if (displayTagMap["_sw"]) return QStringList();
             QString s = displayTagList.join(", ");
             values.append(s);
         }
