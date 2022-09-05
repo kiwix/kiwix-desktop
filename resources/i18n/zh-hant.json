@@ -136,5 +136,7 @@
 	"monitor-dir-dialog-msg": "新監視目錄路徑會是：\n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "您確定您要更改監視目錄嗎？",
 	"monitor-clear-dir-dialog-msg": "這將會停止檢查用於新 ZIM 檔案的監視目錄。",
-	"monitor-directory-tooltip": "所有在此目錄的 ZIM 檔案將會自動添加到圖書館裡。"
+	"monitor-directory-tooltip": "所有在此目錄的 ZIM 檔案將會自動添加到圖書館裡。",
+	"next-tab": "移動至下一分頁",
+	"previous-tab": "移動至上一分頁"
 }

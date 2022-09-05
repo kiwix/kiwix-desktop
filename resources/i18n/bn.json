@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Sibabrata Banerjee",
+			"আজিজ",
 			"আফতাবুজ্জামান"
 		]
 	},
@@ -42,5 +43,7 @@
 	"yes": "হ্যাঁ",
 	"no": "না",
 	"open-link-in-web-browser": "ওয়েব ব্রাউজারে সংযোগ খুলুন",
-	"invalid-port": "পাতা অবৈধ"
+	"invalid-port": "পাতা অবৈধ",
+	"next-tab": "পরবর্তী ট্যাবে যান",
+	"previous-tab": "পূর্ববর্তী ট্যাবে যান"
 }

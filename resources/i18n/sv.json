@@ -11,6 +11,7 @@
 	"error-downloader-window-title": "Kan inte skapa nedladdare",
 	"error-downloader-launch-message": "Omöjligt att starta nedladdare, Kiwix-desktop kommer starta men alla nedladdningsfunktioner kommer inte fungera!",
 	"error-launch-server-message": "Ett fel har uppstått!",
+	"error-archive": "Kan inte hämta arkivet",
 	"open-zim": "Öppna Zim",
 	"local-kiwix-server": "Lokal Kiwix-server",
 	"random-article": "Slumpartikel",

@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Esiahaan",
-			"Farras"
+			"Farras",
+			"Veracious"
 		]
 	},
 	"name": "Bahasa Inggris",
@@ -34,5 +35,7 @@
 	"exit": "Keluar",
 	"file": "File",
 	"edit": "Sunting",
-	"view": "Lihat"
+	"view": "Lihat",
+	"next-tab": "Pindah ke tab berikutnya",
+	"previous-tab": "Pindah ke tab sebelumnya"
 }

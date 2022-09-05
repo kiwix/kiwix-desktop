@@ -136,5 +136,7 @@
 	"monitor-dir-dialog-msg": "הנתיב החדש לתיקיית הניתור יהיה:\n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "האם ברצונך באמת לנקות את תיקיית הניטור?",
 	"monitor-clear-dir-dialog-msg": "זה יפסיק לדגום את תיקיית הניטור ולחפש בה קובצי ZIM חדשים.",
-	"monitor-directory-tooltip": "כל קובצי ה־ZIM בתיקייה הזאת יוספו אוטומטית לספרייה."
+	"monitor-directory-tooltip": "כל קובצי ה־ZIM בתיקייה הזאת יוספו אוטומטית לספרייה.",
+	"next-tab": "לעבור ללשונית הבאה",
+	"previous-tab": "לעבור ללשונית הקודמת"
 }
