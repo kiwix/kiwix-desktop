@@ -134,5 +134,7 @@
 	"monitor-dir-dialog-msg": "S'àndala pro sa cartella de compidada noa at a èssere:\n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Ses seguru de chèrrere isboidare sa cartella de compidada?",
 	"monitor-clear-dir-dialog-msg": "Custu at a firmare sa chirca de archìvios ZIM noos in sa cartella de compidada.",
-	"monitor-directory-tooltip": "Totu sos archìvios ZIM in custa cartella s'ant a annànghere in automàticu a sa biblioteca."
+	"monitor-directory-tooltip": "Totu sos archìvios ZIM in custa cartella s'ant a annànghere in automàticu a sa biblioteca.",
+	"next-tab": "Cola a s'ischeda imbeniente",
+	"previous-tab": "Cola a s'ischeda anteposta"
 }

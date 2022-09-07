@@ -16,6 +16,7 @@
 	"error-downloader-window-title": "İndirici oluşturulamıyor",
 	"error-downloader-launch-message": "İndiriciyi başlatmak imkansız, Kiwix-masaüstü başlayacak, ancak tüm indirme işlevleri çalışmaz!",
 	"error-launch-server-message": "Bir hata oluştu!",
+	"error-archive": "Arşiv alınamıyor",
 	"open-zim": "Zim'i aç",
 	"local-kiwix-server": "Yerel Kiwix Sunucusu",
 	"random-article": "Rastgele Madde",
@@ -77,6 +78,7 @@
 	"port-for-local-kiwix-server-setting": "Yerel Kiwix sunucusu için bağlantı noktası",
 	"zoom-level-setting": "Varsayılan yakınlaştırma düzeyi",
 	"download-directory-setting": "İndirme dizini",
+	"monitor-directory-setting": "Dizini izle",
 	"monitor-directory-default": "Ayarlı değil",
 	"reset": "Sıfırla",
 	"clear": "Temizle",
@@ -134,5 +136,12 @@
 	"download-dir-dialog-msg": "Yeni indirme dizini yolu şunu olacaktır:\n {{DIRECTORY}}",
 	"invalid-port": "Geçersiz bağlantı noktası",
 	"zim-open-fail-title": "Geçersiz dosya",
-	"zim-open-fail-text": "ZIM dosyası <b>{{ZIM}}</b> düzgün açılamadı. Kütüphanenizden kaldırılacaktır."
+	"zim-open-fail-text": "ZIM dosyası <b>{{ZIM}}</b> düzgün açılamadı. Kütüphanenizden kaldırılacaktır.",
+	"monitor-dir-dialog-title": "Monitör dizinini değiştirmek istediğinizden emin misiniz?",
+	"monitor-dir-dialog-msg": "Yeni monitör dizini yolu şöyle olacaktır:\n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "Monitör dizinini temizlemek istediğinizden emin misiniz?",
+	"monitor-clear-dir-dialog-msg": "Bu, yeni ZIM dosyaları için monitör dizinini kontrol etmeyi durduracaktır.",
+	"monitor-directory-tooltip": "Bu dizindeki tüm ZIM dosyaları otomatik olarak kitaplığa eklenecektir.",
+	"next-tab": "Sonraki sekmeye git",
+	"previous-tab": "Önceki sekmeye git"
 }

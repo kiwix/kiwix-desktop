@@ -48,5 +48,7 @@
 	"wiktionary": "ウィクショナリー",
 	"open-link-in-web-browser": "Webブラウザでリンクを開く",
 	"invalid-port": "不正なポート",
-	"zim-open-fail-title": "無効なファイル"
+	"zim-open-fail-title": "無効なファイル",
+	"next-tab": "次のタブに移動",
+	"previous-tab": "前のタブに移動"
 }
