@@ -1,3 +1,14 @@
+kiwix-desktop 2.3.0
+===================
+
+ * Fix downloading of file bigger than 4G (@juzz0 #855)
+ * Hide top widget and topbar in fullscreen (@juzz0 #859)
+ * Add shortcuts for navigating tabs (Ctrl-tab, Ctrl-shift-tab) (@juzz0 #867)
+ * Do not use deprecated method `QWebEngineDownloadItem::setPath` (@juzz0 #853)
+ * Fix compilation with last version of libkiwix (@mgautierfr #858)
+ * Fix README.md (@psypherium #860)
+ * Update translations.
+
 kiwix-desktop 2.2.2
 ===================
 
