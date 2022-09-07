@@ -31,6 +31,7 @@
         <file>i18n/ms.json</file>
         <file>i18n/my.json</file>
         <file>i18n/nl.json</file>
+        <file>i18n/nqo.json</file>
         <file>i18n/pl.json</file>
         <file>i18n/pt-br.json</file>
         <file>i18n/pt.json</file>
@@ -43,8 +44,10 @@
         <file>i18n/sdc.json</file>
         <file>i18n/sk.json</file>
         <file>i18n/skr-arab.json</file>
+        <file>i18n/sms.json</file>
         <file>i18n/sq.json</file>
         <file>i18n/sr-ec.json</file>
+        <file>i18n/sro.json</file>
         <file>i18n/sv.json</file>
         <file>i18n/ta.json</file>
         <file>i18n/th.json</file>
