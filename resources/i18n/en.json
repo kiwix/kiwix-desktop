@@ -9,7 +9,7 @@
     "error-downloader-launch-message":"Impossible to launch downloader, Kiwix-desktop will start but all download functions will not working!",
     "error-launch-server-message":"An error has occured!",
     "error-archive":"Cannot get the archive",
-    "open-zim":"Open Zim",
+    "open-zim":"Open ZIM File",
     "local-kiwix-server":"Local Kiwix Server",
     "random-article":"Random Article",
     "random-article-error":"Failed to open a random article.",
