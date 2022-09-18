@@ -180,7 +180,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
                     getMainWindow(),
                     gt("open-zim"),
                     QString(),
-                    "ZimFile (*.zim*)");
+                    "ZIM Files (*.zim*)");
 
         if (_zimfile.isEmpty()) {
             return;
