@@ -12,24 +12,32 @@ OpdsRequestManager::OpdsRequestManager()
 void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString& categoryFilter)
 {
     QUrlQuery query;
+
+    // Service worker ZIM files are not (yet) supported
+    QStringList excludeTags("_sw:yes");
+
+    // Add filter by language (if necessary)
     if (currentLanguage != "*") {
         query.addQueryItem("lang", currentLanguage);
     }
+
+    // Request all results (no pagination)
     query.addQueryItem("count", QString::number(-1));
+
+    // Add filter by category (if necessary)
     if (categoryFilter != "all" && categoryFilter != "other") {
         query.addQueryItem("tag", "_category:"+categoryFilter);
     }
 
+    // Add "special negative" filter for "other" category (if necessary)
     if (categoryFilter == "other") {
-        QStringList excludeTags;
         for (auto& category: S_CATEGORIES) {
             if (category.first != "other" && category.first != "all") {
-		excludeTags += "_category:"+category.first;
+                excludeTags += "_category:"+category.first;
             }
         }
-        query.addQueryItem("notag", excludeTags.join(";"));
     }
-
+    query.addQueryItem("notag", excludeTags.join(";"));
 
     QUrl url;
     url.setScheme("https");
