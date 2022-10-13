@@ -17,7 +17,7 @@
 	"error-downloader-launch-message": "İndiriciyi başlatmak imkansız, Kiwix-masaüstü başlayacak, ancak tüm indirme işlevleri çalışmaz!",
 	"error-launch-server-message": "Bir hata oluştu!",
 	"error-archive": "Arşiv alınamıyor",
-	"open-zim": "Zim'i aç",
+	"open-zim": "ZIM Dosyasını Aç",
 	"local-kiwix-server": "Yerel Kiwix Sunucusu",
 	"random-article": "Rastgele Madde",
 	"random-article-error": "Rastgele madde açılamadı.",
