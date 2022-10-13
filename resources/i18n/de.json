@@ -3,6 +3,7 @@
 		"authors": [
 			"DraconicDark",
 			"Falwye",
+			"Justman10000",
 			"Susann Schweden",
 			"Umlaut",
 			"Wolfdietmann"
@@ -12,7 +13,7 @@
 	"error-title": "Fehler",
 	"error-downloader-window-title": "Erstellen von Downloader nicht möglich",
 	"error-launch-server-message": "Es ist ein Fehler aufgetreten!",
-	"open-zim": "Öffne ZIM",
+	"open-zim": "Öffne ZIM-Datei",
 	"local-kiwix-server": "Lokaler Kiwix-Server",
 	"random-article": "Zufälliger Artikel",
 	"random-article-error": "Ein zufälliger Artikel kann nicht geöffnet werden.",

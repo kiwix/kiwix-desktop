@@ -3,6 +3,7 @@
 		"authors": [
 			"Funa-enpitu",
 			"MathXplore",
+			"Mugenpman",
 			"Object＊tofu",
 			"Omotecho",
 			"Tmv"
@@ -10,6 +11,7 @@
 	},
 	"error-launch-server-message": "エラーが発生しました。",
 	"error-archive": "アーカイブを取得できない",
+	"open-zim": "ZIMファイルを開く",
 	"print": "印刷",
 	"print-page-error": "印刷中にエラーが発生しました。",
 	"new-tab": "新しいタブ",
