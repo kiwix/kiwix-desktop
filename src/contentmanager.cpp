@@ -15,6 +15,7 @@
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
       mp_library(library),
+      mp_remoteLibrary(std::make_shared<kiwix::Library>()),
       mp_downloader(downloader),
       m_remoteLibraryManager()
 {
@@ -56,7 +57,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
             return &mp_library->getBookById(id);
         } catch (...) {
             try {
-                return &m_remoteLibrary.getBookById(id.toStdString());
+                return &mp_remoteLibrary->getBookById(id.toStdString());
             } catch(...) { return nullptr; }
         }
     }();
@@ -179,7 +180,7 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
     } catch(...) {
         kiwix::Book bCopy(b);
         bCopy.setDownloadId("");
-        mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
+        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
         mp_library->save();
         emit(mp_library->booksChanged());
         return values;
@@ -194,7 +195,7 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         bCopy.setPathValid(true);
         // removing book url so that download link in kiwix-serve is not displayed.
         bCopy.setUrl("");
-        mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
+        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
         mp_library->save();
         mp_library->bookmarksChanged();
         if (!m_local) {
@@ -255,7 +256,7 @@ QString ContentManager::downloadBook(const QString &id)
         return "";
     const auto& book = [&]()->const kiwix::Book& {
         try {
-            return m_remoteLibrary.getBookById(id.toStdString());
+            return mp_remoteLibrary->getBookById(id.toStdString());
         } catch (...) {
             return mp_library->getBookById(id);
         }
@@ -407,8 +408,8 @@ void ContentManager::updateLibrary() {
 
 #define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary(const QString& content) {
-    m_remoteLibrary = kiwix::Library();
-    kiwix::Manager manager(&m_remoteLibrary);
+    mp_remoteLibrary = std::make_shared<kiwix::Library>();
+    kiwix::Manager manager(mp_remoteLibrary);
     manager.readOpds(content.toStdString(), CATALOG_URL);
     emit(this->booksChanged());
     emit(this->pendingRequest(false));
@@ -457,8 +458,8 @@ QStringList ContentManager::getBookIds()
         return mp_library->listBookIds(filter, m_sortBy, m_sortOrderAsc);
     } else {
         filter.remote(true);
-        auto bookIds = m_remoteLibrary.filter(filter);
-        m_remoteLibrary.sort(bookIds, m_sortBy, m_sortOrderAsc);
+        auto bookIds = mp_remoteLibrary->filter(filter);
+        mp_remoteLibrary->sort(bookIds, m_sortBy, m_sortOrderAsc);
         QStringList list;
         for(auto& bookId:bookIds) {
             list.append(QString::fromStdString(bookId));

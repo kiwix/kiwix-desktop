@@ -131,9 +131,12 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
         request->fail(QWebEngineUrlRequestJob::UrlInvalid);
         return;
     }
-    IdNameMapper nameMapper;
-    kiwix::SearchRenderer renderer(search->getResults(start, pageLength), &nameMapper, search->getEstimatedMatches(),
-                            start);
+    auto nameMapper = std::make_shared<IdNameMapper>();
+    kiwix::SearchRenderer renderer(
+        search->getResults(start, pageLength),
+        nameMapper,
+        search->getEstimatedMatches(),
+        start);
     renderer.setSearchPattern(searchQuery);
     renderer.setSearchBookQuery("content="+bookId.toStdString());
     renderer.setProtocolPrefix("zim://");

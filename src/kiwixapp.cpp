@@ -32,7 +32,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      m_nameMapper(m_library.getKiwixLibrary(), false),
+      mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
       mp_server(nullptr)
 {
     try {
@@ -455,7 +455,7 @@ void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
 
 void KiwixApp::updateNameMapper()
 {
-  m_nameMapper.update();
+  mp_nameMapper->update();
 }
 
 bool KiwixApp::runServer(const QString& ipAddress, int port) {
@@ -463,11 +463,12 @@ bool KiwixApp::runServer(const QString& ipAddress, int port) {
     if (mp_server) {
         mp_server->stop();
     }
-    mp_server.reset(new kiwix::Server(&m_library.getKiwixLibrary(), &m_nameMapper));
-    mp_server->setPort(port);
-    mp_server->setAddress(ipAddress.toStdString());
+    kiwix::Server::Configuration configuration(m_library.getKiwixLibrary(), mp_nameMapper);
+    configuration.setPort(port);
+    configuration.setAddress(ipAddress.toStdString());
     settings->setKiwixServerPort(port);
     settings->setKiwixServerIpAddress(ipAddress);
+    mp_server.reset(new kiwix::Server(configuration));
     return mp_server->start();
 }
 
