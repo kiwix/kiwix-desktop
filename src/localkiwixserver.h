@@ -22,7 +22,6 @@ public slots:
 
 private:
     Ui::LocalKiwixServer *ui;
-    kiwix::Server* mp_server;
     bool m_active = false;
     QString m_ipAddress;
     int m_port;

@@ -33,7 +33,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
       m_nameMapper(m_library.getKiwixLibrary(), false),
-      m_server(&m_library.getKiwixLibrary(), &m_nameMapper)
+      mp_server(nullptr)
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -114,7 +114,9 @@ void KiwixApp::init()
 
 KiwixApp::~KiwixApp()
 {
-    m_server.stop();
+    if (mp_server) {
+        mp_server->stop();
+    }
     if (mp_downloader) {
         mp_downloader->close();
         delete mp_downloader;
@@ -454,6 +456,24 @@ void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
 void KiwixApp::updateNameMapper()
 {
   m_nameMapper.update();
+}
+
+bool KiwixApp::runServer(const QString& ipAddress, int port) {
+    auto settings = getSettingsManager();
+    if (mp_server) {
+        mp_server->stop();
+    }
+    mp_server.reset(new kiwix::Server(&m_library.getKiwixLibrary(), &m_nameMapper));
+    mp_server->setPort(port);
+    mp_server->setAddress(ipAddress.toStdString());
+    settings->setKiwixServerPort(port);
+    settings->setKiwixServerIpAddress(ipAddress);
+    return mp_server->start();
+}
+
+void KiwixApp::stopServer() {
+    mp_server->stop();
+    mp_server.reset();
 }
 
 void KiwixApp::printVersions(std::ostream& out) {
