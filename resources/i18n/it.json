@@ -85,7 +85,7 @@
 	"browse": "Esplora",
 	"about-kiwix-desktop-title": "Kiwix Desktop",
 	"about-kiwix-desktop-description": "Kiwix ti consente di avere l'intera Wikipedia a portata di mano ovunque tu vada! Su una barca, in mezzo al nulla o in prigione, Kiwix ti dà accesso a tutta la conoscenza umana. Non hai bisogno di Internet, tutto è archiviato sul tuo computer.",
-	"about-learn-more-about-kiwix": "Leggi di più su Kiwix",
+	"about-learn-more-about-kiwix": "Per saperne di più su Kiwix",
 	"about-release-title": "Versione",
 	"about-source-code": "Questo software è rilasciato secondo i termini della GNU General Public License versione 3. Visualizza il codice sorgente su <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "Versione: {{VERSION}}",

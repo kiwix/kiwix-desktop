@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Jopparn",
 			"Sabelöga",
 			"Susann Schweden",
 			"WikiPhoenix"
@@ -12,7 +13,7 @@
 	"error-downloader-launch-message": "Omöjligt att starta nedladdare, Kiwix-desktop kommer starta men alla nedladdningsfunktioner kommer inte fungera!",
 	"error-launch-server-message": "Ett fel har uppstått!",
 	"error-archive": "Kan inte hämta arkivet",
-	"open-zim": "Öppna Zim",
+	"open-zim": "Öppna ZIM-fil",
 	"local-kiwix-server": "Lokal Kiwix-server",
 	"random-article": "Slumpartikel",
 	"random-article-error": "Misslyckades att öppna en slumpartikel.",
@@ -53,7 +54,7 @@
 	"tools": "Verktyg",
 	"window-title": "Bibliotek - Kiwix",
 	"search": "Sök",
-	"browse-directory": "Bläddra i mappen",
+	"browse-directory": "Bläddra i katalogen",
 	"settings": "Inställningar",
 	"back": "Tillbaka",
 	"forward": "Fram",
@@ -73,6 +74,7 @@
 	"port-for-local-kiwix-server-setting": "Port för den lokala Kiwix-servern",
 	"zoom-level-setting": "Zoomnivå som standard",
 	"download-directory-setting": "Katalog för nedladdningar",
+	"monitor-directory-setting": "Övervaka katalogen",
 	"monitor-directory-default": "Inte angiven",
 	"reset": "Återställ",
 	"clear": "Rensa",
@@ -131,5 +133,11 @@
 	"invalid-port": "Ogiltig port",
 	"zim-open-fail-title": "Ogiltig fil",
 	"zim-open-fail-text": "ZIM-filen <b>{{ZIM}}</b> kan inte öppnas ordentligt. Den kommer att tas bort från ditt bibliotek.",
-	"monitor-directory-tooltip": "Alla ZIM-filer i denna katalog kommer automatiskt läggas till i biblioteket."
+	"monitor-dir-dialog-title": "Är du säker på att du vill byta övervakningskatalog?",
+	"monitor-dir-dialog-msg": "Den nya katalogsökvägen kommer vara:\n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "Är du säker på att du vill rensa övervakningskatalogen?",
+	"monitor-clear-dir-dialog-msg": "Detta kommer sluta kontrollera övervakningskatalogen efter nya ZIM-filer.",
+	"monitor-directory-tooltip": "Alla ZIM-filer i denna katalog kommer automatiskt läggas till i biblioteket.",
+	"next-tab": "Flytta till nästa flik",
+	"previous-tab": "Flytta till föregående flik"
 }
