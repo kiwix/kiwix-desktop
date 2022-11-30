@@ -19,7 +19,7 @@ Disclaimer
 
 This document assumes you have a little knowledge about software
 compilation. If you experience difficulties with the dependencies or
-with the Kiwix libary compilation itself, we recommend to have a look
+with the Kiwix library compilation itself, we recommend to have a look
 at [kiwix-build](https://github.com/kiwix/kiwix-build).
 
 Dependencies
