@@ -1,3 +1,11 @@
+kiwix-destkop 2.3.1
+===================
+
+ * Fix the AppImage packaging. Now published AppImages work correctly on recent
+   distrubution (@mgautierfr #905)
+ * Improve zim file picker (@kelson42 #886)
+ * Do not show ServiceWorker zim file from the remote catalog (@kelson42 #887)
+
 kiwix-desktop 2.3.0
 ===================
 

@@ -19,7 +19,7 @@ QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -std=c++11
 
 # Also change resources/org.kiwix.desktop.appdata.xml
-DEFINES += VERSION="2.3.0"
+DEFINES += VERSION="2.3.1"
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -154,12 +154,12 @@ unix {
   INSTALLS += mime_file
 }
 
-PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 11.0.0 libzim >= 8.0.0\")
+PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 12.0.0 libzim >= 8.0.0\")
 
 QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
-LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 11.0.0 libzim >= 8.0.0\")
+LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 12.0.0 libzim >= 8.0.0\")
 
 RESOURCES += \
     resources/kiwix.qrc \
