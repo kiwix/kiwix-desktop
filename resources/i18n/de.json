@@ -5,6 +5,7 @@
 			"Falwye",
 			"Justman10000",
 			"Susann Schweden",
+			"ThisCarthing",
 			"Umlaut",
 			"Wolfdietmann"
 		]
@@ -127,5 +128,6 @@
 	"download-dir-dialog-title": "Sind Sie sicher, dass Sie das Download-Verzeichnis wechseln möchten?",
 	"download-dir-dialog-msg": "Der neue Download-Verzeichnis-Pfad ist:\n{{DIRECTORY}}",
 	"invalid-port": "Ungültiger Port",
-	"zim-open-fail-title": "Ungültige Datei"
+	"zim-open-fail-title": "Ungültige Datei",
+	"monitor-directory-tooltip": "Alle ZIM-Dateien in diesem Verzeichnis werden automatisch zur Bibliothek hinzugefügt."
 }
