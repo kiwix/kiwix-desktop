@@ -73,8 +73,8 @@ jobs:
 
       - uses: legoktm/gh-action-dput@master
         name: Upload dev package
-        # Only upload on pushes to master
-        if: github.event_name == 'push' && github.event.ref == 'refs/heads/master' && startswith(matrix.distro, 'ubuntu-')
+        # Only upload on pushes to git default branch
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main' && startswith(matrix.distro, 'ubuntu-')
         with:
           gpg_key: ${{ secrets.LAUNCHPAD_GPG }}
           repository: ppa:kiwixteam/dev
