@@ -10,7 +10,7 @@ Microsoft Windows OSes.
 
 [![Release](https://img.shields.io/github/v/tag/kiwix/kiwix-desktop?label=release&sort=semver)](https://download.kiwix.org/release/kiwix-desktop/)
 [![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-desktop/wiki/Repology)
-[![Build Status](https://github.com/kiwix/kiwix-desktop/workflows/CI/badge.svg?query=branch%3Amaster)](https://github.com/kiwix/kiwix-desktop/actions?query=branch%3Amaster)
+[![Build Status](https://github.com/kiwix/kiwix-desktop/workflows/CI/badge.svg?query=branch%3Amain)](https://github.com/kiwix/kiwix-desktop/actions?query=branch%3Amain)
 [![CodeFactor](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop/badge)](https://www.codefactor.io/repository/github/kiwix/kiwix-desktop)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
