@@ -31,7 +31,7 @@
         <ul class="menu-options">
           <li v-on:click="openBook(getBookFromMousePosition())" class="menu-option local-option">{{ gt("open") }}</li>
           <li v-on:click="eraseBook(getBookFromMousePosition())" class="menu-option local-option">{{ gt("delete") }}</li>
-          <li v-on:click="downloadBook(getBookFromMousePosition())" class="menu-option download-option">{{ gt("download") }}</li>
+          <li v-on:click="startDownloadBook(getBookFromMousePosition())" class="menu-option download-option">{{ gt("download") }}</li>
           <li v-on:click="resumeBook(getBookFromMousePosition())" class="menu-option resume-option">{{ gt("resume") }}</li>
           <li v-on:click="pauseBook(getBookFromMousePosition())" class="menu-option pause-option">{{ gt("pause") }}</li>
           <li v-on:click="cancelBook(getBookFromMousePosition())" class="menu-option cancel-option">{{ gt("cancel") }}</li>
@@ -62,7 +62,7 @@
               </span>
             </template>
             <button v-if="book.path" v-on:click="openBook(book)" class="line">Open</button>
-            <button v-if="!book.path && !downloads[book.id]" v-on:click="downloadBook(book)" class="">Download</button>
+            <button v-if="!book.path && !downloads[book.id]" v-on:click="startDownloadBook(book)" class="">Download</button>
 
             <!-- round download progress bar -->
             <template v-if="downloads[book.id]" class="line">

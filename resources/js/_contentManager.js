@@ -82,11 +82,11 @@ function getDownloadInfo(id) {
 
 function displayLoadIcon(display) {
     if (display) {
-        document.getElementById("load-icon").classList.remove("do-not-display")  
-        document.getElementById("bookList").classList.add("do-not-display");  
+        document.getElementById("load-icon").classList.remove("do-not-display")
+        document.getElementById("bookList").classList.add("do-not-display");
     } else {
         document.getElementById("load-icon").classList.add("do-not-display");
-        document.getElementById("bookList").classList.remove("do-not-display")      
+        document.getElementById("bookList").classList.remove("do-not-display")
     }
 }
 const TRANSLATION_KEYS = ["search-files",
@@ -123,18 +123,26 @@ function init() {
         openBook : function(book) {
           contentManager.openBook(book.id, function() {});
         },
-        downloadBook : function(book) {
-          contentManager.downloadBook(book.id, function(did)  {
-            if (did.length == 0) {
-                alert("Error: this download is not available.");
-                return;
-            }
-            if (did == "storage_error") {
+        startDownloadBook : function(book) {
+          contentManager.startDownloadBook(book.id, function(status)  {
+            if (status == "storage_error") {
                 alert("not enough storage available.");
                 return;
             }
-            book.downloadId = did;
+            if (status != "") {
+                alert("unknown error: " + status);
+                return;
+            }
             downloadUpdaters[book.id] = setInterval(function() { getDownloadInfo(book.id); }, 1000);
+          });
+        },
+        downloadBook : function(book) {
+          contentManager.downloadBook(book.id, function(did)  {
+            if (did.length == 0) {
+              alert("Error: this download is not available.");
+              return;
+            }
+            book.downloadId = did;
           });
         },
         eraseBook : function(book) {

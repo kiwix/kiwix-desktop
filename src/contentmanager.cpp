@@ -1,5 +1,6 @@
 #include "contentmanager.h"
 
+#include "backgrounddownloader.h"
 #include "kiwixapp.h"
 #include "static_content.h"
 #include <kiwix/manager.h>
@@ -27,6 +28,11 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
+
+    // setup background downloader
+    mp_background_downloader = new BackgroundDownloader(mp_downloader);
+    connect(this, &ContentManager::backgroundStartDownload, mp_background_downloader, &BackgroundDownloader::startDownload);
+    connect(mp_background_downloader, &BackgroundDownloader::confirmStartDownload, this, &ContentManager::downloadBook);
 }
 
 void ContentManager::setLocal(bool local) {
@@ -249,17 +255,17 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
 }
 #undef ADD_V
 
-QString ContentManager::downloadBook(const QString &id)
+QString ContentManager::startDownloadBook(const QString &bookId)
 {
-    if (!mp_downloader)
-        return "";
+    std::cerr << "request for book id " << bookId.toStdString() << '\n';
     const auto& book = [&]()->const kiwix::Book& {
         try {
-            return m_remoteLibrary.getBookById(id.toStdString());
+            return m_remoteLibrary.getBookById(bookId.toStdString());
         } catch (...) {
-            return mp_library->getBookById(id);
+            return mp_library->getBookById(bookId);
         }
     }();
+    std::cerr << "found book id " << bookId.toStdString() << '\n';
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     QStorageInfo storage(downloadPath);
     auto bytesAvailable = storage.bytesAvailable();
@@ -270,20 +276,29 @@ QString ContentManager::downloadBook(const QString &id)
     for (auto b : booksList)
         if (b.toStdString() == book.getId())
             return "";
-    kiwix::Download *download;
-    try {
-        std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
-        const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
-        download = mp_downloader->startDownload(book.getUrl(), options);
-    } catch (std::exception& e) {
-        return "";
-    }
+
+    std::cerr << "emitting background request for book id " << bookId.toStdString() << '\n';
+
+    emit(backgroundStartDownload(bookId, QString::fromStdString(book.getUrl()), downloadPath));
+    return "";
+}
+
+QString ContentManager::downloadBook(const QString& bookId, const QString& did)
+{
+    const auto& book = [&]()->const kiwix::Book& {
+        try {
+            return m_remoteLibrary.getBookById(bookId.toStdString());
+        } catch (...) {
+            return mp_library->getBookById(bookId);
+        }
+    }();
+    std::cerr << "got book with id " << bookId.toStdString() << '\n';
     kiwix::Book bookCopy(book);
-    bookCopy.setDownloadId(download->getDid());
+    bookCopy.setDownloadId(did.toStdString());
     mp_library->addBookToLibrary(bookCopy);
     mp_library->save();
-    emit(oneBookChanged(id));
-    return QString::fromStdString(download->getDid());
+    emit(oneBookChanged(bookId));
+    return did;
 }
 
 void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName)
