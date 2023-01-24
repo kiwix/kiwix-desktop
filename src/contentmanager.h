@@ -2,6 +2,7 @@
 #define CONTENTMANAGER_H
 
 #include <QObject>
+#include <QMap>
 #include <math.h>
 #include "library.h"
 #include "contentmanagerview.h"
@@ -56,6 +57,10 @@ signals:
     void pendingRequest(const bool);
 
     void backgroundStartDownload(const QString&, const QString&, const QString&);
+    void backgroundCompleteDownload(const QString&);
+    void backgroundPauseDownload(const QString&);
+    void backgroundResumeDownload(const QString&);
+    void backgroundCancelDownload(const QString&, const QString&);
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
@@ -71,7 +76,8 @@ public slots:
     void updateRemoteLibrary(const QString& content);
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
-    void cancelBook(const QString& id);
+    void startCancelBook(const QString& id);
+    void completeCancelBook(const QString& bookId, const QString& path);
 };
 
 #endif // CONTENTMANAGER_H

@@ -33,6 +33,12 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     mp_background_downloader = new BackgroundDownloader(mp_downloader);
     connect(this, &ContentManager::backgroundStartDownload, mp_background_downloader, &BackgroundDownloader::startDownload);
     connect(mp_background_downloader, &BackgroundDownloader::confirmStartDownload, this, &ContentManager::downloadBook);
+
+    connect(this, &ContentManager::backgroundCompleteDownload, mp_background_downloader, &BackgroundDownloader::completeDownload);
+    connect(this, &ContentManager::backgroundPauseDownload, mp_background_downloader, &BackgroundDownloader::pauseDownload);
+    connect(this, &ContentManager::backgroundResumeDownload, mp_background_downloader, &BackgroundDownloader::resumeDownload);
+    connect(this, &ContentManager::backgroundCancelDownload, mp_background_downloader, &BackgroundDownloader::cancelDownload);
+    connect(mp_background_downloader, &BackgroundDownloader::confirmCancelDownload, this, &ContentManager::completeCancelBook);
 }
 
 void ContentManager::setLocal(bool local) {
@@ -167,18 +173,11 @@ void ContentManager::openBook(const QString &id)
     }
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) {values.append(QString::fromStdString((d->METH()))); continue;}}
 QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
-    QStringList values;
-    if (!mp_downloader) {
-        for(auto& key: keys) {
-            (void) key;
-            values.append("");
-        }
-        return values;
-    }
     auto& b = mp_library->getBookById(id);
+
+    /*
     kiwix::Download* d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
@@ -188,12 +187,12 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
         mp_library->save();
         emit(mp_library->booksChanged());
-        return values;
-    }
+        return QMap<std::string, std::string>();
+    }*/
 
-    d->updateStatus(true);
-    if (d->getStatus() == kiwix::Download::K_COMPLETE) {
-        QString tmp(QString::fromStdString(d->getPath()));
+    auto map = mp_background_downloader->getDownloadStatus(b.getDownloadId());
+    if (map.value("status") == "complete") {
+        QString tmp(QString::fromStdString(map.value("path")));
         kiwix::Book bCopy(b);
         bCopy.setPath(QDir::toNativeSeparators(tmp).toStdString());
         bCopy.setDownloadId("");
@@ -208,52 +207,15 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         } else {
             emit(mp_library->booksChanged());
         }
+        emit(backgroundCompleteDownload(QString::fromStdString(b.getDownloadId())));
     }
-    for(auto& key: keys){
-        ADD_V("id", getDid);
-        if(key == "status") {
-            switch(d->getStatus()){
-            case kiwix::Download::K_ACTIVE:
-                values.append("active");
-                break;
-            case kiwix::Download::K_WAITING:
-                values.append("waiting");
-                break;
-            case kiwix::Download::K_PAUSED:
-                values.append("paused");
-                break;
-            case kiwix::Download::K_ERROR:
-                values.append("error");
-                break;
-            case kiwix::Download::K_COMPLETE:
-                values.append("completed");
-                break;
-            case kiwix::Download::K_REMOVED:
-                values.append("removed");
-                break;
-            default:
-                values.append("unknown");
-            }
-            continue;
-        }
-        ADD_V("followedBy", getFollowedBy);
-        ADD_V("path", getPath);
-        if(key == "totalLength") {
-            values.append(QString::number(d->getTotalLength()));
-        }
-        if(key == "completedLength") {
-            values.append(QString::number(d->getCompletedLength()));
-        }
-        if(key == "downloadSpeed") {
-            values.append(QString::number(d->getDownloadSpeed()));
-        }
-        if(key == "verifiedLength") {
-            values.append(QString::number(d->getVerifiedLength()));
-        }
+
+    QStringList values;
+    for (auto& key : keys) {
+        values.append(QString::fromStdString(map.value(key.toStdString())));
     }
     return values;
 }
-#undef ADD_V
 
 QString ContentManager::startDownloadBook(const QString &bookId)
 {
@@ -333,42 +295,32 @@ void ContentManager::eraseBook(const QString& id)
 
 void ContentManager::pauseBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() == kiwix::Download::K_ACTIVE)
-        download->pauseDownload();
+    emit(backgroundPauseDownload(QString::fromStdString(b.getDownloadId())));
 }
 
 void ContentManager::resumeBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() == kiwix::Download::K_PAUSED)
-        download->resumeDownload();
+    emit(backgroundResumeDownload(QString::fromStdString(b.getDownloadId())));
 }
 
-void ContentManager::cancelBook(const QString& id)
+void ContentManager::startCancelBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() != kiwix::Download::K_COMPLETE) {
-        download->cancelDownload();
-    }
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
-    QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
+    QMap<std::string, std::string> map = mp_background_downloader->getDownloadStatus(b.getDownloadId());
+    emit(backgroundCancelDownload(id, QString::fromStdString(b.getDownloadId())));
+}
+
+void ContentManager::completeCancelBook(const QString& bookId, const QString& path)
+{
+    auto stdPath = path.toStdString();
+    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(stdPath));
+    QString filename = QString::fromStdString(kiwix::getLastPathElement(stdPath)) + "*";
     eraseBookFilesFromComputer(dirPath, filename);
-    mp_library->removeBookFromLibraryById(id);
+    mp_library->removeBookFromLibraryById(bookId);
     mp_library->save();
-    emit(oneBookChanged(id));
+    emit(oneBookChanged(bookId));
 }
 
 QStringList ContentManager::getDownloadIds()

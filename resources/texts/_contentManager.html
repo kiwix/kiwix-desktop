@@ -34,7 +34,7 @@
           <li v-on:click="startDownloadBook(getBookFromMousePosition())" class="menu-option download-option">{{ gt("download") }}</li>
           <li v-on:click="resumeBook(getBookFromMousePosition())" class="menu-option resume-option">{{ gt("resume") }}</li>
           <li v-on:click="pauseBook(getBookFromMousePosition())" class="menu-option pause-option">{{ gt("pause") }}</li>
-          <li v-on:click="cancelBook(getBookFromMousePosition())" class="menu-option cancel-option">{{ gt("cancel") }}</li>
+          <li v-on:click="startCancelBook(getBookFromMousePosition())" class="menu-option cancel-option">{{ gt("cancel") }}</li>
         </ul>
       </div>
       <details v-for="book in displayedBooks(books, displayedBooksNb)" class="book">
@@ -83,7 +83,7 @@
             </template>
             <!-- end  -->
 
-            <img class="cancel-button" v-if="downloads[book.id]" v-on:click.stop.prevent="cancelBook(book)" src="qrc:///icons/cancel-button.png">
+            <img class="cancel-button" v-if="downloads[book.id]" v-on:click.stop.prevent="startCancelBook(book)" src="qrc:///icons/cancel-button.png">
           </span>
         </summary>
         <p class="content">

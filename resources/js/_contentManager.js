@@ -157,10 +157,10 @@ function init() {
                 contentManager.resumeBook(book.id);
             }
         },
-        cancelBook : function(book) {
+        startCancelBook : function(book) {
             contentManager.pauseBook(book.id);
             if (confirm("Are you sure you want to abort the download of '" + book.title + "' ?")) {
-                contentManager.cancelBook(book.id);
+                contentManager.startCancelBook(book.id);
                 clearInterval(downloadUpdaters[book.id]);
                 Vue.delete(app.downloads, book.id);
             } else {
