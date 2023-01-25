@@ -46,9 +46,7 @@ void BackgroundDownloader::startDownload(const QString& bookId, const QString& u
     try {
         std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
         const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
-        m_rwlock.lockForWrite();
         download = mp_downloader->startDownload(uri.toStdString(), options);
-        m_rwlock.unlock();
         std::cerr << "got download with id " << download->getDid() << '\n';
         emit(confirmStartDownload(bookId, QString::fromStdString(download->getDid())));
     } catch (std::exception& e) {
@@ -61,11 +59,11 @@ void BackgroundDownloader::startDownload(const QString& bookId, const QString& u
 void BackgroundDownloader::completeDownload(const QString& did)
 {
     kiwix::Download* download = mp_downloader->getDownload(did.toStdString());
+    download->cancelDownload();
 
     m_rwlock.lockForWrite();
     QMap<std::string, std::string> map = m_status.value(did.toStdString());
     m_status.remove(did.toStdString());
-    download->cancelDownload();
     m_rwlock.unlock();
 }
 
@@ -73,9 +71,7 @@ void BackgroundDownloader::pauseDownload(const QString& did)
 {
     kiwix::Download* download = mp_downloader->getDownload(did.toStdString());
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
-        m_rwlock.lockForWrite();
         download->pauseDownload();
-        m_rwlock.unlock();
     }
 }
 
@@ -83,9 +79,7 @@ void BackgroundDownloader::resumeDownload(const QString& did)
 {
     kiwix::Download* download = mp_downloader->getDownload(did.toStdString());
     if (download->getStatus() == kiwix::Download::K_PAUSED) {
-        m_rwlock.lockForWrite();
         download->resumeDownload();
-        m_rwlock.unlock();
     }
 }
 
@@ -93,11 +87,11 @@ void BackgroundDownloader::cancelDownload(const QString& bookId, const QString& 
 {
     qInfo() << "canceling download for book = " << bookId;
     kiwix::Download* download = mp_downloader->getDownload(did.toStdString());
+    download->cancelDownload();
 
     m_rwlock.lockForWrite();
     QMap<std::string, std::string> map = m_status.value(did.toStdString());
     m_status.remove(did.toStdString());
-    download->cancelDownload();
     m_rwlock.unlock();
 
     emit(confirmCancelDownload(bookId, QString::fromStdString(map.value("path"))));
@@ -123,12 +117,8 @@ void BackgroundDownloader::updateStatus()
         m_status.insert(did, status);
         m_rwlock.unlock();
     }
-    int mapSize = 0;
-    for (auto it = m_status.begin(); it != m_status.end(); ++it) {
-        mapSize++;
-    }
 
-    qInfo() << "finished updating status with downloads length = " << mapSize;
+    qInfo() << "finished updating status with downloads length = " << m_status.size();
 }
 
 std::string BackgroundDownloader::convertStatusResult(kiwix::Download::StatusResult result) {
