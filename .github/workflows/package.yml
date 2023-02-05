@@ -13,7 +13,7 @@ jobs:
           - ubuntu-focal
           - ubuntu-bionic
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Determine which PPA we should upload to
       - name: PPA
@@ -66,7 +66,7 @@ jobs:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Packages for ${{ matrix.distro }}
           path: output
