@@ -2,12 +2,14 @@
 #define CONTENTMANAGER_H
 
 #include <QObject>
+#include <QMap>
 #include <math.h>
 #include "library.h"
 #include "contentmanagerview.h"
 #include <kiwix/downloader.h>
 #include "opdsrequestmanager.h"
 #include "contenttypefilter.h"
+#include "backgrounddownloader.h"
 
 class ContentManager : public QObject
 {
@@ -31,6 +33,7 @@ private:
     Library* mp_library;
     kiwix::Library m_remoteLibrary;
     kiwix::Downloader* mp_downloader;
+    BackgroundDownloader* mp_background_downloader;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
@@ -53,12 +56,19 @@ signals:
     void currentLangChanged();
     void pendingRequest(const bool);
 
+    void backgroundStartDownload(const QString&, const QString&, const QString&);
+    void backgroundCompleteDownload(const QString&);
+    void backgroundPauseDownload(const QString&);
+    void backgroundResumeDownload(const QString&);
+    void backgroundCancelDownload(const QString&, const QString&);
+
 public slots:
     QStringList getTranslations(const QStringList &keys);
     QStringList getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
     QStringList updateDownloadInfos(QString id, const QStringList& keys);
-    QString downloadBook(const QString& id);
+    QString startDownloadBook(const QString& id);
+    QString downloadBook(const QString& bookId, const QString& did);
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
@@ -66,7 +76,8 @@ public slots:
     void updateRemoteLibrary(const QString& content);
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
-    void cancelBook(const QString& id);
+    void startCancelBook(const QString& id);
+    void completeCancelBook(const QString& bookId, const QString& path);
 };
 
 #endif // CONTENTMANAGER_H
