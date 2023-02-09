@@ -173,7 +173,7 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         return values;
     }
     auto& b = mp_library->getBookById(id);
-    kiwix::Download* d;
+    std::shared_ptr<kiwix::Download> d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
@@ -270,7 +270,7 @@ QString ContentManager::downloadBook(const QString &id)
     for (auto b : booksList)
         if (b.toStdString() == book.getId())
             return "";
-    kiwix::Download *download;
+    std::shared_ptr<kiwix::Download> download;
     try {
         std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
         const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
