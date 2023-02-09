@@ -8,8 +8,8 @@ jobs:
       fail-fast: false
       matrix:
         distro:
+          - ubuntu-kinetic
           - ubuntu-jammy
-          - ubuntu-impish
           - ubuntu-focal
           - ubuntu-bionic
     steps:
@@ -34,18 +34,19 @@ jobs:
           email: release+launchpad@kiwix.org
           distro: ${{ matrix.distro }}
 
-      - uses: legoktm/gh-action-build-deb@ubuntu-jammy
-        if: matrix.distro == 'ubuntu-jammy'
-        name: Build package for ubuntu-jammy
-        id: build-ubuntu-jammy
+      - uses: legoktm/gh-action-build-deb@ubuntu-kinetic
+        if: matrix.distro == 'ubuntu-kinetic'
+        name: Build package for ubuntu-kinetic
+        id: build-ubuntu-kinetic
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
 
-      - uses: legoktm/gh-action-build-deb@ubuntu-impish
-        if: matrix.distro == 'ubuntu-impish'
-        name: Build package for ubuntu-impish
-        id: build-ubuntu-impish
+
+      - uses: legoktm/gh-action-build-deb@ubuntu-jammy
+        if: matrix.distro == 'ubuntu-jammy'
+        name: Build package for ubuntu-jammy
+        id: build-ubuntu-jammy
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
