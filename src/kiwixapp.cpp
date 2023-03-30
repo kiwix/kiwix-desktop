@@ -449,6 +449,7 @@ void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
     KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryDisplayed);
     KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryDisplayed);
+    KiwixApp::instance()->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryDisplayed);
 }
 
 void KiwixApp::updateNameMapper()
