@@ -74,22 +74,10 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         ADD_V("path", getPath);
         ADD_V("title", getTitle);
         ADD_V("description", getDescription);
-        ADD_V("language", getLanguage);
-        ADD_V("creator", getCreator);
-        ADD_V("publisher", getPublisher);
         ADD_V("date", getDate);
         ADD_V("url", getUrl);
         ADD_V("name", getName);
-        ADD_V("origId", getOrigId);
         ADD_V("downloadId", getDownloadId);
-        if (key == "favicon") {
-            try {
-                auto s = b->getIllustration(48)->getData();
-                values.append(QByteArray::fromStdString(s).toBase64());
-            } catch(...) {
-                values.append(QByteArray());
-            }
-        }
         if (key == "faviconMimeType") {
             std::string mimeType;
             try {
@@ -114,12 +102,6 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         }
         if (key == "size") {
             values.append(QString::number(b->getSize()));
-        }
-        if (key == "articleCount") {
-            values.append(QString::number(b->getArticleCount()));
-        }
-        if (key == "mediaCount") {
-            values.append(QString::number(b->getMediaCount()));
         }
         if (key == "tags") {
             QStringList tagList = QString::fromStdString(b->getTags()).split(';');
