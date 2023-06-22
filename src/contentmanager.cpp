@@ -14,6 +14,7 @@
 #include "contentmanagermodel.h"
 #include <zim/error.h>
 #include <zim/item.h>
+#include <QHeaderView>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -29,6 +30,18 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     managerModel->setBooksData(booksList);
     mp_view->setModel(managerModel);
     mp_view->show();
+
+    auto header = mp_view->header();
+    header->setSectionResizeMode(0, QHeaderView::Fixed);
+    header->setSectionResizeMode(1, QHeaderView::Stretch);
+    header->setSectionResizeMode(2, QHeaderView::Fixed);
+    header->setSectionResizeMode(3, QHeaderView::Fixed);
+    header->setSectionResizeMode(4, QHeaderView::Fixed);
+    header->setStretchLastSection(false);
+    header->setSectionsClickable(true);
+    header->setHighlightSections(true);
+    mp_view->setWordWrap(true);
+
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
@@ -43,7 +56,7 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
 {
     const auto bookIds = getBookIds();
     QList<QMap<QString, QVariant>> bookList;
-    QStringList keys = {"title", "tags", "date", "id", "size"};
+    QStringList keys = {"title", "tags", "date", "id", "size", "description"};
     auto app = KiwixApp::instance();
     std::shared_ptr<zim::Archive> archive;
     QIcon bookIcon;

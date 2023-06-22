@@ -26,6 +26,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     void setBooksData(const QList<QMap<QString, QVariant>>& data);
     void setupNodes();
+    bool hasChildren(const QModelIndex &parent) const override;
 
 private:
     QList<QMap<QString, QVariant>> m_data;

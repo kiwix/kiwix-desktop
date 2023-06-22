@@ -1,7 +1,7 @@
 #include "node.h"
 
-Node::Node(const QList<QVariant> &data, Node *parent)
-    : m_itemData(data), m_parentItem(parent)
+Node::Node(const QList<QVariant> &data, Node *parent, bool isAdditional)
+    : m_itemData(data), m_parentItem(parent),  m_isAdditonal(isAdditional)
 {}
 
 Node::~Node()

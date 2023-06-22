@@ -134,8 +134,18 @@ void ContentManagerModel::setupNodes()
         auto description = bookItem["description"].toString();
         auto icon = bookItem["icon"];
         const auto temp = new Node({icon, name, date, size, content, id}, rootNode);
+        const auto tempsTemp = new Node({"", description, "", "", "", ""}, temp, true);
+        temp->appendChild(tempsTemp);
         rootNode->appendChild(temp);
     }
     endResetModel();
+}
+
+bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
+{
+    Node *item = static_cast<Node*>(parent.internalPointer());
+    if (item)
+        return !item->isAdditonal();
+    return true;
 }
 
