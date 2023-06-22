@@ -71,7 +71,11 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
             QPixmap pixmap;
             pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
             bookIcon = QIcon(pixmap);
-        } catch (std::out_of_range& e) {}
+        } catch (zim::EntryNotFound &e) {
+            bookIcon = QIcon(":/icons/placeholder-icon.png");
+        } catch (std::out_of_range &e) {
+                   bookIcon = QIcon(":/icons/placeholder-icon.png");
+        }
         auto mp = getBookInfos(bookId, keys);
         mp["icon"] = bookIcon;
         bookList.append(mp);

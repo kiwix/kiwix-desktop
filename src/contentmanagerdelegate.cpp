@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QStyleOptionViewItemV4>
 #include "kiwixapp.h"
+#include <QStyleOptionViewItem>
 
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
@@ -29,11 +30,27 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     button.rect = QRect(x,y,w,h);
     button.text = "Open";
     button.state = QStyle::State_Enabled;
-    if (index.column() == 5 && index.data(Qt::UserRole+1) == QVariant()) {
+    QStyleOptionViewItem eOpt = option;
+    if (index.data(Qt::UserRole+1) != QVariant()) {
+        // additional info role
+        QStyledItemDelegate::paint(painter, option, index);
+        return;
+    }
+    if (index.column() == 5) {
         baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
         return;
     }
-    QStyledItemDelegate::paint(painter, option, index);
+    if (index.column() == 0) {
+        const auto icon = index.data().value<QIcon>();
+        icon.paint(painter, QRect(x+10, y+10, 30, 50));
+        return;
+    }
+    if (index.column() == 1) {
+        auto bFont = painter->font();
+        bFont.setBold(true);
+        eOpt.font = bFont;
+    }
+    QStyledItemDelegate::paint(painter, eOpt, index);
 }
 
 bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
