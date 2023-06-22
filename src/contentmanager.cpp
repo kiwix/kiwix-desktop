@@ -16,6 +16,7 @@
 #include <zim/item.h>
 #include <QHeaderView>
 #include "contentmanagerdelegate.h"
+#include "node.h"
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -54,6 +55,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
         managerModel->setBooksData(nBookList);
     });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
+    connect(mp_view, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -84,6 +86,39 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
         bookList.append(mp);
     }
     return bookList;
+}
+
+void ContentManager::onCustomContextMenu(const QPoint &point)
+{
+    QModelIndex index = mp_view->indexAt(point);
+    QMenu contextMenu("optionsMenu", mp_view);
+    Node* bookNode = static_cast<Node*>(index.internalPointer());
+    const auto id = bookNode->getBookId();
+
+    QAction menuDeleteBook("Delete book", this);
+    QAction menuOpenBook("Open book", this);
+    QAction menuDownloadBook("Download book", this);
+
+    connect(&menuDeleteBook, &QAction::triggered, [=]() {
+        eraseBook(id);
+        emit(booksChanged());
+    });
+    connect(&menuOpenBook, &QAction::triggered, [=]() {
+        openBook(id);
+    });
+    connect(&menuDownloadBook, &QAction::triggered, [=]() {
+        downloadBook(id);
+    });
+
+    if (m_local)
+        contextMenu.addAction(&menuOpenBook);
+    else
+        contextMenu.addAction(&menuDownloadBook);
+    contextMenu.addAction(&menuDeleteBook);
+
+    if (index.isValid()) {
+        contextMenu.exec(mp_view->viewport()->mapToGlobal(point));
+    }
 }
 
 void ContentManager::setLocal(bool local) {

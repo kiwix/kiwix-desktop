@@ -9,7 +9,7 @@ QTreeView::branch:closed:has-children {
 }
 
 QTreeView::item:has-children {
-    border-bottom: 1px solid #b7bec9;
+    border-bottom: 1px solid #cccccc;
 }
 
 QTreeView {
@@ -18,7 +18,7 @@ QTreeView {
 }
 
 QHeaderView::section {
-    color: grey;
+    color: #666666;
     background-color:  #fff;
     border-width: 0px 0px 2px;
     border-color: black;
@@ -37,3 +37,19 @@ QHeaderView::up-arrow {
     image: url(:/icons/caret-up-solid.svg);
     margin: 5px;
 }
+
+QMenu {
+    background-color: white;
+    margin: 2px;
+    font-family: 'Selawik';
+}
+
+QMenu::item {
+    padding: 2px 25px 2px 20px;
+    border-bottom: 1px solid #cccccc;
+}
+
+QMenu::item:selected {
+    background-color: #cccccc;
+}
+

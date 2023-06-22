@@ -8,7 +8,7 @@
 class Node
 {
 public:
-    explicit Node(const QList<QVariant> &data, Node *parentItem = nullptr, bool isAdditional = false);
+    explicit Node(const QList<QVariant> &data, Node *parentItem = nullptr, QString bookId = "", bool isAdditional = false);
     ~Node();
     void appendChild(Node *child);
     Node *child(int row);
@@ -18,12 +18,14 @@ public:
     int row() const;
     Node *parentItem();
     bool isAdditonal() const { return m_isAdditonal; }
+    QString getBookId() const { return m_bookId; }
 
 private:
     QList<QVariant> m_itemData;
     Node *m_parentItem;
     QList<Node *> m_childItems;
     bool m_isAdditonal;
+    QString m_bookId;
 };
 
 

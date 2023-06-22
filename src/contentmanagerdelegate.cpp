@@ -47,7 +47,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
     if (index.column() == 1) {
         auto bFont = painter->font();
-        bFont.setBold(true);
+        bFont.setWeight(60);
         eOpt.font = bFont;
     }
     QStyledItemDelegate::paint(painter, eOpt, index);

@@ -135,8 +135,8 @@ void ContentManagerModel::setupNodes()
         auto id = bookItem["id"].toString();
         auto description = bookItem["description"].toString();
         auto icon = bookItem["icon"];
-        const auto temp = new Node({icon, name, date, size, content, id}, rootNode);
-        const auto tempsTemp = new Node({"", description, "", "", "", ""}, temp, true);
+        const auto temp = new Node({icon, name, date, size, content, id}, rootNode, id);
+        const auto tempsTemp = new Node({"", description, "", "", "", ""}, temp, "", true);
         temp->appendChild(tempsTemp);
         rootNode->appendChild(temp);
     }
@@ -190,4 +190,3 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
     }
     KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
 }
-

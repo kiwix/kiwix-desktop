@@ -13,4 +13,5 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     file.open(QFile::ReadOnly);
     QString styleSheet = QString(file.readAll());
     setStyleSheet(styleSheet);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 }

@@ -68,6 +68,7 @@ public slots:
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
     void cancelBook(const QString& id);
+    void onCustomContextMenu(const QPoint &point);
 };
 
 #endif // CONTENTMANAGER_H
