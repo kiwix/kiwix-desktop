@@ -55,7 +55,7 @@ signals:
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
-    QStringList getBookInfos(QString id, const QStringList &keys);
+    QMap<QString, QVariant> getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
     QStringList updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);

@@ -46,10 +46,10 @@ QStringList ContentManager::getTranslations(const QStringList &keys)
     return translations;
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b->METH())));}
-QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
+#define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
+QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
-    QStringList values;
+    QMap<QString, QVariant> values;
     const kiwix::Book* b = [=]()->const kiwix::Book* {
         try {
             return &mp_library->getBookById(id);
@@ -63,7 +63,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
     if (nullptr == b){
         for(auto& key:keys) {
             (void) key;
-            values.append("");
+            values.insert(key, "");
         }
         return values;
     }
@@ -86,7 +86,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
                 const kiwix::Book::Illustration tempIllustration;
                 mimeType = tempIllustration.mimeType;
             }
-            values.append(QString::fromStdString(mimeType));
+            values.insert(key, QString::fromStdString(mimeType));
         }
         if (key == "faviconUrl") {
             std::string url;
@@ -97,10 +97,10 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
                 const kiwix::Book::Illustration tempIllustration;
                 url = tempIllustration.url;
             }
-            values.append(QString::fromStdString(url));
+            values.insert(key, QString::fromStdString(url));
         }
         if (key == "size") {
-            values.append(QString::number(b->getSize()));
+            values.insert(key, QString::number(b->getSize()));
         }
         if (key == "tags") {
             QStringList tagList = QString::fromStdString(b->getTags()).split(';');
@@ -116,7 +116,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
             if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
             if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
             QString s = displayTagList.join(", ");
-            values.append(s);
+            values.insert(key, s);
         }
     }
     return values;
