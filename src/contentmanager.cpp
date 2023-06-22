@@ -12,6 +12,8 @@
 #include <QStorageInfo>
 #include <QMessageBox>
 #include "contentmanagermodel.h"
+#include <zim/error.h>
+#include <zim/item.h>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -23,12 +25,44 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
     auto managerModel = new ContentManagerModel();
+    const auto booksList = getBooksList();
+    managerModel->setBooksData(booksList);
     mp_view->setModel(managerModel);
     mp_view->show();
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
+    connect(this, &ContentManager::booksChanged, this, [=]() {
+        const auto nBookList = getBooksList();
+        managerModel->setBooksData(nBookList);
+    });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
+}
+
+QList<QMap<QString, QVariant>> ContentManager::getBooksList()
+{
+    const auto bookIds = getBookIds();
+    QList<QMap<QString, QVariant>> bookList;
+    QStringList keys = {"title", "tags", "date", "id", "size"};
+    auto app = KiwixApp::instance();
+    std::shared_ptr<zim::Archive> archive;
+    QIcon bookIcon;
+    for (auto bookId : bookIds) {
+        try {
+            archive = app->getLibrary()->getArchive(bookId);
+            std::string favicon, _mimetype;
+            auto item = archive->getIllustrationItem(48);
+            favicon = item.getData();
+            _mimetype = item.getMimetype();
+            QPixmap pixmap;
+            pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
+            bookIcon = QIcon(pixmap);
+        } catch (std::out_of_range& e) {}
+        auto mp = getBookInfos(bookId, keys);
+        mp["icon"] = bookIcon;
+        bookList.append(mp);
+    }
+    return bookList;
 }
 
 void ContentManager::setLocal(bool local) {

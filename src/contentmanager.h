@@ -43,6 +43,7 @@ private:
 
     QStringList getBookIds();
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
+    QList<QMap<QString, QVariant>> getBooksList();
 
 signals:
     void filterParamsChanged();

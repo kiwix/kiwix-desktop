@@ -10,9 +10,6 @@
 ContentManagerModel::ContentManagerModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
-    rootNode = new Node({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")});
-    auto childNode = new Node({"someIcon", "test name", "test date", "test size", "test content", "download link"}, rootNode);
-    rootNode->appendChild(childNode);
 }
 
 ContentManagerModel::~ContentManagerModel()
@@ -83,7 +80,8 @@ QModelIndex ContentManagerModel::parent(const QModelIndex &index) const
 
 int ContentManagerModel::rowCount(const QModelIndex &parent) const
 {
-    return 5;
+    Q_UNUSED(parent);
+    return m_data.size();
 }
 
 QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -101,3 +99,43 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
         default: return QVariant();
     }
 }
+
+void ContentManagerModel::setBooksData(const QList<QMap<QString, QVariant>>& data)
+{
+    m_data = data;
+    rootNode = new Node({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")});
+    setupNodes();
+    emit dataChanged(QModelIndex(), QModelIndex());
+}
+
+QString convertToUnits(QString size)
+{
+    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
+    int unitIndex = 0;
+    auto bytes = size.toDouble();
+    while (bytes >= 1024 && unitIndex < units.size()) {
+        bytes /= 1024;
+        unitIndex++;
+    }
+
+    const auto preciseBytes = QString::number(bytes, 'g', 3);
+    return preciseBytes + units[unitIndex];
+}
+
+void ContentManagerModel::setupNodes()
+{
+    beginResetModel();
+    for (auto bookItem : m_data) {
+        auto name = bookItem["title"].toString();
+        auto date = bookItem["date"].toString();
+        auto size = convertToUnits(bookItem["size"].toString());
+        auto content = bookItem["tags"].toString();
+        auto id = bookItem["id"].toString();
+        auto description = bookItem["description"].toString();
+        auto icon = bookItem["icon"];
+        const auto temp = new Node({icon, name, date, size, content, id}, rootNode);
+        rootNode->appendChild(temp);
+    }
+    endResetModel();
+}
+
