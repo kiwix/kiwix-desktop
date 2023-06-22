@@ -5,6 +5,7 @@
 #include<QDebug>
 #include <QStringList>
 #include <QSize>
+#include "kiwixapp.h"
 
 
 ContentManagerModel::ContentManagerModel(QObject *parent)
@@ -166,5 +167,27 @@ void ContentManagerModel::fetchMore(const QModelIndex &parent)
     beginInsertRows(QModelIndex(), zimCount, zimCount + zimsToFetch - 1);
     zimCount += zimsToFetch;
     endInsertRows();
+}
+
+void ContentManagerModel::sort(int column, Qt::SortOrder order)
+{
+    if (column == 0 || column == 4 || column == 5)
+        return;
+
+    QString sortBy = "";
+    switch(column) {
+        case 1:
+            sortBy = "title";
+            break;
+        case 2:
+            sortBy = "date";
+            break;
+        case 3:
+            sortBy = "size";
+            break;
+        default:
+            sortBy = "unsorted";
+    }
+    KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
 }
 

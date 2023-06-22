@@ -27,6 +27,7 @@ public:
     void setBooksData(const QList<QMap<QString, QVariant>>& data);
     void setupNodes();
     bool hasChildren(const QModelIndex &parent) const override;
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
 protected:
     bool canFetchMore(const QModelIndex &parent) const override;

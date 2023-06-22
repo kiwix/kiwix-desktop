@@ -3,6 +3,7 @@
 
 #include <QVariant>
 #include <QList>
+#include "contentmanagermodel.h"
 
 class Node
 {
