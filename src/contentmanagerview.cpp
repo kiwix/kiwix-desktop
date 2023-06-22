@@ -9,4 +9,8 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     setSortingEnabled(true);
     auto managerDelegate = new ContentManagerDelegate();
     setItemDelegate(managerDelegate);
+    QFile file(QString::fromUtf8(":/css/_contentManager.css"));
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    setStyleSheet(styleSheet);
 }

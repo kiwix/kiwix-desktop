@@ -57,5 +57,8 @@
         <file>icons/library-icon.svg</file>
         <file>icons/open-file.svg</file>
         <file>icons/placeholder-icon.png</file>
+        <file>icons/caret-down-solid.svg</file>
+        <file>icons/caret-right-solid.svg</file>
+        <file>icons/caret-up-solid.svg</file>
     </qresource>
 </RCC>

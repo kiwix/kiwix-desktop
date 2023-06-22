@@ -42,6 +42,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     header->setSectionsClickable(true);
     header->setHighlightSections(true);
     mp_view->setWordWrap(true);
+    mp_view->resizeColumnToContents(4);
+    mp_view->setColumnWidth(0, 80);
+    // TODO: set width for all columns based on viewport
 
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
