@@ -28,9 +28,14 @@ public:
     void setupNodes();
     bool hasChildren(const QModelIndex &parent) const override;
 
+protected:
+    bool canFetchMore(const QModelIndex &parent) const override;
+    void fetchMore(const QModelIndex &parent) override;
+
 private:
     QList<QMap<QString, QVariant>> m_data;
     Node *rootNode;
+    int zimCount = 0;
 };
 
 #endif // CONTENTMANAGERMODEL_H

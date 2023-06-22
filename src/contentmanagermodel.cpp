@@ -82,7 +82,7 @@ QModelIndex ContentManagerModel::parent(const QModelIndex &index) const
 int ContentManagerModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_data.size();
+    return zimCount;
 }
 
 QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -148,5 +148,23 @@ bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
     if (item)
         return !item->isAdditonal();
     return true;
+}
+
+bool ContentManagerModel::canFetchMore(const QModelIndex &parent) const
+{
+    if (parent.isValid())
+        return false;
+    return (zimCount < m_data.size());
+}
+
+void ContentManagerModel::fetchMore(const QModelIndex &parent)
+{
+    if (parent.isValid())
+        return;
+    int remainder = m_data.size() - zimCount;
+    int zimsToFetch = qMin(5, remainder);
+    beginInsertRows(QModelIndex(), zimCount, zimCount + zimsToFetch - 1);
+    zimCount += zimsToFetch;
+    endInsertRows();
 }
 
