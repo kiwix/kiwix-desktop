@@ -21,8 +21,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
-    mp_view->registerObject("contentManager", this);
-    mp_view->setHtml();
+    mp_view->show();
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
