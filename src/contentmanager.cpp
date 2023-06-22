@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QStorageInfo>
 #include <QMessageBox>
+#include "contentmanagermodel.h"
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -21,6 +22,8 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
+    auto managerModel = new ContentManagerModel();
+    mp_view->setModel(managerModel);
     mp_view->show();
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
