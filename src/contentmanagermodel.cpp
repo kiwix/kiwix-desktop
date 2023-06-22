@@ -31,7 +31,8 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 
     Node *item = static_cast<Node*>(index.internalPointer());
     const auto displayRole = role == Qt::DisplayRole;
-    if (displayRole)
+    const auto additionalInfoRole = role == Qt::UserRole+1 && item->isAdditonal();
+    if (displayRole || additionalInfoRole)
         return item->data(index.column());
 
     return QVariant();

@@ -15,6 +15,7 @@
 #include <zim/error.h>
 #include <zim/item.h>
 #include <QHeaderView>
+#include "contentmanagerdelegate.h"
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
