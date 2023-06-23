@@ -72,6 +72,7 @@ SOURCES += \
 HEADERS += \
     src/contentmanagerdelegate.h \
     src/contentmanagermodel.h \
+    src/contentmanagerview.h \
     src/contenttypefilter.h \
     src/findinpagebar.h \
     src/node.h \
@@ -93,7 +94,6 @@ HEADERS += \
     src/webpage.h \
     src/about.h \
     src/contentmanager.h \
-    src/contentmanagerview.h \
     src/tabbar.h \
     src/contentmanagerside.h \
     src/readinglistbar.h \
@@ -107,6 +107,7 @@ HEADERS += \
     src/static_content.h
 
 FORMS += \
+    src/contentmanagerview.ui \
     src/findinpagebar.ui \
     ui/mainwindow.ui \
     ui/about.ui \

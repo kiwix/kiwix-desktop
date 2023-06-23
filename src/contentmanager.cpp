@@ -30,10 +30,11 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     auto managerModel = new ContentManagerModel();
     const auto booksList = getBooksList();
     managerModel->setBooksData(booksList);
-    mp_view->setModel(managerModel);
-    mp_view->show();
+    auto treeView = mp_view->getView();
+    treeView->setModel(managerModel);
+    treeView->show();
 
-    auto header = mp_view->header();
+    auto header = treeView->header();
     header->setSectionResizeMode(0, QHeaderView::Fixed);
     header->setSectionResizeMode(1, QHeaderView::Stretch);
     header->setSectionResizeMode(2, QHeaderView::Fixed);
@@ -42,9 +43,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     header->setStretchLastSection(false);
     header->setSectionsClickable(true);
     header->setHighlightSections(true);
-    mp_view->setWordWrap(true);
-    mp_view->resizeColumnToContents(4);
-    mp_view->setColumnWidth(0, 80);
+    treeView->setWordWrap(true);
+    treeView->resizeColumnToContents(4);
+    treeView->setColumnWidth(0, 80);
     // TODO: set width for all columns based on viewport
 
     setCurrentLanguage(QLocale().name().split("_").at(0));
@@ -55,7 +56,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
         managerModel->setBooksData(nBookList);
     });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
-    connect(mp_view, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
+    connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -90,8 +91,8 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
 
 void ContentManager::onCustomContextMenu(const QPoint &point)
 {
-    QModelIndex index = mp_view->indexAt(point);
-    QMenu contextMenu("optionsMenu", mp_view);
+    QModelIndex index = mp_view->getView()->indexAt(point);
+    QMenu contextMenu("optionsMenu", mp_view->getView());
     Node* bookNode = static_cast<Node*>(index.internalPointer());
     const auto id = bookNode->getBookId();
 
@@ -117,7 +118,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     contextMenu.addAction(&menuDeleteBook);
 
     if (index.isValid()) {
-        contextMenu.exec(mp_view->viewport()->mapToGlobal(point));
+        contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
     }
 }
 

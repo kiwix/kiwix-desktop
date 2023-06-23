@@ -15,6 +15,7 @@ QTreeView::item:has-children {
 QTreeView {
     font-family: 'Selawik';
     padding: 4px;
+    border: none;
 }
 
 QHeaderView::section {
@@ -53,3 +54,12 @@ QMenu::item:selected {
     background-color: #cccccc;
 }
 
+QLineEdit {
+    font-family: 'Selawik';
+    padding: 4px;
+    border: 1px solid #cccccc;
+    color: #666666;
+    font-size: 16px;
+    height: 32px;
+    line-height: 24px;
+}
