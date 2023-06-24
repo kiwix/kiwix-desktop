@@ -236,14 +236,14 @@ void ContentManager::openBook(const QString &id)
     }
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) {values.append(QString::fromStdString((d->METH()))); continue;}}
-QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
+#define ADD_V(KEY, METH) {if(key==KEY) {values.insert(key, QString::fromStdString((d->METH()))); continue;}}
+QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
-    QStringList values;
+    QMap<QString, QVariant> values;
     if (!mp_downloader) {
         for(auto& key: keys) {
             (void) key;
-            values.append("");
+            values.insert(key, "");
         }
         return values;
     }
@@ -283,41 +283,41 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         if(key == "status") {
             switch(d->getStatus()){
             case kiwix::Download::K_ACTIVE:
-                values.append("active");
+                values.insert(key, "active");
                 break;
             case kiwix::Download::K_WAITING:
-                values.append("waiting");
+                values.insert(key, "waiting");
                 break;
             case kiwix::Download::K_PAUSED:
-                values.append("paused");
+                values.insert(key, "paused");
                 break;
             case kiwix::Download::K_ERROR:
-                values.append("error");
+                values.insert(key, "error");
                 break;
             case kiwix::Download::K_COMPLETE:
-                values.append("completed");
+                values.insert(key, "completed");
                 break;
             case kiwix::Download::K_REMOVED:
-                values.append("removed");
+                values.insert(key, "removed");
                 break;
             default:
-                values.append("unknown");
+                values.insert(key, "unknown");
             }
             continue;
         }
         ADD_V("followedBy", getFollowedBy);
         ADD_V("path", getPath);
         if(key == "totalLength") {
-            values.append(QString::number(d->getTotalLength()));
+            values.insert(key, QString::number(d->getTotalLength()));
         }
         if(key == "completedLength") {
-            values.append(QString::number(d->getCompletedLength()));
+            values.insert(key, QString::number(d->getCompletedLength()));
         }
         if(key == "downloadSpeed") {
-            values.append(QString::number(d->getDownloadSpeed()));
+            values.insert(key, QString::number(d->getDownloadSpeed()));
         }
         if(key == "verifiedLength") {
-            values.append(QString::number(d->getVerifiedLength()));
+            values.insert(key, QString::number(d->getVerifiedLength()));
         }
     }
     return values;
