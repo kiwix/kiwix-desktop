@@ -5,6 +5,7 @@
 #include <QStyleOptionViewItemV4>
 #include "kiwixapp.h"
 #include <QStyleOptionViewItem>
+#include "node.h"
 
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
@@ -28,8 +29,20 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     w = r.width();
     h = r.height();
     button.rect = QRect(x,y,w,h);
-    button.text = "Open";
     button.state = QStyle::State_Enabled;
+    auto node = static_cast<Node*>(index.internalPointer());
+    try {
+        const auto id = node->getBookId();
+        const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+        if(KiwixApp::instance()->getContentManager()->getBookInfos(id, {"downloadId"})["downloadId"] != "") {
+            button.text = "Downloading";
+            button.state = QStyle::State_ReadOnly;
+        } else {
+            button.text = gt("open");
+        }
+    } catch (std::out_of_range& e) {
+        button.text = gt("download");
+    }
     QStyleOptionViewItem eOpt = option;
     if (index.data(Qt::UserRole+1) != QVariant()) {
         // additional info role
@@ -61,20 +74,24 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
         int clickX = e->x();
         int clickY = e->y();
 
-        QRect r = option.rect;//getting the rect of the cell
+        QRect r = option.rect;
         int x,y,w,h;
-        x = r.left();//the X coordinate
-        y = r.top();//the Y coordinate
-        w = r.width();//button width
-        h = r.height();//button height
-
+        x = r.left();
+        y = r.top();
+        w = r.width();
+        h = r.height();
+        const auto node = static_cast<Node*>(index.internalPointer());
+        const auto id = node->getBookId();
 
         if(index.column() == 5 && clickX > x && clickX < x + w )
-            if( clickY > y && clickY < y + h )
+            if( clickY > y && clickY < y + h && KiwixApp::instance()->getContentManager()->getBookInfos(id, {"downloadId"})["downloadId"] == "")
             {
-                const auto modeel = index.model();
-                const auto id = modeel->data(index).toString();
-                KiwixApp::instance()->getContentManager()->openBook(id);
+                try {
+                    const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+                    KiwixApp::instance()->getContentManager()->openBook(id);
+                } catch (std::out_of_range& e) {
+                    KiwixApp::instance()->getContentManager()->downloadBook(id);
+                }
             }
     }
 

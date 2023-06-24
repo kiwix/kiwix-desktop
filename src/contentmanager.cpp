@@ -357,6 +357,14 @@ QString ContentManager::downloadBook(const QString &id)
     bookCopy.setDownloadId(download->getDid());
     mp_library->addBookToLibrary(bookCopy);
     mp_library->save();
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=](){
+        auto downloadInfos = updateDownloadInfos(id, {"status"});
+        if (!downloadInfos["status"].isValid()) {
+            timer->stop();
+        }
+    });
+    timer->start(1000);
     emit(oneBookChanged(id));
     return QString::fromStdString(download->getDid());
 }
