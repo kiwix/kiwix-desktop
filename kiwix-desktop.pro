@@ -40,6 +40,7 @@ SOURCES += \
     src/findinpagebar.cpp \
     src/node.cpp \
     src/suggestionlistworker.cpp \
+    src/thumbnaildownloader.cpp \
     src/translation.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
@@ -77,6 +78,7 @@ HEADERS += \
     src/findinpagebar.h \
     src/node.h \
     src/suggestionlistworker.h \
+    src/thumbnaildownloader.h \
     src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \

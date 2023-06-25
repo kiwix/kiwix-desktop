@@ -8,6 +8,7 @@
 #include <kiwix/downloader.h>
 #include "opdsrequestmanager.h"
 #include "contenttypefilter.h"
+#include "contentmanagermodel.h"
 
 class ContentManager : public QObject
 {
@@ -26,6 +27,7 @@ public:
     void setCurrentLanguage(QString language);
     void setCurrentCategoryFilter(QString category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
+    bool isLocal() const { return m_local; }
 
 private:
     Library* mp_library;
@@ -44,6 +46,7 @@ private:
     QStringList getBookIds();
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
     QList<QMap<QString, QVariant>> getBooksList();
+    ContentManagerModel *managerModel;
 
 signals:
     void filterParamsChanged();

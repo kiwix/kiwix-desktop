@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QList>
 #include "contentmanagermodel.h"
+#include <QIcon>
 
 class Node
 {
@@ -19,6 +20,7 @@ public:
     Node *parentItem();
     bool isAdditonal() const { return m_isAdditonal; }
     QString getBookId() const { return m_bookId; }
+    void setIconData(QByteArray iconData) { m_itemData[0] = iconData; }
 
 private:
     QList<QVariant> m_itemData;

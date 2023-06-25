@@ -5,12 +5,15 @@
 #include<QDebug>
 #include <QStringList>
 #include <QSize>
+#include <QIcon>
+#include <zim/error.h>
+#include <zim/item.h>
 #include "kiwixapp.h"
-
 
 ContentManagerModel::ContentManagerModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
+    connect(&td, &ThumbnailDownloader::oneThumbnailDownloaded, this, &ContentManagerModel::updateImage);
 }
 
 ContentManagerModel::~ContentManagerModel()
@@ -126,6 +129,7 @@ QString convertToUnits(QString size)
 
 void ContentManagerModel::setupNodes()
 {
+    QByteArray bookIcon;
     beginResetModel();
     for (auto bookItem : m_data) {
         auto name = bookItem["title"].toString();
@@ -134,13 +138,46 @@ void ContentManagerModel::setupNodes()
         auto content = bookItem["tags"].toString();
         auto id = bookItem["id"].toString();
         auto description = bookItem["description"].toString();
-        auto icon = bookItem["icon"];
-        const auto temp = new Node({icon, name, date, size, content, id}, rootNode, id);
+        auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
+        try {
+            auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            std::string favicon;
+            auto item = book.getIllustration(48);
+            favicon = item->getData();
+            bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
+            bookIcon.detach(); // deep copy
+        } catch (std::out_of_range &e) {
+            if (iconMap.contains(faviconUrl)) {
+                bookIcon = iconMap[faviconUrl];
+            }
+        }
+        const auto temp = new Node({bookIcon, name, date, size, content, id}, rootNode, id);
         const auto tempsTemp = new Node({"", description, "", "", "", ""}, temp, "", true);
         temp->appendChild(tempsTemp);
         rootNode->appendChild(temp);
     }
     endResetModel();
+}
+
+void ContentManagerModel::refreshIcons()
+{
+    if (KiwixApp::instance()->getContentManager()->isLocal())
+        return;
+    td.clearQueue();
+    for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
+        auto bookItem = m_data[i];
+        auto id = bookItem["id"].toString();
+        auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
+        auto app = KiwixApp::instance();
+        try {
+            auto book = app->getLibrary()->getBookById(id);
+            auto item = book.getIllustration(48);
+        } catch (std::out_of_range &e) {
+            if (faviconUrl != "" && !iconMap.contains(faviconUrl)) {
+                td.addDownload(faviconUrl, index(i, 0));
+            }
+        }
+    }
 }
 
 bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
@@ -167,6 +204,7 @@ void ContentManagerModel::fetchMore(const QModelIndex &parent)
     beginInsertRows(QModelIndex(), zimCount, zimCount + zimsToFetch - 1);
     zimCount += zimsToFetch;
     endInsertRows();
+    refreshIcons();
 }
 
 void ContentManagerModel::sort(int column, Qt::SortOrder order)
@@ -189,4 +227,12 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
             sortBy = "unsorted";
     }
     KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
+}
+
+void ContentManagerModel::updateImage(QModelIndex index, QString url, QByteArray imageData)
+{
+    Node *item = static_cast<Node*>(index.internalPointer());
+    item->setIconData(imageData);
+    iconMap[url] = imageData;
+    emit dataChanged(index, index);
 }

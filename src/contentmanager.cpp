@@ -27,7 +27,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
-    auto managerModel = new ContentManagerModel();
+    managerModel = new ContentManagerModel(this);
     const auto booksList = getBooksList();
     managerModel->setBooksData(booksList);
     auto treeView = mp_view->getView();
@@ -54,6 +54,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(this, &ContentManager::booksChanged, this, [=]() {
         const auto nBookList = getBooksList();
         managerModel->setBooksData(nBookList);
+        managerModel->refreshIcons();
     });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
     connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
@@ -63,27 +64,10 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
 {
     const auto bookIds = getBookIds();
     QList<QMap<QString, QVariant>> bookList;
-    QStringList keys = {"title", "tags", "date", "id", "size", "description"};
-    auto app = KiwixApp::instance();
-    std::shared_ptr<zim::Archive> archive;
+    QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl"};
     QIcon bookIcon;
     for (auto bookId : bookIds) {
-        try {
-            archive = app->getLibrary()->getArchive(bookId);
-            std::string favicon, _mimetype;
-            auto item = archive->getIllustrationItem(48);
-            favicon = item.getData();
-            _mimetype = item.getMimetype();
-            QPixmap pixmap;
-            pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
-            bookIcon = QIcon(pixmap);
-        } catch (zim::EntryNotFound &e) {
-            bookIcon = QIcon(":/icons/placeholder-icon.png");
-        } catch (std::out_of_range &e) {
-                   bookIcon = QIcon(":/icons/placeholder-icon.png");
-        }
         auto mp = getBookInfos(bookId, keys);
-        mp["icon"] = bookIcon;
         bookList.append(mp);
     }
     return bookList;

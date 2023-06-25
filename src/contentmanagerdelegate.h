@@ -3,6 +3,7 @@
 
 #include <QStyledItemDelegate>
 #include <QPushButton>
+#include <QByteArray>
 
 class ContentManagerDelegate : public QStyledItemDelegate
 {
@@ -16,6 +17,7 @@ public:
 
 private:
     QScopedPointer<QPushButton> baseButton;
+    QByteArray placeholderIcon;
 };
 
 #endif // CONTENTMANAGERDELEGATE_H

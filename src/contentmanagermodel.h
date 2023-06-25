@@ -4,6 +4,8 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QVariant>
+#include <QIcon>
+#include "thumbnaildownloader.h"
 
 class Node;
 
@@ -28,6 +30,10 @@ public:
     void setupNodes();
     bool hasChildren(const QModelIndex &parent) const override;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
+    void refreshIcons();
+
+public slots:
+    void updateImage(QModelIndex index, QString url, QByteArray imageData);
 
 protected:
     bool canFetchMore(const QModelIndex &parent) const override;
@@ -37,6 +43,8 @@ private:
     QList<QMap<QString, QVariant>> m_data;
     Node *rootNode;
     int zimCount = 0;
+    ThumbnailDownloader td;
+    QMap<QString, QByteArray> iconMap;
 };
 
 #endif // CONTENTMANAGERMODEL_H

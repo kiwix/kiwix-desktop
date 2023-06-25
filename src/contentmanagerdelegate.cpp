@@ -16,6 +16,10 @@ ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
                               "font-family: Selawik;"
                               "color: blue;"
                               "margin: 4px;");
+    QImage placeholderIconFile(":/icons/placeholder-icon.png");
+    QBuffer buffer(&placeholderIcon);
+    buffer.open(QIODevice::WriteOnly);
+    placeholderIconFile.save(&buffer, "png");
 }
 
 
@@ -54,7 +58,12 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         return;
     }
     if (index.column() == 0) {
-        const auto icon = index.data().value<QIcon>();
+        auto iconData = index.data().value<QByteArray>();
+        if (iconData.isNull())
+            iconData = placeholderIcon;
+        QPixmap pix;
+        pix.loadFromData(iconData);
+        QIcon icon(pix);
         icon.paint(painter, QRect(x+10, y+10, 30, 50));
         return;
     }
