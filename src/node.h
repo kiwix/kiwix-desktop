@@ -6,6 +6,14 @@
 #include "contentmanagermodel.h"
 #include <QIcon>
 
+struct DownloadInfo
+{
+    double progress;
+    QString completedLength;
+    QString downloadSpeed;
+    bool paused;
+};
+
 class Node
 {
 public:
@@ -21,6 +29,10 @@ public:
     bool isAdditonal() const { return m_isAdditonal; }
     QString getBookId() const { return m_bookId; }
     void setIconData(QByteArray iconData) { m_itemData[0] = iconData; }
+    bool isDownloading() const { return m_isDownloading; }
+    void setDownloadInfo(DownloadInfo downloadInfo) { m_downloadInfo = downloadInfo; }
+    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
+    void setIsDownloading(bool val) { m_isDownloading = val; }
 
 private:
     QList<QVariant> m_itemData;
@@ -28,6 +40,8 @@ private:
     QList<Node *> m_childItems;
     bool m_isAdditonal;
     QString m_bookId;
+    bool m_isDownloading = false;
+    DownloadInfo m_downloadInfo;
 };
 
 

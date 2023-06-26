@@ -63,6 +63,7 @@ public slots:
     void openBook(const QString& id);
     QMap<QString, QVariant> updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);
+    QString downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
@@ -71,6 +72,9 @@ public slots:
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
     void cancelBook(const QString& id);
+    void pauseBook(const QString& id, QModelIndex index);
+    void resumeBook(const QString& id, QModelIndex index);
+    void cancelBook(const QString& id, QModelIndex index);
     void onCustomContextMenu(const QPoint &point);
 };
 

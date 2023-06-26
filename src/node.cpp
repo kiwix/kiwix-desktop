@@ -2,7 +2,9 @@
 
 Node::Node(const QList<QVariant> &data, Node *parent, QString bookId, bool isAdditional)
     : m_itemData(data), m_parentItem(parent),  m_isAdditonal(isAdditional), m_bookId(bookId)
-{}
+{
+    m_downloadInfo = {0, "", "", false};
+}
 
 Node::~Node()
 {

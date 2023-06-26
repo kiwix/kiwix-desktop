@@ -18,6 +18,7 @@ public:
 private:
     QScopedPointer<QPushButton> baseButton;
     QByteArray placeholderIcon;
+    void handleLastColumnClicked(const QModelIndex& index, QMouseEvent *event, const QStyleOptionViewItem &option);
 };
 
 #endif // CONTENTMANAGERDELEGATE_H

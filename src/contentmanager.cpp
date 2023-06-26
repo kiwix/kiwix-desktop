@@ -46,6 +46,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setWordWrap(true);
     treeView->resizeColumnToContents(4);
     treeView->setColumnWidth(0, 80);
+    treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
 
     setCurrentLanguage(QLocale().name().split("_").at(0));
@@ -83,6 +84,25 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuDeleteBook("Delete book", this);
     QAction menuOpenBook("Open book", this);
     QAction menuDownloadBook("Download book", this);
+    QAction menuPauseBook("Pause download", this);
+    QAction menuResumeBook("Resume download", this);
+    QAction menuCancelBook("Cancel download", this);
+
+    if (bookNode->isDownloading()) {
+        if (bookNode->getDownloadInfo().paused) {
+            contextMenu.addAction(&menuResumeBook);
+        } else {
+            contextMenu.addAction(&menuPauseBook);
+        }
+        contextMenu.addAction(&menuCancelBook);
+    } else {
+        if (m_local) {
+            contextMenu.addAction(&menuOpenBook);
+            contextMenu.addAction(&menuDeleteBook);
+        }
+        else
+            contextMenu.addAction(&menuDownloadBook);
+    }
 
     connect(&menuDeleteBook, &QAction::triggered, [=]() {
         eraseBook(id);
@@ -92,14 +112,17 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         openBook(id);
     });
     connect(&menuDownloadBook, &QAction::triggered, [=]() {
-        downloadBook(id);
+        downloadBook(id, index);
     });
-
-    if (m_local)
-        contextMenu.addAction(&menuOpenBook);
-    else
-        contextMenu.addAction(&menuDownloadBook);
-    contextMenu.addAction(&menuDeleteBook);
+    connect(&menuPauseBook, &QAction::triggered, [=]() {
+        pauseBook(id, index);
+    });
+    connect(&menuCancelBook, &QAction::triggered, [=]() {
+        cancelBook(id, index);
+    });
+    connect(&menuResumeBook, &QAction::triggered, [=]() {
+        resumeBook(id, index);
+    });
 
     if (index.isValid()) {
         contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
@@ -308,6 +331,13 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
 }
 #undef ADD_V
 
+QString ContentManager::downloadBook(const QString &id, QModelIndex index)
+{
+    emit managerModel->startDownload(index);
+    return downloadBook(id);
+}
+
+
 QString ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
@@ -341,14 +371,6 @@ QString ContentManager::downloadBook(const QString &id)
     bookCopy.setDownloadId(download->getDid());
     mp_library->addBookToLibrary(bookCopy);
     mp_library->save();
-    QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [=](){
-        auto downloadInfos = updateDownloadInfos(id, {"status"});
-        if (!downloadInfos["status"].isValid()) {
-            timer->stop();
-        }
-    });
-    timer->start(1000);
     emit(oneBookChanged(id));
     return QString::fromStdString(download->getDid());
 }
@@ -383,6 +405,12 @@ void ContentManager::eraseBook(const QString& id)
     KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
 }
 
+void ContentManager::pauseBook(const QString& id, QModelIndex index)
+{
+    pauseBook(id);
+    emit managerModel->pauseDownload(index);
+}
+
 void ContentManager::pauseBook(const QString& id)
 {
     if (!mp_downloader) {
@@ -394,6 +422,12 @@ void ContentManager::pauseBook(const QString& id)
         download->pauseDownload();
 }
 
+void ContentManager::resumeBook(const QString& id, QModelIndex index)
+{
+    resumeBook(id);
+    emit managerModel->resumeDownload(index);
+}
+
 void ContentManager::resumeBook(const QString& id)
 {
     if (!mp_downloader) {
@@ -403,6 +437,12 @@ void ContentManager::resumeBook(const QString& id)
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_PAUSED)
         download->resumeDownload();
+}
+
+void ContentManager::cancelBook(const QString& id, QModelIndex index)
+{
+    cancelBook(id);
+    emit managerModel->cancelDownload(index);
 }
 
 void ContentManager::cancelBook(const QString& id)

@@ -34,6 +34,10 @@ public:
 
 public slots:
     void updateImage(QModelIndex index, QString url, QByteArray imageData);
+    void startDownload(QModelIndex index);
+    void pauseDownload(QModelIndex index);
+    void resumeDownload(QModelIndex index);
+    void cancelDownload(QModelIndex index);
 
 protected:
     bool canFetchMore(const QModelIndex &parent) const override;
@@ -45,6 +49,7 @@ private:
     int zimCount = 0;
     ThumbnailDownloader td;
     QMap<QString, QByteArray> iconMap;
+    QMap<QString, QTimer*> timers;
 };
 
 #endif // CONTENTMANAGERMODEL_H

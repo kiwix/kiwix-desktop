@@ -124,7 +124,7 @@ QString convertToUnits(QString size)
     }
 
     const auto preciseBytes = QString::number(bytes, 'g', 3);
-    return preciseBytes + units[unitIndex];
+    return preciseBytes + " " + units[unitIndex];
 }
 
 void ContentManagerModel::setupNodes()
@@ -236,3 +236,62 @@ void ContentManagerModel::updateImage(QModelIndex index, QString url, QByteArray
     iconMap[url] = imageData;
     emit dataChanged(index, index);
 }
+
+void ContentManagerModel::startDownload(QModelIndex index)
+{
+    auto node = static_cast<Node*>(index.internalPointer());
+    node->setIsDownloading(true);
+    auto id = node->getBookId();
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [=]() {
+        auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
+        double percent = (double) downloadInfos["completedLength"].toInt() / downloadInfos["totalLength"].toInt();
+        percent *= 100;
+        percent = QString::number(percent, 'g', 3).toDouble();
+        auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
+        auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
+        node->setDownloadInfo({percent, completedLength, downloadSpeed});
+        if (!downloadInfos["status"].isValid()) {
+            node->setIsDownloading(false);
+            timer->stop();
+            timer->deleteLater();
+        }
+        emit dataChanged(index, index);
+    });
+    timer->start(1000);
+    timers[id] = timer;
+}
+
+void ContentManagerModel::pauseDownload(QModelIndex index)
+{
+    auto node = static_cast<Node*>(index.internalPointer());
+    auto id = node->getBookId();
+    auto prevDownloadInfo = node->getDownloadInfo();
+    prevDownloadInfo.paused = true;
+    node->setDownloadInfo(prevDownloadInfo);
+    timers[id]->stop();
+    emit dataChanged(index, index);
+}
+
+void ContentManagerModel::resumeDownload(QModelIndex index)
+{
+    auto node = static_cast<Node*>(index.internalPointer());
+    auto id = node->getBookId();
+    auto prevDownloadInfo = node->getDownloadInfo();
+    prevDownloadInfo.paused = false;
+    node->setDownloadInfo(prevDownloadInfo);
+    timers[id]->start(1000);
+    emit dataChanged(index, index);
+}
+
+void ContentManagerModel::cancelDownload(QModelIndex index)
+{
+    auto node = static_cast<Node*>(index.internalPointer());
+    auto id = node->getBookId();
+    node->setIsDownloading(false);
+    node->setDownloadInfo({0, "", "", false});
+    timers[id]->stop();
+    timers[id]->deleteLater();
+    emit dataChanged(index, index);
+}
+
