@@ -38,6 +38,7 @@ SOURCES += \
     src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
     src/findinpagebar.cpp \
+    src/kiwixconfirmbox.cpp \
     src/node.cpp \
     src/suggestionlistworker.cpp \
     src/thumbnaildownloader.cpp \
@@ -76,6 +77,7 @@ HEADERS += \
     src/contentmanagerview.h \
     src/contenttypefilter.h \
     src/findinpagebar.h \
+    src/kiwixconfirmbox.h \
     src/node.h \
     src/suggestionlistworker.h \
     src/thumbnaildownloader.h \
@@ -111,6 +113,7 @@ HEADERS += \
 FORMS += \
     src/contentmanagerview.ui \
     src/findinpagebar.ui \
+    ui/kiwixconfirmbox.ui \
     ui/mainwindow.ui \
     ui/about.ui \
     src/contentmanagerside.ui \

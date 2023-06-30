@@ -135,5 +135,9 @@
     "monitor-clear-dir-dialog-msg":"This will stop checking the monitor directory for new ZIM files.",
     "monitor-directory-tooltip":"All ZIM files in this directory will be automatically added to the library.",
     "next-tab":"Move to next tab",
-    "previous-tab":"Move to previous tab"
+    "previous-tab":"Move to previous tab",
+    "cancel-download": "Cancel Download",
+    "cancel-download-text": "Are you sure you want to cancel the download of <b>{{ZIM}}</b>?",
+    "delete-book": "Delete book",
+    "delete-book-text": "Are you sure you want to delete <b>{{ZIM}}</b>?"
 }

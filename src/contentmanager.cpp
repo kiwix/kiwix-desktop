@@ -17,6 +17,7 @@
 #include <QHeaderView>
 #include "contentmanagerdelegate.h"
 #include "node.h"
+#include "kiwixconfirmbox.h"
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -106,7 +107,6 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
 
     connect(&menuDeleteBook, &QAction::triggered, [=]() {
         eraseBook(id);
-        emit(booksChanged());
     });
     connect(&menuOpenBook, &QAction::triggered, [=]() {
         openBook(id);
@@ -388,21 +388,32 @@ void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QSt
 
 void ContentManager::eraseBook(const QString& id)
 {
-    auto tabBar = KiwixApp::instance()->getTabWidget();
-    tabBar->closeTabsByZimId(id);
-    kiwix::Book book = mp_library->getBookById(id);
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-    QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-    eraseBookFilesFromComputer(dirPath, fileName);
-    mp_library->removeBookFromLibraryById(id);
-    mp_library->save();
-    emit mp_library->bookmarksChanged();
-    if (m_local) {
-        emit(bookRemoved(id));
-    } else {
-        emit(oneBookChanged(id));
-    }
-    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+    auto text = gt("delete-book-text");
+    text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, mp_view);
+    dialog->show();
+    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+        auto tabBar = KiwixApp::instance()->getTabWidget();
+        tabBar->closeTabsByZimId(id);
+        kiwix::Book book = mp_library->getBookById(id);
+        QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
+        QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
+        eraseBookFilesFromComputer(dirPath, fileName);
+        mp_library->removeBookFromLibraryById(id);
+        mp_library->save();
+        emit mp_library->bookmarksChanged();
+        if (m_local) {
+            emit(bookRemoved(id));
+        } else {
+            emit(oneBookChanged(id));
+        }
+        KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+        dialog->deleteLater();
+        emit booksChanged();
+    });
+    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+        dialog->deleteLater();
+    });
 }
 
 void ContentManager::pauseBook(const QString& id, QModelIndex index)
@@ -441,8 +452,18 @@ void ContentManager::resumeBook(const QString& id)
 
 void ContentManager::cancelBook(const QString& id, QModelIndex index)
 {
-    cancelBook(id);
-    emit managerModel->cancelDownload(index);
+    auto text = gt("cancel-download-text");
+    text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("cancel-download"), text, mp_view);
+    dialog->show();
+    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+        cancelBook(id);
+        emit managerModel->cancelDownload(index);
+        dialog->deleteLater();
+    });
+    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+        dialog->deleteLater();
+    });
 }
 
 void ContentManager::cancelBook(const QString& id)
