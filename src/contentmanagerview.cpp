@@ -17,6 +17,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     mp_ui->m_view->setContextMenuPolicy(Qt::CustomContextMenu);
     auto managerDelegate = new ContentManagerDelegate();
     mp_ui->m_view->setItemDelegate(managerDelegate);
+    mp_ui->m_view->setCursor(Qt::PointingHandCursor);
 
     auto searcher = mp_ui->searcher;
     searcher->setPlaceholderText(gt("search-files"));
@@ -27,6 +28,17 @@ ContentManagerView::ContentManagerView(QWidget *parent)
 
     connect(searcher, &QLineEdit::textChanged, [searcher](){
         KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
+    });
+    connect(mp_ui->m_view, &QTreeView::clicked, [=](QModelIndex index) {
+        if (index.column() == (mp_ui->m_view->model()->columnCount() - 1))
+            return;
+
+        auto zeroColIndex = index.siblingAtColumn(0);
+        if (mp_ui->m_view->isExpanded(zeroColIndex)) {
+            mp_ui->m_view->collapse(zeroColIndex);
+        } else {
+            mp_ui->m_view->expand(zeroColIndex);
+        }
     });
 }
 

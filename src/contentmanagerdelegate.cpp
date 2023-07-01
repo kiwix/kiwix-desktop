@@ -169,7 +169,10 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     QStyleOptionViewItem eOpt = option;
     if (index.data(Qt::UserRole+1) != QVariant()) {
         // additional info role
-        QStyledItemDelegate::paint(painter, option, index);
+        QRect nRect = r;
+        auto viewWidth = KiwixApp::instance()->getContentManager()->getView()->getView()->width();
+        nRect.setWidth(viewWidth);
+        painter->drawText(nRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole+1).toString());
         return;
     }
     if (index.column() == 5) {

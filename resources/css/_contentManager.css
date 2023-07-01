@@ -1,11 +1,11 @@
 QTreeView::branch:open:has-children {
     image: url(:/icons/caret-down-solid.svg);
-    margin: 7px;
+    padding: 6px;
 }
 
 QTreeView::branch:closed:has-children {
     image: url(:/icons/caret-right-solid.svg);
-    margin: 7px;
+    padding: 7px;
 }
 
 QTreeView::item:has-children {
@@ -16,6 +16,10 @@ QTreeView {
     font-family: 'Selawik';
     padding: 4px;
     border: none;
+}
+
+QTreeView::item:hover {
+    background-color: #eaecf0;
 }
 
 QHeaderView::section {
@@ -31,12 +35,12 @@ QHeaderView::section {
 
 QHeaderView::down-arrow {
     image: url(:/icons/caret-down-solid.svg);
-    margin: 5px;
+    padding: 5px;
 }
 
 QHeaderView::up-arrow {
     image: url(:/icons/caret-up-solid.svg);
-    margin: 5px;
+    padding: 5px;
 }
 
 QMenu {
