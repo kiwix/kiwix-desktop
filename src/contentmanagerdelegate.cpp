@@ -218,6 +218,11 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
         w = r.width();
         h = r.height();
 
+        if (e->button() == Qt::MiddleButton && index.column() != 5) {
+            KiwixApp::instance()->getContentManager()->openBookWithIndex(index);
+            return true;
+        }
+
         const auto lastColumnClicked = ((index.column() == 5) && (clickX > x && clickX < x + w)
                                                         && (clickY > y && clickY < y + h));
 

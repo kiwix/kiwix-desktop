@@ -77,6 +77,7 @@ public slots:
     void resumeBook(const QString& id, QModelIndex index);
     void cancelBook(const QString& id, QModelIndex index);
     void onCustomContextMenu(const QPoint &point);
+    void openBookWithIndex(const QModelIndex& index);
 };
 
 #endif // CONTENTMANAGER_H

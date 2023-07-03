@@ -62,6 +62,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
     connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
     connect(this, &ContentManager::pendingRequest, mp_view, &ContentManagerView::showLoader);
+    connect(treeView, &QTreeView::doubleClicked, this, &ContentManager::openBookWithIndex);
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -226,6 +227,21 @@ QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringLi
     return values;
 }
 #undef ADD_V
+
+void ContentManager::openBookWithIndex(const QModelIndex &index)
+{
+    try {
+        Node* bookNode = static_cast<Node*>(index.internalPointer());
+        auto bookId = bookNode->getBookId();
+        if (bookNode->isAdditonal())
+            bookId = bookNode->parentItem()->getBookId();
+        // check if the book is available in local library, will throw std::out_of_range if it isn't.
+        KiwixApp::instance()->getLibrary()->getBookById(bookId);
+        if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
+            return;
+        openBook(bookId);
+    } catch (std::out_of_range &e) {}
+}
 
 void ContentManager::openBook(const QString &id)
 {
