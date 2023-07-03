@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-deb:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
@@ -47,7 +47,6 @@ jobs:
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
-
 
       - uses: legoktm/gh-action-build-deb@ubuntu-jammy
         if: matrix.distro == 'ubuntu-jammy'
