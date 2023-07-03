@@ -1,5 +1,12 @@
 name: Packages
-on: [push, pull_request]
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
 
 jobs:
   build-deb:
@@ -65,7 +72,6 @@ jobs:
 
       - uses: legoktm/gh-action-dput@master
         name: Upload dev package
-        # Only upload on pushes to git default branch
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main' && startswith(matrix.distro, 'ubuntu-')
         with:
           gpg_key: ${{ secrets.LAUNCHPAD_GPG }}
@@ -74,8 +80,7 @@ jobs:
 
       - uses: legoktm/gh-action-dput@master
         name: Upload release package
-        # Only upload on pushes to master or tag
-        if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags') && startswith(matrix.distro, 'ubuntu-')
+        if: github.event_name == 'release' && startswith(matrix.distro, 'ubuntu-')
         with:
           gpg_key: ${{ secrets.LAUNCHPAD_GPG }}
           repository: ppa:kiwixteam/release
