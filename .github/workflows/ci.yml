@@ -22,33 +22,21 @@ jobs:
     runs-on: ubuntu-22.04
     container:
       image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:38
+
     steps:
-    - name: Extract branch name
-      shell: bash
-      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
-    - name: Checkout code
-      shell: python
-      run: |
-        from subprocess import check_call
-        from os import environ
-        command = [
-          'git', 'clone',
-          'https://github.com/${{github.repository}}',
-          '--depth=1',
-          '--branch', '${{steps.extract_branch.outputs.branch}}'
-        ]
-        check_call(command, cwd=environ['HOME'])
-    - name: Install deps
-      shell: bash
-      run: |
-        ARCHIVE_NAME=deps2_focal_native_dyn_kiwix-desktop.tar.xz
-        wget -O- http://tmp.kiwix.org/ci/${ARCHIVE_NAME} | tar -xJ -C /home/runner
-    - name: Compile
-      shell: bash
-      run: |
-        cd $HOME/kiwix-desktop
-        qmake PREFIX=$HOME/BUILD_native_dyn/INSTALL
-        make
-      env:
-        PKG_CONFIG_PATH: "/home/runner/BUILD_native_dyn/INSTALL/lib/pkgconfig:/home/runner/BUILD_native_dyn/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
+      - name: Install dependencies
+        shell: bash
+        run: |
+          ARCHIVE_NAME=deps2_focal_native_dyn_kiwix-desktop.tar.xz
+          wget -O- http://tmp.kiwix.org/ci/${ARCHIVE_NAME} | tar -xJ -C ${{env.HOME}}
+
+      - name: Retrieve source code
+        uses: actions/checkout@v3
+
+      - name: Compile source code
+        shell: bash
+        env:
+          PKG_CONFIG_PATH: "/home/runner/BUILD_native_dyn/INSTALL/lib/pkgconfig:/home/runner/BUILD_native_dyn/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
+        run: |
+          qmake PREFIX=$HOME/BUILD_native_dyn/INSTALL
+          make
