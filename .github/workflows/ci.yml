@@ -17,7 +17,7 @@ jobs:
       HOME: /home/runner
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:36
+      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:38
     steps:
     - name: Extract branch name
       shell: bash
