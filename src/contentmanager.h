@@ -47,6 +47,7 @@ private:
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
     QList<QMap<QString, QVariant>> getBooksList();
     ContentManagerModel *managerModel;
+    QMutex remoteLibraryLocker;
 
 signals:
     void filterParamsChanged();

@@ -18,6 +18,7 @@
 #include "contentmanagerdelegate.h"
 #include "node.h"
 #include "kiwixconfirmbox.h"
+#include <QtConcurrent/QtConcurrentRun>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -157,6 +158,7 @@ QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringLi
             return &mp_library->getBookById(id);
         } catch (...) {
             try {
+                QMutexLocker locker(&remoteLibraryLocker);
                 return &m_remoteLibrary.getBookById(id.toStdString());
             } catch(...) { return nullptr; }
         }
@@ -345,6 +347,7 @@ QString ContentManager::downloadBook(const QString &id)
         return "";
     const auto& book = [&]()->const kiwix::Book& {
         try {
+            QMutexLocker locker(&remoteLibraryLocker);
             return m_remoteLibrary.getBookById(id.toStdString());
         } catch (...) {
             return mp_library->getBookById(id);
@@ -536,11 +539,14 @@ void ContentManager::updateLibrary() {
 
 #define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary(const QString& content) {
-    m_remoteLibrary = kiwix::Library();
-    kiwix::Manager manager(&m_remoteLibrary);
-    manager.readOpds(content.toStdString(), CATALOG_URL);
-    emit(this->booksChanged());
-    emit(this->pendingRequest(false));
+    QtConcurrent::run([=]() {
+        QMutexLocker locker(&remoteLibraryLocker);
+        m_remoteLibrary = kiwix::Library();
+        kiwix::Manager manager(&m_remoteLibrary);
+        manager.readOpds(content.toStdString(), CATALOG_URL);
+        emit(this->booksChanged());
+        emit(this->pendingRequest(false));
+    });
 }
 
 void ContentManager::setSearch(const QString &search)
@@ -586,6 +592,7 @@ QStringList ContentManager::getBookIds()
         return mp_library->listBookIds(filter, m_sortBy, m_sortOrderAsc);
     } else {
         filter.remote(true);
+        QMutexLocker locker(&remoteLibraryLocker);
         auto bookIds = m_remoteLibrary.filter(filter);
         m_remoteLibrary.sort(bookIds, m_sortBy, m_sortOrderAsc);
         QStringList list;
