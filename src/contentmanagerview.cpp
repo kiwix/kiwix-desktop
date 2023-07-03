@@ -23,6 +23,9 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     searcher->setPlaceholderText(gt("search-files"));
     searcher->setStyleSheet(styleSheet);
 
+    loader = new KiwixLoader(mp_ui->loading);
+    mp_ui->stackedWidget->setCurrentIndex(0);
+
     QIcon searchIcon = QIcon(":/icons/search.svg");
     searcher->addAction(searchIcon, QLineEdit::LeadingPosition);
 
@@ -45,4 +48,14 @@ ContentManagerView::ContentManagerView(QWidget *parent)
 ContentManagerView::~ContentManagerView()
 {
 
+}
+
+void ContentManagerView::showLoader(bool show)
+{
+    mp_ui->stackedWidget->setCurrentIndex(show);
+    if (show) {
+        loader->startAnimation();
+    } else {
+        loader->stopAnimation();
+    }
 }

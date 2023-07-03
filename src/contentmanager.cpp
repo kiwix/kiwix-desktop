@@ -60,6 +60,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
     connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
+    connect(this, &ContentManager::pendingRequest, mp_view, &ContentManagerView::showLoader);
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()

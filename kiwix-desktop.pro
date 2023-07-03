@@ -39,6 +39,7 @@ SOURCES += \
     src/contenttypefilter.cpp \
     src/findinpagebar.cpp \
     src/kiwixconfirmbox.cpp \
+    src/kiwixloader.cpp \
     src/node.cpp \
     src/suggestionlistworker.cpp \
     src/thumbnaildownloader.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     src/contenttypefilter.h \
     src/findinpagebar.h \
     src/kiwixconfirmbox.h \
+    src/kiwixloader.h \
     src/node.h \
     src/suggestionlistworker.h \
     src/thumbnaildownloader.h \
