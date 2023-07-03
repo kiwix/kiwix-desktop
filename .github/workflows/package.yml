@@ -11,7 +11,6 @@ jobs:
           - ubuntu-kinetic
           - ubuntu-jammy
           - ubuntu-focal
-          - ubuntu-bionic
     steps:
       - uses: actions/checkout@v3
 
@@ -55,14 +54,6 @@ jobs:
         if: matrix.distro == 'ubuntu-focal'
         name: Build package for ubuntu-focal
         id: build-ubuntu-focal
-        with:
-          args: --no-sign
-          ppa: ${{ steps.ppa.outputs.ppa }}
-
-      - uses: legoktm/gh-action-build-deb@ubuntu-bionic
-        if: matrix.distro == 'ubuntu-bionic'
-        name: Build package for ubuntu-bionic
-        id: build-ubuntu-bionic
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
