@@ -8,10 +8,10 @@ jobs:
       fail-fast: false
       matrix:
         target:
-          - bionic
+          - focal
         include:
-          - target: bionic
-            image_variant: bionic
+          - target: focal
+            image_variant: focal
             lib_postfix: '/x86_64-linux-gnu'
     env:
       HOME: /home/runner
@@ -38,7 +38,7 @@ jobs:
     - name: Install deps
       shell: bash
       run: |
-        ARCHIVE_NAME=deps2_bionic_native_dyn_kiwix-desktop.tar.xz
+        ARCHIVE_NAME=deps2_focal_native_dyn_kiwix-desktop.tar.xz
         wget -O- http://tmp.kiwix.org/ci/${ARCHIVE_NAME} | tar -xJ -C /home/runner
     - name: Compile
       shell: bash
