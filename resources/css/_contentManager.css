@@ -31,16 +31,23 @@ QHeaderView::section {
     font-size: 16px;
     font-family: 'Selawik';
     padding: 4px;
+    margin-left: 10px;
 }
 
 QHeaderView::down-arrow {
     image: url(:/icons/caret-down-solid.svg);
-    padding: 5px;
+    height: 12px;
+    width: 12px;
+    padding-bottom: 6px;
+    subcontrol-position: left;
 }
 
 QHeaderView::up-arrow {
     image: url(:/icons/caret-up-solid.svg);
-    padding: 5px;
+    height: 12px;
+    width: 12px;
+    padding-bottom: 6px;
+    subcontrol-position: left;
 }
 
 QMenu {

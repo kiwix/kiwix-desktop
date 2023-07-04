@@ -19,6 +19,7 @@
 #include "node.h"
 #include "kiwixconfirmbox.h"
 #include <QtConcurrent/QtConcurrentRun>
+#include "contentmanagerheader.h"
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -36,12 +37,14 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setModel(managerModel);
     treeView->show();
 
-    auto header = treeView->header();
+    auto header = new ContentManagerHeader(Qt::Orientation::Horizontal, treeView);
+    treeView->setHeader(header);
     header->setSectionResizeMode(0, QHeaderView::Fixed);
     header->setSectionResizeMode(1, QHeaderView::Stretch);
     header->setSectionResizeMode(2, QHeaderView::Fixed);
     header->setSectionResizeMode(3, QHeaderView::Fixed);
     header->setSectionResizeMode(4, QHeaderView::Fixed);
+    header->setDefaultAlignment(Qt::AlignLeft);
     header->setStretchLastSection(false);
     header->setSectionsClickable(true);
     header->setHighlightSections(true);

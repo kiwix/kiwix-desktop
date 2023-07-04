@@ -96,7 +96,6 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
 
     switch (section)
     {
-        case 0: return QVariant();
         case 1: return "Name";
         case 2: return "Date";
         case 3: return "Size";

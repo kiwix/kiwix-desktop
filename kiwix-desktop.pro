@@ -35,6 +35,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     src/contentmanagerdelegate.cpp \
+    src/contentmanagerheader.cpp \
     src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
     src/findinpagebar.cpp \
@@ -74,6 +75,7 @@ SOURCES += \
 
 HEADERS += \
     src/contentmanagerdelegate.h \
+    src/contentmanagerheader.h \
     src/contentmanagermodel.h \
     src/contentmanagerview.h \
     src/contenttypefilter.h \
