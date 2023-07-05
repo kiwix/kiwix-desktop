@@ -413,7 +413,7 @@ void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, mp_view);
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, false, mp_view);
     dialog->show();
     connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
         auto tabBar = KiwixApp::instance()->getTabWidget();
@@ -477,7 +477,7 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
 {
     auto text = gt("cancel-download-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("cancel-download"), text, mp_view);
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("cancel-download"), text, false, mp_view);
     dialog->show();
     connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
         cancelBook(id);

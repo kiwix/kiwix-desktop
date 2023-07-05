@@ -12,12 +12,13 @@ class KiwixConfirmBox : public QDialog
     Q_OBJECT
 
 public:
-    explicit KiwixConfirmBox(QString confirmTitle, QString confirmText, QWidget *parent = nullptr);
+    explicit KiwixConfirmBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr);
     ~KiwixConfirmBox();
 
 signals:
     void yesClicked();
     void noClicked();
+    void okClicked();
 
 private:
     QString m_confirmTitle;
