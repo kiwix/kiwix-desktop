@@ -355,8 +355,24 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
 
 QString ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
-    emit managerModel->startDownload(index);
-    return downloadBook(id);
+    QString downloadStatus =  downloadBook(id);
+    QString dialogHeader, dialogText;
+    if (downloadStatus.size() == 0) {
+        dialogHeader = gt("download-unavailable");
+        dialogText = gt("download-unavailable-text");
+    } else if (downloadStatus == "storage_error") {
+        dialogHeader = gt("download-storage-error");
+        dialogText = gt("download-storage-error-text");
+    } else {
+        emit managerModel->startDownload(index);
+        return downloadStatus;
+    }
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(dialogHeader, dialogText, mp_view, true);
+    dialog->show();
+    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+        dialog->deleteLater();
+    });
+    return downloadStatus;
 }
 
 

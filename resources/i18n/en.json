@@ -140,5 +140,9 @@
     "cancel-download": "Cancel Download",
     "cancel-download-text": "Are you sure you want to cancel the download of <b>{{ZIM}}</b>?",
     "delete-book": "Delete book",
-    "delete-book-text": "Are you sure you want to delete <b>{{ZIM}}</b>?"
+    "delete-book-text": "Are you sure you want to delete <b>{{ZIM}}</b>?",
+    "download-storage-error": "Storage Error",
+    "download-storage-error-text": "The system doesn't have enough storage available.",
+    "download-unavailable": "Download Unavailable",
+    "download-unavailable-text": "This download is unavailable."
 }
