@@ -70,6 +70,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(treeView, &QTreeView::doubleClicked, this, &ContentManager::openBookWithIndex);
     connect(&m_remoteLibraryManager, &OpdsRequestManager::languagesReceived, this, &ContentManager::updateLanguages);
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
+    setLanguages();
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -155,6 +156,37 @@ QStringList ContentManager::getTranslations(const QStringList &keys)
         translations.append(KiwixApp::instance()->getText(key));
     }
     return translations;
+}
+
+void ContentManager::setCategories()
+{
+    QStringList categories;
+    if (m_local) {
+        auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
+        for (auto category : categoryData) {
+            auto categoryName = QString::fromStdString(category);
+            categories.push_back(categoryName);
+        }
+        m_categories = categories;
+        return;
+    }
+    m_remoteLibraryManager.getCategoriesFromOpds();
+}
+
+void ContentManager::setLanguages()
+{
+    LanguageList languages;
+    if (m_local) {
+        auto languageData = mp_library->getKiwixLibrary().getBooksLanguages();
+        for (auto language : languageData) {
+            auto langCode = QString::fromStdString(language);
+            auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
+            languages.push_back({langCode, selfName});
+        }
+        m_languages = languages;
+        return;
+    }
+    m_remoteLibraryManager.getLanguagesFromOpds();
 }
 
 #define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
@@ -589,10 +621,22 @@ void ContentManager::updateRemoteLibrary(const QString& content) {
 
 void ContentManager::updateLanguages(const QString& content) {
     auto languages = kiwix::readLanguagesFromFeed(content.toStdString());
+    LanguageList tempLanguages;
+    for (auto language : languages) {
+        auto code = QString::fromStdString(language.first);
+        auto title = QString::fromStdString(language.second);
+        tempLanguages.push_back({code, title});
+    }
+    m_languages = tempLanguages;
 }
 
 void ContentManager::updateCategories(const QString& content) {;
     auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
+    QStringList tempCategories;
+    for (auto catg : categories) {
+        tempCategories.push_back(QString::fromStdString(catg));
+    }
+    m_categories = tempCategories;
 }
 
 void ContentManager::setSearch(const QString &search)

@@ -16,6 +16,7 @@ class ContentManager : public QObject
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
     Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
+    typedef QList<QPair<QString, QString>> LanguageList;
 
 public:
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
@@ -28,6 +29,8 @@ public:
     void setCurrentCategoryFilter(QString category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
     bool isLocal() const { return m_local; }
+    QStringList getCategories() const { return m_categories; }
+    LanguageList getLanguages() const { return m_languages; }
 
 private:
     Library* mp_library;
@@ -42,12 +45,16 @@ private:
     QList<ContentTypeFilter*> m_contentTypeFilters;
     kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
     bool m_sortOrderAsc = true;
+    LanguageList m_languages;
+    QStringList m_categories;
 
     QStringList getBookIds();
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
     QList<QMap<QString, QVariant>> getBooksList();
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
+    void setCategories();
+    void setLanguages();
 
 signals:
     void filterParamsChanged();
