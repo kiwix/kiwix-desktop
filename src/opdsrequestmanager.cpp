@@ -3,7 +3,6 @@
 #include "kiwixapp.h"
 
 OpdsRequestManager::OpdsRequestManager()
-: mp_reply(nullptr)
 {
 }
 
@@ -39,29 +38,63 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
     }
     query.addQueryItem("notag", excludeTags.join(";"));
 
+    auto mp_reply = opdsResponseFromPath("/catalog/search", query);
+    connect(mp_reply, &QNetworkReply::finished, this, [=]() {
+        receiveContent(mp_reply);
+    });
+}
+
+QNetworkReply* OpdsRequestManager::opdsResponseFromPath(const QString &path, const QUrlQuery &query)
+{
     QUrl url;
     url.setScheme("https");
     url.setHost(CATALOG_HOST);
     url.setPort(CATALOG_PORT);
-    url.setPath("/catalog/search");
+    url.setPath(path);
     url.setQuery(query);
-
     qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
-
     QNetworkRequest request(url);
-    if (mp_reply) {
-        mp_reply->abort();
-    }
-    mp_reply = m_networkManager.get(request);
-    connect(mp_reply, &QNetworkReply::finished, this, &OpdsRequestManager::receiveContent);
+    return m_networkManager.get(request);
 }
 
-void OpdsRequestManager::receiveContent()
+void OpdsRequestManager::getLanguagesFromOpds()
 {
+    auto mp_reply = opdsResponseFromPath("/catalog/v2/languages");
+    connect(mp_reply, &QNetworkReply::finished, this, [=]() {
+        receiveLanguages(mp_reply);
+    });
+}
+
+void OpdsRequestManager::getCategoriesFromOpds()
+{
+    auto mp_reply = opdsResponseFromPath("/catalog/v2/categories");
+    connect(mp_reply, &QNetworkReply::finished, this, [=]() {
+        receiveCategories(mp_reply);
+    });
+}
+
+QString replyContent(QNetworkReply *mp_reply)
+{
+    QString content;
     if (mp_reply->error() != QNetworkReply::OperationCanceledError) {
-        QString content = mp_reply->readAll().data();
-        emit(requestReceived(content));
+        content = mp_reply->readAll().data();
     }
     mp_reply->deleteLater();
     mp_reply = nullptr;
+    return content;
+}
+
+void OpdsRequestManager::receiveLanguages(QNetworkReply *mp_reply)
+{
+    emit(languagesReceived(replyContent(mp_reply)));
+}
+
+void OpdsRequestManager::receiveCategories(QNetworkReply *mp_reply)
+{
+    emit(categoriesReceived(replyContent(mp_reply)));
+}
+
+void OpdsRequestManager::receiveContent(QNetworkReply *mp_reply)
+{
+    emit(requestReceived(replyContent(mp_reply)));
 }

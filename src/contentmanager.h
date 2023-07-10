@@ -70,6 +70,8 @@ public slots:
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
     void eraseBook(const QString& id);
     void updateRemoteLibrary(const QString& content);
+    void updateLanguages(const QString& content);
+    void updateCategories(const QString& content);
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
     void cancelBook(const QString& id);

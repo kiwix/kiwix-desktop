@@ -68,6 +68,8 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
     connect(this, &ContentManager::pendingRequest, mp_view, &ContentManagerView::showLoader);
     connect(treeView, &QTreeView::doubleClicked, this, &ContentManager::openBookWithIndex);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::languagesReceived, this, &ContentManager::updateLanguages);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -583,6 +585,14 @@ void ContentManager::updateRemoteLibrary(const QString& content) {
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
     });
+}
+
+void ContentManager::updateLanguages(const QString& content) {
+    auto languages = kiwix::readLanguagesFromFeed(content.toStdString());
+}
+
+void ContentManager::updateCategories(const QString& content) {;
+    auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
 }
 
 void ContentManager::setSearch(const QString &search)
