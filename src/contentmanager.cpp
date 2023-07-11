@@ -1,7 +1,6 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
-#include "static_content.h"
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
 

@@ -6,7 +6,6 @@
 #include <QDebug>
 
 #include "klistwidgetitem.h"
-#include "static_content.h"
 
 ContentManagerSide::ContentManagerSide(QWidget *parent) :
     QWidget(parent),

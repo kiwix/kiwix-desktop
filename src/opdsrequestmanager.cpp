@@ -1,5 +1,4 @@
 #include "opdsrequestmanager.h"
-#include "static_content.h"
 #include "kiwixapp.h"
 
 OpdsRequestManager::OpdsRequestManager()

@@ -72,7 +72,6 @@ SOURCES += \
     src/fullscreenwindow.cpp \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
-    src/static_content.cpp
 
 HEADERS += \
     src/contentmanagerdelegate.h \
@@ -115,7 +114,6 @@ HEADERS += \
     src/fullscreennotification.h \
     src/menuproxystyle.h \
     src/zimview.h \
-    src/static_content.h
 
 FORMS += \
     src/contentmanagerview.ui \
