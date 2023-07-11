@@ -79,11 +79,13 @@ public:
     TabBar* getTabWidget() { return getMainWindow()->getTabBar(); }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
-    kiwix::Server* getLocalServer() { return &m_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     QString getText(const QString &key) { return m_translation.getText(key); };
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
+
+    bool runServer(const QString& ipAddress, int port);
+    void stopServer();
 
 public slots:
     void openZimFile(const QString& zimfile="");
@@ -108,8 +110,8 @@ private:
     ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
     QErrorMessage* mp_errorDialog;
-    kiwix::UpdatableNameMapper m_nameMapper;
-    kiwix::Server m_server;
+    std::shared_ptr<kiwix::UpdatableNameMapper> mp_nameMapper;
+    std::unique_ptr<kiwix::Server> mp_server;
     Translation m_translation;
     QFileSystemWatcher m_watcher;
 

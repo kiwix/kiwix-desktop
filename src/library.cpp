@@ -11,23 +11,24 @@
 class LibraryManipulator: public kiwix::LibraryManipulator {
   public:
     LibraryManipulator(Library* p_library)
-        : kiwix::LibraryManipulator(&p_library->getKiwixLibrary())
+        : kiwix::LibraryManipulator(p_library->getKiwixLibrary())
         , mp_library(p_library)
     {}
     virtual ~LibraryManipulator() {}
     bool addBookToLibrary(kiwix::Book book) {
-        auto ret = mp_library->m_library.addBook(book);
+        auto ret = mp_library->mp_library->addBook(book);
         emit(mp_library->booksChanged());
         return ret;
     }
     void addBookmarkToLibrary(kiwix::Bookmark bookmark) {
-        mp_library->m_library.addBookmark(bookmark);
+        mp_library->mp_library->addBookmark(bookmark);
     }
     Library* mp_library;
 };
 
 Library::Library(const QString& libraryDirectory)
-  : m_libraryDirectory(libraryDirectory)
+  : mp_library(std::make_shared<kiwix::Library>()),
+    m_libraryDirectory(libraryDirectory)
 {
     auto manipulator = LibraryManipulator(this);
     auto manager = kiwix::Manager(&manipulator);
@@ -44,11 +45,11 @@ Library::~Library()
 QString Library::openBookFromPath(const QString &zimPath)
 {
     try {
-        auto& book = m_library.getBookByPath(zimPath.toStdString());
+        auto& book = mp_library->getBookByPath(zimPath.toStdString());
         return QString::fromStdString(book.getId());
     } catch(std::out_of_range& e) { }
 
-    kiwix::Manager manager(&m_library);
+    kiwix::Manager manager(mp_library);
     auto id =  manager.addBookFromPathAndGetId(zimPath.toStdString());
     if (id == "") {
         throw std::invalid_argument("invalid zim file");
@@ -60,18 +61,18 @@ QString Library::openBookFromPath(const QString &zimPath)
 
 std::shared_ptr<zim::Archive> Library::getArchive(const QString &zimId)
 {
-    return m_library.getArchiveById(zimId.toStdString());
+    return mp_library->getArchiveById(zimId.toStdString());
 }
 
 std::shared_ptr<zim::Searcher> Library::getSearcher(const QString &zimId)
 {
-    return m_library.getSearcherById(zimId.toStdString());
+    return mp_library->getSearcherById(zimId.toStdString());
 }
 
 QStringList Library::getBookIds() const
 {
     QStringList list;
-    for(auto& id: m_library.getBooksIds()) {
+    for(auto& id: mp_library->getBooksIds()) {
         list.append(QString::fromStdString(id));
     }
     return list;
@@ -80,8 +81,8 @@ QStringList Library::getBookIds() const
 QStringList Library::listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const
 {
     QStringList list;
-    auto bookIds = m_library.filter(filter);
-    m_library.sort(bookIds, sortBy, ascending);
+    auto bookIds = mp_library->filter(filter);
+    mp_library->sort(bookIds, sortBy, ascending);
     for(auto& id: bookIds) {
         list.append(QString::fromStdString(id));
     }
@@ -90,29 +91,29 @@ QStringList Library::listBookIds(const kiwix::Filter& filter, kiwix::supportedLi
 
 void Library::addBookToLibrary(kiwix::Book &book)
 {
-    m_library.addBook(book);
+    mp_library->addBook(book);
 }
 
 void Library::removeBookFromLibraryById(const QString& id) {
-    m_library.removeBookById(id.toStdString());
+    mp_library->removeBookById(id.toStdString());
 }
 
 void Library::addBookmark(kiwix::Bookmark &bookmark)
 {
-    m_library.addBookmark(bookmark);
+    mp_library->addBookmark(bookmark);
     emit bookmarksChanged();
 }
 
 void Library::removeBookmark(const QString &zimId, const QString &url)
 {
-    m_library.removeBookmark(zimId.toStdString(), url.toStdString());
+    mp_library->removeBookmark(zimId.toStdString(), url.toStdString());
     emit bookmarksChanged();
 }
 
 void Library::save()
 {
-    m_library.writeToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
-    m_library.writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
+    mp_library->writeToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
+    mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
 void Library::setMonitorDirZims(QStringList zimList)
@@ -160,7 +161,7 @@ void Library::loadMonitorDir(QString monitorDir)
         needsRefresh |= manager.addBookFromPath(book.toStdString());
     }
     for (auto bookPath : removedZims) {
-        removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
+        removeBookFromLibraryById(QString::fromStdString(mp_library->getBookByPath(bookPath.toStdString()).getId()));
     }
     if (needsRefresh) {
         setMonitorDirZims(newDir.values());
@@ -177,5 +178,5 @@ void Library::asyncLoadMonitorDir(QString dir)
 
 const kiwix::Book &Library::getBookById(QString id) const
 {
-    return m_library.getBookById(id.toStdString());
+    return mp_library->getBookById(id.toStdString());
 }

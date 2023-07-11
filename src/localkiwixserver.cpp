@@ -20,7 +20,6 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     QString style(byteContent);
     setStyleSheet(style);
 
-    mp_server = KiwixApp::instance()->getLocalServer();
     m_port = KiwixApp::instance()->getSettingsManager()->getKiwixServerPort();
 
     connect(ui->KiwixServerButton, SIGNAL(clicked()), this, SLOT(runOrStopServer()));
@@ -81,28 +80,28 @@ void LocalKiwixServer::openInBrowser()
 void LocalKiwixServer::runOrStopServer()
 {
     if (!m_active) {
-        auto settingsManager = KiwixApp::instance()->getSettingsManager();
         m_port = ui->PortChooser->text().toInt();
-        mp_server->setPort(m_port);
-        m_ipAddress = (ui->IpChooser->currentText() != gt("all")) ? ui->IpChooser->currentText() : "0.0.0.0";
-        settingsManager->setKiwixServerPort(m_port);
-        settingsManager->setKiwixServerIpAddress(m_ipAddress);
-        mp_server->setAddress(m_ipAddress.toStdString());
-        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
-        ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
-        ui->IpAddress->setReadOnly(true);
-        if (!mp_server->start()) {
+        m_ipAddress = ui->IpChooser->currentText();
+
+        m_active = KiwixApp::instance()->runServer(
+            (m_ipAddress != gt("all") ? m_ipAddress : "0.0.0.0"),
+            m_port
+        );
+
+        if (!m_active) {
             QMessageBox messageBox;
             messageBox.critical(0,gt("error-title"),gt("error-launch-server-message"));
-            return;
         }
-        m_active = true;
     } else {
-        mp_server->stop();
+        KiwixApp::instance()->stopServer();
         m_active = false;
     }
 
     if (m_active) {
+        // Update UI to display how to acces the server
+        m_ipAddress = m_ipAddress != gt("all") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
+        ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
+        ui->IpAddress->setReadOnly(true);
         ui->KiwixServerButton->setText(gt("stop-kiwix-server"));
         ui->KiwixServerText->setText(gt("kiwix-server-running-message"));
         ui->stackedWidget->setCurrentIndex(1);
