@@ -70,7 +70,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(treeView, &QTreeView::doubleClicked, this, &ContentManager::openBookWithIndex);
     connect(&m_remoteLibraryManager, &OpdsRequestManager::languagesReceived, this, &ContentManager::updateLanguages);
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
-    setLanguages();
+    setCategories();
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -146,6 +146,7 @@ void ContentManager::setLocal(bool local) {
     }
     m_local = local;
     emit(filterParamsChanged());
+    setCategories();
 }
 
 QStringList ContentManager::getTranslations(const QStringList &keys)
@@ -163,11 +164,13 @@ void ContentManager::setCategories()
     QStringList categories;
     if (m_local) {
         auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
+        categories.push_back("all");
         for (auto category : categoryData) {
             auto categoryName = QString::fromStdString(category);
             categories.push_back(categoryName);
         }
         m_categories = categories;
+        emit(categoriesLoaded(m_categories));
         return;
     }
     m_remoteLibraryManager.getCategoriesFromOpds();
@@ -633,10 +636,12 @@ void ContentManager::updateLanguages(const QString& content) {
 void ContentManager::updateCategories(const QString& content) {;
     auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
     QStringList tempCategories;
+    tempCategories.push_back("all");
     for (auto catg : categories) {
         tempCategories.push_back(QString::fromStdString(catg));
     }
     m_categories = tempCategories;
+    emit(categoriesLoaded(m_categories));
 }
 
 void ContentManager::setSearch(const QString &search)
@@ -653,9 +658,9 @@ QStringList ContentManager::getBookIds()
         acceptTags.push_back("_category:"+m_categoryFilter.toStdString());
     }
     if (m_categoryFilter == "other") {
-        for (auto& category: S_CATEGORIES) {
-            if (category.first != "other" && category.first != "all") {
-                rejectTags.push_back("_category:"+category.first.toStdString());
+        for (auto& category: m_categories) {
+            if (category != "other" && category != "all") {
+                rejectTags.push_back("_category:"+category.toStdString());
             }
         }
     }

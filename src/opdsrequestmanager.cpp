@@ -30,9 +30,9 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
 
     // Add "special negative" filter for "other" category (if necessary)
     if (categoryFilter == "other") {
-        for (auto& category: S_CATEGORIES) {
-            if (category.first != "other" && category.first != "all") {
-                excludeTags += "_category:"+category.first;
+        for (auto& category: KiwixApp::instance()->getContentManager()->getCategories()) {
+            if (category != "other" && category != "all") {
+                excludeTags += "_category:"+category;
             }
         }
     }

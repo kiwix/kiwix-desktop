@@ -64,6 +64,7 @@ signals:
     void downloadsChanged();
     void currentLangChanged();
     void pendingRequest(const bool);
+    void categoriesLoaded(QStringList);
 
 public slots:
     QStringList getTranslations(const QStringList &keys);

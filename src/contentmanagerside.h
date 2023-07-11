@@ -30,6 +30,9 @@ private:
     QListWidget* mp_categorySelector;
     QCheckBox* mp_contentTypeButton;
     QList<ContentTypeFilter*> m_contentTypeFilters;
+
+public slots:
+    void setCategories(QStringList);
 };
 
 #endif // CONTENTMANAGERSIDE_H

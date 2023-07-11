@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 
 #include <QLocale>
+#include <QDebug>
 
 #include "klistwidgetitem.h"
 #include "static_content.h"
@@ -91,6 +92,9 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         });
     }
 
+    setCategories(KiwixApp::instance()->getContentManager()->getCategories());
+    connect(KiwixApp::instance()->getContentManager(), &ContentManager::categoriesLoaded, this, &ContentManagerSide::setCategories);
+
     for(auto lang: S_LANGUAGES)
     {
         auto currentLang = QLocale().language();
@@ -113,17 +117,6 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     auto item = new KListWidgetItem("All");
     item->setData(Qt::UserRole, QLocale::AnyLanguage);
     mp_languageSelector->insertItem(0, item);
-
-    for (auto category: S_CATEGORIES)
-    {
-        auto item = new KListWidgetItem(category.second);
-        item->setData(Qt::UserRole, category.first);
-        mp_categorySelector->addItem(item);
-        if (category.first ==  "all")
-        {
-            item->setSelected(true);
-        }
-    }
 }
 
 ContentManagerSide::~ContentManagerSide()
@@ -154,4 +147,29 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
                 auto category = item->data(Qt::UserRole).toString();
                 mp_contentManager->setCurrentCategoryFilter(category);
     });
+}
+
+QString beautify(QString word)
+{
+    word = word.replace("_", " ");
+    word[0] = word[0].toUpper();
+    return word;
+}
+
+void ContentManagerSide::setCategories(QStringList categories)
+{
+    mp_categorySelector->blockSignals(true);
+    mp_categorySelector->setHidden(true);
+    mp_categorySelector->clear();
+    mp_categorySelector->blockSignals(false);
+    for (auto category: categories)
+    {
+        auto item = new KListWidgetItem(beautify(category));
+        item->setData(Qt::UserRole, category);
+        mp_categorySelector->addItem(item);
+        if (category ==  "all")
+        {
+            item->setSelected(true);
+        }
+    }
 }
