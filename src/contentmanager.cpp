@@ -584,6 +584,8 @@ void ContentManager::setCurrentLanguage(QString language)
                      kiwix::converta2toa3(language.toStdString()));
       } catch (std::out_of_range&) {}
     }
+    if (m_currentLanguage == language)
+        return;
     m_currentLanguage = language;
     emit(currentLangChanged());
     emit(filterParamsChanged());
@@ -591,6 +593,8 @@ void ContentManager::setCurrentLanguage(QString language)
 
 void ContentManager::setCurrentCategoryFilter(QString category)
 {
+    if (m_categoryFilter == category)
+        return;
     m_categoryFilter = category.toLower();
     emit(filterParamsChanged());
 }
