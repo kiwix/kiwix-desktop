@@ -71,6 +71,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(&m_remoteLibraryManager, &OpdsRequestManager::languagesReceived, this, &ContentManager::updateLanguages);
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
     setCategories();
+    setLanguages();
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -147,6 +148,7 @@ void ContentManager::setLocal(bool local) {
     m_local = local;
     emit(filterParamsChanged());
     setCategories();
+    setLanguages();
 }
 
 QStringList ContentManager::getTranslations(const QStringList &keys)
@@ -187,6 +189,7 @@ void ContentManager::setLanguages()
             languages.push_back({langCode, selfName});
         }
         m_languages = languages;
+        emit(languagesLoaded(m_languages));
         return;
     }
     m_remoteLibraryManager.getLanguagesFromOpds();
@@ -631,6 +634,7 @@ void ContentManager::updateLanguages(const QString& content) {
         tempLanguages.push_back({code, title});
     }
     m_languages = tempLanguages;
+    emit(languagesLoaded(m_languages));
 }
 
 void ContentManager::updateCategories(const QString& content) {;

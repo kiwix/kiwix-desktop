@@ -33,6 +33,7 @@ private:
 
 public slots:
     void setCategories(QStringList);
+    void setLanguages(ContentManager::LanguageList);
 };
 
 #endif // CONTENTMANAGERSIDE_H

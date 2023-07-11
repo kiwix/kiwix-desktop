@@ -16,9 +16,9 @@ class ContentManager : public QObject
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
     Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
-    typedef QList<QPair<QString, QString>> LanguageList;
 
 public:
+    typedef QList<QPair<QString, QString>> LanguageList;
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
 
@@ -65,6 +65,7 @@ signals:
     void currentLangChanged();
     void pendingRequest(const bool);
     void categoriesLoaded(QStringList);
+    void languagesLoaded(LanguageList);
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
