@@ -17,7 +17,6 @@ public:
     explicit ContentManagerView(QWidget *parent = nullptr);
     ~ContentManagerView();
     QTreeView* getView() { return mp_ui->m_view; }
-    QLineEdit* &getSearcher() { return mp_ui->searcher; }
 
 public slots:
     void showLoader(bool show);

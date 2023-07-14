@@ -68,7 +68,8 @@ QMenu::item:selected {
 QLineEdit {
     font-family: 'Selawik';
     padding: 4px;
-    border: 1px solid #cccccc;
+    border: none;
+    border-bottom: 1px solid #cccccc;
     color: #666666;
     font-size: 16px;
     height: 32px;

@@ -54,6 +54,18 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         }
         mp_contentManager->setCurrentContentTypeFilter(m_contentTypeFilters);
     });
+
+    auto searcher = mp_ui->searcher;
+    searcher->setPlaceholderText(gt("search-files"));
+    QFile file(QString::fromUtf8(":/css/_contentManager.css"));
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    searcher->setStyleSheet(styleSheet);
+    QIcon searchIcon = QIcon(":/icons/search.svg");
+    searcher->addAction(searchIcon, QLineEdit::LeadingPosition);
+    connect(searcher, &QLineEdit::textChanged, [searcher](){
+        KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
+    });
     
     ContentTypeFilter* videosFilter = new ContentTypeFilter("pictures", this);
     ContentTypeFilter* picturesFilter = new ContentTypeFilter("videos", this);

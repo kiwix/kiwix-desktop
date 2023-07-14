@@ -19,19 +19,9 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     mp_ui->m_view->setItemDelegate(managerDelegate);
     mp_ui->m_view->setCursor(Qt::PointingHandCursor);
 
-    auto searcher = mp_ui->searcher;
-    searcher->setPlaceholderText(gt("search-files"));
-    searcher->setStyleSheet(styleSheet);
-
     loader = new KiwixLoader(mp_ui->loading);
     mp_ui->stackedWidget->setCurrentIndex(0);
 
-    QIcon searchIcon = QIcon(":/icons/search.svg");
-    searcher->addAction(searchIcon, QLineEdit::LeadingPosition);
-
-    connect(searcher, &QLineEdit::textChanged, [searcher](){
-        KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
-    });
     connect(mp_ui->m_view, &QTreeView::clicked, [=](QModelIndex index) {
         if (index.column() == (mp_ui->m_view->model()->columnCount() - 1))
             return;
