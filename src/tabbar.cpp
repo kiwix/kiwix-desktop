@@ -65,7 +65,7 @@ TabBar::TabBar(QWidget *parent) :
                 }
                 int index = currentIndex() + 1;
                 mp_stackedWidget->insertWidget(index, view);
-                emit libraryPageDisplayed(false);
+                emit tabDisplayed(TabType::SettingsTab);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
                 QToolButton *tb = new QToolButton(this);
                 tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
@@ -321,18 +321,18 @@ void TabBar::onCurrentChanged(int index)
     if (qobject_cast<SettingsView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
-        emit libraryPageDisplayed(false);
+        emit tabDisplayed(TabType::SettingsTab);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     } else if (auto zv = qobject_cast<ZimView*>(w)) {
         auto view = zv->getWebView();
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
-        emit libraryPageDisplayed(false);
+        emit tabDisplayed(TabType::ZimViewTab);
         QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
     } else if (qobject_cast<ContentManagerView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
-        emit libraryPageDisplayed(true);
+        emit tabDisplayed(TabType::LibraryTab);
         QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
     }
     else {

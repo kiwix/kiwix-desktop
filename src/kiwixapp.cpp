@@ -435,21 +435,22 @@ void KiwixApp::createAction()
 }
 
 void KiwixApp::postInit() {
-    connect(getTabWidget(), &TabBar::libraryPageDisplayed,
-            this, &KiwixApp::disableItemsOnLibraryPage);
+    connect(getTabWidget(), &TabBar::tabDisplayed,
+            this, &KiwixApp::handleItemsState);
     emit(m_library.booksChanged());
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
-    disableItemsOnLibraryPage(true);
+    handleItemsState(TabType::LibraryTab);
 }
 
-void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
+void KiwixApp::handleItemsState(TabType tabType)
 {
-    KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryDisplayed);
+    auto libraryOrSettingsTab =  (tabType == TabType::LibraryTab || tabType == TabType::SettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryOrSettingsTab);
 }
 
 void KiwixApp::updateNameMapper()

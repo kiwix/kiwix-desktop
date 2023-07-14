@@ -15,6 +15,11 @@ class TabBar : public QTabBar
 {
     Q_OBJECT
 public:
+    enum class TabType {
+        LibraryTab,
+        ZimViewTab,
+        SettingsTab
+    };
     TabBar(QWidget* parent=nullptr);
     void setStackedWidget(QStackedWidget* widget);
 
@@ -51,7 +56,7 @@ protected:
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
-    void libraryPageDisplayed(bool displayed);
+    void tabDisplayed(TabType tabType);
     void currentTitleChanged(const QString& title);
 
 public slots:
