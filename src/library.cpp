@@ -115,9 +115,9 @@ void Library::save()
     m_library.writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
-void Library::setMonitorDirZims(QStringList zimList)
+void Library::setMonitorDirZims(QString monitorDir, QStringList zimList)
 {
-    m_monitorDirZims = zimList;
+    m_knownZimsInDir[monitorDir] = zimList;
 }
 
 QStringList Library::getLibraryZimsFromDir(QString dir) const
@@ -133,13 +133,12 @@ QStringList Library::getLibraryZimsFromDir(QString dir) const
     return zimsInDir;
 }
 
-void Library::loadMonitorDir(QString monitorDir)
+void Library::updateFromDir(QString monitorDir)
 {
-    QMutex mutex;
-    QMutexLocker locker(&mutex);
+    QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(monitorDir);
     QStringList newDirEntries = dir.entryList({"*.zim"});
-    QStringList oldDirEntries = m_monitorDirZims;
+    QStringList oldDirEntries = m_knownZimsInDir[monitorDir];
     for (auto &str : newDirEntries) {
         str = QDir::toNativeSeparators(monitorDir + "/" + str);
     }
@@ -160,18 +159,20 @@ void Library::loadMonitorDir(QString monitorDir)
         needsRefresh |= manager.addBookFromPath(book.toStdString());
     }
     for (auto bookPath : removedZims) {
-        removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
+        try {
+            removeBookFromLibraryById(QString::fromStdString(m_library.getBookByPath(bookPath.toStdString()).getId()));
+        } catch (...) {}
     }
     if (needsRefresh) {
-        setMonitorDirZims(newDir.values());
         emit(booksChanged());
+        setMonitorDirZims(monitorDir, newDir.values());
     }
 }
 
-void Library::asyncLoadMonitorDir(QString dir)
+void Library::asyncUpdateFromDir(QString dir)
 {
     QtConcurrent::run( [=]() {
-        loadMonitorDir(dir);
+        updateFromDir(dir);
     });
 }
 

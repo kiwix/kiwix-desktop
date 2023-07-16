@@ -99,13 +99,17 @@ void KiwixApp::init()
         }
     });
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, [=](QString monitorDir) {
-        m_library.asyncLoadMonitorDir(monitorDir);
+        m_library.asyncUpdateFromDir(monitorDir);
     });
     QString monitorDir = m_settingsManager.getMonitorDir();
-    if (monitorDir != "") {
-        m_library.setMonitorDirZims(m_library.getLibraryZimsFromDir(monitorDir));
-        m_watcher.addPath(monitorDir);
-        m_library.asyncLoadMonitorDir(monitorDir);
+    QString downloadDir = m_settingsManager.getDownloadDir();
+    auto dirList = QSet<QString>({monitorDir, downloadDir});
+    for (auto dir : dirList) {
+        if (dir != "") {
+            m_library.setMonitorDirZims(dir, m_library.getLibraryZimsFromDir(dir));
+            m_watcher.addPath(dir);
+            m_library.asyncUpdateFromDir(dir);
+        }
     }
 }
 
@@ -284,13 +288,14 @@ bool KiwixApp::isCurrentArticleBookmarked()
 
 void KiwixApp::setMonitorDir(const QString &dir) {
     m_settingsManager.setMonitorDir(dir);
-    m_library.setMonitorDirZims(QStringList());
+    m_library.setMonitorDirZims(dir, QStringList());
     for (auto path : m_watcher.directories()) {
         m_watcher.removePath(path);
     }
     if (dir != "") {
         m_watcher.addPath(dir);
-        m_library.asyncLoadMonitorDir(dir);
+        m_watcher.addPath(m_settingsManager.getDownloadDir());
+        m_library.asyncUpdateFromDir(dir);
     }
 }
 
