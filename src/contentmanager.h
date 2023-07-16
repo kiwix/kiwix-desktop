@@ -49,7 +49,7 @@ private:
     QStringList m_categories;
 
     QStringList getBookIds();
-    void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
+    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
     QList<QMap<QString, QVariant>> getBooksList();
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
