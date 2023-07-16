@@ -151,5 +151,6 @@
     "resume-download": "Resume download",
     "open-folder": "Open folder",
     "couldnt-open-location": "Couldn't open location",
-    "couldnt-open-location-text": "Kiwix is not able to open folder {{FOLDER}}"
+    "couldnt-open-location-text": "Kiwix is not able to open folder {{FOLDER}}",
+    "move-files-to-trash": "Move deleted files to trash"
 }
