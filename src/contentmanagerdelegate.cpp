@@ -5,7 +5,8 @@
 #include <QStyleOptionViewItemV4>
 #include "kiwixapp.h"
 #include <QStyleOptionViewItem>
-#include "node.h"
+#include "rownode.h"
+#include "descriptionnode.h"
 
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
@@ -155,7 +156,15 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     h = r.height();
     button.rect = QRect(x,y,w,h);
     button.state = QStyle::State_Enabled;
-    auto node = static_cast<Node*>(index.internalPointer());
+    if (index.parent().isValid()) {
+        // additional info
+        QRect nRect = r;
+        auto viewWidth = KiwixApp::instance()->getContentManager()->getView()->getView()->width();
+        nRect.setWidth(viewWidth);
+        painter->drawText(nRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole+1).toString());
+        return;
+    }
+    auto node = static_cast<RowNode*>(index.internalPointer());
     try {
         const auto id = node->getBookId();
         const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
@@ -167,14 +176,6 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         button.text = gt("download");
     }
     QStyleOptionViewItem eOpt = option;
-    if (index.data(Qt::UserRole+1) != QVariant()) {
-        // additional info role
-        QRect nRect = r;
-        auto viewWidth = KiwixApp::instance()->getContentManager()->getView()->getView()->width();
-        nRect.setWidth(viewWidth);
-        painter->drawText(nRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole+1).toString());
-        return;
-    }
     if (index.column() == 5) {
         if (node->isDownloading()) {
             auto downloadInfo = node->getDownloadInfo();
@@ -235,7 +236,7 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
 
 void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, QMouseEvent *mouseEvent, const QStyleOptionViewItem &option)
 {
-    const auto node = static_cast<Node*>(index.internalPointer());
+    const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
     int clickX = mouseEvent->x();
 
@@ -265,7 +266,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
 QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (index.data(Qt::UserRole+1) != QVariant()) {
+    if (index.parent().isValid()) {
         return QSize(300, 70);
     }
     return QSize(50, 70);

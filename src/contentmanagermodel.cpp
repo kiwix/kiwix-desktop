@@ -1,5 +1,7 @@
 #include "contentmanagermodel.h"
 #include "node.h"
+#include "rownode.h"
+#include "descriptionnode.h"
 #include<QList>
 #include<QMap>
 #include<QDebug>
@@ -35,7 +37,7 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 
     Node *item = static_cast<Node*>(index.internalPointer());
     const auto displayRole = role == Qt::DisplayRole;
-    const auto additionalInfoRole = role == Qt::UserRole+1 && item->isAdditonal();
+    const auto additionalInfoRole = role == Qt::UserRole+1;
     if (displayRole || additionalInfoRole)
         return item->data(index.column());
 
@@ -56,16 +58,18 @@ QModelIndex ContentManagerModel::index(int row, int column, const QModelIndex &p
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    Node *parentItem;
+    RowNode* parentItem;
 
-    if (!parent.isValid())
+    if (!parent.isValid()) {
         parentItem = rootNode;
-    else
-        parentItem = static_cast<Node*>(parent.internalPointer());
-
-    Node *childItem = parentItem->child(row);
+    }
+    else {
+        parentItem = static_cast<RowNode*>(parent.internalPointer());
+    }
+    auto childItem = parentItem->child(row);
     if (childItem)
         return createIndex(row, column, childItem);
+
     return QModelIndex();
 }
 
@@ -107,7 +111,7 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
 void ContentManagerModel::setBooksData(const QList<QMap<QString, QVariant>>& data)
 {
     m_data = data;
-    rootNode = new Node({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")});
+    rootNode = new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", nullptr);
     setupNodes();
     emit dataChanged(QModelIndex(), QModelIndex());
 }
@@ -128,32 +132,9 @@ QString convertToUnits(QString size)
 
 void ContentManagerModel::setupNodes()
 {
-    QByteArray bookIcon;
     beginResetModel();
     for (auto bookItem : m_data) {
-        auto name = bookItem["title"].toString();
-        auto date = bookItem["date"].toString();
-        auto size = convertToUnits(bookItem["size"].toString());
-        auto content = bookItem["tags"].toString();
-        auto id = bookItem["id"].toString();
-        auto description = bookItem["description"].toString();
-        auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
-        try {
-            auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-            std::string favicon;
-            auto item = book.getIllustration(48);
-            favicon = item->getData();
-            bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
-            bookIcon.detach(); // deep copy
-        } catch (std::out_of_range &e) {
-            if (iconMap.contains(faviconUrl)) {
-                bookIcon = iconMap[faviconUrl];
-            }
-        }
-        const auto temp = new Node({bookIcon, name, date, size, content, id}, rootNode, id);
-        const auto tempsTemp = new Node({"", description, "", "", "", ""}, temp, "", true);
-        temp->appendChild(tempsTemp);
-        rootNode->appendChild(temp);
+        rootNode->appendChild(RowNode::createNode(bookItem, iconMap, rootNode));
     }
     endResetModel();
 }
@@ -171,7 +152,7 @@ void ContentManagerModel::refreshIcons()
         try {
             auto book = app->getLibrary()->getBookById(id);
             auto item = book.getIllustration(48);
-        } catch (std::out_of_range &e) {
+        } catch (...) {
             if (faviconUrl != "" && !iconMap.contains(faviconUrl)) {
                 td.addDownload(faviconUrl, index(i, 0));
             }
@@ -183,7 +164,7 @@ bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
 {
     Node *item = static_cast<Node*>(parent.internalPointer());
     if (item)
-        return !item->isAdditonal();
+        return item->childCount() > 0;
     return true;
 }
 
@@ -230,7 +211,7 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
 
 void ContentManagerModel::updateImage(QModelIndex index, QString url, QByteArray imageData)
 {
-    Node *item = static_cast<Node*>(index.internalPointer());
+    RowNode *item = static_cast<RowNode*>(index.internalPointer());
     item->setIconData(imageData);
     iconMap[url] = imageData;
     emit dataChanged(index, index);
@@ -238,7 +219,7 @@ void ContentManagerModel::updateImage(QModelIndex index, QString url, QByteArray
 
 void ContentManagerModel::startDownload(QModelIndex index)
 {
-    auto node = static_cast<Node*>(index.internalPointer());
+    auto node = static_cast<RowNode*>(index.internalPointer());
     node->setIsDownloading(true);
     auto id = node->getBookId();
     QTimer *timer = new QTimer(this);
@@ -263,7 +244,7 @@ void ContentManagerModel::startDownload(QModelIndex index)
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
-    auto node = static_cast<Node*>(index.internalPointer());
+    auto node = static_cast<RowNode*>(index.internalPointer());
     auto id = node->getBookId();
     auto prevDownloadInfo = node->getDownloadInfo();
     prevDownloadInfo.paused = true;
@@ -274,7 +255,7 @@ void ContentManagerModel::pauseDownload(QModelIndex index)
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
-    auto node = static_cast<Node*>(index.internalPointer());
+    auto node = static_cast<RowNode*>(index.internalPointer());
     auto id = node->getBookId();
     auto prevDownloadInfo = node->getDownloadInfo();
     prevDownloadInfo.paused = false;
@@ -285,7 +266,7 @@ void ContentManagerModel::resumeDownload(QModelIndex index)
 
 void ContentManagerModel::cancelDownload(QModelIndex index)
 {
-    auto node = static_cast<Node*>(index.internalPointer());
+    auto node = static_cast<RowNode*>(index.internalPointer());
     auto id = node->getBookId();
     node->setIsDownloading(false);
     node->setDownloadInfo({0, "", "", false});

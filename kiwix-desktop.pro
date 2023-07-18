@@ -38,10 +38,11 @@ SOURCES += \
     src/contentmanagerheader.cpp \
     src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
+    src/descriptionnode.cpp \
     src/findinpagebar.cpp \
     src/kiwixconfirmbox.cpp \
     src/kiwixloader.cpp \
-    src/node.cpp \
+    src/rownode.cpp \
     src/suggestionlistworker.cpp \
     src/thumbnaildownloader.cpp \
     src/translation.cpp \
@@ -79,10 +80,12 @@ HEADERS += \
     src/contentmanagermodel.h \
     src/contentmanagerview.h \
     src/contenttypefilter.h \
+    src/descriptionnode.h \
     src/findinpagebar.h \
     src/kiwixconfirmbox.h \
     src/kiwixloader.h \
     src/node.h \
+    src/rownode.h \
     src/suggestionlistworker.h \
     src/thumbnaildownloader.h \
     src/translation.h \

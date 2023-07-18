@@ -16,7 +16,8 @@
 #include <zim/item.h>
 #include <QHeaderView>
 #include "contentmanagerdelegate.h"
-#include "node.h"
+#include "rownode.h"
+#include "descriptionnode.h"
 #include "kiwixconfirmbox.h"
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
@@ -85,7 +86,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
 {
     QModelIndex index = mp_view->getView()->indexAt(point);
     QMenu contextMenu("optionsMenu", mp_view->getView());
-    Node* bookNode = static_cast<Node*>(index.internalPointer());
+    auto bookNode = static_cast<RowNode*>(index.internalPointer());
     const auto id = bookNode->getBookId();
 
     QAction menuDeleteBook("Delete book", this);
@@ -234,10 +235,14 @@ QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringLi
 void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
     try {
-        Node* bookNode = static_cast<Node*>(index.internalPointer());
-        auto bookId = bookNode->getBookId();
-        if (bookNode->isAdditonal())
-            bookId = bookNode->parentItem()->getBookId();
+        QString bookId;
+        if (index.parent().isValid()) {
+            auto bookNode = static_cast<DescriptionNode*>(index.internalPointer());
+            bookId = bookNode->getBookId();
+        } else {
+            auto bookNode = static_cast<RowNode*>(index.internalPointer());
+            bookId = bookNode->getBookId();
+        }
         // check if the book is available in local library, will throw std::out_of_range if it isn't.
         KiwixApp::instance()->getLibrary()->getBookById(bookId);
         if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
@@ -367,7 +372,7 @@ QString ContentManager::downloadBook(const QString &id, QModelIndex index)
         emit managerModel->startDownload(index);
         return downloadStatus;
     }
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(dialogHeader, dialogText, mp_view, true);
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(dialogHeader, dialogText, true, mp_view);
     dialog->show();
     connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
         dialog->deleteLater();
