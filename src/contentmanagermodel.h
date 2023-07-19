@@ -6,9 +6,11 @@
 #include <QVariant>
 #include <QIcon>
 #include "thumbnaildownloader.h"
+#include <memory>
 
 class RowNode;
 class Node;
+class DescriptionNode;
 
 class ContentManagerModel : public QAbstractItemModel
 {
@@ -46,7 +48,7 @@ protected:
 
 private:
     QList<QMap<QString, QVariant>> m_data;
-    RowNode *rootNode;
+    std::shared_ptr<RowNode> rootNode;
     int zimCount = 0;
     ThumbnailDownloader td;
     QMap<QString, QByteArray> iconMap;

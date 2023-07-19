@@ -1,21 +1,27 @@
 #include "descriptionnode.h"
 #include "rownode.h"
 
-DescriptionNode::DescriptionNode(QString desc, RowNode *parent)
+DescriptionNode::DescriptionNode(QString desc, std::weak_ptr<RowNode> parent)
     : m_desc(desc), m_parentItem(parent)
 {}
 
 DescriptionNode::~DescriptionNode()
 {}
 
-Node* DescriptionNode::parentItem()
+std::shared_ptr<Node> DescriptionNode::parentItem()
 {
-    return m_parentItem;
+    std::shared_ptr<Node> temp = m_parentItem.lock();
+    if (!temp)
+        return nullptr;
+    return temp;
 }
 
 QString DescriptionNode::getBookId() const
 {
-    return m_parentItem->getBookId();
+    std::shared_ptr<RowNode> temp = m_parentItem.lock();
+    if (!temp)
+        return QString();
+    return temp->getBookId();
 }
 
 int DescriptionNode::childCount() const
@@ -37,5 +43,8 @@ QVariant DescriptionNode::data(int column)
 
 int DescriptionNode::row() const
 {
-    return m_parentItem->row();
+    std::shared_ptr<RowNode> temp = m_parentItem.lock();
+    if (!temp)
+        return 0;
+    return temp->row();
 }

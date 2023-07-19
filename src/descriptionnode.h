@@ -9,9 +9,9 @@ class RowNode;
 class DescriptionNode : public Node
 {
 public:
-    DescriptionNode(QString desc, RowNode *parent);
+    DescriptionNode(QString desc, std::weak_ptr<RowNode> parent);
     ~DescriptionNode();
-    Node *parentItem() override;
+    std::shared_ptr<Node> parentItem() override;
     int childCount() const override;
     int columnCount() const override;
     QVariant data(int column) override;
@@ -20,7 +20,7 @@ public:
 
 private:
     QString m_desc;
-    RowNode *m_parentItem;
+    std::weak_ptr<RowNode> m_parentItem;
 };
 
 #endif // DESCRIPTIONNODE_H

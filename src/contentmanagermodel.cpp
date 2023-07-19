@@ -2,12 +2,6 @@
 #include "node.h"
 #include "rownode.h"
 #include "descriptionnode.h"
-#include<QList>
-#include<QMap>
-#include<QDebug>
-#include <QStringList>
-#include <QSize>
-#include <QIcon>
 #include <zim/error.h>
 #include <zim/item.h>
 #include "kiwixapp.h"
@@ -20,7 +14,6 @@ ContentManagerModel::ContentManagerModel(QObject *parent)
 
 ContentManagerModel::~ContentManagerModel()
 {
-    delete rootNode;
 }
 
 int ContentManagerModel::columnCount(const QModelIndex &parent) const
@@ -35,7 +28,7 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    Node *item = static_cast<Node*>(index.internalPointer());
+    auto item = static_cast<Node*>(index.internalPointer());
     const auto displayRole = role == Qt::DisplayRole;
     const auto additionalInfoRole = role == Qt::UserRole+1;
     if (displayRole || additionalInfoRole)
@@ -61,14 +54,14 @@ QModelIndex ContentManagerModel::index(int row, int column, const QModelIndex &p
     RowNode* parentItem;
 
     if (!parent.isValid()) {
-        parentItem = rootNode;
+        parentItem = rootNode.get();
     }
     else {
         parentItem = static_cast<RowNode*>(parent.internalPointer());
     }
     auto childItem = parentItem->child(row);
     if (childItem)
-        return createIndex(row, column, childItem);
+        return createIndex(row, column, childItem.get());
 
     return QModelIndex();
 }
@@ -78,13 +71,13 @@ QModelIndex ContentManagerModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    Node *childItem = static_cast<Node*>(index.internalPointer());
-    Node *parentItem = childItem->parentItem();
+    auto childItem = static_cast<Node*>(index.internalPointer());
+    auto parentItem = childItem->parentItem();
 
-    if (parentItem == rootNode)
+    if (!parentItem || parentItem == rootNode)
         return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentItem->row(), 0, parentItem.get());
 }
 
 int ContentManagerModel::rowCount(const QModelIndex &parent) const
@@ -111,7 +104,7 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
 void ContentManagerModel::setBooksData(const QList<QMap<QString, QVariant>>& data)
 {
     m_data = data;
-    rootNode = new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", nullptr);
+    rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
     setupNodes();
     emit dataChanged(QModelIndex(), QModelIndex());
 }
@@ -162,7 +155,7 @@ void ContentManagerModel::refreshIcons()
 
 bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
 {
-    Node *item = static_cast<Node*>(parent.internalPointer());
+    auto item = static_cast<Node*>(parent.internalPointer());
     if (item)
         return item->childCount() > 0;
     return true;
@@ -211,15 +204,24 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
 
 void ContentManagerModel::updateImage(QModelIndex index, QString url, QByteArray imageData)
 {
-    RowNode *item = static_cast<RowNode*>(index.internalPointer());
+    if (!index.isValid())
+        return;
+    auto item = static_cast<RowNode*>(index.internalPointer());
+    if (!rootNode->isChild(item))
+        return;
     item->setIconData(imageData);
     iconMap[url] = imageData;
     emit dataChanged(index, index);
 }
 
+std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
+{
+    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
+}
+
 void ContentManagerModel::startDownload(QModelIndex index)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
+    auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
     node->setIsDownloading(true);
     auto id = node->getBookId();
     QTimer *timer = new QTimer(this);

@@ -4,7 +4,7 @@
 #include "descriptionnode.h"
 #include "kiwix/tools.h"
 
-RowNode::RowNode(QList<QVariant> itemData, QString bookId, RowNode *parent)
+RowNode::RowNode(QList<QVariant> itemData, QString bookId, std::weak_ptr<RowNode> parent)
     : m_itemData(itemData), m_parentItem(parent), m_bookId(bookId)
 {
     m_downloadInfo = {0, "", "", false};
@@ -13,12 +13,12 @@ RowNode::RowNode(QList<QVariant> itemData, QString bookId, RowNode *parent)
 RowNode::~RowNode()
 {}
 
-void RowNode::appendChild(Node *item)
+void RowNode::appendChild(std::shared_ptr<Node> item)
 {
     m_childItems.append(item);
 }
 
-Node *RowNode::child(int row)
+std::shared_ptr<Node> RowNode::child(int row)
 {
     if (row < 0 || row >= m_childItems.size())
         return nullptr;
@@ -35,9 +35,12 @@ int RowNode::columnCount() const
     return 6;
 }
 
-Node* RowNode::parentItem()
+std::shared_ptr<Node> RowNode::parentItem()
 {
-    return m_parentItem;
+    std::shared_ptr<Node> temp = m_parentItem.lock();
+    if (!temp)
+        return nullptr;
+    return temp;
 }
 
 QVariant RowNode::data(int column)
@@ -49,13 +52,20 @@ QVariant RowNode::data(int column)
 
 int RowNode::row() const
 {
-    if (m_parentItem)
-        return m_parentItem->m_childItems.indexOf(const_cast<RowNode*>(this));
+    try {
+        std::shared_ptr<RowNode> temp = m_parentItem.lock();
+        if (temp) {
+            auto nodePtr = std::const_pointer_cast<Node>(shared_from_this());
+            return temp->m_childItems.indexOf(nodePtr);
+        }
+    } catch(...) {
+        return 0;
+    }
 
     return 0;
 }
 
-RowNode* RowNode::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, RowNode *rootNode)
+std::shared_ptr<RowNode> RowNode::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode)
 {
     auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
@@ -72,12 +82,26 @@ RowNode* RowNode::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QBy
             bookIcon = iconMap[faviconUrl];
         }
     }
-    auto temp = new RowNode({bookIcon, bookItem["title"],
+    std::weak_ptr<RowNode> weakRoot = rootNode;
+    auto rowNodePtr = std::shared_ptr<RowNode>(new
+                                    RowNode({bookIcon, bookItem["title"],
                                    bookItem["date"],
                                    QString::fromStdString(kiwix::beautifyFileSize(bookItem["size"].toULongLong())),
                                    bookItem["tags"]
-                                   }, id, rootNode);
-    auto tempsTemp = new DescriptionNode(bookItem["description"].toString(), temp);
-    temp->appendChild(tempsTemp);
-    return temp;
+                                   }, id, weakRoot));
+    std::weak_ptr<RowNode> weakRowNodePtr = rowNodePtr;
+    const auto descNodePtr = std::make_shared<DescriptionNode>(DescriptionNode(bookItem["description"].toString(), weakRowNodePtr));
+    rowNodePtr->appendChild(descNodePtr);
+    return rowNodePtr;
+}
+
+bool RowNode::isChild(Node *candidate)
+{
+    if (!candidate)
+        return false;
+    for (auto item : m_childItems) {
+        if (candidate == item.get())
+            return true;
+    }
+    return false;
 }

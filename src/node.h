@@ -2,12 +2,13 @@
 #define NODE_H
 
 #include <QVariant>
+#include <memory>
 
-class Node
+class Node : public std::enable_shared_from_this<Node>
 {
 public:
     virtual ~Node() = default;
-    virtual Node *parentItem() = 0;
+    virtual std::shared_ptr<Node> parentItem() = 0;
     virtual int childCount() const = 0;
     virtual int columnCount() const = 0;
     virtual QVariant data(int column) = 0;

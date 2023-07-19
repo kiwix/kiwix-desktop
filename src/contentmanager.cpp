@@ -16,6 +16,7 @@
 #include <zim/item.h>
 #include <QHeaderView>
 #include "contentmanagerdelegate.h"
+#include "node.h"
 #include "rownode.h"
 #include "descriptionnode.h"
 #include "kiwixconfirmbox.h"
@@ -236,13 +237,8 @@ void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
     try {
         QString bookId;
-        if (index.parent().isValid()) {
-            auto bookNode = static_cast<DescriptionNode*>(index.internalPointer());
-            bookId = bookNode->getBookId();
-        } else {
-            auto bookNode = static_cast<RowNode*>(index.internalPointer());
-            bookId = bookNode->getBookId();
-        }
+        auto bookNode = static_cast<Node*>(index.internalPointer());
+        bookId = bookNode->getBookId();
         // check if the book is available in local library, will throw std::out_of_range if it isn't.
         KiwixApp::instance()->getLibrary()->getBookById(bookId);
         if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
