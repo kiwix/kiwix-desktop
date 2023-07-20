@@ -184,7 +184,6 @@ void ContentManager::setCategories()
     QStringList categories;
     if (m_local) {
         auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
-        categories.push_back("all");
         for (auto category : categoryData) {
             auto categoryName = QString::fromStdString(category);
             categories.push_back(categoryName);
@@ -686,7 +685,6 @@ void ContentManager::updateLanguages(const QString& content) {
 void ContentManager::updateCategories(const QString& content) {;
     auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
     QStringList tempCategories;
-    tempCategories.push_back("all");
     for (auto catg : categories) {
         tempCategories.push_back(QString::fromStdString(catg));
     }

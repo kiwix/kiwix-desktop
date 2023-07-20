@@ -11,6 +11,8 @@ namespace Ui {
 class contentmanagerside;
 }
 
+class KiwixChoiceBox;
+
 class ContentManagerSide : public QWidget
 {
     Q_OBJECT

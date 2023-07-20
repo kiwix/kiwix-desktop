@@ -1,0 +1,71 @@
+QListWidget::item {
+    padding: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 2px;
+}
+
+QListWidget {
+    padding: 0;
+    border: 1px solid #ccc;
+}
+
+QListWidget::item::selected {
+    color: #444444;
+    background-color: transparent;
+}
+
+QLineEdit {
+    padding: 4px;
+    border: 0;
+}
+
+#choiceLabel {
+    font-size: 16px;
+}
+
+#currentChoices {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+}
+
+#closeButton {
+    margin: 0;
+    background: transparent;
+    color: #eaecf0;
+    font-size: 12px;
+}
+
+ChoiceItem > QFrame {
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    padding: 0;
+    background-color: #666;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin:0;
+}
+
+#itemLabel {
+    margin: 0;
+    height: 6px;
+    background-color: #666;
+    color: #eaecf0;
+    font-size: 13px;
+}
+
+#clearButton {
+    background-color: white;
+    color: #3366cc;
+    padding: 4px;
+    font: bold;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+#clearButton:hover {
+    background-color: #3366cc;
+    color: white;
+}

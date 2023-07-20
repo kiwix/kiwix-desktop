@@ -90,8 +90,8 @@
     "fullscreen-notification":"You are now in full screen mode. Press ESC to quit!",
     "online-files":"Online Files",
     "local-files":"Local Files",
-    "browse-by-category":"Browse By Category",
-    "browse-by-language":"Browse By Language",
+    "category":"Category",
+    "language":"Language",
     "hide":"Hide",
     "open-in-browser":"Open in browser",
     "start-kiwix-server":"Start Kiwix Server",
@@ -154,5 +154,8 @@
     "couldnt-open-location-text": "Kiwix is not able to open folder {{FOLDER}}",
     "move-files-to-trash": "Move deleted files to trash",
     "move-files-to-trash-text": "This action will move the file to trash.",
-    "perma-delete-files-text": "This action will permanently delete the file."
+    "perma-delete-files-text": "This action will permanently delete the file.",
+    "clear-filter": "Clear the currently set filters",
+    "search-language": "Search language",
+    "search-category": "Search category"
 }

@@ -4,5 +4,6 @@
         <file>css/popup.css</file>
         <file>css/localServer.css</file>
         <file>css/confirmBox.css</file>
+        <file>css/contentmanagerside.css</file>
     </qresource>
 </RCC>

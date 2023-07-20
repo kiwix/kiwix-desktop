@@ -34,13 +34,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    src/choiceitem.cpp \
     src/contentmanagerdelegate.cpp \
     src/contentmanagerheader.cpp \
     src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
     src/descriptionnode.cpp \
     src/findinpagebar.cpp \
+    src/flowlayout.cpp \
+    src/kiwixchoicebox.cpp \
     src/kiwixconfirmbox.cpp \
+    src/kiwixlineedit.cpp \
     src/kiwixloader.cpp \
     src/rownode.cpp \
     src/suggestionlistworker.cpp \
@@ -74,6 +78,7 @@ SOURCES += \
     src/zimview.cpp \
 
 HEADERS += \
+    src/choiceitem.h \
     src/contentmanagerdelegate.h \
     src/contentmanagerheader.h \
     src/contentmanagermodel.h \
@@ -81,7 +86,10 @@ HEADERS += \
     src/contenttypefilter.h \
     src/descriptionnode.h \
     src/findinpagebar.h \
+    src/flowlayout.h \
+    src/kiwixchoicebox.h \
     src/kiwixconfirmbox.h \
+    src/kiwixlineedit.h \
     src/kiwixloader.h \
     src/node.h \
     src/rownode.h \
@@ -116,8 +124,10 @@ HEADERS += \
     src/zimview.h \
 
 FORMS += \
+    src/choiceitem.ui \
     src/contentmanagerview.ui \
     src/findinpagebar.ui \
+    ui/kiwixchoicebox.ui \
     ui/kiwixconfirmbox.ui \
     ui/mainwindow.ui \
     ui/about.ui \

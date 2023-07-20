@@ -1,3 +1,7 @@
+#contentmanagerside {
+    background-color: red;
+}
+
 QTreeView::branch:open:has-children {
     image: url(:/icons/caret-down-solid.svg);
     padding: 6px;
@@ -63,15 +67,4 @@ QMenu::item {
 
 QMenu::item:selected {
     background-color: #cccccc;
-}
-
-QLineEdit {
-    font-family: 'Selawik';
-    padding: 4px;
-    border: none;
-    border-bottom: 1px solid #cccccc;
-    color: #666666;
-    font-size: 16px;
-    height: 32px;
-    line-height: 24px;
 }
