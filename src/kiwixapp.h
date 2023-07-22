@@ -3,6 +3,7 @@
 
 #include "library.h"
 #include "contentmanager.h"
+#include "tabbar.h"
 #include "mainwindow.h"
 #include "kiwix/downloader.h"
 #include <kiwix/kiwixserve.h>
@@ -20,6 +21,7 @@
 #include <mutex>
 #include <iostream>
 
+typedef TabBar::TabType TabType;
 
 class KiwixApp : public QtSingleApplication
 {
@@ -90,7 +92,7 @@ public slots:
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
     void printPage();
-    void disableItemsOnLibraryPage(bool displayed);
+    void handleItemsState(TabType);
     void updateNameMapper();
     void printVersions(std::ostream& out = std::cout);
 

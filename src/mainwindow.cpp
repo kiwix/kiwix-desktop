@@ -54,8 +54,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mp_ui->tabBar, &QTabBar::currentChanged,
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
-    connect(mp_ui->tabBar, &TabBar::libraryPageDisplayed,
-            this, &MainWindow::when_libraryPageDisplayed);
+    connect(mp_ui->tabBar, &TabBar::tabDisplayed,
+            this, [=](TabType tabType) {
+                when_libraryPageDisplayed(tabType == TabType::LibraryTab);
+            });
 
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
             &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::on_currentTitleChanged);
