@@ -23,19 +23,9 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
     query.addQueryItem("count", QString::number(-1));
 
     // Add filter by category (if necessary)
-    if (categoryFilter != "all" && categoryFilter != "other") {
-        query.addQueryItem("tag", "_category:"+categoryFilter);
+    if (categoryFilter != "all") {
+        query.addQueryItem("category", categoryFilter);
     }
-
-    // Add "special negative" filter for "other" category (if necessary)
-    if (categoryFilter == "other") {
-        for (auto& category: KiwixApp::instance()->getContentManager()->getCategories()) {
-            if (category != "other" && category != "all") {
-                excludeTags += "_category:"+category;
-            }
-        }
-    }
-    query.addQueryItem("notag", excludeTags.join(";"));
 
     auto mp_reply = opdsResponseFromPath("/catalog/search", query);
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {

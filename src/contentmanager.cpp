@@ -702,16 +702,6 @@ QStringList ContentManager::getBookIds()
 {
     kiwix::Filter filter;
     std::vector<std::string> acceptTags, rejectTags;
-    if (m_categoryFilter != "all" && m_categoryFilter != "other") {
-        acceptTags.push_back("_category:"+m_categoryFilter.toStdString());
-    }
-    if (m_categoryFilter == "other") {
-        for (auto& category: m_categories) {
-            if (category != "other" && category != "all") {
-                rejectTags.push_back("_category:"+category.toStdString());
-            }
-        }
-    }
 
     for (auto &contentTypeFilter : m_contentTypeFilters) {
         auto state = contentTypeFilter->checkState();
@@ -728,6 +718,8 @@ QStringList ContentManager::getBookIds()
     filter.query(m_searchQuery.toStdString());
     if (m_currentLanguage != "*")
         filter.lang(m_currentLanguage.toStdString());
+    if (m_categoryFilter != "all")
+        filter.category(m_categoryFilter.toStdString());
 
     if (m_local) {
         filter.local(true);
