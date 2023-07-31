@@ -8,26 +8,17 @@ on:
 
 jobs:
   Linux:
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - focal
-        include:
-          - target: focal
-            image_variant: focal
-            lib_postfix: '/x86_64-linux-gnu'
     env:
       HOME: /home/runner
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:38
+      image: ghcr.io/kiwix/kiwix-build_ci_bionic:38
 
     steps:
       - name: Install dependencies
         shell: bash
         run: |
-          ARCHIVE_NAME=deps2_focal_native_dyn_kiwix-desktop.tar.xz
+          ARCHIVE_NAME=deps2_bionic_native_dyn_kiwix-desktop.tar.xz
           wget -O- http://tmp.kiwix.org/ci/${ARCHIVE_NAME} | tar -xJ -C ${{env.HOME}}
 
       - name: Retrieve source code
@@ -36,7 +27,7 @@ jobs:
       - name: Compile source code
         shell: bash
         env:
-          PKG_CONFIG_PATH: "/home/runner/BUILD_native_dyn/INSTALL/lib/pkgconfig:/home/runner/BUILD_native_dyn/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
+          PKG_CONFIG_PATH: "/home/runner/BUILD_native_dyn/INSTALL/lib/pkgconfig:/home/runner/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu/pkgconfig"
         run: |
           qmake PREFIX=$HOME/BUILD_native_dyn/INSTALL
           make
