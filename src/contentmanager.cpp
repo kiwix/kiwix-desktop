@@ -108,12 +108,13 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         }
         contextMenu.addAction(&menuCancelBook);
     } else {
-        if (m_local) {
+        try {
+            const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
             contextMenu.addAction(&menuOpenBook);
             contextMenu.addAction(&menuDeleteBook);
-        }
-        else
+        } catch (...) {
             contextMenu.addAction(&menuDownloadBook);
+        }
     }
 
     connect(&menuDeleteBook, &QAction::triggered, [=]() {
