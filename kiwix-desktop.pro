@@ -34,9 +34,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    src/contentmanagerdelegate.cpp \
+    src/contentmanagerheader.cpp \
+    src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
+    src/descriptionnode.cpp \
     src/findinpagebar.cpp \
+    src/kiwixconfirmbox.cpp \
+    src/kiwixloader.cpp \
+    src/rownode.cpp \
     src/suggestionlistworker.cpp \
+    src/thumbnaildownloader.cpp \
     src/translation.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
@@ -67,9 +75,19 @@ SOURCES += \
     src/static_content.cpp
 
 HEADERS += \
+    src/contentmanagerdelegate.h \
+    src/contentmanagerheader.h \
+    src/contentmanagermodel.h \
+    src/contentmanagerview.h \
     src/contenttypefilter.h \
+    src/descriptionnode.h \
     src/findinpagebar.h \
+    src/kiwixconfirmbox.h \
+    src/kiwixloader.h \
+    src/node.h \
+    src/rownode.h \
     src/suggestionlistworker.h \
+    src/thumbnaildownloader.h \
     src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \
@@ -87,7 +105,6 @@ HEADERS += \
     src/webpage.h \
     src/about.h \
     src/contentmanager.h \
-    src/contentmanagerview.h \
     src/tabbar.h \
     src/contentmanagerside.h \
     src/readinglistbar.h \
@@ -101,7 +118,9 @@ HEADERS += \
     src/static_content.h
 
 FORMS += \
+    src/contentmanagerview.ui \
     src/findinpagebar.ui \
+    ui/kiwixconfirmbox.ui \
     ui/mainwindow.ui \
     ui/about.ui \
     src/contentmanagerside.ui \

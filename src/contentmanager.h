@@ -8,6 +8,7 @@
 #include <kiwix/downloader.h>
 #include "opdsrequestmanager.h"
 #include "contenttypefilter.h"
+#include "contentmanagermodel.h"
 
 class ContentManager : public QObject
 {
@@ -26,6 +27,7 @@ public:
     void setCurrentLanguage(QString language);
     void setCurrentCategoryFilter(QString category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
+    bool isLocal() const { return m_local; }
 
 private:
     Library* mp_library;
@@ -43,6 +45,9 @@ private:
 
     QStringList getBookIds();
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
+    QList<QMap<QString, QVariant>> getBooksList();
+    ContentManagerModel *managerModel;
+    QMutex remoteLibraryLocker;
 
 signals:
     void filterParamsChanged();
@@ -55,10 +60,11 @@ signals:
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
-    QStringList getBookInfos(QString id, const QStringList &keys);
+    QMap<QString, QVariant> getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
-    QStringList updateDownloadInfos(QString id, const QStringList& keys);
+    QMap<QString, QVariant> updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);
+    QString downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
@@ -67,6 +73,11 @@ public slots:
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
     void cancelBook(const QString& id);
+    void pauseBook(const QString& id, QModelIndex index);
+    void resumeBook(const QString& id, QModelIndex index);
+    void cancelBook(const QString& id, QModelIndex index);
+    void onCustomContextMenu(const QPoint &point);
+    void openBookWithIndex(const QModelIndex& index);
 };
 
 #endif // CONTENTMANAGER_H

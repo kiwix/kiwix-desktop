@@ -1,0 +1,32 @@
+* {
+    font-family: 'Selawik';
+    background-color: white;
+    font-size: 16px;
+}
+
+QDialog {
+    border: 2px solid #cccccc;
+}
+
+#confirmTitle {
+    font-size: 18px;
+    line-height: 44px;
+    font-weight: bold;
+}
+
+QPushButton {
+    opacity: 1;
+    padding: 6px;
+    outline: 0;
+    border-radius: 2px;
+    width: 24px;
+    border: 1px solid #3366cc;
+    color: #3366cc;
+}
+
+QPushButton:hover {
+    background-color: #3366cc;
+    color: white;
+}
+
+

@@ -24,6 +24,7 @@ public:
 
     TabBar*   getTabBar();
     TopWidget* getTopWidget();
+    QWidget getMainView();
 
 protected:
     void keyPressEvent(QKeyEvent *event);

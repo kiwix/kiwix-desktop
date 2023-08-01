@@ -1,18 +1,29 @@
 #ifndef CONTENTMANAGERVIEW_H
 #define CONTENTMANAGERVIEW_H
 
-#include <QWebEngineView>
-#include <QWebChannel>
+#include <QWidget>
+#include "ui_contentmanagerview.h"
+#include "kiwixloader.h"
 
-class ContentManagerView : public QWebEngineView
+namespace Ui {
+class contentmanagerview;
+}
+
+class ContentManagerView : public QWidget
 {
     Q_OBJECT
+
 public:
-    ContentManagerView(QWidget *parent = Q_NULLPTR);
-    void registerObject(const QString &id, QObject *object);
-    void setHtml();
+    explicit ContentManagerView(QWidget *parent = nullptr);
+    ~ContentManagerView();
+    QTreeView* getView() { return mp_ui->m_view; }
+
+public slots:
+    void showLoader(bool show);
+
 private:
-    QWebChannel m_webChannel;
+    Ui::contentmanagerview *mp_ui;
+    KiwixLoader *loader;
 };
 
 #endif // CONTENTMANAGERVIEW_H
