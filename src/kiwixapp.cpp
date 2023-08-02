@@ -1,5 +1,4 @@
 #include "kiwixapp.h"
-#include "static_content.h"
 #include "zim/error.h"
 #include "zim/version.h"
 #include "kiwix/tools.h"
@@ -65,8 +64,6 @@ void KiwixApp::init()
         gt("error-downloader-launch-message") + "<br><br>" + e.what());
     }
     mp_manager = new ContentManager(&m_library, mp_downloader);
-
-    initStaticContent();
 
     auto icon = QIcon();
     icon.addFile(":/icons/kiwix-app-icons-square.svg");

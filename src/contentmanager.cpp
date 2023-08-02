@@ -1,7 +1,6 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
-#include "static_content.h"
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
 
@@ -68,6 +67,10 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
     connect(this, &ContentManager::pendingRequest, mp_view, &ContentManagerView::showLoader);
     connect(treeView, &QTreeView::doubleClicked, this, &ContentManager::openBookWithIndex);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::languagesReceived, this, &ContentManager::updateLanguages);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
+    setCategories();
+    setLanguages();
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -143,6 +146,8 @@ void ContentManager::setLocal(bool local) {
     }
     m_local = local;
     emit(filterParamsChanged());
+    setCategories();
+    setLanguages();
 }
 
 QStringList ContentManager::getTranslations(const QStringList &keys)
@@ -153,6 +158,40 @@ QStringList ContentManager::getTranslations(const QStringList &keys)
         translations.append(KiwixApp::instance()->getText(key));
     }
     return translations;
+}
+
+void ContentManager::setCategories()
+{
+    QStringList categories;
+    if (m_local) {
+        auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
+        categories.push_back("all");
+        for (auto category : categoryData) {
+            auto categoryName = QString::fromStdString(category);
+            categories.push_back(categoryName);
+        }
+        m_categories = categories;
+        emit(categoriesLoaded(m_categories));
+        return;
+    }
+    m_remoteLibraryManager.getCategoriesFromOpds();
+}
+
+void ContentManager::setLanguages()
+{
+    LanguageList languages;
+    if (m_local) {
+        auto languageData = mp_library->getKiwixLibrary().getBooksLanguages();
+        for (auto language : languageData) {
+            auto langCode = QString::fromStdString(language);
+            auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
+            languages.push_back({langCode, selfName});
+        }
+        m_languages = languages;
+        emit(languagesLoaded(m_languages));
+        return;
+    }
+    m_remoteLibraryManager.getLanguagesFromOpds();
 }
 
 #define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
@@ -544,6 +583,8 @@ void ContentManager::setCurrentLanguage(QString language)
                      kiwix::converta2toa3(language.toStdString()));
       } catch (std::out_of_range&) {}
     }
+    if (m_currentLanguage == language)
+        return;
     m_currentLanguage = language;
     emit(currentLangChanged());
     emit(filterParamsChanged());
@@ -551,6 +592,8 @@ void ContentManager::setCurrentLanguage(QString language)
 
 void ContentManager::setCurrentCategoryFilter(QString category)
 {
+    if (m_categoryFilter == category)
+        return;
     m_categoryFilter = category.toLower();
     emit(filterParamsChanged());
 }
@@ -585,6 +628,29 @@ void ContentManager::updateRemoteLibrary(const QString& content) {
     });
 }
 
+void ContentManager::updateLanguages(const QString& content) {
+    auto languages = kiwix::readLanguagesFromFeed(content.toStdString());
+    LanguageList tempLanguages;
+    for (auto language : languages) {
+        auto code = QString::fromStdString(language.first);
+        auto title = QString::fromStdString(language.second);
+        tempLanguages.push_back({code, title});
+    }
+    m_languages = tempLanguages;
+    emit(languagesLoaded(m_languages));
+}
+
+void ContentManager::updateCategories(const QString& content) {;
+    auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
+    QStringList tempCategories;
+    tempCategories.push_back("all");
+    for (auto catg : categories) {
+        tempCategories.push_back(QString::fromStdString(catg));
+    }
+    m_categories = tempCategories;
+    emit(categoriesLoaded(m_categories));
+}
+
 void ContentManager::setSearch(const QString &search)
 {
     m_searchQuery = search;
@@ -599,9 +665,9 @@ QStringList ContentManager::getBookIds()
         acceptTags.push_back("_category:"+m_categoryFilter.toStdString());
     }
     if (m_categoryFilter == "other") {
-        for (auto& category: S_CATEGORIES) {
-            if (category.first != "other" && category.first != "all") {
-                rejectTags.push_back("_category:"+category.first.toStdString());
+        for (auto& category: m_categories) {
+            if (category != "other" && category != "all") {
+                rejectTags.push_back("_category:"+category.toStdString());
             }
         }
     }

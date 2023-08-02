@@ -16,16 +16,22 @@ public:
 
 public:
     void doUpdate(const QString& currentLanguage, const QString& categoryFilter);
+    void getLanguagesFromOpds();
+    void getCategoriesFromOpds();
 
 private:
     QNetworkAccessManager m_networkManager;
-    QNetworkReply *mp_reply;
+    QNetworkReply* opdsResponseFromPath(const QString &path, const QUrlQuery &query = QUrlQuery());
 
 signals:
     void requestReceived(const QString&);
+    void languagesReceived(const QString&);
+    void categoriesReceived(const QString&);
 
 public slots:
-    void receiveContent();
+    void receiveContent(QNetworkReply*);
+    void receiveLanguages(QNetworkReply*);
+    void receiveCategories(QNetworkReply*);
 };
 
 #endif // OPDSREQUESTMANAGER_H

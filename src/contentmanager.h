@@ -18,6 +18,7 @@ class ContentManager : public QObject
     Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
 
 public:
+    typedef QList<QPair<QString, QString>> LanguageList;
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
 
@@ -28,6 +29,8 @@ public:
     void setCurrentCategoryFilter(QString category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
     bool isLocal() const { return m_local; }
+    QStringList getCategories() const { return m_categories; }
+    LanguageList getLanguages() const { return m_languages; }
 
 private:
     Library* mp_library;
@@ -42,12 +45,16 @@ private:
     QList<ContentTypeFilter*> m_contentTypeFilters;
     kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
     bool m_sortOrderAsc = true;
+    LanguageList m_languages;
+    QStringList m_categories;
 
     QStringList getBookIds();
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename);
     QList<QMap<QString, QVariant>> getBooksList();
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
+    void setCategories();
+    void setLanguages();
 
 signals:
     void filterParamsChanged();
@@ -57,6 +64,8 @@ signals:
     void downloadsChanged();
     void currentLangChanged();
     void pendingRequest(const bool);
+    void categoriesLoaded(QStringList);
+    void languagesLoaded(LanguageList);
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
@@ -70,6 +79,8 @@ public slots:
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
     void eraseBook(const QString& id);
     void updateRemoteLibrary(const QString& content);
+    void updateLanguages(const QString& content);
+    void updateCategories(const QString& content);
     void pauseBook(const QString& id);
     void resumeBook(const QString& id);
     void cancelBook(const QString& id);
