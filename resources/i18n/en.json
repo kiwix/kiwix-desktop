@@ -148,5 +148,8 @@
     "open-book": "Open book",
     "download-book": "Download book",
     "pause-download": "Pause download",
-    "resume-download": "Resume download"
+    "resume-download": "Resume download",
+    "open-folder": "Open folder",
+    "couldnt-open-location": "Couldn't open location",
+    "couldnt-open-location-text": "Kiwix is not able to open folder {{FOLDER}}"
 }

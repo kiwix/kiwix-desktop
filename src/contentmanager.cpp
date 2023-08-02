@@ -21,6 +21,7 @@
 #include "kiwixconfirmbox.h"
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
+#include <QDesktopServices>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -99,6 +100,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuPauseBook(gt("pause-download"), this);
     QAction menuResumeBook(gt("resume-download"), this);
     QAction menuCancelBook(gt("cancel-download"), this);
+    QAction menuOpenFolder(gt("open-folder"), this);
 
     if (bookNode->isDownloading()) {
         if (bookNode->getDownloadInfo().paused) {
@@ -110,8 +112,24 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     } else {
         try {
             const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            auto bookPath = QString::fromStdString(book.getPath());
             contextMenu.addAction(&menuOpenBook);
             contextMenu.addAction(&menuDeleteBook);
+            contextMenu.addAction(&menuOpenFolder);
+            connect(&menuOpenFolder, &QAction::triggered, [=]() {
+                QFileInfo fileInfo(bookPath);
+                QDir bookDir = fileInfo.absoluteDir();
+                bool dirOpen = bookDir.exists() && bookDir.isReadable() && QDesktopServices::openUrl(bookDir.absolutePath());
+                if (!dirOpen) {
+                    QString failedText = gt("couldnt-open-location-text");
+                    failedText = failedText.replace("{{FOLDER}}", "<b>" + bookDir.absolutePath() + "</b>");
+                    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("couldnt-open-location"), failedText, true, mp_view);
+                    dialog->show();
+                    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+                        dialog->deleteLater();
+                    });
+                }
+            });
         } catch (...) {
             contextMenu.addAction(&menuDownloadBook);
         }
