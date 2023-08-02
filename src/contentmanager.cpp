@@ -93,12 +93,12 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     auto bookNode = static_cast<RowNode*>(index.internalPointer());
     const auto id = bookNode->getBookId();
 
-    QAction menuDeleteBook("Delete book", this);
-    QAction menuOpenBook("Open book", this);
-    QAction menuDownloadBook("Download book", this);
-    QAction menuPauseBook("Pause download", this);
-    QAction menuResumeBook("Resume download", this);
-    QAction menuCancelBook("Cancel download", this);
+    QAction menuDeleteBook(gt("delete-book"), this);
+    QAction menuOpenBook(gt("open-book"), this);
+    QAction menuDownloadBook(gt("download-book"), this);
+    QAction menuPauseBook(gt("pause-download"), this);
+    QAction menuResumeBook(gt("resume-download"), this);
+    QAction menuCancelBook(gt("cancel-download"), this);
 
     if (bookNode->isDownloading()) {
         if (bookNode->getDownloadInfo().paused) {

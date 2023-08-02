@@ -144,5 +144,9 @@
     "download-storage-error": "Storage Error",
     "download-storage-error-text": "The system doesn't have enough storage available.",
     "download-unavailable": "Download Unavailable",
-    "download-unavailable-text": "This download is unavailable."
+    "download-unavailable-text": "This download is unavailable.",
+    "open-book": "Open book",
+    "download-book": "Download book",
+    "pause-download": "Pause download",
+    "resume-download": "Resume download"
 }
