@@ -90,6 +90,8 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
 void ContentManager::onCustomContextMenu(const QPoint &point)
 {
     QModelIndex index = mp_view->getView()->indexAt(point);
+    if (!index.isValid())
+        return;
     QMenu contextMenu("optionsMenu", mp_view->getView());
     auto bookNode = static_cast<RowNode*>(index.internalPointer());
     const auto id = bookNode->getBookId();
@@ -154,9 +156,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         resumeBook(id, index);
     });
 
-    if (index.isValid()) {
-        contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
-    }
+    contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
 }
 
 void ContentManager::setLocal(bool local) {
