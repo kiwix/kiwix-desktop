@@ -480,10 +480,12 @@ void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QSt
     }
     QDir dir(dirPath, fileName);
     for(const QString& file: dir.entryList()) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         if (moveToTrash)
             QFile::moveToTrash(dir.filePath(file));
         else
-            dir.remove(file);
+#endif
+        dir.remove(file); // moveToTrash will always be false here, no check required.
     }
 }
 
@@ -498,7 +500,11 @@ QString formatText(QString text)
 void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     const auto moveToTrash = KiwixApp::instance()->getSettingsManager()->getMoveToTrash();
+#else
+    const auto moveToTrash = false; // we do not support move to trash functionality for qt versions below 5.15
+#endif
     if (moveToTrash) {
         text += formatText(gt("move-files-to-trash-text"));
     } else {

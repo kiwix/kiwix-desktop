@@ -34,6 +34,11 @@ SettingsView::SettingsView(QWidget *parent)
     ui->monitorHelp->setText("<b>?</b>");
     ui->monitorHelp->setToolTip(gt("monitor-directory-tooltip"));
     ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    ui->moveToTrashLabel->hide();
+    ui->moveToTrashToggle->hide();
+#endif
+
 }
 
 void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const bool moveToTrash)
