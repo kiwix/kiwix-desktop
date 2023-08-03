@@ -125,6 +125,7 @@
 	"details": "ערך מלא",
 	"yes": "כן",
 	"no": "לא",
+	"ok": "אישור",
 	"no-filter": "ללא מסנן",
 	"open-link-in-web-browser": "פתיחת קישור בדפדפן",
 	"download-dir-dialog-title": "להחליף את תיקיית ההורדה?",
@@ -138,5 +139,13 @@
 	"monitor-clear-dir-dialog-msg": "זה יפסיק לדגום את תיקיית הניטור ולחפש בה קובצי ZIM חדשים.",
 	"monitor-directory-tooltip": "כל קובצי ה־ZIM בתיקייה הזאת יוספו אוטומטית לספרייה.",
 	"next-tab": "לעבור ללשונית הבאה",
-	"previous-tab": "לעבור ללשונית הקודמת"
+	"previous-tab": "לעבור ללשונית הקודמת",
+	"cancel-download": "ביטול הורדה",
+	"cancel-download-text": "האם באמת לבטל את ההורדה של <b>{{ZIM}}</b>?",
+	"delete-book": "מחיקת ספר",
+	"delete-book-text": "האם באמת למחוק את <b>{{ZIM}}</b>?",
+	"download-storage-error": "שגיאת אחסון",
+	"download-storage-error-text": "במערכת אין מספיק אחסון זמין.",
+	"download-unavailable": "הורדה אינה זמינה",
+	"download-unavailable-text": "ההורדה הזאת אינה זמינה."
 }

@@ -125,6 +125,7 @@
 	"details": "整個條目",
 	"yes": "是",
 	"no": "否",
+	"ok": "好",
 	"no-filter": "無篩選",
 	"open-link-in-web-browser": "在網路瀏覽器開啟連結",
 	"download-dir-dialog-title": "您確定您要更改下載目錄嗎？",
@@ -138,5 +139,13 @@
 	"monitor-clear-dir-dialog-msg": "這將會停止檢查用於新 ZIM 檔案的監視目錄。",
 	"monitor-directory-tooltip": "所有在此目錄的 ZIM 檔案將會自動添加到圖書館裡。",
 	"next-tab": "移動至下一分頁",
-	"previous-tab": "移動至上一分頁"
+	"previous-tab": "移動至上一分頁",
+	"cancel-download": "取消下載",
+	"cancel-download-text": "您確定要取消下載<b>{{ZIM}}</b>嗎？",
+	"delete-book": "刪除書籍",
+	"delete-book-text": "您確定要刪除<b>{{ZIM}}</b>嗎？",
+	"download-storage-error": "儲存錯誤",
+	"download-storage-error-text": "系統沒有足夠的可用儲存空間。",
+	"download-unavailable": "無法下載",
+	"download-unavailable-text": "此下載不可用。"
 }

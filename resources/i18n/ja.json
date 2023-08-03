@@ -53,5 +53,6 @@
 	"invalid-port": "無効なポート",
 	"zim-open-fail-title": "無効なファイル",
 	"next-tab": "次のタブに移動",
-	"previous-tab": "前のタブに移動"
+	"previous-tab": "前のタブに移動",
+	"cancel-download": "ダウンロードをキャンセル"
 }

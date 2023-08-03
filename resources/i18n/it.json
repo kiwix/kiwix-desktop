@@ -7,6 +7,7 @@
 			"Beta16",
 			"Gianfranco",
 			"IrsY",
+			"McDutchie",
 			"Scompo",
 			"Stefano"
 		]
@@ -126,6 +127,7 @@
 	"details": "Articolo completo",
 	"yes": "sì",
 	"no": "no",
+	"ok": "ok",
 	"no-filter": "Nessun filtro",
 	"open-link-in-web-browser": "Apri collegamento nel browser web",
 	"download-dir-dialog-title": "Sei sicuro di voler cambiare la directory di download?",
@@ -133,9 +135,15 @@
 	"invalid-port": "Porta non valida",
 	"zim-open-fail-title": "File non valido",
 	"zim-open-fail-text": "Il file ZIM <b>{{ZIM}}</b> non può essere aperto correttamente. Verrà rimosso dalla tua libreria.",
-	"monitor-dir-dialog-title": "Sei sicuro di voler cambiare la directory del monitor?",
+	"monitor-dir-dialog-title": "Sei sicuro di voler cambiare la directory di monitoraggio?",
 	"monitor-dir-dialog-msg": "Il nuovo percorso della directory del monitor sarà:\n{{DIRECTORY}}",
 	"monitor-directory-tooltip": "Tutti i file ZIM in questa directory verranno automaticamente aggiunti alla libreria.",
 	"next-tab": "Passa alla scheda successiva",
-	"previous-tab": "Passa alla scheda precedente"
+	"previous-tab": "Passa alla scheda precedente",
+	"cancel-download": "Annulla download",
+	"cancel-download-text": "Sei sicuro di voler annullare il download di <b>{{ZIM}}</b> ?",
+	"delete-book": "Cancella libro",
+	"delete-book-text": "Sei sicuro di voler cancellare <b>{{ZIM}}</b> ?",
+	"download-storage-error-text": "Il sistema non dispone di memoria sufficiente.",
+	"download-unavailable-text": "Questo download non è disponibile."
 }

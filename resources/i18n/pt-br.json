@@ -2,13 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"Eduardo Addad de Oliveira",
-			"Eduardoaddad"
+			"Eduardoaddad",
+			"Saturnow"
 		]
 	},
 	"name": "Inglês",
 	"error-title": "Erro",
 	"error-downloader-window-title": "Não é possível criar o downloader",
-	"error-downloader-launch-message": "Impossível de baixar, o Kiwix-desktop será iniciado, mas todas as funções não funcionarão!",
+	"error-downloader-launch-message": "Impossível iniciar o downloader, o Kiwix-desktop será iniciado, mas todas as funções de download não funcionarão!",
 	"error-launch-server-message": "Ocorreu um erro!",
 	"open-zim": "Abrir Zim",
 	"local-kiwix-server": "Servidor Kiwix local",
@@ -16,6 +17,7 @@
 	"home-page": "Página principal",
 	"main-menu": "Menu principal",
 	"print": "Imprimir",
+	"print-page-error": "Ocorreu um erro durante a impressão.",
 	"new-tab": "Nova guia",
 	"close-tab": "Fechar guia",
 	"close": "Fechar",
