@@ -21,6 +21,7 @@
 #include "kiwixconfirmbox.h"
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
+#include <QDesktopServices>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -89,16 +90,19 @@ QList<QMap<QString, QVariant>> ContentManager::getBooksList()
 void ContentManager::onCustomContextMenu(const QPoint &point)
 {
     QModelIndex index = mp_view->getView()->indexAt(point);
+    if (!index.isValid())
+        return;
     QMenu contextMenu("optionsMenu", mp_view->getView());
     auto bookNode = static_cast<RowNode*>(index.internalPointer());
     const auto id = bookNode->getBookId();
 
-    QAction menuDeleteBook("Delete book", this);
-    QAction menuOpenBook("Open book", this);
-    QAction menuDownloadBook("Download book", this);
-    QAction menuPauseBook("Pause download", this);
-    QAction menuResumeBook("Resume download", this);
-    QAction menuCancelBook("Cancel download", this);
+    QAction menuDeleteBook(gt("delete-book"), this);
+    QAction menuOpenBook(gt("open-book"), this);
+    QAction menuDownloadBook(gt("download-book"), this);
+    QAction menuPauseBook(gt("pause-download"), this);
+    QAction menuResumeBook(gt("resume-download"), this);
+    QAction menuCancelBook(gt("cancel-download"), this);
+    QAction menuOpenFolder(gt("open-folder"), this);
 
     if (bookNode->isDownloading()) {
         if (bookNode->getDownloadInfo().paused) {
@@ -108,12 +112,29 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         }
         contextMenu.addAction(&menuCancelBook);
     } else {
-        if (m_local) {
+        try {
+            const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            auto bookPath = QString::fromStdString(book.getPath());
             contextMenu.addAction(&menuOpenBook);
             contextMenu.addAction(&menuDeleteBook);
-        }
-        else
+            contextMenu.addAction(&menuOpenFolder);
+            connect(&menuOpenFolder, &QAction::triggered, [=]() {
+                QFileInfo fileInfo(bookPath);
+                QDir bookDir = fileInfo.absoluteDir();
+                bool dirOpen = bookDir.exists() && bookDir.isReadable() && QDesktopServices::openUrl(bookDir.absolutePath());
+                if (!dirOpen) {
+                    QString failedText = gt("couldnt-open-location-text");
+                    failedText = failedText.replace("{{FOLDER}}", "<b>" + bookDir.absolutePath() + "</b>");
+                    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("couldnt-open-location"), failedText, true, mp_view);
+                    dialog->show();
+                    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+                        dialog->deleteLater();
+                    });
+                }
+            });
+        } catch (...) {
             contextMenu.addAction(&menuDownloadBook);
+        }
     }
 
     connect(&menuDeleteBook, &QAction::triggered, [=]() {
@@ -135,9 +156,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         resumeBook(id, index);
     });
 
-    if (index.isValid()) {
-        contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
-    }
+    contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
 }
 
 void ContentManager::setLocal(bool local) {

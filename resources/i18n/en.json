@@ -144,5 +144,12 @@
     "download-storage-error": "Storage Error",
     "download-storage-error-text": "The system doesn't have enough storage available.",
     "download-unavailable": "Download Unavailable",
-    "download-unavailable-text": "This download is unavailable."
+    "download-unavailable-text": "This download is unavailable.",
+    "open-book": "Open book",
+    "download-book": "Download book",
+    "pause-download": "Pause download",
+    "resume-download": "Resume download",
+    "open-folder": "Open folder",
+    "couldnt-open-location": "Couldn't open location",
+    "couldnt-open-location-text": "Kiwix is not able to open folder {{FOLDER}}"
 }
