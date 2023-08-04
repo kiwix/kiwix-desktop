@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Les Meloures",
 			"Robby",
 			"Volvox"
 		]
@@ -43,7 +44,7 @@
 	"window-title": "Bibliothéik - Kiwix",
 	"search": "Sichen",
 	"settings": "Astellungen",
-	"back": "Zréck",
+	"back": "Zeréck",
 	"forward": "Virun",
 	"search-files": "Fichiere sichen",
 	"title": "Titel",
