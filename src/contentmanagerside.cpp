@@ -24,7 +24,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
                     checked ?"*{font-weight: bold}" : "");});
     mp_ui->localFileButton->setStyleSheet("*{font-weight: bold}");
 
-    mp_ui->allFileButton->setText(gt("all-files"));
+    mp_ui->allFileButton->setText(gt("online-files"));
     mp_ui->localFileButton ->setText(gt("local-files"));
     mp_ui->languageButton->setText(gt("browse-by-language"));
     mp_ui->categoryButton->setText(gt("browse-by-category"));

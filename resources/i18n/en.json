@@ -88,7 +88,7 @@
     "kiwix-server-running-message":"The Kiwix Server is running and can be accessed in the local network at:",
     "kiwix-server-description":"Starting a server allows other computers in the local network to access your Kiwix library with a standard web browser.",
     "fullscreen-notification":"You are now in full screen mode. Press ESC to quit!",
-    "all-files":"All Files",
+    "online-files":"Online Files",
     "local-files":"Local Files",
     "browse-by-category":"Browse By Category",
     "browse-by-language":"Browse By Language",
