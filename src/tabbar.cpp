@@ -37,7 +37,7 @@ TabBar::TabBar(QWidget *parent) :
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
-                auto index = this->tabAt(mapFromGlobal(QCursor::pos()));
+                auto index = currentIndex();
                 if (index < 0)
                     return;
 

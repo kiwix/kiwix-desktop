@@ -296,6 +296,8 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 
 #define CREATE_ACTION(ID, TEXT) \
     mpa_actions[ID] = new QAction(TEXT)
+#define CREATE_ACTION_ICON(ID, ICON, TEXT) \
+    mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT);
 #define SET_SHORTCUT(ID, TEXT, SHORTCUT) \
     mpa_actions[ID]->setShortcut(SHORTCUT); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + QKeySequence(SHORTCUT).toString() + ")" )
@@ -303,7 +305,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
     CREATE_ACTION(ID, TEXT); \
     SET_SHORTCUT(ID, TEXT, SHORTCUT)
 #define CREATE_ACTION_ICON_SHORTCUT(ID, ICON, TEXT, SHORTCUT) \
-    mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT); \
+    CREATE_ACTION_ICON(ID, ICON, TEXT) \
     SET_SHORTCUT(ID, TEXT, SHORTCUT)
 #define CREATE_ACTION_ONOFF_ICON_SHORTCUT(ID, ON_ICON, OFF_ICON, TEXT, SHORTCUT) \
     CREATE_ACTION(ID, TEXT); \
@@ -318,6 +320,9 @@ void KiwixApp::setMonitorDir(const QString &dir) {
     mpa_actions[ID]->setToolTip(TEXT + " (" + SHORTCUTS.first().toString() + ")" )
 #define CREATE_ACTION_SHORTCUTS(ID, TEXT, SHORTCUTS) \
     CREATE_ACTION(ID, TEXT); \
+    SET_SHORTCUTS(ID, TEXT, SHORTCUTS)
+#define CREATE_ACTION_ICON_SHORTCUTS(ID, ICON, TEXT, SHORTCUTS) \
+    CREATE_ACTION_ICON(ID, ICON, TEXT) \
     SET_SHORTCUTS(ID, TEXT, SHORTCUTS)
 #define HIDE_ACTION(ID) mpa_actions[ID]->setVisible(false)
 #define DISABLE_ACTION(ID) mpa_actions[ID]->setDisabled(true)
@@ -352,7 +357,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON_SHORTCUT(NewTabAction,"new-tab-icon", gt("new-tab"), QKeySequence::AddTab);
 
-    CREATE_ACTION_ICON_SHORTCUT(CloseTabAction, "close", gt("close-tab"), QKeySequence::Close);
+    CREATE_ACTION_ICON_SHORTCUTS(CloseTabAction, "close", gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL + Qt::Key_F4), QKeySequence(Qt::CTRL + Qt::Key_W)}));
     mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
 
     CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
