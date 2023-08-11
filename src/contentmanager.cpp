@@ -473,20 +473,43 @@ QString ContentManager::downloadBook(const QString &id)
     return QString::fromStdString(download->getDid());
 }
 
-void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName)
+void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
 {
     if (fileName == "*") {
         return;
     }
     QDir dir(dirPath, fileName);
     for(const QString& file: dir.entryList()) {
-        dir.remove(file);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        if (moveToTrash)
+            QFile::moveToTrash(dir.filePath(file));
+        else
+#endif
+        dir.remove(file); // moveToTrash will always be false here, no check required.
     }
+}
+
+QString formatText(QString text)
+{
+    QString finalText = "<br><br><i>";
+    finalText += text;
+    finalText += "</i>";
+    return finalText;
 }
 
 void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    const auto moveToTrash = KiwixApp::instance()->getSettingsManager()->getMoveToTrash();
+#else
+    const auto moveToTrash = false; // we do not support move to trash functionality for qt versions below 5.15
+#endif
+    if (moveToTrash) {
+        text += formatText(gt("move-files-to-trash-text"));
+    } else {
+        text += formatText(gt("perma-delete-files-text"));
+    }
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, false, mp_view);
     dialog->show();
@@ -496,7 +519,7 @@ void ContentManager::eraseBook(const QString& id)
         kiwix::Book book = mp_library->getBookById(id);
         QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
         QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-        eraseBookFilesFromComputer(dirPath, fileName);
+        eraseBookFilesFromComputer(dirPath, fileName, moveToTrash);
         mp_library->removeBookFromLibraryById(id);
         mp_library->save();
         emit mp_library->bookmarksChanged();
@@ -576,7 +599,8 @@ void ContentManager::cancelBook(const QString& id)
     }
     QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
     QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
-    eraseBookFilesFromComputer(dirPath, filename);
+    // incompleted downloaded file should be perma deleted
+    eraseBookFilesFromComputer(dirPath, filename, false);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit(oneBookChanged(id));

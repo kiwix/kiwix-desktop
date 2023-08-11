@@ -16,7 +16,7 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir);
+        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir, m_moveToTrash);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }
@@ -89,6 +89,13 @@ void SettingsManager::setMonitorDir(QString monitorDir)
     emit(monitorDirChanged(monitorDir));
 }
 
+void SettingsManager::setMoveToTrash(bool moveToTrash)
+{
+    m_moveToTrash = moveToTrash;
+    setSettings("moveToTrash", m_moveToTrash);
+    emit(moveToTrashChanged(m_moveToTrash));
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
@@ -96,4 +103,5 @@ void SettingsManager::initSettings()
     m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
+    m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
 }

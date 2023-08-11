@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QMap>
+#include <QMutex>
 
 #define TQS(v) (QString::fromStdString(v))
 #define FORWARD_GETTER(METH) QString METH() const { return TQS(mp_book->METH()); }
@@ -34,14 +35,14 @@ public:
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
     const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return m_library.getBookmarks(onlyValidBookmarks); }
     QStringList getLibraryZimsFromDir(QString dir) const;
-    void setMonitorDirZims(QStringList zimList);
+    void setMonitorDirZims(QString monitorDir, QStringList zimList);
     void addBookToLibrary(kiwix::Book& book);
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
-    void loadMonitorDir(QString dir);
-    void asyncLoadMonitorDir(QString dir);
+    void updateFromDir(QString dir);
+    void asyncUpdateFromDir(QString dir);
     kiwix::Library& getKiwixLibrary() { return m_library; }
 public slots:
     const kiwix::Book& getBookById(QString id) const;
@@ -51,9 +52,10 @@ signals:
     void bookmarksChanged();
 
 private:
+    QMutex m_updateFromDirMutex;
     kiwix::Library m_library;
     QString m_libraryDirectory;
-    QStringList m_monitorDirZims;
+    QMap<QString, QStringList> m_knownZimsInDir;
 friend class LibraryManipulator;
 };
 

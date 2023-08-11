@@ -14,6 +14,7 @@ SettingsView::SettingsView(QWidget *parent)
     QString styleSheet = QString(file.readAll());
     ui->widget->setStyleSheet(styleSheet);
     connect(ui->zoomPercentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setZoom);
+    connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
     connect(ui->monitorBrowse, &QPushButton::clicked, this, &SettingsView::browseMonitorDir);
@@ -21,6 +22,7 @@ SettingsView::SettingsView(QWidget *parent)
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::onDownloadDirChanged);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::monitorDirChanged, this, &SettingsView::onMonitorDirChanged);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, &SettingsView::onZoomChanged);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::moveToTrashChanged, this, &SettingsView::onMoveToTrashChanged);
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
@@ -31,9 +33,15 @@ SettingsView::SettingsView(QWidget *parent)
     ui->monitorBrowse->setText(gt("browse"));
     ui->monitorHelp->setText("<b>?</b>");
     ui->monitorHelp->setToolTip(gt("monitor-directory-tooltip"));
+    ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    ui->moveToTrashLabel->hide();
+    ui->moveToTrashToggle->hide();
+#endif
+
 }
 
-void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir)
+void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const bool moveToTrash)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(downloadDir);
@@ -41,6 +49,7 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir, const QStri
         ui->monitorClear->hide();
     }
     ui->monitorDirPath->setText(monitorDir);
+    ui->moveToTrashToggle->setChecked(moveToTrash);
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
 {
@@ -131,6 +140,11 @@ void SettingsView::setZoom(int zoomPercent)
     KiwixApp::instance()->getSettingsManager()->setZoomFactor(zoomFactor);
 }
 
+void SettingsView::setMoveToTrash(bool moveToTrash)
+{
+    KiwixApp::instance()->getSettingsManager()->setMoveToTrash(moveToTrash);
+}
+
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
     ui->downloadDirPath->setText(dir);
@@ -150,4 +164,9 @@ void SettingsView::onZoomChanged(qreal zoomFactor)
 {
     qreal zoomPercent = zoomFactor * 100;
     ui->zoomPercentSpinBox->setValue(zoomPercent);
+}
+
+void SettingsView::onMoveToTrashChanged(bool moveToTrash)
+{
+    ui->moveToTrashToggle->setChecked(moveToTrash);
 }
