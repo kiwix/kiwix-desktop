@@ -1,271 +1,77 @@
-html, body {
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-}
-#app {
-    height: 100%;
-    position: relative;
-}
-*:focus {
-    outline: none;
+QTreeView::branch:open:has-children {
+    image: url(:/icons/caret-down-solid.svg);
+    padding: 6px;
 }
 
-#searchBar {
-    padding: 10px;
+QTreeView::branch:closed:has-children {
+    image: url(:/icons/caret-right-solid.svg);
+    padding: 7px;
 }
 
-#searchInput {
-    background-image: url('qrc:///icons/search.svg');
-    background-repeat: no-repeat;
-    background-position: left 10px top 10px;
-    background-size: 23px 23px;
-    padding: 0;
-    margin: 0;
-    padding-left: 45px;
-    height: 40px;
-    width: 90%;
-    border: 1px solid #EEE;
+QTreeView::item:has-children {
+    border-bottom: 1px solid #cccccc;
 }
 
-#bookTable {
-    position: relative;
-    height: calc(100% - 42px); /* 42px = 40px(height of #searchInput) + 2px(border) */
-    width: 100%;
+QTreeView {
+    font-family: 'Selawik';
+    padding: 4px;
+    border: none;
 }
 
-#bookList {
-    height: calc(100% - 19px - 20px); /*19px the header size, 20px the header margin-top */
-    overflow-y:scroll;
-    overflow-x:hidden;
-    position: relative;
-    width: 100%
+QTreeView::item:hover {
+    background-color: #eaecf0;
 }
 
-.tablerow,
-.header {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-.header {
-    color: #555;
-    margin-top: 20px;
-}
-.tablecell{
-    flex-basis:20%;
-    font-family: sans-serif;
+QHeaderView::section {
+    color: #666666;
+    background-color:  #fff;
+    border-width: 0px 0px 2px;
+    border-color: black;
+    border-style: plain;
+    font-size: 16px;
+    font-family: 'Selawik';
+    padding: 4px;
+    margin-left: 10px;
 }
 
-.sortable:hover {
-    cursor: pointer;
+QHeaderView::down-arrow {
+    image: url(:/icons/caret-down-solid.svg);
+    height: 12px;
+    width: 12px;
+    padding-bottom: 6px;
+    subcontrol-position: left;
 }
 
-.sortableBold {
-    font-weight: bold;
+QHeaderView::up-arrow {
+    image: url(:/icons/caret-up-solid.svg);
+    height: 12px;
+    width: 12px;
+    padding-bottom: 6px;
+    subcontrol-position: left;
 }
 
-i {
-    border: solid black;
-    border-width: 0 3px 3px 0;
-    display: inline-block;
-    padding: 3px;
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
+QMenu {
+    background-color: white;
+    margin: 2px;
+    font-family: 'Selawik';
 }
 
-.arrowUp {
-  transform: rotate(-135deg);
-  -webkit-transform: rotate(-135deg);
+QMenu::item {
+    padding: 2px 25px 2px 20px;
+    border-bottom: 1px solid #cccccc;
 }
 
-.arrowDown {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
+QMenu::item:selected {
+    background-color: #cccccc;
 }
 
-.cell0 {
-    flex-basis: 60px;
-    flex-grow: 0;
-    flex-shrink: 0;
-
-}
-.tablerow > .cell1 {
-    font-weight: bold;
-}
-.cell0 > img {
-    width: 24px;
-    height: 24px;
-}
-.cell1,
-.cell2,
-.cell3,
-.cell4,
-.cell5 {
-    flex-grow: 1;
-    margin: 0 10px;
-}
-
-.cell2,
-.cell3,
-.cell4 {
-    overflow: hidden;
-}
-
-.cell5 {
-    flex-basis: 30%;
-    flex-grow: 2;
-    flex-direction: row;
-    text-align: center;
-}
-
-summary {
-  height: 64px;
-  align-items: center;
-}
-.book {
-  border-top: 1px solid #EEE;
-  padding: 10px;
-
-}
-button {
-  background: transparent;
-  border: 0;
-}
-.tablerow button {
-  /* color: blue; */
-  color:#555;
-  /* font-weight: bold; */
-  font-size: 16px;
-  border: 0;
-  background: transparent;
-  border-radius: 2px;
-}
-.tablerow button::first-letter {
-  text-transform: uppercase;
-}
-.tablerow button:hover {
-  /* color: white;
-  background: blue; */
-  cursor: pointer;
-  font-weight: bold;
-}
-details:hover {
-  background-color: #d9e9ff;
-  cursor: pointer;
-}
-
-.menu {
-  /* width: 120px; */
-  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
-  position: fixed;
-  display: none;
-  z-index: 99999999999999;
-  background-color: white;
-}
-
-.menu-options {
-    list-style: none;
-    padding: 0;
-    margin: 2px 0;
-}
-
-.menu-option {
-    font-weight: 500;
-    font-size: 14px;
-    padding: 10px 40px 10px 20px;
-    cursor: pointer;
-}
-
-.menu-option:hover {
-    background: rgba(0, 0, 0, 0.2);
-}
-.loader {
-  margin: 0 auto;
-  border: 16px solid #f3f3f3; /* Light grey */
-  border-top: 16px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 120px;
-  height: 120px;
-  animation: spin 2s linear infinite;
-}
-
-.do-not-display {
-  display: none;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
-:root {
-    --circle-wrap-dimension: 40px;
-    --download: 0deg;
-    --inside-margin: 5px;
-    --inside-circle-dimension: 30px;
-    --border-radius: 50%;
-}
-
-.circle-wrap {
-    position: relative;
-    top: 10px;
-    display: inline-block;
-    width: var(--circle-wrap-dimension);
-    height: var(--circle-wrap-dimension);
-    background: #e6e2e7;
-    border-radius: var(--border-radius);
-  }
-
-.circle-wrap .circle .mask,
-.circle-wrap .circle .fill {
-    width: var(--circle-wrap-dimension);
-    height: var(--circle-wrap-dimension);
-    position: absolute;
-    border-radius: var(--border-radius);
-}
-
-.circle-wrap .circle .mask {
-    clip: rect(0, var(--circle-wrap-dimension), var(--circle-wrap-dimension), calc(var(--circle-wrap-dimension) / 2));
-}
-
-.circle-wrap .circle .mask .fill {
-    clip: rect(0, calc(var(--circle-wrap-dimension) / 2), var(--circle-wrap-dimension), 0);
-    background-color: #3498db;
-}
-.circle-wrap .circle .mask.full,
-.circle-wrap .circle .fill {
-    transform: rotate(var(--download));
-}
-
-.circle-wrap .inside-circle {
-    width: var(--inside-circle-dimension);
-    height: var(--inside-circle-dimension);
-    border-radius: var(--border-radius);
-    background: #fff;
-    text-align: center;
-    margin-top: var(--inside-margin);
-    margin-left: var(--inside-margin);
-    position: absolute;
-    z-index: 100;
-}
-
-.circle-wrap img {
-    height: 30px;
-    width: auto;
-}
-
-.cancel-button {
-    position: relative;
-    top: 10px;
-    height: 40px;
-    width: auto;
-}
-
-.line {
-    display: inline;
+QLineEdit {
+    font-family: 'Selawik';
+    padding: 4px;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+    color: #666666;
+    font-size: 16px;
+    height: 32px;
+    line-height: 24px;
 }

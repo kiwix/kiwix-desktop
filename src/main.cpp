@@ -10,6 +10,15 @@
 #endif
 int main(int argc, char *argv[])
 {
+// Small hack to make QtWebEngine works with AppImage.
+// See https://github.com/probonopd/linuxdeployqt/issues/554
+    if (qEnvironmentVariableIsSet("APPIMAGE")) {
+        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", "--disable-gpu --no-sandbox");
+        QApplication::setAttribute(Qt::AA_UseOpenGLES);
+    }
+// End of hack ^^^
+
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
     QWebEngineUrlScheme scheme("zim");

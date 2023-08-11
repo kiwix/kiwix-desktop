@@ -10,6 +10,7 @@
 	"error-downloader-window-title": "Nelze vytvořit stahovač",
 	"error-downloader-launch-message": "Stahovač nelze spustit, Kiwix se spustí, ale všechny funkce stahování budou přerušeny.",
 	"error-launch-server-message": "Došlo k chybě!",
+	"error-archive": "Archiv nelze získat",
 	"open-zim": "Otevřít Zim",
 	"local-kiwix-server": "Lokální Kiwix server",
 	"random-article": "Náhodný článek",
@@ -71,6 +72,7 @@
 	"port-for-local-kiwix-server-setting": "Port pro místní server Kiwix",
 	"zoom-level-setting": "Výchozí stupeň přiblížení",
 	"download-directory-setting": "Složka stahování",
+	"monitor-directory-setting": "Sledování adresáře",
 	"monitor-directory-default": "Nenastaveno",
 	"reset": "Resetovat",
 	"clear": "Vymazat",
@@ -130,5 +132,8 @@
 	"zim-open-fail-title": "Neplatný soubor",
 	"zim-open-fail-text": "Soubor ZIM <b>{{ZIM}}</b> nelze správně otevřít. Bude z vaší knihovny odstraněn.",
 	"monitor-dir-dialog-title": "Opravdu chcete změnit adresář monitorování?",
-	"monitor-clear-dir-dialog-title": "Opravdu chcete vymazat adresář monitorování?"
+	"monitor-dir-dialog-msg": "Nová cesta k adresáři monitoru bude:\n{{DIRECTORY}}",
+	"monitor-clear-dir-dialog-title": "Opravdu chcete vymazat adresář monitorování?",
+	"monitor-clear-dir-dialog-msg": "Tím se zastaví kontrola adresáře monitoru na nové soubory ZIM.",
+	"monitor-directory-tooltip": "Všechny soubory ZIM v tomto adresáři budou automaticky přidány do knihovny."
 }

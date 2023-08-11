@@ -3,13 +3,16 @@
 		"authors": [
 			"Funa-enpitu",
 			"MathXplore",
+			"Mugenpman",
 			"Object＊tofu",
 			"Omotecho",
+			"Shirayuki",
 			"Tmv"
 		]
 	},
 	"error-launch-server-message": "エラーが発生しました。",
 	"error-archive": "アーカイブを取得できない",
+	"open-zim": "ZIMファイルを開く",
 	"print": "印刷",
 	"print-page-error": "印刷中にエラーが発生しました。",
 	"new-tab": "新しいタブ",
@@ -47,6 +50,9 @@
 	"wikivoyage": "ウィキボヤージュ",
 	"wiktionary": "ウィクショナリー",
 	"open-link-in-web-browser": "Webブラウザでリンクを開く",
-	"invalid-port": "不正なポート",
-	"zim-open-fail-title": "無効なファイル"
+	"invalid-port": "無効なポート",
+	"zim-open-fail-title": "無効なファイル",
+	"next-tab": "次のタブに移動",
+	"previous-tab": "前のタブに移動",
+	"cancel-download": "ダウンロードをキャンセル"
 }

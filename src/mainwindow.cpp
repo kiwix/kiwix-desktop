@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
 
     auto app = KiwixApp::instance();
+    addAction(app->getAction(KiwixApp::ToggleFullscreenAction));
+    addAction(app->getAction(KiwixApp::NextTabAction));
+    addAction(app->getAction(KiwixApp::PreviousTabAction));
 
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
@@ -51,8 +54,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mp_ui->tabBar, &QTabBar::currentChanged,
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
-    connect(mp_ui->tabBar, &TabBar::libraryPageDisplayed,
-            this, &MainWindow::when_libraryPageDisplayed);
+    connect(mp_ui->tabBar, &TabBar::tabDisplayed,
+            this, [=](TabType tabType) {
+                when_libraryPageDisplayed(tabType == TabType::LibraryTab);
+            });
 
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
             &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::on_currentTitleChanged);
@@ -75,11 +80,45 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::toggleFullScreen() {
-    if (isFullScreen())
+    if (isFullScreen()) {
+        QApplication::instance()->removeEventFilter(this);
+        showTabAndTop();
         showNormal();
-    else
+    }
+    else {
+        QApplication::instance()->installEventFilter(this);
+        hideTabAndTop();
         showFullScreen();
+    }
 }
+
+void MainWindow::hideTabAndTop() {
+    getTabBar()->hide();
+    getTopWidget()->hide();
+}
+
+void MainWindow::showTabAndTop() {
+    getTabBar()->show();
+    getTopWidget()->show();
+}
+
+bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
+{
+    if (event->type() == QEvent::MouseMove && isFullScreen())
+    {
+        const auto mouseEvent = static_cast<QMouseEvent*>(event);
+        const int tabRegion = getTabBar()->height() + getTopWidget()->height() + 30;
+        // We don't have to check for visibilty as calling hide() on a hidden widget, or show() on a non-hidden widget is a no-op
+        if (mouseEvent->y() == 0) {
+            showTabAndTop();
+        } else if(mouseEvent->y() >= tabRegion) {
+            hideTabAndTop();
+        }
+        return true;
+    }
+    return false;
+}
+
 
 void MainWindow::when_ReadingList_toggled(bool state)
 {

@@ -15,6 +15,11 @@ class TabBar : public QTabBar
 {
     Q_OBJECT
 public:
+    enum class TabType {
+        LibraryTab,
+        ZimViewTab,
+        SettingsTab
+    };
     TabBar(QWidget* parent=nullptr);
     void setStackedWidget(QStackedWidget* widget);
 
@@ -51,20 +56,25 @@ protected:
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
-    void libraryPageDisplayed(bool displayed);
+    void tabDisplayed(TabType tabType);
     void currentTitleChanged(const QString& title);
 
 public slots:
     void closeTab(int index);
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);
+    void moveToNextTab();
+    void moveToPreviousTab();
 
 private:
     QStackedWidget*     mp_stackedWidget;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
     void setSelectionBehaviorOnRemove(int index);
-
+    // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
+    // This function returns the count of real tabs.
+    int realTabCount() const;
+    
 private slots:
     void onTabMoved(int from, int to);
     void onCurrentChanged(int index);

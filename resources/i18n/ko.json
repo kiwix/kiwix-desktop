@@ -135,5 +135,7 @@
 	"monitor-dir-dialog-msg": "새 모니터 디렉터리는 다음과 같습니다: {{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "모니터 디렉터리를 비우시겠습니까?",
 	"monitor-clear-dir-dialog-msg": "새 ZIM 파일의 모니터 디렉터리의 확인을 중단합니다.",
-	"monitor-directory-tooltip": "이 디렉터리의 모든 ZIM 파일은 자동으로 라이브러리에 추가됩니다."
+	"monitor-directory-tooltip": "이 디렉터리의 모든 ZIM 파일은 자동으로 라이브러리에 추가됩니다.",
+	"next-tab": "다음 탭으로 이동",
+	"previous-tab": "이전 탭으로 이동"
 }

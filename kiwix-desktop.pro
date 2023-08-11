@@ -19,7 +19,7 @@ QMAKE_CXXFLAGS += -std=c++11
 QMAKE_LFLAGS +=  -std=c++11
 
 # Also change resources/org.kiwix.desktop.appdata.xml
-DEFINES += VERSION="2.2.2"
+DEFINES += VERSION="2.3.1"
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -34,9 +34,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    src/contentmanagerdelegate.cpp \
+    src/contentmanagerheader.cpp \
+    src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
+    src/descriptionnode.cpp \
     src/findinpagebar.cpp \
+    src/kiwixconfirmbox.cpp \
+    src/kiwixloader.cpp \
+    src/rownode.cpp \
     src/suggestionlistworker.cpp \
+    src/thumbnaildownloader.cpp \
     src/translation.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
@@ -64,12 +72,21 @@ SOURCES += \
     src/fullscreenwindow.cpp \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
-    src/static_content.cpp
 
 HEADERS += \
+    src/contentmanagerdelegate.h \
+    src/contentmanagerheader.h \
+    src/contentmanagermodel.h \
+    src/contentmanagerview.h \
     src/contenttypefilter.h \
+    src/descriptionnode.h \
     src/findinpagebar.h \
+    src/kiwixconfirmbox.h \
+    src/kiwixloader.h \
+    src/node.h \
+    src/rownode.h \
     src/suggestionlistworker.h \
+    src/thumbnaildownloader.h \
     src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \
@@ -87,7 +104,6 @@ HEADERS += \
     src/webpage.h \
     src/about.h \
     src/contentmanager.h \
-    src/contentmanagerview.h \
     src/tabbar.h \
     src/contentmanagerside.h \
     src/readinglistbar.h \
@@ -98,10 +114,11 @@ HEADERS += \
     src/fullscreennotification.h \
     src/menuproxystyle.h \
     src/zimview.h \
-    src/static_content.h
 
 FORMS += \
+    src/contentmanagerview.ui \
     src/findinpagebar.ui \
+    ui/kiwixconfirmbox.ui \
     ui/mainwindow.ui \
     ui/about.ui \
     src/contentmanagerside.ui \
@@ -154,12 +171,12 @@ unix {
   INSTALLS += mime_file
 }
 
-PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 11.0.0 libzim >= 7.2.0\")
+PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 12.0.0 libzim >= 8.0.0\")
 
 QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
-LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 11.0.0 libzim >= 7.2.0\")
+LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 12.0.0 libzim >= 8.0.0\")
 
 RESOURCES += \
     resources/kiwix.qrc \

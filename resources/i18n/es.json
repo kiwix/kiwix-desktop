@@ -8,13 +8,14 @@
 			"Geryescalier",
 			"Ice bulldog",
 			"Josuert",
+			"La Mantis",
 			"Ncr"
 		]
 	},
 	"name": "español",
 	"error-downloader-window-title": "No se puede crear el descargador",
 	"error-downloader-launch-message": "No se puede iniciar el descargador. Kiwix-desktop se iniciará pero no funcionarán las prestaciones de descarga!",
-	"open-zim": "Abrir Zim",
+	"open-zim": "Abrir archivo ZIM",
 	"local-kiwix-server": "Servidor Kiwix local",
 	"random-article": "Artículo al azar",
 	"home-page": "Página principal",

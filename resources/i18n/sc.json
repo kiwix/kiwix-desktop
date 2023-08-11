@@ -9,7 +9,8 @@
 	"error-downloader-window-title": "Impossìbile creare s'iscarrigadore",
 	"error-downloader-launch-message": "Impossìbile carrigare s'iscarrigadore, Kiwix-desktop s'at a abèrrere ma totu sas funtzionalidades de iscarrigamentu no ant a funtzionare!",
 	"error-launch-server-message": "B'at àpidu una faddina|",
-	"open-zim": "Aberi unu Zim",
+	"error-archive": "No at fatu a otènnere s'archìviu",
+	"open-zim": "Aberi un'archìviu Zim",
 	"local-kiwix-server": "Serbidore Kiwix locale",
 	"random-article": "Artìculu a sa tzurpa",
 	"random-article-error": "Abertura de un'artìculu a casu fallida.",
@@ -133,5 +134,7 @@
 	"monitor-dir-dialog-msg": "S'àndala pro sa cartella de compidada noa at a èssere:\n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Ses seguru de chèrrere isboidare sa cartella de compidada?",
 	"monitor-clear-dir-dialog-msg": "Custu at a firmare sa chirca de archìvios ZIM noos in sa cartella de compidada.",
-	"monitor-directory-tooltip": "Totu sos archìvios ZIM in custa cartella s'ant a annànghere in automàticu a sa biblioteca."
+	"monitor-directory-tooltip": "Totu sos archìvios ZIM in custa cartella s'ant a annànghere in automàticu a sa biblioteca.",
+	"next-tab": "Cola a s'ischeda imbeniente",
+	"previous-tab": "Cola a s'ischeda anteposta"
 }

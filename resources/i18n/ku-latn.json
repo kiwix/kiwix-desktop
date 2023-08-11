@@ -11,7 +11,8 @@
 	"error-downloader-window-title": "Nikare daxînerê çêke",
 	"error-downloader-launch-message": "Nemimkun e ku daxînerê veke, wê Kîwîks-sermase dest pê bike lê wê hemû fonksiyonên daxistinê nexebitin!",
 	"error-launch-server-message": "Çewtiyekê rû da!",
-	"open-zim": "Zim-ê Veke",
+	"error-archive": "Arşîvê nikare bîne",
+	"open-zim": "Dosyeya ZIMê Veke",
 	"local-kiwix-server": "Servera Kiwixê ya Herêmî",
 	"random-article": "Gotara Ketober",
 	"random-article-error": "Bi ser neket ku gotareke ketober veke.",
@@ -94,7 +95,7 @@
 	"local-files": "Dosyeyên Lokal",
 	"browse-by-category": "Bi Kategoriyê Çav Pê Bixe",
 	"browse-by-language": "Bi Zimanê Çav Pê Bixe",
-	"hide": "Biveşêre",
+	"hide": "Veşêre",
 	"open-in-browser": "Di gerokê de veke",
 	"start-kiwix-server": "Servera Kiwixê Bide Destpêkirin",
 	"stop-kiwix-server": "Servera Kiwixê Bide Sekinandin",
@@ -135,5 +136,7 @@
 	"monitor-dir-dialog-msg": "Pelrêça monîtorê yê nû wê bibe:\n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Tu jê piştrast î ku tu dixwazî pelrêça monîtorê paqij bikî?",
 	"monitor-clear-dir-dialog-msg": "Ev wê kontrolkirina pelrêça monîtorê ji bo dosyeyên nû yên ZIMê bisekinîne.",
-	"monitor-directory-tooltip": "Temamê dosyeyên ZIMê yên di vê pelrêçê de wê bi otomatîkî tevlî kitêbxaneyê bên kirin."
+	"monitor-directory-tooltip": "Temamê dosyeyên ZIMê yên di vê pelrêçê de wê bi otomatîkî tevlî kitêbxaneyê bên kirin.",
+	"next-tab": "Derbasî hilpekîna piştî bibe",
+	"previous-tab": "Derbasî hilpekîna berî bibe"
 }

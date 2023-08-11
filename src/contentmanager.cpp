@@ -1,7 +1,6 @@
 #include "contentmanager.h"
 
 #include "kiwixapp.h"
-#include "static_content.h"
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
 
@@ -11,6 +10,18 @@
 #include <QDir>
 #include <QStorageInfo>
 #include <QMessageBox>
+#include "contentmanagermodel.h"
+#include <zim/error.h>
+#include <zim/item.h>
+#include <QHeaderView>
+#include "contentmanagerdelegate.h"
+#include "node.h"
+#include "rownode.h"
+#include "descriptionnode.h"
+#include "kiwixconfirmbox.h"
+#include <QtConcurrent/QtConcurrentRun>
+#include "contentmanagerheader.h"
+#include <QDesktopServices>
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
@@ -21,12 +32,131 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
-    mp_view->registerObject("contentManager", this);
-    mp_view->setHtml();
+    managerModel = new ContentManagerModel(this);
+    const auto booksList = getBooksList();
+    managerModel->setBooksData(booksList);
+    auto treeView = mp_view->getView();
+    treeView->setModel(managerModel);
+    treeView->show();
+
+    auto header = new ContentManagerHeader(Qt::Orientation::Horizontal, treeView);
+    treeView->setHeader(header);
+    header->setSectionResizeMode(0, QHeaderView::Fixed);
+    header->setSectionResizeMode(1, QHeaderView::Stretch);
+    header->setSectionResizeMode(2, QHeaderView::Fixed);
+    header->setSectionResizeMode(3, QHeaderView::Fixed);
+    header->setSectionResizeMode(4, QHeaderView::Fixed);
+    header->setDefaultAlignment(Qt::AlignLeft);
+    header->setStretchLastSection(false);
+    header->setSectionsClickable(true);
+    header->setHighlightSections(true);
+    treeView->setWordWrap(true);
+    treeView->resizeColumnToContents(4);
+    treeView->setColumnWidth(0, 80);
+    treeView->setColumnWidth(5, 120);
+    // TODO: set width for all columns based on viewport
+
     setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
+    connect(this, &ContentManager::booksChanged, this, [=]() {
+        const auto nBookList = getBooksList();
+        managerModel->setBooksData(nBookList);
+        managerModel->refreshIcons();
+    });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
+    connect(mp_view->getView(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(onCustomContextMenu(const QPoint &)));
+    connect(this, &ContentManager::pendingRequest, mp_view, &ContentManagerView::showLoader);
+    connect(treeView, &QTreeView::doubleClicked, this, &ContentManager::openBookWithIndex);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::languagesReceived, this, &ContentManager::updateLanguages);
+    connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
+    setCategories();
+    setLanguages();
+}
+
+QList<QMap<QString, QVariant>> ContentManager::getBooksList()
+{
+    const auto bookIds = getBookIds();
+    QList<QMap<QString, QVariant>> bookList;
+    QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl"};
+    QIcon bookIcon;
+    for (auto bookId : bookIds) {
+        auto mp = getBookInfos(bookId, keys);
+        bookList.append(mp);
+    }
+    return bookList;
+}
+
+void ContentManager::onCustomContextMenu(const QPoint &point)
+{
+    QModelIndex index = mp_view->getView()->indexAt(point);
+    if (!index.isValid())
+        return;
+    QMenu contextMenu("optionsMenu", mp_view->getView());
+    auto bookNode = static_cast<RowNode*>(index.internalPointer());
+    const auto id = bookNode->getBookId();
+
+    QAction menuDeleteBook(gt("delete-book"), this);
+    QAction menuOpenBook(gt("open-book"), this);
+    QAction menuDownloadBook(gt("download-book"), this);
+    QAction menuPauseBook(gt("pause-download"), this);
+    QAction menuResumeBook(gt("resume-download"), this);
+    QAction menuCancelBook(gt("cancel-download"), this);
+    QAction menuOpenFolder(gt("open-folder"), this);
+
+    if (bookNode->isDownloading()) {
+        if (bookNode->getDownloadInfo().paused) {
+            contextMenu.addAction(&menuResumeBook);
+        } else {
+            contextMenu.addAction(&menuPauseBook);
+        }
+        contextMenu.addAction(&menuCancelBook);
+    } else {
+        try {
+            const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            auto bookPath = QString::fromStdString(book.getPath());
+            contextMenu.addAction(&menuOpenBook);
+            contextMenu.addAction(&menuDeleteBook);
+            contextMenu.addAction(&menuOpenFolder);
+            connect(&menuOpenFolder, &QAction::triggered, [=]() {
+                QFileInfo fileInfo(bookPath);
+                QDir bookDir = fileInfo.absoluteDir();
+                bool dirOpen = bookDir.exists() && bookDir.isReadable() && QDesktopServices::openUrl(bookDir.absolutePath());
+                if (!dirOpen) {
+                    QString failedText = gt("couldnt-open-location-text");
+                    failedText = failedText.replace("{{FOLDER}}", "<b>" + bookDir.absolutePath() + "</b>");
+                    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("couldnt-open-location"), failedText, true, mp_view);
+                    dialog->show();
+                    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+                        dialog->deleteLater();
+                    });
+                }
+            });
+        } catch (...) {
+            contextMenu.addAction(&menuDownloadBook);
+        }
+    }
+
+    connect(&menuDeleteBook, &QAction::triggered, [=]() {
+        eraseBook(id);
+    });
+    connect(&menuOpenBook, &QAction::triggered, [=]() {
+        openBook(id);
+    });
+    connect(&menuDownloadBook, &QAction::triggered, [=]() {
+        downloadBook(id, index);
+    });
+    connect(&menuPauseBook, &QAction::triggered, [=]() {
+        pauseBook(id, index);
+    });
+    connect(&menuCancelBook, &QAction::triggered, [=]() {
+        cancelBook(id, index);
+    });
+    connect(&menuResumeBook, &QAction::triggered, [=]() {
+        resumeBook(id, index);
+    });
+
+    contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
 }
 
 void ContentManager::setLocal(bool local) {
@@ -35,6 +165,8 @@ void ContentManager::setLocal(bool local) {
     }
     m_local = local;
     emit(filterParamsChanged());
+    setCategories();
+    setLanguages();
 }
 
 QStringList ContentManager::getTranslations(const QStringList &keys)
@@ -47,15 +179,50 @@ QStringList ContentManager::getTranslations(const QStringList &keys)
     return translations;
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) values.append(QString::fromStdString((b->METH())));}
-QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
+void ContentManager::setCategories()
 {
-    QStringList values;
+    QStringList categories;
+    if (m_local) {
+        auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
+        categories.push_back("all");
+        for (auto category : categoryData) {
+            auto categoryName = QString::fromStdString(category);
+            categories.push_back(categoryName);
+        }
+        m_categories = categories;
+        emit(categoriesLoaded(m_categories));
+        return;
+    }
+    m_remoteLibraryManager.getCategoriesFromOpds();
+}
+
+void ContentManager::setLanguages()
+{
+    LanguageList languages;
+    if (m_local) {
+        auto languageData = mp_library->getKiwixLibrary().getBooksLanguages();
+        for (auto language : languageData) {
+            auto langCode = QString::fromStdString(language);
+            auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
+            languages.push_back({langCode, selfName});
+        }
+        m_languages = languages;
+        emit(languagesLoaded(m_languages));
+        return;
+    }
+    m_remoteLibraryManager.getLanguagesFromOpds();
+}
+
+#define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
+QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringList &keys)
+{
+    QMap<QString, QVariant> values;
     const kiwix::Book* b = [=]()->const kiwix::Book* {
         try {
             return &mp_library->getBookById(id);
         } catch (...) {
             try {
+                QMutexLocker locker(&remoteLibraryLocker);
                 return &m_remoteLibrary.getBookById(id.toStdString());
             } catch(...) { return nullptr; }
         }
@@ -64,7 +231,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
     if (nullptr == b){
         for(auto& key:keys) {
             (void) key;
-            values.append("");
+            values.insert(key, "");
         }
         return values;
     }
@@ -74,22 +241,10 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
         ADD_V("path", getPath);
         ADD_V("title", getTitle);
         ADD_V("description", getDescription);
-        ADD_V("language", getLanguage);
-        ADD_V("creator", getCreator);
-        ADD_V("publisher", getPublisher);
         ADD_V("date", getDate);
         ADD_V("url", getUrl);
         ADD_V("name", getName);
-        ADD_V("origId", getOrigId);
         ADD_V("downloadId", getDownloadId);
-        if (key == "favicon") {
-            try {
-                auto s = b->getIllustration(48)->getData();
-                values.append(QByteArray::fromStdString(s).toBase64());
-            } catch(...) {
-                values.append(QByteArray());
-            }
-        }
         if (key == "faviconMimeType") {
             std::string mimeType;
             try {
@@ -99,7 +254,7 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
                 const kiwix::Book::Illustration tempIllustration;
                 mimeType = tempIllustration.mimeType;
             }
-            values.append(QString::fromStdString(mimeType));
+            values.insert(key, QString::fromStdString(mimeType));
         }
         if (key == "faviconUrl") {
             std::string url;
@@ -110,16 +265,10 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
                 const kiwix::Book::Illustration tempIllustration;
                 url = tempIllustration.url;
             }
-            values.append(QString::fromStdString(url));
+            values.insert(key, QString::fromStdString(url));
         }
         if (key == "size") {
-            values.append(QString::number(b->getSize()));
-        }
-        if (key == "articleCount") {
-            values.append(QString::number(b->getArticleCount()));
-        }
-        if (key == "mediaCount") {
-            values.append(QString::number(b->getMediaCount()));
+            values.insert(key, QString::number(b->getSize()));
         }
         if (key == "tags") {
             QStringList tagList = QString::fromStdString(b->getTags()).split(';');
@@ -135,12 +284,26 @@ QStringList ContentManager::getBookInfos(QString id, const QStringList &keys)
             if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
             if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
             QString s = displayTagList.join(", ");
-            values.append(s);
+            values.insert(key, s);
         }
     }
     return values;
 }
 #undef ADD_V
+
+void ContentManager::openBookWithIndex(const QModelIndex &index)
+{
+    try {
+        QString bookId;
+        auto bookNode = static_cast<Node*>(index.internalPointer());
+        bookId = bookNode->getBookId();
+        // check if the book is available in local library, will throw std::out_of_range if it isn't.
+        KiwixApp::instance()->getLibrary()->getBookById(bookId);
+        if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
+            return;
+        openBook(bookId);
+    } catch (std::out_of_range &e) {}
+}
 
 void ContentManager::openBook(const QString &id)
 {
@@ -161,19 +324,19 @@ void ContentManager::openBook(const QString &id)
     }
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) {values.append(QString::fromStdString((d->METH()))); continue;}}
-QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
+#define ADD_V(KEY, METH) {if(key==KEY) {values.insert(key, QString::fromStdString((d->METH()))); continue;}}
+QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
-    QStringList values;
+    QMap<QString, QVariant> values;
     if (!mp_downloader) {
         for(auto& key: keys) {
             (void) key;
-            values.append("");
+            values.insert(key, "");
         }
         return values;
     }
     auto& b = mp_library->getBookById(id);
-    kiwix::Download* d;
+    std::shared_ptr<kiwix::Download> d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
@@ -208,46 +371,69 @@ QStringList ContentManager::updateDownloadInfos(QString id, const QStringList &k
         if(key == "status") {
             switch(d->getStatus()){
             case kiwix::Download::K_ACTIVE:
-                values.append("active");
+                values.insert(key, "active");
                 break;
             case kiwix::Download::K_WAITING:
-                values.append("waiting");
+                values.insert(key, "waiting");
                 break;
             case kiwix::Download::K_PAUSED:
-                values.append("paused");
+                values.insert(key, "paused");
                 break;
             case kiwix::Download::K_ERROR:
-                values.append("error");
+                values.insert(key, "error");
                 break;
             case kiwix::Download::K_COMPLETE:
-                values.append("completed");
+                values.insert(key, "completed");
                 break;
             case kiwix::Download::K_REMOVED:
-                values.append("removed");
+                values.insert(key, "removed");
                 break;
             default:
-                values.append("unknown");
+                values.insert(key, "unknown");
             }
             continue;
         }
         ADD_V("followedBy", getFollowedBy);
         ADD_V("path", getPath);
         if(key == "totalLength") {
-            values.append(QString::number(d->getTotalLength()));
+            values.insert(key, QString::number(d->getTotalLength()));
         }
         if(key == "completedLength") {
-            values.append(QString::number(d->getCompletedLength()));
+            values.insert(key, QString::number(d->getCompletedLength()));
         }
         if(key == "downloadSpeed") {
-            values.append(QString::number(d->getDownloadSpeed()));
+            values.insert(key, QString::number(d->getDownloadSpeed()));
         }
         if(key == "verifiedLength") {
-            values.append(QString::number(d->getVerifiedLength()));
+            values.insert(key, QString::number(d->getVerifiedLength()));
         }
     }
     return values;
 }
 #undef ADD_V
+
+QString ContentManager::downloadBook(const QString &id, QModelIndex index)
+{
+    QString downloadStatus =  downloadBook(id);
+    QString dialogHeader, dialogText;
+    if (downloadStatus.size() == 0) {
+        dialogHeader = gt("download-unavailable");
+        dialogText = gt("download-unavailable-text");
+    } else if (downloadStatus == "storage_error") {
+        dialogHeader = gt("download-storage-error");
+        dialogText = gt("download-storage-error-text");
+    } else {
+        emit managerModel->startDownload(index);
+        return downloadStatus;
+    }
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(dialogHeader, dialogText, true, mp_view);
+    dialog->show();
+    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+        dialog->deleteLater();
+    });
+    return downloadStatus;
+}
+
 
 QString ContentManager::downloadBook(const QString &id)
 {
@@ -255,6 +441,7 @@ QString ContentManager::downloadBook(const QString &id)
         return "";
     const auto& book = [&]()->const kiwix::Book& {
         try {
+            QMutexLocker locker(&remoteLibraryLocker);
             return m_remoteLibrary.getBookById(id.toStdString());
         } catch (...) {
             return mp_library->getBookById(id);
@@ -270,7 +457,7 @@ QString ContentManager::downloadBook(const QString &id)
     for (auto b : booksList)
         if (b.toStdString() == book.getId())
             return "";
-    kiwix::Download *download;
+    std::shared_ptr<kiwix::Download> download;
     try {
         std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
         const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
@@ -299,21 +486,38 @@ void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QSt
 
 void ContentManager::eraseBook(const QString& id)
 {
-    auto tabBar = KiwixApp::instance()->getTabWidget();
-    tabBar->closeTabsByZimId(id);
-    kiwix::Book book = mp_library->getBookById(id);
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-    QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-    eraseBookFilesFromComputer(dirPath, fileName);
-    mp_library->removeBookFromLibraryById(id);
-    mp_library->save();
-    emit mp_library->bookmarksChanged();
-    if (m_local) {
-        emit(bookRemoved(id));
-    } else {
-        emit(oneBookChanged(id));
-    }
-    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+    auto text = gt("delete-book-text");
+    text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, false, mp_view);
+    dialog->show();
+    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+        auto tabBar = KiwixApp::instance()->getTabWidget();
+        tabBar->closeTabsByZimId(id);
+        kiwix::Book book = mp_library->getBookById(id);
+        QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
+        QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
+        eraseBookFilesFromComputer(dirPath, fileName);
+        mp_library->removeBookFromLibraryById(id);
+        mp_library->save();
+        emit mp_library->bookmarksChanged();
+        if (m_local) {
+            emit(bookRemoved(id));
+        } else {
+            emit(oneBookChanged(id));
+        }
+        KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+        dialog->deleteLater();
+        emit booksChanged();
+    });
+    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+        dialog->deleteLater();
+    });
+}
+
+void ContentManager::pauseBook(const QString& id, QModelIndex index)
+{
+    pauseBook(id);
+    emit managerModel->pauseDownload(index);
 }
 
 void ContentManager::pauseBook(const QString& id)
@@ -327,6 +531,12 @@ void ContentManager::pauseBook(const QString& id)
         download->pauseDownload();
 }
 
+void ContentManager::resumeBook(const QString& id, QModelIndex index)
+{
+    resumeBook(id);
+    emit managerModel->resumeDownload(index);
+}
+
 void ContentManager::resumeBook(const QString& id)
 {
     if (!mp_downloader) {
@@ -336,6 +546,22 @@ void ContentManager::resumeBook(const QString& id)
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_PAUSED)
         download->resumeDownload();
+}
+
+void ContentManager::cancelBook(const QString& id, QModelIndex index)
+{
+    auto text = gt("cancel-download-text");
+    text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("cancel-download"), text, false, mp_view);
+    dialog->show();
+    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+        cancelBook(id);
+        emit managerModel->cancelDownload(index);
+        dialog->deleteLater();
+    });
+    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+        dialog->deleteLater();
+    });
 }
 
 void ContentManager::cancelBook(const QString& id)
@@ -376,6 +602,8 @@ void ContentManager::setCurrentLanguage(QString language)
                      kiwix::converta2toa3(language.toStdString()));
       } catch (std::out_of_range&) {}
     }
+    if (m_currentLanguage == language)
+        return;
     m_currentLanguage = language;
     emit(currentLangChanged());
     emit(filterParamsChanged());
@@ -383,6 +611,8 @@ void ContentManager::setCurrentLanguage(QString language)
 
 void ContentManager::setCurrentCategoryFilter(QString category)
 {
+    if (m_categoryFilter == category)
+        return;
     m_categoryFilter = category.toLower();
     emit(filterParamsChanged());
 }
@@ -407,11 +637,37 @@ void ContentManager::updateLibrary() {
 
 #define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary(const QString& content) {
-    m_remoteLibrary = kiwix::Library();
-    kiwix::Manager manager(&m_remoteLibrary);
-    manager.readOpds(content.toStdString(), CATALOG_URL);
-    emit(this->booksChanged());
-    emit(this->pendingRequest(false));
+    QtConcurrent::run([=]() {
+        QMutexLocker locker(&remoteLibraryLocker);
+        m_remoteLibrary = kiwix::Library();
+        kiwix::Manager manager(&m_remoteLibrary);
+        manager.readOpds(content.toStdString(), CATALOG_URL);
+        emit(this->booksChanged());
+        emit(this->pendingRequest(false));
+    });
+}
+
+void ContentManager::updateLanguages(const QString& content) {
+    auto languages = kiwix::readLanguagesFromFeed(content.toStdString());
+    LanguageList tempLanguages;
+    for (auto language : languages) {
+        auto code = QString::fromStdString(language.first);
+        auto title = QString::fromStdString(language.second);
+        tempLanguages.push_back({code, title});
+    }
+    m_languages = tempLanguages;
+    emit(languagesLoaded(m_languages));
+}
+
+void ContentManager::updateCategories(const QString& content) {;
+    auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
+    QStringList tempCategories;
+    tempCategories.push_back("all");
+    for (auto catg : categories) {
+        tempCategories.push_back(QString::fromStdString(catg));
+    }
+    m_categories = tempCategories;
+    emit(categoriesLoaded(m_categories));
 }
 
 void ContentManager::setSearch(const QString &search)
@@ -428,9 +684,9 @@ QStringList ContentManager::getBookIds()
         acceptTags.push_back("_category:"+m_categoryFilter.toStdString());
     }
     if (m_categoryFilter == "other") {
-        for (auto& category: S_CATEGORIES) {
-            if (category.first != "other" && category.first != "all") {
-                rejectTags.push_back("_category:"+category.first.toStdString());
+        for (auto& category: m_categories) {
+            if (category != "other" && category != "all") {
+                rejectTags.push_back("_category:"+category.toStdString());
             }
         }
     }
@@ -457,6 +713,7 @@ QStringList ContentManager::getBookIds()
         return mp_library->listBookIds(filter, m_sortBy, m_sortOrderAsc);
     } else {
         filter.remote(true);
+        QMutexLocker locker(&remoteLibraryLocker);
         auto bookIds = m_remoteLibrary.filter(filter);
         m_remoteLibrary.sort(bookIds, m_sortBy, m_sortOrderAsc);
         QStringList list;

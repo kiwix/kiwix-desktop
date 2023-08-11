@@ -1,5 +1,4 @@
 #include "kiwixapp.h"
-#include "static_content.h"
 #include "zim/error.h"
 #include "zim/version.h"
 #include "kiwix/tools.h"
@@ -65,8 +64,6 @@ void KiwixApp::init()
         gt("error-downloader-launch-message") + "<br><br>" + e.what());
     }
     mp_manager = new ContentManager(&m_library, mp_downloader);
-
-    initStaticContent();
 
     auto icon = QIcon();
     icon.addFile(":/icons/kiwix-app-icons-square.svg");
@@ -180,7 +177,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
                     getMainWindow(),
                     gt("open-zim"),
                     QString(),
-                    "ZimFile (*.zim*)");
+                    "ZIM Files (*.zim);;Splitted ZIM Files (*.zimaa)");
 
         if (_zimfile.isEmpty()) {
             return;
@@ -299,6 +296,8 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 
 #define CREATE_ACTION(ID, TEXT) \
     mpa_actions[ID] = new QAction(TEXT)
+#define CREATE_ACTION_ICON(ID, ICON, TEXT) \
+    mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT);
 #define SET_SHORTCUT(ID, TEXT, SHORTCUT) \
     mpa_actions[ID]->setShortcut(SHORTCUT); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + QKeySequence(SHORTCUT).toString() + ")" )
@@ -306,7 +305,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
     CREATE_ACTION(ID, TEXT); \
     SET_SHORTCUT(ID, TEXT, SHORTCUT)
 #define CREATE_ACTION_ICON_SHORTCUT(ID, ICON, TEXT, SHORTCUT) \
-    mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT); \
+    CREATE_ACTION_ICON(ID, ICON, TEXT) \
     SET_SHORTCUT(ID, TEXT, SHORTCUT)
 #define CREATE_ACTION_ONOFF_ICON_SHORTCUT(ID, ON_ICON, OFF_ICON, TEXT, SHORTCUT) \
     CREATE_ACTION(ID, TEXT); \
@@ -321,6 +320,9 @@ void KiwixApp::setMonitorDir(const QString &dir) {
     mpa_actions[ID]->setToolTip(TEXT + " (" + SHORTCUTS.first().toString() + ")" )
 #define CREATE_ACTION_SHORTCUTS(ID, TEXT, SHORTCUTS) \
     CREATE_ACTION(ID, TEXT); \
+    SET_SHORTCUTS(ID, TEXT, SHORTCUTS)
+#define CREATE_ACTION_ICON_SHORTCUTS(ID, ICON, TEXT, SHORTCUTS) \
+    CREATE_ACTION_ICON(ID, ICON, TEXT) \
     SET_SHORTCUTS(ID, TEXT, SHORTCUTS)
 #define HIDE_ACTION(ID) mpa_actions[ID]->setVisible(false)
 #define DISABLE_ACTION(ID) mpa_actions[ID]->setDisabled(true)
@@ -355,7 +357,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON_SHORTCUT(NewTabAction,"new-tab-icon", gt("new-tab"), QKeySequence::AddTab);
 
-    CREATE_ACTION_ICON_SHORTCUT(CloseTabAction, "close", gt("close-tab"), QKeySequence::Close);
+    CREATE_ACTION_ICON_SHORTCUTS(CloseTabAction, "close", gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL + Qt::Key_F4), QKeySequence(Qt::CTRL + Qt::Key_W)}));
     mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
 
     CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
@@ -409,6 +411,10 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_SHORTCUT(ZoomResetAction, gt("zoom-reset"), QKeySequence(Qt::CTRL+Qt::Key_0));
 
+    CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL + Qt::Key_Tab));
+
+    CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab));
+
     CREATE_ACTION_SHORTCUT(HelpAction, gt("help"), QKeySequence::HelpContents);
     HIDE_ACTION(HelpAction);
 
@@ -431,20 +437,22 @@ void KiwixApp::createAction()
 }
 
 void KiwixApp::postInit() {
-    connect(getTabWidget(), &TabBar::libraryPageDisplayed,
-            this, &KiwixApp::disableItemsOnLibraryPage);
+    connect(getTabWidget(), &TabBar::tabDisplayed,
+            this, &KiwixApp::handleItemsState);
     emit(m_library.booksChanged());
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
-    disableItemsOnLibraryPage(true);
+    handleItemsState(TabType::LibraryTab);
 }
 
-void KiwixApp::disableItemsOnLibraryPage(bool libraryDisplayed)
+void KiwixApp::handleItemsState(TabType tabType)
 {
-    KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryDisplayed);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryDisplayed);
+    auto libraryOrSettingsTab =  (tabType == TabType::LibraryTab || tabType == TabType::SettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryOrSettingsTab);
+    KiwixApp::instance()->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryOrSettingsTab);
 }
 
 void KiwixApp::updateNameMapper()

@@ -2,11 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Ajeje Brazorf",
-			"Kareyac"
+			"Kareyac",
+			"Սերգեյ Սաֆարյան"
 		]
 	},
 	"name": "Անգլերեն",
 	"home-page": "Հիմնական էջ",
+	"main-menu": "Հիմնական ընտրացանկ",
 	"print": "Տպել",
 	"find-in-page": "Գտնել էջում",
 	"zoom-in": "Խոշորացնել",

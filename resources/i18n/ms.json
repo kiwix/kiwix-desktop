@@ -1,15 +1,18 @@
 {
 	"@metadata": {
 		"authors": [
+			"Hakimi97",
 			"Tofeiku",
 			"Ultron90"
 		]
 	},
 	"name": "Bahasa Melayu",
+	"error-title": "Ralat",
 	"error-downloader-window-title": "Tidak dapat mencipta pemuat turun",
 	"random-article": "Rencana Rawak",
 	"main-menu": "Menu utama",
 	"print": "Cetak",
+	"close": "Tutup",
 	"open-file": "Buka fail",
 	"search-article": "Cari rencana",
 	"table-of-content": "Jadual isi kandungan",
@@ -38,6 +41,7 @@
 	"delete": "Hapuskan",
 	"download": "Muat turun",
 	"cancel": "Batalkan",
+	"about-libraries-title": "Perpustakaan",
 	"all-files": "Semua Fail",
 	"local-files": "Fail Tempatan",
 	"hide": "Sorokkan",
@@ -56,7 +60,7 @@
 	"wikisource": "Wikisumber",
 	"wikispecies": "Wikispesies",
 	"wikiversity": "Wikiversiti",
-	"wikivoyage": "Wikikembara",
+	"wikivoyage": "Wikilayar",
 	"wiktionary": "Wikikamus",
 	"pictures": "Gambar",
 	"videos": "Video",
