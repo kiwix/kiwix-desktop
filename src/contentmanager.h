@@ -27,7 +27,7 @@ public:
     QStringList getDownloadIds();
     void setCurrentLanguage(QStringList languageList);
     void setCurrentCategoryFilter(QStringList category);
-    void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
+    void setCurrentContentTypeFilter(QStringList contentTypeFilter);
     bool isLocal() const { return m_local; }
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
@@ -42,7 +42,7 @@ private:
     QString m_currentLanguage;
     QString m_searchQuery;
     QString m_categoryFilter = "all";
-    QList<ContentTypeFilter*> m_contentTypeFilters;
+    QStringList m_contentTypeFilters;
     kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
     bool m_sortOrderAsc = true;
     LanguageList m_languages;

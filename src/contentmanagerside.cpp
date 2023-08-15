@@ -25,8 +25,6 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         mp_contentManager->setLocal(id == CatalogButtonId::LOCAL);
     });
 
-    mp_ui->contentTypeButton->setIcon(QIcon(":/icons/caret-right-solid.svg"));
-    mp_ui->contentTypeButton->setIconSize(QSize(12, 12));
     connect(mp_ui->allFileButton, &QRadioButton::toggled,
             this, [=](bool checked) { mp_ui->allFileButton->setStyleSheet(
                     checked ? "*{font-weight: bold}" : "");});
@@ -36,32 +34,15 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     mp_ui->allFileButton->setText(gt("online-files"));
     mp_ui->localFileButton ->setText(gt("local-files"));
-    mp_ui->contentTypeButton->setText(gt("content-type"));
 
     mp_categories = mp_ui->categories;
-    mp_categories->setType(gt("category"));
+    mp_categories->setType("category");
 
     mp_languages = mp_ui->languages;
-    mp_languages->setType(gt("language"));
+    mp_languages->setType("language");
 
-    mp_contentTypeButton = mp_ui->contentTypeButton;
-
-
-    connect(mp_contentTypeButton, &QCheckBox::toggled, this, [=](bool checked) {
-        mp_ui->contentTypeSelector->setHidden(!checked);
-    });
-    mp_ui->contentTypeSelector->setHidden(true);
-
-    mp_ui->contentTypeAllButton->setText(gt("all"));
-    mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: 500;}");
-    connect(mp_ui->contentTypeAllButton, &QCheckBox::clicked, this, [=](bool checked) {
-        Q_UNUSED(checked);
-        mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: 500;}");
-        for (auto &contentTypeFilter : m_contentTypeFilters) {
-            contentTypeFilter->setCheckState(Qt::Unchecked);
-        }
-        mp_contentManager->setCurrentContentTypeFilter(m_contentTypeFilters);
-    });
+    mp_contentType = mp_ui->contentType;
+    mp_contentType->setType("content-type");
 
     auto searcher = mp_ui->searcher;
     searcher->setPlaceholderText(gt("search-files"));
@@ -71,30 +52,17 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     connect(searcher, &QLineEdit::textChanged, [searcher](){
         KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
     });
-    
-    ContentTypeFilter* videosFilter = new ContentTypeFilter("pictures", this);
-    ContentTypeFilter* picturesFilter = new ContentTypeFilter("videos", this);
-    ContentTypeFilter* detailsFilter = new ContentTypeFilter("details", this);
-    m_contentTypeFilters.push_back(videosFilter);
-    m_contentTypeFilters.push_back(picturesFilter);
-    m_contentTypeFilters.push_back(detailsFilter);
 
-    auto layout = static_cast<QVBoxLayout*>(mp_ui->contentTypeSelector->layout());
-    for (auto &contentTypeFilter : m_contentTypeFilters) {
-        layout->addWidget(contentTypeFilter, 0, Qt::AlignTop);
-        connect(contentTypeFilter, &QCheckBox::clicked, this, [=](bool checked) {
-            Q_UNUSED(checked);
-            bool activeFilter = false;
-            for (auto &contentTypeFilter : m_contentTypeFilters) {
-                if (contentTypeFilter->checkState() != Qt::Unchecked) {
-                    activeFilter = true;
-                    break;
-                }
-            }
-            mp_ui->contentTypeAllButton->setStyleSheet(activeFilter ? " * {color : #666666;} " : "*{font-weight: 500; color: black;}");
-            mp_contentManager->setCurrentContentTypeFilter(m_contentTypeFilters);
-        });
-    }
+    QList<QPair<QString, QString>> contentTypeList = {
+      {"_pictures:yes", gt("pictures")},
+      {"_pictures:no", gt("no-pictures")},
+      {"_videos:yes", gt("videos")},
+      {"_videos:no", gt("no-videos")},
+      {"_details:yes", gt("details")},
+      {"_details:no", gt("no-details")}
+    };
+
+    mp_contentType->setSelections(contentTypeList, KiwixApp::instance()->getSettingsManager()->getContentType());
 
     setCategories(KiwixApp::instance()->getContentManager()->getCategories());
     setLanguages(KiwixApp::instance()->getContentManager()->getLanguages());
@@ -124,13 +92,12 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
     connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
         mp_contentManager->setCurrentCategoryFilter(values);
     });
-}
-
-QString beautify(QString word)
-{
-    word = word.replace("_", " ");
-    word[0] = word[0].toUpper();
-    return word;
+    connect(mp_contentType, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
+       if (values[0] == "all") {
+           values = QStringList();
+       }
+       mp_contentManager->setCurrentContentTypeFilter(values);
+    });
 }
 
 void ContentManagerSide::setCategories(QStringList categories)

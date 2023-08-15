@@ -32,8 +32,9 @@ private:
     ContentManager* mp_contentManager;
     KiwixChoiceBox *mp_categories;
     KiwixChoiceBox *mp_languages;
+    KiwixChoiceBox *mp_contentType;
     QCheckBox* mp_contentTypeButton;
-    QList<ContentTypeFilter*> m_contentTypeFilters;
+    QStringList m_contentTypeFilters;
 
 public slots:
     void setCategories(QStringList);

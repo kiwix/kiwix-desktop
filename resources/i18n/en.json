@@ -156,6 +156,10 @@
     "move-files-to-trash-text": "This action will move the file to trash.",
     "perma-delete-files-text": "This action will permanently delete the file.",
     "clear-filter": "Clear the currently set filters",
-    "search-language": "Search language",
-    "search-category": "Search category"
+    "language-searcher-placeholder": "Filter language",
+    "category-searcher-placeholder": "Filter category",
+    "content-type-searcher-placeholder": "Filter content type",
+    "no-details": "Introduction only",
+    "no-pictures": "No Pictures",
+    "no-videos": "No Videos"
 }

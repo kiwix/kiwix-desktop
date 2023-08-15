@@ -30,6 +30,7 @@ public:
     bool getMoveToTrash() const { return m_moveToTrash; }
     QStringList getLanguageList() const { return m_langList; }
     QStringList getCategoryList() const { return m_categoryList; }
+    QStringList getContentType() const { return m_contentTypeList; }
 
 public slots:
     void setKiwixServerPort(int port);
@@ -40,6 +41,7 @@ public slots:
     void setMoveToTrash(bool moveToTrash);
     void setLanguage(QStringList langList);
     void setCategory(QStringList categoryList);
+    void setContentType(QStringList contentTypeList);
 private:
     void initSettings();
 
@@ -51,6 +53,7 @@ signals:
     void moveToTrashChanged(bool moveToTrash);
     void languageChanged(QStringList langList);
     void categoryChanged(QStringList categoryList);
+    void contentTypeChanged(QStringList contentTypeList);
 
 private:
     QSettings m_settings;
@@ -63,6 +66,7 @@ private:
     bool m_moveToTrash;
     QStringList m_langList;
     QStringList m_categoryList;
+    QStringList m_contentTypeList;
 };
 
 #endif // SETTINGSMANAGER_H

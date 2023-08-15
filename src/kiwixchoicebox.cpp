@@ -76,7 +76,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     searcher->setStyleSheet("QLineEdit{color: #999;}");
 
     connect(searcher, &KiwixLineEdit::focusedOut, [=]() {
-        searcher->setPlaceholderText(gt("search-" + m_type.toLower()));
+        searcher->setPlaceholderText(gt(m_type.toLower() + "-searcher-placeholder"));
         searcher->setStyleSheet("QLineEdit{color: #999;}");
         choiceSelector->setVisible(false);
         ui->currentChoices->setStyleSheet("#currentChoices{border: 1px solid #ccc;}");
@@ -189,9 +189,14 @@ void KiwixChoiceBox::adjustSize()
 
 void KiwixChoiceBox::setType(QString type)
 {
-    ui->choiceLabel->setText(type);
+    ui->choiceLabel->setText(gt(type));
     m_type = type;
-    searcher->setPlaceholderText(gt("search-" + type.toLower()));
+    searcher->setPlaceholderText(gt(type + "-searcher-placeholder"));
+
+    // Putting width based on placeholder contents
+    QFontMetrics fm = searcher->fontMetrics();
+    auto w = fm.boundingRect(gt(type + "-searcher-placeholder")).width();
+    searcher->setMinimumWidth(w + 20);
 }
 
 QStringList KiwixChoiceBox::getCurrentSelected()

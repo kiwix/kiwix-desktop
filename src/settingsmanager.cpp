@@ -112,6 +112,13 @@ void SettingsManager::setCategory(QStringList categoryList)
     emit(categoryChanged(m_categoryList));
 }
 
+void SettingsManager::setContentType(QStringList contentTypeList)
+{
+    m_contentTypeList = contentTypeList;
+    setSettings("contentType", m_contentTypeList);
+    emit(contentTypeChanged(m_contentTypeList));
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
@@ -122,4 +129,5 @@ void SettingsManager::initSettings()
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     m_langList = m_settings.value("language", QLocale::languageToString(QLocale().language())).toStringList();
     m_categoryList = m_settings.value("category", {"all"}).toStringList();
+    m_contentTypeList = m_settings.value("contentType", {}).toStringList();
 }

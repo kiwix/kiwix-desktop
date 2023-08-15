@@ -56,6 +56,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
 
+    setCurrentLanguage(KiwixApp::instance()->getSettingsManager()->getLanguageList());
+    setCurrentCategoryFilter(KiwixApp::instance()->getSettingsManager()->getCategoryList());
+    setCurrentContentTypeFilter(KiwixApp::instance()->getSettingsManager()->getContentType());
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
@@ -71,8 +74,6 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
     setCategories();
     setLanguages();
-    setCurrentLanguage(KiwixApp::instance()->getSettingsManager()->getLanguageList());
-    setCurrentCategoryFilter(KiwixApp::instance()->getSettingsManager()->getCategoryList());
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -650,9 +651,10 @@ void ContentManager::setCurrentCategoryFilter(QStringList categoryList)
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilters)
+void ContentManager::setCurrentContentTypeFilter(QStringList contentTypeFilters)
 {
     m_contentTypeFilters = contentTypeFilters;
+    KiwixApp::instance()->getSettingsManager()->setContentType(m_contentTypeFilters);
     emit(filterParamsChanged());
 }
 
@@ -714,13 +716,7 @@ QStringList ContentManager::getBookIds()
     std::vector<std::string> acceptTags, rejectTags;
 
     for (auto &contentTypeFilter : m_contentTypeFilters) {
-        auto state = contentTypeFilter->checkState();
-        auto filter = contentTypeFilter->getName();
-        if (state == Qt::PartiallyChecked) {
-            acceptTags.push_back("_" + filter.toStdString() +":yes");
-        } else if (state == Qt::Checked) {
-            acceptTags.push_back("_" + filter.toStdString() +":no");
-        }
+        acceptTags.push_back(contentTypeFilter.toStdString());
     }
 
     filter.acceptTags(acceptTags);

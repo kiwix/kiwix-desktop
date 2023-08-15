@@ -142,19 +142,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="contentTypeButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Content Type</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QFrame" name="contentTypeSelector">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -190,24 +177,11 @@
           <property name="bottomMargin">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QCheckBox" name="contentTypeAllButton">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>All</string>
-            </property>
-            <property name="tristate">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <widget class="KiwixChoiceBox" name="contentType" native="true"/>
        </item>
        <item>
         <spacer name="verticalSpacer">
