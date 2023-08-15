@@ -2,7 +2,6 @@
 #include "ui_contentmanagerside.h"
 #include "kiwixapp.h"
 #include "kiwixchoicebox.h"
-
 #include <QLocale>
 #include <QDebug>
 
@@ -118,13 +117,12 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
     connect(mp_languages, &KiwixChoiceBox::choiceUpdated,
             this, [=](QStringList values) {
                 if (values[0] == "all") {
-                    mp_contentManager->setCurrentLanguage("*");
-                    return;
+                    values = QStringList();
                 }
-                mp_contentManager->setCurrentLanguage(values.join(","));
+                mp_contentManager->setCurrentLanguage(values);
     });
     connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
-        mp_contentManager->setCurrentCategoryFilter(values.join(","));
+        mp_contentManager->setCurrentCategoryFilter(values);
     });
 }
 
@@ -137,10 +135,10 @@ QString beautify(QString word)
 
 void ContentManagerSide::setCategories(QStringList categories)
 {
-    mp_categories->setSelections(categories, gt("all"));
+    mp_categories->setSelections(categories, KiwixApp::instance()->getSettingsManager()->getCategoryList());
 }
 
 void ContentManagerSide::setLanguages(ContentManager::LanguageList langList)
 {
-    mp_languages->setSelections(langList, QLocale::languageToString(QLocale().language()));
+    mp_languages->setSelections(langList, KiwixApp::instance()->getSettingsManager()->getLanguageList());
 }

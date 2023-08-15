@@ -16,7 +16,6 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::kiwixchoicebox)
 {
-    m_defaultItem = nullptr;
     ui->setupUi(this);
 
     QFile file(QString::fromUtf8(":/css/choiceBox.css"));
@@ -153,7 +152,7 @@ QString beautifyString(QString word)
     return word;
 }
 
-void KiwixChoiceBox::setSelections(QStringList selections, QString defaultSelection)
+void KiwixChoiceBox::setSelections(QStringList selections, QStringList defaultSelection)
 {
     SelectionList sList;
     for (const auto &sel : selections) {
@@ -162,7 +161,7 @@ void KiwixChoiceBox::setSelections(QStringList selections, QString defaultSelect
     setSelections(sList, defaultSelection);
 }
 
-void KiwixChoiceBox::setSelections(SelectionList selections, QString defaultSelection)
+void KiwixChoiceBox::setSelections(SelectionList selections, QStringList defaultSelection)
 {
     choiceSelector->clear();
     for (const auto &selection: selections)
@@ -170,14 +169,10 @@ void KiwixChoiceBox::setSelections(SelectionList selections, QString defaultSele
         auto item = new KListWidgetItem(beautifyString(selection.second));
         item->setData(Qt::UserRole, selection.first);
         choiceSelector->addItem(item);
-        if (selection.second ==  defaultSelection)
-        {
-            m_defaultItem = item;
+        if (defaultSelection.contains(selection.first)) {
+            item->setSelected(true);
+            addSelection(item->text(), item->data(Qt::UserRole).toString());
         }
-    }
-    if (choiceSelector->selectedItems().isEmpty() && m_defaultItem) {
-        m_defaultItem->setSelected(true);
-        addSelection(m_defaultItem->text(), m_defaultItem->data(Qt::UserRole).toString());
     }
     adjustSize();
 }

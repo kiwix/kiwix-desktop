@@ -15,7 +15,6 @@ class ContentManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
-    Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
 
 public:
@@ -26,8 +25,8 @@ public:
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
     QStringList getDownloadIds();
-    void setCurrentLanguage(QString language);
-    void setCurrentCategoryFilter(QString category);
+    void setCurrentLanguage(QStringList languageList);
+    void setCurrentCategoryFilter(QStringList category);
     void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
     bool isLocal() const { return m_local; }
     QStringList getCategories() const { return m_categories; }

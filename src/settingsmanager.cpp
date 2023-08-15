@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <kiwix/tools.h>
+#include <QLocale>
+
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
     m_settings("Kiwix", "Kiwix-desktop"),
@@ -96,6 +98,20 @@ void SettingsManager::setMoveToTrash(bool moveToTrash)
     emit(moveToTrashChanged(m_moveToTrash));
 }
 
+void SettingsManager::setLanguage(QStringList langList)
+{
+    m_langList = langList;
+    setSettings("language", m_langList);
+    emit(languageChanged(m_langList));
+}
+
+void SettingsManager::setCategory(QStringList categoryList)
+{
+    m_categoryList = categoryList;
+    setSettings("category", m_categoryList);
+    emit(categoryChanged(m_categoryList));
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
@@ -104,4 +120,6 @@ void SettingsManager::initSettings()
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
+    m_langList = m_settings.value("language", QLocale::languageToString(QLocale().language())).toStringList();
+    m_categoryList = m_settings.value("category", {"all"}).toStringList();
 }

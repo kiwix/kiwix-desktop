@@ -56,7 +56,6 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
 
-    setCurrentLanguage(QLocale().name().split("_").at(0));
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
@@ -72,6 +71,8 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
     setCategories();
     setLanguages();
+    setCurrentLanguage(KiwixApp::instance()->getSettingsManager()->getLanguageList());
+    setCurrentCategoryFilter(KiwixApp::instance()->getSettingsManager()->getCategoryList());
 }
 
 QList<QMap<QString, QVariant>> ContentManager::getBooksList()
@@ -617,26 +618,35 @@ QStringList ContentManager::getDownloadIds()
     return list;
 }
 
-void ContentManager::setCurrentLanguage(QString language)
+void ContentManager::setCurrentLanguage(QStringList languageList)
 {
-    if (language.length() == 2) {
-      try {
-        language = QString::fromStdString(
-                     kiwix::converta2toa3(language.toStdString()));
-      } catch (std::out_of_range&) {}
+    languageList.sort();
+    for (auto &language : languageList) {
+        if (language.length() == 2) {
+          try {
+            language = QString::fromStdString(
+                         kiwix::converta2toa3(language.toStdString()));
+          } catch (std::out_of_range&) {}
+        }
     }
-    if (m_currentLanguage == language)
+    if (languageList.empty())
+        languageList.append("*");
+    auto newLanguage = languageList.join(",");
+    if (m_currentLanguage == newLanguage)
         return;
-    m_currentLanguage = language;
+    m_currentLanguage = newLanguage;
+    KiwixApp::instance()->getSettingsManager()->setLanguage(languageList);
     emit(currentLangChanged());
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentCategoryFilter(QString category)
+void ContentManager::setCurrentCategoryFilter(QStringList categoryList)
 {
-    if (m_categoryFilter == category)
+    categoryList.sort();
+    if (m_categoryFilter == categoryList.join(","))
         return;
-    m_categoryFilter = category.toLower();
+    m_categoryFilter = categoryList.join(",");
+    KiwixApp::instance()->getSettingsManager()->setCategory(categoryList);
     emit(filterParamsChanged());
 }
 
