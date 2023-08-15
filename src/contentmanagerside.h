@@ -30,10 +30,8 @@ public:
 private:
     Ui::contentmanagerside *mp_ui;
     ContentManager* mp_contentManager;
-    QCheckBox* mp_languageButton;
-    QListWidget* mp_languageSelector;
-    QCheckBox* mp_categoryButton;
-    QListWidget* mp_categorySelector;
+    KiwixChoiceBox *mp_categories;
+    KiwixChoiceBox *mp_languages;
     QCheckBox* mp_contentTypeButton;
     QList<ContentTypeFilter*> m_contentTypeFilters;
 

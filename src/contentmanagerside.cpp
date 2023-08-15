@@ -1,6 +1,7 @@
 #include "contentmanagerside.h"
 #include "ui_contentmanagerside.h"
 #include "kiwixapp.h"
+#include "kiwixchoicebox.h"
 
 #include <QLocale>
 #include <QDebug>
@@ -11,7 +12,13 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     QWidget(parent),
     mp_ui(new Ui::contentmanagerside)
 {
+    setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     mp_ui->setupUi(this);
+    QFile file(QString::fromUtf8(":/css/contentmanagerside.css"));
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    this->setStyleSheet(styleSheet);
+
     mp_ui->buttonGroup->setId(mp_ui->allFileButton, CatalogButtonId::ALL);
     mp_ui->buttonGroup->setId(mp_ui->localFileButton, CatalogButtonId::LOCAL);
     connect(mp_ui->buttonGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton *btn) {
@@ -19,6 +26,8 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         mp_contentManager->setLocal(id == CatalogButtonId::LOCAL);
     });
 
+    mp_ui->contentTypeButton->setIcon(QIcon(":/icons/caret-right-solid.svg"));
+    mp_ui->contentTypeButton->setIconSize(QSize(12, 12));
     connect(mp_ui->allFileButton, &QRadioButton::toggled,
             this, [=](bool checked) { mp_ui->allFileButton->setStyleSheet(
                     checked ? "*{font-weight: bold}" : "");});
@@ -28,29 +37,29 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     mp_ui->allFileButton->setText(gt("online-files"));
     mp_ui->localFileButton ->setText(gt("local-files"));
-    mp_ui->languageButton->setText(gt("browse-by-language"));
-    mp_ui->categoryButton->setText(gt("browse-by-category"));
     mp_ui->contentTypeButton->setText(gt("content-type"));
 
-    mp_languageButton = mp_ui->languageButton;
-    mp_languageSelector = mp_ui->languageSelector;
-    connect(mp_languageButton, &QCheckBox::toggled, this, [=](bool checked) { mp_languageSelector->setHidden(!checked); });
-    mp_languageSelector->setHidden(true);
+    mp_categories = mp_ui->categories;
+    mp_categories->setType(gt("category"));
 
-    mp_categoryButton = mp_ui->categoryButton;
-    mp_categorySelector = mp_ui->categorySelector;
-    connect(mp_categoryButton, &QCheckBox::toggled, this, [=](bool checked) { mp_categorySelector->setHidden(!checked); });
-    mp_categorySelector->setHidden(true);
+    mp_languages = mp_ui->languages;
+    mp_languages->setType(gt("language"));
 
     mp_contentTypeButton = mp_ui->contentTypeButton;
-    connect(mp_contentTypeButton, &QCheckBox::toggled, this, [=](bool checked) { mp_ui->contentTypeSelector->setHidden(!checked); });
+
+
+    connect(mp_contentTypeButton, &QCheckBox::toggled, this, [=](bool checked) {
+        mp_ui->contentTypeSelector->setHidden(!checked);
+        mp_ui->contentTypeButton->setIcon(checked ? QIcon(":/icons/caret-down-solid.svg") : QIcon(":/icons/caret-right-solid.svg"));
+
+    });
     mp_ui->contentTypeSelector->setHidden(true);
 
     mp_ui->contentTypeAllButton->setText(gt("all"));
-    mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: bold}");
+    mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: 500;}");
     connect(mp_ui->contentTypeAllButton, &QCheckBox::clicked, this, [=](bool checked) {
         Q_UNUSED(checked);
-        mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: bold}");
+        mp_ui->contentTypeAllButton->setStyleSheet("*{font-weight: 500;}");
         for (auto &contentTypeFilter : m_contentTypeFilters) {
             contentTypeFilter->setCheckState(Qt::Unchecked);
         }
@@ -59,11 +68,8 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     auto searcher = mp_ui->searcher;
     searcher->setPlaceholderText(gt("search-files"));
-    QFile file(QString::fromUtf8(":/css/_contentManager.css"));
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QString(file.readAll());
-    searcher->setStyleSheet(styleSheet);
     QIcon searchIcon = QIcon(":/icons/search.svg");
+
     searcher->addAction(searchIcon, QLineEdit::LeadingPosition);
     connect(searcher, &QLineEdit::textChanged, [searcher](){
         KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
@@ -88,7 +94,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
                     break;
                 }
             }
-            mp_ui->contentTypeAllButton->setStyleSheet(activeFilter ? "" : "*{font-weight: bold}");
+            mp_ui->contentTypeAllButton->setStyleSheet(activeFilter ? " * {color : #666666;} " : "*{font-weight: 500; color: black;}");
             mp_contentManager->setCurrentContentTypeFilter(m_contentTypeFilters);
         });
     }
@@ -111,23 +117,16 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
     const auto checkedButton = mp_ui->buttonGroup->button(isLocal == CatalogButtonId::LOCAL);
     checkedButton->setChecked(true);
     checkedButton->setStyleSheet("*{font-weight: bold}");
-    connect(mp_languageSelector, &QListWidget::itemSelectionChanged,
-            this, [=]() {
-                auto item = mp_languageSelector->selectedItems().at(0);
-                if (!item) return;
-                auto lang = item->data(Qt::UserRole).toString();
-                if (lang == "all") {
+    connect(mp_languages, &KiwixChoiceBox::choiceUpdated,
+            this, [=](QStringList values) {
+                if (values[0] == "all") {
                     mp_contentManager->setCurrentLanguage("*");
                     return;
                 }
-                mp_contentManager->setCurrentLanguage(lang);
+                mp_contentManager->setCurrentLanguage(values.join(","));
     });
-    connect(mp_categorySelector, &QListWidget::itemSelectionChanged,
-            this, [=]() {
-                auto item = mp_categorySelector->selectedItems().at(0);
-                if (!item) return;
-                auto category = item->data(Qt::UserRole).toString();
-                mp_contentManager->setCurrentCategoryFilter(category);
+    connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
+        mp_contentManager->setCurrentCategoryFilter(values.join(","));
     });
 }
 
@@ -140,40 +139,10 @@ QString beautify(QString word)
 
 void ContentManagerSide::setCategories(QStringList categories)
 {
-    mp_categorySelector->blockSignals(true);
-    mp_categorySelector->setHidden(true);
-    mp_categorySelector->clear();
-    mp_categorySelector->blockSignals(false);
-    for (auto category: categories)
-    {
-        auto item = new KListWidgetItem(beautify(category));
-        item->setData(Qt::UserRole, category);
-        mp_categorySelector->addItem(item);
-        if (category ==  "all")
-        {
-            item->setSelected(true);
-        }
-    }
+    mp_categories->setSelections(categories, gt("all"));
 }
 
 void ContentManagerSide::setLanguages(ContentManager::LanguageList langList)
 {
-    mp_languageSelector->blockSignals(true);
-    mp_languageSelector->setHidden(true);
-    mp_languageSelector->clear();
-    mp_languageSelector->blockSignals(false);
-    for(auto lang: langList)
-    {
-        auto currentLang = QLocale().language();
-        auto item = new KListWidgetItem(lang.second);
-        item->setData(Qt::UserRole, lang.first);
-        mp_languageSelector->addItem(item);
-        if (lang.second == QLocale::languageToString(currentLang)) {
-            item->setSelected(true);
-        }
-    }
-    mp_languageSelector->sortItems();
-    auto item = new KListWidgetItem("All");
-    item->setData(Qt::UserRole, "all");
-    mp_languageSelector->insertItem(0, item);
+    mp_languages->setSelections(langList, QLocale::languageToString(QLocale().language()));
 }
