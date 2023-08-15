@@ -1,4 +1,5 @@
 QListWidget::item {
+    color: #666666;
     padding: 0;
     padding-top: 6px;
     padding-bottom: 6px;
@@ -13,6 +14,11 @@ QListWidget {
 QListWidget::item::selected {
     color: #444444;
     background-color: transparent;
+}
+
+QListWidget::item::hover {
+    color: white;
+    background-color: #4e63ad;
 }
 
 QLineEdit {

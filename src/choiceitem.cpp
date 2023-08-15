@@ -9,6 +9,10 @@ ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
     m_value(value)
 {
     ui->setupUi(this);
+    QFile file(QString::fromUtf8(":/css/choiceBox.css"));
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    this->setStyleSheet(styleSheet);
     ui->itemLabel->setText(key);
     ui->itemLabel->setToolTip(key);
     connect(ui->closeButton, &QPushButton::clicked, [=](){

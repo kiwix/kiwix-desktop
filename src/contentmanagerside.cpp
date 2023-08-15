@@ -50,8 +50,6 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     connect(mp_contentTypeButton, &QCheckBox::toggled, this, [=](bool checked) {
         mp_ui->contentTypeSelector->setHidden(!checked);
-        mp_ui->contentTypeButton->setIcon(checked ? QIcon(":/icons/caret-down-solid.svg") : QIcon(":/icons/caret-right-solid.svg"));
-
     });
     mp_ui->contentTypeSelector->setHidden(true);
 

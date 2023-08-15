@@ -8,3 +8,16 @@
     height: 32px;
     line-height: 24px;
 }
+
+QScrollArea {
+    border: 0;
+}
+
+#allFileButton, #localFileButton, #contentTypeButton {
+    padding-left: 2px;
+}
+
+#allFileButton::indicator, #localFileButton::indicator, #contentTypeButton::indicator {
+    height: 0;
+    width: 0;
+}

@@ -18,6 +18,11 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
 {
     m_defaultItem = nullptr;
     ui->setupUi(this);
+
+    QFile file(QString::fromUtf8(":/css/choiceBox.css"));
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    this->setStyleSheet(styleSheet);
     ui->clearButton->setText(gt("clear"));
     ui->clearButton->setToolTip(gt("clear-filter"));
 
@@ -32,6 +37,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     choiceSelector->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
     choiceSelector->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     choiceSelector->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+    choiceSelector->setStyleSheet(styleSheet);
     choiceSelector->setSelectionMode(QAbstractItemView::SelectionMode::MultiSelection);
 
     currentChoicesLayout = new FlowLayout(ui->currentChoices, 2, 2, 2);
