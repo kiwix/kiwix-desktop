@@ -84,7 +84,6 @@
 	"kiwix-server-running-message": "Serverul Kiwix rulează și poate fi accesat în rețeaua locală la:",
 	"kiwix-server-description": "Pornirea unui server permite altor computere din rețeaua locală să acceseze biblioteca dvs. Kiwix cu un browser web standard.",
 	"fullscreen-notification": "Acum sunteți în modul ecran complet. Apăsați ESC pentru a renunța!",
-	"all-files": "Toate fișierele",
 	"local-files": "Fișiere Locale",
 	"browse-by-category": "Caută După Categorie",
 	"browse-by-language": "Caută După Limbă",

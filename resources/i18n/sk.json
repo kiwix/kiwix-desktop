@@ -89,7 +89,6 @@
 	"kiwix-server-running-message": "Server Kiwixu pracuje a dá sa naň vstúpiť na miestnej sieti cez:",
 	"kiwix-server-description": "Spustenie serveru umožňuje ostatným počítačom v lokálnej sieti pristupovať do Vašej Kiwix knižnice pomocou štandardného webového prehliadača.",
 	"fullscreen-notification": "Ste v režime celej obrazovky. Pre ukončenie stlačte ESC!",
-	"all-files": "Všetky súbory",
 	"local-files": "Lokálne súbory",
 	"browse-by-category": "Prehliadať podľa kategórie",
 	"browse-by-language": "Prehliadať podľa jazyka",

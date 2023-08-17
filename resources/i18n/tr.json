@@ -96,7 +96,6 @@
 	"kiwix-server-running-message": "Kiwix Sunucusu çalışıyor ve yerel ağdan şu adresten erişilebilir:",
 	"kiwix-server-description": "Sunucu başlatmak, yerel ağdaki diğer bilgisayarların standart bir web tarayıcısıyla Kiwix kitaplığınıza erişmesine izin verir.",
 	"fullscreen-notification": "Şimdi tam ekran modundasınız. Çıkmak için ESC tuşuna basın!",
-	"all-files": "Tüm Dosyalar",
 	"local-files": "Yerel Dosyalar",
 	"browse-by-category": "Kategoriye Göre Gözat",
 	"browse-by-language": "Dile Göre Gözat",

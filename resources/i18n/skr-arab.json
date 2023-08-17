@@ -57,7 +57,7 @@
 	"about-release-title": "ریلیز",
 	"about-version": "ورژن: {{VERSION}}",
 	"about-libraries-title": "لائبریریاں",
-	"all-files": "ساریاں فائلاں",
+	"online-files": "آن لائن فائلاں",
 	"local-files": "مقامی فائلاں",
 	"hide": "لُکاؤ",
 	"open-in-browser": "براؤزر وچ کھولو",
@@ -80,5 +80,7 @@
 	"ok": "ٹھیک ہے",
 	"invalid-port": "غلط پورٹ",
 	"zim-open-fail-title": "غلط فائل",
-	"delete-book": "کتاب مٹاؤ"
+	"delete-book": "کتاب مٹاؤ",
+	"open-book": "کتاب کھولو",
+	"open-folder": "فولڈر کھولو"
 }

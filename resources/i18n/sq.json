@@ -84,7 +84,6 @@
 	"kiwix-server-running-message": "Shërbyesi Kiwix Server është në punë dhe mund të përdoret te rrjeti vendor në:",
 	"kiwix-server-description": "Nisja e një shërbyesi u lejon kompjuterave të tjerë në rrjetin vendor të përdorin bibliotekën tuaj Kiwix përmes një shfletuesi standard.",
 	"fullscreen-notification": "Gjendeni nën mënyrën “sa krejt ekrani”. Që të dilni, shtypni tastin ESC!",
-	"all-files": "Krejt Kartelat",
 	"local-files": "Kartela Vendore",
 	"browse-by-category": "Shfletoni Sipas Kategorish",
 	"browse-by-language": "Shfletoni Sipas Gjuhësh",

@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Jopparn",
+			"Marcusjehrlander",
 			"Sabelöga",
 			"Susann Schweden",
 			"WikiPhoenix"
@@ -92,7 +93,7 @@
 	"kiwix-server-running-message": "Kiwix-servern fungerar och kan nås i det lokala nätverket via:",
 	"kiwix-server-description": "Att starta en server låter andra datorer i det lokala nätverket att få tillgång till ditt Kiwix-bibliotek med en vanlig webbläsare.",
 	"fullscreen-notification": "Du har aktiverat fullskärmsläge. Tryck ESC för att avsluta!",
-	"all-files": "Alla filer",
+	"online-files": "Online-filer",
 	"local-files": "Lokala filer",
 	"browse-by-category": "Bläddra efter kategori",
 	"browse-by-language": "Bläddra efter språk",
@@ -126,6 +127,7 @@
 	"details": "Fullständig artikel",
 	"yes": "ja",
 	"no": "nej",
+	"ok": "ok",
 	"no-filter": "inget filter",
 	"open-link-in-web-browser": "Öppna länk i webbläsaren",
 	"download-dir-dialog-title": "Är du säker på att du vill byta nedladdningskatalog?",
@@ -139,5 +141,23 @@
 	"monitor-clear-dir-dialog-msg": "Detta kommer sluta kontrollera övervakningskatalogen efter nya ZIM-filer.",
 	"monitor-directory-tooltip": "Alla ZIM-filer i denna katalog kommer automatiskt läggas till i biblioteket.",
 	"next-tab": "Flytta till nästa flik",
-	"previous-tab": "Flytta till föregående flik"
+	"previous-tab": "Flytta till föregående flik",
+	"cancel-download": "Avbryt nedladdning",
+	"cancel-download-text": "Är du säker på att du vill avbryta nedladdningen av <b>{{ZIM}}?</b>",
+	"delete-book": "Radera bok",
+	"delete-book-text": "Är du säker på att du vill radera <b>{{ZIM}}</b>?",
+	"download-storage-error": "Lagringsfel",
+	"download-storage-error-text": "Systemet har inte tillräckligt med lagringsutrymme.",
+	"download-unavailable": "Nedladdning ej tillgänglig",
+	"download-unavailable-text": "Nedladdningen är inte tillgänglig.",
+	"open-book": "Öppna bok",
+	"download-book": "Ladda ner bok",
+	"pause-download": "Pausa nedladdning",
+	"resume-download": "Återuppta nedladdning",
+	"open-folder": "Öppna mapp",
+	"couldnt-open-location": "Kunde inte öppna plats",
+	"couldnt-open-location-text": "Kiwix kunde inte öppna mappen {{FOLDER}}",
+	"move-files-to-trash": "Flytta raderade filer till papperskorgen",
+	"move-files-to-trash-text": "Denna åtgärd flyttar filen till papperskorgen.",
+	"perma-delete-files-text": "Denna åtgärd raderar filen permanent."
 }

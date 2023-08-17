@@ -66,7 +66,7 @@
 	"about-learn-more-about-kiwix": "Méi iwwer Kiwix gewuer ginn",
 	"about-version": "Versioun: {{VERSION}}",
 	"about-libraries-title": "Bibliothéiken",
-	"all-files": "All Fichieren",
+	"online-files": "Online-Fichieren",
 	"local-files": "Lokal Fichieren",
 	"hide": "Verstoppen",
 	"open-in-browser": "Am Browser opmaachen",
@@ -98,7 +98,10 @@
 	"details": "Kompletten Artikel",
 	"yes": "jo",
 	"no": "neen",
+	"ok": "ok",
 	"no-filter": "kee Filter",
 	"open-link-in-web-browser": "Link am Browser opmaachen",
-	"invalid-port": "Net valabele Port"
+	"invalid-port": "Net valabele Port",
+	"cancel-download": "Download ofbriechen",
+	"delete-book": "Buch läschen"
 }

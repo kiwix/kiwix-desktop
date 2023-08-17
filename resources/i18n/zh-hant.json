@@ -91,7 +91,7 @@
 	"kiwix-server-running-message": "Kiwix 伺服器正運作中，要在本地網路存取請在：",
 	"kiwix-server-description": "啟動伺服器能允許在本地網路上的其它台電腦以標準網頁瀏覽器來存取您的 Kiwix 圖書館。",
 	"fullscreen-notification": "您現在是處在全螢幕模式。若要離開請按下 ESC 鍵！",
-	"all-files": "所有檔案",
+	"online-files": "線上檔案",
 	"local-files": "本地檔案",
 	"browse-by-category": "按分類瀏覽",
 	"browse-by-language": "按語言瀏覽",
@@ -147,5 +147,15 @@
 	"download-storage-error": "儲存錯誤",
 	"download-storage-error-text": "系統沒有足夠的可用儲存空間。",
 	"download-unavailable": "無法下載",
-	"download-unavailable-text": "此下載不可用。"
+	"download-unavailable-text": "此下載不可用。",
+	"open-book": "開啟書籍",
+	"download-book": "下載書籍",
+	"pause-download": "暫停下載",
+	"resume-download": "繼續下載",
+	"open-folder": "開啟資料夾",
+	"couldnt-open-location": "無法開啟位置",
+	"couldnt-open-location-text": "Kiwix 開啟資料夾{{FOLDER}}",
+	"move-files-to-trash": "將已刪除的檔案移至垃圾桶",
+	"move-files-to-trash-text": "此操作將會把檔案移至垃圾桶。",
+	"perma-delete-files-text": "此操作將會永久刪除檔案。"
 }

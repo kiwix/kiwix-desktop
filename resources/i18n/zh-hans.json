@@ -93,7 +93,6 @@
 	"about-libraries-title": "图书馆",
 	"kiwix-server-description": "开启服务器可以允许局域网中的其他电脑使用普通的网页浏览器来访问你的 Kiwix 图书馆",
 	"fullscreen-notification": "您现已进入全屏模式。点击Esc键以退出全屏！",
-	"all-files": "所有文件",
 	"local-files": "本地文件",
 	"browse-by-category": "按分类浏览",
 	"browse-by-language": "按语言浏览",
