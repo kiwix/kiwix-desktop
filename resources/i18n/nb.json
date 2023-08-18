@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Event",
 			"Johshh"
 		]
 	},
@@ -70,7 +71,7 @@
 	"kiwix-server-running-message": "Kiwix-tjeneren kjører og kan nås i det lokale nettverket på:",
 	"kiwix-server-description": "Å starte en tjener lar andre datamaskiner i det lokale nettverket få tilgang til Kiwix-biblioteket med en standard nettleser.",
 	"fullscreen-notification": "Du er nå i fullskjermmodus. Trykk ESC for å avslutte!",
-	"all-files": "Alle filer",
+	"online-files": "Online-filer",
 	"local-files": "Lokale filer",
 	"browse-by-category": "Bla etter kategori",
 	"browse-by-language": "Bla etter språk",
@@ -103,5 +104,8 @@
 	"open-link-in-web-browser": "Åpne lenken i nettleseren",
 	"download-dir-dialog-title": "Er du sikker på at du vil endre nedlastingsmappen?",
 	"invalid-port": "Ugyldig port",
-	"zim-open-fail-title": "Ugyldig fil"
+	"zim-open-fail-title": "Ugyldig fil",
+	"move-files-to-trash": "Flytt slettede filer til papirkurven",
+	"move-files-to-trash-text": "Denne handlingen vil flytte filen til papirkurven.",
+	"perma-delete-files-text": "Denne handlingen vil slette filen uopprettelig."
 }

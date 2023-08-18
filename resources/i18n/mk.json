@@ -89,7 +89,7 @@
 	"kiwix-server-running-message": "Опслужувачот на Кивикс работи и може да му се пристапи во месната мрежа на:",
 	"kiwix-server-description": "Отпочнувањето на опслужувачот им овозможува на другите сметачи во месната мрежа да имаат пристап кон библиотеката на Кивикс со стандарден семрежен прелистувач.",
 	"fullscreen-notification": "Сега сте во целоекрански режим. Стиснете на Esc за да излезете!",
-	"all-files": "Сите податотеки",
+	"online-files": "Семрежни податотеки",
 	"local-files": "Месни податотеки",
 	"browse-by-category": "Прелистај по категорија",
 	"browse-by-language": "Прелистај по јазик",
@@ -145,5 +145,15 @@
 	"download-storage-error": "Грешка во складирањето",
 	"download-storage-error-text": "Системот нема доволно складиштен простор.",
 	"download-unavailable": "Преземањето е недостапно",
-	"download-unavailable-text": "Ова преземање е недостапно."
+	"download-unavailable-text": "Ова преземање е недостапно.",
+	"open-book": "Отвори книга",
+	"download-book": "Преземи книга",
+	"pause-download": "Запри го преземањето",
+	"resume-download": "Продолжи преземање",
+	"open-folder": "Отвори папка",
+	"couldnt-open-location": "Не можам да го отворам местото",
+	"couldnt-open-location-text": "Кивикс не може да ја отвори папката {{FOLDER}}",
+	"move-files-to-trash": "Премести ги избришаните податотеки во корпа",
+	"move-files-to-trash-text": "Ова дејство ќе ја премести податотеката во корпа.",
+	"perma-delete-files-text": "Ова дејство трајно ќе ја избрише податотеката."
 }

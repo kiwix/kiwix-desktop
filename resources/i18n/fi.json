@@ -81,7 +81,6 @@
 	"about-version": "Versio: {{VERSION}}",
 	"about-libraries-title": "Kirjastot",
 	"fullscreen-notification": "Olet nyt koko näytön tilassa. Paina ESC poistuaksesi!",
-	"all-files": "Kaikki tiedostot",
 	"local-files": "Paikalliset tiedostot",
 	"browse-by-category": "Selaa luokittain",
 	"browse-by-language": "Selaa kielittäin",

@@ -94,7 +94,7 @@
 	"kiwix-server-running-message": "Le serveur Kiwix est lancé et peut être accédé sur le réseau local à :",
 	"kiwix-server-description": "Démarrer un serveur permet à d’autres ordinateurs du réseau local d’accéder à votre bibliothèque Kiwix avec un navigateur web classique.",
 	"fullscreen-notification": "Vous êtes maintenant en plein écran. Appuyez sur Échap pour quitter !",
-	"all-files": "Tous les fichiers",
+	"online-files": "Fichiers en ligne",
 	"local-files": "Fichiers locaux",
 	"browse-by-category": "Parcourir par catégorie",
 	"browse-by-language": "Parcourir par langue",
@@ -150,5 +150,15 @@
 	"download-storage-error": "Erreur de stockage",
 	"download-storage-error-text": "Le système n’a pas assez de place de stockage disponible.",
 	"download-unavailable": "Téléchargement indisponible",
-	"download-unavailable-text": "Ce téléchargement n’est pas disponible."
+	"download-unavailable-text": "Ce téléchargement n’est pas disponible.",
+	"open-book": "Ouvrir le livre",
+	"download-book": "Télécharger le livre",
+	"pause-download": "Mettre en pause le téléchargement",
+	"resume-download": "Reprendre le téléchargement",
+	"open-folder": "Ouvrir le dossier",
+	"couldnt-open-location": "Impossible d’ouvrir l’emplacement",
+	"couldnt-open-location-text": "Kiwix ne peut pas ouvrir le dossier {{FOLDER}}",
+	"move-files-to-trash": "Déplacer les fichiers supprimés vers la corbeille",
+	"move-files-to-trash-text": "Cette action déplacera le fichier vers la corbeille.",
+	"perma-delete-files-text": "Cette action supprimera définitivement le fichier."
 }

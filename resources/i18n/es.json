@@ -90,7 +90,6 @@
 	"kiwix-server-running-message": "El servidor Kiwix se está ejecutando y se puede acceder a él en la red local en:",
 	"kiwix-server-description": "Iniciar un servidor permite que otras computadoras en la red local accedan a su biblioteca Kiwix con un navegador web estándar.",
 	"fullscreen-notification": "Ahora estás en modo de pantalla completa. Presione ESC para salir!",
-	"all-files": "Todos los archivos",
 	"local-files": "Archivos locales",
 	"browse-by-category": "Explorar por categorías",
 	"browse-by-language": "Explorar por idiomas",

@@ -93,7 +93,6 @@
 	"kiwix-server-running-message": "Serwer Kiwix jest uruchomiony i można uzyskać do niego dostęp w sieci lokalnej pod adresem:",
 	"kiwix-server-description": "Uruchomienie serwera umożliwia innym komputerom w sieci lokalnej dostęp do biblioteki Kiwix za pomocą standardowej przeglądarki internetowej.",
 	"fullscreen-notification": "Znajdujesz się w trybie pełnoekranowym. Naciśnij ESC aby z niego wyjść!",
-	"all-files": "Wszystkie pliki",
 	"local-files": "Pliki lokalne",
 	"browse-by-category": "Przeglądaj według kategorii",
 	"browse-by-language": "Przeglądaj według języka",

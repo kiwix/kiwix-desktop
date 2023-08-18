@@ -97,7 +97,6 @@
 	"kiwix-server-running-message": "Il server Kiwix è in esecuzione ed è possibile accedervi nella rete locale all'indirizzo:",
 	"kiwix-server-description": "L'avvio di un server consente ad altri computer nella rete locale di accedere alla tua libreria Kiwix con un browser web standard.",
 	"fullscreen-notification": "Ora sei in modalità a schermo intero. Premi ESC per uscire!",
-	"all-files": "Tutti i file",
 	"local-files": "File locali",
 	"browse-by-category": "Sfoglia per categoria",
 	"browse-by-language": "Sfoglia per lingua",
