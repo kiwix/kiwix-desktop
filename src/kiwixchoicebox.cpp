@@ -32,7 +32,8 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     choiceSelector = new KiwixListWidget(parent);
     choiceSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     choiceSelector->setMaximumWidth(250);
-    choiceSelector->setMaximumHeight(200);
+    // allow maximum 6 elements
+    choiceSelector->setMaximumHeight(KListWidgetItem::getItemHeight() * 6);
     choiceSelector->setCursor(Qt::PointingHandCursor);
     choiceSelector->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
     choiceSelector->setFocusPolicy(Qt::FocusPolicy::NoFocus);
@@ -40,7 +41,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     choiceSelector->setStyleSheet(styleSheet);
     choiceSelector->setSelectionMode(QAbstractItemView::SelectionMode::MultiSelection);
 
-    currentChoicesLayout = new FlowLayout(ui->currentChoices, 2, 2, 2);
+    currentChoicesLayout = new FlowLayout(ui->currentChoices, 4, 2, 2);
     searcher = new KiwixLineEdit();
     searcher->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     currentChoicesLayout->addWidget(searcher);
@@ -100,11 +101,22 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     connect(this, &KiwixChoiceBox::choiceUpdated, [=]() {
         choiceSelector->setVisible(false);
     });
+
+    connect(this, &KiwixChoiceBox::clicked, [=]() {
+        searcher->setFocus();
+    });
 }
 
 KiwixChoiceBox::~KiwixChoiceBox()
 {
     delete ui;
+}
+
+void KiwixChoiceBox::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        emit(clicked());
+    }
 }
 
 void KiwixChoiceBox::keyPressEvent(QKeyEvent *event)

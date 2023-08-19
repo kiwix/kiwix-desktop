@@ -36,9 +36,11 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 signals:
     void choiceUpdated(QStringList);
+    void clicked();
 
 private:
     Ui::kiwixchoicebox *ui;
