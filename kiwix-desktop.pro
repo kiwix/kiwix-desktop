@@ -45,6 +45,7 @@ SOURCES += \
     src/kiwixchoicebox.cpp \
     src/kiwixconfirmbox.cpp \
     src/kiwixlineedit.cpp \
+    src/kiwixlistwidget.cpp \
     src/kiwixloader.cpp \
     src/rownode.cpp \
     src/suggestionlistworker.cpp \
@@ -90,6 +91,7 @@ HEADERS += \
     src/kiwixchoicebox.h \
     src/kiwixconfirmbox.h \
     src/kiwixlineedit.h \
+    src/kiwixlistwidget.h \
     src/kiwixloader.h \
     src/node.h \
     src/rownode.h \

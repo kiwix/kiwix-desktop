@@ -14,6 +14,7 @@
 
 class ChoiceItem;
 class KiwixLineEdit;
+class KiwixListWidget;
 
 namespace Ui {
 class kiwixchoicebox;
@@ -43,7 +44,7 @@ private:
     Ui::kiwixchoicebox *ui;
     QLabel *choiceLabel;
     QLineEdit *choiceSearch;
-    QListWidget *choiceSelector;
+    KiwixListWidget *choiceSelector;
     FlowLayout *currentChoicesLayout;
     KiwixLineEdit *searcher;
     QStringList getCurrentSelected();

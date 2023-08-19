@@ -11,6 +11,7 @@
 #include <QAbstractItemView>
 #include <QScrollBar>
 #include "kiwixlineedit.h"
+#include "kiwixlistwidget.h"
 
 KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     QWidget(parent),
@@ -28,7 +29,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     choiceLabel = ui->choiceLabel;
     choiceLabel->setText(gt("undefined"));
 
-    choiceSelector = new QListWidget(parent);
+    choiceSelector = new KiwixListWidget(parent);
     choiceSelector->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     choiceSelector->setMaximumWidth(250);
     choiceSelector->setMaximumHeight(200);
@@ -110,6 +111,12 @@ void KiwixChoiceBox::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         searcher->clearFocus();
+    } else if (event->key() == Qt::Key_Down) {
+        choiceSelector->moveDown();
+    } else if (event->key() == Qt::Key_Up) {
+        choiceSelector->moveUp();
+    } else if ((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
+        choiceSelector->selectCurrent();
     }
 }
 
