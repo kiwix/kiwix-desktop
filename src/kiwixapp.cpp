@@ -31,8 +31,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      m_nameMapper(m_library.getKiwixLibrary(), false),
-      m_server(&m_library.getKiwixLibrary(), &m_nameMapper)
+      mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
+      m_server(m_library.getKiwixLibrary(), mp_nameMapper)
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -457,7 +457,7 @@ void KiwixApp::handleItemsState(TabType tabType)
 
 void KiwixApp::updateNameMapper()
 {
-  m_nameMapper.update();
+  mp_nameMapper->update();
 }
 
 void KiwixApp::printVersions(std::ostream& out) {
