@@ -66,9 +66,6 @@
         <number>9</number>
        </property>
        <item>
-        <widget class="QLineEdit" name="searcher"/>
-       </item>
-       <item>
         <widget class="QRadioButton" name="allFileButton">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -114,6 +111,9 @@
           <string notr="true">buttonGroup</string>
          </attribute>
         </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="searcher"/>
        </item>
        <item>
         <widget class="KiwixChoiceBox" name="languages" native="true">
