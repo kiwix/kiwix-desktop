@@ -70,32 +70,25 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     });
 
     connect(searcher, &KiwixLineEdit::clicked, [=]() {
-        choiceSelector->setVisible(true);
-        adjustSize();
+        showOptions();
     });
 
     choiceSelector->setVisible(false);
     searcher->setStyleSheet("QLineEdit{color: #999;}");
 
     connect(searcher, &KiwixLineEdit::focusedOut, [=]() {
-        searcher->setPlaceholderText(gt(m_type.toLower() + "-searcher-placeholder"));
-        searcher->setStyleSheet("QLineEdit{color: #999;}");
-        choiceSelector->setVisible(false);
-        ui->currentChoices->setStyleSheet("#currentChoices{border: 1px solid #ccc;}");
+        hideOptions();
     });
 
     connect(searcher, &KiwixLineEdit::focusedIn, [=]() {
-        ui->currentChoices->setStyleSheet("#currentChoices{border: 2px solid #4e63ad;}");
-        adjustSize();
-        choiceSelector->setVisible(true);
-        choiceSelector->raise();
-        searcher->setPlaceholderText("");
+        showOptions();
     });
 
     ui->clearButton->setCursor(Qt::PointingHandCursor);
     connect(ui->clearButton, &QPushButton::clicked, [=]() {
        clearSelections();
        emit(choiceUpdated(getCurrentSelected()));
+       hideOptions();
     });
 
     connect(this, &KiwixChoiceBox::choiceUpdated, [=]() {
@@ -103,7 +96,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     });
 
     connect(this, &KiwixChoiceBox::clicked, [=]() {
-        searcher->setFocus();
+        showOptions();
     });
 }
 
@@ -112,18 +105,48 @@ KiwixChoiceBox::~KiwixChoiceBox()
     delete ui;
 }
 
-void KiwixChoiceBox::mouseReleaseEvent(QMouseEvent *event)
+/*
+When the lineEdit is currently focused,
+if the outer widget is pressed, lineEdit loses focus and hides the options.
+When mouseRelease event is called, it will create a flicker effect: 
+    - Clicking and holding causes the lineEdit to lose focus and hide the options 
+    - Release causes the options to show up again.
+Showing the options on a mousePress doesn't allow this
+*/
+void KiwixChoiceBox::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         emit(clicked());
     }
 }
 
+void KiwixChoiceBox::hideOptions()
+{
+    if (choiceSelector->selectedItems().isEmpty()) {
+        searcher->setPlaceholderText(gt(m_type.toLower() + "-searcher-placeholder"));
+    }
+    searcher->setStyleSheet("QLineEdit{color: #999;}");
+    choiceSelector->setVisible(false);
+    ui->currentChoices->setStyleSheet("#currentChoices{border: 1px solid #ccc;}");
+    searcher->clearFocus();
+}
+
+void KiwixChoiceBox::showOptions()
+{
+    ui->currentChoices->setStyleSheet("#currentChoices{border: 2px solid #4e63ad;}");
+    adjustSize();
+    choiceSelector->setVisible(true);
+    choiceSelector->raise();
+    searcher->setPlaceholderText("");
+    searcher->setFocus();
+}
+
 void KiwixChoiceBox::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
-        searcher->clearFocus();
+        hideOptions();
     } else if (event->key() == Qt::Key_Down) {
+        showOptions();
         choiceSelector->moveDown();
     } else if (event->key() == Qt::Key_Up) {
         choiceSelector->moveUp();
@@ -193,6 +216,8 @@ void KiwixChoiceBox::setSelections(SelectionList selections, QStringList default
             addSelection(item->text(), item->data(Qt::UserRole).toString());
         }
     }
+    if (choiceSelector->selectedItems().isEmpty())
+        searcher->setPlaceholderText(gt(m_type + "-searcher-placeholder"));
     adjustSize();
 }
 
@@ -210,7 +235,6 @@ void KiwixChoiceBox::setType(QString type)
 {
     ui->choiceLabel->setText(gt(type));
     m_type = type;
-    searcher->setPlaceholderText(gt(type + "-searcher-placeholder"));
 
     // Putting width based on placeholder contents
     QFontMetrics fm = searcher->fontMetrics();

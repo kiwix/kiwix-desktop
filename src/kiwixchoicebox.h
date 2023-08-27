@@ -36,7 +36,7 @@ public:
 
 protected:
     void keyPressEvent(QKeyEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 signals:
     void choiceUpdated(QStringList);
@@ -53,6 +53,8 @@ private:
     bool removeSelection(QString selection);
     void clearSelections();
     bool addSelection(QString key, QString value);
+    void showOptions();
+    void hideOptions();
     QString m_type;
     bool m_sliderMoved = false;
 };
