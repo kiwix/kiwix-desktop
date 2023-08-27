@@ -17,6 +17,9 @@ public:
     QString getKey() { return m_key; }
     QString getValue() { return m_value; }
 
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+
 private:
     Ui::ChoiceItem *ui;
     QString m_key;

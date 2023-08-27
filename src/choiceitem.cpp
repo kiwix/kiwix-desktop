@@ -1,6 +1,7 @@
 #include "choiceitem.h"
 #include "ui_choiceitem.h"
 #include <QFile>
+#include <QMouseEvent>
 
 ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
     QWidget(parent),
@@ -24,4 +25,10 @@ ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
 ChoiceItem::~ChoiceItem()
 {
     delete ui;
+}
+
+void ChoiceItem::mousePressEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    return;
 }
