@@ -50,9 +50,9 @@ private:
     FlowLayout *currentChoicesLayout;
     KiwixLineEdit *searcher;
     QStringList getCurrentSelected();
-    bool removeSelection(QString selection);
+    bool removeSelection(QListWidgetItem *item);
     void clearSelections();
-    bool addSelection(QString key, QString value);
+    bool addSelection(QListWidgetItem *item);
     void showOptions();
     void hideOptions();
     QString m_type;

@@ -48,9 +48,9 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     connect(choiceSelector, &QListWidget::itemPressed, this, [=](QListWidgetItem *item) {
         searcher->clear();
         if (item->isSelected()) {
-            addSelection(item->text(), item->data(Qt::UserRole).toString());
+            addSelection(item);
         } else {
-            removeSelection(item->text());
+            removeSelection(item);
         }
     });
 
@@ -155,24 +155,38 @@ void KiwixChoiceBox::keyPressEvent(QKeyEvent *event)
     }
 }
 
-bool KiwixChoiceBox::addSelection(QString key, QString value)
+bool KiwixChoiceBox::addSelection(QListWidgetItem *item)
 {
+    auto key = item->text();
+    auto value = item->data(Qt::UserRole).toString();
     auto chItem = new ChoiceItem(key, value);
     connect(chItem, &ChoiceItem::closeButtonClicked, [=](QString text) {
-        removeSelection(text);
+        auto selectionItems = choiceSelector->findItems(text, Qt::MatchExactly);
+        if (selectionItems.size() != 1) return;
+        removeSelection(selectionItems[0]);
     });
     chItem->setObjectName(key);
     currentChoicesLayout->insertWidget(ui->currentChoices->children().count() - 2, chItem);
     searcher->setFixedWidth(20);
+    // put on top of list
+    item = choiceSelector->takeItem(choiceSelector->row(item));
+    choiceSelector->insertItem(0, item);
+    item->setSelected(true);
+
     searcher->setFocus();
     emit(choiceUpdated(getCurrentSelected()));
     return true;
 }
 
-bool KiwixChoiceBox::removeSelection(QString selection)
+bool KiwixChoiceBox::removeSelection(QListWidgetItem *item)
 {
-    auto chItem = ui->currentChoices->findChild<ChoiceItem*>(selection);
+    auto chItem = ui->currentChoices->findChild<ChoiceItem*>(item->text());
     chItem->deleteLater();
+    // selected items are always shown at top, put it after the last selected item
+    item->setSelected(false);
+    auto selItems = choiceSelector->selectedItems();
+    item = choiceSelector->takeItem(choiceSelector->row(item));
+    choiceSelector->insertItem(selItems.size(), item);
     emit(choiceUpdated(getCurrentSelected()));
     return true;
 }
@@ -212,8 +226,7 @@ void KiwixChoiceBox::setSelections(SelectionList selections, QStringList default
         item->setData(Qt::UserRole, selection.first);
         choiceSelector->addItem(item);
         if (defaultSelection.contains(selection.first)) {
-            item->setSelected(true);
-            addSelection(item->text(), item->data(Qt::UserRole).toString());
+            addSelection(item);
         }
     }
     if (choiceSelector->selectedItems().isEmpty())
