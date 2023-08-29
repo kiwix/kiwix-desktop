@@ -12,17 +12,19 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     mp_ui(new Ui::contentmanagerside)
 {
     mp_ui->setupUi(this);
-    connect(mp_ui->allFileButton, &QRadioButton::toggled,
-            this, [=](bool checked) { this->mp_contentManager->setLocal(!checked); });
-    connect(mp_ui->localFileButton, &QRadioButton::toggled,
-            this, [=](bool checked) { this->mp_contentManager->setLocal(checked); });
+    mp_ui->buttonGroup->setId(mp_ui->allFileButton, CatalogButtonId::ALL);
+    mp_ui->buttonGroup->setId(mp_ui->localFileButton, CatalogButtonId::LOCAL);
+    connect(mp_ui->buttonGroup, QOverload<QAbstractButton *>::of(&QButtonGroup::buttonClicked), [=](QAbstractButton *btn) {
+        const auto id = mp_ui->buttonGroup->id(btn);
+        mp_contentManager->setLocal(id == CatalogButtonId::LOCAL);
+    });
+
     connect(mp_ui->allFileButton, &QRadioButton::toggled,
             this, [=](bool checked) { mp_ui->allFileButton->setStyleSheet(
                     checked ? "*{font-weight: bold}" : "");});
     connect(mp_ui->localFileButton, &QRadioButton::toggled,
             this, [=](bool checked) { mp_ui->localFileButton->setStyleSheet(
                     checked ?"*{font-weight: bold}" : "");});
-    mp_ui->localFileButton->setStyleSheet("*{font-weight: bold}");
 
     mp_ui->allFileButton->setText(gt("online-files"));
     mp_ui->localFileButton ->setText(gt("local-files"));
@@ -105,6 +107,10 @@ ContentManagerSide::~ContentManagerSide()
 void ContentManagerSide::setContentManager(ContentManager *contentManager)
 {
     mp_contentManager = contentManager;
+    const auto isLocal = mp_contentManager->isLocal();
+    const auto checkedButton = mp_ui->buttonGroup->button(isLocal == CatalogButtonId::LOCAL);
+    checkedButton->setChecked(true);
+    checkedButton->setStyleSheet("*{font-weight: bold}");
     connect(mp_languageSelector, &QListWidget::itemSelectionChanged,
             this, [=]() {
                 auto item = mp_languageSelector->selectedItems().at(0);

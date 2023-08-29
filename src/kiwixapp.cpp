@@ -64,6 +64,7 @@ void KiwixApp::init()
         gt("error-downloader-launch-message") + "<br><br>" + e.what());
     }
     mp_manager = new ContentManager(&m_library, mp_downloader);
+    mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 
     auto icon = QIcon();
     icon.addFile(":/icons/kiwix-app-icons-square.svg");
