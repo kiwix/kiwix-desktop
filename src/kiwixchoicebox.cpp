@@ -43,7 +43,8 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
 
     currentChoicesLayout = new FlowLayout(ui->currentChoices, 4, 2, 2);
     searcher = new KiwixLineEdit();
-    searcher->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    searcher->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    searcher->setFixedWidth(20);
     currentChoicesLayout->addWidget(searcher);
     connect(choiceSelector, &QListWidget::itemPressed, this, [=](QListWidgetItem *item) {
         searcher->clear();
@@ -56,16 +57,20 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
 
     connect(searcher, &QLineEdit::textChanged, [=](QString search) {
         searcher->setStyleSheet("QLineEdit{color: #666;}");
+        QFontMetrics fm = searcher->fontMetrics();
+        auto w = fm.horizontalAdvance(search) + 20;
+        if (w + 4 < ui->currentChoices->width()) {
+            searcher->setFixedWidth(w);
+            ui->currentChoices->resize(ui->currentChoices->width(), currentChoicesLayout->minimumHeightForWidth(ui->currentChoices->width()));
+        }
         int visibleItems = 0;
         for (auto i = 0; i < choiceSelector->count(); i++) {
             auto itemAtRow = choiceSelector->item(i);
             itemAtRow->setHidden(!itemAtRow->text().contains(search, Qt::CaseSensitivity::CaseInsensitive));
             visibleItems += !(itemAtRow->isHidden());
         }
-        choiceSelector->setGeometry(this->x() + ui->currentChoices->x(),
-                                    this->y() + ui->currentChoices->y() + ui->currentChoices->height(),
-                                    choiceSelector->width(),
-                                    visibleItems * KListWidgetItem::getItemHeight() + 2);
+        choiceSelector->setVisibleItems(visibleItems);
+        adjustSize();
         choiceSelector->setVisible(true);
     });
 
@@ -86,12 +91,14 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
 
     ui->clearButton->setCursor(Qt::PointingHandCursor);
     connect(ui->clearButton, &QPushButton::clicked, [=]() {
-       clearSelections();
-       emit(choiceUpdated(getCurrentSelected()));
-       hideOptions();
+        clearSelections();
+        emit(choiceUpdated(getCurrentSelected()));
+        hideOptions();
     });
 
     connect(this, &KiwixChoiceBox::choiceUpdated, [=]() {
+        if (choiceSelector->selectedItems().isEmpty())
+            showPlaceholder();
         choiceSelector->setVisible(false);
     });
 
@@ -123,7 +130,7 @@ void KiwixChoiceBox::mousePressEvent(QMouseEvent *event)
 void KiwixChoiceBox::hideOptions()
 {
     if (choiceSelector->selectedItems().isEmpty()) {
-        searcher->setPlaceholderText(gt(m_type.toLower() + "-searcher-placeholder"));
+        showPlaceholder();
     }
     searcher->setStyleSheet("QLineEdit{color: #999;}");
     choiceSelector->setVisible(false);
@@ -146,7 +153,8 @@ void KiwixChoiceBox::keyPressEvent(QKeyEvent *event)
     if (event->key() == Qt::Key_Escape) {
         hideOptions();
     } else if (event->key() == Qt::Key_Down) {
-        showOptions();
+        if (!choiceSelector->isVisible())
+            showOptions();
         choiceSelector->moveDown();
     } else if (event->key() == Qt::Key_Up) {
         choiceSelector->moveUp();
@@ -173,6 +181,7 @@ bool KiwixChoiceBox::addSelection(QListWidgetItem *item)
     choiceSelector->insertItem(0, item);
     item->setSelected(true);
 
+    searcher->setFixedWidth(20);
     searcher->setFocus();
     emit(choiceUpdated(getCurrentSelected()));
     return true;
@@ -199,6 +208,16 @@ void KiwixChoiceBox::clearSelections()
         ui->currentChoices->layout()->removeWidget(chItem);
         delete chItem;
     }
+}
+
+void KiwixChoiceBox::showPlaceholder()
+{
+    searcher->clear();
+    searcher->setPlaceholderText(gt(m_type + "-searcher-placeholder"));
+    // Putting width based on placeholder contents
+    QFontMetrics fm = searcher->fontMetrics();
+    auto w = fm.boundingRect(gt(m_type + "-searcher-placeholder")).width();
+    searcher->setFixedWidth(w + 20);
 }
 
 QString beautifyString(QString word)
@@ -230,7 +249,8 @@ void KiwixChoiceBox::setSelections(SelectionList selections, QStringList default
         }
     }
     if (choiceSelector->selectedItems().isEmpty())
-        searcher->setPlaceholderText(gt(m_type + "-searcher-placeholder"));
+        showPlaceholder();
+    choiceSelector->setVisibleItems(choiceSelector->count());
     adjustSize();
 }
 
@@ -241,18 +261,13 @@ void KiwixChoiceBox::adjustSize()
     choiceSelector->setGeometry(this->x() + ui->currentChoices->x(),
                                 this->y() + ui->currentChoices->y() + ui->currentChoices->height(),
                                 choiceSelector->width(),
-                                choiceSelector->count() * KListWidgetItem::getItemHeight() + 2); // 2 is for the border so that all elements are visible
+                                choiceSelector->getVisibleItems() * KListWidgetItem::getItemHeight() + 2); // 2 is for the border so that all elements are visible
 }
 
 void KiwixChoiceBox::setType(QString type)
 {
     ui->choiceLabel->setText(gt(type));
     m_type = type;
-
-    // Putting width based on placeholder contents
-    QFontMetrics fm = searcher->fontMetrics();
-    auto w = fm.boundingRect(gt(type + "-searcher-placeholder")).width();
-    searcher->setMinimumWidth(w + 20);
 }
 
 QStringList KiwixChoiceBox::getCurrentSelected()

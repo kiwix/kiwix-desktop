@@ -55,6 +55,7 @@ private:
     bool addSelection(QListWidgetItem *item);
     void showOptions();
     void hideOptions();
+    void showPlaceholder();
     QString m_type;
     bool m_sliderMoved = false;
 };

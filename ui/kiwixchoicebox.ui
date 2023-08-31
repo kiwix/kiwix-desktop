@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>268</width>
-    <height>50</height>
+    <height>54</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -79,7 +79,7 @@
    <item>
     <widget class="QWidget" name="currentChoices" native="true">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+      <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
