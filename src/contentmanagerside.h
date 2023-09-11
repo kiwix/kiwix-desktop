@@ -16,6 +16,10 @@ class ContentManagerSide : public QWidget
     Q_OBJECT
 
 public:
+    enum CatalogButtonId {
+        ALL = 0,
+        LOCAL = 1
+    };
     explicit ContentManagerSide(QWidget *parent = 0);
     ~ContentManagerSide();
 

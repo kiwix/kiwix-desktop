@@ -16,6 +16,7 @@ class ContentManager : public QObject
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
     Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
+    Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
 
 public:
     typedef QList<QPair<QString, QString>> LanguageList;
@@ -66,6 +67,7 @@ signals:
     void pendingRequest(const bool);
     void categoriesLoaded(QStringList);
     void languagesLoaded(LanguageList);
+    void localChanged(const bool);
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
