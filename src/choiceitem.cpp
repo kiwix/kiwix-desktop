@@ -2,6 +2,7 @@
 #include "ui_choiceitem.h"
 #include <QFile>
 #include <QMouseEvent>
+#include "kiwixapp.h"
 
 ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
     QWidget(parent),
@@ -10,10 +11,7 @@ ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
     m_value(value)
 {
     ui->setupUi(this);
-    QFile file(QString::fromUtf8(":/css/choiceBox.css"));
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QString(file.readAll());
-    this->setStyleSheet(styleSheet);
+    this->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/choiceBox.css"));
     ui->itemLabel->setText(key);
     ui->itemLabel->setToolTip(key);
     connect(ui->closeButton, &QPushButton::clicked, [=](){

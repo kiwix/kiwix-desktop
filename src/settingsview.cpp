@@ -9,10 +9,7 @@ SettingsView::SettingsView(QWidget *parent)
     , ui(new Ui::Settings)
 {
     ui->setupUi(this);
-    QFile file(QString::fromUtf8(":/css/_settingsManager.css"));
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QString(file.readAll());
-    ui->widget->setStyleSheet(styleSheet);
+    ui->widget->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/_settingsManager.css"));
     connect(ui->zoomPercentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setZoom);
     connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
