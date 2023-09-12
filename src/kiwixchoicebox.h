@@ -52,7 +52,7 @@ private:
     QStringList getCurrentSelected();
     bool removeSelection(QListWidgetItem *item);
     void clearSelections();
-    bool addSelection(QListWidgetItem *item);
+    bool addSelection(QListWidgetItem *item, bool updateRequired = true);
     void showOptions();
     void hideOptions();
     void showPlaceholder();

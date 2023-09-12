@@ -163,7 +163,7 @@ void KiwixChoiceBox::keyPressEvent(QKeyEvent *event)
     }
 }
 
-bool KiwixChoiceBox::addSelection(QListWidgetItem *item)
+bool KiwixChoiceBox::addSelection(QListWidgetItem *item, bool updateRequired)
 {
     auto key = item->text();
     auto value = item->data(Qt::UserRole).toString();
@@ -182,8 +182,10 @@ bool KiwixChoiceBox::addSelection(QListWidgetItem *item)
     item->setSelected(true);
 
     searcher->setFixedWidth(20);
-    searcher->setFocus();
-    emit(choiceUpdated(getCurrentSelected()));
+    if (updateRequired) {
+        searcher->setFocus();
+        emit(choiceUpdated(getCurrentSelected()));
+    }
     return true;
 }
 
@@ -238,6 +240,14 @@ void KiwixChoiceBox::setSelections(QStringList selections, QStringList defaultSe
 
 void KiwixChoiceBox::setSelections(SelectionList selections, QStringList defaultSelection)
 {
+    auto prevSelections = choiceSelector->selectedItems();
+    for (auto prev : prevSelections) {
+        QPair<QString, QString> prevPair = {prev->data(Qt::UserRole).toString(), prev->text()};
+        if (!selections.contains(prevPair)) {
+            selections.append(prevPair);
+        }
+    }
+    clearSelections();
     choiceSelector->clear();
     for (const auto &selection: selections)
     {
@@ -245,7 +255,7 @@ void KiwixChoiceBox::setSelections(SelectionList selections, QStringList default
         item->setData(Qt::UserRole, selection.first);
         choiceSelector->addItem(item);
         if (defaultSelection.contains(selection.first)) {
-            addSelection(item);
+            addSelection(item, false);
         }
     }
     if (choiceSelector->selectedItems().isEmpty())
