@@ -15,7 +15,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
     QStringList excludeTags("_sw:yes");
 
     // Add filter by language (if necessary)
-    if (currentLanguage != "*") {
+    if (currentLanguage != "") {
         query.addQueryItem("lang", currentLanguage);
     }
 
@@ -23,7 +23,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
     query.addQueryItem("count", QString::number(-1));
 
     // Add filter by category (if necessary)
-    if (categoryFilter != "all") {
+    if (categoryFilter != "") {
         query.addQueryItem("category", categoryFilter);
     }
 

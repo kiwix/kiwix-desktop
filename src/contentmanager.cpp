@@ -630,8 +630,6 @@ void ContentManager::setCurrentLanguage(QStringList languageList)
           } catch (std::out_of_range&) {}
         }
     }
-    if (languageList.empty())
-        languageList.append("*");
     auto newLanguage = languageList.join(",");
     if (m_currentLanguage == newLanguage)
         return;
@@ -722,9 +720,9 @@ QStringList ContentManager::getBookIds()
     filter.acceptTags(acceptTags);
     filter.rejectTags(rejectTags);
     filter.query(m_searchQuery.toStdString());
-    if (m_currentLanguage != "*")
+    if (m_currentLanguage != "")
         filter.lang(m_currentLanguage.toStdString());
-    if (m_categoryFilter != "all")
+    if (m_categoryFilter != "")
         filter.category(m_categoryFilter.toStdString());
 
     if (m_local) {

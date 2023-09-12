@@ -272,8 +272,6 @@ void KiwixChoiceBox::setType(QString type)
 
 QStringList KiwixChoiceBox::getCurrentSelected()
 {
-    if (choiceSelector->selectedItems().isEmpty())
-        return {"all"};
     QStringList selections;
     for (auto &item : choiceSelector->selectedItems()) {
         selections.append(item->data(Qt::UserRole).toString());

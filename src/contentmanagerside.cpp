@@ -82,21 +82,14 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
     const auto checkedButton = mp_ui->buttonGroup->button(isLocal == CatalogButtonId::LOCAL);
     checkedButton->setChecked(true);
     checkedButton->setStyleSheet("*{font-weight: bold}");
-    connect(mp_languages, &KiwixChoiceBox::choiceUpdated,
-            this, [=](QStringList values) {
-                if (values[0] == "all") {
-                    values = QStringList();
-                }
-                mp_contentManager->setCurrentLanguage(values);
+    connect(mp_languages, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
+        mp_contentManager->setCurrentLanguage(values);
     });
     connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
         mp_contentManager->setCurrentCategoryFilter(values);
     });
     connect(mp_contentType, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
-       if (values[0] == "all") {
-           values = QStringList();
-       }
-       mp_contentManager->setCurrentContentTypeFilter(values);
+        mp_contentManager->setCurrentContentTypeFilter(values);
     });
 }
 

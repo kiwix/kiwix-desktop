@@ -128,6 +128,6 @@ void SettingsManager::initSettings()
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     m_langList = m_settings.value("language", QLocale::languageToString(QLocale().language())).toStringList();
-    m_categoryList = m_settings.value("category", {"all"}).toStringList();
+    m_categoryList = m_settings.value("category", {}).toStringList();
     m_contentTypeList = m_settings.value("contentType", {}).toStringList();
 }
