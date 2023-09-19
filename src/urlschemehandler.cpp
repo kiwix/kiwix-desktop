@@ -133,7 +133,6 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     }
     kiwix::SearchRenderer renderer(
         search->getResults(start, pageLength),
-        std::make_shared<IdNameMapper>(),
         search->getEstimatedMatches(),
         start);
     renderer.setSearchPattern(searchQuery);
@@ -141,7 +140,8 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     renderer.setProtocolPrefix("zim://");
     renderer.setSearchProtocolPrefix("zim://" + host.toStdString() + "/");
     renderer.setPageLength(pageLength);
-    auto content = renderer.getHtml();
+    IdNameMapper mapper;
+    auto content = renderer.getHtml(mapper, nullptr);
     QBuffer *buffer = new QBuffer;
     buffer->setData(content.data(), content.size());
     connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
