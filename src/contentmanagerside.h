@@ -12,6 +12,7 @@ class contentmanagerside;
 }
 
 class KiwixChoiceBox;
+using FilterList = ContentManager::FilterList;
 
 class ContentManagerSide : public QWidget
 {

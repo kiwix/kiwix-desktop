@@ -29,8 +29,8 @@ class KiwixChoiceBox : public QWidget
 public:
     explicit KiwixChoiceBox(QWidget *parent = nullptr);
     void setType(QString type);
-    void setSelections(SelectionList selections, QStringList defaultSelection);
-    void setSelections(QStringList selections, QStringList defaultSelection);
+    void setSelections(SelectionList selections, SelectionList defaultSelection);
+    void setSelections(QStringList selections, SelectionList defaultSelection);
     ~KiwixChoiceBox();
     void adjustSize();
 
@@ -39,7 +39,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
 
 signals:
-    void choiceUpdated(QStringList);
+    void choiceUpdated(SelectionList);
     void clicked();
 
 private:
@@ -49,7 +49,7 @@ private:
     KiwixListWidget *choiceSelector;
     FlowLayout *currentChoicesLayout;
     KiwixLineEdit *searcher;
-    QStringList getCurrentSelected();
+    SelectionList getCurrentSelected();
     bool removeSelection(QListWidgetItem *item);
     void clearSelections();
     bool addSelection(QListWidgetItem *item, bool updateRequired = true);

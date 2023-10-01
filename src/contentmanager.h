@@ -19,15 +19,16 @@ class ContentManager : public QObject
 
 public:
     typedef QList<QPair<QString, QString>> LanguageList;
+    typedef QList<QPair<QString, QString>> FilterList;
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
     QStringList getDownloadIds();
-    void setCurrentLanguage(QStringList languageList);
-    void setCurrentCategoryFilter(QStringList category);
-    void setCurrentContentTypeFilter(QStringList contentTypeFilter);
+    void setCurrentLanguage(FilterList languageList);
+    void setCurrentCategoryFilter(FilterList category);
+    void setCurrentContentTypeFilter(FilterList contentTypeFilter);
     bool isLocal() const { return m_local; }
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }

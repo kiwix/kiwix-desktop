@@ -98,23 +98,43 @@ void SettingsManager::setMoveToTrash(bool moveToTrash)
     emit(moveToTrashChanged(m_moveToTrash));
 }
 
-void SettingsManager::setLanguage(QStringList langList)
+QList<QVariant> SettingsManager::flattenPair(FilterList pairList)
 {
-    m_langList = langList;
+    QList<QVariant> res;
+    for (auto &pair : pairList) {
+        res.push_back(pair.first+"|"+pair.second);
+    }
+    return res;
+}
+
+SettingsManager::FilterList SettingsManager::deducePair(QList<QVariant> variantList)
+{
+    FilterList pairList;
+    for (auto &variant : variantList) {
+        QString str = variant.toString();
+        auto pairs = str.split('|');
+        pairList.push_back({pairs[0], pairs[1]});
+    }
+    return pairList;
+}
+
+void SettingsManager::setLanguage(FilterList langList)
+{
+    m_langList = flattenPair(langList);
     setSettings("language", m_langList);
     emit(languageChanged(m_langList));
 }
 
-void SettingsManager::setCategory(QStringList categoryList)
+void SettingsManager::setCategory(FilterList categoryList)
 {
-    m_categoryList = categoryList;
+    m_categoryList = flattenPair(categoryList);
     setSettings("category", m_categoryList);
     emit(categoryChanged(m_categoryList));
 }
 
-void SettingsManager::setContentType(QStringList contentTypeList)
+void SettingsManager::setContentType(FilterList contentTypeList)
 {
-    m_contentTypeList = contentTypeList;
+    m_contentTypeList = flattenPair(contentTypeList);
     setSettings("contentType", m_contentTypeList);
     emit(contentTypeChanged(m_contentTypeList));
 }
@@ -127,7 +147,8 @@ void SettingsManager::initSettings()
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
-    m_langList = m_settings.value("language", QLocale::languageToString(QLocale().language())).toStringList();
-    m_categoryList = m_settings.value("category", {}).toStringList();
-    m_contentTypeList = m_settings.value("contentType", {}).toStringList();
+    QVariant defaultLang = QVariant::fromValue(QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0));
+    m_langList = m_settings.value("language", {defaultLang}).toList();
+    m_categoryList = m_settings.value("category", {}).toList();
+    m_contentTypeList = m_settings.value("contentType", {}).toList();
 }

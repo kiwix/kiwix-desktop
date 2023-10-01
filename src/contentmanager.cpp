@@ -619,8 +619,12 @@ QStringList ContentManager::getDownloadIds()
     return list;
 }
 
-void ContentManager::setCurrentLanguage(QStringList languageList)
+void ContentManager::setCurrentLanguage(FilterList langPairList)
 {
+    QStringList languageList;
+    for (auto &langPair : langPairList) {
+        languageList.append(langPair.second);
+    }
     languageList.sort();
     for (auto &language : languageList) {
         if (language.length() == 2) {
@@ -634,25 +638,33 @@ void ContentManager::setCurrentLanguage(QStringList languageList)
     if (m_currentLanguage == newLanguage)
         return;
     m_currentLanguage = newLanguage;
-    KiwixApp::instance()->getSettingsManager()->setLanguage(languageList);
+    KiwixApp::instance()->getSettingsManager()->setLanguage(langPairList);
     emit(currentLangChanged());
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentCategoryFilter(QStringList categoryList)
+void ContentManager::setCurrentCategoryFilter(FilterList categoryPairList)
 {
+    QStringList categoryList;
+    for (auto &catPair : categoryPairList) {
+        categoryList.append(catPair.second);
+    }
     categoryList.sort();
     if (m_categoryFilter == categoryList.join(","))
         return;
     m_categoryFilter = categoryList.join(",");
-    KiwixApp::instance()->getSettingsManager()->setCategory(categoryList);
+    KiwixApp::instance()->getSettingsManager()->setCategory(categoryPairList);
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentContentTypeFilter(QStringList contentTypeFilters)
+void ContentManager::setCurrentContentTypeFilter(FilterList contentTypeFiltersPairList)
 {
+    QStringList contentTypeFilters;
+    for (auto &ctfPair : contentTypeFiltersPairList) {
+        contentTypeFilters.append(ctfPair.second);
+    }
     m_contentTypeFilters = contentTypeFilters;
-    KiwixApp::instance()->getSettingsManager()->setContentType(m_contentTypeFilters);
+    KiwixApp::instance()->getSettingsManager()->setContentType(contentTypeFiltersPairList);
     emit(filterParamsChanged());
 }
 

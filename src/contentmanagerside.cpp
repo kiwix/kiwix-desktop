@@ -50,7 +50,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
         KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
     });
 
-    QList<QPair<QString, QString>> contentTypeList = {
+    FilterList contentTypeList = {
       {"_pictures:yes", gt("pictures")},
       {"_pictures:no", gt("no-pictures")},
       {"_videos:yes", gt("videos")},
@@ -79,13 +79,13 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
     const auto checkedButton = mp_ui->buttonGroup->button(isLocal == CatalogButtonId::LOCAL);
     checkedButton->setChecked(true);
     checkedButton->setStyleSheet("*{font-weight: bold}");
-    connect(mp_languages, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
+    connect(mp_languages, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
         mp_contentManager->setCurrentLanguage(values);
     });
-    connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
+    connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
         mp_contentManager->setCurrentCategoryFilter(values);
     });
-    connect(mp_contentType, &KiwixChoiceBox::choiceUpdated, this, [=](QStringList values) {
+    connect(mp_contentType, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
         mp_contentManager->setCurrentContentTypeFilter(values);
     });
 }

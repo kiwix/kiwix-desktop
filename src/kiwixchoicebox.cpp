@@ -226,7 +226,7 @@ QString beautifyString(QString word)
     return word;
 }
 
-void KiwixChoiceBox::setSelections(QStringList selections, QStringList defaultSelection)
+void KiwixChoiceBox::setSelections(QStringList selections, SelectionList defaultSelection)
 {
     SelectionList sList;
     for (const auto &sel : selections) {
@@ -235,15 +235,8 @@ void KiwixChoiceBox::setSelections(QStringList selections, QStringList defaultSe
     setSelections(sList, defaultSelection);
 }
 
-void KiwixChoiceBox::setSelections(SelectionList selections, QStringList defaultSelection)
+void KiwixChoiceBox::setSelections(SelectionList selections, SelectionList defaultSelection)
 {
-    auto prevSelections = choiceSelector->selectedItems();
-    for (auto prev : prevSelections) {
-        QPair<QString, QString> prevPair = {prev->data(Qt::UserRole).toString(), prev->text()};
-        if (!selections.contains(prevPair)) {
-            selections.append(prevPair);
-        }
-    }
     clearSelections();
     choiceSelector->clear();
     for (const auto &selection: selections)
@@ -251,10 +244,20 @@ void KiwixChoiceBox::setSelections(SelectionList selections, QStringList default
         auto item = new KListWidgetItem(beautifyString(selection.second));
         item->setData(Qt::UserRole, selection.first);
         choiceSelector->addItem(item);
-        if (defaultSelection.contains(selection.first)) {
+    }
+
+    for (const auto &defSel : defaultSelection) {
+        auto itemList = choiceSelector->findItems(defSel.first, Qt::MatchExactly);
+        if (itemList.isEmpty()) {
+            auto item = new KListWidgetItem(defSel.first);
+            item->setData(Qt::UserRole, defSel.second);
+            choiceSelector->addItem(item);
             addSelection(item, false);
+        } else {
+            addSelection(itemList[0], false);
         }
     }
+
     if (choiceSelector->selectedItems().isEmpty())
         showPlaceholder();
     choiceSelector->setVisibleItems(choiceSelector->count());
@@ -277,11 +280,11 @@ void KiwixChoiceBox::setType(QString type)
     m_type = type;
 }
 
-QStringList KiwixChoiceBox::getCurrentSelected()
+KiwixChoiceBox::SelectionList KiwixChoiceBox::getCurrentSelected()
 {
-    QStringList selections;
+    SelectionList selections;
     for (auto &item : choiceSelector->selectedItems()) {
-        selections.append(item->data(Qt::UserRole).toString());
+        selections.append({item->text(), item->data(Qt::UserRole).toString()});
     }
     return selections;
 }
