@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Brettchenweber",
 			"DraconicDark",
 			"Falwye",
 			"IMayBeABitShy",
@@ -13,7 +14,7 @@
 	},
 	"name": "Deutsch",
 	"error-title": "Fehler",
-	"error-downloader-window-title": "Erstellen von Downloader nicht möglich",
+	"error-downloader-window-title": "Erstellen vom Downloader nicht möglich",
 	"error-downloader-launch-message": "Der Downloader konnte nicht gestartet werden, Kiwix-desktop wird gestartet, aber alle Funktionen zum Herunterladen werden nicht funktionieren!",
 	"error-launch-server-message": "Es ist ein Fehler aufgetreten!",
 	"error-archive": "Das Archiv konnte nicht geöffnet werden.",
@@ -139,7 +140,7 @@
 	"zim-open-fail-title": "Ungültige Datei",
 	"zim-open-fail-text": "Die ZIM-Datei <b>{{ZIM}}</b> kann nicht ordnungsgemäß geöffnet werden. Sie wird aus Ihrer Bibliothek entfernt.",
 	"monitor-dir-dialog-title": "Sind Sie sicher, dass Sie das zu beobachtende Verzeichnis ändern wollen?",
-	"monitor-dir-dialog-msg": "Der Pfad des zu beobachtenden Ordners wird auf folgendes geändert: {{DIRECTORY}}",
+	"monitor-dir-dialog-msg": "Der Pfad des zu beobachtenden Ordners wird auf Folgendes geändert: {{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Sind Sie sicher, dass Sie den zu beobachtenden Ordner leeren wollen?",
 	"monitor-clear-dir-dialog-msg": "Hierdurch wird der zu beobachtende Ordner nicht mehr nach neu hinzugekommenen ZIM-Dateien durchsucht.",
 	"monitor-directory-tooltip": "Alle ZIM-Dateien in diesem Verzeichnis werden automatisch zur Bibliothek hinzugefügt.",
