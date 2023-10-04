@@ -61,5 +61,6 @@
         <file>icons/caret-up-solid.svg</file>
         <file>icons/kiwix-logo.svg</file>
         <file>icons/check-solid.svg</file>
+        <file>icons/xmark-solid.svg</file>
     </qresource>
 </RCC>

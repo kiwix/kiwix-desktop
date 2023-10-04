@@ -9,13 +9,7 @@ KiwixConfirmBox::KiwixConfirmBox(QString confirmTitle, QString confirmText, bool
 {
     ui->setupUi(this);
     setWindowFlag(Qt::FramelessWindowHint, true);
-
-    QFile styleFile(":/css/confirmBox.css");
-    styleFile.open(QIODevice::ReadOnly);
-    auto byteContent = styleFile.readAll();
-    styleFile.close();
-    QString style(byteContent);
-    setStyleSheet(style);
+    setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/confirmBox.css"));
     connect(ui->yesButton, &QPushButton::clicked, [=]() {
         emit yesClicked();
     });

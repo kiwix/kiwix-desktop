@@ -72,13 +72,7 @@ void KiwixApp::init()
 
     setApplicationName("Kiwix");
     setDesktopFileName("kiwix.desktop");
-
-    QFile styleFile(":/css/style.css");
-    styleFile.open(QIODevice::ReadOnly);
-    auto byteContent = styleFile.readAll();
-    QString style(byteContent);
-    setStyleSheet(style);
-
+    setStyleSheet(parseStyleFromFile(":/css/style.css"));
 
     createAction();
     mp_mainWindow = new MainWindow;
@@ -473,4 +467,13 @@ void KiwixApp::printVersions(std::ostream& out) {
   kiwix::printVersions(out);
   out << std::endl;
   zim::printVersions(out);
+}
+
+QString KiwixApp::parseStyleFromFile(QString filePath)
+{
+    QFile file(filePath);
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QString(file.readAll());
+    file.close();
+    return styleSheet;
 }

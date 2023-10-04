@@ -86,6 +86,7 @@ public:
     QString getText(const QString &key) { return m_translation.getText(key); };
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
+    QString parseStyleFromFile(QString filePath);
 
 public slots:
     void openZimFile(const QString& zimfile="");

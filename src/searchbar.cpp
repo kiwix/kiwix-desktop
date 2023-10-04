@@ -71,12 +71,7 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer.setMaxVisibleItems(16);
     setCompleter(&m_completer);
 
-    QFile styleFile(":/css/popup.css");
-    styleFile.open(QIODevice::ReadOnly);
-    auto byteContent = styleFile.readAll();
-    styleFile.close();
-    QString style(byteContent);
-    m_completer.popup()->setStyleSheet(style);
+    m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
     qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBar::updateCompletion);

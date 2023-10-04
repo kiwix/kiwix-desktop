@@ -11,11 +11,12 @@ ContentTypeFilter::ContentTypeFilter(QString name, QWidget *parent)
     m_states[Qt::PartiallyChecked] = gt("yes");
     m_states[Qt::Checked] = gt("no");
     setText(gt(m_name) + " : " + m_states[checkState()]);
+    setStyleSheet("* { color: #666666; }");
     connect(this, &QCheckBox::stateChanged, this, &ContentTypeFilter::onStateChanged);
 }
 
 void ContentTypeFilter::onStateChanged(int state)
 {
     setText(gt(m_name) + " : " + m_states[static_cast<Qt::CheckState>(state)]);
-    setStyleSheet((state == 0) ? "" : "*{font-weight: bold}");
+    setStyleSheet((state == 0) ? "*{color: #666666;}" : "*{font-weight: bold; color: black;}");
 }

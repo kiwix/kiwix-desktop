@@ -56,7 +56,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
 
-    setCurrentLanguage(QLocale().name().split("_").at(0));
+    setCurrentLanguage(KiwixApp::instance()->getSettingsManager()->getLanguageList());
+    setCurrentCategoryFilter(KiwixApp::instance()->getSettingsManager()->getCategoryList());
+    setCurrentContentTypeFilter(KiwixApp::instance()->getSettingsManager()->getContentType());
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
@@ -184,7 +186,6 @@ void ContentManager::setCategories()
     QStringList categories;
     if (m_local) {
         auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
-        categories.push_back("all");
         for (auto category : categoryData) {
             auto categoryName = QString::fromStdString(category);
             categories.push_back(categoryName);
@@ -618,32 +619,52 @@ QStringList ContentManager::getDownloadIds()
     return list;
 }
 
-void ContentManager::setCurrentLanguage(QString language)
+void ContentManager::setCurrentLanguage(FilterList langPairList)
 {
-    if (language.length() == 2) {
-      try {
-        language = QString::fromStdString(
-                     kiwix::converta2toa3(language.toStdString()));
-      } catch (std::out_of_range&) {}
+    QStringList languageList;
+    for (auto &langPair : langPairList) {
+        languageList.append(langPair.second);
     }
-    if (m_currentLanguage == language)
+    languageList.sort();
+    for (auto &language : languageList) {
+        if (language.length() == 2) {
+          try {
+            language = QString::fromStdString(
+                         kiwix::converta2toa3(language.toStdString()));
+          } catch (std::out_of_range&) {}
+        }
+    }
+    auto newLanguage = languageList.join(",");
+    if (m_currentLanguage == newLanguage)
         return;
-    m_currentLanguage = language;
+    m_currentLanguage = newLanguage;
+    KiwixApp::instance()->getSettingsManager()->setLanguage(langPairList);
     emit(currentLangChanged());
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentCategoryFilter(QString category)
+void ContentManager::setCurrentCategoryFilter(FilterList categoryPairList)
 {
-    if (m_categoryFilter == category)
+    QStringList categoryList;
+    for (auto &catPair : categoryPairList) {
+        categoryList.append(catPair.second);
+    }
+    categoryList.sort();
+    if (m_categoryFilter == categoryList.join(","))
         return;
-    m_categoryFilter = category.toLower();
+    m_categoryFilter = categoryList.join(",");
+    KiwixApp::instance()->getSettingsManager()->setCategory(categoryPairList);
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilters)
+void ContentManager::setCurrentContentTypeFilter(FilterList contentTypeFiltersPairList)
 {
+    QStringList contentTypeFilters;
+    for (auto &ctfPair : contentTypeFiltersPairList) {
+        contentTypeFilters.append(ctfPair.second);
+    }
     m_contentTypeFilters = contentTypeFilters;
+    KiwixApp::instance()->getSettingsManager()->setContentType(contentTypeFiltersPairList);
     emit(filterParamsChanged());
 }
 
@@ -686,7 +707,6 @@ void ContentManager::updateLanguages(const QString& content) {
 void ContentManager::updateCategories(const QString& content) {;
     auto categories = kiwix::readCategoriesFromFeed(content.toStdString());
     QStringList tempCategories;
-    tempCategories.push_back("all");
     for (auto catg : categories) {
         tempCategories.push_back(QString::fromStdString(catg));
     }
@@ -704,32 +724,18 @@ QStringList ContentManager::getBookIds()
 {
     kiwix::Filter filter;
     std::vector<std::string> acceptTags, rejectTags;
-    if (m_categoryFilter != "all" && m_categoryFilter != "other") {
-        acceptTags.push_back("_category:"+m_categoryFilter.toStdString());
-    }
-    if (m_categoryFilter == "other") {
-        for (auto& category: m_categories) {
-            if (category != "other" && category != "all") {
-                rejectTags.push_back("_category:"+category.toStdString());
-            }
-        }
-    }
 
     for (auto &contentTypeFilter : m_contentTypeFilters) {
-        auto state = contentTypeFilter->checkState();
-        auto filter = contentTypeFilter->getName();
-        if (state == Qt::PartiallyChecked) {
-            acceptTags.push_back("_" + filter.toStdString() +":yes");
-        } else if (state == Qt::Checked) {
-            acceptTags.push_back("_" + filter.toStdString() +":no");
-        }
+        acceptTags.push_back(contentTypeFilter.toStdString());
     }
 
     filter.acceptTags(acceptTags);
     filter.rejectTags(rejectTags);
     filter.query(m_searchQuery.toStdString());
-    if (m_currentLanguage != "*")
+    if (m_currentLanguage != "")
         filter.lang(m_currentLanguage.toStdString());
+    if (m_categoryFilter != "")
+        filter.category(m_categoryFilter.toStdString());
 
     if (m_local) {
         filter.local(true);

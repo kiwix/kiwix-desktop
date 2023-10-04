@@ -15,20 +15,20 @@ class ContentManager : public QObject
     Q_OBJECT
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
-    Q_PROPERTY(QString currentLanguage MEMBER m_currentLanguage WRITE setCurrentLanguage NOTIFY currentLangChanged)
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
 
 public:
     typedef QList<QPair<QString, QString>> LanguageList;
+    typedef QList<QPair<QString, QString>> FilterList;
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
     QStringList getDownloadIds();
-    void setCurrentLanguage(QString language);
-    void setCurrentCategoryFilter(QString category);
-    void setCurrentContentTypeFilter(QList<ContentTypeFilter*>& contentTypeFilter);
+    void setCurrentLanguage(FilterList languageList);
+    void setCurrentCategoryFilter(FilterList category);
+    void setCurrentContentTypeFilter(FilterList contentTypeFilter);
     bool isLocal() const { return m_local; }
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
@@ -43,7 +43,7 @@ private:
     QString m_currentLanguage;
     QString m_searchQuery;
     QString m_categoryFilter = "all";
-    QList<ContentTypeFilter*> m_contentTypeFilters;
+    QStringList m_contentTypeFilters;
     kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
     bool m_sortOrderAsc = true;
     LanguageList m_languages;
