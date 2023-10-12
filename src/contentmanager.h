@@ -35,7 +35,7 @@ public:
 
 private:
     Library* mp_library;
-    kiwix::Library m_remoteLibrary;
+    kiwix::LibraryPtr mp_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;

@@ -111,7 +111,7 @@ private:
     ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
     QErrorMessage* mp_errorDialog;
-    kiwix::UpdatableNameMapper m_nameMapper;
+    std::shared_ptr<kiwix::UpdatableNameMapper> mp_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
     QFileSystemWatcher m_watcher;

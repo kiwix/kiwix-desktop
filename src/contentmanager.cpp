@@ -26,6 +26,7 @@
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
       mp_library(library),
+      mp_remoteLibrary(kiwix::Library::create()),
       mp_downloader(downloader),
       m_remoteLibraryManager()
 {
@@ -185,7 +186,7 @@ void ContentManager::setCategories()
 {
     QStringList categories;
     if (m_local) {
-        auto categoryData = mp_library->getKiwixLibrary().getBooksCategories();
+        auto categoryData = mp_library->getKiwixLibrary()->getBooksCategories();
         for (auto category : categoryData) {
             auto categoryName = QString::fromStdString(category);
             categories.push_back(categoryName);
@@ -201,7 +202,7 @@ void ContentManager::setLanguages()
 {
     LanguageList languages;
     if (m_local) {
-        auto languageData = mp_library->getKiwixLibrary().getBooksLanguages();
+        auto languageData = mp_library->getKiwixLibrary()->getBooksLanguages();
         for (auto language : languageData) {
             auto langCode = QString::fromStdString(language);
             auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
@@ -224,7 +225,7 @@ QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringLi
         } catch (...) {
             try {
                 QMutexLocker locker(&remoteLibraryLocker);
-                return &m_remoteLibrary.getBookById(id.toStdString());
+                return &mp_remoteLibrary->getBookById(id.toStdString());
             } catch(...) { return nullptr; }
         }
     }();
@@ -343,7 +344,7 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
     } catch(...) {
         kiwix::Book bCopy(b);
         bCopy.setDownloadId("");
-        mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
+        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
         mp_library->save();
         emit(mp_library->booksChanged());
         return values;
@@ -358,7 +359,7 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
         bCopy.setPathValid(true);
         // removing book url so that download link in kiwix-serve is not displayed.
         bCopy.setUrl("");
-        mp_library->getKiwixLibrary().addOrUpdateBook(bCopy);
+        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
         mp_library->save();
         mp_library->bookmarksChanged();
         if (!m_local) {
@@ -443,7 +444,7 @@ QString ContentManager::downloadBook(const QString &id)
     const auto& book = [&]()->const kiwix::Book& {
         try {
             QMutexLocker locker(&remoteLibraryLocker);
-            return m_remoteLibrary.getBookById(id.toStdString());
+            return mp_remoteLibrary->getBookById(id.toStdString());
         } catch (...) {
             return mp_library->getBookById(id);
         }
@@ -684,8 +685,8 @@ void ContentManager::updateLibrary() {
 void ContentManager::updateRemoteLibrary(const QString& content) {
     QtConcurrent::run([=]() {
         QMutexLocker locker(&remoteLibraryLocker);
-        m_remoteLibrary = kiwix::Library();
-        kiwix::Manager manager(&m_remoteLibrary);
+        mp_remoteLibrary = kiwix::Library::create();
+        kiwix::Manager manager(mp_remoteLibrary);
         manager.readOpds(content.toStdString(), CATALOG_URL);
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
@@ -744,8 +745,8 @@ QStringList ContentManager::getBookIds()
     } else {
         filter.remote(true);
         QMutexLocker locker(&remoteLibraryLocker);
-        auto bookIds = m_remoteLibrary.filter(filter);
-        m_remoteLibrary.sort(bookIds, m_sortBy, m_sortOrderAsc);
+        auto bookIds = mp_remoteLibrary->filter(filter);
+        mp_remoteLibrary->sort(bookIds, m_sortBy, m_sortOrderAsc);
         QStringList list;
         for(auto& bookId:bookIds) {
             list.append(QString::fromStdString(bookId));
