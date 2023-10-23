@@ -59,6 +59,8 @@
 	"about-libraries-title": "لائبریریاں",
 	"online-files": "آن لائن فائلاں",
 	"local-files": "مقامی فائلاں",
+	"category": "ونکی",
+	"language": "زبان",
 	"hide": "لُکاؤ",
 	"open-in-browser": "براؤزر وچ کھولو",
 	"all": "یکے",
@@ -82,5 +84,6 @@
 	"zim-open-fail-title": "غلط فائل",
 	"delete-book": "کتاب مٹاؤ",
 	"open-book": "کتاب کھولو",
-	"open-folder": "فولڈر کھولو"
+	"open-folder": "فولڈر کھولو",
+	"no-videos": "ویڈیو کائنی"
 }

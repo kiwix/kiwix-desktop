@@ -91,8 +91,6 @@
 	"kiwix-server-description": "Spuštění serveru umožňuje ostatním počítačům v místní síti přistupovat ke knihovně Kiwix pomocí standardního webového prohlížeče.",
 	"fullscreen-notification": "Jste v režimu celé obrazovky. Pro ukončení stiskněte klávesu ESC!",
 	"local-files": "Lokální soubory",
-	"browse-by-category": "Procházet podle kategorie",
-	"browse-by-language": "Procházet podle jazyka",
 	"hide": "Skrýt",
 	"open-in-browser": "Otevřít v prohlížeči",
 	"start-kiwix-server": "Spustit Kiwix server",

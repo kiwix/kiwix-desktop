@@ -1,12 +1,13 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Sibabrata Banerjee",
 			"আজিজ",
 			"আফতাবুজ্জামান"
 		]
 	},
-	"name": "ইংরেজি",
+	"name": "বাংলা",
 	"print": "মুদ্রিত করুন",
 	"new-tab": "নতুন ট্যাব",
 	"close-tab": "ট্যাব বন্ধ করুন",

@@ -4,7 +4,7 @@
 			"McDutchie"
 		]
 	},
-	"name": "Anglese",
+	"name": "Interlingua",
 	"error-title": "Error",
 	"error-downloader-window-title": "Non pote crear discargator",
 	"error-downloader-launch-message": "Impossibile lancear le discargator. Kiwix-desktop se initiara ma tote le functiones de discargamento non functionara!",
@@ -91,8 +91,8 @@
 	"fullscreen-notification": "Tu es ora in modo de plen schermo. Preme ESC pro exir!",
 	"online-files": "Files in linea",
 	"local-files": "Files local",
-	"browse-by-category": "Navigar per categoria",
-	"browse-by-language": "Navigar per lingua",
+	"category": "Categoria",
+	"language": "Lingua",
 	"hide": "Celar",
 	"open-in-browser": "Aperir in navigator",
 	"start-kiwix-server": "Initiar servitor Kiwix",
@@ -155,5 +155,12 @@
 	"couldnt-open-location-text": "Kiwix non pote aperir le dossier {{FOLDER}}",
 	"move-files-to-trash": "Displaciar files delite al corbe a papiro",
 	"move-files-to-trash-text": "Iste action displaciara le file al corbe a papiro.",
-	"perma-delete-files-text": "Iste action delera permanentemente le file."
+	"perma-delete-files-text": "Iste action delera permanentemente le file.",
+	"clear-filter": "Rader le filtros actualmente definite",
+	"language-searcher-placeholder": "Filtrar per lingua",
+	"category-searcher-placeholder": "Filtrar per categoria",
+	"content-type-searcher-placeholder": "Filtrar per typo de contento",
+	"no-details": "Introduction solmente",
+	"no-pictures": "Necun imagine",
+	"no-videos": "Necun video"
 }

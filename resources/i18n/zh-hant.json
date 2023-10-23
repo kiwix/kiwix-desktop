@@ -93,8 +93,6 @@
 	"fullscreen-notification": "您現在是處在全螢幕模式。若要離開請按下 ESC 鍵！",
 	"online-files": "線上檔案",
 	"local-files": "本地檔案",
-	"browse-by-category": "按分類瀏覽",
-	"browse-by-language": "按語言瀏覽",
 	"hide": "隱藏",
 	"open-in-browser": "在瀏覽器中開啟",
 	"start-kiwix-server": "啟動 Kiwix 伺服器",

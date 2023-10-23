@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Dr Lotus Black"
+			"Dr Lotus Black",
+			"McDutchie"
 		]
 	},
-	"name": "အင်္ဂလိပ်ဘာသာ",
+	"name": "မြန်မာဘာသာ",
 	"error-title": "အမှား",
 	"error-launch-server-message": "အမှားတစ်ခု ဖြစ်ပွားခဲ့ပါသည်",
 	"random-article": "ကျပန်း ဆောင်းပါး",
@@ -55,8 +56,6 @@
 	"about-reporting-problem-title": "အခက်အခဲ တင်ပြခြင်း",
 	"about-libraries-title": "စာကြည့်တိုက်များ",
 	"local-files": "ဒေသတွင်းဖိုင်များ",
-	"browse-by-category": "ကဏ္ဍအလိုက် ရှာဖွေလှန်လောရန်",
-	"browse-by-language": "ဘာသာစကားအလိုက် ရှာဖွေလှန်လောရန်",
 	"hide": "ဝှက်ရန်",
 	"open-in-browser": "ဘရောက်ဆာတွင် ဖွင့်ရန်",
 	"all": "အားလုံး",

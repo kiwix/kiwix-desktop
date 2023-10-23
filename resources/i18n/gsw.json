@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Rschlegel"
 		]
 	},
-	"name": "Änglisch",
+	"name": "Schwiizerdütsch",
 	"open-zim": "Zim öffnä",
 	"random-article": "Zuefälligi Syte",
 	"print": "Drucke",
@@ -41,8 +42,6 @@
 	"about-reporting-problem-title": "Es Problem mälde",
 	"about-libraries-title": "Bibliotheke",
 	"local-files": "Lokali Dateiä",
-	"browse-by-category": "Nach Kategorii blättere",
-	"browse-by-language": "Nach Spraach blättere",
 	"hide": "Uusblände",
 	"all": "Alli",
 	"other": "Anderi",

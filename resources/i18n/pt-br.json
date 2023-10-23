@@ -3,10 +3,11 @@
 		"authors": [
 			"Eduardo Addad de Oliveira",
 			"Eduardoaddad",
+			"McDutchie",
 			"Saturnow"
 		]
 	},
-	"name": "Inglês",
+	"name": "Português do Brasil",
 	"error-title": "Erro",
 	"error-downloader-window-title": "Não é possível criar o downloader",
 	"error-downloader-launch-message": "Impossível iniciar o downloader, o Kiwix-desktop será iniciado, mas todas as funções de download não funcionarão!",
@@ -87,8 +88,6 @@
 	"kiwix-server-description": "Iniciar um servidor permite que outros computadores na rede local acessem sua biblioteca Kiwix com um navegador da Web padrão.",
 	"fullscreen-notification": "Agora você está no modo de tela cheia. Pressione ESC para sair!",
 	"local-files": "Arquivos locais",
-	"browse-by-category": "Pesquisar por categoria",
-	"browse-by-language": "Procurar por idioma",
 	"hide": "Ocultar",
 	"open-in-browser": "Abrir no navegador",
 	"start-kiwix-server": "Inicie o servidor Kiwix",

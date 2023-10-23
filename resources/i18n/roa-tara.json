@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
-			"Joetaras"
+			"Joetaras",
+			"McDutchie"
 		]
 	},
-	"name": "Inglese",
+	"name": "Tarandíne",
 	"open-zim": "Iapre Zim",
 	"local-kiwix-server": "Server locale de Kiwix",
 	"home-page": "Pàgena prengepàle",

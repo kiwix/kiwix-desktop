@@ -91,8 +91,8 @@
 	"fullscreen-notification": "Сега сте во целоекрански режим. Стиснете на Esc за да излезете!",
 	"online-files": "Семрежни податотеки",
 	"local-files": "Месни податотеки",
-	"browse-by-category": "Прелистај по категорија",
-	"browse-by-language": "Прелистај по јазик",
+	"category": "Категорија",
+	"language": "Јазик",
 	"hide": "Скриј",
 	"open-in-browser": "Отвори во прелистувач",
 	"start-kiwix-server": "Пушти го опслужувачот на Кивикс",
@@ -155,5 +155,12 @@
 	"couldnt-open-location-text": "Кивикс не може да ја отвори папката {{FOLDER}}",
 	"move-files-to-trash": "Премести ги избришаните податотеки во корпа",
 	"move-files-to-trash-text": "Ова дејство ќе ја премести податотеката во корпа.",
-	"perma-delete-files-text": "Ова дејство трајно ќе ја избрише податотеката."
+	"perma-delete-files-text": "Ова дејство трајно ќе ја избрише податотеката.",
+	"clear-filter": "Исчистете ги тековно поставените филтри",
+	"language-searcher-placeholder": "Филтрирај јазик",
+	"category-searcher-placeholder": "Филтрирај категорија",
+	"content-type-searcher-placeholder": "Филтрирај вид на содржина",
+	"no-details": "Само вовед",
+	"no-pictures": "Нема слики",
+	"no-videos": "Нема видеа"
 }

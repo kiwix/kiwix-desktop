@@ -6,6 +6,7 @@
 			"Falwye",
 			"IMayBeABitShy",
 			"Justman10000",
+			"Magiczocker",
 			"Susann Schweden",
 			"ThisCarthing",
 			"Umlaut",
@@ -99,8 +100,7 @@
 	"fullscreen-notification": "Sie sind im Vollbildmodus. Drücken Sie ESC, um ihn zu verlassen!",
 	"online-files": "Online Dateien",
 	"local-files": "Lokale Dateien",
-	"browse-by-category": "Nach Kategorie durchsuchen",
-	"browse-by-language": "Nach Sprache durchsuchen",
+	"category": "Kategorie",
 	"hide": "Verbergen",
 	"open-in-browser": "Im Browser öffnen",
 	"start-kiwix-server": "Kiwix-Server starten",
@@ -163,5 +163,10 @@
 	"couldnt-open-location-text": "Es ist Kiwix nicht möglich, den Ordner {{FOLDER}} zu öffnen",
 	"move-files-to-trash": "Gelöschte Dateien in den Papierkorb verschieben",
 	"move-files-to-trash-text": "Durch diese Aktion wird die Datei in den Papierkorb verschoben.",
-	"perma-delete-files-text": "Durch diese Aktion wird die Datei unwiderruflich gelöscht."
+	"perma-delete-files-text": "Durch diese Aktion wird die Datei unwiderruflich gelöscht.",
+	"clear-filter": "Aktuell eingestellte Filter Löschen",
+	"language-searcher-placeholder": "Sprache filtern",
+	"category-searcher-placeholder": "Kategorie filtern",
+	"no-pictures": "Keine Bilder",
+	"no-videos": "Keine Videos"
 }

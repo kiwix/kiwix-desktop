@@ -4,12 +4,13 @@
 			"Apzp79",
 			"Codenstory",
 			"Fitoschido",
+			"McDutchie",
 			"Nuevo Paso",
 			"Ykhwong",
 			"그냥기여자"
 		]
 	},
-	"name": "영어",
+	"name": "한국어",
 	"error-title": "오류",
 	"error-downloader-window-title": "다운로더를 만들 수 없습니다",
 	"error-downloader-launch-message": "다운로더를 시작할 수 없습니다. Kiwix-desktop이 시작되더라도 모든 다운로드 기능이 작동하지 않을 것입니다!",
@@ -93,8 +94,6 @@
 	"kiwix-server-description": "서버를 시작하면 로컬 네트워크의 다른 컴퓨터가 표준 웹 브라우저를 사용하여 Kiwix 라이브러리에 접근할 수 있습니다.",
 	"fullscreen-notification": "현재 전체 화면 모드입니다. 빠져나가려면 ESC를 누르십시오!",
 	"local-files": "로컬 파일",
-	"browse-by-category": "분류별 찾아보기",
-	"browse-by-language": "언어별로 찾아보기",
 	"hide": "숨기기",
 	"open-in-browser": "브라우저에서 열기",
 	"start-kiwix-server": "Kiwix 서버 시작",

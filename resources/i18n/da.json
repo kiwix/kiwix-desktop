@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Saederup92"
 		]
 	},
-	"name": "Engelsk",
+	"name": "Dansk",
 	"error-title": "Fejl",
 	"error-launch-server-message": "Der opstod en fejl!",
 	"error-archive": "Kan ikke hente arkivet",
@@ -55,8 +56,6 @@
 	"about-version": "Version: {{VERSION}}",
 	"about-libraries-title": "Biblioteker",
 	"local-files": "Lokale filer",
-	"browse-by-category": "Gennemse efter kategori",
-	"browse-by-language": "Gennemse efter sprog",
 	"hide": "Skjul",
 	"open-in-browser": "Åbn i browser",
 	"start-kiwix-server": "Start Kiwix-server",
