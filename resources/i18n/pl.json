@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Pietrasagh",
 			"Rail",
 			"Rainbow P",
@@ -9,7 +10,7 @@
 			"WaldiSt"
 		]
 	},
-	"name": "Angielski",
+	"name": "Polski",
 	"error-title": "Błąd",
 	"error-downloader-window-title": "Nie można utworzyć pobierania",
 	"error-downloader-launch-message": "Nie można uruchomić pobierania, uruchomi się Kiwix-desktop, ale wszystkie funkcje pobierania nie będą działać!",
@@ -94,8 +95,6 @@
 	"kiwix-server-description": "Uruchomienie serwera umożliwia innym komputerom w sieci lokalnej dostęp do biblioteki Kiwix za pomocą standardowej przeglądarki internetowej.",
 	"fullscreen-notification": "Znajdujesz się w trybie pełnoekranowym. Naciśnij ESC aby z niego wyjść!",
 	"local-files": "Pliki lokalne",
-	"browse-by-category": "Przeglądaj według kategorii",
-	"browse-by-language": "Przeglądaj według języka",
 	"hide": "Ukryj",
 	"open-in-browser": "Otwórz w przeglądarce",
 	"start-kiwix-server": "Uruchom serwer Kiwix",

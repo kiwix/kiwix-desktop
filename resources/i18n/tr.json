@@ -97,8 +97,6 @@
 	"kiwix-server-description": "Sunucu başlatmak, yerel ağdaki diğer bilgisayarların standart bir web tarayıcısıyla Kiwix kitaplığınıza erişmesine izin verir.",
 	"fullscreen-notification": "Şimdi tam ekran modundasınız. Çıkmak için ESC tuşuna basın!",
 	"local-files": "Yerel Dosyalar",
-	"browse-by-category": "Kategoriye Göre Gözat",
-	"browse-by-language": "Dile Göre Gözat",
 	"hide": "Gizle",
 	"open-in-browser": "Tarayıcıda aç",
 	"start-kiwix-server": "Kiwix Sunucusunu Başlat",

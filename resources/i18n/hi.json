@@ -92,8 +92,8 @@
 	"fullscreen-notification": "अब आप पूर्ण स्क्रीन मोड में हैं. छोड़ने के लिए ESC दबाएँ!",
 	"online-files": "ऑनलाइन फ़ाइलें",
 	"local-files": "स्थानीय फ़ाइलें",
-	"browse-by-category": "वर्गानुसार खोजें",
-	"browse-by-language": "भाषा के अनुसार खोजें",
+	"category": "श्रेणी",
+	"language": "भाषा",
 	"hide": "छुपाएँ",
 	"open-in-browser": "ब्राउज़र में खोलें",
 	"start-kiwix-server": "किविक्स सर्वर प्रारंभ करें",
@@ -156,5 +156,12 @@
 	"couldnt-open-location-text": "किविक्स फ़ोल्डर {{FOLDER}} खोलने में सक्षम नहीं है",
 	"move-files-to-trash": "हटाई गई फ़ाइलों को ट्रैश में ले जाएं",
 	"move-files-to-trash-text": "यह क्रिया फ़ाइल को ट्रैश में ले जाएगी.",
-	"perma-delete-files-text": "यह क्रिया फ़ाइल को स्थायी रूप से हटा देगी।"
+	"perma-delete-files-text": "यह क्रिया फ़ाइल को स्थायी रूप से हटा देगी।",
+	"clear-filter": "वर्तमान में सेट किए गए फिल्टर को साफ़ करें",
+	"language-searcher-placeholder": "भाषा अनुसार छानें",
+	"category-searcher-placeholder": "श्रणी के अनुसार छानें",
+	"content-type-searcher-placeholder": "सामग्री प्रकार छानें",
+	"no-details": "केवल परिचय",
+	"no-pictures": "कोई चित्र नहीं",
+	"no-videos": "कोई चलचित्र नहीं"
 }

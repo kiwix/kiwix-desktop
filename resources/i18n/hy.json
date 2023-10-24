@@ -3,10 +3,11 @@
 		"authors": [
 			"Ajeje Brazorf",
 			"Kareyac",
+			"McDutchie",
 			"Սերգեյ Սաֆարյան"
 		]
 	},
-	"name": "Անգլերեն",
+	"name": "Հայերեն",
 	"home-page": "Հիմնական էջ",
 	"main-menu": "Հիմնական ընտրացանկ",
 	"print": "Տպել",
@@ -34,6 +35,8 @@
 	"cancel": "Չեղարկել",
 	"apply": "Կիրառել",
 	"about-libraries-title": "Գրադարաններ",
+	"category": "Կատեգորիա",
+	"language": "Լեզու",
 	"hide": "Թաքցնել",
 	"all": "Բոլորը",
 	"other": "Այլ",
@@ -49,5 +52,7 @@
 	"wikivoyage": "Վիքիճամփորդ",
 	"wiktionary": "Վիքիբառարան",
 	"yes": "այո",
-	"no": "ոչ"
+	"no": "ոչ",
+	"language-searcher-placeholder": "Զտել լեզուն",
+	"no-videos": "Տեսանյութ չկա"
 }

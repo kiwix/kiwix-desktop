@@ -102,8 +102,6 @@
 	"fullscreen-notification": "Вы находитесь в полноэкранном режиме. Нажмите ESC для выхода!",
 	"online-files": "Онлайн-файлы",
 	"local-files": "Локальный файлы",
-	"browse-by-category": "Искать по категориям",
-	"browse-by-language": "Просмотр по языку",
 	"hide": "Скрыть",
 	"open-in-browser": "Открыть в браузере",
 	"start-kiwix-server": "Запустить сервер Kiwix",

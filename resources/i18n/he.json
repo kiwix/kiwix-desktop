@@ -2,11 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
+			"McDutchie",
 			"Steeve815",
 			"YaronSh"
 		]
 	},
-	"name": "אנגלית",
+	"name": "עברית",
 	"error-title": "שגיאה",
 	"error-downloader-window-title": "לא ניתן ליצור מנגנון הורדה",
 	"error-downloader-launch-message": "אי אפשר לטעון מנגנון הורדה, Kiwix לשולחן העבודה יופעל אך יכולות ההורדה לא תפעלנה!",
@@ -93,8 +94,8 @@
 	"fullscreen-notification": "הגדלת למסך מלא. ESC ליציאה!",
 	"online-files": "קבצים מקוונים",
 	"local-files": "קבצים מקומיים",
-	"browse-by-category": "עיון לפי קטגוריה",
-	"browse-by-language": "עיון לפי שפה",
+	"category": "קטגוריה",
+	"language": "שפה",
 	"hide": "הסתרה",
 	"open-in-browser": "פתיחה בדפדפן",
 	"start-kiwix-server": "הפעלת שרת Kiwix",
@@ -157,5 +158,12 @@
 	"couldnt-open-location-text": "קיוויקס לא הצליח לפתוח את התיקייה {{FOLDER}}",
 	"move-files-to-trash": "להעביר קבצים שנמחקים לאשפה",
 	"move-files-to-trash-text": "הפעולה הזאת תעביר את הקובץ לאשפה.",
-	"perma-delete-files-text": "הפעולה האת תמחק את הקובץ לתמיד."
+	"perma-delete-files-text": "הפעולה האת תמחק את הקובץ לתמיד.",
+	"clear-filter": "ניקוי המסננים שמוגדרים כעת",
+	"language-searcher-placeholder": "סינון לפי שפה",
+	"category-searcher-placeholder": "סינון לפי קטגוריה",
+	"content-type-searcher-placeholder": "סינון לפי סוג תוכן",
+	"no-details": "הקדמה בלבד",
+	"no-pictures": "ללא תמונות",
+	"no-videos": "ללא סרטים"
 }

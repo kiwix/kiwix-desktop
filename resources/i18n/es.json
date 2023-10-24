@@ -101,8 +101,6 @@
 	"fullscreen-notification": "Ahora estás en modo de pantalla completa. Presione ESC para salir!",
 	"online-files": "Archivos en línea",
 	"local-files": "Archivos locales",
-	"browse-by-category": "Explorar por categorías",
-	"browse-by-language": "Explorar por idiomas",
 	"hide": "Ocultar",
 	"open-in-browser": "Abrir en el navegador",
 	"start-kiwix-server": "Iniciar servidor Kiwix",

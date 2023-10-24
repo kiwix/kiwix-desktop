@@ -9,10 +9,10 @@
 			"Wladek92"
 		]
 	},
-	"name": "français",
+	"name": "Français",
 	"error-title": "Erreur",
-	"error-downloader-window-title": "Impossible de lancer le téléchargeur",
-	"error-downloader-launch-message": "Impossible de lancer le téléchargeur, Kiwix-desktop démarrera mais toutes les fonctions de téléchargement ne fonctionneront pas !",
+	"error-downloader-window-title": "Impossible de créer le téléchargeur",
+	"error-downloader-launch-message": "Impossible de lancer le téléchargement, Kiwix-desktop démarrera mais toutes les fonctions de téléchargement ne fonctionneront pas !",
 	"error-launch-server-message": "Une erreur s’est produite !",
 	"error-archive": "Impossible d’obtenir l’archive",
 	"open-zim": "Ouvrir un fichier ZIM",
@@ -96,8 +96,8 @@
 	"fullscreen-notification": "Vous êtes maintenant en plein écran. Appuyez sur Échap pour quitter !",
 	"online-files": "Fichiers en ligne",
 	"local-files": "Fichiers locaux",
-	"browse-by-category": "Parcourir par catégorie",
-	"browse-by-language": "Parcourir par langue",
+	"category": "Catégorie",
+	"language": "Langue",
 	"hide": "Masquer",
 	"open-in-browser": "Ouvrir dans un navigateur",
 	"start-kiwix-server": "Démarrer le serveur Kiwix",
@@ -138,7 +138,7 @@
 	"zim-open-fail-text": "Le fichier ZIM <b>{{ZIM}}</b> ne peut être ouvert correctement. Il sera supprimé de votre bibliothèque.",
 	"monitor-dir-dialog-title": "Voulez-vous vraiment modifier le répertoire de surveillance ?",
 	"monitor-dir-dialog-msg": "Le nouveau chemin du répertoire du moniteur sera :\n{{DIRECTORY}}",
-	"monitor-clear-dir-dialog-title": "Voulez-vous vraiment effacer le répertoire du moniteur ?",
+	"monitor-clear-dir-dialog-title": "Voulez-vous vraiment effacer le répertoire de surveillance ?",
 	"monitor-clear-dir-dialog-msg": "Ceci arrêtera la vérification du répertoire de surveillance des nouveaux fichiers ZIM.",
 	"monitor-directory-tooltip": "Tous les fichiers ZIM dans ce répertoire seront automatiquement ajoutés à la bibliothèque.",
 	"next-tab": "Passer à l’onglet suivant",
@@ -160,5 +160,12 @@
 	"couldnt-open-location-text": "Kiwix ne peut pas ouvrir le dossier {{FOLDER}}",
 	"move-files-to-trash": "Déplacer les fichiers supprimés vers la corbeille",
 	"move-files-to-trash-text": "Cette action déplacera le fichier vers la corbeille.",
-	"perma-delete-files-text": "Cette action supprimera définitivement le fichier."
+	"perma-delete-files-text": "Cette action supprimera définitivement le fichier.",
+	"clear-filter": "Réinitialiser les filtres actuels",
+	"language-searcher-placeholder": "Filtrer par langue",
+	"category-searcher-placeholder": "Filtrer par catégorie",
+	"content-type-searcher-placeholder": "Filtrer le type de contenu",
+	"no-details": "Introduction seulement",
+	"no-pictures": "Aucune image",
+	"no-videos": "Aucune vidéo"
 }

@@ -98,8 +98,6 @@
 	"kiwix-server-description": "L'avvio di un server consente ad altri computer nella rete locale di accedere alla tua libreria Kiwix con un browser web standard.",
 	"fullscreen-notification": "Ora sei in modalità a schermo intero. Premi ESC per uscire!",
 	"local-files": "File locali",
-	"browse-by-category": "Sfoglia per categoria",
-	"browse-by-language": "Sfoglia per lingua",
 	"hide": "Nascondi",
 	"open-in-browser": "Apri nel browser",
 	"start-kiwix-server": "Avvia server Kiwix",

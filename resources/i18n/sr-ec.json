@@ -2,10 +2,11 @@
 	"@metadata": {
 		"authors": [
 			"BadDog",
-			"Kizule"
+			"Kizule",
+			"Milicevic01"
 		]
 	},
-	"name": "енглески",
+	"name": "српски",
 	"random-article": "Насумичан чланак",
 	"home-page": "Почетна странциа",
 	"print": "Штампање",
@@ -58,8 +59,6 @@
 	"about-libraries-title": "Библиотеке",
 	"fullscreen-notification": "Сада сте у режиму целог екрана. Притисните Esc да бисте изашли.",
 	"local-files": "Локалне датотеке",
-	"browse-by-category": "Прегледајте по категорији",
-	"browse-by-language": "Прегледајте по језику",
 	"hide": "Сакриј",
 	"open-in-browser": "Отвори у прегледачу",
 	"stop-kiwix-server": "Заустави Kiwix сервер",

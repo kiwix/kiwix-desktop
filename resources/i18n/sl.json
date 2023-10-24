@@ -91,8 +91,8 @@
 	"fullscreen-notification": "Zdaj ste v celozaslonskem načinu. Pritisnite ESC za izhod!",
 	"online-files": "Spletne datoteke",
 	"local-files": "Lokalne datoteke",
-	"browse-by-category": "Brskanje po kategoriji",
-	"browse-by-language": "Brskanje po jeziku",
+	"category": "Kategorija",
+	"language": "Jezik",
 	"hide": "Skrij",
 	"open-in-browser": "Odpri v brskalniku",
 	"start-kiwix-server": "Zaženi strežnik Kiwix",
@@ -155,5 +155,10 @@
 	"couldnt-open-location-text": "Kiwix ne more odpreti mape {{FOLDER}}",
 	"move-files-to-trash": "Prestavi izbrisane datoteke v koš",
 	"move-files-to-trash-text": "To dejanje bo datoteko prestavilo v koš.",
-	"perma-delete-files-text": "To dejanje bo datoteko trajno izbrisalo."
+	"perma-delete-files-text": "To dejanje bo datoteko trajno izbrisalo.",
+	"language-searcher-placeholder": "Filtriranje jezika",
+	"category-searcher-placeholder": "Filtriranje kategorije",
+	"content-type-searcher-placeholder": "Filtriranje vrste vsebine",
+	"no-details": "Samo uvod",
+	"no-pictures": "Ni slik"
 }

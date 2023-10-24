@@ -68,6 +68,8 @@
 	"about-libraries-title": "Bibliothéiken",
 	"online-files": "Online-Fichieren",
 	"local-files": "Lokal Fichieren",
+	"category": "Kategorie",
+	"language": "Sprooch",
 	"hide": "Verstoppen",
 	"open-in-browser": "Am Browser opmaachen",
 	"start-kiwix-server": "Kiwix-Server starten",
@@ -103,5 +105,7 @@
 	"open-link-in-web-browser": "Link am Browser opmaachen",
 	"invalid-port": "Net valabele Port",
 	"cancel-download": "Download ofbriechen",
-	"delete-book": "Buch läschen"
+	"delete-book": "Buch läschen",
+	"no-pictures": "Keng Biller",
+	"no-videos": "Keng Videoen"
 }

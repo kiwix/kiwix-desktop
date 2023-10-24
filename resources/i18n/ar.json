@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Meno25",
 			"Ravan",
 			"Tala Ali",
@@ -8,7 +9,7 @@
 			"محمد أحمد عبد الفتاح"
 		]
 	},
-	"name": "اللغة الانجليزية",
+	"name": "العربية",
 	"error-title": "خطأ",
 	"error-downloader-window-title": "لا يمكن إنشاء برنامج التنزيل",
 	"error-downloader-launch-message": "من المستحيل تشغيل برنامج التنزيل، سيبدأ تطبيق Kiwix-desktop لكن جميع وظائف التنزيل لن تعمل!",
@@ -94,8 +95,6 @@
 	"kiwix-server-description": "يسمح بدء تشغيل الخادم لأجهزة الكمبيوتر الأخرى في الشبكة المحلية بالوصول إلى مكتبة كيويكس الخاصة بك باستخدام مستعرض ويب قياسي.",
 	"fullscreen-notification": "أنت الآن في وضع ملء الشاشة. اضغط على ESC للإنهاء!",
 	"local-files": "ملفات محلية",
-	"browse-by-category": "تصفح حسب الفئة",
-	"browse-by-language": "التصفح حسب اللغة",
 	"hide": "إخفاء",
 	"open-in-browser": "افتح في المتصفح",
 	"start-kiwix-server": "ابدأ تشغيل خادم كيويكس",

@@ -2,6 +2,7 @@
 <RCC>
     <qresource prefix="/">
         <file>i18n/ar.json</file>
+        <file>i18n/bcl.json</file>
         <file>i18n/bn.json</file>
         <file>i18n/br.json</file>
         <file>i18n/ca.json</file>
@@ -34,6 +35,7 @@
         <file>i18n/nb.json</file>
         <file>i18n/nl.json</file>
         <file>i18n/nqo.json</file>
+        <file>i18n/or.json</file>
         <file>i18n/pl.json</file>
         <file>i18n/pt-br.json</file>
         <file>i18n/pt.json</file>
@@ -54,6 +56,7 @@
         <file>i18n/sro.json</file>
         <file>i18n/sv.json</file>
         <file>i18n/ta.json</file>
+        <file>i18n/te.json</file>
         <file>i18n/th.json</file>
         <file>i18n/tr.json</file>
         <file>i18n/uk.json</file>

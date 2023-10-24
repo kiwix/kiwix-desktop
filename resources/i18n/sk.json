@@ -1,10 +1,11 @@
 {
 	"@metadata": {
 		"authors": [
+			"McDutchie",
 			"Yardom78"
 		]
 	},
-	"name": "Angličtina",
+	"name": "Slovenčina",
 	"error-title": "Chyba",
 	"error-downloader-window-title": "Nepodarilo za vytvoriť sťahovač",
 	"error-downloader-launch-message": "Nie je možné spustiť sťahovač, Kiwix sa spustí, ale všetky funkcie sťahovania budú nefunkčné.",
@@ -90,8 +91,6 @@
 	"kiwix-server-description": "Spustenie serveru umožňuje ostatným počítačom v lokálnej sieti pristupovať do Vašej Kiwix knižnice pomocou štandardného webového prehliadača.",
 	"fullscreen-notification": "Ste v režime celej obrazovky. Pre ukončenie stlačte ESC!",
 	"local-files": "Lokálne súbory",
-	"browse-by-category": "Prehliadať podľa kategórie",
-	"browse-by-language": "Prehliadať podľa jazyka",
 	"hide": "Skryť",
 	"open-in-browser": "Otvoriť v prehliadači",
 	"start-kiwix-server": "Spustiť Kiwix server",
