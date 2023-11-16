@@ -93,6 +93,8 @@
 	"fullscreen-notification": "您現在是處在全螢幕模式。若要離開請按下 ESC 鍵！",
 	"online-files": "線上檔案",
 	"local-files": "本地檔案",
+	"category": "分類",
+	"language": "語言",
 	"hide": "隱藏",
 	"open-in-browser": "在瀏覽器中開啟",
 	"start-kiwix-server": "啟動 Kiwix 伺服器",
@@ -155,5 +157,12 @@
 	"couldnt-open-location-text": "Kiwix 開啟資料夾{{FOLDER}}",
 	"move-files-to-trash": "將已刪除的檔案移至垃圾桶",
 	"move-files-to-trash-text": "此操作將會把檔案移至垃圾桶。",
-	"perma-delete-files-text": "此操作將會永久刪除檔案。"
+	"perma-delete-files-text": "此操作將會永久刪除檔案。",
+	"clear-filter": "清除目前的篩選設定",
+	"language-searcher-placeholder": "篩選語言",
+	"category-searcher-placeholder": "篩選分類",
+	"content-type-searcher-placeholder": "篩選內容類型",
+	"no-details": "僅介紹",
+	"no-pictures": "沒有圖片",
+	"no-videos": "沒有影片"
 }
