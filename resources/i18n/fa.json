@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"FarsiNevis",
-			"Jeeputer"
+			"Jeeputer",
+			"Rulebased"
 		]
 	},
 	"name": "انگلیسی",
@@ -51,6 +52,7 @@
 	"about-reporting-problem-title": "گزارش مشکل",
 	"about-libraries-title": "کتابخانه‌ها",
 	"local-files": "پرونده‌های محلی",
+	"language": "زبان",
 	"hide": "پنهان کن",
 	"open-in-browser": "در مرورگر باز کن",
 	"all": "همه",
