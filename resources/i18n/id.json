@@ -8,6 +8,7 @@
 		]
 	},
 	"name": "Bahasa Indonesia",
+	"error-title": "Galat",
 	"error-downloader-window-title": "Tidak dapat membuat pengunduh",
 	"error-archive": "Gagal memuat arsip",
 	"open-zim": "Buka Zim",
@@ -37,6 +38,11 @@
 	"file": "File",
 	"edit": "Sunting",
 	"view": "Lihat",
+	"wikibooks": "Wikibuku",
+	"wikinews": "Wikiberita",
+	"wikiquote": "Wikikutip",
+	"wikispecies": "Wikispesies",
+	"wikivoyage": "Wikiwisata",
 	"wiktionary": "Wikikamus",
 	"next-tab": "Pindah ke tab berikutnya",
 	"previous-tab": "Pindah ke tab sebelumnya"
