@@ -681,13 +681,13 @@ void ContentManager::updateLibrary() {
     } catch (std::runtime_error&) {}
 }
 
-#define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary(const QString& content) {
     QtConcurrent::run([=]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
-        manager.readOpds(content.toStdString(), CATALOG_URL);
+        const auto catalogUrl = m_remoteLibraryManager.getCatalogHost();
+        manager.readOpds(content.toStdString(), catalogUrl.toStdString());
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
     });

@@ -32,6 +32,10 @@ public slots:
     void receiveContent(QNetworkReply*);
     void receiveLanguages(QNetworkReply*);
     void receiveCategories(QNetworkReply*);
+
+public:
+    static QString getCatalogHost();
+    static int     getCatalogPort();
 };
 
 #endif // OPDSREQUESTMANAGER_H
