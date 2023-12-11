@@ -227,7 +227,7 @@ void ContentManagerModel::startDownload(QModelIndex index)
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, [=]() {
         auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
-        double percent = (double) downloadInfos["completedLength"].toInt() / downloadInfos["totalLength"].toInt();
+        double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
         percent *= 100;
         percent = QString::number(percent, 'g', 3).toDouble();
         auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
