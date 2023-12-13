@@ -232,7 +232,7 @@ void ContentManagerModel::startDownload(QModelIndex index)
         percent = QString::number(percent, 'g', 3).toDouble();
         auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
         auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
-        node->setDownloadInfo({percent, completedLength, downloadSpeed});
+        node->setDownloadInfo({percent, completedLength, downloadSpeed, false});
         if (!downloadInfos["status"].isValid()) {
             node->setIsDownloading(false);
             timer->stop();
