@@ -142,7 +142,7 @@ bool RowNode::isChild(Node *candidate)
     return false;
 }
 
-void RowNode::setDownloadState(DownloadState* ds)
+void RowNode::setDownloadState(std::shared_ptr<DownloadState> ds)
 {
-    m_downloadState.reset(ds);
+    m_downloadState = ds;
 }

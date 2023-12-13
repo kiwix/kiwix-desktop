@@ -50,15 +50,15 @@ public:
     bool isChild(Node* candidate);
 
 
-    void setDownloadState(DownloadState* ds);
-    DownloadState* getDownloadState() { return m_downloadState.get(); }
+    void setDownloadState(std::shared_ptr<DownloadState> ds);
+    std::shared_ptr<DownloadState> getDownloadState() { return m_downloadState; }
 
 private:
     QList<QVariant> m_itemData;
     QList<std::shared_ptr<Node>> m_childItems;
     std::weak_ptr<RowNode> m_parentItem;
     QString m_bookId;
-    std::unique_ptr<DownloadState> m_downloadState;
+    std::shared_ptr<DownloadState> m_downloadState;
 };
 
 

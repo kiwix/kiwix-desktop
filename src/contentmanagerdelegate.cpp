@@ -177,7 +177,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 5) {
-        if (DownloadState* downloadState = node->getDownloadState()) {
+        if (const auto downloadState = node->getDownloadState()) {
             auto downloadInfo = downloadState->getDownloadInfo();
             showDownloadProgress(painter, r, downloadInfo);
         }
@@ -244,7 +244,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
     int x = r.left();
     int w = r.width();
 
-    if (DownloadState* downloadState = node->getDownloadState()) {
+    if (const auto downloadState = node->getDownloadState()) {
         if (downloadState->getDownloadInfo().paused) {
             if (clickX < (x + w/2)) {
                 KiwixApp::instance()->getContentManager()->cancelBook(id, index);
