@@ -250,20 +250,14 @@ void ContentManagerModel::startDownload(QModelIndex index)
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto prevDownloadInfo = node->getDownloadInfo();
-    prevDownloadInfo.paused = true;
-    node->setDownloadInfo(prevDownloadInfo);
-    node->getDownloadUpdateTimer()->stop();
+    node->pauseDownload();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto prevDownloadInfo = node->getDownloadInfo();
-    prevDownloadInfo.paused = false;
-    node->setDownloadInfo(prevDownloadInfo);
-    node->getDownloadUpdateTimer()->start(1000);
+    node->resumeDownload();
     emit dataChanged(index, index);
 }
 

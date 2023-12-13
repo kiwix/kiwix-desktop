@@ -35,6 +35,8 @@ public:
     void setIsDownloading(bool val);
     bool isChild(Node* candidate);
 
+    void pauseDownload();
+    void resumeDownload();
     void updateDownloadStatus();
 
 private:

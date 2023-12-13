@@ -125,3 +125,15 @@ void RowNode::updateDownloadStatus()
         setIsDownloading(false); // this stops & deletes the timer
     }
 }
+
+void RowNode::pauseDownload()
+{
+    m_downloadInfo.paused = true;
+    m_downloadUpdateTimer->stop();
+}
+
+void RowNode::resumeDownload()
+{
+    m_downloadInfo.paused = false;
+    m_downloadUpdateTimer->start(1000);
+}
