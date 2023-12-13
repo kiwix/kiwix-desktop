@@ -74,3 +74,20 @@ bool RowNode::isChild(Node *candidate)
     }
     return false;
 }
+
+void RowNode::setIsDownloading(bool val)
+{
+    assert(val != isDownloading());
+    if ( val ) {
+        m_downloadUpdateTimer.reset(new QTimer);
+        m_downloadUpdateTimer->start(1000);
+    } else {
+        m_downloadUpdateTimer->stop();
+
+        // Deleting the timer object immediately instead of via
+        // QObject::deleteLater() seems to be safe since it is not a recipient
+        // of any events that may be in the process of being delivered to it
+        // from another thread.
+        m_downloadUpdateTimer.reset();
+    }
+}

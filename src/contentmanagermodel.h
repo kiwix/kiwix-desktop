@@ -58,7 +58,6 @@ private: // data
     int zimCount = 0;
     ThumbnailDownloader td;
     QMap<QString, QByteArray> iconMap;
-    QMap<QString, QTimer*> timers;
 };
 
 #endif // CONTENTMANAGERMODEL_H

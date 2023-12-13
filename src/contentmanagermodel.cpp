@@ -253,9 +253,9 @@ std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
 void ContentManagerModel::startDownload(QModelIndex index)
 {
     auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    node->setIsDownloading(true);
+    node->setIsDownloading(true); // this starts the internal timer
     auto id = node->getBookId();
-    QTimer *timer = new QTimer(this);
+    QTimer *timer = node->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
         auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
         double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
@@ -265,14 +265,10 @@ void ContentManagerModel::startDownload(QModelIndex index)
         auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
         node->setDownloadInfo({percent, completedLength, downloadSpeed, false});
         if (!downloadInfos["status"].isValid()) {
-            node->setIsDownloading(false);
-            timer->stop();
-            timer->deleteLater();
+            node->setIsDownloading(false); // this stops & deletes the timer
         }
         emit dataChanged(index, index);
     });
-    timer->start(1000);
-    timers[id] = timer;
 }
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
@@ -282,7 +278,7 @@ void ContentManagerModel::pauseDownload(QModelIndex index)
     auto prevDownloadInfo = node->getDownloadInfo();
     prevDownloadInfo.paused = true;
     node->setDownloadInfo(prevDownloadInfo);
-    timers[id]->stop();
+    node->getDownloadUpdateTimer()->stop();
     emit dataChanged(index, index);
 }
 
@@ -293,7 +289,7 @@ void ContentManagerModel::resumeDownload(QModelIndex index)
     auto prevDownloadInfo = node->getDownloadInfo();
     prevDownloadInfo.paused = false;
     node->setDownloadInfo(prevDownloadInfo);
-    timers[id]->start(1000);
+    node->getDownloadUpdateTimer()->start(1000);
     emit dataChanged(index, index);
 }
 
@@ -301,10 +297,8 @@ void ContentManagerModel::cancelDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
     auto id = node->getBookId();
-    node->setIsDownloading(false);
+    node->setIsDownloading(false); // this stops & deletes the timer
     node->setDownloadInfo({0, "", "", false});
-    timers[id]->stop();
-    timers[id]->deleteLater();
     emit dataChanged(index, index);
 }
 
