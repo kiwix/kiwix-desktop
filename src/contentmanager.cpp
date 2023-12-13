@@ -77,10 +77,10 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     setLanguages();
 }
 
-QList<QMap<QString, QVariant>> ContentManager::getBooksList()
+ContentManager::BookInfoList ContentManager::getBooksList()
 {
     const auto bookIds = getBookIds();
-    QList<QMap<QString, QVariant>> bookList;
+    BookInfoList bookList;
     QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl"};
     QIcon bookIcon;
     for (auto bookId : bookIds) {
@@ -216,9 +216,9 @@ void ContentManager::setLanguages()
 }
 
 #define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
-QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringList &keys)
+ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
-    QMap<QString, QVariant> values;
+    BookInfo values;
     const kiwix::Book* b = [=]()->const kiwix::Book* {
         try {
             return &mp_library->getBookById(id);

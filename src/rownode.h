@@ -3,7 +3,6 @@
 
 #include "node.h"
 #include <QList>
-#include "contentmanagermodel.h"
 #include <QIcon>
 #include "kiwix/book.h"
 

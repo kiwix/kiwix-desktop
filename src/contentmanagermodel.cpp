@@ -102,7 +102,7 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
     }
 }
 
-void ContentManagerModel::setBooksData(const QList<QMap<QString, QVariant>>& data)
+void ContentManagerModel::setBooksData(const BookInfoList& data)
 {
     m_data = data;
     rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
@@ -124,7 +124,7 @@ QString convertToUnits(QString size)
     return preciseBytes + " " + units[unitIndex];
 }
 
-std::shared_ptr<RowNode> ContentManagerModel::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap) const
+std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const
 {
     auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
