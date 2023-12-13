@@ -20,7 +20,6 @@ public:
     DownloadState();
 
     bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
-    void setDownloadInfo(DownloadInfo downloadInfo) { m_downloadInfo = downloadInfo; }
     DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
     QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
     void setIsDownloading(bool val);

@@ -265,7 +265,6 @@ void ContentManagerModel::cancelDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
     node->setIsDownloading(false); // this stops & deletes the timer
-    node->setDownloadInfo({0, "", "", false});
     emit dataChanged(index, index);
 }
 

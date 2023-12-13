@@ -93,6 +93,7 @@ void DownloadState::setIsDownloading(bool val)
         // of any events that may be in the process of being delivered to it
         // from another thread.
         m_downloadUpdateTimer.reset();
+        m_downloadInfo = {0, "", "", false};
     }
 }
 
@@ -123,7 +124,7 @@ void DownloadState::updateDownloadStatus(QString id)
     percent = QString::number(percent, 'g', 3).toDouble();
     auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
     auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
-    setDownloadInfo({percent, completedLength, downloadSpeed, false});
+    m_downloadInfo = {percent, completedLength, downloadSpeed, false};
     if (!downloadInfos["status"].isValid()) {
         setIsDownloading(false); // this stops & deletes the timer
     }
