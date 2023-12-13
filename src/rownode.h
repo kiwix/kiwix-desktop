@@ -22,9 +22,9 @@ public:
     bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
     DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
     QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
-    void pauseDownload();
-    void resumeDownload();
-    void updateDownloadStatus(QString id);
+    void pause();
+    void resume();
+    void update(QString id);
 
 protected:
     // This is non-NULL only for a pending (even if paused) download

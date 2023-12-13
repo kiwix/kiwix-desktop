@@ -242,7 +242,7 @@ void ContentManagerModel::startDownload(QModelIndex index)
     node->setDownloadState(new DownloadState);
     QTimer *timer = node->getDownloadState()->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        node->getDownloadState()->updateDownloadStatus(node->getBookId());
+        node->getDownloadState()->update(node->getBookId());
         emit dataChanged(index, index);
     });
 }
@@ -250,14 +250,14 @@ void ContentManagerModel::startDownload(QModelIndex index)
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    node->getDownloadState()->pauseDownload();
+    node->getDownloadState()->pause();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    node->getDownloadState()->resumeDownload();
+    node->getDownloadState()->resume();
     emit dataChanged(index, index);
 }
 
