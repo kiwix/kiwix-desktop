@@ -35,7 +35,7 @@ public:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
     void refreshIcons();
 
-    static std::shared_ptr<RowNode> createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode);
+    std::shared_ptr<RowNode> createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap) const;
 
 public slots:
     void updateImage(QModelIndex index, QString url, QByteArray imageData);

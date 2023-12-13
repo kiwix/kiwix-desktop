@@ -124,7 +124,7 @@ QString convertToUnits(QString size)
     return preciseBytes + " " + units[unitIndex];
 }
 
-std::shared_ptr<RowNode> ContentManagerModel::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode)
+std::shared_ptr<RowNode> ContentManagerModel::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap) const
 {
     auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
@@ -158,7 +158,7 @@ void ContentManagerModel::setupNodes()
 {
     beginResetModel();
     for (auto bookItem : m_data) {
-        rootNode->appendChild(createNode(bookItem, iconMap, rootNode));
+        rootNode->appendChild(createNode(bookItem, iconMap));
     }
     endResetModel();
 }
