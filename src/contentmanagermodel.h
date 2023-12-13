@@ -6,6 +6,7 @@
 #include <QVariant>
 #include <QIcon>
 #include "thumbnaildownloader.h"
+#include "rownode.h"
 #include <memory>
 
 class RowNode;
@@ -58,6 +59,7 @@ private: // data
     int zimCount = 0;
     ThumbnailDownloader td;
     QMap<QString, QByteArray> iconMap;
+    QMap<QString, std::shared_ptr<DownloadState>> m_downloads;
 };
 
 #endif // CONTENTMANAGERMODEL_H

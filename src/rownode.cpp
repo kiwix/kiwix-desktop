@@ -33,7 +33,7 @@ QString convertToUnits(QString size)
 
 } // unnamed namespace
 
-void DownloadState::update(QString id)
+bool DownloadState::update(QString id)
 {
     auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
     double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
@@ -51,7 +51,9 @@ void DownloadState::update(QString id)
         // from another thread.
         m_downloadUpdateTimer.reset();
         m_downloadInfo = {0, "", "", false};
+        return false;
     }
+    return true;
 }
 
 void DownloadState::pause()

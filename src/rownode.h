@@ -24,7 +24,7 @@ public:
     QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
     void pause();
     void resume();
-    void update(QString id);
+    bool update(QString id);
 
 protected:
     // This is non-NULL only for a pending (even if paused) download

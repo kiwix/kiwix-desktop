@@ -136,6 +136,7 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap
                                    }, id, weakRoot));
     std::weak_ptr<RowNode> weakRowNodePtr = rowNodePtr;
     const auto descNodePtr = std::make_shared<DescriptionNode>(DescriptionNode(bookItem["description"].toString(), weakRowNodePtr));
+
     rowNodePtr->appendChild(descNodePtr);
     return rowNodePtr;
 }
@@ -144,7 +145,15 @@ void ContentManagerModel::setupNodes()
 {
     beginResetModel();
     for (auto bookItem : m_data) {
-        rootNode->appendChild(createNode(bookItem, iconMap));
+        const auto rowNode = createNode(bookItem, iconMap);
+
+        // Restore download state during model updates (filtering, etc)
+        const auto downloadIter = m_downloads.constFind(rowNode->getBookId());
+        if ( downloadIter != m_downloads.constEnd() ) {
+            rowNode->setDownloadState(downloadIter.value());
+        }
+
+        rootNode->appendChild(rowNode);
     }
     endResetModel();
 }
@@ -239,10 +248,16 @@ std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
 void ContentManagerModel::startDownload(QModelIndex index)
 {
     auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    node->setDownloadState(new DownloadState);
-    QTimer *timer = node->getDownloadState()->getDownloadUpdateTimer();
+    const auto bookId = node->getBookId();
+    const auto newDownload = std::make_shared<DownloadState>();
+    m_downloads[bookId] = newDownload;
+    node->setDownloadState(newDownload);
+    QTimer *timer = newDownload->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        node->getDownloadState()->update(node->getBookId());
+        if ( ! newDownload->update(bookId) ) {
+            m_downloads.remove(bookId);
+            node->setDownloadState(nullptr);
+        }
         emit dataChanged(index, index);
     });
 }
@@ -265,6 +280,7 @@ void ContentManagerModel::cancelDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
     node->setDownloadState(nullptr);
+    m_downloads.remove(node->getBookId());
     emit dataChanged(index, index);
 }
 
