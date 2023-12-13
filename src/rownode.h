@@ -22,7 +22,6 @@ public:
     bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
     DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
     QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
-    void setIsDownloading(bool val);
     void pauseDownload();
     void resumeDownload();
     void updateDownloadStatus(QString id);
@@ -34,7 +33,7 @@ protected:
     DownloadInfo m_downloadInfo;
 };
 
-class RowNode : public Node, public DownloadState
+class RowNode : public Node
 {
 public:
     explicit RowNode(QList<QVariant> itemData, QString bookId, std::weak_ptr<RowNode> parentItem);
@@ -50,11 +49,16 @@ public:
     void setIconData(QByteArray iconData) { m_itemData[0] = iconData; }
     bool isChild(Node* candidate);
 
+
+    void setDownloadState(DownloadState* ds);
+    DownloadState* getDownloadState() { return m_downloadState.get(); }
+
 private:
     QList<QVariant> m_itemData;
     QList<std::shared_ptr<Node>> m_childItems;
     std::weak_ptr<RowNode> m_parentItem;
     QString m_bookId;
+    std::unique_ptr<DownloadState> m_downloadState;
 };
 
 

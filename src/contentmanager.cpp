@@ -107,8 +107,8 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuCancelBook(gt("cancel-download"), this);
     QAction menuOpenFolder(gt("open-folder"), this);
 
-    if (bookNode->isDownloading()) {
-        if (bookNode->getDownloadInfo().paused) {
+    if (DownloadState* download = bookNode->getDownloadState()) {
+        if (download->getDownloadInfo().paused) {
             contextMenu.addAction(&menuResumeBook);
         } else {
             contextMenu.addAction(&menuPauseBook);

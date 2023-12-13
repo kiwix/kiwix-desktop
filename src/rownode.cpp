@@ -10,24 +10,8 @@
 DownloadState::DownloadState()
     : m_downloadInfo({0, "", "", false})
 {
-}
-
-void DownloadState::setIsDownloading(bool val)
-{
-    assert(val != isDownloading());
-    if ( val ) {
-        m_downloadUpdateTimer.reset(new QTimer);
-        m_downloadUpdateTimer->start(1000);
-    } else {
-        m_downloadUpdateTimer->stop();
-
-        // Deleting the timer object immediately instead of via
-        // QObject::deleteLater() seems to be safe since it is not a recipient
-        // of any events that may be in the process of being delivered to it
-        // from another thread.
-        m_downloadUpdateTimer.reset();
-        m_downloadInfo = {0, "", "", false};
-    }
+    m_downloadUpdateTimer.reset(new QTimer);
+    m_downloadUpdateTimer->start(1000);
 }
 
 namespace
@@ -59,7 +43,14 @@ void DownloadState::updateDownloadStatus(QString id)
     auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
     m_downloadInfo = {percent, completedLength, downloadSpeed, false};
     if (!downloadInfos["status"].isValid()) {
-        setIsDownloading(false); // this stops & deletes the timer
+        m_downloadUpdateTimer->stop();
+
+        // Deleting the timer object immediately instead of via
+        // QObject::deleteLater() seems to be safe since it is not a recipient
+        // of any events that may be in the process of being delivered to it
+        // from another thread.
+        m_downloadUpdateTimer.reset();
+        m_downloadInfo = {0, "", "", false};
     }
 }
 
@@ -149,4 +140,9 @@ bool RowNode::isChild(Node *candidate)
             return true;
     }
     return false;
+}
+
+void RowNode::setDownloadState(DownloadState* ds)
+{
+    m_downloadState.reset(ds);
 }

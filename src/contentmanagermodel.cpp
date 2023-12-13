@@ -239,10 +239,10 @@ std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
 void ContentManagerModel::startDownload(QModelIndex index)
 {
     auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    node->setIsDownloading(true); // this starts the internal timer
-    QTimer *timer = node->getDownloadUpdateTimer();
+    node->setDownloadState(new DownloadState);
+    QTimer *timer = node->getDownloadState()->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        node->updateDownloadStatus(node->getBookId());
+        node->getDownloadState()->updateDownloadStatus(node->getBookId());
         emit dataChanged(index, index);
     });
 }
@@ -250,21 +250,21 @@ void ContentManagerModel::startDownload(QModelIndex index)
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    node->pauseDownload();
+    node->getDownloadState()->pauseDownload();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    node->resumeDownload();
+    node->getDownloadState()->resumeDownload();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::cancelDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    node->setIsDownloading(false); // this stops & deletes the timer
+    node->setDownloadState(nullptr);
     emit dataChanged(index, index);
 }
 
