@@ -250,7 +250,6 @@ void ContentManagerModel::startDownload(QModelIndex index)
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto id = node->getBookId();
     auto prevDownloadInfo = node->getDownloadInfo();
     prevDownloadInfo.paused = true;
     node->setDownloadInfo(prevDownloadInfo);
@@ -261,7 +260,6 @@ void ContentManagerModel::pauseDownload(QModelIndex index)
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto id = node->getBookId();
     auto prevDownloadInfo = node->getDownloadInfo();
     prevDownloadInfo.paused = false;
     node->setDownloadInfo(prevDownloadInfo);
@@ -272,7 +270,6 @@ void ContentManagerModel::resumeDownload(QModelIndex index)
 void ContentManagerModel::cancelDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto id = node->getBookId();
     node->setIsDownloading(false); // this stops & deletes the timer
     node->setDownloadInfo({0, "", "", false});
     emit dataChanged(index, index);
