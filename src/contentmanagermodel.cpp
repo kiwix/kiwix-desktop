@@ -5,6 +5,7 @@
 #include <zim/error.h>
 #include <zim/item.h>
 #include "kiwixapp.h"
+#include <kiwix/tools.h>
 
 ContentManagerModel::ContentManagerModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -123,11 +124,41 @@ QString convertToUnits(QString size)
     return preciseBytes + " " + units[unitIndex];
 }
 
+std::shared_ptr<RowNode> ContentManagerModel::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode)
+{
+    auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
+    QString id = bookItem["id"].toString();
+    QByteArray bookIcon;
+    try {
+        auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+        std::string favicon;
+        auto item = book.getIllustration(48);
+        favicon = item->getData();
+        bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
+        bookIcon.detach(); // deep copy
+    } catch (...) {
+        if (iconMap.contains(faviconUrl)) {
+            bookIcon = iconMap[faviconUrl];
+        }
+    }
+    std::weak_ptr<RowNode> weakRoot = rootNode;
+    auto rowNodePtr = std::shared_ptr<RowNode>(new
+                                    RowNode({bookIcon, bookItem["title"],
+                                   bookItem["date"],
+                                   QString::fromStdString(kiwix::beautifyFileSize(bookItem["size"].toULongLong())),
+                                   bookItem["tags"]
+                                   }, id, weakRoot));
+    std::weak_ptr<RowNode> weakRowNodePtr = rowNodePtr;
+    const auto descNodePtr = std::make_shared<DescriptionNode>(DescriptionNode(bookItem["description"].toString(), weakRowNodePtr));
+    rowNodePtr->appendChild(descNodePtr);
+    return rowNodePtr;
+}
+
 void ContentManagerModel::setupNodes()
 {
     beginResetModel();
     for (auto bookItem : m_data) {
-        rootNode->appendChild(RowNode::createNode(bookItem, iconMap, rootNode));
+        rootNode->appendChild(createNode(bookItem, iconMap, rootNode));
     }
     endResetModel();
 }

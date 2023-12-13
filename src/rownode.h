@@ -33,7 +33,6 @@ public:
     void setDownloadInfo(DownloadInfo downloadInfo) { m_downloadInfo = downloadInfo; }
     DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
     void setIsDownloading(bool val) { m_isDownloading = val; }
-    static std::shared_ptr<RowNode> createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode);
     bool isChild(Node* candidate);
 
 private:
