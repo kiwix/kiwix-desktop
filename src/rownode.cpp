@@ -91,3 +91,37 @@ void RowNode::setIsDownloading(bool val)
         m_downloadUpdateTimer.reset();
     }
 }
+
+namespace
+{
+
+QString convertToUnits(QString size)
+{
+    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
+    int unitIndex = 0;
+    auto bytes = size.toDouble();
+    while (bytes >= 1024 && unitIndex < units.size()) {
+        bytes /= 1024;
+        unitIndex++;
+    }
+
+    const auto preciseBytes = QString::number(bytes, 'g', 3);
+    return preciseBytes + " " + units[unitIndex];
+}
+
+} // unnamed namespace
+
+void RowNode::updateDownloadStatus()
+{
+    const auto id = getBookId();
+    auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
+    double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
+    percent *= 100;
+    percent = QString::number(percent, 'g', 3).toDouble();
+    auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
+    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
+    setDownloadInfo({percent, completedLength, downloadSpeed, false});
+    if (!downloadInfos["status"].isValid()) {
+        setIsDownloading(false); // this stops & deletes the timer
+    }
+}

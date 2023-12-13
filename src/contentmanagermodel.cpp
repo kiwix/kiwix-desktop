@@ -110,20 +110,6 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-QString convertToUnits(QString size)
-{
-    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
-    int unitIndex = 0;
-    auto bytes = size.toDouble();
-    while (bytes >= 1024 && unitIndex < units.size()) {
-        bytes /= 1024;
-        unitIndex++;
-    }
-
-    const auto preciseBytes = QString::number(bytes, 'g', 3);
-    return preciseBytes + " " + units[unitIndex];
-}
-
 std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const
 {
     auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
@@ -254,19 +240,9 @@ void ContentManagerModel::startDownload(QModelIndex index)
 {
     auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
     node->setIsDownloading(true); // this starts the internal timer
-    auto id = node->getBookId();
     QTimer *timer = node->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
-        double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
-        percent *= 100;
-        percent = QString::number(percent, 'g', 3).toDouble();
-        auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
-        auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
-        node->setDownloadInfo({percent, completedLength, downloadSpeed, false});
-        if (!downloadInfos["status"].isValid()) {
-            node->setIsDownloading(false); // this stops & deletes the timer
-        }
+        node->updateDownloadStatus();
         emit dataChanged(index, index);
     });
 }

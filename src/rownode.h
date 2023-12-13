@@ -35,6 +35,8 @@ public:
     void setIsDownloading(bool val);
     bool isChild(Node* candidate);
 
+    void updateDownloadStatus();
+
 private:
     QList<QVariant> m_itemData;
     QList<std::shared_ptr<Node>> m_childItems;
