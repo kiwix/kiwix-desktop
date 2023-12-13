@@ -3,10 +3,82 @@
 #include "kiwixapp.h"
 #include "descriptionnode.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// DowloadState
+////////////////////////////////////////////////////////////////////////////////
+
 DownloadState::DownloadState()
     : m_downloadInfo({0, "", "", false})
 {
 }
+
+void DownloadState::setIsDownloading(bool val)
+{
+    assert(val != isDownloading());
+    if ( val ) {
+        m_downloadUpdateTimer.reset(new QTimer);
+        m_downloadUpdateTimer->start(1000);
+    } else {
+        m_downloadUpdateTimer->stop();
+
+        // Deleting the timer object immediately instead of via
+        // QObject::deleteLater() seems to be safe since it is not a recipient
+        // of any events that may be in the process of being delivered to it
+        // from another thread.
+        m_downloadUpdateTimer.reset();
+        m_downloadInfo = {0, "", "", false};
+    }
+}
+
+namespace
+{
+
+QString convertToUnits(QString size)
+{
+    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
+    int unitIndex = 0;
+    auto bytes = size.toDouble();
+    while (bytes >= 1024 && unitIndex < units.size()) {
+        bytes /= 1024;
+        unitIndex++;
+    }
+
+    const auto preciseBytes = QString::number(bytes, 'g', 3);
+    return preciseBytes + " " + units[unitIndex];
+}
+
+} // unnamed namespace
+
+void DownloadState::updateDownloadStatus(QString id)
+{
+    auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
+    double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
+    percent *= 100;
+    percent = QString::number(percent, 'g', 3).toDouble();
+    auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
+    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
+    m_downloadInfo = {percent, completedLength, downloadSpeed, false};
+    if (!downloadInfos["status"].isValid()) {
+        setIsDownloading(false); // this stops & deletes the timer
+    }
+}
+
+void DownloadState::pauseDownload()
+{
+    m_downloadInfo.paused = true;
+    m_downloadUpdateTimer->stop();
+}
+
+void DownloadState::resumeDownload()
+{
+    m_downloadInfo.paused = false;
+    m_downloadUpdateTimer->start(1000);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// RowNode
+////////////////////////////////////////////////////////////////////////////////
 
 RowNode::RowNode(QList<QVariant> itemData, QString bookId, std::weak_ptr<RowNode> parent)
     : m_itemData(itemData), m_parentItem(parent), m_bookId(bookId)
@@ -77,67 +149,4 @@ bool RowNode::isChild(Node *candidate)
             return true;
     }
     return false;
-}
-
-void DownloadState::setIsDownloading(bool val)
-{
-    assert(val != isDownloading());
-    if ( val ) {
-        m_downloadUpdateTimer.reset(new QTimer);
-        m_downloadUpdateTimer->start(1000);
-    } else {
-        m_downloadUpdateTimer->stop();
-
-        // Deleting the timer object immediately instead of via
-        // QObject::deleteLater() seems to be safe since it is not a recipient
-        // of any events that may be in the process of being delivered to it
-        // from another thread.
-        m_downloadUpdateTimer.reset();
-        m_downloadInfo = {0, "", "", false};
-    }
-}
-
-namespace
-{
-
-QString convertToUnits(QString size)
-{
-    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
-    int unitIndex = 0;
-    auto bytes = size.toDouble();
-    while (bytes >= 1024 && unitIndex < units.size()) {
-        bytes /= 1024;
-        unitIndex++;
-    }
-
-    const auto preciseBytes = QString::number(bytes, 'g', 3);
-    return preciseBytes + " " + units[unitIndex];
-}
-
-} // unnamed namespace
-
-void DownloadState::updateDownloadStatus(QString id)
-{
-    auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
-    double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
-    percent *= 100;
-    percent = QString::number(percent, 'g', 3).toDouble();
-    auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
-    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
-    m_downloadInfo = {percent, completedLength, downloadSpeed, false};
-    if (!downloadInfos["status"].isValid()) {
-        setIsDownloading(false); // this stops & deletes the timer
-    }
-}
-
-void DownloadState::pauseDownload()
-{
-    m_downloadInfo.paused = true;
-    m_downloadUpdateTimer->stop();
-}
-
-void DownloadState::resumeDownload()
-{
-    m_downloadInfo.paused = false;
-    m_downloadUpdateTimer->start(1000);
 }
