@@ -3,10 +3,14 @@
 #include "kiwixapp.h"
 #include "descriptionnode.h"
 
+DownloadState::DownloadState()
+    : m_downloadInfo({0, "", "", false})
+{
+}
+
 RowNode::RowNode(QList<QVariant> itemData, QString bookId, std::weak_ptr<RowNode> parent)
     : m_itemData(itemData), m_parentItem(parent), m_bookId(bookId)
 {
-    m_downloadInfo = {0, "", "", false};
 }
 
 RowNode::~RowNode()
@@ -75,7 +79,7 @@ bool RowNode::isChild(Node *candidate)
     return false;
 }
 
-void RowNode::setIsDownloading(bool val)
+void DownloadState::setIsDownloading(bool val)
 {
     assert(val != isDownloading());
     if ( val ) {
@@ -111,9 +115,8 @@ QString convertToUnits(QString size)
 
 } // unnamed namespace
 
-void RowNode::updateDownloadStatus()
+void DownloadState::updateDownloadStatus(QString id)
 {
-    const auto id = getBookId();
     auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
     double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
     percent *= 100;
@@ -126,13 +129,13 @@ void RowNode::updateDownloadStatus()
     }
 }
 
-void RowNode::pauseDownload()
+void DownloadState::pauseDownload()
 {
     m_downloadInfo.paused = true;
     m_downloadUpdateTimer->stop();
 }
 
-void RowNode::resumeDownload()
+void DownloadState::resumeDownload()
 {
     m_downloadInfo.paused = false;
     m_downloadUpdateTimer->start(1000);

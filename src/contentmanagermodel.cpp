@@ -242,7 +242,7 @@ void ContentManagerModel::startDownload(QModelIndex index)
     node->setIsDownloading(true); // this starts the internal timer
     QTimer *timer = node->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        node->updateDownloadStatus();
+        node->updateDownloadStatus(node->getBookId());
         emit dataChanged(index, index);
     });
 }

@@ -14,7 +14,28 @@ struct DownloadInfo
     bool paused;
 };
 
-class RowNode : public Node
+class DownloadState
+{
+public:
+    DownloadState();
+
+    bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
+    void setDownloadInfo(DownloadInfo downloadInfo) { m_downloadInfo = downloadInfo; }
+    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
+    QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
+    void setIsDownloading(bool val);
+    void pauseDownload();
+    void resumeDownload();
+    void updateDownloadStatus(QString id);
+
+protected:
+    // This is non-NULL only for a pending (even if paused) download
+    std::unique_ptr<QTimer> m_downloadUpdateTimer;
+
+    DownloadInfo m_downloadInfo;
+};
+
+class RowNode : public Node, public DownloadState
 {
 public:
     explicit RowNode(QList<QVariant> itemData, QString bookId, std::weak_ptr<RowNode> parentItem);
@@ -28,27 +49,13 @@ public:
     int row() const override;
     QString getBookId() const override { return m_bookId; }
     void setIconData(QByteArray iconData) { m_itemData[0] = iconData; }
-    bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
-    void setDownloadInfo(DownloadInfo downloadInfo) { m_downloadInfo = downloadInfo; }
-    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
-    QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
-    void setIsDownloading(bool val);
     bool isChild(Node* candidate);
-
-    void pauseDownload();
-    void resumeDownload();
-    void updateDownloadStatus();
 
 private:
     QList<QVariant> m_itemData;
     QList<std::shared_ptr<Node>> m_childItems;
     std::weak_ptr<RowNode> m_parentItem;
     QString m_bookId;
-
-    // This is non-NULL only for a pending (even if paused) download
-    std::unique_ptr<QTimer> m_downloadUpdateTimer;
-
-    DownloadInfo m_downloadInfo;
 };
 
 
