@@ -144,6 +144,7 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap
 void ContentManagerModel::setupNodes()
 {
     beginResetModel();
+    bookIdToRowMap.clear();
     for (auto bookItem : m_data) {
         const auto rowNode = createNode(bookItem, iconMap);
 
@@ -153,6 +154,7 @@ void ContentManagerModel::setupNodes()
             rowNode->setDownloadState(downloadIter.value());
         }
 
+        bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
         rootNode->appendChild(rowNode);
     }
     endResetModel();
@@ -254,11 +256,33 @@ void ContentManagerModel::startDownload(QModelIndex index)
     node->setDownloadState(newDownload);
     QTimer *timer = newDownload->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        if ( ! newDownload->update(bookId) ) {
+        // We may not use node in this lambda since it may have been
+        // invalidated by a call to ContentManagerModel::setBooksData().
+
+        const bool downloadStillValid = newDownload->update(bookId);
+
+        // newDownload->update() call above may result in
+        // ContentManagerModel::setBooksData() being called (through a chain
+        // of signals), which in turn will rebuild bookIdToRowMap. Hence
+        // bookIdToRowMap access must happen after it.
+
+        const auto it = bookIdToRowMap.constFind(bookId);
+
+        if ( ! downloadStillValid ) {
             m_downloads.remove(bookId);
-            node->setDownloadState(nullptr);
+            if ( it != bookIdToRowMap.constEnd() ) {
+                const size_t row = it.value();
+                RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
+                rowNode.setDownloadState(nullptr);
+            }
         }
-        emit dataChanged(index, index);
+
+        if ( it != bookIdToRowMap.constEnd() ) {
+            const size_t row = it.value();
+            const QModelIndex rootNodeIndex = this->index(0, 0);
+            const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
+            emit dataChanged(newIndex, newIndex);
+        }
     });
 }
 

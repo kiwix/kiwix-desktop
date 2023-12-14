@@ -58,6 +58,7 @@ private: // data
     std::shared_ptr<RowNode> rootNode;
     int zimCount = 0;
     ThumbnailDownloader td;
+    QMap<QString, size_t> bookIdToRowMap;
     QMap<QString, QByteArray> iconMap;
     QMap<QString, std::shared_ptr<DownloadState>> m_downloads;
 };
