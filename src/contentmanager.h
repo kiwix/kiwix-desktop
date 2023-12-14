@@ -17,9 +17,13 @@ class ContentManager : public QObject
     Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
 
-public:
+public: // types
     typedef QList<QPair<QString, QString>> LanguageList;
     typedef QList<QPair<QString, QString>> FilterList;
+    typedef ContentManagerModel::BookInfo     BookInfo;
+    typedef ContentManagerModel::BookInfoList BookInfoList;
+
+public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
 
@@ -51,7 +55,7 @@ private:
 
     QStringList getBookIds();
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
-    QList<QMap<QString, QVariant>> getBooksList();
+    BookInfoList getBooksList();
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
     void setCategories();
@@ -71,7 +75,7 @@ signals:
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
-    QMap<QString, QVariant> getBookInfos(QString id, const QStringList &keys);
+    BookInfo getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
     QMap<QString, QVariant> updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);

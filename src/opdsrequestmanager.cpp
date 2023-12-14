@@ -5,8 +5,22 @@ OpdsRequestManager::OpdsRequestManager()
 {
 }
 
-#define CATALOG_HOST "library.kiwix.org"
-#define CATALOG_PORT 443
+QString OpdsRequestManager::getCatalogHost()
+{
+    const char* const envVarVal = getenv("KIWIX_CATALOG_HOST");
+    return envVarVal
+         ? envVarVal
+         : "library.kiwix.org";
+}
+
+int OpdsRequestManager::getCatalogPort()
+{
+    const char* const envVarVal = getenv("KIWIX_CATALOG_PORT");
+    return envVarVal
+         ? atoi(envVarVal)
+         : 443;
+}
+
 void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString& categoryFilter)
 {
     QUrlQuery query;
@@ -36,9 +50,10 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
 QNetworkReply* OpdsRequestManager::opdsResponseFromPath(const QString &path, const QUrlQuery &query)
 {
     QUrl url;
-    url.setScheme("https");
-    url.setHost(CATALOG_HOST);
-    url.setPort(CATALOG_PORT);
+    const int port = getCatalogPort();
+    url.setScheme(port == 443 ? "https" : "http");
+    url.setHost(getCatalogHost());
+    url.setPort(port);
     url.setPath(path);
     url.setQuery(query);
     qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);

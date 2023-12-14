@@ -6,6 +6,7 @@
 #include <QVariant>
 #include <QIcon>
 #include "thumbnaildownloader.h"
+#include "rownode.h"
 #include <memory>
 
 class RowNode;
@@ -16,7 +17,11 @@ class ContentManagerModel : public QAbstractItemModel
 {
     Q_OBJECT
 
-public:
+public: // types
+    typedef QMap<QString, QVariant> BookInfo;
+    typedef QList<BookInfo>         BookInfoList;
+
+public: // functions
     explicit ContentManagerModel(QObject *parent = nullptr);
     ~ContentManagerModel();
 
@@ -29,11 +34,13 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    void setBooksData(const QList<QMap<QString, QVariant>>& data);
+    void setBooksData(const BookInfoList& data);
     void setupNodes();
     bool hasChildren(const QModelIndex &parent) const override;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
     void refreshIcons();
+
+    std::shared_ptr<RowNode> createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const;
 
 public slots:
     void updateImage(QModelIndex index, QString url, QByteArray imageData);
@@ -42,17 +49,21 @@ public slots:
     void resumeDownload(QModelIndex index);
     void cancelDownload(QModelIndex index);
 
-protected:
+protected: // functions
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
 
-private:
-    QList<QMap<QString, QVariant>> m_data;
+private: // functions
+    void updateDownload(QString bookId);
+
+private: // data
+    BookInfoList m_data;
     std::shared_ptr<RowNode> rootNode;
     int zimCount = 0;
     ThumbnailDownloader td;
+    QMap<QString, size_t> bookIdToRowMap;
     QMap<QString, QByteArray> iconMap;
-    QMap<QString, QTimer*> timers;
+    QMap<QString, std::shared_ptr<DownloadState>> m_downloads;
 };
 
 #endif // CONTENTMANAGERMODEL_H

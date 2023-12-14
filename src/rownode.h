@@ -3,7 +3,6 @@
 
 #include "node.h"
 #include <QList>
-#include "contentmanagermodel.h"
 #include <QIcon>
 #include "kiwix/book.h"
 
@@ -13,6 +12,25 @@ struct DownloadInfo
     QString completedLength;
     QString downloadSpeed;
     bool paused;
+};
+
+class DownloadState
+{
+public:
+    DownloadState();
+
+    bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
+    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
+    QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
+    void pause();
+    void resume();
+    bool update(QString id);
+
+protected:
+    // This is non-NULL only for a pending (even if paused) download
+    std::unique_ptr<QTimer> m_downloadUpdateTimer;
+
+    DownloadInfo m_downloadInfo;
 };
 
 class RowNode : public Node
@@ -29,20 +47,18 @@ public:
     int row() const override;
     QString getBookId() const override { return m_bookId; }
     void setIconData(QByteArray iconData) { m_itemData[0] = iconData; }
-    bool isDownloading() const { return m_isDownloading; }
-    void setDownloadInfo(DownloadInfo downloadInfo) { m_downloadInfo = downloadInfo; }
-    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
-    void setIsDownloading(bool val) { m_isDownloading = val; }
-    static std::shared_ptr<RowNode> createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode);
     bool isChild(Node* candidate);
+
+
+    void setDownloadState(std::shared_ptr<DownloadState> ds);
+    std::shared_ptr<DownloadState> getDownloadState() { return m_downloadState; }
 
 private:
     QList<QVariant> m_itemData;
     QList<std::shared_ptr<Node>> m_childItems;
     std::weak_ptr<RowNode> m_parentItem;
     QString m_bookId;
-    bool m_isDownloading = false;
-    DownloadInfo m_downloadInfo;
+    std::shared_ptr<DownloadState> m_downloadState;
 };
 
 

@@ -77,10 +77,10 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     setLanguages();
 }
 
-QList<QMap<QString, QVariant>> ContentManager::getBooksList()
+ContentManager::BookInfoList ContentManager::getBooksList()
 {
     const auto bookIds = getBookIds();
-    QList<QMap<QString, QVariant>> bookList;
+    BookInfoList bookList;
     QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl"};
     QIcon bookIcon;
     for (auto bookId : bookIds) {
@@ -107,8 +107,8 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuCancelBook(gt("cancel-download"), this);
     QAction menuOpenFolder(gt("open-folder"), this);
 
-    if (bookNode->isDownloading()) {
-        if (bookNode->getDownloadInfo().paused) {
+    if (const auto download = bookNode->getDownloadState()) {
+        if (download->getDownloadInfo().paused) {
             contextMenu.addAction(&menuResumeBook);
         } else {
             contextMenu.addAction(&menuPauseBook);
@@ -216,9 +216,9 @@ void ContentManager::setLanguages()
 }
 
 #define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
-QMap<QString, QVariant> ContentManager::getBookInfos(QString id, const QStringList &keys)
+ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
-    QMap<QString, QVariant> values;
+    BookInfo values;
     const kiwix::Book* b = [=]()->const kiwix::Book* {
         try {
             return &mp_library->getBookById(id);
@@ -681,13 +681,13 @@ void ContentManager::updateLibrary() {
     } catch (std::runtime_error&) {}
 }
 
-#define CATALOG_URL "library.kiwix.org"
 void ContentManager::updateRemoteLibrary(const QString& content) {
     QtConcurrent::run([=]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
-        manager.readOpds(content.toStdString(), CATALOG_URL);
+        const auto catalogUrl = m_remoteLibraryManager.getCatalogHost();
+        manager.readOpds(content.toStdString(), catalogUrl.toStdString());
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
     });

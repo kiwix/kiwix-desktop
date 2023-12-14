@@ -2,12 +2,81 @@
 #include <QVariant>
 #include "kiwixapp.h"
 #include "descriptionnode.h"
-#include "kiwix/tools.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// DowloadState
+////////////////////////////////////////////////////////////////////////////////
+
+DownloadState::DownloadState()
+    : m_downloadInfo({0, "", "", false})
+{
+    m_downloadUpdateTimer.reset(new QTimer);
+    m_downloadUpdateTimer->start(1000);
+}
+
+namespace
+{
+
+QString convertToUnits(QString size)
+{
+    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
+    int unitIndex = 0;
+    auto bytes = size.toDouble();
+    while (bytes >= 1024 && unitIndex < units.size()) {
+        bytes /= 1024;
+        unitIndex++;
+    }
+
+    const auto preciseBytes = QString::number(bytes, 'g', 3);
+    return preciseBytes + " " + units[unitIndex];
+}
+
+} // unnamed namespace
+
+bool DownloadState::update(QString id)
+{
+    auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
+    if (!downloadInfos["status"].isValid()) {
+        m_downloadUpdateTimer->stop();
+
+        // Deleting the timer object immediately instead of via
+        // QObject::deleteLater() seems to be safe since it is not a recipient
+        // of any events that may be in the process of being delivered to it
+        // from another thread.
+        m_downloadUpdateTimer.reset();
+        m_downloadInfo = {0, "", "", false};
+        return false;
+    }
+
+    double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
+    percent *= 100;
+    percent = QString::number(percent, 'g', 3).toDouble();
+    auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
+    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
+    m_downloadInfo = {percent, completedLength, downloadSpeed, false};
+    return true;
+}
+
+void DownloadState::pause()
+{
+    m_downloadInfo.paused = true;
+    m_downloadUpdateTimer->stop();
+}
+
+void DownloadState::resume()
+{
+    m_downloadInfo.paused = false;
+    m_downloadUpdateTimer->start(1000);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+// RowNode
+////////////////////////////////////////////////////////////////////////////////
 
 RowNode::RowNode(QList<QVariant> itemData, QString bookId, std::weak_ptr<RowNode> parent)
     : m_itemData(itemData), m_parentItem(parent), m_bookId(bookId)
 {
-    m_downloadInfo = {0, "", "", false};
 }
 
 RowNode::~RowNode()
@@ -65,36 +134,6 @@ int RowNode::row() const
     return 0;
 }
 
-std::shared_ptr<RowNode> RowNode::createNode(QMap<QString, QVariant> bookItem, QMap<QString, QByteArray> iconMap, std::shared_ptr<RowNode> rootNode)
-{
-    auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
-    QString id = bookItem["id"].toString();
-    QByteArray bookIcon;
-    try {
-        auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-        std::string favicon;
-        auto item = book.getIllustration(48);
-        favicon = item->getData();
-        bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
-        bookIcon.detach(); // deep copy
-    } catch (...) {
-        if (iconMap.contains(faviconUrl)) {
-            bookIcon = iconMap[faviconUrl];
-        }
-    }
-    std::weak_ptr<RowNode> weakRoot = rootNode;
-    auto rowNodePtr = std::shared_ptr<RowNode>(new
-                                    RowNode({bookIcon, bookItem["title"],
-                                   bookItem["date"],
-                                   QString::fromStdString(kiwix::beautifyFileSize(bookItem["size"].toULongLong())),
-                                   bookItem["tags"]
-                                   }, id, weakRoot));
-    std::weak_ptr<RowNode> weakRowNodePtr = rowNodePtr;
-    const auto descNodePtr = std::make_shared<DescriptionNode>(DescriptionNode(bookItem["description"].toString(), weakRowNodePtr));
-    rowNodePtr->appendChild(descNodePtr);
-    return rowNodePtr;
-}
-
 bool RowNode::isChild(Node *candidate)
 {
     if (!candidate)
@@ -104,4 +143,9 @@ bool RowNode::isChild(Node *candidate)
             return true;
     }
     return false;
+}
+
+void RowNode::setDownloadState(std::shared_ptr<DownloadState> ds)
+{
+    m_downloadState = ds;
 }

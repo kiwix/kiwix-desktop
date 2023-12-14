@@ -5,6 +5,7 @@
 #include <zim/error.h>
 #include <zim/item.h>
 #include "kiwixapp.h"
+#include <kiwix/tools.h>
 
 ContentManagerModel::ContentManagerModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -101,7 +102,7 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
     }
 }
 
-void ContentManagerModel::setBooksData(const QList<QMap<QString, QVariant>>& data)
+void ContentManagerModel::setBooksData(const BookInfoList& data)
 {
     m_data = data;
     rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
@@ -109,25 +110,52 @@ void ContentManagerModel::setBooksData(const QList<QMap<QString, QVariant>>& dat
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-QString convertToUnits(QString size)
+std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const
 {
-    QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
-    int unitIndex = 0;
-    auto bytes = size.toDouble();
-    while (bytes >= 1024 && unitIndex < units.size()) {
-        bytes /= 1024;
-        unitIndex++;
+    auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
+    QString id = bookItem["id"].toString();
+    QByteArray bookIcon;
+    try {
+        auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+        std::string favicon;
+        auto item = book.getIllustration(48);
+        favicon = item->getData();
+        bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
+        bookIcon.detach(); // deep copy
+    } catch (...) {
+        if (iconMap.contains(faviconUrl)) {
+            bookIcon = iconMap[faviconUrl];
+        }
     }
+    std::weak_ptr<RowNode> weakRoot = rootNode;
+    auto rowNodePtr = std::shared_ptr<RowNode>(new
+                                    RowNode({bookIcon, bookItem["title"],
+                                   bookItem["date"],
+                                   QString::fromStdString(kiwix::beautifyFileSize(bookItem["size"].toULongLong())),
+                                   bookItem["tags"]
+                                   }, id, weakRoot));
+    std::weak_ptr<RowNode> weakRowNodePtr = rowNodePtr;
+    const auto descNodePtr = std::make_shared<DescriptionNode>(DescriptionNode(bookItem["description"].toString(), weakRowNodePtr));
 
-    const auto preciseBytes = QString::number(bytes, 'g', 3);
-    return preciseBytes + " " + units[unitIndex];
+    rowNodePtr->appendChild(descNodePtr);
+    return rowNodePtr;
 }
 
 void ContentManagerModel::setupNodes()
 {
     beginResetModel();
+    bookIdToRowMap.clear();
     for (auto bookItem : m_data) {
-        rootNode->appendChild(RowNode::createNode(bookItem, iconMap, rootNode));
+        const auto rowNode = createNode(bookItem, iconMap);
+
+        // Restore download state during model updates (filtering, etc)
+        const auto downloadIter = m_downloads.constFind(rowNode->getBookId());
+        if ( downloadIter != m_downloads.constEnd() ) {
+            rowNode->setDownloadState(downloadIter.value());
+        }
+
+        bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
+        rootNode->appendChild(rowNode);
     }
     endResetModel();
 }
@@ -222,58 +250,68 @@ std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
 void ContentManagerModel::startDownload(QModelIndex index)
 {
     auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    node->setIsDownloading(true);
-    auto id = node->getBookId();
-    QTimer *timer = new QTimer(this);
+    const auto bookId = node->getBookId();
+    const auto newDownload = std::make_shared<DownloadState>();
+    m_downloads[bookId] = newDownload;
+    node->setDownloadState(newDownload);
+    QTimer *timer = newDownload->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
-        double percent = (double) downloadInfos["completedLength"].toInt() / downloadInfos["totalLength"].toInt();
-        percent *= 100;
-        percent = QString::number(percent, 'g', 3).toDouble();
-        auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
-        auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
-        node->setDownloadInfo({percent, completedLength, downloadSpeed});
-        if (!downloadInfos["status"].isValid()) {
-            node->setIsDownloading(false);
-            timer->stop();
-            timer->deleteLater();
-        }
-        emit dataChanged(index, index);
+        updateDownload(bookId);
     });
-    timer->start(1000);
-    timers[id] = timer;
+}
+
+void ContentManagerModel::updateDownload(QString bookId)
+{
+    const auto download = m_downloads.value(bookId);
+
+    if ( ! download )
+        return;
+
+    const bool downloadStillValid = download->update(bookId);
+
+    // The download->update() call above may result in
+    // ContentManagerModel::setBooksData() being called (through a chain
+    // of signals), which in turn will rebuild bookIdToRowMap. Hence
+    // bookIdToRowMap access must happen after it.
+
+    const auto it = bookIdToRowMap.constFind(bookId);
+
+    if ( ! downloadStillValid ) {
+        m_downloads.remove(bookId);
+        if ( it != bookIdToRowMap.constEnd() ) {
+            const size_t row = it.value();
+            RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
+            rowNode.setDownloadState(nullptr);
+        }
+    }
+
+    if ( it != bookIdToRowMap.constEnd() ) {
+        const size_t row = it.value();
+        const QModelIndex rootNodeIndex = this->index(0, 0);
+        const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
+        emit dataChanged(newIndex, newIndex);
+    }
 }
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto id = node->getBookId();
-    auto prevDownloadInfo = node->getDownloadInfo();
-    prevDownloadInfo.paused = true;
-    node->setDownloadInfo(prevDownloadInfo);
-    timers[id]->stop();
+    node->getDownloadState()->pause();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto id = node->getBookId();
-    auto prevDownloadInfo = node->getDownloadInfo();
-    prevDownloadInfo.paused = false;
-    node->setDownloadInfo(prevDownloadInfo);
-    timers[id]->start(1000);
+    node->getDownloadState()->resume();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::cancelDownload(QModelIndex index)
 {
     auto node = static_cast<RowNode*>(index.internalPointer());
-    auto id = node->getBookId();
-    node->setIsDownloading(false);
-    node->setDownloadInfo({0, "", "", false});
-    timers[id]->stop();
-    timers[id]->deleteLater();
+    node->setDownloadState(nullptr);
+    m_downloads.remove(node->getBookId());
     emit dataChanged(index, index);
 }
 
