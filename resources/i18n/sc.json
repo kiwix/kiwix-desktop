@@ -91,6 +91,8 @@
 	"fullscreen-notification": "Como ses in modalidade a ischermu intreu. Incarca ESC pro essire!",
 	"online-files": "Documentos in lìnia",
 	"local-files": "Documentos locales",
+	"category": "Categoria",
+	"language": "Limba",
 	"hide": "Cua",
 	"open-in-browser": "Aberi in su navigadore (browser)",
 	"start-kiwix-server": "Avia su serbidore de Kiwix",
@@ -153,5 +155,12 @@
 	"couldnt-open-location-text": "Kiwix no est in gradu de abèrrere sa cartella {{FOLDER}}",
 	"move-files-to-trash": "Move sos documentos iscarrigados a s'arga",
 	"move-files-to-trash-text": "Cussta atzione at a mòvere su documentos a su boto de s'arga.",
-	"perma-delete-files-text": "Custa atzione at a iscantzellare in manera permanente su documentu."
+	"perma-delete-files-text": "Custa atzione at a iscantzellare in manera permanente su documentu.",
+	"clear-filter": "Isbòida sos filtros impostados atuales",
+	"language-searcher-placeholder": "Filtra pro limba",
+	"category-searcher-placeholder": "Filtra pro categoria",
+	"content-type-searcher-placeholder": "Filtra pro casta de cuntenutu",
+	"no-details": "Introdutzione ebbia",
+	"no-pictures": "Peruna immàgine",
+	"no-videos": "Perunu vìdeu"
 }
