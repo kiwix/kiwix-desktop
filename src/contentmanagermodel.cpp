@@ -256,34 +256,41 @@ void ContentManagerModel::startDownload(QModelIndex index)
     node->setDownloadState(newDownload);
     QTimer *timer = newDownload->getDownloadUpdateTimer();
     connect(timer, &QTimer::timeout, this, [=]() {
-        // We may not use node in this lambda since it may have been
-        // invalidated by a call to ContentManagerModel::setBooksData().
+        updateDownload(bookId);
+    });
+}
 
-        const bool downloadStillValid = newDownload->update(bookId);
+void ContentManagerModel::updateDownload(QString bookId)
+{
+    const auto download = m_downloads.value(bookId);
 
-        // newDownload->update() call above may result in
-        // ContentManagerModel::setBooksData() being called (through a chain
-        // of signals), which in turn will rebuild bookIdToRowMap. Hence
-        // bookIdToRowMap access must happen after it.
+    if ( ! download )
+        return;
 
-        const auto it = bookIdToRowMap.constFind(bookId);
+    const bool downloadStillValid = download->update(bookId);
 
-        if ( ! downloadStillValid ) {
-            m_downloads.remove(bookId);
-            if ( it != bookIdToRowMap.constEnd() ) {
-                const size_t row = it.value();
-                RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
-                rowNode.setDownloadState(nullptr);
-            }
-        }
+    // The download->update() call above may result in
+    // ContentManagerModel::setBooksData() being called (through a chain
+    // of signals), which in turn will rebuild bookIdToRowMap. Hence
+    // bookIdToRowMap access must happen after it.
 
+    const auto it = bookIdToRowMap.constFind(bookId);
+
+    if ( ! downloadStillValid ) {
+        m_downloads.remove(bookId);
         if ( it != bookIdToRowMap.constEnd() ) {
             const size_t row = it.value();
-            const QModelIndex rootNodeIndex = this->index(0, 0);
-            const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
-            emit dataChanged(newIndex, newIndex);
+            RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
+            rowNode.setDownloadState(nullptr);
         }
-    });
+    }
+
+    if ( it != bookIdToRowMap.constEnd() ) {
+        const size_t row = it.value();
+        const QModelIndex rootNodeIndex = this->index(0, 0);
+        const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
+        emit dataChanged(newIndex, newIndex);
+    }
 }
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
