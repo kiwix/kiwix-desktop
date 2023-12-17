@@ -156,9 +156,11 @@
 	"move-files-to-trash": "Prestavi izbrisane datoteke v koš",
 	"move-files-to-trash-text": "To dejanje bo datoteko prestavilo v koš.",
 	"perma-delete-files-text": "To dejanje bo datoteko trajno izbrisalo.",
+	"clear-filter": "Počistite trenutno nastavljene filtre",
 	"language-searcher-placeholder": "Filtriranje jezika",
 	"category-searcher-placeholder": "Filtriranje kategorije",
 	"content-type-searcher-placeholder": "Filtriranje vrste vsebine",
 	"no-details": "Samo uvod",
-	"no-pictures": "Ni slik"
+	"no-pictures": "Ni slik",
+	"no-videos": "Ni videoposnetkov"
 }
