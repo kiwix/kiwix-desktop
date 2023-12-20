@@ -25,10 +25,9 @@ jobs:
 
     steps:
       - name: Install dependencies
-        shell: bash
-        run: |
-          ARCHIVE_NAME=deps2_focal_native_dyn_kiwix-desktop.tar.xz
-          wget -O- http://tmp.kiwix.org/ci/${ARCHIVE_NAME} | tar -xJ -C ${{env.HOME}}
+        uses: kiwix/kiwix-build/actions/dl_deps_archive@main
+        with:
+          target_platform: native_dyn
 
       - name: Retrieve source code
         uses: actions/checkout@v3
