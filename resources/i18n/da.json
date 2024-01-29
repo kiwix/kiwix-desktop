@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"McDutchie",
-			"Saederup92"
+			"Saederup92",
+			"Zakawer2"
 		]
 	},
 	"name": "Dansk",
@@ -82,5 +83,6 @@
 	"zim-open-fail-title": "Ugyldig fil",
 	"zim-open-fail-text": "ZIM-filen <b>{{ZIM}}</b> kunne ikke åbnes korrekt. Den vil blive slettet fra dit bibliotek.",
 	"next-tab": "Flyt til næste fane",
-	"previous-tab": "Flyt til forrige fane"
+	"previous-tab": "Flyt til forrige fane",
+	"cancel-download": "Annuller download"
 }

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Hanzo64",
 			"LaMagiaaa",
 			"McDutchie",
 			"Meno25",
@@ -139,5 +140,6 @@
 	"monitor-clear-dir-dialog-msg": "سيؤدي هذا إلى إيقاف فحص دليل الشاشة لملفات ZIM الجديدة.",
 	"monitor-directory-tooltip": "ستتم إضافة جميع ملفات ZIM الموجودة في هذا الدليل تلقائيًا إلى المكتبة.",
 	"next-tab": "انتقل إلى علامة التبويب التالية",
-	"previous-tab": "انتقل إلى علامة التبويب السابقة"
+	"previous-tab": "انتقل إلى علامة التبويب السابقة",
+	"cancel-download": "إلغاء التنزيل"
 }

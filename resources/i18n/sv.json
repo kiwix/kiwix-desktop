@@ -95,6 +95,8 @@
 	"fullscreen-notification": "Du har aktiverat fullskärmsläge. Tryck ESC för att avsluta!",
 	"online-files": "Online-filer",
 	"local-files": "Lokala filer",
+	"category": "Kategori",
+	"language": "Språk",
 	"hide": "Dölj",
 	"open-in-browser": "Öppna i webbläsare",
 	"start-kiwix-server": "Starta Kiwix-server",
@@ -157,5 +159,12 @@
 	"couldnt-open-location-text": "Kiwix kunde inte öppna mappen {{FOLDER}}",
 	"move-files-to-trash": "Flytta raderade filer till papperskorgen",
 	"move-files-to-trash-text": "Denna åtgärd flyttar filen till papperskorgen.",
-	"perma-delete-files-text": "Denna åtgärd raderar filen permanent."
+	"perma-delete-files-text": "Denna åtgärd raderar filen permanent.",
+	"clear-filter": "Rensa aktuella filter",
+	"language-searcher-placeholder": "Filtrera efter språk",
+	"category-searcher-placeholder": "Filtrera efter kategori",
+	"content-type-searcher-placeholder": "Filtrera efter innehållstyp",
+	"no-details": "Endast introduktion",
+	"no-pictures": "Inga bilder",
+	"no-videos": "Inga videor"
 }
