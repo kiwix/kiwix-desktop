@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Fahimrazick",
 			"Gurulenin",
 			"McDutchie",
 			"Siddhan"
@@ -45,7 +46,7 @@
 	"about-kiwix": "கிவிக்ஸ் பற்றி",
 	"donate-to-support-kiwix": "கிவிக்ஸை ஆதரிக்க நன்கொடை",
 	"exit": "வெளியேறு",
-	"save-file-as-window-title": "கோப்பை இவ்வாறு சேமிக்கவும்",
+	"save-file-as-window-title": "கோப்பை இவ்வாறு சேமி",
 	"download-finished-message": "ஆவணம் பதிவிறக்கம் செய்யப்பட்டுள்ளது.",
 	"file": "கோப்பு",
 	"edit": "தொகு",
@@ -55,7 +56,7 @@
 	"search": "தேடு",
 	"browse-directory": "கோப்பகத்தை உலாவுக",
 	"settings": "அமைப்புகள்",
-	"back": "பின்செல்",
+	"back": "பின்னே",
 	"forward": "முன் செல்",
 	"search-files": "கோப்புகளைத் தேடு",
 	"title": "தலைப்பு",
@@ -68,7 +69,7 @@
 	"download": "பதிவிறக்கு",
 	"resume": "தொடர்க",
 	"pause": "இடைநிறுத்து",
-	"cancel": "ரத்து செய்",
+	"cancel": "கைவிடு",
 	"apply": "பயன்படுத்து",
 	"port-for-local-kiwix-server-setting": "உள்ளக கிவிக்ஸ் வழங்கிக்கான புறை",
 	"zoom-level-setting": "இயல்பான பெரிதாக்கு நிலை",
@@ -79,7 +80,7 @@
 	"about-kiwix-desktop-description": "நீங்கள் எங்கு சென்றாலும் முழு விக்கிபீடியாவையும் கிவிக்ஸ் வைத்திருக்க உதவுகிறது! ஒரு படகில், எங்கும் நடுவில் அல்லது சிறையில், கிவிக்ஸ் முழு மனித அறிவையும் அணுகுவதற்கு உங்களுக்கு உதவி செய்கிறது. உங்களுக்கு இணையம் தேவையில்லை, அனைத்தும் உங்கள் கணினியில் சேமிக்கப்படுகிறது.",
 	"about-learn-more-about-kiwix": "கிவிக்ஸ் பற்றி மேலும் அறிக",
 	"about-release-title": "வெளியீடு",
-	"about-source-code": "இந்த மென்பொருள் குனு பொது உரிம பதிப்பு 3 இன் விதிமுறைகளின் கீழ் வெளியிடப்படுகிறது. <a href='{{GITHUB_URL}}'>Github</a> மூலக் குறியீட்டைக் காண்க.",
+	"about-source-code": "இந்த மென்பொருள் குனு பொது உரிம பதிப்பு 3 இன் விதிமுறைகளின் கீழ் வெளியிடப்படுகிறது. <a href='{{GITHUB_URL}}'>Github</a> மூலக் குறியீட்டைப் பார்.",
 	"about-version": "பதிப்பு: {{VERSION}}",
 	"about-reporting-problem-title": "சிக்கலை புகாரளி",
 	"about-report-issue": "சிக்கலைத் தெரிவிக்க, <a href='{{TRACKER_URL}}'>Kiwix-desktop issue tracker </a> பார்வையிட்டு, உங்கள் சிக்கலை விவரிக்கவும்",
