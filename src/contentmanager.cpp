@@ -335,6 +335,24 @@ void ContentManager::openBook(const QString &id)
     }
 }
 
+namespace
+{
+
+const char* downloadStatus2String(kiwix::Download::StatusResult status)
+{
+    switch(status){
+    case kiwix::Download::K_ACTIVE:   return "active";
+    case kiwix::Download::K_WAITING:  return "waiting";
+    case kiwix::Download::K_PAUSED:   return "paused";
+    case kiwix::Download::K_ERROR:    return "error";
+    case kiwix::Download::K_COMPLETE: return "completed";
+    case kiwix::Download::K_REMOVED:  return "removed";
+    default:                          return "unknown";
+    }
+}
+
+} // unnamed namespace
+
 #define ADD_V(KEY, METH) {if(key==KEY) {values.insert(key, QString::fromStdString((d->METH()))); continue;}}
 QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
@@ -380,28 +398,7 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
     for(auto& key: keys){
         ADD_V("id", getDid);
         if(key == "status") {
-            switch(d->getStatus()){
-            case kiwix::Download::K_ACTIVE:
-                values.insert(key, "active");
-                break;
-            case kiwix::Download::K_WAITING:
-                values.insert(key, "waiting");
-                break;
-            case kiwix::Download::K_PAUSED:
-                values.insert(key, "paused");
-                break;
-            case kiwix::Download::K_ERROR:
-                values.insert(key, "error");
-                break;
-            case kiwix::Download::K_COMPLETE:
-                values.insert(key, "completed");
-                break;
-            case kiwix::Download::K_REMOVED:
-                values.insert(key, "removed");
-                break;
-            default:
-                values.insert(key, "unknown");
-            }
+            values.insert(key, downloadStatus2String(d->getStatus()));
             continue;
         }
         ADD_V("followedBy", getFollowedBy);
