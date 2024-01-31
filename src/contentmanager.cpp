@@ -23,6 +23,26 @@
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
 
+namespace
+{
+
+// Opens the directory containing the input file path.
+// parent is the widget serving as the parent for the error dialog in case of
+// failure.
+void openFileLocation(QString path, QWidget *parent = nullptr)
+{
+    QFileInfo fileInfo(path);
+    QDir dir = fileInfo.absoluteDir();
+    bool dirOpen = dir.exists() && dir.isReadable() && QDesktopServices::openUrl(dir.absolutePath());
+    if (!dirOpen) {
+        QString failedText = gt("couldnt-open-location-text");
+        failedText = failedText.replace("{{FOLDER}}", "<b>" + dir.absolutePath() + "</b>");
+        showInfoBox(gt("couldnt-open-location"), failedText, parent);
+    }
+}
+
+} // unnamed namespace
+
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
       mp_library(library),
@@ -122,14 +142,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
             contextMenu.addAction(&menuDeleteBook);
             contextMenu.addAction(&menuOpenFolder);
             connect(&menuOpenFolder, &QAction::triggered, [=]() {
-                QFileInfo fileInfo(bookPath);
-                QDir bookDir = fileInfo.absoluteDir();
-                bool dirOpen = bookDir.exists() && bookDir.isReadable() && QDesktopServices::openUrl(bookDir.absolutePath());
-                if (!dirOpen) {
-                    QString failedText = gt("couldnt-open-location-text");
-                    failedText = failedText.replace("{{FOLDER}}", "<b>" + bookDir.absolutePath() + "</b>");
-                    showInfoBox(gt("couldnt-open-location"), failedText, mp_view);
-                }
+                openFileLocation(bookPath, mp_view);
             });
         } catch (...) {
             contextMenu.addAction(&menuDownloadBook);
