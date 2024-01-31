@@ -12,7 +12,7 @@ class KiwixConfirmBox : public QDialog
     Q_OBJECT
 
 public:
-    explicit KiwixConfirmBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr);
+    KiwixConfirmBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr);
     ~KiwixConfirmBox();
 
 signals:
@@ -25,5 +25,8 @@ private:
     QString m_confirmText;
     Ui::kiwixconfirmbox *ui;
 };
+
+
+void showInfoBox(QString title, QString text, QWidget *parent = nullptr);
 
 #endif // KIWIXCONFIRMBOX_H

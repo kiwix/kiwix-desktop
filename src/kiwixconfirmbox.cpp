@@ -36,3 +36,12 @@ KiwixConfirmBox::~KiwixConfirmBox()
 {
     delete ui;
 }
+
+void showInfoBox(QString title, QString text, QWidget *parent)
+{
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, true, parent);
+    dialog->show();
+    QObject::connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+        dialog->deleteLater();
+    });
+}

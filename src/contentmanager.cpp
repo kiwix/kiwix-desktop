@@ -128,11 +128,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
                 if (!dirOpen) {
                     QString failedText = gt("couldnt-open-location-text");
                     failedText = failedText.replace("{{FOLDER}}", "<b>" + bookDir.absolutePath() + "</b>");
-                    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("couldnt-open-location"), failedText, true, mp_view);
-                    dialog->show();
-                    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
-                        dialog->deleteLater();
-                    });
+                    showInfoBox(gt("couldnt-open-location"), failedText, mp_view);
                 }
             });
         } catch (...) {
@@ -428,11 +424,7 @@ QString ContentManager::downloadBook(const QString &id, QModelIndex index)
         emit managerModel->startDownload(index);
         return downloadStatus;
     }
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(dialogHeader, dialogText, true, mp_view);
-    dialog->show();
-    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
-        dialog->deleteLater();
-    });
+    showInfoBox(dialogHeader, dialogText, mp_view);
     return downloadStatus;
 }
 
