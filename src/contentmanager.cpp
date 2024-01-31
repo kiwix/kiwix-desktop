@@ -338,7 +338,7 @@ void ContentManager::openBook(const QString &id)
 namespace
 {
 
-const char* downloadStatus2String(kiwix::Download::StatusResult status)
+QString downloadStatus2QString(kiwix::Download::StatusResult status)
 {
     switch(status){
     case kiwix::Download::K_ACTIVE:   return "active";
@@ -351,9 +351,21 @@ const char* downloadStatus2String(kiwix::Download::StatusResult status)
     }
 }
 
+QString getDownloadInfo(const kiwix::Download& d, const QString& k)
+{
+    if (k == "id")              return QString::fromStdString(d.getDid());
+    if (k == "path")            return QString::fromStdString(d.getPath());
+    if (k == "status")          return downloadStatus2QString(d.getStatus());
+    if (k == "followedBy")      return QString::fromStdString(d.getFollowedBy());
+    if (k == "totalLength")     return QString::number(d.getTotalLength());
+    if (k == "downloadSpeed")   return QString::number(d.getDownloadSpeed());
+    if (k == "verifiedLength")  return QString::number(d.getVerifiedLength());
+    if (k == "completedLength") return QString::number(d.getCompletedLength());
+    return "";
+}
+
 } // unnamed namespace
 
-#define ADD_V(KEY, METH) {if(key==KEY) {values.insert(key, QString::fromStdString((d->METH()))); continue;}}
 QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
     QMap<QString, QVariant> values;
@@ -396,29 +408,10 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
         }
     }
     for(auto& key: keys){
-        ADD_V("id", getDid);
-        if(key == "status") {
-            values.insert(key, downloadStatus2String(d->getStatus()));
-            continue;
-        }
-        ADD_V("followedBy", getFollowedBy);
-        ADD_V("path", getPath);
-        if(key == "totalLength") {
-            values.insert(key, QString::number(d->getTotalLength()));
-        }
-        if(key == "completedLength") {
-            values.insert(key, QString::number(d->getCompletedLength()));
-        }
-        if(key == "downloadSpeed") {
-            values.insert(key, QString::number(d->getDownloadSpeed()));
-        }
-        if(key == "verifiedLength") {
-            values.insert(key, QString::number(d->getVerifiedLength()));
-        }
+        values.insert(key, getDownloadInfo(*d, key));
     }
     return values;
 }
-#undef ADD_V
 
 QString ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
