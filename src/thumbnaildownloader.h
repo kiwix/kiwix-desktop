@@ -13,24 +13,28 @@ class ThumbnailDownloader : public QObject
     Q_OBJECT
 
 public:
+    typedef QModelIndex ThumbnailId;
+    typedef QPair<ThumbnailId, QString> ThumbnailInfo;
+
+public:
     ThumbnailDownloader(QObject *parent = 0);
     ~ThumbnailDownloader();
 
-    void addDownload(QString url, QModelIndex index);
+    void addDownload(QString url, ThumbnailId index);
     void startDownload();
-    void downloadOnePair(QPair<QModelIndex, QString> urlPair);
+    void downloadOnePair(ThumbnailInfo thumbnailInfo);
     void clearQueue() { m_urlPairList.clear(); }
 
 signals:
-    void oneThumbnailDownloaded(QModelIndex, QString, QByteArray);
+    void oneThumbnailDownloaded(ThumbnailId, QString, QByteArray);
 
 private:
-    QQueue<QPair<QModelIndex, QString>> m_urlPairList;
+    QQueue<ThumbnailInfo> m_urlPairList;
     QNetworkAccessManager manager;
     bool m_isDownloading = false;
 
 private slots:
-    void fileDownloaded(QNetworkReply *pReply, QPair<QModelIndex, QString> urlPair);
+    void fileDownloaded(QNetworkReply *pReply, ThumbnailInfo thumbnailInfo);
 
 };
 

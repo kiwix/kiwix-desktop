@@ -18,7 +18,7 @@ ThumbnailDownloader::~ThumbnailDownloader()
 {
 }
 
-void ThumbnailDownloader::addDownload(QString url, QModelIndex index)
+void ThumbnailDownloader::addDownload(QString url, ThumbnailId index)
 {
     m_urlPairList.append({index, url});
     if (!m_isDownloading)
@@ -35,18 +35,18 @@ void ThumbnailDownloader::startDownload()
     downloadOnePair(m_urlPairList.takeFirst());
 }
 
-void ThumbnailDownloader::downloadOnePair(QPair<QModelIndex, QString> urlPair)
+void ThumbnailDownloader::downloadOnePair(ThumbnailInfo thumbnailInfo)
 {
-    QNetworkRequest req(urlPair.second);
+    QNetworkRequest req(thumbnailInfo.second);
     auto reply = manager.get(req);
     connect(reply, &QNetworkReply::finished, this, [=](){
-        fileDownloaded(reply, urlPair);
+        fileDownloaded(reply, thumbnailInfo);
     });
 }
 
-void ThumbnailDownloader::fileDownloaded(QNetworkReply *pReply, QPair<QModelIndex, QString> urlPair)
+void ThumbnailDownloader::fileDownloaded(QNetworkReply *pReply, ThumbnailInfo thumbnailInfo)
 {
     auto downloadedData = pReply->readAll();
-    emit oneThumbnailDownloaded(urlPair.first, urlPair.second, downloadedData);
+    emit oneThumbnailDownloaded(thumbnailInfo.first, thumbnailInfo.second, downloadedData);
     pReply->deleteLater();
 }
