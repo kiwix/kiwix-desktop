@@ -7,8 +7,8 @@
 ThumbnailDownloader::ThumbnailDownloader()
 {
     connect(this, &ThumbnailDownloader::oneThumbnailDownloaded, [=]() {
-        if (m_urlPairList.size() != 0)
-            downloadOnePair(m_urlPairList.takeFirst());
+        if (m_downloadQueue.size() != 0)
+            downloadThumbnail(m_downloadQueue.takeFirst());
         else
             m_isDownloading = false;
     });
@@ -20,22 +20,22 @@ ThumbnailDownloader::~ThumbnailDownloader()
 
 void ThumbnailDownloader::addDownload(QString url, ThumbnailId index)
 {
-    m_urlPairList.append({index, url});
+    m_downloadQueue.append({index, url});
     if (!m_isDownloading)
         startDownload();
 }
 
 void ThumbnailDownloader::startDownload()
 {
-    if (m_urlPairList.size() == 0) {
+    if (m_downloadQueue.size() == 0) {
         m_isDownloading = false;
         return;
     }
     m_isDownloading = true;
-    downloadOnePair(m_urlPairList.takeFirst());
+    downloadThumbnail(m_downloadQueue.takeFirst());
 }
 
-void ThumbnailDownloader::downloadOnePair(ThumbnailInfo thumbnailInfo)
+void ThumbnailDownloader::downloadThumbnail(ThumbnailInfo thumbnailInfo)
 {
     QNetworkRequest req(thumbnailInfo.second);
     auto reply = manager.get(req);

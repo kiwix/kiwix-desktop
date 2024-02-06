@@ -22,14 +22,16 @@ public:
 
     void addDownload(QString url, ThumbnailId index);
     void startDownload();
-    void downloadOnePair(ThumbnailInfo thumbnailInfo);
-    void clearQueue() { m_urlPairList.clear(); }
+    void clearQueue() { m_downloadQueue.clear(); }
+
+private:
+    void downloadThumbnail(ThumbnailInfo thumbnailInfo);
 
 signals:
     void oneThumbnailDownloaded(ThumbnailId, QString, QByteArray);
 
 private:
-    QQueue<ThumbnailInfo> m_urlPairList;
+    QQueue<ThumbnailInfo> m_downloadQueue;
     QNetworkAccessManager manager;
     bool m_isDownloading = false;
 
