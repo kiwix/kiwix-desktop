@@ -679,12 +679,26 @@ void ContentManager::updateLibrary() {
     } catch (std::runtime_error&) {}
 }
 
+namespace
+{
+
+QString makeHttpUrl(QString host, int port)
+{
+    return port == 443
+         ? "https://" + host
+         : "http://" + host + ":" + QString::number(port);
+}
+
+} // unnamed namespace
+
 void ContentManager::updateRemoteLibrary(const QString& content) {
     QtConcurrent::run([=]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
-        const auto catalogUrl = m_remoteLibraryManager.getCatalogHost();
+        const auto catalogHost = m_remoteLibraryManager.getCatalogHost();
+        const auto catalogPort = m_remoteLibraryManager.getCatalogPort();
+        const auto catalogUrl = makeHttpUrl(catalogHost, catalogPort);
         manager.readOpds(content.toStdString(), catalogUrl.toStdString());
         emit(this->booksChanged());
         emit(this->pendingRequest(false));

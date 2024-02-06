@@ -112,7 +112,7 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
 
 std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const
 {
-    auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
+    const auto faviconUrl = bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
     QByteArray bookIcon;
     try {
@@ -168,7 +168,7 @@ void ContentManagerModel::refreshIcons()
     for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
         auto bookItem = m_data[i];
         auto id = bookItem["id"].toString();
-        auto faviconUrl = "https://" + bookItem["faviconUrl"].toString();
+        const auto faviconUrl = bookItem["faviconUrl"].toString();
         auto app = KiwixApp::instance();
         try {
             auto book = app->getLibrary()->getBookById(id);
