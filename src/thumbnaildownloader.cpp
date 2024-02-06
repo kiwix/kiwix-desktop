@@ -4,7 +4,7 @@
 #include <QPixmap>
 #include <QIcon>
 
-ThumbnailDownloader::ThumbnailDownloader(QObject *parent)
+ThumbnailDownloader::ThumbnailDownloader()
 {
     connect(this, &ThumbnailDownloader::oneThumbnailDownloaded, [=]() {
         if (m_urlPairList.size() != 0)

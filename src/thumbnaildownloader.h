@@ -17,7 +17,7 @@ public:
     typedef QPair<ThumbnailId, QString> ThumbnailInfo;
 
 public:
-    ThumbnailDownloader(QObject *parent = 0);
+    ThumbnailDownloader();
     ~ThumbnailDownloader();
 
     void addDownload(QString url, ThumbnailId index);
