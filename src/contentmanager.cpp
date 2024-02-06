@@ -504,6 +504,26 @@ QString formatText(QString text)
     return finalText;
 }
 
+void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
+{
+    auto tabBar = KiwixApp::instance()->getTabWidget();
+    tabBar->closeTabsByZimId(id);
+    kiwix::Book book = mp_library->getBookById(id);
+    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
+    QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
+    eraseBookFilesFromComputer(dirPath, fileName, moveToTrash);
+    mp_library->removeBookFromLibraryById(id);
+    mp_library->save();
+    emit mp_library->bookmarksChanged();
+    if (m_local) {
+        emit(bookRemoved(id));
+    } else {
+        emit(oneBookChanged(id));
+    }
+    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+    emit booksChanged();
+}
+
 void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
@@ -521,23 +541,8 @@ void ContentManager::eraseBook(const QString& id)
     KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, false, mp_view);
     dialog->show();
     connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
-        auto tabBar = KiwixApp::instance()->getTabWidget();
-        tabBar->closeTabsByZimId(id);
-        kiwix::Book book = mp_library->getBookById(id);
-        QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-        QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-        eraseBookFilesFromComputer(dirPath, fileName, moveToTrash);
-        mp_library->removeBookFromLibraryById(id);
-        mp_library->save();
-        emit mp_library->bookmarksChanged();
-        if (m_local) {
-            emit(bookRemoved(id));
-        } else {
-            emit(oneBookChanged(id));
-        }
-        KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+        reallyEraseBook(id, moveToTrash);
         dialog->deleteLater();
-        emit booksChanged();
     });
     connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
         dialog->deleteLater();

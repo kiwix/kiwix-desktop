@@ -54,6 +54,8 @@ private:
     QStringList m_categories;
 
     QStringList getBookIds();
+    // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
+    void reallyEraseBook(const QString& id, bool moveToTrash);
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
     BookInfoList getBooksList();
     ContentManagerModel *managerModel;
@@ -83,6 +85,7 @@ public slots:
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
+    // eraseBook() asks for confirmation (reallyEraseBook() doesn't)
     void eraseBook(const QString& id);
     void updateRemoteLibrary(const QString& content);
     void updateLanguages(const QString& content);
