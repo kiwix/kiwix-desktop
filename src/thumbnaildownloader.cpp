@@ -6,12 +6,8 @@
 
 ThumbnailDownloader::ThumbnailDownloader()
 {
-    connect(this, &ThumbnailDownloader::oneThumbnailDownloaded, [=]() {
-        if (m_downloadQueue.size() != 0)
-            downloadThumbnail(m_downloadQueue.takeFirst());
-        else
-            m_isDownloading = false;
-    });
+    connect(this, &ThumbnailDownloader::oneThumbnailDownloaded,
+            this, &ThumbnailDownloader::startNextDownload);
 }
 
 ThumbnailDownloader::~ThumbnailDownloader()
@@ -22,10 +18,10 @@ void ThumbnailDownloader::addDownload(QString url, ThumbnailId index)
 {
     m_downloadQueue.append({index, url});
     if (!m_isDownloading)
-        startDownload();
+        startNextDownload();
 }
 
-void ThumbnailDownloader::startDownload()
+void ThumbnailDownloader::startNextDownload()
 {
     if (m_downloadQueue.size() == 0) {
         m_isDownloading = false;

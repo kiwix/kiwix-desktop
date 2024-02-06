@@ -21,7 +21,7 @@ public:
     ~ThumbnailDownloader();
 
     void addDownload(QString url, ThumbnailId index);
-    void startDownload();
+    void startNextDownload();
     void clearQueue() { m_downloadQueue.clear(); }
 
 private:
