@@ -538,14 +538,8 @@ void ContentManager::eraseBook(const QString& id)
         text += formatText(gt("perma-delete-files-text"));
     }
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, false, mp_view);
-    dialog->show();
-    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+    showConfirmBox(gt("delete-book"), text, mp_view, [=]() {
         reallyEraseBook(id, moveToTrash);
-        dialog->deleteLater();
-    });
-    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
-        dialog->deleteLater();
     });
 }
 
@@ -587,15 +581,9 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
 {
     auto text = gt("cancel-download-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("cancel-download"), text, false, mp_view);
-    dialog->show();
-    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+    showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
         cancelBook(id);
         emit managerModel->cancelDownload(index);
-        dialog->deleteLater();
-    });
-    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
-        dialog->deleteLater();
     });
 }
 

@@ -29,4 +29,19 @@ private:
 
 void showInfoBox(QString title, QString text, QWidget *parent = nullptr);
 
+template<class YesAction>
+void showConfirmBox(QString title, QString text, QWidget *parent,
+                    YesAction yesAction)
+{
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, false, parent);
+    dialog->show();
+    QObject::connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+        yesAction();
+        dialog->deleteLater();
+    });
+    QObject::connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+        dialog->deleteLater();
+    });
+}
+
 #endif // KIWIXCONFIRMBOX_H
