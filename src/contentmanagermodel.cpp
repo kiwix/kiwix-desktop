@@ -175,7 +175,7 @@ void ContentManagerModel::refreshIcons()
             auto item = book.getIllustration(48);
         } catch (...) {
             if (faviconUrl != "" && !iconMap.contains(faviconUrl)) {
-                td.addDownload(faviconUrl, index(i, 0));
+                td.addDownload(faviconUrl, id);
             }
         }
     }
@@ -230,15 +230,17 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
     KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
 }
 
-void ContentManagerModel::updateImage(QModelIndex index, QString url, QByteArray imageData)
+void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray imageData)
 {
-    if (!index.isValid())
+    const auto it = bookIdToRowMap.constFind(bookId);
+    if ( it == bookIdToRowMap.constEnd() )
         return;
-    auto item = static_cast<RowNode*>(index.internalPointer());
-    if (!rootNode->isChild(item))
-        return;
+
+    const size_t row = it.value();
+    const auto item = static_cast<RowNode*>(rootNode->child(row).get());
     item->setIconData(imageData);
     iconMap[url] = imageData;
+    const QModelIndex index = this->index(row, 0);
     emit dataChanged(index, index);
 }
 

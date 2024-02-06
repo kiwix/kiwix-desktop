@@ -4,16 +4,14 @@
 #include <QObject>
 #include <QQueue>
 #include <QNetworkAccessManager>
-#include <QIcon>
 #include <QNetworkReply>
-#include <QModelIndex>
 
 class ThumbnailDownloader : public QObject
 {
     Q_OBJECT
 
 public:
-    typedef QModelIndex ThumbnailId;
+    typedef QString ThumbnailId;
     typedef QPair<ThumbnailId, QString> ThumbnailInfo;
 
 public:
