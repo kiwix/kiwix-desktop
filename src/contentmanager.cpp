@@ -366,6 +366,24 @@ QString getDownloadInfo(const kiwix::Download& d, const QString& k)
 
 } // unnamed namespace
 
+void ContentManager::downloadCompleted(const kiwix::Book& b, QString path)
+{
+    kiwix::Book bCopy(b);
+    bCopy.setPath(QDir::toNativeSeparators(path).toStdString());
+    bCopy.setDownloadId("");
+    bCopy.setPathValid(true);
+    // removing book url so that download link in kiwix-serve is not displayed.
+    bCopy.setUrl("");
+    mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
+    mp_library->save();
+    mp_library->bookmarksChanged();
+    if (!m_local) {
+        emit(oneBookChanged(QString::fromStdString(b.getId())));
+    } else {
+        emit(mp_library->booksChanged());
+    }
+}
+
 QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
     QMap<QString, QVariant> values;
@@ -391,21 +409,7 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
 
     d->updateStatus(true);
     if (d->getStatus() == kiwix::Download::K_COMPLETE) {
-        QString tmp(QString::fromStdString(d->getPath()));
-        kiwix::Book bCopy(b);
-        bCopy.setPath(QDir::toNativeSeparators(tmp).toStdString());
-        bCopy.setDownloadId("");
-        bCopy.setPathValid(true);
-        // removing book url so that download link in kiwix-serve is not displayed.
-        bCopy.setUrl("");
-        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
-        mp_library->save();
-        mp_library->bookmarksChanged();
-        if (!m_local) {
-            emit(oneBookChanged(id));
-        } else {
-            emit(mp_library->booksChanged());
-        }
+        downloadCompleted(b, QString::fromStdString(d->getPath()));
     }
     for(auto& key: keys){
         values.insert(key, getDownloadInfo(*d, key));
