@@ -23,6 +23,26 @@
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
 
+namespace
+{
+
+// Opens the directory containing the input file path.
+// parent is the widget serving as the parent for the error dialog in case of
+// failure.
+void openFileLocation(QString path, QWidget *parent = nullptr)
+{
+    QFileInfo fileInfo(path);
+    QDir dir = fileInfo.absoluteDir();
+    bool dirOpen = dir.exists() && dir.isReadable() && QDesktopServices::openUrl(dir.absolutePath());
+    if (!dirOpen) {
+        QString failedText = gt("couldnt-open-location-text");
+        failedText = failedText.replace("{{FOLDER}}", "<b>" + dir.absolutePath() + "</b>");
+        showInfoBox(gt("couldnt-open-location"), failedText, parent);
+    }
+}
+
+} // unnamed namespace
+
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
       mp_library(library),
@@ -122,18 +142,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
             contextMenu.addAction(&menuDeleteBook);
             contextMenu.addAction(&menuOpenFolder);
             connect(&menuOpenFolder, &QAction::triggered, [=]() {
-                QFileInfo fileInfo(bookPath);
-                QDir bookDir = fileInfo.absoluteDir();
-                bool dirOpen = bookDir.exists() && bookDir.isReadable() && QDesktopServices::openUrl(bookDir.absolutePath());
-                if (!dirOpen) {
-                    QString failedText = gt("couldnt-open-location-text");
-                    failedText = failedText.replace("{{FOLDER}}", "<b>" + bookDir.absolutePath() + "</b>");
-                    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("couldnt-open-location"), failedText, true, mp_view);
-                    dialog->show();
-                    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
-                        dialog->deleteLater();
-                    });
-                }
+                openFileLocation(bookPath, mp_view);
             });
         } catch (...) {
             contextMenu.addAction(&menuDownloadBook);
@@ -428,11 +437,7 @@ QString ContentManager::downloadBook(const QString &id, QModelIndex index)
         emit managerModel->startDownload(index);
         return downloadStatus;
     }
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(dialogHeader, dialogText, true, mp_view);
-    dialog->show();
-    connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
-        dialog->deleteLater();
-    });
+    showInfoBox(dialogHeader, dialogText, mp_view);
     return downloadStatus;
 }
 
@@ -499,6 +504,26 @@ QString formatText(QString text)
     return finalText;
 }
 
+void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
+{
+    auto tabBar = KiwixApp::instance()->getTabWidget();
+    tabBar->closeTabsByZimId(id);
+    kiwix::Book book = mp_library->getBookById(id);
+    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
+    QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
+    eraseBookFilesFromComputer(dirPath, fileName, moveToTrash);
+    mp_library->removeBookFromLibraryById(id);
+    mp_library->save();
+    emit mp_library->bookmarksChanged();
+    if (m_local) {
+        emit(bookRemoved(id));
+    } else {
+        emit(oneBookChanged(id));
+    }
+    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+    emit booksChanged();
+}
+
 void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
@@ -513,29 +538,8 @@ void ContentManager::eraseBook(const QString& id)
         text += formatText(gt("perma-delete-files-text"));
     }
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("delete-book"), text, false, mp_view);
-    dialog->show();
-    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
-        auto tabBar = KiwixApp::instance()->getTabWidget();
-        tabBar->closeTabsByZimId(id);
-        kiwix::Book book = mp_library->getBookById(id);
-        QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-        QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-        eraseBookFilesFromComputer(dirPath, fileName, moveToTrash);
-        mp_library->removeBookFromLibraryById(id);
-        mp_library->save();
-        emit mp_library->bookmarksChanged();
-        if (m_local) {
-            emit(bookRemoved(id));
-        } else {
-            emit(oneBookChanged(id));
-        }
-        KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
-        dialog->deleteLater();
-        emit booksChanged();
-    });
-    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
-        dialog->deleteLater();
+    showConfirmBox(gt("delete-book"), text, mp_view, [=]() {
+        reallyEraseBook(id, moveToTrash);
     });
 }
 
@@ -577,15 +581,9 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
 {
     auto text = gt("cancel-download-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(gt("cancel-download"), text, false, mp_view);
-    dialog->show();
-    connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+    showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
         cancelBook(id);
         emit managerModel->cancelDownload(index);
-        dialog->deleteLater();
-    });
-    connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
-        dialog->deleteLater();
     });
 }
 
