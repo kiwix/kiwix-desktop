@@ -366,6 +366,15 @@ QString getDownloadInfo(const kiwix::Download& d, const QString& k)
 
 } // unnamed namespace
 
+void ContentManager::downloadStarted(const kiwix::Book& book, const std::string& downloadId)
+{
+    kiwix::Book bookCopy(book);
+    bookCopy.setDownloadId(downloadId);
+    mp_library->addBookToLibrary(bookCopy);
+    mp_library->save();
+    emit(oneBookChanged(QString::fromStdString(book.getId())));
+}
+
 void ContentManager::downloadCancelled(QString bookId)
 {
     kiwix::Book bCopy(mp_library->getBookById(bookId));
@@ -485,11 +494,7 @@ QString ContentManager::downloadBook(const QString &id)
     } catch (std::exception& e) {
         return "";
     }
-    kiwix::Book bookCopy(book);
-    bookCopy.setDownloadId(download->getDid());
-    mp_library->addBookToLibrary(bookCopy);
-    mp_library->save();
-    emit(oneBookChanged(id));
+    downloadStarted(book, download->getDid());
     return QString::fromStdString(download->getDid());
 }
 
