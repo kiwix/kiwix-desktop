@@ -366,6 +366,15 @@ QString getDownloadInfo(const kiwix::Download& d, const QString& k)
 
 } // unnamed namespace
 
+void ContentManager::downloadCancelled(const kiwix::Book& b)
+{
+    kiwix::Book bCopy(b);
+    bCopy.setDownloadId("");
+    mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
+    mp_library->save();
+    emit(mp_library->booksChanged());
+}
+
 void ContentManager::downloadCompleted(const kiwix::Book& b, QString path)
 {
     kiwix::Book bCopy(b);
@@ -389,7 +398,6 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
     QMap<QString, QVariant> values;
     if (!mp_downloader) {
         for(auto& key: keys) {
-            (void) key;
             values.insert(key, "");
         }
         return values;
@@ -399,11 +407,7 @@ QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QS
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
-        kiwix::Book bCopy(b);
-        bCopy.setDownloadId("");
-        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
-        mp_library->save();
-        emit(mp_library->booksChanged());
+        downloadCancelled(b);
         return values;
     }
 

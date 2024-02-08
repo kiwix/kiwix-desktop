@@ -62,6 +62,7 @@ private:
     QMutex remoteLibraryLocker;
     void setCategories();
     void setLanguages();
+    void downloadCancelled(const kiwix::Book& b);
     void downloadCompleted(const kiwix::Book& book, QString path);
 
 signals:
