@@ -366,18 +366,18 @@ QString getDownloadInfo(const kiwix::Download& d, const QString& k)
 
 } // unnamed namespace
 
-void ContentManager::downloadCancelled(const kiwix::Book& b)
+void ContentManager::downloadCancelled(QString bookId)
 {
-    kiwix::Book bCopy(b);
+    kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setDownloadId("");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
     mp_library->save();
     emit(mp_library->booksChanged());
 }
 
-void ContentManager::downloadCompleted(const kiwix::Book& b, QString path)
+void ContentManager::downloadCompleted(QString bookId, QString path)
 {
-    kiwix::Book bCopy(b);
+    kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setPath(QDir::toNativeSeparators(path).toStdString());
     bCopy.setDownloadId("");
     bCopy.setPathValid(true);
@@ -387,13 +387,13 @@ void ContentManager::downloadCompleted(const kiwix::Book& b, QString path)
     mp_library->save();
     mp_library->bookmarksChanged();
     if (!m_local) {
-        emit(oneBookChanged(QString::fromStdString(b.getId())));
+        emit(oneBookChanged(bookId));
     } else {
         emit(mp_library->booksChanged());
     }
 }
 
-ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
+ContentManager::DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
 {
     DownloadInfo values;
     if (!mp_downloader) {
@@ -402,23 +402,38 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString id, con
         }
         return values;
     }
-    auto& b = mp_library->getBookById(id);
+
+    auto& b = mp_library->getBookById(bookId);
     std::shared_ptr<kiwix::Download> d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
-        downloadCancelled(b);
         return values;
     }
 
     d->updateStatus(true);
-    if (d->getStatus() == kiwix::Download::K_COMPLETE) {
-        downloadCompleted(b, QString::fromStdString(d->getPath()));
-    }
+
     for(auto& key: keys){
-        values.insert(key, getDownloadInfo(*d, key));
+        values.insert(key, ::getDownloadInfo(*d, key));
     }
+
     return values;
+}
+
+ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId, QStringList keys)
+{
+    if ( !keys.contains("status") ) keys.append("status");
+    if ( !keys.contains("path")   ) keys.append("path");
+
+    const DownloadInfo result = getDownloadInfo(bookId, keys);
+
+    if ( result.isEmpty() ) {
+        downloadCancelled(bookId);
+    } else if ( result["status"] == "completed" ) {
+        downloadCompleted(bookId, result["path"].toString());
+    }
+
+    return result;
 }
 
 QString ContentManager::downloadBook(const QString &id, QModelIndex index)

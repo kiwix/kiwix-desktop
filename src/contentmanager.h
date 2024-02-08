@@ -65,8 +65,9 @@ private:
     QMutex remoteLibraryLocker;
     void setCategories();
     void setLanguages();
-    void downloadCancelled(const kiwix::Book& b);
-    void downloadCompleted(const kiwix::Book& book, QString path);
+    void downloadCancelled(QString bookId);
+    void downloadCompleted(QString bookId, QString path);
+    DownloadInfo getDownloadInfo(QString bookId, const QStringList& keys) const;
 
 signals:
     void filterParamsChanged();
@@ -84,7 +85,7 @@ public slots:
     QStringList getTranslations(const QStringList &keys);
     BookInfo getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
-    DownloadInfo updateDownloadInfos(QString id, const QStringList& keys);
+    DownloadInfo updateDownloadInfos(QString bookId, QStringList keys);
     QString downloadBook(const QString& id);
     QString downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
