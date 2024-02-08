@@ -23,6 +23,9 @@ public: // types
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
 
+    // XXX: potentional source of confusion with ::DownloadInfo from rownode.h
+    typedef QMap<QString, QVariant> DownloadInfo;
+
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
@@ -81,7 +84,7 @@ public slots:
     QStringList getTranslations(const QStringList &keys);
     BookInfo getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
-    QMap<QString, QVariant> updateDownloadInfos(QString id, const QStringList& keys);
+    DownloadInfo updateDownloadInfos(QString id, const QStringList& keys);
     QString downloadBook(const QString& id);
     QString downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();

@@ -393,9 +393,9 @@ void ContentManager::downloadCompleted(const kiwix::Book& b, QString path)
     }
 }
 
-QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
+ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
 {
-    QMap<QString, QVariant> values;
+    DownloadInfo values;
     if (!mp_downloader) {
         for(auto& key: keys) {
             values.insert(key, "");
