@@ -666,6 +666,8 @@ void ContentManager::cancelBook(const QString& id)
     if (download->getStatus() != kiwix::Download::K_COMPLETE) {
         download->cancelDownload();
     }
+    m_downloads.remove(id);
+
     QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
     QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
     // incompleted downloaded file should be perma deleted

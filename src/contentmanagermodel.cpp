@@ -282,7 +282,6 @@ void ContentManagerModel::resumeDownload(QModelIndex index)
 
 void ContentManagerModel::removeDownload(QString bookId)
 {
-    m_downloads.remove(bookId);
     const auto it = bookIdToRowMap.constFind(bookId);
     if ( it == bookIdToRowMap.constEnd() )
         return;
