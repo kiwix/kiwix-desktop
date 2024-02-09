@@ -54,7 +54,7 @@ public slots:
     void openBook(const QString& id);
     DownloadInfo updateDownloadInfos(QString bookId, QStringList keys);
     QString downloadBook(const QString& id);
-    QString downloadBook(const QString& id, QModelIndex index);
+    void downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);

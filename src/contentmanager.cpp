@@ -445,7 +445,7 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId,
     return result;
 }
 
-QString ContentManager::downloadBook(const QString &id, QModelIndex index)
+void ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
     QString downloadStatus =  downloadBook(id);
     QString dialogHeader, dialogText;
@@ -457,10 +457,9 @@ QString ContentManager::downloadBook(const QString &id, QModelIndex index)
         dialogText = gt("download-storage-error-text");
     } else {
         emit managerModel->startDownload(index);
-        return downloadStatus;
     }
+
     showInfoBox(dialogHeader, dialogText, mp_view);
-    return downloadStatus;
 }
 
 const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
