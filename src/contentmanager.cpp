@@ -47,10 +47,14 @@ void throwDownloadUnavailableError()
                               gt("download-unavailable-text"));
 }
 
-void throwStorageError()
+void checkEnoughStorageAvailable(const kiwix::Book& book, QString targetDir)
 {
-    throw ContentManagerError(gt("download-storage-error"),
-                              gt("download-storage-error-text"));
+    QStorageInfo storage(targetDir);
+    auto bytesAvailable = storage.bytesAvailable();
+    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
+        throw ContentManagerError(gt("download-storage-error"),
+                                  gt("download-storage-error-text"));
+    }
 }
 
 // Opens the directory containing the input file path.
@@ -502,11 +506,7 @@ void ContentManager::downloadBook(const QString &id)
 
     const auto& book = getRemoteOrLocalBook(id);
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
-    QStorageInfo storage(downloadPath);
-    auto bytesAvailable = storage.bytesAvailable();
-    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        throwStorageError();
-    }
+    checkEnoughStorageAvailable(book, downloadPath);
 
     auto booksList = mp_library->getBookIds();
     for (auto b : booksList) {
