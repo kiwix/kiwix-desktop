@@ -499,6 +499,19 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
     }
 }
 
+std::string ContentManager::startDownload(const kiwix::Book& book)
+{
+    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+    checkEnoughStorageAvailable(book, downloadPath);
+
+    typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
+
+    const DownloadOptions downloadOptions{{"dir", downloadPath.toStdString()}};
+
+    const auto d = mp_downloader->startDownload(book.getUrl(), downloadOptions);
+    return d->getDid();
+}
+
 void ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
@@ -506,18 +519,13 @@ void ContentManager::downloadBook(const QString &id)
 
     const auto& book = getRemoteOrLocalBook(id);
 
-    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
-    checkEnoughStorageAvailable(book, downloadPath);
-
-    std::shared_ptr<kiwix::Download> download;
+    std::string downloadId;
     try {
-        std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
-        const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
-        download = mp_downloader->startDownload(book.getUrl(), options);
+        downloadId = startDownload(book);
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
-    downloadStarted(book, download->getDid());
+    downloadStarted(book, downloadId);
 }
 
 void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
