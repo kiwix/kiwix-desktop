@@ -44,6 +44,7 @@ private:
     Library* mp_library;
     kiwix::LibraryPtr mp_remoteLibrary;
     kiwix::Downloader* mp_downloader;
+    ContentManagerModel::Downloads m_downloads;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
@@ -61,8 +62,10 @@ private:
     void reallyEraseBook(const QString& id, bool moveToTrash);
     void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
     BookInfoList getBooksList();
+
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
+
     void setCategories();
     void setLanguages();
 
