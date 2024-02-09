@@ -81,6 +81,10 @@ private: // functions
     void setCategories();
     void setLanguages();
 
+    // Get the book with the specified id from
+    // the remote or local library (in that order).
+    const kiwix::Book& getRemoteOrLocalBook(const QString &id);
+
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadCancelled(QString bookId);
     void downloadCompleted(QString bookId, QString path);

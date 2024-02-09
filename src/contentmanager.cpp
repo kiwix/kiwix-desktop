@@ -463,29 +463,35 @@ QString ContentManager::downloadBook(const QString &id, QModelIndex index)
     return downloadStatus;
 }
 
+const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
+{
+    try {
+        QMutexLocker locker(&remoteLibraryLocker);
+        return mp_remoteLibrary->getBookById(id.toStdString());
+    } catch (...) {
+        return mp_library->getBookById(id);
+    }
+}
 
 QString ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
         return "";
-    const auto& book = [&]()->const kiwix::Book& {
-        try {
-            QMutexLocker locker(&remoteLibraryLocker);
-            return mp_remoteLibrary->getBookById(id.toStdString());
-        } catch (...) {
-            return mp_library->getBookById(id);
-        }
-    }();
+
+    const auto& book = getRemoteOrLocalBook(id);
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     QStorageInfo storage(downloadPath);
     auto bytesAvailable = storage.bytesAvailable();
     if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
         return "storage_error";
     }
+
     auto booksList = mp_library->getBookIds();
-    for (auto b : booksList)
+    for (auto b : booksList) {
         if (b.toStdString() == book.getId())
             return "";
+    }
+
     std::shared_ptr<kiwix::Download> download;
     try {
         std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
