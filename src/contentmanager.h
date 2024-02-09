@@ -40,40 +40,6 @@ public: // functions
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
 
-private:
-    Library* mp_library;
-    kiwix::LibraryPtr mp_remoteLibrary;
-    kiwix::Downloader* mp_downloader;
-    ContentManagerModel::Downloads m_downloads;
-    OpdsRequestManager m_remoteLibraryManager;
-    ContentManagerView* mp_view;
-    bool m_local = true;
-    QString m_currentLanguage;
-    QString m_searchQuery;
-    QString m_categoryFilter = "all";
-    QStringList m_contentTypeFilters;
-    kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
-    bool m_sortOrderAsc = true;
-    LanguageList m_languages;
-    QStringList m_categories;
-
-    QStringList getBookIds();
-    // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
-    void reallyEraseBook(const QString& id, bool moveToTrash);
-    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
-    BookInfoList getBooksList();
-
-    ContentManagerModel *managerModel;
-    QMutex remoteLibraryLocker;
-
-    void setCategories();
-    void setLanguages();
-
-    void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
-    void downloadCancelled(QString bookId);
-    void downloadCompleted(QString bookId, QString path);
-    DownloadInfo getDownloadInfo(QString bookId, const QStringList& keys) const;
-
 signals:
     void filterParamsChanged();
     void booksChanged();
@@ -109,6 +75,40 @@ public slots:
     void cancelBook(const QString& id, QModelIndex index);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
+
+private: // functions
+    QStringList getBookIds();
+    // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
+    void reallyEraseBook(const QString& id, bool moveToTrash);
+    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
+    BookInfoList getBooksList();
+    void setCategories();
+    void setLanguages();
+
+    void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
+    void downloadCancelled(QString bookId);
+    void downloadCompleted(QString bookId, QString path);
+    DownloadInfo getDownloadInfo(QString bookId, const QStringList& keys) const;
+
+private: // data
+    Library* mp_library;
+    kiwix::LibraryPtr mp_remoteLibrary;
+    kiwix::Downloader* mp_downloader;
+    ContentManagerModel::Downloads m_downloads;
+    OpdsRequestManager m_remoteLibraryManager;
+    ContentManagerView* mp_view;
+    bool m_local = true;
+    QString m_currentLanguage;
+    QString m_searchQuery;
+    QString m_categoryFilter = "all";
+    QStringList m_contentTypeFilters;
+    kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
+    bool m_sortOrderAsc = true;
+    LanguageList m_languages;
+    QStringList m_categories;
+
+    ContentManagerModel *managerModel;
+    QMutex remoteLibraryLocker;
 };
 
 #endif // CONTENTMANAGER_H
