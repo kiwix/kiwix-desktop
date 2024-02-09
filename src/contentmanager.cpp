@@ -624,18 +624,6 @@ void ContentManager::cancelBook(const QString& id)
     emit(oneBookChanged(id));
 }
 
-QStringList ContentManager::getDownloadIds()
-{
-    QStringList list;
-    if (!mp_downloader)
-        return list;
-    for(auto& id: mp_downloader->getDownloadIds()) {
-        qInfo() << QString::fromStdString(id);
-        list.append(QString::fromStdString(id));
-    }
-    return list;
-}
-
 void ContentManager::setCurrentLanguage(FilterList langPairList)
 {
     QStringList languageList;

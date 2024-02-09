@@ -2,7 +2,6 @@
 #define CONTENTMANAGER_H
 
 #include <QObject>
-#include <math.h>
 #include "library.h"
 #include "contentmanagerview.h"
 #include <kiwix/downloader.h>
@@ -13,8 +12,6 @@
 class ContentManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
-    Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
 
 public: // types
@@ -32,7 +29,6 @@ public: // functions
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
-    QStringList getDownloadIds();
     void setCurrentLanguage(FilterList languageList);
     void setCurrentCategoryFilter(FilterList category);
     void setCurrentContentTypeFilter(FilterList contentTypeFilter);
