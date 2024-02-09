@@ -245,24 +245,6 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     emit dataChanged(index, index);
 }
 
-std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
-{
-    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
-}
-
-void ContentManagerModel::startDownload(QModelIndex index)
-{
-    auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    const auto bookId = node->getBookId();
-    const auto newDownload = std::make_shared<DownloadState>();
-    m_downloads[bookId] = newDownload;
-    node->setDownloadState(newDownload);
-    QTimer *timer = newDownload->getDownloadUpdateTimer();
-    connect(timer, &QTimer::timeout, this, [=]() {
-        updateDownload(bookId);
-    });
-}
-
 void ContentManagerModel::updateDownload(QString bookId)
 {
     const auto download = m_downloads.value(bookId);

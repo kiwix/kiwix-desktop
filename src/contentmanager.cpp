@@ -476,12 +476,29 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId,
     return result;
 }
 
+namespace
+{
+
+std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
+{
+    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
+}
+
+} // unnamed namespace
+
 void ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
     try
     {
         downloadBook(id);
-        emit managerModel->startDownload(index);
+        auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
+        const auto newDownload = std::make_shared<DownloadState>();
+        m_downloads[id] = newDownload;
+        node->setDownloadState(newDownload);
+        QTimer *timer = newDownload->getDownloadUpdateTimer();
+        connect(timer, &QTimer::timeout, [=]() {
+                managerModel->updateDownload(id);
+        });
     }
     catch ( const ContentManagerError& err )
     {

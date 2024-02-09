@@ -47,17 +47,14 @@ public: // functions
 
 public slots:
     void updateImage(QString bookId, QString url, QByteArray imageData);
-    void startDownload(QModelIndex index);
     void pauseDownload(QModelIndex index);
     void resumeDownload(QModelIndex index);
     void cancelDownload(QModelIndex index);
+    void updateDownload(QString bookId);
 
 protected: // functions
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
-
-private: // functions
-    void updateDownload(QString bookId);
 
 private: // data
     BookInfoList m_data;
