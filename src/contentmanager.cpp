@@ -26,6 +26,33 @@
 namespace
 {
 
+class ContentManagerError : public std::runtime_error
+{
+public:
+    ContentManagerError(const QString& summary, const QString& details)
+        : std::runtime_error(summary.toStdString())
+        , m_details(details)
+    {}
+
+    QString summary() const { return QString::fromStdString(what()); }
+    QString details() const { return m_details; }
+
+private:
+    QString m_details;
+};
+
+void throwDownloadUnavailableError()
+{
+    throw ContentManagerError(gt("download-unavailable"),
+                              gt("download-unavailable-text"));
+}
+
+void throwStorageError()
+{
+    throw ContentManagerError(gt("download-storage-error"),
+                              gt("download-storage-error-text"));
+}
+
 // Opens the directory containing the input file path.
 // parent is the widget serving as the parent for the error dialog in case of
 // failure.
@@ -447,19 +474,15 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId,
 
 void ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
-    QString downloadStatus =  downloadBook(id);
-    QString dialogHeader, dialogText;
-    if (downloadStatus.size() == 0) {
-        dialogHeader = gt("download-unavailable");
-        dialogText = gt("download-unavailable-text");
-    } else if (downloadStatus == "storage_error") {
-        dialogHeader = gt("download-storage-error");
-        dialogText = gt("download-storage-error-text");
-    } else {
+    try
+    {
+        downloadBook(id);
         emit managerModel->startDownload(index);
     }
-
-    showInfoBox(dialogHeader, dialogText, mp_view);
+    catch ( const ContentManagerError& err )
+    {
+        showInfoBox(err.summary(), err.details(), mp_view);
+    }
 }
 
 const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
@@ -472,23 +495,23 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
     }
 }
 
-QString ContentManager::downloadBook(const QString &id)
+void ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
-        return "";
+        throwDownloadUnavailableError();
 
     const auto& book = getRemoteOrLocalBook(id);
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     QStorageInfo storage(downloadPath);
     auto bytesAvailable = storage.bytesAvailable();
     if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        return "storage_error";
+        throwStorageError();
     }
 
     auto booksList = mp_library->getBookIds();
     for (auto b : booksList) {
         if (b.toStdString() == book.getId())
-            return "";
+            throwDownloadUnavailableError(); // but why???
     }
 
     std::shared_ptr<kiwix::Download> download;
@@ -497,10 +520,9 @@ QString ContentManager::downloadBook(const QString &id)
         const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
         download = mp_downloader->startDownload(book.getUrl(), options);
     } catch (std::exception& e) {
-        return "";
+        throwDownloadUnavailableError();
     }
     downloadStarted(book, download->getDid());
-    return QString::fromStdString(download->getDid());
 }
 
 void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
