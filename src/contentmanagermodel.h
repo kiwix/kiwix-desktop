@@ -49,7 +49,7 @@ public slots:
     void updateImage(QString bookId, QString url, QByteArray imageData);
     void pauseDownload(QModelIndex index);
     void resumeDownload(QModelIndex index);
-    void cancelDownload(QModelIndex index);
+    void removeDownload(QString bookId);
     void updateDownload(QString bookId);
 
 protected: // functions

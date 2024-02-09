@@ -262,15 +262,8 @@ void ContentManagerModel::updateDownload(QString bookId)
     const auto it = bookIdToRowMap.constFind(bookId);
 
     if ( ! downloadStillValid ) {
-        m_downloads.remove(bookId);
-        if ( it != bookIdToRowMap.constEnd() ) {
-            const size_t row = it.value();
-            RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
-            rowNode.setDownloadState(nullptr);
-        }
-    }
-
-    if ( it != bookIdToRowMap.constEnd() ) {
+        removeDownload(bookId);
+    } else if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
         const QModelIndex newIndex = this->index(row, 5);
         emit dataChanged(newIndex, newIndex);
@@ -287,11 +280,17 @@ void ContentManagerModel::resumeDownload(QModelIndex index)
     emit dataChanged(index, index);
 }
 
-void ContentManagerModel::cancelDownload(QModelIndex index)
+void ContentManagerModel::removeDownload(QString bookId)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->setDownloadState(nullptr);
-    m_downloads.remove(node->getBookId());
+    m_downloads.remove(bookId);
+    const auto it = bookIdToRowMap.constFind(bookId);
+    if ( it == bookIdToRowMap.constEnd() )
+        return;
+
+    const size_t row = it.value();
+    auto& node = static_cast<RowNode&>(*rootNode->child(row));
+    node.setDownloadState(nullptr);
+    const QModelIndex index = this->index(row, 5);
     emit dataChanged(index, index);
 }
 

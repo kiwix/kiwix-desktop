@@ -652,7 +652,7 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
         cancelBook(id);
-        emit managerModel->cancelDownload(index);
+        emit managerModel->removeDownload(id);
     });
 }
 
