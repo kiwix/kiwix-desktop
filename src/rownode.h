@@ -19,7 +19,6 @@ class DownloadState
 public:
     DownloadState();
 
-    bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
     DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
     QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
     void pause();
