@@ -126,6 +126,10 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
     setCategories();
     setLanguages();
+
+    m_downloadUpdateTimer.start(1000);
+    connect(&m_downloadUpdateTimer, &QTimer::timeout,
+            this, &ContentManager::updateDownloads);
 }
 
 ContentManager::BookInfoList ContentManager::getBooksList()
@@ -478,9 +482,19 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId,
 
 void ContentManager::updateDownload(QString bookId)
 {
-    // This calls ContentManager::updateDownloadInfos() in a convoluted way
-    // and also has some other side-effects
-    managerModel->updateDownload(bookId);
+    const auto downloadState = m_downloads.value(bookId);
+    if ( downloadState && !downloadState->getDownloadInfo().paused ) {
+        // This calls ContentManager::updateDownloadInfos() in a convoluted way
+        // and also has some other side-effects
+        managerModel->updateDownload(bookId);
+    }
+}
+
+void ContentManager::updateDownloads()
+{
+    for ( const auto& bookId : m_downloads.keys() ) {
+        updateDownload(bookId);
+    }
 }
 
 namespace
@@ -502,10 +516,6 @@ void ContentManager::downloadBook(const QString &id, QModelIndex index)
         const auto newDownload = std::make_shared<DownloadState>();
         m_downloads[id] = newDownload;
         node->setDownloadState(newDownload);
-        QTimer *timer = newDownload->getDownloadUpdateTimer();
-        connect(timer, &QTimer::timeout, [=]() {
-                this->updateDownload(id);
-        });
     }
     catch ( const ContentManagerError& err )
     {

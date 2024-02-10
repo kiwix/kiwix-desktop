@@ -10,8 +10,6 @@
 DownloadState::DownloadState()
     : m_downloadInfo({0, "", "", false})
 {
-    m_downloadUpdateTimer.reset(new QTimer);
-    m_downloadUpdateTimer->start(1000);
 }
 
 namespace
@@ -37,13 +35,6 @@ bool DownloadState::update(QString id)
 {
     auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
     if (!downloadInfos["status"].isValid()) {
-        m_downloadUpdateTimer->stop();
-
-        // Deleting the timer object immediately instead of via
-        // QObject::deleteLater() seems to be safe since it is not a recipient
-        // of any events that may be in the process of being delivered to it
-        // from another thread.
-        m_downloadUpdateTimer.reset();
         m_downloadInfo = {0, "", "", false};
         return false;
     }
@@ -60,13 +51,11 @@ bool DownloadState::update(QString id)
 void DownloadState::pause()
 {
     m_downloadInfo.paused = true;
-    m_downloadUpdateTimer->stop();
 }
 
 void DownloadState::resume()
 {
     m_downloadInfo.paused = false;
-    m_downloadUpdateTimer->start(1000);
 }
 
 

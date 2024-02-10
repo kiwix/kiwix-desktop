@@ -20,15 +20,11 @@ public:
     DownloadState();
 
     DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
-    QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
     void pause();
     void resume();
     bool update(QString id);
 
 protected:
-    // This is non-NULL only for a pending (even if paused) download
-    std::unique_ptr<QTimer> m_downloadUpdateTimer;
-
     DownloadInfo m_downloadInfo;
 };
 

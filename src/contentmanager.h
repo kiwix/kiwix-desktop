@@ -71,6 +71,7 @@ public slots:
     void cancelBook(const QString& id, QModelIndex index);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
+    void updateDownloads();
 
 private: // functions
     QStringList getBookIds();
@@ -97,6 +98,7 @@ private: // data
     kiwix::LibraryPtr mp_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     ContentManagerModel::Downloads m_downloads;
+    QTimer m_downloadUpdateTimer;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
