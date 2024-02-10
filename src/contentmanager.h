@@ -86,6 +86,7 @@ private: // functions
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
 
     std::string startDownload(const kiwix::Book& book);
+    void updateDownload(QString bookId);
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadCancelled(QString bookId);
     void downloadCompleted(QString bookId, QString path);

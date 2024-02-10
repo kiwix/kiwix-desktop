@@ -476,6 +476,13 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId,
     return result;
 }
 
+void ContentManager::updateDownload(QString bookId)
+{
+    // This calls ContentManager::updateDownloadInfos() in a convoluted way
+    // and also has some other side-effects
+    managerModel->updateDownload(bookId);
+}
+
 namespace
 {
 
@@ -497,7 +504,7 @@ void ContentManager::downloadBook(const QString &id, QModelIndex index)
         node->setDownloadState(newDownload);
         QTimer *timer = newDownload->getDownloadUpdateTimer();
         connect(timer, &QTimer::timeout, [=]() {
-                managerModel->updateDownload(id);
+                this->updateDownload(id);
         });
     }
     catch ( const ContentManagerError& err )
