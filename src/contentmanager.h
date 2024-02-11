@@ -20,8 +20,6 @@ public: // types
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
 
-    typedef QMap<QString, QVariant> DownloadInfo;
-
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}

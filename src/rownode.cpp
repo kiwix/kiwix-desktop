@@ -26,9 +26,8 @@ QString convertToUnits(QString size)
 
 } // unnamed namespace
 
-bool DownloadState::update(QString id)
+bool DownloadState::update(const DownloadInfo& downloadInfos)
 {
-    auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
     if (!downloadInfos["status"].isValid()) {
         *this = {0, "", "", false};
         return false;

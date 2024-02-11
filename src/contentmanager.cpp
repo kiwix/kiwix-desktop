@@ -437,7 +437,7 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     }
 }
 
-ContentManager::DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
+DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
 {
     DownloadInfo values;
     if (!mp_downloader) {
@@ -464,7 +464,7 @@ ContentManager::DownloadInfo ContentManager::getDownloadInfo(QString bookId, con
     return values;
 }
 
-ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId, QStringList keys)
+DownloadInfo ContentManager::updateDownloadInfos(QString bookId, QStringList keys)
 {
     if ( !keys.contains("status") ) keys.append("status");
     if ( !keys.contains("path")   ) keys.append("path");

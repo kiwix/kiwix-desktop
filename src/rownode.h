@@ -6,6 +6,8 @@
 #include <QIcon>
 #include "kiwix/book.h"
 
+typedef QMap<QString, QVariant> DownloadInfo;
+
 class DownloadState
 {
 public:
@@ -17,7 +19,7 @@ public:
 public:
     void pause();
     void resume();
-    bool update(QString id);
+    bool update(const DownloadInfo& info);
 };
 
 class RowNode : public Node

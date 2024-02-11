@@ -252,9 +252,10 @@ void ContentManagerModel::updateDownload(QString bookId)
     if ( ! download )
         return;
 
-    const bool downloadStillValid = download->update(bookId);
+    const auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(bookId, {"status", "completedLength", "totalLength", "downloadSpeed"});
+    const bool downloadStillValid = download->update(downloadInfos);
 
-    // The download->update() call above may result in
+    // The ContentManager::updateDownloadInfos() call above may result in
     // ContentManagerModel::setBooksData() being called (through a chain
     // of signals), which in turn will rebuild bookIdToRowMap. Hence
     // bookIdToRowMap access must happen after it.
