@@ -245,12 +245,12 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     emit dataChanged(index, index);
 }
 
-void ContentManagerModel::updateDownload(QString bookId)
+bool ContentManagerModel::updateDownload(QString bookId)
 {
     const auto download = m_downloads.value(bookId);
 
     if ( ! download )
-        return;
+        return true;
 
     const auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(bookId, {"status", "completedLength", "totalLength", "downloadSpeed"});
     const bool downloadStillValid = download->update(downloadInfos);
@@ -269,7 +269,9 @@ void ContentManagerModel::updateDownload(QString bookId)
         const QModelIndex newIndex = this->index(row, 5);
         emit dataChanged(newIndex, newIndex);
     }
+    return downloadStillValid;
 }
+
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {

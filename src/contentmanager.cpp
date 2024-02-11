@@ -486,7 +486,9 @@ void ContentManager::updateDownload(QString bookId)
     if ( downloadState && !downloadState->paused ) {
         // This calls ContentManager::updateDownloadInfos() in a convoluted way
         // and also has some other side-effects
-        managerModel->updateDownload(bookId);
+        if ( ! managerModel->updateDownload(bookId) ) {
+            m_downloads.remove(bookId);
+        }
     }
 }
 
