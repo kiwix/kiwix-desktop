@@ -410,6 +410,12 @@ void ContentManager::downloadStarted(const kiwix::Book& book, const std::string&
     emit(oneBookChanged(QString::fromStdString(book.getId())));
 }
 
+void ContentManager::removeDownload(QString bookId)
+{
+    m_downloads.remove(bookId);
+    managerModel->removeDownload(bookId);
+}
+
 void ContentManager::downloadCancelled(QString bookId)
 {
     kiwix::Book bCopy(mp_library->getBookById(bookId));
@@ -478,8 +484,7 @@ void ContentManager::updateDownload(QString bookId)
 
         const bool downloadStillValid = downloadState->update(downloadInfo);
         if ( ! downloadStillValid ) {
-            m_downloads.remove(bookId);
-            managerModel->removeDownload(bookId);
+            removeDownload(bookId);
         } else {
             managerModel->updateDownload(bookId);
         }
