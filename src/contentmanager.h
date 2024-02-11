@@ -20,7 +20,6 @@ public: // types
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
 
-    // XXX: potentional source of confusion with ::DownloadInfo from rownode.h
     typedef QMap<QString, QVariant> DownloadInfo;
 
 public: // functions

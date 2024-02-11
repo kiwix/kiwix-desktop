@@ -163,7 +163,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuOpenFolder(gt("open-folder"), this);
 
     if (const auto download = bookNode->getDownloadState()) {
-        if (download->getDownloadInfo().paused) {
+        if (download->paused) {
             contextMenu.addAction(&menuResumeBook);
         } else {
             contextMenu.addAction(&menuPauseBook);
@@ -483,7 +483,7 @@ ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId,
 void ContentManager::updateDownload(QString bookId)
 {
     const auto downloadState = m_downloads.value(bookId);
-    if ( downloadState && !downloadState->getDownloadInfo().paused ) {
+    if ( downloadState && !downloadState->paused ) {
         // This calls ContentManager::updateDownloadInfos() in a convoluted way
         // and also has some other side-effects
         managerModel->updateDownload(bookId);

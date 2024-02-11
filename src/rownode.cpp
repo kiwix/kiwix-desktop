@@ -7,11 +7,6 @@
 // DowloadState
 ////////////////////////////////////////////////////////////////////////////////
 
-DownloadState::DownloadState()
-    : m_downloadInfo({0, "", "", false})
-{
-}
-
 namespace
 {
 
@@ -35,7 +30,7 @@ bool DownloadState::update(QString id)
 {
     auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(id, {"status", "completedLength", "totalLength", "downloadSpeed"});
     if (!downloadInfos["status"].isValid()) {
-        m_downloadInfo = {0, "", "", false};
+        *this = {0, "", "", false};
         return false;
     }
 
@@ -44,18 +39,18 @@ bool DownloadState::update(QString id)
     percent = QString::number(percent, 'g', 3).toDouble();
     auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
     auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
-    m_downloadInfo = {percent, completedLength, downloadSpeed, false};
+    *this = {percent, completedLength, downloadSpeed, false};
     return true;
 }
 
 void DownloadState::pause()
 {
-    m_downloadInfo.paused = true;
+    this->paused = true;
 }
 
 void DownloadState::resume()
 {
-    m_downloadInfo.paused = false;
+    this->paused = false;
 }
 
 

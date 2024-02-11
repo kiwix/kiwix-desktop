@@ -103,7 +103,7 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
     painter->setFont(oldFont);
 }
 
-void showDownloadProgress(QPainter *painter, QRect box, DownloadInfo downloadInfo)
+void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& downloadInfo)
 {
     int x,y,w,h;
     x = box.left();
@@ -178,8 +178,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 5) {
         if (const auto downloadState = node->getDownloadState()) {
-            auto downloadInfo = downloadState->getDownloadInfo();
-            showDownloadProgress(painter, r, downloadInfo);
+            showDownloadProgress(painter, r, *downloadState);
         }
         else {
             baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
@@ -245,7 +244,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
     int w = r.width();
 
     if (const auto downloadState = node->getDownloadState()) {
-        if (downloadState->getDownloadInfo().paused) {
+        if (downloadState->paused) {
             if (clickX < (x + w/2)) {
                 KiwixApp::instance()->getContentManager()->cancelBook(id, index);
             } else {

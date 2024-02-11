@@ -6,26 +6,18 @@
 #include <QIcon>
 #include "kiwix/book.h"
 
-struct DownloadInfo
-{
-    double progress;
-    QString completedLength;
-    QString downloadSpeed;
-    bool paused;
-};
-
 class DownloadState
 {
 public:
-    DownloadState();
+    double progress = 0;
+    QString completedLength;
+    QString downloadSpeed;
+    bool paused = false;
 
-    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
+public:
     void pause();
     void resume();
     bool update(QString id);
-
-protected:
-    DownloadInfo m_downloadInfo;
 };
 
 class RowNode : public Node
