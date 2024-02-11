@@ -7,7 +7,7 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(Downloads* downloads, QObject *parent)
+ContentManagerModel::ContentManagerModel(const Downloads* downloads, QObject *parent)
     : QAbstractItemModel(parent)
     , m_downloads(*downloads)
 {
