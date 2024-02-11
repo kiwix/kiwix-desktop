@@ -484,10 +484,13 @@ void ContentManager::updateDownload(QString bookId)
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState && !downloadState->paused ) {
-        // This calls ContentManager::updateDownloadInfos() in a convoluted way
-        // and also has some other side-effects
-        if ( ! managerModel->updateDownload(bookId) ) {
+        const auto downloadInfo = updateDownloadInfos(bookId, {"status", "completedLength", "totalLength", "downloadSpeed"});
+        const bool downloadStillValid = downloadState->update(downloadInfo);
+        if ( ! downloadStillValid ) {
             m_downloads.remove(bookId);
+            managerModel->removeDownload(bookId);
+        } else {
+            managerModel->updateDownload(bookId);
         }
     }
 }

@@ -50,7 +50,7 @@ public slots:
     void pauseDownload(QModelIndex index);
     void resumeDownload(QModelIndex index);
     void removeDownload(QString bookId);
-    bool updateDownload(QString bookId);
+    void updateDownload(QString bookId);
 
 protected: // functions
     bool canFetchMore(const QModelIndex &parent) const override;

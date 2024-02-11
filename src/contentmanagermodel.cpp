@@ -245,31 +245,15 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     emit dataChanged(index, index);
 }
 
-bool ContentManagerModel::updateDownload(QString bookId)
+void ContentManagerModel::updateDownload(QString bookId)
 {
-    const auto download = m_downloads.value(bookId);
-
-    if ( ! download )
-        return true;
-
-    const auto downloadInfos = KiwixApp::instance()->getContentManager()->updateDownloadInfos(bookId, {"status", "completedLength", "totalLength", "downloadSpeed"});
-    const bool downloadStillValid = download->update(downloadInfos);
-
-    // The ContentManager::updateDownloadInfos() call above may result in
-    // ContentManagerModel::setBooksData() being called (through a chain
-    // of signals), which in turn will rebuild bookIdToRowMap. Hence
-    // bookIdToRowMap access must happen after it.
-
     const auto it = bookIdToRowMap.constFind(bookId);
 
-    if ( ! downloadStillValid ) {
-        removeDownload(bookId);
-    } else if ( it != bookIdToRowMap.constEnd() ) {
+    if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
         const QModelIndex newIndex = this->index(row, 5);
         emit dataChanged(newIndex, newIndex);
     }
-    return downloadStillValid;
 }
 
 
