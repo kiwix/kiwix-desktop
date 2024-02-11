@@ -49,7 +49,6 @@ public slots:
     QStringList getTranslations(const QStringList &keys);
     BookInfo getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
-    DownloadInfo updateDownloadInfos(QString bookId, QStringList keys);
     void downloadBook(const QString& id);
     void downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();

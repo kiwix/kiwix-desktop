@@ -464,27 +464,18 @@ DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &
     return values;
 }
 
-DownloadInfo ContentManager::updateDownloadInfos(QString bookId, QStringList keys)
-{
-    if ( !keys.contains("status") ) keys.append("status");
-    if ( !keys.contains("path")   ) keys.append("path");
-
-    const DownloadInfo result = getDownloadInfo(bookId, keys);
-
-    if ( result.isEmpty() ) {
-        downloadCancelled(bookId);
-    } else if ( result["status"] == "completed" ) {
-        downloadCompleted(bookId, result["path"].toString());
-    }
-
-    return result;
-}
-
 void ContentManager::updateDownload(QString bookId)
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState && !downloadState->paused ) {
-        const auto downloadInfo = updateDownloadInfos(bookId, {"status", "completedLength", "totalLength", "downloadSpeed"});
+        const auto downloadInfo = getDownloadInfo(bookId, {"status", "completedLength", "totalLength", "downloadSpeed", "path"});
+
+        if ( downloadInfo.isEmpty() ) {
+            downloadCancelled(bookId);
+        } else if ( downloadInfo["status"] == "completed" ) {
+            downloadCompleted(bookId, downloadInfo["path"].toString());
+        }
+
         const bool downloadStillValid = downloadState->update(downloadInfo);
         if ( ! downloadStillValid ) {
             m_downloads.remove(bookId);
