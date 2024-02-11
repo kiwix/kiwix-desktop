@@ -26,7 +26,7 @@ QString convertToUnits(QString size)
 
 } // unnamed namespace
 
-bool DownloadState::update(const DownloadInfo& downloadInfos)
+void DownloadState::update(const DownloadInfo& downloadInfos)
 {
     double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
     percent *= 100;
@@ -34,7 +34,6 @@ bool DownloadState::update(const DownloadInfo& downloadInfos)
     auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
     auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
     *this = {percent, completedLength, downloadSpeed, false};
-    return true;
 }
 
 void DownloadState::pause()

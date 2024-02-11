@@ -19,7 +19,7 @@ public:
 public:
     void pause();
     void resume();
-    bool update(const DownloadInfo& info);
+    void update(const DownloadInfo& info);
 };
 
 class RowNode : public Node
