@@ -418,6 +418,7 @@ void ContentManager::removeDownload(QString bookId)
 
 void ContentManager::downloadCancelled(QString bookId)
 {
+    removeDownload(bookId);
     kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setDownloadId("");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
@@ -427,6 +428,7 @@ void ContentManager::downloadCancelled(QString bookId)
 
 void ContentManager::downloadCompleted(QString bookId, QString path)
 {
+    removeDownload(bookId);
     kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setPath(QDir::toNativeSeparators(path).toStdString());
     bCopy.setDownloadId("");
@@ -480,12 +482,8 @@ void ContentManager::updateDownload(QString bookId)
             downloadCancelled(bookId);
         } else if ( downloadInfo["status"] == "completed" ) {
             downloadCompleted(bookId, downloadInfo["path"].toString());
-        }
-
-        const bool downloadStillValid = downloadState->update(downloadInfo);
-        if ( ! downloadStillValid ) {
-            removeDownload(bookId);
         } else {
+            downloadState->update(downloadInfo);
             managerModel->updateDownload(bookId);
         }
     }

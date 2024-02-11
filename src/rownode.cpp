@@ -28,11 +28,6 @@ QString convertToUnits(QString size)
 
 bool DownloadState::update(const DownloadInfo& downloadInfos)
 {
-    if (!downloadInfos["status"].isValid()) {
-        *this = {0, "", "", false};
-        return false;
-    }
-
     double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
     percent *= 100;
     percent = QString::number(percent, 'g', 3).toDouble();
