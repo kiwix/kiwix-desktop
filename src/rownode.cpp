@@ -10,11 +10,10 @@
 namespace
 {
 
-QString convertToUnits(QString size)
+QString convertToUnits(double bytes)
 {
     QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
     int unitIndex = 0;
-    auto bytes = size.toDouble();
     while (bytes >= 1024 && unitIndex < units.size()) {
         bytes /= 1024;
         unitIndex++;
@@ -31,8 +30,8 @@ void DownloadState::update(const DownloadInfo& downloadInfos)
     double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
     percent *= 100;
     percent = QString::number(percent, 'g', 3).toDouble();
-    auto completedLength = convertToUnits(downloadInfos["completedLength"].toString());
-    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toString()) + "/s";
+    auto completedLength = convertToUnits(downloadInfos["completedLength"].toDouble());
+    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toDouble()) + "/s";
     *this = {percent, completedLength, downloadSpeed, false};
 }
 
