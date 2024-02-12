@@ -477,12 +477,10 @@ DownloadInfo ContentManager::getDownloadInfo(QString bookId) const
     };
 }
 
-void ContentManager::updateDownload(QString bookId)
+void ContentManager::updateDownload(QString bookId, const DownloadInfo& downloadInfo)
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState && !downloadState->paused ) {
-        const auto downloadInfo = getDownloadInfo(bookId);
-
         if ( downloadInfo.isEmpty() ) {
             downloadDisappeared(bookId);
         } else if ( downloadInfo["status"] == "completed" ) {
@@ -497,7 +495,9 @@ void ContentManager::updateDownload(QString bookId)
 void ContentManager::updateDownloads()
 {
     for ( const auto& bookId : m_downloads.keys() ) {
-        updateDownload(bookId);
+        const auto downloadInfo = getDownloadInfo(bookId);
+
+        updateDownload(bookId, downloadInfo);
     }
 }
 
