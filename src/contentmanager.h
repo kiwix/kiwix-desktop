@@ -44,6 +44,7 @@ signals:
     void categoriesLoaded(QStringList);
     void languagesLoaded(LanguageList);
     void localChanged(const bool);
+    void downloadUpdated(QString bookId, const DownloadInfo& );
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
@@ -66,6 +67,7 @@ public slots:
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
     void updateDownloads();
+    void updateDownload(QString bookId, const DownloadInfo& downloadInfo);
 
 private: // functions
     QStringList getBookIds();
@@ -83,7 +85,6 @@ private: // functions
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
 
     std::string startDownload(const kiwix::Book& book);
-    void updateDownload(QString bookId, const DownloadInfo& downloadInfo);
     void removeDownload(QString bookId);
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadDisappeared(QString bookId);
