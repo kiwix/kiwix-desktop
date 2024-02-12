@@ -22,7 +22,7 @@ public: // types
 
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
-    virtual ~ContentManager() {}
+    virtual ~ContentManager();
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
@@ -84,6 +84,7 @@ private: // functions
     // the remote or local library (in that order).
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
 
+    void startDownloadUpdaterThread();
     std::string startDownload(const kiwix::Book& book);
     void removeDownload(QString bookId);
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
@@ -96,7 +97,7 @@ private: // data
     kiwix::LibraryPtr mp_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     ContentManagerModel::Downloads m_downloads;
-    QTimer m_downloadUpdateTimer;
+    QThread* mp_downloadUpdaterThread = nullptr;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
