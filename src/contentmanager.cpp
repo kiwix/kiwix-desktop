@@ -133,6 +133,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     m_downloadUpdateTimer.start(1000);
     connect(&m_downloadUpdateTimer, &QTimer::timeout,
             this, &ContentManager::updateDownloads);
+
+    connect(this, &ContentManager::downloadUpdated,
+            this, &ContentManager::updateDownload);
 }
 
 void ContentManager::updateModel()
@@ -497,7 +500,7 @@ void ContentManager::updateDownloads()
     for ( const auto& bookId : m_downloads.keys() ) {
         const auto downloadInfo = getDownloadInfo(bookId);
 
-        updateDownload(bookId, downloadInfo);
+        emit downloadUpdated(bookId, downloadInfo);
     }
 }
 
