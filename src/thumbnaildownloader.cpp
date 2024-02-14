@@ -4,49 +4,45 @@
 #include <QPixmap>
 #include <QIcon>
 
-ThumbnailDownloader::ThumbnailDownloader(QObject *parent)
+ThumbnailDownloader::ThumbnailDownloader()
 {
-    connect(this, &ThumbnailDownloader::oneThumbnailDownloaded, [=]() {
-        if (m_urlPairList.size() != 0)
-            downloadOnePair(m_urlPairList.takeFirst());
-        else
-            m_isDownloading = false;
-    });
+    connect(this, &ThumbnailDownloader::oneThumbnailDownloaded,
+            this, &ThumbnailDownloader::startNextDownload);
 }
 
 ThumbnailDownloader::~ThumbnailDownloader()
 {
 }
 
-void ThumbnailDownloader::addDownload(QString url, QModelIndex index)
+void ThumbnailDownloader::addDownload(QString url, ThumbnailId index)
 {
-    m_urlPairList.append({index, url});
+    m_downloadQueue.append({index, url});
     if (!m_isDownloading)
-        startDownload();
+        startNextDownload();
 }
 
-void ThumbnailDownloader::startDownload()
+void ThumbnailDownloader::startNextDownload()
 {
-    if (m_urlPairList.size() == 0) {
+    if (m_downloadQueue.size() == 0) {
         m_isDownloading = false;
         return;
     }
     m_isDownloading = true;
-    downloadOnePair(m_urlPairList.takeFirst());
+    downloadThumbnail(m_downloadQueue.takeFirst());
 }
 
-void ThumbnailDownloader::downloadOnePair(QPair<QModelIndex, QString> urlPair)
+void ThumbnailDownloader::downloadThumbnail(ThumbnailInfo thumbnailInfo)
 {
-    QNetworkRequest req(urlPair.second);
+    QNetworkRequest req(thumbnailInfo.second);
     auto reply = manager.get(req);
     connect(reply, &QNetworkReply::finished, this, [=](){
-        fileDownloaded(reply, urlPair);
+        fileDownloaded(reply, thumbnailInfo);
     });
 }
 
-void ThumbnailDownloader::fileDownloaded(QNetworkReply *pReply, QPair<QModelIndex, QString> urlPair)
+void ThumbnailDownloader::fileDownloaded(QNetworkReply *pReply, ThumbnailInfo thumbnailInfo)
 {
     auto downloadedData = pReply->readAll();
-    emit oneThumbnailDownloaded(urlPair.first, urlPair.second, downloadedData);
+    emit oneThumbnailDownloaded(thumbnailInfo.first, thumbnailInfo.second, downloadedData);
     pReply->deleteLater();
 }

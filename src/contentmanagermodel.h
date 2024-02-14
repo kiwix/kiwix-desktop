@@ -43,7 +43,7 @@ public: // functions
     std::shared_ptr<RowNode> createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const;
 
 public slots:
-    void updateImage(QModelIndex index, QString url, QByteArray imageData);
+    void updateImage(QString bookId, QString url, QByteArray imageData);
     void startDownload(QModelIndex index);
     void pauseDownload(QModelIndex index);
     void resumeDownload(QModelIndex index);
