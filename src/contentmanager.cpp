@@ -171,7 +171,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         contextMenu.addAction(&menuCancelBook);
     } else {
         try {
-            const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            const auto book = mp_library->getBookById(id);
             auto bookPath = QString::fromStdString(book.getPath());
             contextMenu.addAction(&menuOpenBook);
             contextMenu.addAction(&menuDeleteBook);
@@ -344,7 +344,7 @@ void ContentManager::openBookWithIndex(const QModelIndex &index)
         auto bookNode = static_cast<Node*>(index.internalPointer());
         bookId = bookNode->getBookId();
         // check if the book is available in local library, will throw std::out_of_range if it isn't.
-        KiwixApp::instance()->getLibrary()->getBookById(bookId);
+        mp_library->getBookById(bookId);
         if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
             return;
         openBook(bookId);
