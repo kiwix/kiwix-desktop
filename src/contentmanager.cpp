@@ -447,12 +447,6 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
 DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
 {
     DownloadInfo values;
-    if (!mp_downloader) {
-        for(auto& key: keys) {
-            values.insert(key, "");
-        }
-        return values;
-    }
 
     auto& b = mp_library->getBookById(bookId);
     std::shared_ptr<kiwix::Download> d;
@@ -631,9 +625,6 @@ void ContentManager::pauseBook(const QString& id, QModelIndex index)
 
 void ContentManager::pauseBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
@@ -650,9 +641,6 @@ void ContentManager::resumeBook(const QString& id, QModelIndex index)
 
 void ContentManager::resumeBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_PAUSED) {
@@ -673,9 +661,6 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
 
 void ContentManager::cancelBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() != kiwix::Download::K_COMPLETE) {
