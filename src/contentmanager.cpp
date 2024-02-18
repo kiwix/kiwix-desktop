@@ -26,6 +26,12 @@
 namespace
 {
 
+
+SettingsManager* getSettingsManager()
+{
+    return KiwixApp::instance()->getSettingsManager();
+}
+
 class ContentManagerError : public std::runtime_error
 {
 public:
@@ -108,9 +114,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
 
-    setCurrentLanguage(KiwixApp::instance()->getSettingsManager()->getLanguageList());
-    setCurrentCategoryFilter(KiwixApp::instance()->getSettingsManager()->getCategoryList());
-    setCurrentContentTypeFilter(KiwixApp::instance()->getSettingsManager()->getContentType());
+    setCurrentLanguage(getSettingsManager()->getLanguageList());
+    setCurrentCategoryFilter(getSettingsManager()->getCategoryList());
+    setCurrentContentTypeFilter(getSettingsManager()->getContentType());
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
@@ -534,7 +540,7 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
 
 std::string ContentManager::startDownload(const kiwix::Book& book)
 {
-    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+    auto downloadPath = getSettingsManager()->getDownloadDir();
     checkEnoughStorageAvailable(book, downloadPath);
 
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
@@ -601,7 +607,7 @@ void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
     } else {
         emit(oneBookChanged(id));
     }
-    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+    getSettingsManager()->deleteSettings(id);
     emit booksChanged();
 }
 
@@ -609,7 +615,7 @@ void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const auto moveToTrash = KiwixApp::instance()->getSettingsManager()->getMoveToTrash();
+    const auto moveToTrash = getSettingsManager()->getMoveToTrash();
 #else
     const auto moveToTrash = false; // we do not support move to trash functionality for qt versions below 5.15
 #endif
@@ -712,7 +718,7 @@ void ContentManager::setCurrentLanguage(FilterList langPairList)
     if (m_currentLanguage == newLanguage)
         return;
     m_currentLanguage = newLanguage;
-    KiwixApp::instance()->getSettingsManager()->setLanguage(langPairList);
+    getSettingsManager()->setLanguage(langPairList);
     emit(currentLangChanged());
     emit(filterParamsChanged());
 }
@@ -727,7 +733,7 @@ void ContentManager::setCurrentCategoryFilter(FilterList categoryPairList)
     if (m_categoryFilter == categoryList.join(","))
         return;
     m_categoryFilter = categoryList.join(",");
-    KiwixApp::instance()->getSettingsManager()->setCategory(categoryPairList);
+    getSettingsManager()->setCategory(categoryPairList);
     emit(filterParamsChanged());
 }
 
@@ -738,7 +744,7 @@ void ContentManager::setCurrentContentTypeFilter(FilterList contentTypeFiltersPa
         contentTypeFilters.append(ctfPair.second);
     }
     m_contentTypeFilters = contentTypeFilters;
-    KiwixApp::instance()->getSettingsManager()->setContentType(contentTypeFiltersPairList);
+    getSettingsManager()->setContentType(contentTypeFiltersPairList);
     emit(filterParamsChanged());
 }
 
