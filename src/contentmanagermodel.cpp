@@ -7,9 +7,8 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(const Downloads* downloads, QObject *parent)
+ContentManagerModel::ContentManagerModel(QObject *parent)
     : QAbstractItemModel(parent)
-    , m_downloads(*downloads)
 {
     connect(&td, &ThumbnailDownloader::oneThumbnailDownloaded, this, &ContentManagerModel::updateImage);
 }
@@ -112,11 +111,11 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
     }
 }
 
-void ContentManagerModel::setBooksData(const BookInfoList& data)
+void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads& downloads)
 {
     m_data = data;
     rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
-    setupNodes();
+    setupNodes(downloads);
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
@@ -151,7 +150,7 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) cons
     return rowNodePtr;
 }
 
-void ContentManagerModel::setupNodes()
+void ContentManagerModel::setupNodes(const Downloads& downloads)
 {
     beginResetModel();
     bookIdToRowMap.clear();
@@ -159,8 +158,8 @@ void ContentManagerModel::setupNodes()
         const auto rowNode = createNode(bookItem);
 
         // Restore download state during model updates (filtering, etc)
-        const auto downloadIter = m_downloads.constFind(rowNode->getBookId());
-        if ( downloadIter != m_downloads.constEnd() ) {
+        const auto downloadIter = downloads.constFind(rowNode->getBookId());
+        if ( downloadIter != downloads.constEnd() ) {
             rowNode->setDownloadState(downloadIter.value());
         }
 
