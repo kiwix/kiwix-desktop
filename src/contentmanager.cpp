@@ -91,8 +91,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
     managerModel = new ContentManagerModel(&m_downloads, this);
-    const auto booksList = getBooksList();
-    managerModel->setBooksData(booksList);
+    updateModel();
     auto treeView = mp_view->getView();
     treeView->setModel(managerModel);
     treeView->show();
@@ -120,8 +119,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
-        const auto nBookList = getBooksList();
-        managerModel->setBooksData(nBookList);
+        updateModel();
         managerModel->refreshIcons();
     });
     connect(&m_remoteLibraryManager, &OpdsRequestManager::requestReceived, this, &ContentManager::updateRemoteLibrary);
@@ -138,7 +136,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
             this, &ContentManager::updateDownloads);
 }
 
-ContentManager::BookInfoList ContentManager::getBooksList()
+void ContentManager::updateModel()
 {
     const auto bookIds = getBookIds();
     BookInfoList bookList;
@@ -148,7 +146,7 @@ ContentManager::BookInfoList ContentManager::getBooksList()
         auto mp = getBookInfos(bookId, keys);
         bookList.append(mp);
     }
-    return bookList;
+    managerModel->setBooksData(bookList);
 }
 
 void ContentManager::onCustomContextMenu(const QPoint &point)
