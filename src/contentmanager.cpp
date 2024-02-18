@@ -90,7 +90,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
-    managerModel = new ContentManagerModel(&m_downloads, this);
+    managerModel = new ContentManagerModel(this);
     updateModel();
     auto treeView = mp_view->getView();
     treeView->setModel(managerModel);
@@ -145,7 +145,7 @@ void ContentManager::updateModel()
         auto mp = getBookInfos(bookId, keys);
         bookList.append(mp);
     }
-    managerModel->setBooksData(bookList);
+    managerModel->setBooksData(bookList, m_downloads);
 }
 
 void ContentManager::onCustomContextMenu(const QPoint &point)
