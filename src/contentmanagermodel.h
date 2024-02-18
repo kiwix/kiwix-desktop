@@ -43,7 +43,7 @@ public: // functions
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
     void refreshIcons();
 
-    std::shared_ptr<RowNode> createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const;
+    std::shared_ptr<RowNode> createNode(BookInfo bookItem) const;
 
 public slots:
     void updateImage(QString bookId, QString url, QByteArray imageData);
@@ -62,7 +62,7 @@ private: // data
     int zimCount = 0;
     ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;
-    QMap<QString, QByteArray> iconMap;
+    QMap<QString, QByteArray> m_iconMap;
     const Downloads& m_downloads;
 };
 

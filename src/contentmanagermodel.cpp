@@ -111,7 +111,7 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const
+std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
 {
     const auto faviconUrl = bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
@@ -124,8 +124,8 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap
         bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
         bookIcon.detach(); // deep copy
     } catch (...) {
-        if (iconMap.contains(faviconUrl)) {
-            bookIcon = iconMap[faviconUrl];
+        if (m_iconMap.contains(faviconUrl)) {
+            bookIcon = m_iconMap[faviconUrl];
         }
     }
     std::weak_ptr<RowNode> weakRoot = rootNode;
@@ -147,7 +147,7 @@ void ContentManagerModel::setupNodes()
     beginResetModel();
     bookIdToRowMap.clear();
     for (auto bookItem : m_data) {
-        const auto rowNode = createNode(bookItem, iconMap);
+        const auto rowNode = createNode(bookItem);
 
         // Restore download state during model updates (filtering, etc)
         const auto downloadIter = m_downloads.constFind(rowNode->getBookId());
@@ -175,7 +175,7 @@ void ContentManagerModel::refreshIcons()
             auto book = app->getLibrary()->getBookById(id);
             auto item = book.getIllustration(48);
         } catch (...) {
-            if (faviconUrl != "" && !iconMap.contains(faviconUrl)) {
+            if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
                 td.addDownload(faviconUrl, id);
             }
         }
@@ -240,7 +240,7 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     const size_t row = it.value();
     const auto item = static_cast<RowNode*>(rootNode->child(row).get());
     item->setIconData(imageData);
-    iconMap[url] = imageData;
+    m_iconMap[url] = imageData;
     const QModelIndex index = this->index(row, 0);
     emit dataChanged(index, index);
 }
