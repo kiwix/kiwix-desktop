@@ -385,19 +385,6 @@ QString downloadStatus2QString(kiwix::Download::StatusResult status)
     }
 }
 
-QString getDownloadInfo(const kiwix::Download& d, const QString& k)
-{
-    if (k == "id")              return QString::fromStdString(d.getDid());
-    if (k == "path")            return QString::fromStdString(d.getPath());
-    if (k == "status")          return downloadStatus2QString(d.getStatus());
-    if (k == "followedBy")      return QString::fromStdString(d.getFollowedBy());
-    if (k == "totalLength")     return QString::number(d.getTotalLength());
-    if (k == "downloadSpeed")   return QString::number(d.getDownloadSpeed());
-    if (k == "verifiedLength")  return QString::number(d.getVerifiedLength());
-    if (k == "completedLength") return QString::number(d.getCompletedLength());
-    return "";
-}
-
 } // unnamed namespace
 
 void ContentManager::downloadStarted(const kiwix::Book& book, const std::string& downloadId)
@@ -444,32 +431,32 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     }
 }
 
-DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
+DownloadInfo ContentManager::getDownloadInfo(QString bookId) const
 {
-    DownloadInfo values;
-
     auto& b = mp_library->getBookById(bookId);
     std::shared_ptr<kiwix::Download> d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
-        return values;
+        return {};
     }
 
     d->updateStatus(true);
 
-    for(auto& key: keys){
-        values.insert(key, ::getDownloadInfo(*d, key));
-    }
-
-    return values;
+    return {
+             { "status"          , downloadStatus2QString(d->getStatus())   },
+             { "completedLength" , QString::number(d->getCompletedLength()) },
+             { "totalLength"     , QString::number(d->getTotalLength())     },
+             { "downloadSpeed"   , QString::number(d->getDownloadSpeed())   },
+             { "path"            , QString::fromStdString(d->getPath())     }
+    };
 }
 
 void ContentManager::updateDownload(QString bookId)
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState && !downloadState->paused ) {
-        const auto downloadInfo = getDownloadInfo(bookId, {"status", "completedLength", "totalLength", "downloadSpeed", "path"});
+        const auto downloadInfo = getDownloadInfo(bookId);
 
         if ( downloadInfo.isEmpty() ) {
             downloadCancelled(bookId);

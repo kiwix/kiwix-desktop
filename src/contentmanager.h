@@ -88,7 +88,7 @@ private: // functions
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadCancelled(QString bookId);
     void downloadCompleted(QString bookId, QString path);
-    DownloadInfo getDownloadInfo(QString bookId, const QStringList& keys) const;
+    DownloadInfo getDownloadInfo(QString bookId) const;
 
 private: // data
     Library* mp_library;
