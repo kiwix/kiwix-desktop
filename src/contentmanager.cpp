@@ -285,9 +285,36 @@ QString getBookTags(const kiwix::Book& b)
     return displayTagList.join(", ");
 }
 
+QString getFaviconUrl(const kiwix::Book& b)
+{
+    std::string url;
+    try {
+        auto item = b.getIllustration(48);
+        url = item->url;
+    } catch (...) {
+    }
+    return QString::fromStdString(url);
+}
+
+QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
+{
+    if ( a == "id" )          return QString::fromStdString(b.getId());
+    if ( a == "path" )        return QString::fromStdString(b.getPath());
+    if ( a == "title" )       return QString::fromStdString(b.getTitle());
+    if ( a == "description" ) return QString::fromStdString(b.getDescription());
+    if ( a == "date" )        return QString::fromStdString(b.getDate());
+    if ( a == "url" )         return QString::fromStdString(b.getUrl());
+    if ( a == "name" )        return QString::fromStdString(b.getName());
+    if ( a == "downloadId" )  return QString::fromStdString(b.getDownloadId());
+    if ( a == "faviconUrl")   return getFaviconUrl(b);
+    if ( a == "size" )        return QString::number(b.getSize());
+    if ( a == "tags" )        return getBookTags(b);
+
+    return QVariant();
+}
+
 } // unnamed namespace
 
-#define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
 ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
     BookInfo values;
@@ -302,44 +329,12 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
         }
     }();
 
-    if (nullptr == b){
-        for(auto& key:keys) {
-            (void) key;
-            values.insert(key, "");
-        }
-        return values;
+    for(auto& key: keys){
+        values.insert(key, b ? getBookAttribute(*b, key) : "");
     }
 
-    for(auto& key: keys){
-        ADD_V("id", getId);
-        ADD_V("path", getPath);
-        ADD_V("title", getTitle);
-        ADD_V("description", getDescription);
-        ADD_V("date", getDate);
-        ADD_V("url", getUrl);
-        ADD_V("name", getName);
-        ADD_V("downloadId", getDownloadId);
-        if (key == "faviconUrl") {
-            std::string url;
-            try {
-                auto item = b->getIllustration(48);
-                url = item->url;
-            } catch (...) {
-                const kiwix::Book::Illustration tempIllustration;
-                url = tempIllustration.url;
-            }
-            values.insert(key, QString::fromStdString(url));
-        }
-        if (key == "size") {
-            values.insert(key, QString::number(b->getSize()));
-        }
-        if (key == "tags") {
-            values.insert(key, getBookTags(*b));
-        }
-    }
     return values;
 }
-#undef ADD_V
 
 void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
