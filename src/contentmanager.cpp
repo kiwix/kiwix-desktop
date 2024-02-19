@@ -140,7 +140,7 @@ void ContentManager::updateModel()
 {
     const auto bookIds = getBookIds();
     BookInfoList bookList;
-    QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl"};
+    QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl", "favicon"};
     QIcon bookIcon;
     for (auto bookId : bookIds) {
         auto mp = getBookInfos(bookId, keys);
@@ -294,6 +294,28 @@ QString getFaviconUrl(const kiwix::Book& b)
     return QString::fromStdString(url);
 }
 
+QByteArray getFaviconData(const kiwix::Book& b)
+{
+    QByteArray qdata;
+    try {
+        // Try to obtain favicons only from local books (otherwise
+        // kiwix::Book::Illustration::getData() attempts to download the image
+        // on its own, whereas we want that operation to be performed
+        // asynchronously by ThumbnailDownloader).
+        if ( b.isPathValid() ) {
+            const auto illustration = b.getIllustration(48);
+            const std::string data = illustration->getData();
+
+            qdata = QByteArray::fromRawData(data.data(), data.size());
+            qdata.detach(); // deep copy
+        }
+    } catch ( ... ) {
+        return QByteArray();
+    }
+
+    return qdata;
+}
+
 QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
 {
     if ( a == "id" )          return QString::fromStdString(b.getId());
@@ -304,6 +326,7 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
     if ( a == "url" )         return QString::fromStdString(b.getUrl());
     if ( a == "name" )        return QString::fromStdString(b.getName());
     if ( a == "downloadId" )  return QString::fromStdString(b.getDownloadId());
+    if ( a == "favicon")      return getFaviconData(b);
     if ( a == "faviconUrl")   return getFaviconUrl(b);
     if ( a == "size" )        return QString::number(b.getSize());
     if ( a == "tags" )        return getBookTags(b);

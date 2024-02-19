@@ -113,16 +113,8 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
 
 QByteArray ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
 {
-    QString id = bookItem["id"].toString();
-    QByteArray bookIcon;
-    try {
-        auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-        std::string favicon;
-        auto item = book.getIllustration(48);
-        favicon = item->getData();
-        bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
-        bookIcon.detach(); // deep copy
-    } catch (...) {
+    QByteArray bookIcon = bookItem["favicon"].toByteArray();
+    if ( bookIcon.isNull() ) {
         const auto faviconUrl = bookItem["faviconUrl"].toString();
         if (m_iconMap.contains(faviconUrl)) {
             bookIcon = m_iconMap[faviconUrl];
@@ -174,16 +166,11 @@ void ContentManagerModel::refreshIcons()
         return;
     td.clearQueue();
     for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
-        auto bookItem = m_data[i];
-        auto id = bookItem["id"].toString();
-        const auto faviconUrl = bookItem["faviconUrl"].toString();
-        auto app = KiwixApp::instance();
-        try {
-            auto book = app->getLibrary()->getBookById(id);
-            auto item = book.getIllustration(48);
-        } catch (...) {
+        const auto& bookItem = m_data[i];
+        if ( bookItem["favicon"].toByteArray().isNull() ) {
+            const auto faviconUrl = bookItem["faviconUrl"].toString();
             if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
-                td.addDownload(faviconUrl, id);
+                td.addDownload(faviconUrl, bookItem["id"].toString());
             }
         }
     }
