@@ -297,17 +297,6 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
         ADD_V("url", getUrl);
         ADD_V("name", getName);
         ADD_V("downloadId", getDownloadId);
-        if (key == "faviconMimeType") {
-            std::string mimeType;
-            try {
-                auto item = b->getIllustration(48);
-                mimeType = item->mimeType;
-            } catch (...) {
-                const kiwix::Book::Illustration tempIllustration;
-                mimeType = tempIllustration.mimeType;
-            }
-            values.insert(key, QString::fromStdString(mimeType));
-        }
         if (key == "faviconUrl") {
             std::string url;
             try {
