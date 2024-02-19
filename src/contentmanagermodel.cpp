@@ -111,9 +111,8 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
+QByteArray ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
 {
-    const auto faviconUrl = bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
     QByteArray bookIcon;
     try {
@@ -124,10 +123,18 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) cons
         bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
         bookIcon.detach(); // deep copy
     } catch (...) {
+        const auto faviconUrl = bookItem["faviconUrl"].toString();
         if (m_iconMap.contains(faviconUrl)) {
             bookIcon = m_iconMap[faviconUrl];
         }
     }
+    return bookIcon;
+}
+
+std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
+{
+    QString id = bookItem["id"].toString();
+    const QByteArray bookIcon = getThumbnail(bookItem);
     std::weak_ptr<RowNode> weakRoot = rootNode;
     auto rowNodePtr = std::shared_ptr<RowNode>(new
                                     RowNode({bookIcon, bookItem["title"],

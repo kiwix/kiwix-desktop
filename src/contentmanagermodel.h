@@ -56,6 +56,9 @@ protected: // functions
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
 
+private: // functions
+    QByteArray getThumbnail(const BookInfo& bookItem) const;
+
 private: // data
     BookInfoList m_data;
     std::shared_ptr<RowNode> rootNode;
