@@ -7,6 +7,7 @@
 			"IMayBeABitShy",
 			"Justman10000",
 			"Magiczocker",
+			"Rofiatmustapha12",
 			"Susann Schweden",
 			"ThisCarthing",
 			"Umlaut",
@@ -101,6 +102,7 @@
 	"online-files": "Online Dateien",
 	"local-files": "Lokale Dateien",
 	"category": "Kategorie",
+	"language": "Sprache",
 	"hide": "Verbergen",
 	"open-in-browser": "Im Browser öffnen",
 	"start-kiwix-server": "Kiwix-Server starten",
@@ -167,6 +169,8 @@
 	"clear-filter": "Aktuell eingestellte Filter Löschen",
 	"language-searcher-placeholder": "Sprache filtern",
 	"category-searcher-placeholder": "Kategorie filtern",
+	"content-type-searcher-placeholder": "Inhaltstyp filtern",
+	"no-details": "Nur Einführung",
 	"no-pictures": "Keine Bilder",
 	"no-videos": "Keine Videos"
 }

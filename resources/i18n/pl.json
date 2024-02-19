@@ -136,5 +136,13 @@
 	"monitor-dir-dialog-msg": "Nową ścieżką katalogu monitorowanego będzie:\n{{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Czy na pewno chcesz wyczyścić katalog monitorowany?",
 	"monitor-clear-dir-dialog-msg": "Spowoduje to zatrzymanie sprawdzania katalogu monitora w poszukiwaniu nowych plików ZIM.",
-	"monitor-directory-tooltip": "Wszystkie pliki ZIM w tym katalogu zostaną automatycznie dodane do biblioteki."
+	"monitor-directory-tooltip": "Wszystkie pliki ZIM w tym katalogu zostaną automatycznie dodane do biblioteki.",
+	"download-book": "Pobierz książkę",
+	"pause-download": "Wstrzymaj pobieranie",
+	"resume-download": "Wznów pobieranie",
+	"open-folder": "Otwórz folder",
+	"couldnt-open-location": "Nie udało się otworzyć lokalizacji",
+	"couldnt-open-location-text": "Kiwix nie może otworzyć folderu {{FOLDER}}",
+	"move-files-to-trash": "Przenieś usunięte pliki do kosza",
+	"move-files-to-trash-text": "Ta czynność spowoduje przeniesienie pliku do kosza."
 }

@@ -9,6 +9,7 @@
 			"Kareyac",
 			"Pacha Tchernof",
 			"Razno0",
+			"Rofiatmustapha12",
 			"Smavrina",
 			"StarryFairy",
 			"Tanzun",
@@ -162,8 +163,16 @@
 	"pause-download": "Приостановить загрузку",
 	"resume-download": "Возобновить загрузку",
 	"open-folder": "Открыть папку",
+	"couldnt-open-location": "Не удалось открыть местоположение",
 	"couldnt-open-location-text": "Kiwix не может открыть папку {{FOLDER}}",
 	"move-files-to-trash": "Переместить удаленные файлы в корзину",
 	"move-files-to-trash-text": "Это действие переместит файл в корзину.",
-	"perma-delete-files-text": "Это действие навсегда удалит файл."
+	"perma-delete-files-text": "Это действие навсегда удалит файл.",
+	"clear-filter": "Очистить текущие установленные фильтры",
+	"language-searcher-placeholder": "Фильтр по языку",
+	"category-searcher-placeholder": "Фильтр по категории",
+	"content-type-searcher-placeholder": "Фильтровать тип контента",
+	"no-details": "Только введение",
+	"no-pictures": "Без картинок",
+	"no-videos": "Без видео"
 }
