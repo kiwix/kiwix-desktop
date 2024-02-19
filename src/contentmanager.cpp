@@ -265,6 +265,28 @@ void ContentManager::setLanguages()
     m_remoteLibraryManager.getLanguagesFromOpds();
 }
 
+namespace
+{
+
+QString getBookTags(const kiwix::Book& b)
+{
+    QStringList tagList = QString::fromStdString(b.getTags()).split(';');
+    QMap<QString, bool> displayTagMap;
+    for(auto tag: tagList) {
+      if (tag[0] == '_') {
+        auto splitTag = tag.split(":");
+        displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
+      }
+    }
+    QStringList displayTagList;
+    if (displayTagMap["_videos"]) displayTagList << QObject::tr("Videos");
+    if (displayTagMap["_pictures"]) displayTagList << QObject::tr("Pictures");
+    if (!displayTagMap["_details"]) displayTagList << QObject::tr("Introduction only");
+    return displayTagList.join(", ");
+}
+
+} // unnamed namespace
+
 #define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
 ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
@@ -312,20 +334,7 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
             values.insert(key, QString::number(b->getSize()));
         }
         if (key == "tags") {
-            QStringList tagList = QString::fromStdString(b->getTags()).split(';');
-            QMap<QString, bool> displayTagMap;
-            for(auto tag: tagList) {
-              if (tag[0] == '_') {
-                auto splitTag = tag.split(":");
-                displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
-              }
-            }
-            QStringList displayTagList;
-            if (displayTagMap["_videos"]) displayTagList << tr("Videos");
-            if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
-            if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
-            QString s = displayTagList.join(", ");
-            values.insert(key, s);
+            values.insert(key, getBookTags(*b));
         }
     }
     return values;
