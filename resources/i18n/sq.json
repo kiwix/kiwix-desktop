@@ -92,6 +92,8 @@
 	"fullscreen-notification": "Gjendeni nën mënyrën “sa krejt ekrani”. Që të dilni, shtypni tastin ESC!",
 	"online-files": "Kartela Në Linjë",
 	"local-files": "Kartela Vendore",
+	"category": "Kategori",
+	"language": "Gjuhë",
 	"hide": "Fshihe",
 	"open-in-browser": "Hape në shfletues",
 	"start-kiwix-server": "Nis Shërbyesin Kiwix",
@@ -137,7 +139,7 @@
 	"monitor-directory-tooltip": "Krejt kartelat ZIM në këtë drejtori do të shtohen automatikisht te biblioteka.",
 	"next-tab": "Kalo te skeda pasuese",
 	"previous-tab": "Kalo te skeda e mëparshme",
-	"cancel-download": "Anuloje Shkarkimin",
+	"cancel-download": "Anuloje shkarkimin",
 	"cancel-download-text": "Jeni i sigurt se doni të anulohet shkarkimi i <b>{{ZIM}}</b>?",
 	"delete-book": "Fshije librin",
 	"delete-book-text": "Jeni i sigurt se doni të fshihet <b>{{ZIM}}</b>?",
@@ -154,5 +156,12 @@
 	"couldnt-open-location-text": "Kiwix-i s’është në gjendje të hapë dosjen {{FOLDER}}",
 	"move-files-to-trash": "Shpjeri kartelat e fshira te hedhurinat",
 	"move-files-to-trash-text": "Ky veprim do ta shpjerë kartelën te hedhurinat.",
-	"perma-delete-files-text": "Ky veprim do ta fshijë përgjithmonë kartelën."
+	"perma-delete-files-text": "Ky veprim do ta fshijë përgjithmonë kartelën.",
+	"clear-filter": "Spastro filtrat e ujdisur aktualisht",
+	"language-searcher-placeholder": "Filtroni gjuhë",
+	"category-searcher-placeholder": "Filtroni kategori",
+	"content-type-searcher-placeholder": "Filtroni lloj lënde",
+	"no-details": "Vetëm hyrje",
+	"no-pictures": "Pa Foto",
+	"no-videos": "Pa Video"
 }
