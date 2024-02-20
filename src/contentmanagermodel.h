@@ -60,6 +60,7 @@ private: // functions
     // Returns either data of the thumbnail (as a QByteArray) or a URL (as a
     // QString) from where the actual data can be obtained.
     QVariant getThumbnail(const BookInfo& bookItem) const;
+    RowNode* getRowNode(size_t row);
 
 private: // data
     BookInfoList m_data;

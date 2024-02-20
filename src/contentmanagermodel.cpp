@@ -175,12 +175,12 @@ void ContentManagerModel::refreshIcons()
         return;
     td.clearQueue();
     for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
-        const auto& bookItem = m_data[i];
-        const QVariant favicon = bookItem["favicon"];
+        auto& rowNode = *getRowNode(i);
+        const QVariant favicon = rowNode.data(0);
         if ( favicon.type() == QVariant::String ) {
             const auto faviconUrl = favicon.toString();
             if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
-                td.addDownload(faviconUrl, bookItem["id"].toString());
+                td.addDownload(faviconUrl, rowNode.getBookId());
             }
         }
     }
@@ -235,6 +235,11 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
     KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
 }
 
+RowNode* ContentManagerModel::getRowNode(size_t row)
+{
+    return static_cast<RowNode*>(rootNode->child(row).get());
+}
+
 void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray imageData)
 {
     const auto it = bookIdToRowMap.constFind(bookId);
@@ -242,7 +247,7 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
         return;
 
     const size_t row = it.value();
-    const auto item = static_cast<RowNode*>(rootNode->child(row).get());
+    const auto item = getRowNode(row);
     item->setIconData(imageData);
     m_iconMap[url] = imageData;
     const QModelIndex index = this->index(row, 0);
@@ -278,8 +283,7 @@ void ContentManagerModel::removeDownload(QString bookId)
         return;
 
     const size_t row = it.value();
-    auto& node = static_cast<RowNode&>(*rootNode->child(row));
-    node.setDownloadState(nullptr);
+    getRowNode(row)->setDownloadState(nullptr);
     const QModelIndex index = this->index(row, 5);
     emit dataChanged(index, index);
 }
