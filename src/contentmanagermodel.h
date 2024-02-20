@@ -38,7 +38,6 @@ public: // functions
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     void setBooksData(const BookInfoList& data, const Downloads& downloads);
-    void setupNodes(const Downloads& downloads);
     bool hasChildren(const QModelIndex &parent) const override;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 
@@ -58,7 +57,6 @@ private: // functions
     RowNode* getRowNode(size_t row);
 
 private: // data
-    BookInfoList m_data;
     std::shared_ptr<RowNode> rootNode;
     mutable ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;

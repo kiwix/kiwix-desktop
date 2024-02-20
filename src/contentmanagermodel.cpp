@@ -116,9 +116,22 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
 
 void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads& downloads)
 {
-    m_data = data;
     rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
-    setupNodes(downloads);
+    beginResetModel();
+    bookIdToRowMap.clear();
+    for (auto bookItem : data) {
+        const auto rowNode = createNode(bookItem);
+
+        // Restore download state during model updates (filtering, etc)
+        const auto downloadIter = downloads.constFind(rowNode->getBookId());
+        if ( downloadIter != downloads.constEnd() ) {
+            rowNode->setDownloadState(downloadIter.value());
+        }
+
+        bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
+        rootNode->appendChild(rowNode);
+    }
+    endResetModel();
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
@@ -151,25 +164,6 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) cons
 
     rowNodePtr->appendChild(descNodePtr);
     return rowNodePtr;
-}
-
-void ContentManagerModel::setupNodes(const Downloads& downloads)
-{
-    beginResetModel();
-    bookIdToRowMap.clear();
-    for (auto bookItem : m_data) {
-        const auto rowNode = createNode(bookItem);
-
-        // Restore download state during model updates (filtering, etc)
-        const auto downloadIter = downloads.constFind(rowNode->getBookId());
-        if ( downloadIter != downloads.constEnd() ) {
-            rowNode->setDownloadState(downloadIter.value());
-        }
-
-        bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
-        rootNode->appendChild(rowNode);
-    }
-    endResetModel();
 }
 
 bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
