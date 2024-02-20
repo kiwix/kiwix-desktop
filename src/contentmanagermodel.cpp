@@ -92,8 +92,11 @@ QModelIndex ContentManagerModel::parent(const QModelIndex &index) const
 
 int ContentManagerModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
-    return m_data.size();
+    const auto node = parent.isValid()
+                    ? static_cast<const Node*>(parent.internalPointer())
+                    : rootNode.get();
+
+    return node->childCount();
 }
 
 QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientation, int role) const
