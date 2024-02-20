@@ -27,13 +27,10 @@ int ContentManagerModel::columnCount(const QModelIndex &parent) const
 
 QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
-
-    auto item = static_cast<Node*>(index.internalPointer());
     const auto displayRole = role == Qt::DisplayRole;
     const auto additionalInfoRole = role == Qt::UserRole+1;
-    if (displayRole || additionalInfoRole) {
+    if ( (displayRole || additionalInfoRole) && index.isValid() ) {
+        const auto item = static_cast<Node*>(index.internalPointer());
         QVariant r = item->data(index.column());
         if ( index.column() != 0 )
             return r;
