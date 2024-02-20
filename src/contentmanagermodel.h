@@ -58,6 +58,7 @@ protected: // functions
 
 private: // functions
     QVariant getThumbnail(const BookInfo& bookItem) const;
+    RowNode* getRowNode(size_t row);
 
 private: // data
     BookInfoList m_data;
