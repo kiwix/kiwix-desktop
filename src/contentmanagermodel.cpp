@@ -113,14 +113,14 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
 
 QByteArray ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
 {
-    QByteArray bookIcon = bookItem["favicon"].toByteArray();
-    if ( bookIcon.isNull() ) {
-        const auto faviconUrl = bookItem["faviconUrl"].toString();
-        if (m_iconMap.contains(faviconUrl)) {
-            bookIcon = m_iconMap[faviconUrl];
-        }
-    }
-    return bookIcon;
+    const QVariant faviconEntry = bookItem["favicon"];
+    if ( faviconEntry.type() == QVariant::ByteArray )
+        return faviconEntry.toByteArray();
+
+    const auto faviconUrl = faviconEntry.toString();
+    return m_iconMap.contains(faviconUrl)
+         ? m_iconMap[faviconUrl]
+         : QByteArray();
 }
 
 std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
@@ -167,8 +167,8 @@ void ContentManagerModel::refreshIcons()
     td.clearQueue();
     for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
         const auto& bookItem = m_data[i];
-        if ( bookItem["favicon"].toByteArray().isNull() ) {
-            const auto faviconUrl = bookItem["faviconUrl"].toString();
+        if ( bookItem["favicon"].type() == QVariant::String ) {
+            const auto faviconUrl = bookItem["favicon"].toString();
             if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
                 td.addDownload(faviconUrl, bookItem["id"].toString());
             }

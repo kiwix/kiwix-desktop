@@ -140,7 +140,7 @@ void ContentManager::updateModel()
 {
     const auto bookIds = getBookIds();
     BookInfoList bookList;
-    QStringList keys = {"title", "tags", "date", "id", "size", "description", "faviconUrl", "favicon"};
+    QStringList keys = {"title", "tags", "date", "id", "size", "description", "favicon"};
     QIcon bookIcon;
     for (auto bookId : bookIds) {
         auto mp = getBookInfos(bookId, keys);
@@ -316,6 +316,12 @@ QByteArray getFaviconData(const kiwix::Book& b)
     return qdata;
 }
 
+QVariant getFaviconDataOrUrl(const kiwix::Book& b)
+{
+    const QByteArray data = getFaviconData(b);
+    return !data.isNull() ? QVariant(data) : QVariant(getFaviconUrl(b));
+}
+
 QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
 {
     if ( a == "id" )          return QString::fromStdString(b.getId());
@@ -326,8 +332,7 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
     if ( a == "url" )         return QString::fromStdString(b.getUrl());
     if ( a == "name" )        return QString::fromStdString(b.getName());
     if ( a == "downloadId" )  return QString::fromStdString(b.getDownloadId());
-    if ( a == "favicon")      return getFaviconData(b);
-    if ( a == "faviconUrl")   return getFaviconUrl(b);
+    if ( a == "favicon")      return getFaviconDataOrUrl(b);
     if ( a == "size" )        return QString::number(b.getSize());
     if ( a == "tags" )        return getBookTags(b);
 
