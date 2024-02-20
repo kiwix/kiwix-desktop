@@ -57,7 +57,7 @@ protected: // functions
     void fetchMore(const QModelIndex &parent) override;
 
 private: // functions
-    QByteArray getThumbnail(const BookInfo& bookItem) const;
+    QVariant getThumbnail(const BookInfo& bookItem) const;
 
 private: // data
     BookInfoList m_data;
