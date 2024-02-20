@@ -51,10 +51,6 @@ public slots:
     void removeDownload(QString bookId);
     void updateDownload(QString bookId);
 
-protected: // functions
-    bool canFetchMore(const QModelIndex &parent) const override;
-    void fetchMore(const QModelIndex &parent) override;
-
 private: // functions
     // Returns either data of the thumbnail (as a QByteArray) or a URL (as a
     // QString) from where the actual data can be obtained.
@@ -64,7 +60,6 @@ private: // functions
 private: // data
     BookInfoList m_data;
     std::shared_ptr<RowNode> rootNode;
-    int zimCount = 0;
     mutable ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;
     QMap<QString, QByteArray> m_iconMap;
