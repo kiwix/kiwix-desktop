@@ -33,8 +33,15 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
     auto item = static_cast<Node*>(index.internalPointer());
     const auto displayRole = role == Qt::DisplayRole;
     const auto additionalInfoRole = role == Qt::UserRole+1;
-    if (displayRole || additionalInfoRole)
-        return item->data(index.column());
+    if (displayRole || additionalInfoRole) {
+        const QVariant r = item->data(index.column());
+        if ( index.column() == 0 && r.type() == QVariant::String ) {
+            // Thumbnail was requested but what we have is only its URL
+            return QVariant();
+        } else {
+            return r;
+        }
+    }
 
     return QVariant();
 }
@@ -111,22 +118,24 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-QByteArray ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
+// Returns either data of the thumbnail (as a QByteArray) or a URL (as a
+// QString) from where the actual data can be obtained.
+QVariant ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
 {
     const QVariant faviconEntry = bookItem["favicon"];
     if ( faviconEntry.type() == QVariant::ByteArray )
-        return faviconEntry.toByteArray();
+        return faviconEntry;
 
     const auto faviconUrl = faviconEntry.toString();
     return m_iconMap.contains(faviconUrl)
          ? m_iconMap[faviconUrl]
-         : QByteArray();
+         : faviconEntry;
 }
 
 std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
 {
     QString id = bookItem["id"].toString();
-    const QByteArray bookIcon = getThumbnail(bookItem);
+    const QVariant bookIcon = getThumbnail(bookItem);
     std::weak_ptr<RowNode> weakRoot = rootNode;
     auto rowNodePtr = std::shared_ptr<RowNode>(new
                                     RowNode({bookIcon, bookItem["title"],
@@ -167,8 +176,9 @@ void ContentManagerModel::refreshIcons()
     td.clearQueue();
     for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
         const auto& bookItem = m_data[i];
-        if ( bookItem["favicon"].type() == QVariant::String ) {
-            const auto faviconUrl = bookItem["favicon"].toString();
+        const QVariant favicon = bookItem["favicon"];
+        if ( favicon.type() == QVariant::String ) {
+            const auto faviconUrl = favicon.toString();
             if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
                 td.addDownload(faviconUrl, bookItem["id"].toString());
             }

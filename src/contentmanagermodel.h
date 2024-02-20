@@ -57,7 +57,9 @@ protected: // functions
     void fetchMore(const QModelIndex &parent) override;
 
 private: // functions
-    QByteArray getThumbnail(const BookInfo& bookItem) const;
+    // Returns either data of the thumbnail (as a QByteArray) or a URL (as a
+    // QString) from where the actual data can be obtained.
+    QVariant getThumbnail(const BookInfo& bookItem) const;
 
 private: // data
     BookInfoList m_data;
