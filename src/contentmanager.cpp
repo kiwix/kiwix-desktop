@@ -505,14 +505,9 @@ void ContentManager::downloadBook(const QString &id)
         throwDownloadUnavailableError();
 
     const auto& book = getRemoteOrLocalBook(id);
+
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     checkEnoughStorageAvailable(book, downloadPath);
-
-    auto booksList = mp_library->getBookIds();
-    for (auto b : booksList) {
-        if (b.toStdString() == book.getId())
-            throwDownloadUnavailableError(); // but why???
-    }
 
     std::shared_ptr<kiwix::Download> download;
     try {
