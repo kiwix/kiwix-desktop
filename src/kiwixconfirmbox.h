@@ -44,4 +44,21 @@ void showConfirmBox(QString title, QString text, QWidget *parent,
     });
 }
 
+template<class YesAction, class NoAction>
+void showConfirmBox(QString title, QString text, QWidget *parent,
+                    YesAction yesAction, NoAction noAction)
+{
+    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, false, parent);
+    dialog->show();
+    QObject::connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+        yesAction();
+        dialog->deleteLater();
+    });
+    QObject::connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+        noAction();
+        dialog->deleteLater();
+    });
+}
+
+
 #endif // KIWIXCONFIRMBOX_H

@@ -1,0 +1,171 @@
+/* Customized Styling for Kiwix Application */
+
+/* General Styling */
+QWidget {
+    background-color: #EAECF0;
+    color: #000000;
+}
+
+/* Top Bar Styling */
+TopWidget {
+    min-height: 48px;
+    max-height: 48px;
+    margin: 0;
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+
+TopWidget::separator {
+    background: none;
+    border: none;
+    width: 40px;
+}
+
+QToolButton {
+    background: none;
+    height: 40px;
+    width: 40px;
+    border: none;
+}
+
+SearchBar {
+    background-color: white;
+    padding: 2px 2px 2px 40px;
+    max-height: 38px;
+    margin: 2px 5px;
+    color: #666;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+SearchBar > QPushButton {
+    margin: 8px 0px 8px 12px;
+    padding: 0;
+    border: 0 solid #fff;
+    background-color: white;
+    height: 32px;
+    width: 32px;
+}
+
+TopWidget QToolButton:pressed,
+TopWidget QToolButton::hover {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    border-radius: 3px;
+}
+
+TopWidget QToolButton::menu-button {
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+}
+
+
+
+TopWidget QToolButton::menu-indicator {
+    width: 0; /* it can be hidden at all by setting 0px */
+    height: 0;
+   /* subcontrol-origin: padding; */
+}
+
+TopWidget QToolButton#backButton {
+    margin-left: 6px;  /* see also: void WebViewBackMenu::showEvent(QShowEvent *) { geo.setX(geo.x() + 6); } */
+}
+
+TopWidget QToolButton#fullScreenButton {
+    margin-right: 6px;
+}
+
+/* Menu Styling */
+QMenu {
+    border: none;
+    min-width: 320px;
+}
+
+QMenu::item {
+    min-width: 320px;
+    min-height: 40px;
+    max-height: 40px;
+    border: 1px solid transparent;
+    padding: 2px 12px 2px 40px;     /* top right bottom left */
+}
+
+QMenu::icon {
+    min-width: 40px;
+    min-height: 40px;
+}
+
+QMenu::item:selected {
+    background-color: #D9E9FF;
+    border: 1px solid #3366CC;
+}
+
+MainMenu::indicator {
+    color: #666666;
+    width: 13px;
+    height: 13px;
+}
+
+WebViewForwardMenu::item, WebViewBackMenu::item {
+    padding: 2px 12px;
+}
+
+WebViewForwardMenu::icon, WebViewBackMenu::icon {
+    min-width: 2px;
+    min-height: 2px;
+}
+
+/* TabWidget Styling */
+QTabBar {
+    font-size: 16px;
+   /* icon-size: 24px; */
+    border-bottom: 1px solid #ccc;
+}
+
+QTabBar::tear {
+     background-color: blue;
+}
+
+QTabWidget::pane {
+    top: -2px;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+QTabBar::tab {
+    border: none;
+    border-right: 1px solid #ccc;
+    border-radius: 0;
+    padding: 2px;
+}
+
+QTabBar::tab:selected {
+    background-color: white;
+    border-bottom: 2px solid white;
+}
+
+QTabBar::tab:first {
+    padding-top: 6px;
+    padding-left: 5px;
+}
+
+QTabBar::tab:last {
+    border: none;
+}
+
+QTabBar::tab:last QToolButton {
+    font-size: 30px;
+    width: 30px; min-width: 30px; max-width: 30px;
+    height: 30px; min-height:30px; max-height:30px;
+    border-radius: 3px;
+}
+
+QTabBar::tab:last QToolButton::hover {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    border-radius: 3px;
+}
+
+/* Custom Section for New Functionality */
+/* Add your additional styles here */
