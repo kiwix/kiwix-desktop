@@ -922,3 +922,43 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
     m_sortOrderAsc = sortOrderAsc;
     emit(booksChanged());
 }
+
+void ContentManager::cancelBook(const QString& id, QModelIndex index)
+{
+    auto text = gt("cancel-download-text");
+    text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
+    showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
+        cancelBook(id);
+        emit managerModel->cancelDownload(index);
+        // Clear the download ID when cancelling the download
+        clearDownloadId(id);
+    });
+}
+// 
+void ContentManager::cancelBook(const QString& id)
+{
+    if (!mp_downloader) {
+        return;
+    }
+    auto& b = mp_library->getBookById(id);
+    auto download = mp_downloader->getDownload(b.getDownloadId());
+    if (download->getStatus() != kiwix::Download::K_COMPLETE) {
+        download->cancelDownload();
+    }
+    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
+    QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
+    // incompleted downloaded file should be perma deleted
+    eraseBookFilesFromComputer(dirPath, filename, false);
+    // Clear the download ID when cancelling the download
+    clearDownloadId(id);
+    mp_library->removeBookFromLibraryById(id);
+    mp_library->save();
+    emit(oneBookChanged(id));
+}
+// 
+void ContentManager::clearDownloadId(const QString& id)
+{
+    auto& b = mp_library->getBookById(id);
+    b.setDownloadId(""); // Clear the download ID
+}
+// 
