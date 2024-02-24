@@ -46,11 +46,11 @@ void showInfoBox(QString title, QString text, QWidget *parent)
     });
 }
 
-void showInfoBox(QString title, QString text, QWidget *parent)
-{
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, true, parent);
-    QObject::connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
-        dialog->deleteLater(); // Ensure the dialog is deleted after the OK button is clicked
-    });
-    dialog->show();
-}
+// void showInfoBox(QString title, QString text, QWidget *parent)
+// {
+//     KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, true, parent);
+//     QObject::connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+//         dialog->deleteLater(); // Ensure the dialog is deleted after the OK button is clicked
+//     });
+//     dialog->show();
+// }
