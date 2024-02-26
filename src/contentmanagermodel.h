@@ -21,8 +21,11 @@ public: // types
     typedef QMap<QString, QVariant> BookInfo;
     typedef QList<BookInfo>         BookInfoList;
 
+    // BookId -> DownloadState map
+    typedef QMap<QString, std::shared_ptr<DownloadState>> Downloads;
+
 public: // functions
-    explicit ContentManagerModel(QObject *parent = nullptr);
+    ContentManagerModel(Downloads* downloads, QObject *parent = nullptr);
     ~ContentManagerModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -63,7 +66,7 @@ private: // data
     ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;
     QMap<QString, QByteArray> iconMap;
-    QMap<QString, std::shared_ptr<DownloadState>> m_downloads;
+    Downloads& m_downloads;
 };
 
 #endif // CONTENTMANAGERMODEL_H

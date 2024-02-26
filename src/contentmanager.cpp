@@ -26,6 +26,37 @@
 namespace
 {
 
+class ContentManagerError : public std::runtime_error
+{
+public:
+    ContentManagerError(const QString& summary, const QString& details)
+        : std::runtime_error(summary.toStdString())
+        , m_details(details)
+    {}
+
+    QString summary() const { return QString::fromStdString(what()); }
+    QString details() const { return m_details; }
+
+private:
+    QString m_details;
+};
+
+void throwDownloadUnavailableError()
+{
+    throw ContentManagerError(gt("download-unavailable"),
+                              gt("download-unavailable-text"));
+}
+
+void checkEnoughStorageAvailable(const kiwix::Book& book, QString targetDir)
+{
+    QStorageInfo storage(targetDir);
+    auto bytesAvailable = storage.bytesAvailable();
+    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
+        throw ContentManagerError(gt("download-storage-error"),
+                                  gt("download-storage-error-text"));
+    }
+}
+
 // Opens the directory containing the input file path.
 // parent is the widget serving as the parent for the error dialog in case of
 // failure.
@@ -53,7 +84,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
-    managerModel = new ContentManagerModel(this);
+    managerModel = new ContentManagerModel(&m_downloads, this);
     const auto booksList = getBooksList();
     managerModel->setBooksData(booksList);
     auto treeView = mp_view->getView();
@@ -335,149 +366,163 @@ void ContentManager::openBook(const QString &id)
     }
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) {values.insert(key, QString::fromStdString((d->METH()))); continue;}}
-QMap<QString, QVariant> ContentManager::updateDownloadInfos(QString id, const QStringList &keys)
+namespace
 {
-    QMap<QString, QVariant> values;
+
+QString downloadStatus2QString(kiwix::Download::StatusResult status)
+{
+    switch(status){
+    case kiwix::Download::K_ACTIVE:   return "active";
+    case kiwix::Download::K_WAITING:  return "waiting";
+    case kiwix::Download::K_PAUSED:   return "paused";
+    case kiwix::Download::K_ERROR:    return "error";
+    case kiwix::Download::K_COMPLETE: return "completed";
+    case kiwix::Download::K_REMOVED:  return "removed";
+    default:                          return "unknown";
+    }
+}
+
+QString getDownloadInfo(const kiwix::Download& d, const QString& k)
+{
+    if (k == "id")              return QString::fromStdString(d.getDid());
+    if (k == "path")            return QString::fromStdString(d.getPath());
+    if (k == "status")          return downloadStatus2QString(d.getStatus());
+    if (k == "followedBy")      return QString::fromStdString(d.getFollowedBy());
+    if (k == "totalLength")     return QString::number(d.getTotalLength());
+    if (k == "downloadSpeed")   return QString::number(d.getDownloadSpeed());
+    if (k == "verifiedLength")  return QString::number(d.getVerifiedLength());
+    if (k == "completedLength") return QString::number(d.getCompletedLength());
+    return "";
+}
+
+} // unnamed namespace
+
+void ContentManager::downloadStarted(const kiwix::Book& book, const std::string& downloadId)
+{
+    kiwix::Book bookCopy(book);
+    bookCopy.setDownloadId(downloadId);
+    mp_library->addBookToLibrary(bookCopy);
+    mp_library->save();
+    emit(oneBookChanged(QString::fromStdString(book.getId())));
+}
+
+void ContentManager::downloadCancelled(QString bookId)
+{
+    kiwix::Book bCopy(mp_library->getBookById(bookId));
+    bCopy.setDownloadId("");
+    mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
+    mp_library->save();
+    emit(mp_library->booksChanged());
+}
+
+void ContentManager::downloadCompleted(QString bookId, QString path)
+{
+    kiwix::Book bCopy(mp_library->getBookById(bookId));
+    bCopy.setPath(QDir::toNativeSeparators(path).toStdString());
+    bCopy.setDownloadId("");
+    bCopy.setPathValid(true);
+    // removing book url so that download link in kiwix-serve is not displayed.
+    bCopy.setUrl("");
+    mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
+    mp_library->save();
+    mp_library->bookmarksChanged();
+    if (!m_local) {
+        emit(oneBookChanged(bookId));
+    } else {
+        emit(mp_library->booksChanged());
+    }
+}
+
+ContentManager::DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
+{
+    DownloadInfo values;
     if (!mp_downloader) {
         for(auto& key: keys) {
-            (void) key;
             values.insert(key, "");
         }
         return values;
     }
-    auto& b = mp_library->getBookById(id);
+
+    auto& b = mp_library->getBookById(bookId);
     std::shared_ptr<kiwix::Download> d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
-        kiwix::Book bCopy(b);
-        bCopy.setDownloadId("");
-        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
-        mp_library->save();
-        emit(mp_library->booksChanged());
         return values;
     }
 
     d->updateStatus(true);
-    if (d->getStatus() == kiwix::Download::K_COMPLETE) {
-        QString tmp(QString::fromStdString(d->getPath()));
-        kiwix::Book bCopy(b);
-        bCopy.setPath(QDir::toNativeSeparators(tmp).toStdString());
-        bCopy.setDownloadId("");
-        bCopy.setPathValid(true);
-        // removing book url so that download link in kiwix-serve is not displayed.
-        bCopy.setUrl("");
-        mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
-        mp_library->save();
-        mp_library->bookmarksChanged();
-        if (!m_local) {
-            emit(oneBookChanged(id));
-        } else {
-            emit(mp_library->booksChanged());
-        }
-    }
+
     for(auto& key: keys){
-        ADD_V("id", getDid);
-        if(key == "status") {
-            switch(d->getStatus()){
-            case kiwix::Download::K_ACTIVE:
-                values.insert(key, "active");
-                break;
-            case kiwix::Download::K_WAITING:
-                values.insert(key, "waiting");
-                break;
-            case kiwix::Download::K_PAUSED:
-                values.insert(key, "paused");
-                break;
-            case kiwix::Download::K_ERROR:
-                values.insert(key, "error");
-                break;
-            case kiwix::Download::K_COMPLETE:
-                values.insert(key, "completed");
-                break;
-            case kiwix::Download::K_REMOVED:
-                values.insert(key, "removed");
-                break;
-            default:
-                values.insert(key, "unknown");
-            }
-            continue;
-        }
-        ADD_V("followedBy", getFollowedBy);
-        ADD_V("path", getPath);
-        if(key == "totalLength") {
-            values.insert(key, QString::number(d->getTotalLength()));
-        }
-        if(key == "completedLength") {
-            values.insert(key, QString::number(d->getCompletedLength()));
-        }
-        if(key == "downloadSpeed") {
-            values.insert(key, QString::number(d->getDownloadSpeed()));
-        }
-        if(key == "verifiedLength") {
-            values.insert(key, QString::number(d->getVerifiedLength()));
-        }
+        values.insert(key, ::getDownloadInfo(*d, key));
     }
+
     return values;
 }
-#undef ADD_V
 
-QString ContentManager::downloadBook(const QString &id, QModelIndex index)
+ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId, QStringList keys)
 {
-    QString downloadStatus =  downloadBook(id);
-    QString dialogHeader, dialogText;
-    if (downloadStatus.size() == 0) {
-        dialogHeader = gt("download-unavailable");
-        dialogText = gt("download-unavailable-text");
-    } else if (downloadStatus == "storage_error") {
-        dialogHeader = gt("download-storage-error");
-        dialogText = gt("download-storage-error-text");
-    } else {
-        emit managerModel->startDownload(index);
-        return downloadStatus;
+    if ( !keys.contains("status") ) keys.append("status");
+    if ( !keys.contains("path")   ) keys.append("path");
+
+    const DownloadInfo result = getDownloadInfo(bookId, keys);
+
+    if ( result.isEmpty() ) {
+        downloadCancelled(bookId);
+    } else if ( result["status"] == "completed" ) {
+        downloadCompleted(bookId, result["path"].toString());
     }
-    showInfoBox(dialogHeader, dialogText, mp_view);
-    return downloadStatus;
+
+    return result;
 }
 
+void ContentManager::downloadBook(const QString &id, QModelIndex index)
+{
+    try
+    {
+        downloadBook(id);
+        emit managerModel->startDownload(index);
+    }
+    catch ( const ContentManagerError& err )
+    {
+        showInfoBox(err.summary(), err.details(), mp_view);
+    }
+}
 
-QString ContentManager::downloadBook(const QString &id)
+const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
+{
+    try {
+        QMutexLocker locker(&remoteLibraryLocker);
+        return mp_remoteLibrary->getBookById(id.toStdString());
+    } catch (...) {
+        return mp_library->getBookById(id);
+    }
+}
+
+void ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
-        return "";
-    const auto& book = [&]()->const kiwix::Book& {
-        try {
-            QMutexLocker locker(&remoteLibraryLocker);
-            return mp_remoteLibrary->getBookById(id.toStdString());
-        } catch (...) {
-            return mp_library->getBookById(id);
-        }
-    }();
+        throwDownloadUnavailableError();
+
+    const auto& book = getRemoteOrLocalBook(id);
     auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
-    QStorageInfo storage(downloadPath);
-    auto bytesAvailable = storage.bytesAvailable();
-    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        return "storage_error";
-    }
+    checkEnoughStorageAvailable(book, downloadPath);
+
     auto booksList = mp_library->getBookIds();
-    for (auto b : booksList)
+    for (auto b : booksList) {
         if (b.toStdString() == book.getId())
-            return "";
+            throwDownloadUnavailableError(); // but why???
+    }
+
     std::shared_ptr<kiwix::Download> download;
     try {
         std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
         const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
         download = mp_downloader->startDownload(book.getUrl(), options);
     } catch (std::exception& e) {
-        return "";
+        throwDownloadUnavailableError();
     }
-    kiwix::Book bookCopy(book);
-    bookCopy.setDownloadId(download->getDid());
-    mp_library->addBookToLibrary(bookCopy);
-    mp_library->save();
-    emit(oneBookChanged(id));
-    return QString::fromStdString(download->getDid());
+    downloadStarted(book, download->getDid());
 }
 
 void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
@@ -556,8 +601,10 @@ void ContentManager::pauseBook(const QString& id)
     }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() == kiwix::Download::K_ACTIVE)
+    if (download->getStatus() == kiwix::Download::K_ACTIVE) {
         download->pauseDownload();
+        m_downloads[id]->pause();
+    }
 }
 
 void ContentManager::resumeBook(const QString& id, QModelIndex index)
@@ -573,8 +620,10 @@ void ContentManager::resumeBook(const QString& id)
     }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() == kiwix::Download::K_PAUSED)
+    if (download->getStatus() == kiwix::Download::K_PAUSED) {
         download->resumeDownload();
+        m_downloads[id]->resume();
+    }
 }
 
 void ContentManager::cancelBook(const QString& id, QModelIndex index)
@@ -604,18 +653,6 @@ void ContentManager::cancelBook(const QString& id)
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit(oneBookChanged(id));
-}
-
-QStringList ContentManager::getDownloadIds()
-{
-    QStringList list;
-    if (!mp_downloader)
-        return list;
-    for(auto& id: mp_downloader->getDownloadIds()) {
-        qInfo() << QString::fromStdString(id);
-        list.append(QString::fromStdString(id));
-    }
-    return list;
 }
 
 void ContentManager::setCurrentLanguage(FilterList langPairList)

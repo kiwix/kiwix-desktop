@@ -2,7 +2,6 @@
 #define CONTENTMANAGER_H
 
 #include <QObject>
-#include <math.h>
 #include "library.h"
 #include "contentmanagerview.h"
 #include <kiwix/downloader.h>
@@ -13,8 +12,6 @@
 class ContentManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
-    Q_PROPERTY(QStringList downloadIds READ getDownloadIds NOTIFY downloadsChanged)
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
 
 public: // types
@@ -23,45 +20,21 @@ public: // types
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
 
+    // XXX: potentional source of confusion with ::DownloadInfo from rownode.h
+    typedef QMap<QString, QVariant> DownloadInfo;
+
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
-    QStringList getDownloadIds();
     void setCurrentLanguage(FilterList languageList);
     void setCurrentCategoryFilter(FilterList category);
     void setCurrentContentTypeFilter(FilterList contentTypeFilter);
     bool isLocal() const { return m_local; }
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
-
-private:
-    Library* mp_library;
-    kiwix::LibraryPtr mp_remoteLibrary;
-    kiwix::Downloader* mp_downloader;
-    OpdsRequestManager m_remoteLibraryManager;
-    ContentManagerView* mp_view;
-    bool m_local = true;
-    QString m_currentLanguage;
-    QString m_searchQuery;
-    QString m_categoryFilter = "all";
-    QStringList m_contentTypeFilters;
-    kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
-    bool m_sortOrderAsc = true;
-    LanguageList m_languages;
-    QStringList m_categories;
-
-    QStringList getBookIds();
-    // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
-    void reallyEraseBook(const QString& id, bool moveToTrash);
-    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
-    BookInfoList getBooksList();
-    ContentManagerModel *managerModel;
-    QMutex remoteLibraryLocker;
-    void setCategories();
-    void setLanguages();
 
 signals:
     void filterParamsChanged();
@@ -79,9 +52,9 @@ public slots:
     QStringList getTranslations(const QStringList &keys);
     BookInfo getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
-    QMap<QString, QVariant> updateDownloadInfos(QString id, const QStringList& keys);
-    QString downloadBook(const QString& id);
-    QString downloadBook(const QString& id, QModelIndex index);
+    DownloadInfo updateDownloadInfos(QString bookId, QStringList keys);
+    void downloadBook(const QString& id);
+    void downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
@@ -98,6 +71,44 @@ public slots:
     void cancelBook(const QString& id, QModelIndex index);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
+
+private: // functions
+    QStringList getBookIds();
+    // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
+    void reallyEraseBook(const QString& id, bool moveToTrash);
+    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
+    BookInfoList getBooksList();
+    void setCategories();
+    void setLanguages();
+
+    // Get the book with the specified id from
+    // the remote or local library (in that order).
+    const kiwix::Book& getRemoteOrLocalBook(const QString &id);
+
+    void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
+    void downloadCancelled(QString bookId);
+    void downloadCompleted(QString bookId, QString path);
+    DownloadInfo getDownloadInfo(QString bookId, const QStringList& keys) const;
+
+private: // data
+    Library* mp_library;
+    kiwix::LibraryPtr mp_remoteLibrary;
+    kiwix::Downloader* mp_downloader;
+    ContentManagerModel::Downloads m_downloads;
+    OpdsRequestManager m_remoteLibraryManager;
+    ContentManagerView* mp_view;
+    bool m_local = true;
+    QString m_currentLanguage;
+    QString m_searchQuery;
+    QString m_categoryFilter = "all";
+    QStringList m_contentTypeFilters;
+    kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
+    bool m_sortOrderAsc = true;
+    LanguageList m_languages;
+    QStringList m_categories;
+
+    ContentManagerModel *managerModel;
+    QMutex remoteLibraryLocker;
 };
 
 #endif // CONTENTMANAGER_H

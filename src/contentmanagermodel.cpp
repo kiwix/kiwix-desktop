@@ -7,8 +7,9 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(QObject *parent)
+ContentManagerModel::ContentManagerModel(Downloads* downloads, QObject *parent)
     : QAbstractItemModel(parent)
+    , m_downloads(*downloads)
 {
     connect(&td, &ThumbnailDownloader::oneThumbnailDownloaded, this, &ContentManagerModel::updateImage);
 }
@@ -297,15 +298,11 @@ void ContentManagerModel::updateDownload(QString bookId)
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->getDownloadState()->pause();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->getDownloadState()->resume();
     emit dataChanged(index, index);
 }
 
