@@ -1,6 +1,7 @@
 #ifndef FULLSCREENWINDOW_H
 #define FULLSCREENWINDOW_H
 
+class QMenu;
 #include <QWidget>
 #include <QWebEngineView>
 #include "fullscreennotification.h"

@@ -27,7 +27,7 @@ public:
     QWidget getMainView();
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
     bool eventFilter(QObject* object, QEvent* event) override;
 
 private slots:

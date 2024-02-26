@@ -316,7 +316,7 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
             QStringList tagList = QString::fromStdString(b->getTags()).split(';');
             QMap<QString, bool> displayTagMap;
             for(auto tag: tagList) {
-              if (tag[0] == "_") {
+              if (tag[0] == '_') {
                 auto splitTag = tag.split(":");
                 displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
               }

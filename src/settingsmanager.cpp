@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <kiwix/tools.h>
 #include <QLocale>
+#include <QList>
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
@@ -147,8 +148,18 @@ void SettingsManager::initSettings()
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
-    QVariant defaultLang = QVariant::fromValue(QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0));
-    m_langList = m_settings.value("language", {defaultLang}).toList();
+    QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
+
+    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list, so use append() for Qt5+Qt6 compat
+    defaultLangList.append(defaultLang);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QVariant defaultLangVariant(defaultLangList); // Qt5 requires explicit conversion from QList to QVariant
+    m_langList = m_settings.value("language", defaultLangVariant).toList();
+#else
+    m_langList = m_settings.value("language", defaultLangList).toList();
+#endif
+
     m_categoryList = m_settings.value("category", {}).toList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }

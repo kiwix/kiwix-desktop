@@ -66,6 +66,9 @@ namespace QtLP_Private {
 
 class QT_QTLOCKEDFILE_EXPORT QtLockedFile : public QFile
 {
+    //Q_OBJECT
+    // TODO: Uncomment Q_OBJECT. Setting Q_OBJECT here causes this error:
+    // undefined reference to `vtable for QtLP_Private::QtLockedFile'
 public:
     enum LockMode { NoLock = 0, ReadLock, WriteLock };
 
