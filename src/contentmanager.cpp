@@ -630,27 +630,16 @@ void ContentManager::eraseBook(const QString& id)
 
 void ContentManager::pauseBook(const QString& id, QModelIndex index)
 {
-    pauseBook(id);
-    emit managerModel->pauseDownload(index);
-}
-
-void ContentManager::pauseBook(const QString& id)
-{
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
         download->pauseDownload();
         m_downloads[id]->pause();
     }
+    emit managerModel->pauseDownload(index);
 }
 
 void ContentManager::resumeBook(const QString& id, QModelIndex index)
-{
-    resumeBook(id);
-    emit managerModel->resumeDownload(index);
-}
-
-void ContentManager::resumeBook(const QString& id)
 {
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
@@ -658,6 +647,7 @@ void ContentManager::resumeBook(const QString& id)
         download->resumeDownload();
         m_downloads[id]->resume();
     }
+    emit managerModel->resumeDownload(index);
 }
 
 void ContentManager::cancelBook(const QString& id)

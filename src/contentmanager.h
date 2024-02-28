@@ -59,8 +59,6 @@ public slots:
     void updateRemoteLibrary(const QString& content);
     void updateLanguages(const QString& content);
     void updateCategories(const QString& content);
-    void pauseBook(const QString& id);
-    void resumeBook(const QString& id);
     void pauseBook(const QString& id, QModelIndex index);
     void resumeBook(const QString& id, QModelIndex index);
     // cancelBook() asks for confirmation (reallyCancelBook() doesn't)
