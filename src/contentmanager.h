@@ -64,7 +64,7 @@ public slots:
     void pauseBook(const QString& id, QModelIndex index);
     void resumeBook(const QString& id, QModelIndex index);
     // cancelBook() asks for confirmation (reallyCancelBook() doesn't)
-    void cancelBook(const QString& id, QModelIndex index);
+    void cancelBook(const QString& id);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
     void updateDownloads();
