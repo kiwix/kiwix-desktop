@@ -636,7 +636,7 @@ void ContentManager::pauseBook(const QString& id, QModelIndex index)
         download->pauseDownload();
         m_downloads[id]->pause();
     }
-    emit managerModel->pauseDownload(index);
+    managerModel->triggerDataUpdateAt(index);
 }
 
 void ContentManager::resumeBook(const QString& id, QModelIndex index)
@@ -647,7 +647,7 @@ void ContentManager::resumeBook(const QString& id, QModelIndex index)
         download->resumeDownload();
         m_downloads[id]->resume();
     }
-    emit managerModel->resumeDownload(index);
+    managerModel->triggerDataUpdateAt(index);
 }
 
 void ContentManager::cancelBook(const QString& id)

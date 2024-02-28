@@ -209,8 +209,7 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     const auto item = getRowNode(row);
     item->setIconData(imageData);
     m_iconMap[url] = imageData;
-    const QModelIndex index = this->index(row, 0);
-    emit dataChanged(index, index);
+    triggerDataUpdateAt( this->index(row, 0) );
 }
 
 void ContentManagerModel::updateDownload(QString bookId)
@@ -219,18 +218,11 @@ void ContentManagerModel::updateDownload(QString bookId)
 
     if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
-        const QModelIndex newIndex = this->index(row, 5);
-        emit dataChanged(newIndex, newIndex);
+        triggerDataUpdateAt( this->index(row, 5) );
     }
 }
 
-
-void ContentManagerModel::pauseDownload(QModelIndex index)
-{
-    emit dataChanged(index, index);
-}
-
-void ContentManagerModel::resumeDownload(QModelIndex index)
+void ContentManagerModel::triggerDataUpdateAt(QModelIndex index)
 {
     emit dataChanged(index, index);
 }
@@ -243,7 +235,6 @@ void ContentManagerModel::removeDownload(QString bookId)
 
     const size_t row = it.value();
     getRowNode(row)->setDownloadState(nullptr);
-    const QModelIndex index = this->index(row, 5);
-    emit dataChanged(index, index);
+    triggerDataUpdateAt( this->index(row, 5) );
 }
 
