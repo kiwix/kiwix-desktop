@@ -142,6 +142,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="darkModeCheckbox">
+       <property name="text">
+        <string>Dark Mode</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
@@ -149,3 +156,6 @@
  <resources/>
  <connections/>
 </ui>
+
+
+<!-- added the check box part for the dark mode in the code  -->
