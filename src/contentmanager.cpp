@@ -672,7 +672,6 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
         cancelBook(id);
-        emit managerModel->removeDownload(id);
     });
 }
 
@@ -683,7 +682,7 @@ void ContentManager::cancelBook(const QString& id)
     if (download->getStatus() != kiwix::Download::K_COMPLETE) {
         download->cancelDownload();
     }
-    m_downloads.remove(id);
+    removeDownload(id);
 
     QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
     QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
