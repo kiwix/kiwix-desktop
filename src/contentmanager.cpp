@@ -671,11 +671,11 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
     auto text = gt("cancel-download-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
-        cancelBook(id);
+        reallyCancelBook(id);
     });
 }
 
-void ContentManager::cancelBook(const QString& id)
+void ContentManager::reallyCancelBook(const QString& id)
 {
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
