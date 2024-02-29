@@ -108,8 +108,8 @@ void KiwixApp::init()
         m_library.asyncUpdateFromDir(monitorDir);
     });
     QString monitorDir = m_settingsManager.getMonitorDir();
-    QString downloadDir = m_settingsManager.getDownloadDir();
-    auto dirList = QSet<QString>({monitorDir, downloadDir});
+    //QString downloadDir = m_settingsManager.getDownloadDir();
+    auto dirList = QSet<QString>({monitorDir /*, downloadDir*/});
     for (auto dir : dirList) {
         if (dir != "") {
             m_library.setMonitorDirZims(dir, m_library.getLibraryZimsFromDir(dir));
