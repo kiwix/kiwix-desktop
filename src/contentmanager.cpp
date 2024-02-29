@@ -486,13 +486,7 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
 DownloadInfo ContentManager::getDownloadInfo(QString bookId) const
 {
     auto& b = mp_library->getBookById(bookId);
-    std::shared_ptr<kiwix::Download> d;
-    try {
-        d = mp_downloader->getDownload(b.getDownloadId());
-    } catch(...) {
-        return {};
-    }
-
+    const auto d = mp_downloader->getDownload(b.getDownloadId());
     d->updateStatus(true);
 
     return {
@@ -508,9 +502,7 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState && !downloadState->paused ) {
-        if ( downloadInfo.isEmpty() ) {
-            downloadDisappeared(bookId);
-        } else if ( downloadInfo["status"] == "completed" ) {
+        if ( downloadInfo["status"].toString() == "completed" ) {
             downloadCompleted(bookId, downloadInfo["path"].toString());
         } else {
             downloadState->update(downloadInfo);
@@ -521,8 +513,14 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
 
 void ContentManager::updateDownloads()
 {
+    DownloadInfo downloadInfo;
     for ( const auto& bookId : m_downloads.keys() ) {
-        const auto downloadInfo = getDownloadInfo(bookId);
+        try {
+            downloadInfo = getDownloadInfo(bookId);
+        } catch ( ... ) {
+            downloadDisappeared(bookId);
+            continue;
+        }
 
         emit downloadUpdated(bookId, downloadInfo);
     }
