@@ -402,7 +402,7 @@ void ContentManager::removeDownload(QString bookId)
     managerModel->removeDownload(bookId);
 }
 
-void ContentManager::downloadCancelled(QString bookId)
+void ContentManager::downloadDisappeared(QString bookId)
 {
     removeDownload(bookId);
     kiwix::Book bCopy(mp_library->getBookById(bookId));
@@ -459,7 +459,7 @@ void ContentManager::updateDownload(QString bookId)
         const auto downloadInfo = getDownloadInfo(bookId);
 
         if ( downloadInfo.isEmpty() ) {
-            downloadCancelled(bookId);
+            downloadDisappeared(bookId);
         } else if ( downloadInfo["status"] == "completed" ) {
             downloadCompleted(bookId, downloadInfo["path"].toString());
         } else {
