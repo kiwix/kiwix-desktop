@@ -5,6 +5,8 @@
 #include <QModelIndex>
 #include <QVariant>
 #include <QIcon>
+#include <QMutex>
+#include <QMutexLocker>
 #include "thumbnaildownloader.h"
 #include "rownode.h"
 #include <memory>
@@ -30,23 +32,28 @@ public: // types
 
     public:
         void set(const QString& id, DownloadStatePtr d) {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
             impl[id] = d;
         }
 
         DownloadStatePtr value(const QString& id) const {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
             return impl.value(id);
         }
 
         QList<QString> keys() const {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
             return impl.keys();
         }
 
         void remove(const QString& id) {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
             impl.remove(id);
         }
 
     private:
         ImplType impl;
+        mutable QMutex mutex;
     };
 
 
