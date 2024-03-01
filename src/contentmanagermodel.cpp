@@ -272,8 +272,7 @@ void ContentManagerModel::updateDownload(QString bookId)
 
     if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
-        const QModelIndex rootNodeIndex = this->index(0, 0);
-        const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
+        const QModelIndex newIndex = this->index(row, 5);
         emit dataChanged(newIndex, newIndex);
     }
 }
