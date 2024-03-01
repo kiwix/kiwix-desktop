@@ -543,7 +543,7 @@ void ContentManager::downloadBook(const QString &id, QModelIndex index)
         downloadBook(id);
         auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
         const auto newDownload = std::make_shared<DownloadState>();
-        m_downloads[id] = newDownload;
+        m_downloads.set(id, newDownload);
         node->setDownloadState(newDownload);
     }
     catch ( const ContentManagerError& err )

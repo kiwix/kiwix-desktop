@@ -22,7 +22,33 @@ public: // types
     typedef QList<BookInfo>         BookInfoList;
 
     // BookId -> DownloadState map
-    typedef QMap<QString, std::shared_ptr<DownloadState>> Downloads;
+    class Downloads
+    {
+    private:
+        typedef std::shared_ptr<DownloadState> DownloadStatePtr;
+        typedef QMap<QString, DownloadStatePtr> ImplType;
+
+    public:
+        void set(const QString& id, DownloadStatePtr d) {
+            impl[id] = d;
+        }
+
+        DownloadStatePtr value(const QString& id) const {
+            return impl.value(id);
+        }
+
+        QList<QString> keys() const {
+            return impl.keys();
+        }
+
+        void remove(const QString& id) {
+            impl.remove(id);
+        }
+
+    private:
+        ImplType impl;
+    };
+
 
 public: // functions
     explicit ContentManagerModel(QObject *parent = nullptr);
