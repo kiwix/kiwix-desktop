@@ -656,7 +656,9 @@ void ContentManager::pauseBook(const QString& id, QModelIndex index)
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
         download->pauseDownload();
-        m_downloads[id]->pause();
+        if ( const auto downloadState = m_downloads.value(id) ) {
+            downloadState->pause();
+        }
     }
     managerModel->triggerDataUpdateAt(index);
 }
@@ -667,7 +669,9 @@ void ContentManager::resumeBook(const QString& id, QModelIndex index)
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_PAUSED) {
         download->resumeDownload();
-        m_downloads[id]->resume();
+        if ( const auto downloadState = m_downloads.value(id) ) {
+            downloadState->resume();
+        }
     }
     managerModel->triggerDataUpdateAt(index);
 }

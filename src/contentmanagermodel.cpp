@@ -123,10 +123,7 @@ void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads
         const auto rowNode = createNode(bookItem);
 
         // Restore download state during model updates (filtering, etc)
-        const auto downloadIter = downloads.constFind(rowNode->getBookId());
-        if ( downloadIter != downloads.constEnd() ) {
-            rowNode->setDownloadState(downloadIter.value());
-        }
+        rowNode->setDownloadState(downloads.value(rowNode->getBookId()));
 
         bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
         rootNode->appendChild(rowNode);
