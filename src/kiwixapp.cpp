@@ -216,21 +216,17 @@ void KiwixApp::printPage()
         if(!webview)
             return;
 
+    const auto onPrintFinished = [=](bool success) {
+        if (!success) {
+            showMessage(gt("print-page-error"), gt("error-title"), QMessageBox::Critical);
+        }
+        delete printer;
+    };
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        webview->page()->print(printer, [=](bool success) {
-            if (!success) {
-                showMessage(gt("print-page-error"), gt("error-title"), QMessageBox::Critical);
-            }
-            delete printer;
-        });
+        webview->page()->print(printer, onPrintFinished);
 #else
         webview->print(printer);
-        connect(webview, &QWebEngineView::printFinished, this, [=](bool success) {
-            if (!success) {
-                showMessage(gt("print-page-error"), gt("error-title"), QMessageBox::Critical);
-            }
-            delete printer;
-        });
+        connect(webview, &QWebEngineView::printFinished, this, onPrintFinished);
 #endif
     }
 }

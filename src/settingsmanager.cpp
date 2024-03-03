@@ -150,15 +150,21 @@ void SettingsManager::initSettings()
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
 
-    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list, so use append() for Qt5+Qt6 compat
+    /*
+     * Qt5 & Qt6 have slightly different behaviors with regards to initializing QVariant.
+     * The below approach is specifically chosen to work with both versions.
+     * m_langList initialized with defaultLang should be of the form:
+     *
+     * (QVariant(QString, "English|en"))
+     *
+     * and not
+     *
+     * QList(QVariant(QChar, 'E'), QVariant(QChar, 'n'), QVariant(QChar, 'g'), ...
+     */
+    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
     defaultLangList.append(defaultLang);
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QVariant defaultLangVariant(defaultLangList); // Qt5 requires explicit conversion from QList to QVariant
+    QVariant defaultLangVariant(defaultLangList);
     m_langList = m_settings.value("language", defaultLangVariant).toList();
-#else
-    m_langList = m_settings.value("language", defaultLangList).toList();
-#endif
 
     m_categoryList = m_settings.value("category", {}).toList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
