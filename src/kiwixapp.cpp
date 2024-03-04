@@ -40,8 +40,13 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         QMessageBox::critical(nullptr, "Translation error", e.what());
         return;
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     m_qtTranslator.load(QLocale(), "qt", "_",
                         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+#else
+    m_qtTranslator.load(QLocale(), "qt", "_",
+                        QLibraryInfo::path(QLibraryInfo::TranslationsPath));
+#endif
     installTranslator(&m_qtTranslator);
 
     m_appTranslator.load(QLocale(), "kiwix-desktop", "_", ":/i18n/");
@@ -201,6 +206,7 @@ void KiwixApp::printPage()
 {
     if(!getTabWidget()->currentZimView())
         return;
+
     QPrinter* printer = new QPrinter();
     QPrintDialog printDialog(printer, mp_mainWindow);
     printDialog.setStyle(nullptr);
@@ -209,12 +215,19 @@ void KiwixApp::printPage()
         auto webview = getTabWidget()->currentWebView();
         if(!webview)
             return;
-        webview->page()->print(printer, [=](bool success) {
-            if (!success) {
-                showMessage(gt("print-page-error"), gt("error-title"), QMessageBox::Critical);
-            }
-            delete printer;
-        });
+
+    const auto onPrintFinished = [=](bool success) {
+        if (!success) {
+            showMessage(gt("print-page-error"), gt("error-title"), QMessageBox::Critical);
+        }
+        delete printer;
+    };
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        webview->page()->print(printer, onPrintFinished);
+#else
+        webview->print(printer);
+        connect(webview, &QWebEngineView::printFinished, this, onPrintFinished);
+#endif
     }
 }
 
@@ -329,25 +342,25 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 
 void KiwixApp::createAction()
 {
-    CREATE_ACTION_ICON_SHORTCUT(KiwixServeAction, "share", gt("local-kiwix-server"), QKeySequence(Qt::CTRL+Qt::Key_I));
+    CREATE_ACTION_ICON_SHORTCUT(KiwixServeAction, "share", gt("local-kiwix-server"), QKeySequence(Qt::CTRL | Qt::Key_I));
 
-    CREATE_ACTION_ICON_SHORTCUT(RandomArticleAction, "random", gt("random-article"), QKeySequence(Qt::CTRL+Qt::Key_R));
+    CREATE_ACTION_ICON_SHORTCUT(RandomArticleAction, "random", gt("random-article"), QKeySequence(Qt::CTRL | Qt::Key_R));
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
             this, [=]() { this->openRandomUrl(false); });
 
-    CREATE_ACTION_SHORTCUT(OpenHomePageAction, gt("home-page"), QKeySequence(Qt::ALT + Qt::Key_Home));
+    CREATE_ACTION_SHORTCUT(OpenHomePageAction, gt("home-page"), QKeySequence(Qt::ALT | Qt::Key_Home));
 
     if (QGuiApplication::isLeftToRight()) {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-left", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Left));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-left", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Left));
     } else {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-right", gt("back"), QKeySequence(Qt::ALT + Qt::Key_Right));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-right", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Right));
     }
     DISABLE_ACTION(HistoryBackAction);
 
     if (QGuiApplication::isLeftToRight()) {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-right", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Right));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-right", gt("forward"), QKeySequence(Qt::ALT | Qt::Key_Right));
     } else {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-left", gt("forward"), QKeySequence(Qt::ALT + Qt::Key_Left));
+      CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-left", gt("forward"), QKeySequence(Qt::ALT | Qt::Key_Left));
     }
     DISABLE_ACTION(HistoryForwardAction);
 
@@ -357,13 +370,13 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON_SHORTCUT(NewTabAction,"new-tab-icon", gt("new-tab"), QKeySequence::AddTab);
 
-    CREATE_ACTION_ICON_SHORTCUTS(CloseTabAction, "close", gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL + Qt::Key_F4), QKeySequence(Qt::CTRL + Qt::Key_W)}));
+    CREATE_ACTION_ICON_SHORTCUTS(CloseTabAction, "close", gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL | Qt::Key_F4), QKeySequence(Qt::CTRL | Qt::Key_W)}));
     mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
 
-    CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_T));
+    CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
     HIDE_ACTION(ReopenClosedTabAction);
 
-    CREATE_ACTION_SHORTCUT(BrowseLibraryAction, gt("browse-library"), QKeySequence(Qt::CTRL+Qt::Key_E));
+    CREATE_ACTION_SHORTCUT(BrowseLibraryAction, gt("browse-library"), QKeySequence(Qt::CTRL | Qt::Key_E));
     HIDE_ACTION(BrowseLibraryAction);
 
     CREATE_ACTION_ICON_SHORTCUT(OpenFileAction, "open-file", gt("open-file"), QKeySequence::Open);
@@ -379,10 +392,10 @@ void KiwixApp::createAction()
     HIDE_ACTION(SavePageAsAction);
     */
 
-    CREATE_ACTION_SHORTCUT(SearchArticleAction, gt("search-article"), QKeySequence(Qt::CTRL+Qt::Key_L));
+    CREATE_ACTION_SHORTCUT(SearchArticleAction, gt("search-article"), QKeySequence(Qt::CTRL | Qt::Key_L));
     HIDE_ACTION(SearchArticleAction);
 
-    CREATE_ACTION_SHORTCUT(SearchLibraryAction, gt("search-in-library"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_R));
+    CREATE_ACTION_SHORTCUT(SearchLibraryAction, gt("search-in-library"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     HIDE_ACTION(SearchLibraryAction);
 
     CREATE_ACTION(FindInPageAction, gt("find-in-page"));
@@ -400,20 +413,20 @@ void KiwixApp::createAction()
     });
     mpa_actions[ToggleFullscreenAction]->setCheckable(true);
 
-    CREATE_ACTION_SHORTCUT(ToggleTOCAction, gt("table-of-content"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_1));
+    CREATE_ACTION_SHORTCUT(ToggleTOCAction, gt("table-of-content"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_1));
     HIDE_ACTION(ToggleTOCAction);
 
-    CREATE_ACTION_ONOFF_ICON_SHORTCUT(ToggleReadingListAction, "reading-list-active", "reading-list", gt("reading-list"), QKeySequence(Qt::CTRL+Qt::SHIFT+Qt::Key_2));
+    CREATE_ACTION_ONOFF_ICON_SHORTCUT(ToggleReadingListAction, "reading-list-active", "reading-list", gt("reading-list"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_2));
 
-    CREATE_ACTION_SHORTCUTS(ZoomInAction, gt("zoom-in"), QList<QKeySequence>({QKeySequence::ZoomIn, QKeySequence(Qt::CTRL+Qt::Key_Equal)}));
+    CREATE_ACTION_SHORTCUTS(ZoomInAction, gt("zoom-in"), QList<QKeySequence>({QKeySequence::ZoomIn, QKeySequence(Qt::CTRL | Qt::Key_Equal)}));
 
     CREATE_ACTION_SHORTCUT(ZoomOutAction, gt("zoom-out"), QKeySequence::ZoomOut);
 
-    CREATE_ACTION_SHORTCUT(ZoomResetAction, gt("zoom-reset"), QKeySequence(Qt::CTRL+Qt::Key_0));
+    CREATE_ACTION_SHORTCUT(ZoomResetAction, gt("zoom-reset"), QKeySequence(Qt::CTRL | Qt::Key_0));
 
-    CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL + Qt::Key_Tab));
+    CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_Tab));
 
-    CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Tab));
+    CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
 
     CREATE_ACTION_SHORTCUT(HelpAction, gt("help"), QKeySequence::HelpContents);
     HIDE_ACTION(HelpAction);
@@ -431,7 +444,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON_SHORTCUT(SettingAction, "settings", gt("settings"),  QKeySequence(Qt::Key_F12));
 
-    CREATE_ACTION_ICON_SHORTCUT(DonateAction, "donate", gt("donate-to-support-kiwix"),  QKeySequence(Qt::CTRL+Qt::Key_D));
+    CREATE_ACTION_ICON_SHORTCUT(DonateAction, "donate", gt("donate-to-support-kiwix"),  QKeySequence(Qt::CTRL | Qt::Key_D));
 
     CREATE_ACTION_ICON_SHORTCUT(ExitAction, "exit", gt("exit"), QKeySequence::Quit);
 }

@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <kiwix/tools.h>
 #include <QLocale>
+#include <QList>
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
@@ -147,8 +148,24 @@ void SettingsManager::initSettings()
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
-    QVariant defaultLang = QVariant::fromValue(QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0));
-    m_langList = m_settings.value("language", {defaultLang}).toList();
+    QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
+
+    /*
+     * Qt5 & Qt6 have slightly different behaviors with regards to initializing QVariant.
+     * The below approach is specifically chosen to work with both versions.
+     * m_langList initialized with defaultLang should be of the form:
+     *
+     * (QVariant(QString, "English|en"))
+     *
+     * and not
+     *
+     * QList(QVariant(QChar, 'E'), QVariant(QChar, 'n'), QVariant(QChar, 'g'), ...
+     */
+    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
+    defaultLangList.append(defaultLang);
+    QVariant defaultLangVariant(defaultLangList);
+    m_langList = m_settings.value("language", defaultLangVariant).toList();
+
     m_categoryList = m_settings.value("category", {}).toList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }

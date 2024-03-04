@@ -2,11 +2,12 @@
 #include "contentmanagerdelegate.h"
 #include <QApplication>
 #include <QDialog>
-#include <QStyleOptionViewItemV4>
+#include <QStyleOptionViewItem>
 #include "kiwixapp.h"
 #include <QStyleOptionViewItem>
 #include "rownode.h"
 #include "descriptionnode.h"
+#include "portutils.h"
 
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
@@ -198,7 +199,11 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
     if (index.column() == 1) {
         auto bFont = painter->font();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         bFont.setWeight(60);
+#else
+        bFont.setWeight(QFont::DemiBold);
+#endif
         eOpt.font = bFont;
     }
     QStyledItemDelegate::paint(painter, eOpt, index);
@@ -209,8 +214,8 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
     if(event->type() == QEvent::MouseButtonRelease )
     {
         QMouseEvent * e = (QMouseEvent *)event;
-        int clickX = e->x();
-        int clickY = e->y();
+        int clickX = portutils::getX(*e);
+        int clickY = portutils::getY(*e);
 
         QRect r = option.rect;
         int x,y,w,h;
@@ -238,7 +243,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 {
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
-    int clickX = mouseEvent->x();
+    int clickX = portutils::getX(*mouseEvent);
 
     QRect r = option.rect;
     int x = r.left();
