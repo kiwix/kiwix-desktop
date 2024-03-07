@@ -3,12 +3,14 @@
 		"authors": [
 			"Dnshitobu",
 			"Kalakpagh",
-			"Munkaila Sulemana"
+			"Munkaila Sulemana",
+			"Peggy"
 		]
 	},
 	"name": "Silimiinsili",
 	"error-title": "Chirimbu",
 	"error-downloader-window-title": "Di ku tooi nam deera",
+	"error-downloader-launch-message": "Haiwezekani kuzindua upakuaji, Kiwix-desktop itaanza lakini kazi zote za upakuaji hazitafanya\n kufanya kazi",
 	"error-launch-server-message": "Chiriŋ nyɛla din niŋ!",
 	"error-archive": "Ku tooi nya polo deei niŋ shee ŋɔ",
 	"open-zim": "Yoomi ZIM Fasara",
@@ -18,6 +20,7 @@
 	"home-page": "Solɔɣu",
 	"main-menu": "Piligu shee",
 	"print": "Paɣibu",
+	"print-page-error": "Chiriŋ daa nyɛla din niŋ yaabu maa shɛɛ.",
 	"new-tab": "tab palli",
 	"close-tab": "kparimi a tab",
 	"close": "Kparima",
@@ -75,6 +78,7 @@
 	"browse": "Browsɛ",
 	"about-learn-more-about-kiwix": "Bɔhimmi pam zaŋ jɛndi Kiwix",
 	"about-release-title": "Gaai",
+	"about-source-code": "\"Software\" ŋɔ nyɛla bɛ ni daa bahi shɛli tam GNU zalikpana zuɣu 3. Lihimi Kundivihira jia ŋɔ <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-reporting-problem-title": "Yɛlli zaŋ wuhi salo",
 	"about-report-issue-2": "Pahimi suɣilo bolimi yaɣa shɛli yɛlli'gola ŋɔ ni be",
 	"about-libraries-title": "Karimbu shɛhi",
@@ -109,7 +113,7 @@
 	"pictures": "Anfooninima",
 	"videos": "Siniinima",
 	"details": "Lahabali pali",
-	"yes": "ii",
+	"yes": "iin",
 	"no": "aayi",
 	"ok": "tɔr",
 	"no-filter": "Lɔŋ kani",
