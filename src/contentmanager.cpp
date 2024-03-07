@@ -60,13 +60,11 @@ void checkEnoughStorageAvailable(const kiwix::Book& book, QString targetDir)
     if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
         const QString &key = "download-storage-error-text";
         QString details = KiwixApp::instance()->getText(key);
-        QString bytesLeft = " The number of bytes available is" + 
-            QString::number(bytesAvailable);
-        QString destDirect = " The destinatinon directory is" + targetDir;
+        QString bytesLeft = QString("\nThe number of bytes available is %1").arg(bytesAvailable);
+        QString destDirect = QString("\nThe destination directory is %1").arg(targetDir);
         details.append(bytesLeft);
-        deatils.append(destDirect);
-        throw ContentManagerError(gt("download-storage-error"),
-                                  details);
+        details.append(destDirect);
+        throw ContentManagerError(gt("download-storage-error"), details);
     }
 }
 
