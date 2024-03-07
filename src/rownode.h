@@ -6,31 +6,20 @@
 #include <QIcon>
 #include "kiwix/book.h"
 
-struct DownloadInfo
-{
-    double progress;
-    QString completedLength;
-    QString downloadSpeed;
-    bool paused;
-};
+typedef QMap<QString, QVariant> DownloadInfo;
 
 class DownloadState
 {
 public:
-    DownloadState();
+    double progress = 0;
+    QString completedLength;
+    QString downloadSpeed;
+    bool paused = false;
 
-    bool isDownloading() const { return m_downloadUpdateTimer.get() != nullptr; }
-    DownloadInfo getDownloadInfo() const { return m_downloadInfo; }
-    QTimer* getDownloadUpdateTimer() const { return m_downloadUpdateTimer.get(); }
+public:
     void pause();
     void resume();
-    bool update(QString id);
-
-protected:
-    // This is non-NULL only for a pending (even if paused) download
-    std::unique_ptr<QTimer> m_downloadUpdateTimer;
-
-    DownloadInfo m_downloadInfo;
+    void update(const DownloadInfo& info);
 };
 
 class RowNode : public Node

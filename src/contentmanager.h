@@ -20,9 +20,6 @@ public: // types
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
 
-    // XXX: potentional source of confusion with ::DownloadInfo from rownode.h
-    typedef QMap<QString, QVariant> DownloadInfo;
-
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager() {}
@@ -52,7 +49,6 @@ public slots:
     QStringList getTranslations(const QStringList &keys);
     BookInfo getBookInfos(QString id, const QStringList &keys);
     void openBook(const QString& id);
-    DownloadInfo updateDownloadInfos(QString bookId, QStringList keys);
     void downloadBook(const QString& id);
     void downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
@@ -71,6 +67,7 @@ public slots:
     void cancelBook(const QString& id, QModelIndex index);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
+    void updateDownloads();
 
 private: // functions
     QStringList getBookIds();
@@ -85,6 +82,9 @@ private: // functions
     // the remote or local library (in that order).
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
 
+    std::string startDownload(const kiwix::Book& book);
+    void updateDownload(QString bookId);
+    void removeDownload(QString bookId);
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadCancelled(QString bookId);
     void downloadCompleted(QString bookId, QString path);
@@ -95,6 +95,7 @@ private: // data
     kiwix::LibraryPtr mp_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     ContentManagerModel::Downloads m_downloads;
+    QTimer m_downloadUpdateTimer;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
