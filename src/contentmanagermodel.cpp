@@ -7,7 +7,7 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(Downloads* downloads, QObject *parent)
+ContentManagerModel::ContentManagerModel(const Downloads* downloads, QObject *parent)
     : QAbstractItemModel(parent)
     , m_downloads(*downloads)
 {
@@ -245,56 +245,17 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     emit dataChanged(index, index);
 }
 
-std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
-{
-    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
-}
-
-void ContentManagerModel::startDownload(QModelIndex index)
-{
-    auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    const auto bookId = node->getBookId();
-    const auto newDownload = std::make_shared<DownloadState>();
-    m_downloads[bookId] = newDownload;
-    node->setDownloadState(newDownload);
-    QTimer *timer = newDownload->getDownloadUpdateTimer();
-    connect(timer, &QTimer::timeout, this, [=]() {
-        updateDownload(bookId);
-    });
-}
-
 void ContentManagerModel::updateDownload(QString bookId)
 {
-    const auto download = m_downloads.value(bookId);
-
-    if ( ! download )
-        return;
-
-    const bool downloadStillValid = download->update(bookId);
-
-    // The download->update() call above may result in
-    // ContentManagerModel::setBooksData() being called (through a chain
-    // of signals), which in turn will rebuild bookIdToRowMap. Hence
-    // bookIdToRowMap access must happen after it.
-
     const auto it = bookIdToRowMap.constFind(bookId);
-
-    if ( ! downloadStillValid ) {
-        m_downloads.remove(bookId);
-        if ( it != bookIdToRowMap.constEnd() ) {
-            const size_t row = it.value();
-            RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
-            rowNode.setDownloadState(nullptr);
-        }
-    }
 
     if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
-        const QModelIndex rootNodeIndex = this->index(0, 0);
-        const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
+        const QModelIndex newIndex = this->index(row, 5);
         emit dataChanged(newIndex, newIndex);
     }
 }
+
 
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
@@ -306,11 +267,16 @@ void ContentManagerModel::resumeDownload(QModelIndex index)
     emit dataChanged(index, index);
 }
 
-void ContentManagerModel::cancelDownload(QModelIndex index)
+void ContentManagerModel::removeDownload(QString bookId)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->setDownloadState(nullptr);
-    m_downloads.remove(node->getBookId());
+    const auto it = bookIdToRowMap.constFind(bookId);
+    if ( it == bookIdToRowMap.constEnd() )
+        return;
+
+    const size_t row = it.value();
+    auto& node = static_cast<RowNode&>(*rootNode->child(row));
+    node.setDownloadState(nullptr);
+    const QModelIndex index = this->index(row, 5);
     emit dataChanged(index, index);
 }
 

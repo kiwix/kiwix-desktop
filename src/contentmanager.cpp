@@ -131,6 +131,10 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     connect(&m_remoteLibraryManager, &OpdsRequestManager::categoriesReceived, this, &ContentManager::updateCategories);
     setCategories();
     setLanguages();
+
+    m_downloadUpdateTimer.start(1000);
+    connect(&m_downloadUpdateTimer, &QTimer::timeout,
+            this, &ContentManager::updateDownloads);
 }
 
 ContentManager::BookInfoList ContentManager::getBooksList()
@@ -164,7 +168,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuOpenFolder(gt("open-folder"), this);
 
     if (const auto download = bookNode->getDownloadState()) {
-        if (download->getDownloadInfo().paused) {
+        if (download->paused) {
             contextMenu.addAction(&menuResumeBook);
         } else {
             contextMenu.addAction(&menuPauseBook);
@@ -411,8 +415,15 @@ void ContentManager::downloadStarted(const kiwix::Book& book, const std::string&
     emit(oneBookChanged(QString::fromStdString(book.getId())));
 }
 
+void ContentManager::removeDownload(QString bookId)
+{
+    m_downloads.remove(bookId);
+    managerModel->removeDownload(bookId);
+}
+
 void ContentManager::downloadCancelled(QString bookId)
 {
+    removeDownload(bookId);
     kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setDownloadId("");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
@@ -422,6 +433,7 @@ void ContentManager::downloadCancelled(QString bookId)
 
 void ContentManager::downloadCompleted(QString bookId, QString path)
 {
+    removeDownload(bookId);
     kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setPath(QDir::toNativeSeparators(path).toStdString());
     bCopy.setDownloadId("");
@@ -438,7 +450,7 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     }
 }
 
-ContentManager::DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
+DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
 {
     DownloadInfo values;
     if (!mp_downloader) {
@@ -465,28 +477,49 @@ ContentManager::DownloadInfo ContentManager::getDownloadInfo(QString bookId, con
     return values;
 }
 
-ContentManager::DownloadInfo ContentManager::updateDownloadInfos(QString bookId, QStringList keys)
+void ContentManager::updateDownload(QString bookId)
 {
-    if ( !keys.contains("status") ) keys.append("status");
-    if ( !keys.contains("path")   ) keys.append("path");
+    const auto downloadState = m_downloads.value(bookId);
+    if ( downloadState && !downloadState->paused ) {
+        const auto downloadInfo = getDownloadInfo(bookId, {"status", "completedLength", "totalLength", "downloadSpeed", "path"});
 
-    const DownloadInfo result = getDownloadInfo(bookId, keys);
-
-    if ( result.isEmpty() ) {
-        downloadCancelled(bookId);
-    } else if ( result["status"] == "completed" ) {
-        downloadCompleted(bookId, result["path"].toString());
+        if ( downloadInfo.isEmpty() ) {
+            downloadCancelled(bookId);
+        } else if ( downloadInfo["status"] == "completed" ) {
+            downloadCompleted(bookId, downloadInfo["path"].toString());
+        } else {
+            downloadState->update(downloadInfo);
+            managerModel->updateDownload(bookId);
+        }
     }
-
-    return result;
 }
+
+void ContentManager::updateDownloads()
+{
+    for ( const auto& bookId : m_downloads.keys() ) {
+        updateDownload(bookId);
+    }
+}
+
+namespace
+{
+
+std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
+{
+    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
+}
+
+} // unnamed namespace
 
 void ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
     try
     {
         downloadBook(id);
-        emit managerModel->startDownload(index);
+        auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
+        const auto newDownload = std::make_shared<DownloadState>();
+        m_downloads[id] = newDownload;
+        node->setDownloadState(newDownload);
     }
     catch ( const ContentManagerError& err )
     {
@@ -504,30 +537,33 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
     }
 }
 
+std::string ContentManager::startDownload(const kiwix::Book& book)
+{
+    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+    checkEnoughStorageAvailable(book, downloadPath);
+
+    typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
+
+    const DownloadOptions downloadOptions{{"dir", downloadPath.toStdString()}};
+
+    const auto d = mp_downloader->startDownload(book.getUrl(), downloadOptions);
+    return d->getDid();
+}
+
 void ContentManager::downloadBook(const QString &id)
 {
     if (!mp_downloader)
         throwDownloadUnavailableError();
 
     const auto& book = getRemoteOrLocalBook(id);
-    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
-    checkEnoughStorageAvailable(book, downloadPath);
 
-    auto booksList = mp_library->getBookIds();
-    for (auto b : booksList) {
-        if (b.toStdString() == book.getId())
-            throwDownloadUnavailableError(); // but why???
-    }
-
-    std::shared_ptr<kiwix::Download> download;
+    std::string downloadId;
     try {
-        std::pair<std::string, std::string> downloadDir("dir", downloadPath.toStdString());
-        const std::vector<std::pair<std::string, std::string>> options = { downloadDir };
-        download = mp_downloader->startDownload(book.getUrl(), options);
+        downloadId = startDownload(book);
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
-    downloadStarted(book, download->getDid());
+    downloadStarted(book, downloadId);
 }
 
 void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
@@ -637,7 +673,7 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
         cancelBook(id);
-        emit managerModel->cancelDownload(index);
+        emit managerModel->removeDownload(id);
     });
 }
 
@@ -651,6 +687,8 @@ void ContentManager::cancelBook(const QString& id)
     if (download->getStatus() != kiwix::Download::K_COMPLETE) {
         download->cancelDownload();
     }
+    m_downloads.remove(id);
+
     QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
     QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
     // incompleted downloaded file should be perma deleted

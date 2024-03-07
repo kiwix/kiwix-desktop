@@ -25,7 +25,7 @@ public: // types
     typedef QMap<QString, std::shared_ptr<DownloadState>> Downloads;
 
 public: // functions
-    ContentManagerModel(Downloads* downloads, QObject *parent = nullptr);
+    ContentManagerModel(const Downloads* downloads, QObject *parent = nullptr);
     ~ContentManagerModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -47,17 +47,14 @@ public: // functions
 
 public slots:
     void updateImage(QString bookId, QString url, QByteArray imageData);
-    void startDownload(QModelIndex index);
     void pauseDownload(QModelIndex index);
     void resumeDownload(QModelIndex index);
-    void cancelDownload(QModelIndex index);
+    void removeDownload(QString bookId);
+    void updateDownload(QString bookId);
 
 protected: // functions
     bool canFetchMore(const QModelIndex &parent) const override;
     void fetchMore(const QModelIndex &parent) override;
-
-private: // functions
-    void updateDownload(QString bookId);
 
 private: // data
     BookInfoList m_data;
@@ -66,7 +63,7 @@ private: // data
     ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;
     QMap<QString, QByteArray> iconMap;
-    Downloads& m_downloads;
+    const Downloads& m_downloads;
 };
 
 #endif // CONTENTMANAGERMODEL_H
