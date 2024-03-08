@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
+#include "portutils.h"
 
 #include <QDebug>
 #include <QUrlQuery>
@@ -564,6 +565,9 @@ void ContentManager::downloadBook(const QString &id)
 
 void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
 {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    Q_UNUSED(moveToTrash);
+#endif
     if (fileName == "*") {
         return;
     }
@@ -770,7 +774,7 @@ QString makeHttpUrl(QString host, int port)
 } // unnamed namespace
 
 void ContentManager::updateRemoteLibrary(const QString& content) {
-    QThreadPool::globalInstance()->start([this, content]() {
+    std::function f = [this, content]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
@@ -780,7 +784,9 @@ void ContentManager::updateRemoteLibrary(const QString& content) {
         manager.readOpds(content.toStdString(), catalogUrl.toStdString());
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
-    });
+    };
+    // wrap the lambda in LambdaRunnable for Qt 5.12 and later compat
+    QThreadPool::globalInstance()->start(new portutils::LambdaRunnable(f));
 }
 
 void ContentManager::updateLanguages(const QString& content) {

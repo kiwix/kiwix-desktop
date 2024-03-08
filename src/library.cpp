@@ -1,5 +1,6 @@
 #include "library.h"
 #include "kiwixapp.h"
+#include "portutils.h"
 
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
@@ -170,9 +171,11 @@ void Library::updateFromDir(QString monitorDir)
 
 void Library::asyncUpdateFromDir(QString dir)
 {
-    QThreadPool::globalInstance()->start([this, dir]() {
+    std::function f = [this, dir]() {
         updateFromDir(dir);
-    });
+    };
+    // wrap the lambda in LambdaRunnable for Qt 5.12 and later compat
+    QThreadPool::globalInstance()->start(new portutils::LambdaRunnable(f));
 }
 
 const kiwix::Book &Library::getBookById(QString id) const
