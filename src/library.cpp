@@ -170,7 +170,7 @@ void Library::updateFromDir(QString monitorDir)
 
 void Library::asyncUpdateFromDir(QString dir)
 {
-    QtConcurrent::run( [=]() {
+    QThreadPool::globalInstance()->start([this, dir]() {
         updateFromDir(dir);
     });
 }

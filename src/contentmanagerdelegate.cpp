@@ -210,6 +210,8 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
 bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
+    Q_UNUSED(model);
+
     if(event->type() == QEvent::MouseButtonRelease )
     {
         QMouseEvent * e = (QMouseEvent *)event;
@@ -270,6 +272,8 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
 QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+
     if (index.parent().isValid()) {
         return QSize(300, 70);
     }

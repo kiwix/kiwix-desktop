@@ -22,6 +22,7 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
+#include <QThreadPool>
 
 namespace
 {
@@ -664,6 +665,8 @@ void ContentManager::resumeBook(const QString& id)
 
 void ContentManager::cancelBook(const QString& id, QModelIndex index)
 {
+    Q_UNUSED(index);
+
     auto text = gt("cancel-download-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
@@ -767,7 +770,7 @@ QString makeHttpUrl(QString host, int port)
 } // unnamed namespace
 
 void ContentManager::updateRemoteLibrary(const QString& content) {
-    QtConcurrent::run([=]() {
+    QThreadPool::globalInstance()->start([this, content]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
