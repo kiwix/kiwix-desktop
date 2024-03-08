@@ -26,6 +26,12 @@
 namespace
 {
 
+
+SettingsManager* getSettingsManager()
+{
+    return KiwixApp::instance()->getSettingsManager();
+}
+
 class ContentManagerError : public std::runtime_error
 {
 public:
@@ -108,9 +114,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
 
-    setCurrentLanguage(KiwixApp::instance()->getSettingsManager()->getLanguageList());
-    setCurrentCategoryFilter(KiwixApp::instance()->getSettingsManager()->getCategoryList());
-    setCurrentContentTypeFilter(KiwixApp::instance()->getSettingsManager()->getContentType());
+    setCurrentLanguage(getSettingsManager()->getLanguageList());
+    setCurrentCategoryFilter(getSettingsManager()->getCategoryList());
+    setCurrentContentTypeFilter(getSettingsManager()->getContentType());
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
@@ -171,7 +177,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         contextMenu.addAction(&menuCancelBook);
     } else {
         try {
-            const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            const auto book = mp_library->getBookById(id);
             auto bookPath = QString::fromStdString(book.getPath());
             contextMenu.addAction(&menuOpenBook);
             contextMenu.addAction(&menuDeleteBook);
@@ -259,7 +265,56 @@ void ContentManager::setLanguages()
     m_remoteLibraryManager.getLanguagesFromOpds();
 }
 
-#define ADD_V(KEY, METH) {if(key==KEY) values.insert(key, QString::fromStdString((b->METH())));}
+namespace
+{
+
+QString getBookTags(const kiwix::Book& b)
+{
+    QStringList tagList = QString::fromStdString(b.getTags()).split(';');
+    QMap<QString, bool> displayTagMap;
+    for(auto tag: tagList) {
+      if (tag[0] == '_') {
+        auto splitTag = tag.split(":");
+        displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
+      }
+    }
+    QStringList displayTagList;
+    if (displayTagMap["_videos"]) displayTagList << QObject::tr("Videos");
+    if (displayTagMap["_pictures"]) displayTagList << QObject::tr("Pictures");
+    if (!displayTagMap["_details"]) displayTagList << QObject::tr("Introduction only");
+    return displayTagList.join(", ");
+}
+
+QString getFaviconUrl(const kiwix::Book& b)
+{
+    std::string url;
+    try {
+        auto item = b.getIllustration(48);
+        url = item->url;
+    } catch (...) {
+    }
+    return QString::fromStdString(url);
+}
+
+QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
+{
+    if ( a == "id" )          return QString::fromStdString(b.getId());
+    if ( a == "path" )        return QString::fromStdString(b.getPath());
+    if ( a == "title" )       return QString::fromStdString(b.getTitle());
+    if ( a == "description" ) return QString::fromStdString(b.getDescription());
+    if ( a == "date" )        return QString::fromStdString(b.getDate());
+    if ( a == "url" )         return QString::fromStdString(b.getUrl());
+    if ( a == "name" )        return QString::fromStdString(b.getName());
+    if ( a == "downloadId" )  return QString::fromStdString(b.getDownloadId());
+    if ( a == "faviconUrl")   return getFaviconUrl(b);
+    if ( a == "size" )        return QString::number(b.getSize());
+    if ( a == "tags" )        return getBookTags(b);
+
+    return QVariant();
+}
+
+} // unnamed namespace
+
 ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
     BookInfo values;
@@ -274,68 +329,12 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
         }
     }();
 
-    if (nullptr == b){
-        for(auto& key:keys) {
-            (void) key;
-            values.insert(key, "");
-        }
-        return values;
+    for(auto& key: keys){
+        values.insert(key, b ? getBookAttribute(*b, key) : "");
     }
 
-    for(auto& key: keys){
-        ADD_V("id", getId);
-        ADD_V("path", getPath);
-        ADD_V("title", getTitle);
-        ADD_V("description", getDescription);
-        ADD_V("date", getDate);
-        ADD_V("url", getUrl);
-        ADD_V("name", getName);
-        ADD_V("downloadId", getDownloadId);
-        if (key == "faviconMimeType") {
-            std::string mimeType;
-            try {
-                auto item = b->getIllustration(48);
-                mimeType = item->mimeType;
-            } catch (...) {
-                const kiwix::Book::Illustration tempIllustration;
-                mimeType = tempIllustration.mimeType;
-            }
-            values.insert(key, QString::fromStdString(mimeType));
-        }
-        if (key == "faviconUrl") {
-            std::string url;
-            try {
-                auto item = b->getIllustration(48);
-                url = item->url;
-            } catch (...) {
-                const kiwix::Book::Illustration tempIllustration;
-                url = tempIllustration.url;
-            }
-            values.insert(key, QString::fromStdString(url));
-        }
-        if (key == "size") {
-            values.insert(key, QString::number(b->getSize()));
-        }
-        if (key == "tags") {
-            QStringList tagList = QString::fromStdString(b->getTags()).split(';');
-            QMap<QString, bool> displayTagMap;
-            for(auto tag: tagList) {
-              if (tag[0] == '_') {
-                auto splitTag = tag.split(":");
-                displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
-              }
-            }
-            QStringList displayTagList;
-            if (displayTagMap["_videos"]) displayTagList << tr("Videos");
-            if (displayTagMap["_pictures"]) displayTagList << tr("Pictures");
-            if (!displayTagMap["_details"]) displayTagList << tr("Introduction only");
-            QString s = displayTagList.join(", ");
-            values.insert(key, s);
-        }
-    }
     return values;
 }
-#undef ADD_V
 
 void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
@@ -344,7 +343,7 @@ void ContentManager::openBookWithIndex(const QModelIndex &index)
         auto bookNode = static_cast<Node*>(index.internalPointer());
         bookId = bookNode->getBookId();
         // check if the book is available in local library, will throw std::out_of_range if it isn't.
-        KiwixApp::instance()->getLibrary()->getBookById(bookId);
+        mp_library->getBookById(bookId);
         if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
             return;
         openBook(bookId);
@@ -384,19 +383,6 @@ QString downloadStatus2QString(kiwix::Download::StatusResult status)
     case kiwix::Download::K_REMOVED:  return "removed";
     default:                          return "unknown";
     }
-}
-
-QString getDownloadInfo(const kiwix::Download& d, const QString& k)
-{
-    if (k == "id")              return QString::fromStdString(d.getDid());
-    if (k == "path")            return QString::fromStdString(d.getPath());
-    if (k == "status")          return downloadStatus2QString(d.getStatus());
-    if (k == "followedBy")      return QString::fromStdString(d.getFollowedBy());
-    if (k == "totalLength")     return QString::number(d.getTotalLength());
-    if (k == "downloadSpeed")   return QString::number(d.getDownloadSpeed());
-    if (k == "verifiedLength")  return QString::number(d.getVerifiedLength());
-    if (k == "completedLength") return QString::number(d.getCompletedLength());
-    return "";
 }
 
 } // unnamed namespace
@@ -445,38 +431,32 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     }
 }
 
-DownloadInfo ContentManager::getDownloadInfo(QString bookId, const QStringList &keys) const
+DownloadInfo ContentManager::getDownloadInfo(QString bookId) const
 {
-    DownloadInfo values;
-    if (!mp_downloader) {
-        for(auto& key: keys) {
-            values.insert(key, "");
-        }
-        return values;
-    }
-
     auto& b = mp_library->getBookById(bookId);
     std::shared_ptr<kiwix::Download> d;
     try {
         d = mp_downloader->getDownload(b.getDownloadId());
     } catch(...) {
-        return values;
+        return {};
     }
 
     d->updateStatus(true);
 
-    for(auto& key: keys){
-        values.insert(key, ::getDownloadInfo(*d, key));
-    }
-
-    return values;
+    return {
+             { "status"          , downloadStatus2QString(d->getStatus())   },
+             { "completedLength" , QString::number(d->getCompletedLength()) },
+             { "totalLength"     , QString::number(d->getTotalLength())     },
+             { "downloadSpeed"   , QString::number(d->getDownloadSpeed())   },
+             { "path"            , QString::fromStdString(d->getPath())     }
+    };
 }
 
 void ContentManager::updateDownload(QString bookId)
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState && !downloadState->paused ) {
-        const auto downloadInfo = getDownloadInfo(bookId, {"status", "completedLength", "totalLength", "downloadSpeed", "path"});
+        const auto downloadInfo = getDownloadInfo(bookId);
 
         if ( downloadInfo.isEmpty() ) {
             downloadCancelled(bookId);
@@ -534,7 +514,7 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
 
 std::string ContentManager::startDownload(const kiwix::Book& book)
 {
-    auto downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+    auto downloadPath = getSettingsManager()->getDownloadDir();
     checkEnoughStorageAvailable(book, downloadPath);
 
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
@@ -601,7 +581,7 @@ void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
     } else {
         emit(oneBookChanged(id));
     }
-    KiwixApp::instance()->getSettingsManager()->deleteSettings(id);
+    getSettingsManager()->deleteSettings(id);
     emit booksChanged();
 }
 
@@ -609,7 +589,7 @@ void ContentManager::eraseBook(const QString& id)
 {
     auto text = gt("delete-book-text");
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-    const auto moveToTrash = KiwixApp::instance()->getSettingsManager()->getMoveToTrash();
+    const auto moveToTrash = getSettingsManager()->getMoveToTrash();
 #else
     const auto moveToTrash = false; // we do not support move to trash functionality for qt versions below 5.15
 #endif
@@ -632,9 +612,6 @@ void ContentManager::pauseBook(const QString& id, QModelIndex index)
 
 void ContentManager::pauseBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
@@ -651,9 +628,6 @@ void ContentManager::resumeBook(const QString& id, QModelIndex index)
 
 void ContentManager::resumeBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_PAUSED) {
@@ -674,9 +648,6 @@ void ContentManager::cancelBook(const QString& id, QModelIndex index)
 
 void ContentManager::cancelBook(const QString& id)
 {
-    if (!mp_downloader) {
-        return;
-    }
     auto& b = mp_library->getBookById(id);
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() != kiwix::Download::K_COMPLETE) {
@@ -712,7 +683,7 @@ void ContentManager::setCurrentLanguage(FilterList langPairList)
     if (m_currentLanguage == newLanguage)
         return;
     m_currentLanguage = newLanguage;
-    KiwixApp::instance()->getSettingsManager()->setLanguage(langPairList);
+    getSettingsManager()->setLanguage(langPairList);
     emit(currentLangChanged());
     emit(filterParamsChanged());
 }
@@ -727,7 +698,7 @@ void ContentManager::setCurrentCategoryFilter(FilterList categoryPairList)
     if (m_categoryFilter == categoryList.join(","))
         return;
     m_categoryFilter = categoryList.join(",");
-    KiwixApp::instance()->getSettingsManager()->setCategory(categoryPairList);
+    getSettingsManager()->setCategory(categoryPairList);
     emit(filterParamsChanged());
 }
 
@@ -738,7 +709,7 @@ void ContentManager::setCurrentContentTypeFilter(FilterList contentTypeFiltersPa
         contentTypeFilters.append(ctfPair.second);
     }
     m_contentTypeFilters = contentTypeFilters;
-    KiwixApp::instance()->getSettingsManager()->setContentType(contentTypeFiltersPairList);
+    getSettingsManager()->setContentType(contentTypeFiltersPairList);
     emit(filterParamsChanged());
 }
 
