@@ -127,6 +127,7 @@
 	"ok": "ok",
 	"no-filter": "Nessun filtro",
 	"open-link-in-web-browser": "Apri collegamento nel browser web",
+	"open-link-new-tab": "Apri collegamento in una nuova scheda",
 	"download-dir-dialog-title": "Sei sicuro di voler cambiare la directory di download?",
 	"download-dir-dialog-msg": "Il nuovo percorso della directory di download sarà:\n{{DIRECTORY}}",
 	"invalid-port": "Porta non valida",
