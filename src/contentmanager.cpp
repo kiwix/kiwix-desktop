@@ -670,12 +670,29 @@ void ContentManager::eraseBook(const QString& id)
 
 void ContentManager::pauseBook(const QString& id, QModelIndex index)
 {
-    auto& b = mp_library->getBookById(id);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
+    const auto downloadId = mp_library->getBookById(id).getDownloadId();
+    if ( downloadId.empty() ) {
+        // Completion of the download has been detected (and its id was reset)
+        // before the pause-download action was triggered (most likely through
+        // the context menu which can stay open for an arbitrarily long time,
+        // or, unlikely, through the ⏸ button during the last milliseconds of
+        // the download progress).
+        return;
+    }
+
+    auto download = mp_downloader->getDownload(downloadId);
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
-        download->pauseDownload();
-        if ( const auto downloadState = m_downloads.value(id) ) {
-            downloadState->pause();
+        try {
+            download->pauseDownload();
+            if ( const auto downloadState = m_downloads.value(id) ) {
+                downloadState->pause();
+            }
+        } catch (const kiwix::AriaError&) {
+            // Download has completed before the pause request was handled.
+            // Most likely the download was already complete at the time
+            // when ContentManager::pauseBook() started executing, but its
+            // completion was not yet detected (and/or handled) by the download
+            // updater thread.
         }
     }
     managerModel->triggerDataUpdateAt(index);
