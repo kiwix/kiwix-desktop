@@ -41,7 +41,6 @@ public: // functions
     void setupNodes();
     bool hasChildren(const QModelIndex &parent) const override;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
-    void refreshIcons();
 
     std::shared_ptr<RowNode> createNode(BookInfo bookItem) const;
 
@@ -57,14 +56,14 @@ protected: // functions
     void fetchMore(const QModelIndex &parent) override;
 
 private: // functions
-    QVariant getThumbnail(const BookInfo& bookItem) const;
+    QVariant getThumbnail(const QVariant& faviconEntry) const;
     RowNode* getRowNode(size_t row);
 
 private: // data
     BookInfoList m_data;
     std::shared_ptr<RowNode> rootNode;
     int zimCount = 0;
-    ThumbnailDownloader td;
+    mutable ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;
     QMap<QString, QByteArray> m_iconMap;
     const Downloads& m_downloads;
