@@ -34,13 +34,18 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
     const auto displayRole = role == Qt::DisplayRole;
     const auto additionalInfoRole = role == Qt::UserRole+1;
     if (displayRole || additionalInfoRole) {
-        const QVariant r = item->data(index.column());
-        if ( index.column() == 0 && r.type() == QVariant::String ) {
-            // Thumbnail was requested but what we have is only its URL
-            return QVariant();
-        } else {
+        QVariant r = item->data(index.column());
+        if ( index.column() != 0 )
             return r;
-        }
+
+        r = getThumbnail(r);
+
+        if ( r.type() == QVariant::ByteArray )
+            return r;
+
+        const QString faviconUrl = r.toString();
+        if ( !faviconUrl.isEmpty() )
+            td.addDownload(faviconUrl, item->getBookId());
     }
 
     return QVariant();
@@ -120,9 +125,8 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
 
 // Returns either data of the thumbnail (as a QByteArray) or a URL (as a
 // QString) from where the actual data can be obtained.
-QVariant ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
+QVariant ContentManagerModel::getThumbnail(const QVariant& faviconEntry) const
 {
-    const QVariant faviconEntry = bookItem["favicon"];
     if ( faviconEntry.type() == QVariant::ByteArray )
         return faviconEntry;
 
@@ -135,7 +139,7 @@ QVariant ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
 std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
 {
     QString id = bookItem["id"].toString();
-    const QVariant bookIcon = getThumbnail(bookItem);
+    const QVariant bookIcon = getThumbnail(bookItem["favicon"]);
     std::weak_ptr<RowNode> weakRoot = rootNode;
     auto rowNodePtr = std::shared_ptr<RowNode>(new
                                     RowNode({bookIcon, bookItem["title"],
@@ -169,23 +173,6 @@ void ContentManagerModel::setupNodes()
     endResetModel();
 }
 
-void ContentManagerModel::refreshIcons()
-{
-    if (KiwixApp::instance()->getContentManager()->isLocal())
-        return;
-    td.clearQueue();
-    for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
-        auto& rowNode = *getRowNode(i);
-        const QVariant favicon = rowNode.data(0);
-        if ( favicon.type() == QVariant::String ) {
-            const auto faviconUrl = favicon.toString();
-            if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
-                td.addDownload(faviconUrl, rowNode.getBookId());
-            }
-        }
-    }
-}
-
 bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
 {
     auto item = static_cast<Node*>(parent.internalPointer());
@@ -210,7 +197,6 @@ void ContentManagerModel::fetchMore(const QModelIndex &parent)
     beginInsertRows(QModelIndex(), zimCount, zimCount + zimsToFetch - 1);
     zimCount += zimsToFetch;
     endInsertRows();
-    refreshIcons();
 }
 
 void ContentManagerModel::sort(int column, Qt::SortOrder order)
