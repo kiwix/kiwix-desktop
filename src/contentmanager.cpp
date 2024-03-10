@@ -722,10 +722,24 @@ void ContentManager::cancelBook(const QString& id)
 
 void ContentManager::reallyCancelBook(const QString& id)
 {
-    auto& b = mp_library->getBookById(id);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() != kiwix::Download::K_COMPLETE) {
+    const auto downloadId = mp_library->getBookById(id).getDownloadId();
+    if ( downloadId.empty() ) {
+        // Completion of the download has been detected (and its id was reset)
+        // before the confirmation to cancel the download was granted.
+        return;
+    }
+
+    auto download = mp_downloader->getDownload(downloadId);
+    try {
         download->cancelDownload();
+    } catch (const kiwix::AriaError&) {
+        // Download has completed before the cancel request was handled.
+        // Most likely the download was already complete at the time
+        // when ContentManager::reallyCancelBook() started executing, but
+        // its completion was not yet detected (and/or handled) by the
+        // download updater thread (letting the code pass past the empty
+        // downloadId check above).
+        return;
     }
     removeDownload(id);
 
