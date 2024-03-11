@@ -10,6 +10,7 @@
 #include "fullscreenwindow.h"
 #include <QMouseEvent>
 #include <QWebEngineFullScreenRequest>
+#include <QToolButton>
 
 class TabBar : public QTabBar
 {
@@ -49,6 +50,7 @@ public:
     virtual QSize tabSizeHint(int index) const;
     void openFindInPageBar();
     void closeTabsByZimId(const QString &id);
+    int tabIndexOf(QObject *object);
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -79,6 +81,18 @@ private slots:
     void onTabMoved(int from, int to);
     void onCurrentChanged(int index);
     void onWebviewHistoryActionChanged(QWebEnginePage::WebAction action, bool enabled);
+};
+
+class TabCloseButton : public QToolButton
+{
+public:
+    TabCloseButton(QWidget *parent = nullptr, QObject *parent_view = nullptr)
+        : QToolButton(parent), parent_view(parent_view){};
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
+private:
+    QObject *parent_view;
 };
 
 #endif // TABWIDGET_H

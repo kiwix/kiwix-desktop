@@ -69,7 +69,7 @@ TabBar::TabBar(QWidget *parent) :
                 mp_stackedWidget->insertWidget(index, view);
                 emit tabDisplayed(TabType::SettingsTab);
                 insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
-                QToolButton *tb = new QToolButton(this);
+                TabCloseButton *tb = new TabCloseButton(this, view);
                 tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
                 setTabButton(index, QTabBar::RightSide, tb);
                 setCurrentIndex(index);
@@ -162,7 +162,7 @@ ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
     }
     mp_stackedWidget->insertWidget(index, tab);
     index = insertTab(index, "");
-    QToolButton *tb = new QToolButton(this);
+    TabCloseButton *tb = new TabCloseButton(this, tab);
     tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
     setTabButton(index, QTabBar::RightSide, tb);
     if (setCurrent) {
@@ -275,6 +275,29 @@ void TabBar::closeTabsByZimId(const QString &id)
         }
     }
 }
+
+/**
+ * @brief Finds the index of the tab the object resides in. Currently, the depth
+ * only extends to finding direct view objects and webview inside ZimView 
+ * objects
+ * 
+ * @param object 
+ * @return int 
+ */
+int TabBar::tabIndexOf(QObject *object)
+{
+    for (int index = 0; index <= mp_stackedWidget->count(); index++)
+    {
+        auto widget = mp_stackedWidget->widget(index);
+        if (widget == object)
+            return index;
+        if (ZimView* zv = qobject_cast<ZimView*>(widget))
+            if (zv->getWebView() == object)
+                return index;
+    }
+    return -1;
+}
+
 
 void TabBar::closeTab(int index)
 {
@@ -486,4 +509,22 @@ void TabBar::onTabMoved(int from, int to)
     QWidget *w_from = mp_stackedWidget->widget(from);
     mp_stackedWidget->removeWidget(w_from);
     mp_stackedWidget->insertWidget(to, w_from);
+}
+
+void TabCloseButton::mousePressEvent(QMouseEvent *event) {
+    auto tabbar = KiwixApp::instance()->getTabWidget();
+
+    /* Issue #1053. Overtakes CloseTabAction if user tries to click the close
+       button. ClostTabAction only acts on the active tab, while clicks on
+       the close button can happen on any tab.
+    */
+    if (event->button() == Qt::LeftButton &&
+        tabbar->tabIndexOf(this->parent_view) >= 0)
+    {
+      tabbar->closeTab(tabbar->tabIndexOf(this->parent_view));
+    }
+    else
+    {
+      QToolButton::mousePressEvent(event);
+    }
 }
