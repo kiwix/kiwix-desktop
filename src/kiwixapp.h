@@ -34,7 +34,7 @@ public:
         OpenHomePageAction,
         PrintAction,
         NewTabAction,
-        CloseTabAction,
+        CloseCurrentTabAction,
         ReopenClosedTabAction,
         BrowseLibraryAction,
         OpenFileAction,

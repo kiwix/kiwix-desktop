@@ -28,7 +28,7 @@ TabBar::TabBar(QWidget *parent) :
 
     connect(app->getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
     connect(app->getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
-    connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
+    connect(app->getAction(KiwixApp::CloseCurrentTabAction), &QAction::triggered,
             this, [=]() {
                 this->closeTab(currentIndex());
             });
@@ -127,8 +127,17 @@ void TabBar::setCloseTabButton(int index)
     Q_ASSERT(index > 0 && index < realTabCount());
 
     QToolButton *tb = new QToolButton(this);
-    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
+    QAction *a = new QAction(QIcon(":/icons/close.svg"), gt("close-tab"), tb);
+    tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
+    connect(tb, &QToolButton::triggered, this, [=]() {
+        for ( int i = 0; i < realTabCount(); ++i ) {
+            if ( tb == tabButton(i, QTabBar::RightSide) ) {
+                closeTab(i);
+                return;
+            }
+        }
+    });
 }
 
 ZimView* TabBar::createNewTab(bool setCurrent, bool nextToCurrentTab)
