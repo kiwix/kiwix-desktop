@@ -52,25 +52,13 @@ TabBar::TabBar(QWidget *parent) :
 
     for (int i = 0 ; i <= 9 ; i++) {
         QAction *a = new QAction(this);
-        a->setData(QVariant::fromValue(i));
-        QKeySequence ks(Qt::ALT | (Qt::Key_0 + i));
-        a->setShortcut(ks);
+        a->setShortcut(QKeySequence(Qt::ALT | (Qt::Key_0 + i)));
         addAction(a);
         connect(a, &QAction::triggered, this, [=](){
-            QAction *a = qobject_cast<QAction*>(QObject::sender());
-            if (!a)
-                return;
-
-            bool ok;
-            int tab_n = a->data().toInt(&ok);
-            if (tab_n==0)
-                tab_n=10;
-            if (!ok)
-                return;
-            if (tab_n >= count())
-                return;
-
-            setCurrentIndex(tab_n-1);
+            const int tabIndex = i == 0 ? 9 : i - 1;
+            if (tabIndex < realTabCount()) {
+                setCurrentIndex(tabIndex);
+            }
         });
     }
 
