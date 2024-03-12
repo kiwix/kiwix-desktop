@@ -256,12 +256,13 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *wid
 
 void TabBar::closeTabsByZimId(const QString &id)
 {
-    // the last tab is + button, skip it
-    for (int i = count() - 2 ; i >= 0 ; i--) {
+    // 0th tab is always (unless this comment becomes outdated by the time you
+    // read it) the library tab, so iteration could start from 1, however we
+    // shouldn't try to save CPU cycles at the cost of the code breaking
+    // should this comment indeed become outdated ;)
+    for (int i = 0 ; i < realTabCount() ; ++i ) {
         auto *zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(i));
-        if (!zv)
-            continue;
-        if (zv->getWebView()->zimId() == id) {
+        if (zv && zv->getWebView()->zimId() == id) {
             closeTab(i);
         }
     }
