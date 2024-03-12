@@ -113,12 +113,12 @@ void TabBar::setNewTabButton()
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
 }
 
+// Returns the count of real tabs with content (excluding the last pseudo-tab
+// that acts as a button for creating new empty tabs; BTW what is the use for
+// such empty tabs?)
 int TabBar::realTabCount() const
 {
-    // The last tab is "+" in TabBar, but that isn't a real tab which displays any content hence the real count is tab count - 1
-    if (count() < 1)
-        return 0;
-    return count() - 1;
+    return count() < 1 ? 0 : count() - 1;
 }
 
 void TabBar::moveToNextTab()
@@ -133,17 +133,12 @@ void TabBar::moveToPreviousTab()
     setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
 }
 
-ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
+ZimView* TabBar::createNewTab(bool setCurrent, bool nextToCurrentTab)
 {
     auto tab = new ZimView(this, this);
-    int index;
-    if(adjacentToCurrentTab) {
-        index = currentIndex() + 1;
-    } else {
-        index = realTabCount(); // for New Tab Button
-    }
+    const int index = nextToCurrentTab ? currentIndex() + 1 : realTabCount();
     mp_stackedWidget->insertWidget(index, tab);
-    index = insertTab(index, "");
+    insertTab(index, "");
     QToolButton *tb = new QToolButton(this);
     tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
     setTabButton(index, QTabBar::RightSide, tb);
