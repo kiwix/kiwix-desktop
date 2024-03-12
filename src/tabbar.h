@@ -68,6 +68,9 @@ public slots:
     void moveToPreviousTab();
 
 private:
+    void setCloseTabButton(int index);
+
+private:
     QStackedWidget*     mp_stackedWidget;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 

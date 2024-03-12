@@ -71,9 +71,7 @@ void TabBar::openOrSwitchToSettingsTab()
     mp_stackedWidget->insertWidget(index, view);
     emit tabDisplayed(TabType::SettingsTab);
     insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
-    QToolButton *tb = new QToolButton(this);
-    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
-    setTabButton(index, QTabBar::RightSide, tb);
+    setCloseTabButton(index);
     setCurrentIndex(index);
 }
 
@@ -124,15 +122,22 @@ void TabBar::moveToPreviousTab()
     setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
 }
 
+void TabBar::setCloseTabButton(int index)
+{
+    Q_ASSERT(index > 0 && index < realTabCount());
+
+    QToolButton *tb = new QToolButton(this);
+    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
+    setTabButton(index, QTabBar::RightSide, tb);
+}
+
 ZimView* TabBar::createNewTab(bool setCurrent, bool nextToCurrentTab)
 {
     auto tab = new ZimView(this, this);
     const int index = nextToCurrentTab ? currentIndex() + 1 : realTabCount();
     mp_stackedWidget->insertWidget(index, tab);
     insertTab(index, "");
-    QToolButton *tb = new QToolButton(this);
-    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
-    setTabButton(index, QTabBar::RightSide, tb);
+    setCloseTabButton(index);
     if (setCurrent) {
         setCurrentIndex(index);
     }
