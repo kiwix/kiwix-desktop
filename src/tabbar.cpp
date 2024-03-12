@@ -282,14 +282,14 @@ void TabBar::closeTab(int index)
     if (index == this->realTabCount())
         return;
 
-    setSelectionBehaviorOnRemove(index);
-
     QWidget *view = mp_stackedWidget->widget(index);
 
     // library tab cannot be closed
     if (qobject_cast<ContentManagerView*>(view)) {
         return;
     }
+
+    setSelectionBehaviorOnRemove(index);
 
     mp_stackedWidget->removeWidget(view);
     view->setParent(nullptr);
