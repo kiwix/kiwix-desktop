@@ -289,22 +289,15 @@ void TabBar::closeTab(int index)
         return;
     }
 
-    setSelectionBehaviorOnRemove(index);
+    if ( index == currentIndex() ) {
+        setCurrentIndex(index + 1 == realTabCount() ? index - 1 : index + 1);
+    }
 
     mp_stackedWidget->removeWidget(view);
     view->setParent(nullptr);
     removeTab(index);
     view->close();
     view->deleteLater();
-}
-
-void TabBar::setSelectionBehaviorOnRemove(int index)
-{
-    if (index == count() - 2) {
-        setCurrentIndex(index - 1);
-    } else {
-        setCurrentIndex(index + 1);
-    }
 }
 
 void TabBar::onCurrentChanged(int index)
