@@ -79,7 +79,7 @@ void KiwixApp::init()
     setDesktopFileName("kiwix.desktop");
     setStyleSheet(parseStyleFromFile(":/css/style.css"));
 
-    createAction();
+    createActions();
     mp_mainWindow = new MainWindow;
     getTabWidget()->setContentManagerView(mp_manager->getView());
     getTabWidget()->setNewTabButton();
@@ -340,7 +340,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 #define HIDE_ACTION(ID) mpa_actions[ID]->setVisible(false)
 #define DISABLE_ACTION(ID) mpa_actions[ID]->setDisabled(true)
 
-void KiwixApp::createAction()
+void KiwixApp::createActions()
 {
     CREATE_ACTION_ICON_SHORTCUT(KiwixServeAction, "share", gt("local-kiwix-server"), QKeySequence(Qt::CTRL | Qt::Key_I));
 

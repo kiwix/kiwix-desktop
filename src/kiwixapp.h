@@ -98,7 +98,7 @@ public slots:
     void printVersions(std::ostream& out = std::cout);
 
 protected:
-    void createAction();
+    void createActions();
     void postInit();
 
 private:
