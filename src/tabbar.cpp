@@ -48,23 +48,7 @@ TabBar::TabBar(QWidget *parent) :
                 current->setUrl("zim://" + current->zimId() + ".zim/");
             });
     connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
-            this, [=]() {
-                SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
-                for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
-                    if (mp_stackedWidget->widget(i) == view) {
-                        setCurrentIndex(i);
-                        return;
-                    }
-                }
-                int index = currentIndex() + 1;
-                mp_stackedWidget->insertWidget(index, view);
-                emit tabDisplayed(TabType::SettingsTab);
-                insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
-                QToolButton *tb = new QToolButton(this);
-                tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
-                setTabButton(index, QTabBar::RightSide, tb);
-                setCurrentIndex(index);
-            });
+            this, &TabBar::openOrSwitchToSettingsTab);
 
     for (int i = 0 ; i <= 9 ; i++) {
         QAction *a = new QAction(this);
@@ -93,6 +77,25 @@ TabBar::TabBar(QWidget *parent) :
     // the slot relies the connection will be direct to reverting back the tab
     connect(this, SIGNAL(tabMoved(int,int)),
             this, SLOT(onTabMoved(int,int)), Qt::DirectConnection);
+}
+
+void TabBar::openOrSwitchToSettingsTab()
+{
+    SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
+    for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
+        if (mp_stackedWidget->widget(i) == view) {
+            setCurrentIndex(i);
+            return;
+        }
+    }
+    int index = currentIndex() + 1;
+    mp_stackedWidget->insertWidget(index, view);
+    emit tabDisplayed(TabType::SettingsTab);
+    insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
+    QToolButton *tb = new QToolButton(this);
+    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
+    setTabButton(index, QTabBar::RightSide, tb);
+    setCurrentIndex(index);
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {
