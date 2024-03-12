@@ -82,7 +82,9 @@ void KiwixApp::init()
     createActions();
     mp_mainWindow = new MainWindow;
     getTabWidget()->setContentManagerView(mp_manager->getView());
-    getTabWidget()->setNewTabButton(getAction(KiwixApp::NewTabAction));
+    const auto newTabAction = getAction(KiwixApp::NewTabAction);
+    getTabWidget()->setNewTabButton(newTabAction);
+    connect(newTabAction, &QAction::triggered, this, &KiwixApp::newTab);
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
@@ -126,6 +128,16 @@ KiwixApp::~KiwixApp()
     if (mp_mainWindow) {
         delete mp_mainWindow;
     }
+}
+
+void KiwixApp::newTab()
+{
+    getTabWidget()->createNewTab(true, false);
+    auto& searchBar = mp_mainWindow->getTopWidget()->getSearchBar();
+    searchBar.setFocus(Qt::MouseFocusReason);
+    searchBar.clear();
+    searchBar.clearSuggestions();
+    searchBar.hideSuggestions();
 }
 
 QString KiwixApp::findLibraryDirectory()

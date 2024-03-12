@@ -89,6 +89,7 @@ public:
     QString parseStyleFromFile(QString filePath);
 
 public slots:
+    void newTab();
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
