@@ -39,16 +39,7 @@ TabBar::TabBar(QWidget *parent) :
           });
     connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
             this, [=]() {
-                auto index = currentIndex();
-                if (index < 0)
-                    return;
-
-                // library tab cannot be closed
-                QWidget *w = mp_stackedWidget->widget(index);
-                if (qobject_cast<ContentManagerView*>(w)) {
-                    return;
-                }
-                this->closeTab(index);
+                this->closeTab(currentIndex());
             });
     connect(app->getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
             this, [=]() {
@@ -278,21 +269,16 @@ void TabBar::closeTabsByZimId(const QString &id)
 
 void TabBar::closeTab(int index)
 {
-    // the last tab is + button, cannot be closed
-    if (index == this->realTabCount())
+    // The first and last tabs (i.e. the library tab and the + (new tab) button)
+    // cannot be closed
+    if (index <= 0 || index >= this->realTabCount())
         return;
-
-    QWidget *view = mp_stackedWidget->widget(index);
-
-    // library tab cannot be closed
-    if (qobject_cast<ContentManagerView*>(view)) {
-        return;
-    }
 
     if ( index == currentIndex() ) {
         setCurrentIndex(index + 1 == realTabCount() ? index - 1 : index + 1);
     }
 
+    QWidget *view = mp_stackedWidget->widget(index);
     mp_stackedWidget->removeWidget(view);
     view->setParent(nullptr);
     removeTab(index);
