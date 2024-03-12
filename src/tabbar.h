@@ -24,7 +24,7 @@ public:
     void setStackedWidget(QStackedWidget* widget);
 
     void     setContentManagerView(ContentManagerView* view);
-    void     setNewTabButton();
+    void     setNewTabButton(QAction* newTabAction);
     ZimView* createNewTab(bool setCurrent, bool adjacentToCurrentTab);
 
     ZimView* currentZimView() {

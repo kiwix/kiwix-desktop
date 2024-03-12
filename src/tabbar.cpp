@@ -101,10 +101,10 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     setTabButton(idx, RightSide, nullptr);
 }
 
-void TabBar::setNewTabButton()
+void TabBar::setNewTabButton(QAction* newTabAction)
 {
     QToolButton *tb = new QToolButton();
-    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::NewTabAction));
+    tb->setDefaultAction(newTabAction);
     tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
     int idx = addTab("");
     setTabEnabled(idx, false);

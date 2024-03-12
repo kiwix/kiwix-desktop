@@ -82,7 +82,7 @@ void KiwixApp::init()
     createActions();
     mp_mainWindow = new MainWindow;
     getTabWidget()->setContentManagerView(mp_manager->getView());
-    getTabWidget()->setNewTabButton();
+    getTabWidget()->setNewTabButton(getAction(KiwixApp::NewTabAction));
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
