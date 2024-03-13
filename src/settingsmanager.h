@@ -11,6 +11,7 @@ class SettingsManager : public QObject
     Q_PROPERTY(int kiwixServerPort READ getKiwixServerPort NOTIFY portChanged)
     Q_PROPERTY(qreal zoomFactor MEMBER m_zoomFactor WRITE setZoomFactor NOTIFY zoomChanged)
     Q_PROPERTY(QString downloadDir MEMBER m_downloadDir WRITE setDownloadDir NOTIFY downloadDirChanged)
+    Q_PROPERTY(QString importDir MEMBER m_importDir WRITE setImportDir NOTIFY importDirChanged)
 
 public:
     typedef QList<QPair<QString, QString>> FilterList;
@@ -27,6 +28,7 @@ public:
     QString getKiwixServerIpAddress() const { return m_kiwixServerIpAddress; }
     qreal getZoomFactor() const { return m_zoomFactor; }
     QString getDownloadDir() const { return m_downloadDir; }
+    QString getImportDir() const { return m_importDir; }
     QString getMonitorDir() const { return m_monitorDir; }
     bool getMoveToTrash() const { return m_moveToTrash; }
     FilterList getLanguageList() { return deducePair(m_langList); }
@@ -38,6 +40,7 @@ public slots:
     void setKiwixServerIpAddress(QString ipAddress);
     void setZoomFactor(qreal zoomFactor);
     void setDownloadDir(QString downloadDir);
+    void setImportDir(QString importDir);
     void setMonitorDir(QString monitorDir);
     void setMoveToTrash(bool moveToTrash);
     void setLanguage(FilterList langList);
@@ -52,6 +55,7 @@ signals:
     void portChanged(int port);
     void zoomChanged(qreal zoomFactor);
     void downloadDirChanged(QString downloadDir);
+    void importDirChanged(QString importDir);
     void monitorDirChanged(QString monitorDir);
     void moveToTrashChanged(bool moveToTrash);
     void languageChanged(QList<QVariant> langList);
@@ -65,6 +69,7 @@ private:
     QString m_kiwixServerIpAddress;
     qreal m_zoomFactor;
     QString m_downloadDir;
+    QString m_importDir;
     QString m_monitorDir;
     bool m_moveToTrash;
     QList<QVariant> m_langList;

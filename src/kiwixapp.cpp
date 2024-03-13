@@ -180,7 +180,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
         _zimfile = QFileDialog::getOpenFileName(
                     getMainWindow(),
                     gt("open-zim"),
-                    QString(),
+                    QString(getSettingsManager()->getImportDir()),
                     "ZIM Files (*.zim);;Splitted ZIM Files (*.zimaa)");
 
         if (_zimfile.isEmpty()) {

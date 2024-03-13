@@ -14,18 +14,24 @@ SettingsView::SettingsView(QWidget *parent)
     connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
+    connect(ui->importBrowse, &QPushButton::clicked, this, &SettingsView::browseImportDir);
+    connect(ui->importReset, &QPushButton::clicked, this, &SettingsView::resetImportDir);
     connect(ui->monitorBrowse, &QPushButton::clicked, this, &SettingsView::browseMonitorDir);
     connect(ui->monitorClear, &QPushButton::clicked, this, &SettingsView::clearMonitorDir);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::onDownloadDirChanged);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::importDirChanged, this, &SettingsView::onImportDirChanged);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::monitorDirChanged, this, &SettingsView::onMonitorDirChanged);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, &SettingsView::onZoomChanged);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::moveToTrashChanged, this, &SettingsView::onMoveToTrashChanged);
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
+    ui->importDirLabel->setText(gt("import-directory-setting"));
     ui->monitorDirLabel->setText(gt("monitor-directory-setting"));
     ui->resetButton->setText(gt("reset"));
     ui->browseButton->setText(gt("browse"));
+    ui->importReset->setText(gt("reset"));
+    ui->importBrowse->setText(gt("browse"));
     ui->monitorClear->setText(gt("clear"));
     ui->monitorBrowse->setText(gt("browse"));
     ui->monitorHelp->setText("<b>?</b>");
@@ -38,10 +44,11 @@ SettingsView::SettingsView(QWidget *parent)
 
 }
 
-void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const bool moveToTrash)
+void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &importDir, const QString &monitorDir, const bool moveToTrash)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(downloadDir);
+    ui->importDirPath->setText(importDir);
     if (monitorDir == QString()) {
         ui->monitorClear->hide();
     }
@@ -66,6 +73,12 @@ bool SettingsView::confirmDialogDownloadDir(const QString &dir) {
     auto messageText = gt("download-dir-dialog-msg");
     messageText = messageText.replace("{{DIRECTORY}}", dir);
     return confirmDialog(messageText, gt("download-dir-dialog-title"));
+}
+
+bool SettingsView::confirmDialogImportDir(const QString &dir) {
+    auto messageText = gt("import-dir-dialog-msg");
+    messageText = messageText.replace("{{DIRECTORY}}", dir);
+    return confirmDialog(messageText, gt("import-dir-dialog-title"));
 }
 
 bool SettingsView::confirmDialogMonitorDir(const QString &dir) {
@@ -100,6 +113,34 @@ void SettingsView::browseDownloadDir()
 
     if (confirmDialogDownloadDir(dir)) {
         KiwixApp::instance()->getSettingsManager()->setDownloadDir(dir);
+    }
+}
+
+void SettingsView::resetImportDir()
+{
+    auto dir = QString::fromStdString(kiwix::getDataDirectory());
+    const auto &importDir = KiwixApp::instance()->getSettingsManager()->getImportDir();
+    if (dir == importDir) {
+        return;
+    }
+    if (confirmDialogImportDir(dir)) {
+        KiwixApp::instance()->getSettingsManager()->setImportDir(dir);
+    }
+}
+
+void SettingsView::browseImportDir()
+{
+    const auto &importDir = KiwixApp::instance()->getSettingsManager()->getImportDir();
+    QString dir = QFileDialog::getExistingDirectory(KiwixApp::instance()->getMainWindow(),
+                                                    gt("browse-directory"),
+                                                    importDir,
+                                                    QFileDialog::ShowDirsOnly);
+    if (dir == importDir || dir.isEmpty()) {
+        return;
+    }
+
+    if (confirmDialogImportDir(dir)) {
+        KiwixApp::instance()->getSettingsManager()->setImportDir(dir);
     }
 }
 
@@ -145,6 +186,11 @@ void SettingsView::setMoveToTrash(bool moveToTrash)
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
     ui->downloadDirPath->setText(dir);
+}
+
+void SettingsView::onImportDirChanged(const QString &dir)
+{
+    ui->importDirPath->setText(dir);
 }
 
 void SettingsView::onMonitorDirChanged(const QString &dir)
