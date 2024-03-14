@@ -13,6 +13,15 @@ class QMenu;
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentZimView();}
 
+namespace
+{
+
+QAction* getAction(KiwixApp::Actions action) {
+    return KiwixApp::instance()->getAction(action);
+}
+
+} // unnamed namespace
+
 TabBar::TabBar(QWidget *parent) :
     QTabBar(parent)
 {
@@ -24,21 +33,20 @@ TabBar::TabBar(QWidget *parent) :
     setMovable(true);
     setIconSize(QSize(30, 30));
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
-    auto app = KiwixApp::instance();
 
-    connect(app->getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
-    connect(app->getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
-    connect(app->getAction(KiwixApp::CloseCurrentTabAction), &QAction::triggered,
+    connect(getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
+    connect(getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
+    connect(getAction(KiwixApp::CloseCurrentTabAction), &QAction::triggered,
             this, [=]() {
                 this->closeTab(currentIndex());
             });
-    connect(app->getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
+    connect(getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
             this, [=]() {
                 auto current = this->currentWebView();
                 QUITIFNULL(current);
                 current->setUrl("zim://" + current->zimId() + ".zim/");
             });
-    connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
+    connect(getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, &TabBar::openOrSwitchToSettingsTab);
 
     for (int i = 0 ; i <= 9 ; i++) {
@@ -128,6 +136,7 @@ void TabBar::setCloseTabButton(int index)
 
     QToolButton *tb = new QToolButton(this);
     QAction *a = new QAction(QIcon(":/icons/close.svg"), gt("close-tab"), tb);
+    a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
     tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
     connect(tb, &QToolButton::triggered, this, [=]() {
