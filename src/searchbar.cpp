@@ -94,6 +94,13 @@ SearchBar::SearchBar(QWidget *parent) :
     connect(this, &QLineEdit::returnPressed, this, [=]() {
         m_returnPressed = true;
     });
+    
+    auto app = KiwixApp::instance();
+    connect(app->getAction(KiwixApp::SearchArticleAction), &QAction::triggered,
+            this, [=]() {
+                this->selectAll();
+                this->setFocus(Qt::ShortcutFocusReason);
+            });
 }
 
 void SearchBar::hideSuggestions()
@@ -129,7 +136,8 @@ void SearchBar::focusInEvent( QFocusEvent* event)
         clear();
     }
     if (event->reason() == Qt::ActiveWindowFocusReason ||
-        event->reason() == Qt::MouseFocusReason) {
+        event->reason() == Qt::MouseFocusReason ||
+        event->reason() == Qt::ShortcutFocusReason) {
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
         this, QOverload<const QModelIndex &>::of(&SearchBar::openCompletion));
     }

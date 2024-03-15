@@ -439,8 +439,7 @@ void KiwixApp::createActions()
     HIDE_ACTION(SavePageAsAction);
     */
 
-    CREATE_ACTION_SHORTCUT(SearchArticleAction, gt("search-article"), QKeySequence(Qt::CTRL | Qt::Key_L));
-    HIDE_ACTION(SearchArticleAction);
+    CREATE_ACTION_SHORTCUTS(SearchArticleAction, gt("search-article"), QList<QKeySequence>({QKeySequence(Qt::Key_F6), QKeySequence(Qt::CTRL | Qt::Key_L), QKeySequence(Qt::ALT | Qt::Key_D)}));
 
     CREATE_ACTION_SHORTCUT(SearchLibraryAction, gt("search-in-library"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     HIDE_ACTION(SearchLibraryAction);
