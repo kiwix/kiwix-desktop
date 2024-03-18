@@ -7,8 +7,9 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(QObject *parent)
+ContentManagerModel::ContentManagerModel(const Downloads* downloads, QObject *parent)
     : QAbstractItemModel(parent)
+    , m_downloads(*downloads)
 {
     connect(&td, &ThumbnailDownloader::oneThumbnailDownloaded, this, &ContentManagerModel::updateImage);
 }
@@ -110,9 +111,8 @@ void ContentManagerModel::setBooksData(const BookInfoList& data)
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap<QString, QByteArray> iconMap) const
+QByteArray ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
 {
-    const auto faviconUrl = bookItem["faviconUrl"].toString();
     QString id = bookItem["id"].toString();
     QByteArray bookIcon;
     try {
@@ -123,10 +123,18 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem, QMap
         bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
         bookIcon.detach(); // deep copy
     } catch (...) {
-        if (iconMap.contains(faviconUrl)) {
-            bookIcon = iconMap[faviconUrl];
+        const auto faviconUrl = bookItem["faviconUrl"].toString();
+        if (m_iconMap.contains(faviconUrl)) {
+            bookIcon = m_iconMap[faviconUrl];
         }
     }
+    return bookIcon;
+}
+
+std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
+{
+    QString id = bookItem["id"].toString();
+    const QByteArray bookIcon = getThumbnail(bookItem);
     std::weak_ptr<RowNode> weakRoot = rootNode;
     auto rowNodePtr = std::shared_ptr<RowNode>(new
                                     RowNode({bookIcon, bookItem["title"],
@@ -146,7 +154,7 @@ void ContentManagerModel::setupNodes()
     beginResetModel();
     bookIdToRowMap.clear();
     for (auto bookItem : m_data) {
-        const auto rowNode = createNode(bookItem, iconMap);
+        const auto rowNode = createNode(bookItem);
 
         // Restore download state during model updates (filtering, etc)
         const auto downloadIter = m_downloads.constFind(rowNode->getBookId());
@@ -174,7 +182,7 @@ void ContentManagerModel::refreshIcons()
             auto book = app->getLibrary()->getBookById(id);
             auto item = book.getIllustration(48);
         } catch (...) {
-            if (faviconUrl != "" && !iconMap.contains(faviconUrl)) {
+            if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
                 td.addDownload(faviconUrl, id);
             }
         }
@@ -239,81 +247,43 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
     const size_t row = it.value();
     const auto item = static_cast<RowNode*>(rootNode->child(row).get());
     item->setIconData(imageData);
-    iconMap[url] = imageData;
+    m_iconMap[url] = imageData;
     const QModelIndex index = this->index(row, 0);
     emit dataChanged(index, index);
 }
 
-std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
-{
-    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
-}
-
-void ContentManagerModel::startDownload(QModelIndex index)
-{
-    auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-    const auto bookId = node->getBookId();
-    const auto newDownload = std::make_shared<DownloadState>();
-    m_downloads[bookId] = newDownload;
-    node->setDownloadState(newDownload);
-    QTimer *timer = newDownload->getDownloadUpdateTimer();
-    connect(timer, &QTimer::timeout, this, [=]() {
-        updateDownload(bookId);
-    });
-}
-
 void ContentManagerModel::updateDownload(QString bookId)
 {
-    const auto download = m_downloads.value(bookId);
-
-    if ( ! download )
-        return;
-
-    const bool downloadStillValid = download->update(bookId);
-
-    // The download->update() call above may result in
-    // ContentManagerModel::setBooksData() being called (through a chain
-    // of signals), which in turn will rebuild bookIdToRowMap. Hence
-    // bookIdToRowMap access must happen after it.
-
     const auto it = bookIdToRowMap.constFind(bookId);
-
-    if ( ! downloadStillValid ) {
-        m_downloads.remove(bookId);
-        if ( it != bookIdToRowMap.constEnd() ) {
-            const size_t row = it.value();
-            RowNode& rowNode = static_cast<RowNode&>(*rootNode->child(row));
-            rowNode.setDownloadState(nullptr);
-        }
-    }
 
     if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
-        const QModelIndex rootNodeIndex = this->index(0, 0);
-        const QModelIndex newIndex = this->index(row, 5, rootNodeIndex);
+        const QModelIndex newIndex = this->index(row, 5);
         emit dataChanged(newIndex, newIndex);
     }
 }
 
+
 void ContentManagerModel::pauseDownload(QModelIndex index)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->getDownloadState()->pause();
     emit dataChanged(index, index);
 }
 
 void ContentManagerModel::resumeDownload(QModelIndex index)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->getDownloadState()->resume();
     emit dataChanged(index, index);
 }
 
-void ContentManagerModel::cancelDownload(QModelIndex index)
+void ContentManagerModel::removeDownload(QString bookId)
 {
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    node->setDownloadState(nullptr);
-    m_downloads.remove(node->getBookId());
+    const auto it = bookIdToRowMap.constFind(bookId);
+    if ( it == bookIdToRowMap.constEnd() )
+        return;
+
+    const size_t row = it.value();
+    auto& node = static_cast<RowNode&>(*rootNode->child(row));
+    node.setDownloadState(nullptr);
+    const QModelIndex index = this->index(row, 5);
     emit dataChanged(index, index);
 }
 

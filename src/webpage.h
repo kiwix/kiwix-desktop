@@ -5,6 +5,7 @@
 
 class WebPage : public QWebEnginePage
 {
+	Q_OBJECT
 public:
     explicit WebPage(QObject *parent = nullptr);
 

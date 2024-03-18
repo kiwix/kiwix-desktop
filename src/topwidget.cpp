@@ -4,6 +4,7 @@
 #include "kiwixapp.h"
 #include "mainmenu.h"
 #include "tabbar.h"
+#include "portutils.h"
 
 #include <QMouseEvent>
 #include <QAction>
@@ -48,12 +49,13 @@ TopWidget::TopWidget(QWidget *parent) :
     addAction(KiwixApp::instance()->getAction(KiwixApp::OpenFileAction));
 
     QMenu* menu = new MainMenu();
-    QAction* menuAction = new QAction(this);
-    menuAction->setIcon(QIcon(":/icons/more.svg"));
-    menuAction->setMenu(menu);
-    menuAction->setToolTip(gt("main-menu"));
+    QToolButton *toolButton = new QToolButton(menu);
+    toolButton->setIcon(QIcon(":/icons/more.svg"));
+    toolButton->setPopupMode(QToolButton::InstantPopup);
+    toolButton->setToolTip(gt("main-menu"));
+    toolButton->setMenu(menu);
+    addWidget(toolButton);
 
-    addAction(menuAction);
     setContextMenuPolicy( Qt::PreventContextMenu );
 
 #if !SYSTEMTITLEBAR
@@ -92,7 +94,8 @@ void TopWidget::mousePressEvent(QMouseEvent *event) {
     if (event->button() != Qt::LeftButton)
         return;
 
-    m_cursorPos = event->globalPos() + frameGeometry().topLeft() - parentWidget()->frameGeometry().topLeft();
+    QPoint globalPos = portutils::getGlobalPos(*event);
+    m_cursorPos = globalPos + frameGeometry().topLeft() - parentWidget()->frameGeometry().topLeft();
     m_timestamp = event->timestamp();
     event->accept();
 }
@@ -101,8 +104,9 @@ void TopWidget::mouseMoveEvent(QMouseEvent *event) {
     if (event->timestamp() <= m_timestamp)
         return;
 
+    QPoint globalPos = portutils::getGlobalPos(*event);
     m_timestamp = event->timestamp();
-    auto delta = event->globalPos() - m_cursorPos;
+    auto delta = globalPos - m_cursorPos;
     parentWidget()->move(delta);
     event->accept();
 }

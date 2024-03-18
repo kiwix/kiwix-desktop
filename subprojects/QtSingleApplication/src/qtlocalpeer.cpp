@@ -38,11 +38,11 @@
 **
 ****************************************************************************/
 
-
 #include "qtlocalpeer.h"
 #include <QCoreApplication>
 #include <QDataStream>
 #include <QTime>
+#include <QRegularExpression>
 
 #if defined(Q_OS_WIN)
 #include <QLibrary>
@@ -76,15 +76,25 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
 #if defined(Q_OS_WIN)
         id = id.toLower();
 #endif
-        prefix = id.section(QLatin1Char('/'), -1);
+        prefix = id.section(u'/', -1);
     }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     prefix.remove(QRegExp("[^a-zA-Z]"));
+#else
+    prefix.remove(QRegularExpression("[^a-zA-Z]"));
+#endif
     prefix.truncate(6);
 
     QByteArray idc = id.toUtf8();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     quint16 idNum = qChecksum(idc.constData(), idc.size());
+#else
+    QByteArrayView v = QByteArrayView(idc);
+    quint16 idNum = qChecksum(v);
+#endif
+
     socketName = QLatin1String("qtsingleapp-") + prefix
-                 + QLatin1Char('-') + QString::number(idNum, 16);
+                 + u'-' + QString::number(idNum, 16);
 
 #if defined(Q_OS_WIN)
     if (!pProcessIdToSessionId) {
@@ -97,12 +107,12 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
         socketName += QLatin1Char('-') + QString::number(sessionId, 16);
     }
 #else
-    socketName += QLatin1Char('-') + QString::number(::getuid(), 16);
+    socketName += u'-' + QString::number(::getuid(), 16);
 #endif
 
     server = new QLocalServer(this);
     QString lockName = QDir(QDir::tempPath()).absolutePath()
-                       + QLatin1Char('/') + socketName
+                       + u'/' + socketName
                        + QLatin1String("-lockfile");
     lockFile.setFileName(lockName);
     lockFile.open(QIODevice::ReadWrite);
@@ -122,7 +132,7 @@ bool QtLocalPeer::isClient()
 #if defined(Q_OS_UNIX) && (QT_VERSION >= QT_VERSION_CHECK(4,5,0))
     // ### Workaround
     if (!res && server->serverError() == QAbstractSocket::AddressInUseError) {
-        QFile::remove(QDir::cleanPath(QDir::tempPath())+QLatin1Char('/')+socketName);
+        QFile::remove(QDir::cleanPath(QDir::tempPath())+u'/'+socketName);
         res = server->listen(socketName);
     }
 #endif

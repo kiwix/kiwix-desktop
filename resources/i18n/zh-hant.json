@@ -128,6 +128,7 @@
 	"ok": "好",
 	"no-filter": "無篩選",
 	"open-link-in-web-browser": "在網路瀏覽器開啟連結",
+	"open-link-new-tab": "在新分頁開啟連結",
 	"download-dir-dialog-title": "您確定您要更改下載目錄嗎？",
 	"download-dir-dialog-msg": "新目錄路徑會是：\n{{DIRECTORY}}",
 	"invalid-port": "無效通訊埠",

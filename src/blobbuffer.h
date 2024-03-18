@@ -6,6 +6,7 @@
 
 class BlobBuffer : public QBuffer
 {
+	Q_OBJECT
 public:
     BlobBuffer(zim::Blob m_blob);
     virtual ~BlobBuffer() = default;

@@ -1,10 +1,10 @@
 #ifndef WEBVIEW_H
 #define WEBVIEW_H
 
+#include <QMenu>
 #include <QWebEngineView>
 #include <QIcon>
 #include <QWheelEvent>
-#include <QMenu>
 
 #include "findinpagebar.h"
 
@@ -69,6 +69,8 @@ private slots:
 private:
     void addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const;
     void applyCorrectZoomFactor();
+    QMenu* createStandardContextMenu();
+    QMenu* createLinkContextMenu();
 };
 
 #endif // WEBVIEW_H

@@ -30,7 +30,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
 SOURCES += \
@@ -124,6 +124,7 @@ HEADERS += \
     src/fullscreennotification.h \
     src/menuproxystyle.h \
     src/zimview.h \
+    src/portutils.h \
 
 FORMS += \
     src/choiceitem.ui \
@@ -183,12 +184,12 @@ unix {
   INSTALLS += mime_file
 }
 
-PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 libzim >= 8.0.0\")
+PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 kiwix < 14.0.0 libzim >= 9.0.0 libzim < 10.0.0\")
 
 QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
-LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 libzim >= 8.0.0\")
+LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 kiwix < 14.0.0 libzim >= 9.0.0 libzim < 10.0.0\")
 
 RESOURCES += \
     resources/kiwix.qrc \

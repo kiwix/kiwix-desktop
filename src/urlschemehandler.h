@@ -5,6 +5,7 @@
 
 class UrlSchemeHandler : public QWebEngineUrlSchemeHandler
 {
+	Q_OBJECT
 public:
     UrlSchemeHandler();
     void requestStarted(QWebEngineUrlRequestJob *request);

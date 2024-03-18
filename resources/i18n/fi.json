@@ -82,6 +82,8 @@
 	"about-libraries-title": "Kirjastot",
 	"fullscreen-notification": "Olet nyt koko näytön tilassa. Paina ESC poistuaksesi!",
 	"local-files": "Paikalliset tiedostot",
+	"category": "Luokka",
+	"language": "Kieli",
 	"hide": "Piilota",
 	"open-in-browser": "Avaa selaimessa",
 	"start-kiwix-server": "Käynnistä Kiwix-palvelin",

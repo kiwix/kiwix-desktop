@@ -1,3 +1,5 @@
+class QMenu;
+
 #include "fullscreenwindow.h"
 #include <QAction>
 
