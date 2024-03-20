@@ -110,14 +110,12 @@ bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
         const auto mouseEvent = static_cast<QMouseEvent*>(event);
         const int tabRegion = getTabBar()->height() + getTopWidget()->height() + 30;
         int clickY = portutils::getY(*mouseEvent);
-
         // We don't have to check for visibilty as calling hide() on a hidden widget, or show() on a non-hidden widget is a no-op
         if (clickY == 0) {
             showTabAndTop();
         } else if(clickY >= tabRegion) {
             hideTabAndTop();
         }
-        return true;
     }
     return false;
 }
