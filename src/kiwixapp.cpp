@@ -79,10 +79,12 @@ void KiwixApp::init()
     setDesktopFileName("kiwix.desktop");
     setStyleSheet(parseStyleFromFile(":/css/style.css"));
 
-    createAction();
+    createActions();
     mp_mainWindow = new MainWindow;
     getTabWidget()->setContentManagerView(mp_manager->getView());
-    getTabWidget()->setNewTabButton();
+    const auto newTabAction = getAction(KiwixApp::NewTabAction);
+    getTabWidget()->setNewTabButton(newTabAction);
+    connect(newTabAction, &QAction::triggered, this, &KiwixApp::newTab);
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
@@ -126,6 +128,16 @@ KiwixApp::~KiwixApp()
     if (mp_mainWindow) {
         delete mp_mainWindow;
     }
+}
+
+void KiwixApp::newTab()
+{
+    getTabWidget()->createNewTab(true, false);
+    auto& searchBar = mp_mainWindow->getTopWidget()->getSearchBar();
+    searchBar.setFocus(Qt::MouseFocusReason);
+    searchBar.clear();
+    searchBar.clearSuggestions();
+    searchBar.hideSuggestions();
 }
 
 QString KiwixApp::findLibraryDirectory()
@@ -340,7 +352,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 #define HIDE_ACTION(ID) mpa_actions[ID]->setVisible(false)
 #define DISABLE_ACTION(ID) mpa_actions[ID]->setDisabled(true)
 
-void KiwixApp::createAction()
+void KiwixApp::createActions()
 {
     CREATE_ACTION_ICON_SHORTCUT(KiwixServeAction, "share", gt("local-kiwix-server"), QKeySequence(Qt::CTRL | Qt::Key_I));
 
@@ -370,8 +382,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON_SHORTCUT(NewTabAction,"new-tab-icon", gt("new-tab"), QKeySequence::AddTab);
 
-    CREATE_ACTION_ICON_SHORTCUTS(CloseTabAction, "close", gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL | Qt::Key_F4), QKeySequence(Qt::CTRL | Qt::Key_W)}));
-    mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
+    CREATE_ACTION_SHORTCUTS(CloseCurrentTabAction, gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL | Qt::Key_F4), QKeySequence(Qt::CTRL | Qt::Key_W)}));
 
     CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
     HIDE_ACTION(ReopenClosedTabAction);
