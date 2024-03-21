@@ -24,9 +24,11 @@ void SearchButton::set_searchMode(bool searchMode)
     } else {
         auto kiwixApp = KiwixApp::instance();
         if (kiwixApp->isCurrentArticleBookmarked()) {
-            setIcon(QIcon(":/icons/reading-list-active.svg"));
+            setIcon(QIcon(":/icons/star.svg"));
+            setToolTip(gt("add-bookmark"));
         } else {
-            setIcon(QIcon(":/icons/reading-list.svg"));
+            setIcon(QIcon(":/icons/star-active.svg"));
+            setToolTip(gt("remove-bookmark"));
         }
         setIconSize(QSize(25, 25));
     }

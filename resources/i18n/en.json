@@ -30,6 +30,8 @@
     "set-fullscreen":"Set fullscreen",
     "quit-fullscreen":"Quit fullScreen",
     "table-of-content":"Table of content",
+    "add-bookmark": "Add to the reading list",
+    "remove-bookmark": "Remove from the reading list",
     "reading-list":"Reading list",
     "reading-list-title":"Reading List",
     "zoom-in":"Zoom in",
