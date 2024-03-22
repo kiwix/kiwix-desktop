@@ -20,6 +20,7 @@ public Q_SLOTS:
     void setZoom(int zoomPercent);
     void setMoveToTrash(bool moveToTrash);
     void onDownloadDirChanged(const QString &dir);
+    void languageSelected(const int &languageIndex);
     void onMonitorDirChanged(const QString &dir);
     void onZoomChanged(qreal zoomFactor);
     void onMoveToTrashChanged(bool moveToTrash);
