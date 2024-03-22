@@ -182,7 +182,23 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
             showDownloadProgress(painter, r, *downloadState);
         }
         else {
-            baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
+            if (option.state & QStyle::State_MouseOver) {
+                baseButton->setStyleSheet("background-color: #eaecf0;"
+                                          "border: 0;"
+                                          "font-weight: bold;"
+                                          "font-family: Selawik;"
+                                          "color: blue;"
+                                          "margin: 0;");
+                baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
+            }else{
+                baseButton->setStyleSheet("background-color: white;"
+                                          "border: 0;"
+                                          "font-weight: bold;"
+                                          "font-family: Selawik;"
+                                          "color: blue;"
+                                          "margin: 0;");
+                baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
+            }
         }
         return;
     }
@@ -193,6 +209,9 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         QPixmap pix;
         pix.loadFromData(iconData);
         QIcon icon(pix);
+        if (option.state & QStyle::State_MouseOver) {
+            painter->fillRect(QRect(x, y, w, h), QColor("#eaecf0"));
+        }
         icon.paint(painter, QRect(x+10, y+10, 30, 50));
         return;
     }
