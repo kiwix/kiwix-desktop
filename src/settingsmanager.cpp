@@ -170,10 +170,14 @@ void SettingsManager::initSettings()
      *
      * QList(QVariant(QChar, 'E'), QVariant(QChar, 'n'), QVariant(QChar, 'g'), ...
      */
+
     QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
     defaultLangList.append(defaultLang);
     QVariant defaultLangVariant(defaultLangList);
     m_langList = m_settings.value("language", defaultLangVariant).toList();
+
+    
+    // ui->comboBoxLanguage->addItems(languageList);
 
     m_categoryList = m_settings.value("category", {}).toList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
