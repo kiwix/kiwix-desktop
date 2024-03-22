@@ -414,12 +414,10 @@ void KiwixApp::createActions()
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
             this, [=]() { getTabWidget()->openFindInPageBar(); });
     
-    bool fullScreenKeyUndefined = (QKeySequence(QKeySequence::FullScreen).toString()).isEmpty();
-    if (fullScreenKeyUndefined) {
-        CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"), Qt::Key_F11);
-    } else {
-        CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"), QKeySequence::FullScreen);
-    }
+    const auto fullScreenKeySeq = QKeySequence(QKeySequence::FullScreen).isEmpty()
+                                ? Qt::Key_F11
+                                : QKeySequence::FullScreen;
+    CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"), fullScreenKeySeq);
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
         auto action = mpa_actions[ToggleFullscreenAction];
