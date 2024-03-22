@@ -13,15 +13,21 @@ SearchButton::SearchButton(QWidget *parent) :
     setFlat(true);
     setIcon(QIcon(":/icons/search.svg"));
     connect(this, &QPushButton::clicked, this, &SearchButton::on_buttonClicked);
+
+    /* No focus as search button should do nothing in search mode */
+    this->setFocusPolicy(Qt::NoFocus);
 }
 
 void SearchButton::set_searchMode(bool searchMode)
 {
     m_searchMode = searchMode;
     if (m_searchMode) {
+        this->setFocusPolicy(Qt::NoFocus);
         setIcon(QIcon(":/icons/search.svg"));
         setIconSize(QSize(27, 27));
     } else {
+        /* Bookmark button focus should not fall through to trigger search*/
+        this->setFocusPolicy(Qt::StrongFocus);
         auto kiwixApp = KiwixApp::instance();
         if (kiwixApp->isCurrentArticleBookmarked()) {
             setIcon(QIcon(":/icons/reading-list-active.svg"));
@@ -109,6 +115,7 @@ void SearchBar::clearSuggestions()
 void SearchBar::on_currentTitleChanged(const QString& title)
 {
     if (this->hasFocus()) {
+        m_title = title; /* Only display title when not search or no text */
         return;
     }
     if (!title.startsWith("zim://")) {
@@ -138,10 +145,16 @@ void SearchBar::focusInEvent( QFocusEvent* event)
 void SearchBar::focusOutEvent(QFocusEvent* event)
 {
     setReadOnly(true);
-    if (event->reason() == Qt::MouseFocusReason && text().isEmpty()) {
+
+    if (event->reason() == Qt::MouseFocusReason) {
         m_button.set_searchMode(false);
+    }
+
+    /* Set the title in search to current tab title if no text */
+    if (text().isEmpty()) {
         setText(m_title);
     }
+    
     deselect();
     return QLineEdit::focusOutEvent(event);
 }
