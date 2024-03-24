@@ -108,6 +108,10 @@ bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
     if (event->type() == QEvent::MouseMove && isFullScreen())
     {
         const auto mouseEvent = static_cast<QMouseEvent*>(event);
+
+        if (mouseEvent->buttons() != Qt::NoButton)  // Check that no buttons are pressed at the same time -- This can indicate moving the scrollbar or any other item
+            return false;
+
         const int tabRegion = getTabBar()->height() + getTopWidget()->height() + 30;
         int clickY = portutils::getY(*mouseEvent);
 
