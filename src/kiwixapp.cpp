@@ -192,9 +192,12 @@ void KiwixApp::openZimFile(const QString &zimfile)
         _zimfile = QFileDialog::getOpenFileName(
                     getMainWindow(),
                     gt("open-zim"),
-                    QString(),
+                    QString(instance()->getSettingsManager()->getImportDir()),
                     "ZIM Files (*.zim);;Splitted ZIM Files (*.zimaa)");
-
+        QFileInfo fileInfo(_zimfile);
+        QString importDir = fileInfo.absolutePath();
+        instance()->getSettingsManager()->setImportDir(importDir);
+        
         if (_zimfile.isEmpty()) {
             return;
         }
