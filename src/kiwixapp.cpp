@@ -40,17 +40,22 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         QMessageBox::critical(nullptr, "Translation error", e.what());
         return;
     }
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    m_qtTranslator.load(QLocale(), "qt", "_",
-                        QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-#else
-    m_qtTranslator.load(QLocale(), "qt", "_",
-                        QLibraryInfo::path(QLibraryInfo::TranslationsPath));
-#endif
-    installTranslator(&m_qtTranslator);
 
-    m_appTranslator.load(QLocale(), "kiwix-desktop", "_", ":/i18n/");
-    installTranslator(&m_appTranslator);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#else
+    QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#endif
+    bool success = false;
+    success = loadAndInstallTranslations(m_qtTranslator, "qt", path);
+    if (!success) {
+        // ignore for now
+    }
+
+    success = loadAndInstallTranslations(m_appTranslator, "kiwix-desktop", ":/i18n/");
+    if (!success) {
+        // ignore for now
+    }
 
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawkb.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawkl.ttf");
@@ -58,6 +63,16 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawksl.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawk.ttf");
     setFont(QFont("Selawik"));
+}
+
+bool KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory) {
+    bool loaded = false;
+
+    loaded = translator.load(QLocale(), filename, "_", directory);
+    if (loaded) {
+        return installTranslator(&translator);
+    }
+    return false;
 }
 
 void KiwixApp::init()

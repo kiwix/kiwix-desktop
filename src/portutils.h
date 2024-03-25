@@ -2,6 +2,7 @@
 #define PORTUTILS_H
 
 #include <QEvent>
+#include <QRunnable>
 
 namespace portutils {
 
@@ -33,6 +34,18 @@ namespace portutils {
     }
 
 #endif
+
+    class LambdaRunnable : public QRunnable {
+    public:
+        explicit LambdaRunnable(std::function<void()> func) : func(func) {}
+
+        void run() override {
+            func();
+        }
+
+    private:
+        std::function<void()> func;
+    };
 
 }
 

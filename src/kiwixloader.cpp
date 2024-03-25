@@ -41,6 +41,8 @@ void createArc(QPainter &painter, int startAngle, int spanAngle, QRect rectangle
 
 void KiwixLoader::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
