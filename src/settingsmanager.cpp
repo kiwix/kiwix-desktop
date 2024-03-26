@@ -19,8 +19,7 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir,
-                   m_moveToTrash, m_reopenTab);
+        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir, m_appLangIndex, m_moveToTrash, m_reopenTab);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }
@@ -127,11 +126,18 @@ SettingsManager::FilterList SettingsManager::deducePair(QList<QVariant> variantL
     return pairList;
 }
 
-void SettingsManager::setLanguage(FilterList langList)
+void SettingsManager::setLanguage(FilterList langList)  // This regards the search filter languages
 {
     m_langList = flattenPair(langList);
     setSettings("language", m_langList);
     emit(languageChanged(m_langList));
+}
+
+void SettingsManager::setAppLanguage(int languageIndex) // This regards the application language
+{   
+    m_appLangIndex = languageIndex;
+    KiwixApp::instance()->setAppLanguage();
+    m_settings.setValue("app/languageIndex", languageIndex);
 }
 
 void SettingsManager::setCategory(FilterList categoryList)
@@ -157,8 +163,30 @@ void SettingsManager::initSettings()
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     m_reopenTab = m_settings.value("reopenTab", false).toBool();
+    // This regards the application language
+    m_appLangCodes = {
+        "ar", "bcl", "bn", "br", "ca", "cs", "da", "dag", "de", "diq",
+        "en", "eo", "es", "fa", "fi", "fr", "gsw", "ha", "he", "hi",
+        "hy", "ia", "id", "ie", "ig", "igl", "io", "it", "ja", "ko",
+        "ku-latn", "lb", "mk", "ms", "my", "nb", "nl", "nqo", "or",
+        "pl", "pt-br", "pt", "qqq", "ro", "roa-tara", "ru", "sc",
+        "scn", "sdc", "se", "sk", "skr-arab", "sl", "sms", "sq",
+        "sr-ec", "sro", "sv", "sw", "ta", "te", "th", "tn", "tr",
+        "uk", "yo", "zgh", "zh-hans", "zh-hant"
+    };
+    int i = 0, defaultLanguage = -1;
+    for (const QString& code : m_appLangCodes) {
+        QString name = QLocale::languageToString(QLocale(code).language());
+        if(name == "English") defaultLanguage = i;
+        i++;
+    }
+    m_appLangIndex = m_settings.value("app/languageIndex", defaultLanguage).toInt();
+    // Below regards the search filters
     QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
-
+    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
+    defaultLangList.append(defaultLang);
+    QVariant defaultLangVariant(defaultLangList);
+    m_langList = m_settings.value("language", defaultLangVariant).toList();
     /*
      * Qt5 & Qt6 have slightly different behaviors with regards to initializing QVariant.
      * The below approach is specifically chosen to work with both versions.
@@ -170,15 +198,6 @@ void SettingsManager::initSettings()
      *
      * QList(QVariant(QChar, 'E'), QVariant(QChar, 'n'), QVariant(QChar, 'g'), ...
      */
-
-    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
-    defaultLangList.append(defaultLang);
-    QVariant defaultLangVariant(defaultLangList);
-    m_langList = m_settings.value("language", defaultLangVariant).toList();
-
-    
-    // ui->comboBoxLanguage->addItems(languageList);
-
     m_categoryList = m_settings.value("category", {}).toList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }

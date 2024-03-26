@@ -35,21 +35,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_server(m_library.getKiwixLibrary(), mp_nameMapper),
       mp_session(nullptr)
 {
-    try {
-        m_translation.setTranslation(QLocale());
-    } catch (std::exception& e) {
-        QMessageBox::critical(nullptr, "Translation error", e.what());
-        return;
-    }
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#else
-    QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
-#endif
-    loadAndInstallTranslations(m_qtTranslator, "qt", path);
-    loadAndInstallTranslations(m_appTranslator, "kiwix-desktop", ":/i18n/");
-
+    setAppLanguage();
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawkb.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawkl.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawksb.ttf");
@@ -248,6 +234,28 @@ void KiwixApp::openZimFile(const QString &zimfile)
         return;
     }
     openUrl(QUrl("zim://"+zimId+".zim/"));
+}
+
+void KiwixApp::setAppLanguage() 
+{   
+    const QList<QString> languageCodes = getSettingsManager()->getLanguageCodes();
+    const QString code = languageCodes.at(getSettingsManager()->getAppLanguageIndex());
+    QLocale appLanguage(code);
+    try {
+        m_translation.setTranslation(appLanguage);
+    } catch (std::exception& e) {
+        QMessageBox::critical(nullptr, "Translation error", e.what());
+        return;
+    }
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QString qtTranslatorSuffix = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#else
+    QString qtTranslatorSuffix = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#endif
+    m_qtTranslator.load(appLanguage, "qt", "_", qtTranslatorSuffix);
+    installTranslator(&m_qtTranslator);
+    m_appTranslator.load(appLanguage, "kiwix-desktop", "_", ":/i18n/");
+    installTranslator(&m_appTranslator);
 }
 
 void KiwixApp::printPage()

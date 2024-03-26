@@ -15,7 +15,6 @@ SettingsView::SettingsView(QWidget *parent)
     connect(ui->reopenTabToggle, &QCheckBox::clicked, this, &SettingsView::setReopenTab);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
-    connect(ui->comboBoxLanguage, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::languageSelected);
     connect(ui->monitorBrowse, &QPushButton::clicked, this, &SettingsView::browseMonitorDir);
     connect(ui->monitorClear, &QPushButton::clicked, this, &SettingsView::clearMonitorDir);
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::onDownloadDirChanged);
@@ -43,9 +42,8 @@ SettingsView::SettingsView(QWidget *parent)
 
 }
 
-void SettingsView::init(int zoomPercent, const QString &downloadDir,
-                        const QString &monitorDir, const bool moveToTrash,
-                        bool reopentab)
+
+void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const int &langIndex, const bool moveToTrash, bool reopentab)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(downloadDir);
@@ -53,12 +51,19 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir,
         ui->monitorClear->hide();
     }
     ui->monitorDirPath->setText(monitorDir);
+    // Application Language Code
+    const QList<QString> languageCodes = KiwixApp::instance()->getSettingsManager()->getLanguageCodes();
     QStringList languageList;
-    languageList << "English" << "Spanish" << "French" << "German" << "Chinese";
+    for (const QString& code : languageCodes) {
+        QString name = QLocale::languageToString(QLocale(code).language());
+        languageList.append(name);
+    }
     ui->comboBoxLanguage->addItems(languageList);
-    ui->comboBoxLanguage->setCurrentText("Spanish");
+    ui->comboBoxLanguage->setCurrentIndex(langIndex);
     ui->moveToTrashToggle->setChecked(moveToTrash);
     ui->reopenTabToggle->setChecked(reopentab);
+    // Connect comboBox to change handler after initialization to avoid false calls
+    connect(ui->comboBoxLanguage, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::languageSelected); 
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
 {
@@ -166,10 +171,8 @@ void SettingsView::onDownloadDirChanged(const QString &dir)
 
 void SettingsView::languageSelected(const int &languageIndex)
 {
-    qInfo() << languageIndex;
-    // ui->comboBoxLanguage->setCurrentText(language);
     ui->comboBoxLanguage->setCurrentIndex(languageIndex);
-    //KiwixApp::instance()->getSettingsManager()->setDownloadDir(dir);
+    KiwixApp::instance()->getSettingsManager()->setAppLanguage(languageIndex);
 }
 
 void SettingsView::onMonitorDirChanged(const QString &dir)

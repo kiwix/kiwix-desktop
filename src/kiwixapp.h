@@ -92,6 +92,7 @@ public:
 public slots:
     void newTab();
     void openZimFile(const QString& zimfile="");
+    void setAppLanguage();
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
     void printPage();
