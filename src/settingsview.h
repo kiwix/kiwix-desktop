@@ -11,7 +11,7 @@ class SettingsView : public QWidget
 public:
     SettingsView(QWidget *parent = nullptr);
     ~SettingsView(){};
-    void init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const bool moveToTrash);
+    void init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const int &langIndex, const bool moveToTrash);
 public Q_SLOTS:
     void resetDownloadDir();
     void browseDownloadDir();
@@ -20,6 +20,7 @@ public Q_SLOTS:
     void setZoom(int zoomPercent);
     void setMoveToTrash(bool moveToTrash);
     void onDownloadDirChanged(const QString &dir);
+    void languageSelected(const int &languageIndex);
     void onMonitorDirChanged(const QString &dir);
     void onZoomChanged(qreal zoomFactor);
     void onMoveToTrashChanged(bool moveToTrash);

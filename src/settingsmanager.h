@@ -29,6 +29,8 @@ public:
     QString getDownloadDir() const { return m_downloadDir; }
     QString getMonitorDir() const { return m_monitorDir; }
     bool getMoveToTrash() const { return m_moveToTrash; }
+    QList<QString> getLanguageCodes() { return m_appLangCodes; }
+    int getAppLanguageIndex() { return m_appLangIndex; }
     FilterList getLanguageList() { return deducePair(m_langList); }
     FilterList getCategoryList() { return deducePair(m_categoryList); }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
@@ -41,6 +43,7 @@ public slots:
     void setMonitorDir(QString monitorDir);
     void setMoveToTrash(bool moveToTrash);
     void setLanguage(FilterList langList);
+    void setAppLanguage(int languageIndex);
     void setCategory(FilterList categoryList);
     void setContentType(FilterList contentTypeList);
 private:
@@ -67,9 +70,11 @@ private:
     QString m_downloadDir;
     QString m_monitorDir;
     bool m_moveToTrash;
+    int m_appLangIndex;
     QList<QVariant> m_langList;
     QList<QVariant> m_categoryList;
     QList<QVariant> m_contentTypeList;
+    QList<QString> m_appLangCodes;
 };
 
 #endif // SETTINGSMANAGER_H

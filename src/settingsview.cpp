@@ -38,7 +38,7 @@ SettingsView::SettingsView(QWidget *parent)
 
 }
 
-void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const bool moveToTrash)
+void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const int &langIndex, const bool moveToTrash)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(downloadDir);
@@ -46,7 +46,18 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir, const QStri
         ui->monitorClear->hide();
     }
     ui->monitorDirPath->setText(monitorDir);
+    // Application Language Code
+    const QList<QString> languageCodes = KiwixApp::instance()->getSettingsManager()->getLanguageCodes();
+    QStringList languageList;
+    for (const QString& code : languageCodes) {
+        QString name = QLocale::languageToString(QLocale(code).language());
+        languageList.append(name);
+    }
+    ui->comboBoxLanguage->addItems(languageList);
+    ui->comboBoxLanguage->setCurrentIndex(langIndex);
     ui->moveToTrashToggle->setChecked(moveToTrash);
+    // Connect comboBox to change handler after initialization to avoid false calls
+    connect(ui->comboBoxLanguage, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::languageSelected); 
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
 {
@@ -145,6 +156,12 @@ void SettingsView::setMoveToTrash(bool moveToTrash)
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
     ui->downloadDirPath->setText(dir);
+}
+
+void SettingsView::languageSelected(const int &languageIndex)
+{
+    ui->comboBoxLanguage->setCurrentIndex(languageIndex);
+    KiwixApp::instance()->getSettingsManager()->setAppLanguage(languageIndex);
 }
 
 void SettingsView::onMonitorDirChanged(const QString &dir)

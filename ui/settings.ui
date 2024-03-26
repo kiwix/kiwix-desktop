@@ -51,14 +51,14 @@
          </widget>
         </item>
         <item>
-         <widget class="Line" name="line_3">
+         <widget class="Line" name="lineSettings">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayoutZoom">
           <item>
            <widget class="QLabel" name="zoomPercentLabel">
             <property name="text">
@@ -67,7 +67,7 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_4">
+           <spacer name="horizontalSpacerZoom">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -104,7 +104,7 @@
          </layout>
         </item>
         <item>
-         <widget class="Line" name="line_2">
+         <widget class="Line" name="lineZoom">
           <property name="frameShadow">
            <enum>QFrame::Plain</enum>
           </property>
@@ -114,7 +114,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <layout class="QHBoxLayout" name="horizontalLayoutDownload1">
           <item>
            <widget class="QLabel" name="downloadDirLabel">
             <property name="text">
@@ -123,7 +123,7 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
+           <spacer name="horizontalSpacerDownload1">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -145,9 +145,9 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <layout class="QHBoxLayout" name="horizontalLayoutDownload2">
           <item>
-           <spacer name="horizontalSpacer_2">
+           <spacer name="horizontalSpacerDownload2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -200,14 +200,14 @@
          </layout>
         </item>
         <item>
-         <widget class="Line" name="line_4">
+         <widget class="Line" name="lineDownload">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <layout class="QHBoxLayout" name="horizontalLayoutMonitor1">
           <item>
            <widget class="QLabel" name="monitorDirLabel">
             <property name="text">
@@ -232,7 +232,7 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_6">
+           <spacer name="horizontalSpacerMonitor1">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -254,9 +254,9 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <layout class="QHBoxLayout" name="horizontalLayoutMonitor2">
           <item>
-           <spacer name="horizontalSpacer_7">
+           <spacer name="horizontalSpacerMonitor2">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -285,7 +285,45 @@
          </layout>
         </item>
         <item>
-         <widget class="Line" name="line_5">
+         <widget class="Line" name="lineMonitor">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayoutLanguage">
+          <item>
+           <widget class="QLabel" name="languageLabel">
+            <property name="text">
+             <string>Language</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacerLanguage">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBoxLanguage">
+            <property name="currentText">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="lineLanguage">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
