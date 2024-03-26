@@ -133,8 +133,8 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     }
     kiwix::SearchRenderer renderer(
         search->getResults(start, pageLength),
-        search->getEstimatedMatches(),
-        start);
+        start,
+        search->getEstimatedMatches());
     renderer.setSearchPattern(searchQuery);
     renderer.setSearchBookQuery("content="+bookId.toStdString());
     renderer.setProtocolPrefix("zim://");

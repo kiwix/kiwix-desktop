@@ -34,7 +34,7 @@ public:
         OpenHomePageAction,
         PrintAction,
         NewTabAction,
-        CloseTabAction,
+        CloseCurrentTabAction,
         ReopenClosedTabAction,
         BrowseLibraryAction,
         OpenFileAction,
@@ -89,6 +89,7 @@ public:
     QString parseStyleFromFile(QString filePath);
 
 public slots:
+    void newTab();
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
@@ -98,7 +99,7 @@ public slots:
     void printVersions(std::ostream& out = std::cout);
 
 protected:
-    void createAction();
+    void createActions();
     void postInit();
 
 private:

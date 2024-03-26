@@ -24,7 +24,7 @@ public:
     void setStackedWidget(QStackedWidget* widget);
 
     void     setContentManagerView(ContentManagerView* view);
-    void     setNewTabButton();
+    void     setNewTabButton(QAction* newTabAction);
     ZimView* createNewTab(bool setCurrent, bool adjacentToCurrentTab);
 
     ZimView* currentZimView() {
@@ -61,20 +61,23 @@ signals:
 
 public slots:
     void closeTab(int index);
+    void openOrSwitchToSettingsTab();
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);
     void moveToNextTab();
     void moveToPreviousTab();
 
 private:
+    void setCloseTabButton(int index);
+
+private:
     QStackedWidget*     mp_stackedWidget;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
-    void setSelectionBehaviorOnRemove(int index);
     // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
     // This function returns the count of real tabs.
     int realTabCount() const;
-    
+
 private slots:
     void onTabMoved(int from, int to);
     void onCurrentChanged(int index);
