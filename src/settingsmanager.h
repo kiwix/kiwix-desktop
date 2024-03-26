@@ -30,6 +30,8 @@ public:
     QString getMonitorDir() const { return m_monitorDir; }
     bool getMoveToTrash() const { return m_moveToTrash; }
     bool getReopenTab() const { return m_reopenTab; }
+    QList<QString> getLanguageCodes() { return m_appLangCodes; }
+    int getAppLanguageIndex() { return m_appLangIndex; }
     FilterList getLanguageList() { return deducePair(m_langList); }
     FilterList getCategoryList() { return deducePair(m_categoryList); }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
@@ -43,6 +45,7 @@ public slots:
     void setMoveToTrash(bool moveToTrash);
     void setReopenTab(bool reopenTab);
     void setLanguage(FilterList langList);
+    void setAppLanguage(int languageIndex);
     void setCategory(FilterList categoryList);
     void setContentType(FilterList contentTypeList);
 
@@ -72,9 +75,11 @@ private:
     QString m_monitorDir;
     bool m_moveToTrash;
     bool m_reopenTab;
+    int m_appLangIndex;
     QList<QVariant> m_langList;
     QList<QVariant> m_categoryList;
     QList<QVariant> m_contentTypeList;
+    QList<QString> m_appLangCodes;
 };
 
 #endif // SETTINGSMANAGER_H
