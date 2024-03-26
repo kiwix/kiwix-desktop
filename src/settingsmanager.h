@@ -29,6 +29,7 @@ public:
     QString getDownloadDir() const { return m_downloadDir; }
     QString getMonitorDir() const { return m_monitorDir; }
     bool getMoveToTrash() const { return m_moveToTrash; }
+    bool getReopenTab() const { return m_reopenTab; }
     FilterList getLanguageList() { return deducePair(m_langList); }
     FilterList getCategoryList() { return deducePair(m_categoryList); }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
@@ -40,9 +41,11 @@ public slots:
     void setDownloadDir(QString downloadDir);
     void setMonitorDir(QString monitorDir);
     void setMoveToTrash(bool moveToTrash);
+    void setReopenTab(bool reopenTab);
     void setLanguage(FilterList langList);
     void setCategory(FilterList categoryList);
     void setContentType(FilterList contentTypeList);
+
 private:
     void initSettings();
     QList<QVariant> flattenPair(FilterList pairList);
@@ -54,6 +57,7 @@ signals:
     void downloadDirChanged(QString downloadDir);
     void monitorDirChanged(QString monitorDir);
     void moveToTrashChanged(bool moveToTrash);
+    void reopenTabChanged(bool reopenTab);
     void languageChanged(QList<QVariant> langList);
     void categoryChanged(QList<QVariant> categoryList);
     void contentTypeChanged(QList<QVariant> contentTypeList);
@@ -67,6 +71,7 @@ private:
     QString m_downloadDir;
     QString m_monitorDir;
     bool m_moveToTrash;
+    bool m_reopenTab;
     QList<QVariant> m_langList;
     QList<QVariant> m_categoryList;
     QList<QVariant> m_contentTypeList;

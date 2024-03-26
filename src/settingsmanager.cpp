@@ -19,7 +19,8 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir, m_moveToTrash);
+        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir,
+                   m_moveToTrash, m_reopenTab);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }
@@ -99,6 +100,13 @@ void SettingsManager::setMoveToTrash(bool moveToTrash)
     emit(moveToTrashChanged(m_moveToTrash));
 }
 
+void SettingsManager::setReopenTab(bool reopenTab)
+{
+    m_reopenTab = reopenTab;
+    setSettings("reopenTab", m_reopenTab);
+    emit(reopenTabChanged(reopenTab));
+}
+
 QList<QVariant> SettingsManager::flattenPair(FilterList pairList)
 {
     QList<QVariant> res;
@@ -148,6 +156,7 @@ void SettingsManager::initSettings()
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
+    m_reopenTab = m_settings.value("reopenTab", false).toBool();
     QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
 
     /*
