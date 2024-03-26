@@ -166,12 +166,13 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 
 void WebView::onUrlChanged(const QUrl& url) {
     auto zimId = getZimIdFromUrl(url);
+    auto app = KiwixApp::instance();
+    app->saveListOfOpenTabs();
     if (m_currentZimId == zimId ) {
         return;
     }
     m_currentZimId = zimId;
     emit zimIdChanged(m_currentZimId);
-    auto app = KiwixApp::instance();
     std::shared_ptr<zim::Archive> archive;
     try {
         archive = app->getLibrary()->getArchive(m_currentZimId);

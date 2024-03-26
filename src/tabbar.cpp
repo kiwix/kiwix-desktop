@@ -268,6 +268,16 @@ void TabBar::closeTabsByZimId(const QString &id)
     }
 }
 
+QStringList TabBar::getTabUrls() const {
+    QStringList idList;
+    for (int index = 0; index <= mp_stackedWidget->count(); index++)
+    {
+        if (ZimView* zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(index)))
+            idList.push_back(zv->getWebView()->url().url());
+    }
+    return idList;
+}
+
 void TabBar::closeTab(int index)
 {
     // The first and last tabs (i.e. the library tab and the + (new tab) button)
@@ -285,6 +295,8 @@ void TabBar::closeTab(int index)
     removeTab(index);
     view->close();
     view->deleteLater();
+
+    KiwixApp::instance()->saveListOfOpenTabs();
 }
 
 void TabBar::onCurrentChanged(int index)
@@ -466,4 +478,6 @@ void TabBar::onTabMoved(int from, int to)
     QWidget *w_from = mp_stackedWidget->widget(from);
     mp_stackedWidget->removeWidget(w_from);
     mp_stackedWidget->insertWidget(to, w_from);
+
+    KiwixApp::instance()->saveListOfOpenTabs();
 }
