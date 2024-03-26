@@ -189,15 +189,18 @@ void KiwixApp::restoreTabs()
 
     /* Restart a new session to prevent duplicate records in openURL */
     saveListOfOpenTabs();
-    for (const auto &zimUrl : tabsToOpen)
+    if (m_settingsManager.getReopenTab())
     {
-      try
+      for (const auto &zimUrl : tabsToOpen)
       {
+        try
+        {
           /* Throws exception if zim file cannot be found */
           m_library.getArchive(QUrl(zimUrl).host().split('.')[0]);
           openUrl(QUrl(zimUrl));
+        }
+        catch (std::exception &e) { /* Blank */ }
       }
-      catch (std::exception &e) { /* Blank */ }
     }
 }
 
