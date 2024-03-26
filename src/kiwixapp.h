@@ -87,6 +87,7 @@ public:
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
     QString parseStyleFromFile(QString filePath);
+    void saveListOfOpenTabs();
 
 public slots:
     void newTab();
@@ -116,10 +117,12 @@ private:
     kiwix::Server m_server;
     Translation m_translation;
     QFileSystemWatcher m_watcher;
+    QSettings* mp_session;
 
     QAction*     mpa_actions[MAX_ACTION];
 
     QString findLibraryDirectory();
+    void restoreTabs();
 };
 
 QString gt(const QString &key);
