@@ -32,7 +32,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
       mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
-      m_server(m_library.getKiwixLibrary(), mp_nameMapper)
+      m_server(m_library.getKiwixLibrary(), mp_nameMapper),
+      mp_session(nullptr)
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -113,6 +114,8 @@ void KiwixApp::init()
             m_library.asyncUpdateFromDir(dir);
         }
     }
+
+    restoreTabs();
 }
 
 KiwixApp::~KiwixApp()
@@ -174,6 +177,31 @@ QString KiwixApp::findLibraryDirectory()
   }
 
   return currentDataDir;
+}
+
+void KiwixApp::restoreTabs()
+{
+    /* Place session file in our global library path */
+    QDir dir(m_libraryDirectory);
+    mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
+                               QSettings::defaultFormat(), this);
+    QStringList tabsToOpen = mp_session->value("reopenTabList").toStringList();
+
+    /* Restart a new session to prevent duplicate records in openURL */
+    saveListOfOpenTabs();
+    if (m_settingsManager.getReopenTab())
+    {
+      for (const auto &zimUrl : tabsToOpen)
+      {
+        try
+        {
+          /* Throws exception if zim file cannot be found */
+          m_library.getArchive(QUrl(zimUrl).host().split('.')[0]);
+          openUrl(QUrl(zimUrl));
+        }
+        catch (std::exception &e) { /* Blank */ }
+      }
+    }
 }
 
 KiwixApp *KiwixApp::instance()
@@ -503,4 +531,9 @@ QString KiwixApp::parseStyleFromFile(QString filePath)
     QString styleSheet = QString(file.readAll());
     file.close();
     return styleSheet;
+}
+
+void KiwixApp::saveListOfOpenTabs()
+{
+  return mp_session->setValue("reopenTabList", getTabWidget()->getTabUrls());
 }

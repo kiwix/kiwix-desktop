@@ -49,6 +49,7 @@ public:
     virtual QSize tabSizeHint(int index) const;
     void openFindInPageBar();
     void closeTabsByZimId(const QString &id);
+    QStringList getTabUrls() const;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

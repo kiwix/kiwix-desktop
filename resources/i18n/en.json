@@ -162,5 +162,6 @@
     "content-type-searcher-placeholder": "Filter content type",
     "no-details": "Introduction only",
     "no-pictures": "No Pictures",
-    "no-videos": "No Videos"
+    "no-videos": "No Videos",
+    "open-previous-tabs-at-startup": "Open previous tabs at startup"
 }
