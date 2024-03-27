@@ -336,9 +336,10 @@ QByteArray getFaviconData(const kiwix::Book& b)
             qdata.detach(); // deep copy
         }
     } catch ( ... ) {
+        return QByteArray();
     }
 
-    return QByteArray();
+    return qdata;
 }
 
 QVariant getFaviconDataOrUrl(const kiwix::Book& b)
