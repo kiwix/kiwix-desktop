@@ -443,7 +443,7 @@ void ContentManager::downloadStarted(const kiwix::Book& book, const std::string&
 {
     kiwix::Book bookCopy(book);
     bookCopy.setDownloadId(downloadId);
-    mp_library->addBookToLibrary(bookCopy);
+    mp_library->addBookBeingDownloaded(bookCopy, getSettingsManager()->getDownloadDir());
     mp_library->save();
     emit(oneBookChanged(QString::fromStdString(book.getId())));
 }
