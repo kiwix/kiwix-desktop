@@ -43,7 +43,6 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
     QString dmimeType = download->mimeType();
     
     if (dmimeType.toStdString()=="application/pdf"){ 
-        
         auto downloadPath = getSettingsManager()->getDownloadDir();
         fileName = downloadPath + "/" + defaultFileName;
         setDownloadInfo(fileName,dmimeType);
