@@ -566,6 +566,14 @@ void ContentManager::downloadBook(const QString &id)
     downloadStarted(book, downloadId);
 }
 
+static const char MSG_FOR_PREVENTED_RMSTAR_OPERATION[] = R"(
+    BUG: Errare humanum est.
+    BUG: Kiwix developers are human, but we try to ensure that our mistakes
+    BUG: don't cause harm to our users.
+    BUG: If we didn't detect this situation we could have erased a lot of files
+    BUG: on your computer.
+)";
+
 void ContentManager::eraseBookFilesFromComputer(const std::string& bookPath, bool moveToTrash)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
@@ -573,6 +581,12 @@ void ContentManager::eraseBookFilesFromComputer(const std::string& bookPath, boo
 #endif
     const std::string dirPath = kiwix::removeLastPathElement(bookPath);
     const std::string fileGlob = kiwix::getLastPathElement(bookPath) + "*";
+
+    if ( fileGlob == "*" ) {
+        std::cerr << MSG_FOR_PREVENTED_RMSTAR_OPERATION << std::endl;
+        return;
+    }
+
     QDir dir(QString::fromStdString(dirPath), QString::fromStdString(fileGlob));
     for(const QString& file: dir.entryList()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
