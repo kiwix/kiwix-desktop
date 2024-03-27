@@ -13,11 +13,15 @@
 class KProfile : public QWebEngineProfile
 {
     Q_OBJECT
+    typedef std::pair<QString, QString> DownloadInfo;
 public:
     KProfile(QObject *parent = nullptr);
+    void setDownloadInfo(const QString &fileName, const QString &mimeType);
+    DownloadInfo getDownloadInfo() const;
 
 private:
     UrlSchemeHandler m_schemeHandler;
+    DownloadInfo m_downloadInfo;
 
 signals:
 public slots:
