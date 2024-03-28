@@ -345,7 +345,7 @@ QByteArray getFaviconData(const kiwix::Book& b)
 QVariant getFaviconDataOrUrl(const kiwix::Book& b)
 {
     const QByteArray data = getFaviconData(b);
-    return !data.isNull() ? data : getFaviconUrl(b);
+    return !data.isNull() ? QVariant(data) : QVariant(getFaviconUrl(b));
 }
 
 QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
