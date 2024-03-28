@@ -129,6 +129,7 @@
 	"ok": "אישור",
 	"no-filter": "ללא מסנן",
 	"open-link-in-web-browser": "פתיחת קישור בדפדפן",
+	"open-link-new-tab": "פתיחת קישור בלשונית חדשה",
 	"download-dir-dialog-title": "להחליף את תיקיית ההורדה?",
 	"download-dir-dialog-msg": "נתיב תיקיית ההורדה החדש הוא:\n{{DIRECTORY}}",
 	"invalid-port": "פתחה שגויה",

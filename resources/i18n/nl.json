@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Dutchy45",
+			"HanV",
 			"Mainframe98",
 			"McDutchie",
 			"SPQRobin"
@@ -129,6 +130,7 @@
 	"ok": "OK",
 	"no-filter": "geen filter",
 	"open-link-in-web-browser": "Koppeling openen in webbrowser",
+	"open-link-new-tab": "Koppeling openen in nieuwe tab",
 	"download-dir-dialog-title": "Weet u zeker dat u de downloaddirectory wilt wijzigen?",
 	"download-dir-dialog-msg": "Het pad naar de nieuwe downloaddirectory wordt:\n{{DIRECTORY}}",
 	"invalid-port": "Ongeldige poort",
