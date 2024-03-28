@@ -22,7 +22,7 @@ public: // types
 
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
-    virtual ~ContentManager() {}
+    virtual ~ContentManager();
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
@@ -44,6 +44,7 @@ signals:
     void categoriesLoaded(QStringList);
     void languagesLoaded(LanguageList);
     void localChanged(const bool);
+    void downloadUpdated(QString bookId, const DownloadInfo& );
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
@@ -59,22 +60,23 @@ public slots:
     void updateRemoteLibrary(const QString& content);
     void updateLanguages(const QString& content);
     void updateCategories(const QString& content);
-    void pauseBook(const QString& id);
-    void resumeBook(const QString& id);
-    void cancelBook(const QString& id);
     void pauseBook(const QString& id, QModelIndex index);
     void resumeBook(const QString& id, QModelIndex index);
-    void cancelBook(const QString& id, QModelIndex index);
+    // cancelBook() asks for confirmation (reallyCancelBook() doesn't)
+    void cancelBook(const QString& id);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
     void updateDownloads();
+    void updateDownload(QString bookId, const DownloadInfo& downloadInfo);
 
 private: // functions
     QStringList getBookIds();
+    // reallyCancelBook() doesn't ask for confirmation (unlike cancelBook())
+    void reallyCancelBook(const QString& id);
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
     void reallyEraseBook(const QString& id, bool moveToTrash);
-    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
-    BookInfoList getBooksList();
+    void eraseBookFilesFromComputer(const std::string& bookPath, bool moveToTrash);
+    void updateModel();
     void setCategories();
     void setLanguages();
 
@@ -82,20 +84,21 @@ private: // functions
     // the remote or local library (in that order).
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
 
+    void startDownloadUpdaterThread();
     std::string startDownload(const kiwix::Book& book);
-    void updateDownload(QString bookId);
     void removeDownload(QString bookId);
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
-    void downloadCancelled(QString bookId);
+    void downloadDisappeared(QString bookId);
     void downloadCompleted(QString bookId, QString path);
     DownloadInfo getDownloadInfo(QString bookId) const;
+    void restoreDownloads();
 
 private: // data
     Library* mp_library;
     kiwix::LibraryPtr mp_remoteLibrary;
     kiwix::Downloader* mp_downloader;
     ContentManagerModel::Downloads m_downloads;
-    QTimer m_downloadUpdateTimer;
+    QThread* mp_downloadUpdaterThread = nullptr;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
     bool m_local = true;
