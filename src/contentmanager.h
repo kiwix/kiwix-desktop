@@ -91,6 +91,7 @@ private: // functions
     void downloadDisappeared(QString bookId);
     void downloadCompleted(QString bookId, QString path);
     DownloadInfo getDownloadInfo(QString bookId) const;
+    void restoreDownloads();
 
 private: // data
     Library* mp_library;
