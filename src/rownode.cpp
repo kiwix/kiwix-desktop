@@ -32,17 +32,8 @@ void DownloadState::update(const DownloadInfo& downloadInfos)
     percent = QString::number(percent, 'g', 3).toDouble();
     auto completedLength = convertToUnits(downloadInfos["completedLength"].toDouble());
     auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toDouble()) + "/s";
-    *this = {percent, completedLength, downloadSpeed, false};
-}
-
-void DownloadState::pause()
-{
-    this->paused = true;
-}
-
-void DownloadState::resume()
-{
-    this->paused = false;
+    const bool paused = downloadInfos["status"] == "paused";
+    *this = {percent, completedLength, downloadSpeed, paused};
 }
 
 

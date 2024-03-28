@@ -17,8 +17,6 @@ public:
     bool paused = false;
 
 public:
-    void pause();
-    void resume();
     void update(const DownloadInfo& info);
 };
 
