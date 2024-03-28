@@ -8,6 +8,7 @@ QT       += core gui network
 QT       += webenginewidgets
 QT       += printsupport
 
+CONFIG += nostrip
 CONFIG += link_pkgconfig
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
