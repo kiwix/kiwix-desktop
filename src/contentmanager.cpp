@@ -87,6 +87,8 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
       mp_downloader(downloader),
       m_remoteLibraryManager()
 {
+    restoreDownloads();
+
     // mp_view will be passed to the tab who will take ownership,
     // so, we don't need to delete it.
     mp_view = new ContentManagerView();
@@ -135,6 +137,19 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
 
     if ( mp_downloader ) {
         startDownloadUpdaterThread();
+    }
+}
+
+void ContentManager::restoreDownloads()
+{
+    for ( const auto& bookId : mp_library->getBookIds() ) {
+        const kiwix::Book& book = mp_library->getBookById(bookId);
+        const QString downloadId = QString::fromStdString(book.getDownloadId());
+        if ( ! downloadId.isEmpty() ) {
+            const auto newDownload = std::make_shared<DownloadState>();
+            newDownload->paused = true;
+            m_downloads.set(bookId, newDownload);
+        }
     }
 }
 
