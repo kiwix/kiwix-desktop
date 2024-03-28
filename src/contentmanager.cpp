@@ -501,7 +501,7 @@ DownloadInfo ContentManager::getDownloadInfo(QString bookId) const
 void ContentManager::updateDownload(QString bookId, const DownloadInfo& downloadInfo)
 {
     const auto downloadState = m_downloads.value(bookId);
-    if ( downloadState && !downloadState->paused ) {
+    if ( downloadState ) {
         if ( downloadInfo["status"].toString() == "completed" ) {
             downloadCompleted(bookId, downloadInfo["path"].toString());
         } else {
@@ -684,9 +684,6 @@ void ContentManager::pauseBook(const QString& id, QModelIndex index)
     if (download->getStatus() == kiwix::Download::K_ACTIVE) {
         try {
             download->pauseDownload();
-            if ( const auto downloadState = m_downloads.value(id) ) {
-                downloadState->pause();
-            }
         } catch (const kiwix::AriaError&) {
             // Download has completed before the pause request was handled.
             // Most likely the download was already complete at the time
@@ -704,9 +701,6 @@ void ContentManager::resumeBook(const QString& id, QModelIndex index)
     auto download = mp_downloader->getDownload(b.getDownloadId());
     if (download->getStatus() == kiwix::Download::K_PAUSED) {
         download->resumeDownload();
-        if ( const auto downloadState = m_downloads.value(id) ) {
-            downloadState->resume();
-        }
     }
     managerModel->triggerDataUpdateAt(index);
 }
