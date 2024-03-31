@@ -187,6 +187,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
                                           "border: 0;"
                                           "font-weight: bold;"
                                           "font-family: Selawik;"
+                                          "border-bottom: 1px solid #cccccc;"
                                           "color: blue;"
                                           "margin: 0;");
                 baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
@@ -195,6 +196,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
                                           "border: 0;"
                                           "font-weight: bold;"
                                           "font-family: Selawik;"
+                                          "border-bottom: 1px solid #cccccc;"
                                           "color: blue;"
                                           "margin: 0;");
                 baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
@@ -213,6 +215,8 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
             painter->fillRect(QRect(x, y, w, h), QColor("#eaecf0"));
         }
         icon.paint(painter, QRect(x+10, y+10, 30, 50));
+        painter->setPen(QPen(QColor("#cccccc")));
+        painter->drawLine(x, y + h - 1, x + w, y + h - 1);
         return;
     }
     if (index.column() == 1) {
