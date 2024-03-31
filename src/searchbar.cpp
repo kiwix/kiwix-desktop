@@ -24,13 +24,13 @@ void SearchButton::set_searchMode(bool searchMode)
     } else {
         auto kiwixApp = KiwixApp::instance();
         if (kiwixApp->isCurrentArticleBookmarked()) {
-            setIcon(QIcon(":/icons/star.svg"));
-            setToolTip(gt("add-bookmark"));
-        } else {
             setIcon(QIcon(":/icons/star-active.svg"));
             setToolTip(gt("remove-bookmark"));
+        } else {
+            setIcon(QIcon(":/icons/star.svg"));
+            setToolTip(gt("add-bookmark"));
         }
-        setIconSize(QSize(25, 25));
+        setIconSize(QSize(32, 32));
     }
 }
 
