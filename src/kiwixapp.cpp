@@ -32,7 +32,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
       mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
-      m_server(m_library.getKiwixLibrary(), mp_nameMapper)
+      m_server(m_library.getKiwixLibrary(), mp_nameMapper),
+      mp_session(nullptr)
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -79,10 +80,12 @@ void KiwixApp::init()
     setDesktopFileName("kiwix.desktop");
     setStyleSheet(parseStyleFromFile(":/css/style.css"));
 
-    createAction();
+    createActions();
     mp_mainWindow = new MainWindow;
     getTabWidget()->setContentManagerView(mp_manager->getView());
-    getTabWidget()->setNewTabButton();
+    const auto newTabAction = getAction(KiwixApp::NewTabAction);
+    getTabWidget()->setNewTabButton(newTabAction);
+    connect(newTabAction, &QAction::triggered, this, &KiwixApp::newTab);
     postInit();
     mp_errorDialog = new QErrorMessage(mp_mainWindow);
     setActivationWindow(mp_mainWindow);
@@ -111,6 +114,8 @@ void KiwixApp::init()
             m_library.asyncUpdateFromDir(dir);
         }
     }
+
+    restoreTabs();
 }
 
 KiwixApp::~KiwixApp()
@@ -126,6 +131,16 @@ KiwixApp::~KiwixApp()
     if (mp_mainWindow) {
         delete mp_mainWindow;
     }
+}
+
+void KiwixApp::newTab()
+{
+    getTabWidget()->createNewTab(true, false);
+    auto& searchBar = mp_mainWindow->getTopWidget()->getSearchBar();
+    searchBar.setFocus(Qt::MouseFocusReason);
+    searchBar.clear();
+    searchBar.clearSuggestions();
+    searchBar.hideSuggestions();
 }
 
 QString KiwixApp::findLibraryDirectory()
@@ -162,6 +177,31 @@ QString KiwixApp::findLibraryDirectory()
   }
 
   return currentDataDir;
+}
+
+void KiwixApp::restoreTabs()
+{
+    /* Place session file in our global library path */
+    QDir dir(m_libraryDirectory);
+    mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
+                               QSettings::defaultFormat(), this);
+    QStringList tabsToOpen = mp_session->value("reopenTabList").toStringList();
+
+    /* Restart a new session to prevent duplicate records in openURL */
+    saveListOfOpenTabs();
+    if (m_settingsManager.getReopenTab())
+    {
+      for (const auto &zimUrl : tabsToOpen)
+      {
+        try
+        {
+          /* Throws exception if zim file cannot be found */
+          m_library.getArchive(QUrl(zimUrl).host().split('.')[0]);
+          openUrl(QUrl(zimUrl));
+        }
+        catch (std::exception &e) { /* Blank */ }
+      }
+    }
 }
 
 KiwixApp *KiwixApp::instance()
@@ -340,7 +380,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 #define HIDE_ACTION(ID) mpa_actions[ID]->setVisible(false)
 #define DISABLE_ACTION(ID) mpa_actions[ID]->setDisabled(true)
 
-void KiwixApp::createAction()
+void KiwixApp::createActions()
 {
     CREATE_ACTION_ICON_SHORTCUT(KiwixServeAction, "share", gt("local-kiwix-server"), QKeySequence(Qt::CTRL | Qt::Key_I));
 
@@ -370,8 +410,7 @@ void KiwixApp::createAction()
 
     CREATE_ACTION_ICON_SHORTCUT(NewTabAction,"new-tab-icon", gt("new-tab"), QKeySequence::AddTab);
 
-    CREATE_ACTION_ICON_SHORTCUTS(CloseTabAction, "close", gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL | Qt::Key_F4), QKeySequence(Qt::CTRL | Qt::Key_W)}));
-    mpa_actions[CloseTabAction]->setIconVisibleInMenu(false);
+    CREATE_ACTION_SHORTCUTS(CloseCurrentTabAction, gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL | Qt::Key_F4), QKeySequence(Qt::CTRL | Qt::Key_W)}));
 
     CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
     HIDE_ACTION(ReopenClosedTabAction);
@@ -402,8 +441,11 @@ void KiwixApp::createAction()
     mpa_actions[FindInPageAction]->setShortcuts({QKeySequence::Find, Qt::Key_F3});
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
             this, [=]() { getTabWidget()->openFindInPageBar(); });
-
-    CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"),  QKeySequence::FullScreen);
+    
+    const auto fullScreenKeySeq = QKeySequence(QKeySequence::FullScreen).isEmpty()
+                                ? Qt::Key_F11
+                                : QKeySequence::FullScreen;
+    CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"), fullScreenKeySeq);
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
         auto action = mpa_actions[ToggleFullscreenAction];
@@ -489,4 +531,9 @@ QString KiwixApp::parseStyleFromFile(QString filePath)
     QString styleSheet = QString(file.readAll());
     file.close();
     return styleSheet;
+}
+
+void KiwixApp::saveListOfOpenTabs()
+{
+  return mp_session->setValue("reopenTabList", getTabWidget()->getTabUrls());
 }

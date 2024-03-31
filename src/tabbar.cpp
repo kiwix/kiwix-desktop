@@ -13,6 +13,15 @@ class QMenu;
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentZimView();}
 
+namespace
+{
+
+QAction* getAction(KiwixApp::Actions action) {
+    return KiwixApp::instance()->getAction(action);
+}
+
+} // unnamed namespace
+
 TabBar::TabBar(QWidget *parent) :
     QTabBar(parent)
 {
@@ -24,84 +33,54 @@ TabBar::TabBar(QWidget *parent) :
     setMovable(true);
     setIconSize(QSize(30, 30));
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
-    auto app = KiwixApp::instance();
 
-    connect(app->getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
-    connect(app->getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
-    connect(app->getAction(KiwixApp::NewTabAction), &QAction::triggered,
+    connect(getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
+    connect(getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
+    connect(getAction(KiwixApp::CloseCurrentTabAction), &QAction::triggered,
             this, [=]() {
-                this->createNewTab(true, false);
-                auto topWidget = KiwixApp::instance()->getMainWindow()->getTopWidget();
-                topWidget->getSearchBar().setFocus(Qt::MouseFocusReason);
-                topWidget->getSearchBar().clear();
-                topWidget->getSearchBar().clearSuggestions();
-                topWidget->getSearchBar().hideSuggestions();
-          });
-    connect(app->getAction(KiwixApp::CloseTabAction), &QAction::triggered,
-            this, [=]() {
-                auto index = currentIndex();
-                if (index < 0)
-                    return;
-
-                // library tab cannot be closed
-                QWidget *w = mp_stackedWidget->widget(index);
-                if (qobject_cast<ContentManagerView*>(w)) {
-                    return;
-                }
-                this->closeTab(index);
+                this->closeTab(currentIndex());
             });
-    connect(app->getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
+    connect(getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
             this, [=]() {
                 auto current = this->currentWebView();
                 QUITIFNULL(current);
                 current->setUrl("zim://" + current->zimId() + ".zim/");
             });
-    connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
-            this, [=]() {
-                SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
-                for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
-                    if (mp_stackedWidget->widget(i) == view) {
-                        setCurrentIndex(i);
-                        return;
-                    }
-                }
-                int index = currentIndex() + 1;
-                mp_stackedWidget->insertWidget(index, view);
-                emit tabDisplayed(TabType::SettingsTab);
-                insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
-                QToolButton *tb = new QToolButton(this);
-                tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
-                setTabButton(index, QTabBar::RightSide, tb);
-                setCurrentIndex(index);
-            });
+    connect(getAction(KiwixApp::SettingAction), &QAction::triggered,
+            this, &TabBar::openOrSwitchToSettingsTab);
 
     for (int i = 0 ; i <= 9 ; i++) {
         QAction *a = new QAction(this);
-        a->setData(QVariant::fromValue(i));
-        QKeySequence ks(Qt::ALT | (Qt::Key_0 + i));
-        a->setShortcut(ks);
+        a->setShortcut(QKeySequence(Qt::ALT | (Qt::Key_0 + i)));
         addAction(a);
         connect(a, &QAction::triggered, this, [=](){
-            QAction *a = qobject_cast<QAction*>(QObject::sender());
-            if (!a)
-                return;
-
-            bool ok;
-            int tab_n = a->data().toInt(&ok);
-            if (tab_n==0)
-                tab_n=10;
-            if (!ok)
-                return;
-            if (tab_n >= count())
-                return;
-
-            setCurrentIndex(tab_n-1);
+            const int tabIndex = i == 0 ? 9 : i - 1;
+            if (tabIndex < realTabCount()) {
+                setCurrentIndex(tabIndex);
+            }
         });
     }
 
     // the slot relies the connection will be direct to reverting back the tab
     connect(this, SIGNAL(tabMoved(int,int)),
             this, SLOT(onTabMoved(int,int)), Qt::DirectConnection);
+}
+
+void TabBar::openOrSwitchToSettingsTab()
+{
+    SettingsView* view = KiwixApp::instance()->getSettingsManager()->getView();
+    for (int i = 0 ; i < mp_stackedWidget->count(); i++) {
+        if (mp_stackedWidget->widget(i) == view) {
+            setCurrentIndex(i);
+            return;
+        }
+    }
+    int index = currentIndex() + 1;
+    mp_stackedWidget->insertWidget(index, view);
+    emit tabDisplayed(TabType::SettingsTab);
+    insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
+    setCloseTabButton(index);
+    setCurrentIndex(index);
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {
@@ -119,10 +98,10 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     setTabButton(idx, RightSide, nullptr);
 }
 
-void TabBar::setNewTabButton()
+void TabBar::setNewTabButton(QAction* newTabAction)
 {
     QToolButton *tb = new QToolButton();
-    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::NewTabAction));
+    tb->setDefaultAction(newTabAction);
     tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
     int idx = addTab("");
     setTabEnabled(idx, false);
@@ -131,12 +110,12 @@ void TabBar::setNewTabButton()
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
 }
 
+// Returns the count of real tabs with content (excluding the last pseudo-tab
+// that acts as a button for creating new empty tabs; BTW what is the use for
+// such empty tabs?)
 int TabBar::realTabCount() const
 {
-    // The last tab is "+" in TabBar, but that isn't a real tab which displays any content hence the real count is tab count - 1
-    if (count() < 1)
-        return 0;
-    return count() - 1;
+    return count() < 1 ? 0 : count() - 1;
 }
 
 void TabBar::moveToNextTab()
@@ -151,20 +130,32 @@ void TabBar::moveToPreviousTab()
     setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
 }
 
-ZimView* TabBar::createNewTab(bool setCurrent, bool adjacentToCurrentTab)
+void TabBar::setCloseTabButton(int index)
+{
+    Q_ASSERT(index > 0 && index < realTabCount());
+
+    QToolButton *tb = new QToolButton(this);
+    QAction *a = new QAction(QIcon(":/icons/close.svg"), gt("close-tab"), tb);
+    a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
+    tb->setDefaultAction(a);
+    setTabButton(index, QTabBar::RightSide, tb);
+    connect(tb, &QToolButton::triggered, this, [=]() {
+        for ( int i = 0; i < realTabCount(); ++i ) {
+            if ( tb == tabButton(i, QTabBar::RightSide) ) {
+                closeTab(i);
+                return;
+            }
+        }
+    });
+}
+
+ZimView* TabBar::createNewTab(bool setCurrent, bool nextToCurrentTab)
 {
     auto tab = new ZimView(this, this);
-    int index;
-    if(adjacentToCurrentTab) {
-        index = currentIndex() + 1;
-    } else {
-        index = realTabCount(); // for New Tab Button
-    }
+    const int index = nextToCurrentTab ? currentIndex() + 1 : realTabCount();
     mp_stackedWidget->insertWidget(index, tab);
-    index = insertTab(index, "");
-    QToolButton *tb = new QToolButton(this);
-    tb->setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::CloseTabAction));
-    setTabButton(index, QTabBar::RightSide, tb);
+    insertTab(index, "");
+    setCloseTabButton(index);
     if (setCurrent) {
         setCurrentIndex(index);
     }
@@ -265,46 +256,47 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *wid
 
 void TabBar::closeTabsByZimId(const QString &id)
 {
-    // the last tab is + button, skip it
-    for (int i = count() - 2 ; i >= 0 ; i--) {
+    // 0th tab is always (unless this comment becomes outdated by the time you
+    // read it) the library tab, so iteration could start from 1, however we
+    // shouldn't try to save CPU cycles at the cost of the code breaking
+    // should this comment indeed become outdated ;)
+    for (int i = 0 ; i < realTabCount() ; ++i ) {
         auto *zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(i));
-        if (!zv)
-            continue;
-        if (zv->getWebView()->zimId() == id) {
+        if (zv && zv->getWebView()->zimId() == id) {
             closeTab(i);
         }
     }
 }
 
+QStringList TabBar::getTabUrls() const {
+    QStringList idList;
+    for (int index = 0; index <= mp_stackedWidget->count(); index++)
+    {
+        if (ZimView* zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(index)))
+            idList.push_back(zv->getWebView()->url().url());
+    }
+    return idList;
+}
+
 void TabBar::closeTab(int index)
 {
-    // the last tab is + button, cannot be closed
-    if (index == this->realTabCount())
+    // The first and last tabs (i.e. the library tab and the + (new tab) button)
+    // cannot be closed
+    if (index <= 0 || index >= this->realTabCount())
         return;
 
-    setSelectionBehaviorOnRemove(index);
-
-    QWidget *view = mp_stackedWidget->widget(index);
-
-    // library tab cannot be closed
-    if (qobject_cast<ContentManagerView*>(view)) {
-        return;
+    if ( index == currentIndex() ) {
+        setCurrentIndex(index + 1 == realTabCount() ? index - 1 : index + 1);
     }
 
+    QWidget *view = mp_stackedWidget->widget(index);
     mp_stackedWidget->removeWidget(view);
     view->setParent(nullptr);
     removeTab(index);
     view->close();
     view->deleteLater();
-}
 
-void TabBar::setSelectionBehaviorOnRemove(int index)
-{
-    if (index == count() - 2) {
-        setCurrentIndex(index - 1);
-    } else {
-        setCurrentIndex(index + 1);
-    }
+    KiwixApp::instance()->saveListOfOpenTabs();
 }
 
 void TabBar::onCurrentChanged(int index)
@@ -486,4 +478,6 @@ void TabBar::onTabMoved(int from, int to)
     QWidget *w_from = mp_stackedWidget->widget(from);
     mp_stackedWidget->removeWidget(w_from);
     mp_stackedWidget->insertWidget(to, w_from);
+
+    KiwixApp::instance()->saveListOfOpenTabs();
 }

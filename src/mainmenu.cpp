@@ -19,7 +19,7 @@ MainMenu::MainMenu(QWidget *parent) :
 
     m_fileMenu.setTitle(gt("file"));
     m_fileMenu.ADD_ACTION(NewTabAction);
-    m_fileMenu.ADD_ACTION(CloseTabAction);
+    m_fileMenu.ADD_ACTION(CloseCurrentTabAction);
     m_fileMenu.ADD_ACTION(ReopenClosedTabAction);
     m_fileMenu.ADD_ACTION(BrowseLibraryAction);
     m_fileMenu.ADD_ACTION(OpenFileAction);

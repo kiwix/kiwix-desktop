@@ -34,7 +34,7 @@ public:
         OpenHomePageAction,
         PrintAction,
         NewTabAction,
-        CloseTabAction,
+        CloseCurrentTabAction,
         ReopenClosedTabAction,
         BrowseLibraryAction,
         OpenFileAction,
@@ -87,8 +87,10 @@ public:
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
     QString parseStyleFromFile(QString filePath);
+    void saveListOfOpenTabs();
 
 public slots:
+    void newTab();
     void openZimFile(const QString& zimfile="");
     void openUrl(const QString& url, bool newTab=true);
     void openUrl(const QUrl& url, bool newTab=true);
@@ -98,7 +100,7 @@ public slots:
     void printVersions(std::ostream& out = std::cout);
 
 protected:
-    void createAction();
+    void createActions();
     void postInit();
 
 private:
@@ -115,10 +117,12 @@ private:
     kiwix::Server m_server;
     Translation m_translation;
     QFileSystemWatcher m_watcher;
+    QSettings* mp_session;
 
     QAction*     mpa_actions[MAX_ACTION];
 
     QString findLibraryDirectory();
+    void restoreTabs();
 };
 
 QString gt(const QString &key);
