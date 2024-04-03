@@ -54,6 +54,7 @@ void FindInPageBar::findClose()
         return;
     auto page = current->page();
     page->findText("");
+    current->setFocus();
     close();
 }
 
