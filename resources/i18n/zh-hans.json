@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Anterdc99",
 			"GuoPC",
 			"IceButBin",
 			"Josephine W.",
@@ -138,6 +139,7 @@
 	"ok": "好的",
 	"no-filter": "无过滤器",
 	"open-link-in-web-browser": "在网页浏览器中打开链接",
+	"open-link-new-tab": "在新标签页打开链接",
 	"download-dir-dialog-title": "您确定您要更改下载路径吗？",
 	"download-dir-dialog-msg": "新的下载路径为：\n{{DIRECTORY}}",
 	"invalid-port": "无效的接口",
