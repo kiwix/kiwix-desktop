@@ -566,15 +566,14 @@ void ContentManager::downloadBook(const QString &id)
     downloadStarted(book, downloadId);
 }
 
-void ContentManager::eraseBookFilesFromComputer(const QString dirPath, const QString fileName, const bool moveToTrash)
+void ContentManager::eraseBookFilesFromComputer(const std::string& bookPath, bool moveToTrash)
 {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     Q_UNUSED(moveToTrash);
 #endif
-    if (fileName == "*") {
-        return;
-    }
-    QDir dir(dirPath, fileName);
+    const std::string dirPath = kiwix::removeLastPathElement(bookPath);
+    const std::string fileGlob = kiwix::getLastPathElement(bookPath) + "*";
+    QDir dir(QString::fromStdString(dirPath), QString::fromStdString(fileGlob));
     for(const QString& file: dir.entryList()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         if (moveToTrash)
@@ -598,9 +597,7 @@ void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
     auto tabBar = KiwixApp::instance()->getTabWidget();
     tabBar->closeTabsByZimId(id);
     kiwix::Book book = mp_library->getBookById(id);
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(book.getPath()));
-    QString fileName = QString::fromStdString(kiwix::getLastPathElement(book.getPath())) + "*";
-    eraseBookFilesFromComputer(dirPath, fileName, moveToTrash);
+    eraseBookFilesFromComputer(book.getPath(), moveToTrash);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit mp_library->bookmarksChanged();
@@ -672,10 +669,8 @@ void ContentManager::reallyCancelBook(const QString& id)
     }
     removeDownload(id);
 
-    QString dirPath = QString::fromStdString(kiwix::removeLastPathElement(download->getPath()));
-    QString filename = QString::fromStdString(kiwix::getLastPathElement(download->getPath())) + "*";
     // incompleted downloaded file should be perma deleted
-    eraseBookFilesFromComputer(dirPath, filename, false);
+    eraseBookFilesFromComputer(download->getPath(), false);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit(oneBookChanged(id));

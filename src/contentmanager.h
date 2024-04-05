@@ -73,7 +73,7 @@ private: // functions
     void reallyCancelBook(const QString& id);
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
     void reallyEraseBook(const QString& id, bool moveToTrash);
-    void eraseBookFilesFromComputer(const QString dirPath, const QString filename, const bool moveToTrash);
+    void eraseBookFilesFromComputer(const std::string& bookPath, bool moveToTrash);
     void updateModel();
     void setCategories();
     void setLanguages();
