@@ -253,7 +253,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
     if (const auto downloadState = node->getDownloadState()) {
         if (downloadState->paused) {
             if (clickX < (x + w/2)) {
-                KiwixApp::instance()->getContentManager()->cancelBook(id, index);
+                KiwixApp::instance()->getContentManager()->cancelBook(id);
             } else {
                 KiwixApp::instance()->getContentManager()->resumeBook(id, index);
             }

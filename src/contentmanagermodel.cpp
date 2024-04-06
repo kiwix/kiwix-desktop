@@ -7,9 +7,8 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(const Downloads* downloads, QObject *parent)
+ContentManagerModel::ContentManagerModel(QObject *parent)
     : QAbstractItemModel(parent)
-    , m_downloads(*downloads)
 {
     connect(&td, &ThumbnailDownloader::oneThumbnailDownloaded, this, &ContentManagerModel::updateImage);
 }
@@ -27,14 +26,23 @@ int ContentManagerModel::columnCount(const QModelIndex &parent) const
 
 QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid())
-        return QVariant();
-
-    auto item = static_cast<Node*>(index.internalPointer());
     const auto displayRole = role == Qt::DisplayRole;
     const auto additionalInfoRole = role == Qt::UserRole+1;
-    if (displayRole || additionalInfoRole)
-        return item->data(index.column());
+    if ( (displayRole || additionalInfoRole) && index.isValid() ) {
+        const auto item = static_cast<Node*>(index.internalPointer());
+        QVariant r = item->data(index.column());
+        if ( index.column() != 0 )
+            return r;
+
+        r = getThumbnail(r);
+
+        if ( r.type() == QVariant::ByteArray )
+            return r;
+
+        const QString faviconUrl = r.toString();
+        if ( !faviconUrl.isEmpty() )
+            td.addDownload(faviconUrl, item->getBookId());
+    }
 
     return QVariant();
 }
@@ -84,8 +92,11 @@ QModelIndex ContentManagerModel::parent(const QModelIndex &index) const
 
 int ContentManagerModel::rowCount(const QModelIndex &parent) const
 {
-    Q_UNUSED(parent);
-    return zimCount;
+    const auto node = parent.isValid()
+                    ? static_cast<const Node*>(parent.internalPointer())
+                    : rootNode.get();
+
+    return node->childCount();
 }
 
 QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -103,38 +114,41 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
     }
 }
 
-void ContentManagerModel::setBooksData(const BookInfoList& data)
+void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads& downloads)
 {
-    m_data = data;
     rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
-    setupNodes();
+    beginResetModel();
+    bookIdToRowMap.clear();
+    for (auto bookItem : data) {
+        const auto rowNode = createNode(bookItem);
+
+        // Restore download state during model updates (filtering, etc)
+        rowNode->setDownloadState(downloads.value(rowNode->getBookId()));
+
+        bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
+        rootNode->appendChild(rowNode);
+    }
+    endResetModel();
     emit dataChanged(QModelIndex(), QModelIndex());
 }
 
-QByteArray ContentManagerModel::getThumbnail(const BookInfo& bookItem) const
+// Returns either data of the thumbnail (as a QByteArray) or a URL (as a
+// QString) from where the actual data can be obtained.
+QVariant ContentManagerModel::getThumbnail(const QVariant& faviconEntry) const
 {
-    QString id = bookItem["id"].toString();
-    QByteArray bookIcon;
-    try {
-        auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-        std::string favicon;
-        auto item = book.getIllustration(48);
-        favicon = item->getData();
-        bookIcon = QByteArray::fromRawData(reinterpret_cast<const char*>(favicon.data()), favicon.size());
-        bookIcon.detach(); // deep copy
-    } catch (...) {
-        const auto faviconUrl = bookItem["faviconUrl"].toString();
-        if (m_iconMap.contains(faviconUrl)) {
-            bookIcon = m_iconMap[faviconUrl];
-        }
-    }
-    return bookIcon;
+    if ( faviconEntry.type() == QVariant::ByteArray )
+        return faviconEntry;
+
+    const auto faviconUrl = faviconEntry.toString();
+    return m_iconMap.contains(faviconUrl)
+         ? m_iconMap[faviconUrl]
+         : faviconEntry;
 }
 
 std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) const
 {
     QString id = bookItem["id"].toString();
-    const QByteArray bookIcon = getThumbnail(bookItem);
+    const QVariant bookIcon = getThumbnail(bookItem["favicon"]);
     std::weak_ptr<RowNode> weakRoot = rootNode;
     auto rowNodePtr = std::shared_ptr<RowNode>(new
                                     RowNode({bookIcon, bookItem["title"],
@@ -149,71 +163,12 @@ std::shared_ptr<RowNode> ContentManagerModel::createNode(BookInfo bookItem) cons
     return rowNodePtr;
 }
 
-void ContentManagerModel::setupNodes()
-{
-    beginResetModel();
-    bookIdToRowMap.clear();
-    for (auto bookItem : m_data) {
-        const auto rowNode = createNode(bookItem);
-
-        // Restore download state during model updates (filtering, etc)
-        const auto downloadIter = m_downloads.constFind(rowNode->getBookId());
-        if ( downloadIter != m_downloads.constEnd() ) {
-            rowNode->setDownloadState(downloadIter.value());
-        }
-
-        bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
-        rootNode->appendChild(rowNode);
-    }
-    endResetModel();
-}
-
-void ContentManagerModel::refreshIcons()
-{
-    if (KiwixApp::instance()->getContentManager()->isLocal())
-        return;
-    td.clearQueue();
-    for (auto i = 0; i < rowCount() && i < m_data.size(); i++) {
-        auto bookItem = m_data[i];
-        auto id = bookItem["id"].toString();
-        const auto faviconUrl = bookItem["faviconUrl"].toString();
-        auto app = KiwixApp::instance();
-        try {
-            auto book = app->getLibrary()->getBookById(id);
-            auto item = book.getIllustration(48);
-        } catch (...) {
-            if (faviconUrl != "" && !m_iconMap.contains(faviconUrl)) {
-                td.addDownload(faviconUrl, id);
-            }
-        }
-    }
-}
-
 bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
 {
     auto item = static_cast<Node*>(parent.internalPointer());
     if (item)
         return item->childCount() > 0;
     return true;
-}
-
-bool ContentManagerModel::canFetchMore(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-        return false;
-    return (zimCount < m_data.size());
-}
-
-void ContentManagerModel::fetchMore(const QModelIndex &parent)
-{
-    if (parent.isValid())
-        return;
-    int remainder = m_data.size() - zimCount;
-    int zimsToFetch = qMin(5, remainder);
-    beginInsertRows(QModelIndex(), zimCount, zimCount + zimsToFetch - 1);
-    zimCount += zimsToFetch;
-    endInsertRows();
-    refreshIcons();
 }
 
 void ContentManagerModel::sort(int column, Qt::SortOrder order)
@@ -238,6 +193,11 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
     KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
 }
 
+RowNode* ContentManagerModel::getRowNode(size_t row)
+{
+    return static_cast<RowNode*>(rootNode->child(row).get());
+}
+
 void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray imageData)
 {
     const auto it = bookIdToRowMap.constFind(bookId);
@@ -245,11 +205,10 @@ void ContentManagerModel::updateImage(QString bookId, QString url, QByteArray im
         return;
 
     const size_t row = it.value();
-    const auto item = static_cast<RowNode*>(rootNode->child(row).get());
+    const auto item = getRowNode(row);
     item->setIconData(imageData);
     m_iconMap[url] = imageData;
-    const QModelIndex index = this->index(row, 0);
-    emit dataChanged(index, index);
+    triggerDataUpdateAt( this->index(row, 0) );
 }
 
 void ContentManagerModel::updateDownload(QString bookId)
@@ -258,18 +217,11 @@ void ContentManagerModel::updateDownload(QString bookId)
 
     if ( it != bookIdToRowMap.constEnd() ) {
         const size_t row = it.value();
-        const QModelIndex newIndex = this->index(row, 5);
-        emit dataChanged(newIndex, newIndex);
+        triggerDataUpdateAt( this->index(row, 5) );
     }
 }
 
-
-void ContentManagerModel::pauseDownload(QModelIndex index)
-{
-    emit dataChanged(index, index);
-}
-
-void ContentManagerModel::resumeDownload(QModelIndex index)
+void ContentManagerModel::triggerDataUpdateAt(QModelIndex index)
 {
     emit dataChanged(index, index);
 }
@@ -281,9 +233,7 @@ void ContentManagerModel::removeDownload(QString bookId)
         return;
 
     const size_t row = it.value();
-    auto& node = static_cast<RowNode&>(*rootNode->child(row));
-    node.setDownloadState(nullptr);
-    const QModelIndex index = this->index(row, 5);
-    emit dataChanged(index, index);
+    getRowNode(row)->setDownloadState(nullptr);
+    triggerDataUpdateAt( this->index(row, 5) );
 }
 
