@@ -163,5 +163,6 @@
 	"content-type-searcher-placeholder": "Филтрирај вид на содржина",
 	"no-details": "Само вовед",
 	"no-pictures": "Нема слики",
-	"no-videos": "Нема видеа"
+	"no-videos": "Нема видеа",
+	"open-previous-tabs-at-startup": "Отвори го претходното јазиче при пуштање"
 }

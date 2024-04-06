@@ -4,6 +4,7 @@
 			"Carlespera",
 			"DDPAT",
 			"Destinid10 2",
+			"Eulalio",
 			"Fitoschido",
 			"Geryescalier",
 			"Ice bulldog",
@@ -163,5 +164,6 @@
 	"couldnt-open-location-text": "Kiwix no puede abrir la carpeta {{FOLDER}}",
 	"move-files-to-trash": "Mover archivos eliminados a la papelera",
 	"move-files-to-trash-text": "Esta acción moverá el archivo a la papelera.",
-	"perma-delete-files-text": "Esta acción eliminará permanentemente el archivo."
+	"perma-delete-files-text": "Esta acción eliminará permanentemente el archivo.",
+	"open-previous-tabs-at-startup": "Abrir pestañas anteriores al inicio"
 }

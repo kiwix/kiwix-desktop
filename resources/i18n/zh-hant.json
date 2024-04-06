@@ -165,5 +165,6 @@
 	"content-type-searcher-placeholder": "篩選內容類型",
 	"no-details": "僅介紹",
 	"no-pictures": "沒有圖片",
-	"no-videos": "沒有影片"
+	"no-videos": "沒有影片",
+	"open-previous-tabs-at-startup": "啟動時打開先前的分頁"
 }

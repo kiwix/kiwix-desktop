@@ -3,6 +3,7 @@
 		"authors": [
 			"Florian COLLIN",
 			"Gomoko",
+			"Hecatonchire",
 			"McDutchie",
 			"Stephane",
 			"Verdy p",
@@ -131,6 +132,7 @@
 	"ok": "ok",
 	"no-filter": "aucun filtre",
 	"open-link-in-web-browser": "Ouvrir le lien dans votre navigateur web",
+	"open-link-new-tab": "Ouvrir le lien dans un nouvel onglet",
 	"download-dir-dialog-title": "Voulez-vous vraiment modifier le répertoire de téléchargement ?",
 	"download-dir-dialog-msg": "Le nouveau chemin du répertoire de téléchargement sera :\n{{DIRECTORY}}",
 	"invalid-port": "Port non valide",
@@ -167,5 +169,6 @@
 	"content-type-searcher-placeholder": "Filtrer le type de contenu",
 	"no-details": "Introduction seulement",
 	"no-pictures": "Aucune image",
-	"no-videos": "Aucune vidéo"
+	"no-videos": "Aucune vidéo",
+	"open-previous-tabs-at-startup": "Ouvrir les onglets précédents au démarrage"
 }
