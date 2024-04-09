@@ -35,7 +35,7 @@ SettingsView::SettingsView(QWidget *parent)
     ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
     ui->reopenTabLabel->setText(gt("open-previous-tabs-at-startup"));
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    ui->line_5->hide();
+    ui->lineMonitor->hide();
     ui->moveToTrashLabel->hide();
     ui->moveToTrashToggle->hide();
 #endif
