@@ -18,9 +18,14 @@ public:
 
 public slots:
     void setupList();
-    void on_itemActivated(QListWidgetItem *item);
+    void onItemClicked(QListWidgetItem* item);
+    void onItemDoubleClicked(QListWidgetItem *item);
+    void onItemPressed(QListWidgetItem* item, Qt::MouseButtons buttons);
+    void onItemActivated(QListWidgetItem *item, Qt::MouseButtons buttons);
 private:
     Ui::readinglistbar *ui;
+    int clickKind;
+    void openUrl(QListWidgetItem* item, bool newTab);
 };
 
 #endif // READINGLISTBAR_H

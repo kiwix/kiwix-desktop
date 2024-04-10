@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,
             this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::ToggleReadingListAction), &QAction::toggled,
-            this, &MainWindow::when_ReadingList_toggled);
+            this, &MainWindow::readingListToggled);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
     connect(app->getAction(KiwixApp::DonateAction), &QAction::triggered,
@@ -57,12 +57,11 @@ MainWindow::MainWindow(QWidget *parent) :
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
     connect(mp_ui->tabBar, &TabBar::tabDisplayed,
             this, [=](TabType tabType) {
-                when_libraryPageDisplayed(tabType == TabType::LibraryTab);
+                tabChanged(tabType);
             });
 
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
             &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::currentTitleChanged);
-
     // This signal emited more often than the history really updated
     // but for now we have no better signal for it.
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
@@ -120,8 +119,7 @@ bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
     return false;
 }
 
-
-void MainWindow::when_ReadingList_toggled(bool state)
+void MainWindow::readingListToggled(bool state)
 {
     if (state) {
         mp_ui->sideBar->setCurrentWidget(mp_ui->readinglistbar);
@@ -132,19 +130,16 @@ void MainWindow::when_ReadingList_toggled(bool state)
     }
 }
 
-void MainWindow::when_libraryPageDisplayed(bool showed)
+void MainWindow::tabChanged(TabType tabType) 
 {
-    auto app = KiwixApp::instance();
-
-    // When library sidebar appeared, or hidden, reading list is always hidden.
-    app->getAction(KiwixApp::ToggleReadingListAction)->setChecked(false);
-
-    if (showed) {
+    QAction *readingList = KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction);
+    if (tabType == TabType::SettingsTab) { 
+        mp_ui->sideBar->hide();    
+    } else if(tabType == TabType::LibraryTab) { 
         mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);
         mp_ui->sideBar->show();
-    }
-    else {
-        mp_ui->sideBar->hide();
+    } else { 
+        readingListToggled(readingList->isChecked());
     }
 }
 
