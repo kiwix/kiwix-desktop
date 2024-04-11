@@ -125,7 +125,12 @@ KiwixApp::~KiwixApp()
 {
     m_server.stop();
     if (mp_downloader) {
-        mp_downloader->close();
+        try {
+            mp_downloader->close();
+        } catch (const std::exception& err) {
+            std::cerr << "ERROR: Failed to save the downloader state: "
+                      << err.what() << std::endl;
+        }
         delete mp_downloader;
     }
     if (mp_manager) {
