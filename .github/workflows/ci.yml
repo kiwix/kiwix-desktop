@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         uses: kiwix/kiwix-build/actions/dl_deps_archive@main
         with:
-          target_platform: native_dyn
+          target_platform: linux-x86_64-dyn
 
       - name: Retrieve source code
         uses: actions/checkout@v3
@@ -35,7 +35,7 @@ jobs:
       - name: Compile source code
         shell: bash
         env:
-          PKG_CONFIG_PATH: "/home/runner/BUILD_native_dyn/INSTALL/lib/pkgconfig:/home/runner/BUILD_native_dyn/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
+          PKG_CONFIG_PATH: "/home/runner/BUILD_linux-x86_64/INSTALL/lib/pkgconfig:/home/runner/BUILD_linux-x86_64/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
         run: |
-          qmake PREFIX=$HOME/BUILD_native_dyn/INSTALL
+          qmake PREFIX=$HOME/BUILD_linux-x86_64/INSTALL
           make
