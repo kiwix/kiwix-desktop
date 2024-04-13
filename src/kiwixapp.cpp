@@ -125,7 +125,12 @@ KiwixApp::~KiwixApp()
 {
     m_server.stop();
     if (mp_downloader) {
-        mp_downloader->close();
+        try {
+            mp_downloader->close();
+        } catch (const std::exception& err) {
+            std::cerr << "ERROR: Failed to save the downloader state: "
+                      << err.what() << std::endl;
+        }
         delete mp_downloader;
     }
     if (mp_manager) {
@@ -434,8 +439,7 @@ void KiwixApp::createActions()
     HIDE_ACTION(SavePageAsAction);
     */
 
-    CREATE_ACTION_SHORTCUT(SearchArticleAction, gt("search-article"), QKeySequence(Qt::CTRL | Qt::Key_L));
-    HIDE_ACTION(SearchArticleAction);
+    CREATE_ACTION_SHORTCUTS(SearchArticleAction, gt("search-article"), QList<QKeySequence>({QKeySequence(Qt::Key_F6), QKeySequence(Qt::CTRL | Qt::Key_L), QKeySequence(Qt::ALT | Qt::Key_D)}));
 
     CREATE_ACTION_SHORTCUT(SearchLibraryAction, gt("search-in-library"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
     HIDE_ACTION(SearchLibraryAction);
@@ -446,8 +450,8 @@ void KiwixApp::createActions()
             this, [=]() { getTabWidget()->openFindInPageBar(); });
 
     const auto fullScreenKeySeq = QKeySequence(QKeySequence::FullScreen).isEmpty()
-                                ? (int) Qt::Key_F11
-                                : (int) QKeySequence::FullScreen;
+                                ? QKeySequence(Qt::Key_F11)
+                                : QKeySequence(QKeySequence::FullScreen);
     CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"), fullScreenKeySeq);
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
