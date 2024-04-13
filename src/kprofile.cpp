@@ -21,14 +21,68 @@ SettingsManager* getSettingsManager()
     return KiwixApp::instance()->getSettingsManager();
 }
 
-void KProfile::setDownloadInfo(const QString &fileName, const QString &mimeType)
+void KProfile::setFileOpenChoice(QString fileName, bool choice)
 {
-    m_downloadInfo = std::make_pair(fileName, mimeType);
+    m_fileOpenChoice = std::make_pair(fileName,choice);
 }
 
-KProfile::DownloadInfo KProfile::getDownloadInfo() const
+KProfile::DownloadInfo KProfile::getFileOpenChoice() const
 {
-    return m_downloadInfo;
+    return m_fileOpenChoice;
+}
+
+bool KProfile::isNonReadableFile(QString mimeType)
+{
+    if (mimeType.toStdString()=="application/pdf"){ 
+        return true;
+    }
+    return false;
+}
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QString KProfile::getFileName(QWebEngineDownloadItem* download)
+#else
+    QString KProfile::getFileName(QWebEngineDownloadRequest* download)
+#endif
+{
+    int ret;
+    bool nrFile = isNonReadableFile(download->mimeType());
+    QString defaultFileName = download->url().fileName();
+    QString fileName("");
+    
+    if(nrFile){
+        QMessageBox msgBox;
+
+        msgBox.setText(gt("download-or-open"));
+        msgBox.setStandardButtons(QMessageBox::Open | QMessageBox::Save | QMessageBox::Close);
+        msgBox.button(QMessageBox::Save )->setText(gt("download"));
+        msgBox.setDefaultButton(QMessageBox::Save);
+        ret = msgBox.exec();
+
+        if(ret == QMessageBox::Open){
+            QTemporaryFile tempFile;
+
+            if (tempFile.open()) {
+                fileName = tempFile.fileName();
+                tempFile.close();
+            }
+            setFileOpenChoice(fileName,true);
+        }
+    }
+
+    if(!nrFile || ret == QMessageBox::Save){
+        fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(),
+                                                            gt("save-file-as-window-title"), defaultFileName);
+        if (!fileName.isEmpty()) {
+            QString extension = "." + download->url().url().section('.', -1);
+            if (!fileName.endsWith(extension)) {
+                fileName.append(extension);
+            }
+            setFileOpenChoice(fileName,false);
+        }
+        
+    }
+    return fileName;
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -37,35 +91,10 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
 void KProfile::startDownload(QWebEngineDownloadRequest* download)
 #endif
 {   
-    QString fileName;
-    QString defaultFileName = download->url().fileName();
+    QString fileName=getFileName(download);
 
-    QString dmimeType = download->mimeType();
-    
-    if (dmimeType.toStdString()=="application/pdf"){ 
-        auto downloadPath = getSettingsManager()->getDownloadDir();
-        fileName = downloadPath + "/" + defaultFileName;
-        setDownloadInfo(fileName,dmimeType);
-        
-        QFile file(fileName);
-
-        if (file.exists()){
-            QDesktopServices::openUrl(QUrl::fromLocalFile(fileName));
+    if (fileName.isEmpty()) {
             return;
-        }
-    }
-
-    else{
-        fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(),
-                                                        gt("save-file-as-window-title"), defaultFileName);
-        if (fileName.isEmpty()) {
-            return;
-        }
-        QString extension = "." + download->url().url().section('.', -1);
-        if (!fileName.endsWith(extension)) {
-            fileName.append(extension);
-        }
-        setDownloadInfo(fileName,dmimeType);
     }
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
@@ -83,10 +112,13 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
 
 void KProfile::downloadFinished()
 {
-    KProfile::DownloadInfo dInfo = getDownloadInfo();
-    if (dInfo.second.toStdString()=="application/pdf"){
+    KProfile::DownloadInfo dInfo = getFileOpenChoice();
+
+    if (dInfo.second){
         QDesktopServices::openUrl(QUrl::fromLocalFile(dInfo.first));
+        return;
     }
+    
     QMessageBox msgBox;
     msgBox.setText(gt("download-finished-message"));
     msgBox.exec();
