@@ -80,7 +80,6 @@ bool KProfile::isNonReadableFile(QString mimeType)
             }
             setFileOpenChoice(fileName,false);
         }
-        
     }
     return fileName;
 }
