@@ -165,5 +165,7 @@
     "no-details": "Introduction only",
     "no-pictures": "No Pictures",
     "no-videos": "No Videos",
-    "open-previous-tabs-at-startup": "Open previous tabs at startup"
+    "open-previous-tabs-at-startup": "Open previous tabs at startup",
+    "download-or-open":"Do you want to open or download the file?"
+
 }
