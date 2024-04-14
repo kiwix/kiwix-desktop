@@ -1,5 +1,5 @@
-#include "kiwixapp.h"
 #include "urlschemehandler.h"
+#include "kiwixapp.h"
 #include "blobbuffer.h"
 #include <QDebug>
 #include <QWebEngineUrlRequestJob>
@@ -100,6 +100,25 @@ class IdNameMapper : public kiwix::NameMapper {
 };
 
 
+namespace
+{
+
+struct SearchResultsWithEstimatedMatchCount
+{
+    std::shared_ptr<zim::SearchResultSet> results;
+    int estimatedMatchCount = 0;
+};
+
+SearchResultsWithEstimatedMatchCount getSearchResults(zim::Search& s, int start, int pageLength)
+{
+    SearchResultsWithEstimatedMatchCount r;
+    r.estimatedMatchCount = s.getEstimatedMatches();
+    r.results = std::make_shared<zim::SearchResultSet>(s.getResults(start, pageLength));
+    return r;
+}
+
+} // unnamed namespace
+
 void
 UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
 {
@@ -131,10 +150,19 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
         request->fail(QWebEngineUrlRequestJob::UrlInvalid);
         return;
     }
+
+    SearchResultsWithEstimatedMatchCount searchResult;
+    try {
+        searchResult = getSearchResults(*search, start, pageLength);
+    } catch (...) {
+        request->fail(QWebEngineUrlRequestJob::RequestFailed);
+        return;
+    }
+
     kiwix::SearchRenderer renderer(
-        search->getResults(start, pageLength),
+        *searchResult.results,
         start,
-        search->getEstimatedMatches());
+        searchResult.estimatedMatchCount);
     renderer.setSearchPattern(searchQuery);
     renderer.setSearchBookQuery("content="+bookId.toStdString());
     renderer.setProtocolPrefix("zim://");

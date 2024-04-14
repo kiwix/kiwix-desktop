@@ -1,5 +1,5 @@
-#include <QtGui>
 #include "contentmanagerdelegate.h"
+#include <QtGui>
 #include <QApplication>
 #include <QDialog>
 #include <QStyleOptionViewItem>
