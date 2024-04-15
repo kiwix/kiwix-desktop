@@ -1,8 +1,8 @@
-#include <QTranslator>
-
 #include "mainmenu.h"
 #include "kiwixapp.h"
 #include "menuproxystyle.h"
+
+#include <QTranslator>
 
 #define ADD_ACTION(ID) addAction(app->getAction(KiwixApp::ID));
 

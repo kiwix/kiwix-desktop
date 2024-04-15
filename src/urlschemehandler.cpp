@@ -1,5 +1,5 @@
-#include "kiwixapp.h"
 #include "urlschemehandler.h"
+#include "kiwixapp.h"
 #include "blobbuffer.h"
 #include <QDebug>
 #include <QWebEngineUrlRequestJob>

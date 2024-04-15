@@ -97,6 +97,43 @@ void Library::removeBookFromLibraryById(const QString& id) {
     mp_library->removeBookById(id.toStdString());
 }
 
+namespace
+{
+
+std::string pseudoPathOfAFileBeingDownloaded(const std::string& path)
+{
+    return path + ".beingdownloadedbykiwix";
+}
+
+} // unnamed namespace
+
+void Library::addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir)
+{
+    const QString downloadUrl = QString::fromStdString(book.getUrl());
+
+    // XXX: This works if the URL is a direct link to a ZIM file
+    // XXX: rather than to a torrent or a metalink file
+    const QString fileName = downloadUrl.split('/').back();
+
+    const QString path = QDir(downloadDir).absoluteFilePath(fileName);
+    const std::string stlPath = QDir::toNativeSeparators(path).toStdString();
+
+    kiwix::Book bookCopy(book);
+    bookCopy.setPath(pseudoPathOfAFileBeingDownloaded(stlPath));
+    addBookToLibrary(bookCopy);
+}
+
+bool Library::isBeingDownloadedByUs(QString path) const
+{
+    const auto fakePath = pseudoPathOfAFileBeingDownloaded(path.toStdString());
+    try {
+        mp_library->getBookByPath(fakePath);
+        return true;
+    } catch ( const std::out_of_range& ) {
+        return false;
+    }
+}
+
 void Library::addBookmark(kiwix::Bookmark &bookmark)
 {
     mp_library->addBookmark(bookmark);
@@ -125,6 +162,8 @@ QStringList Library::getLibraryZimsFromDir(QString dir) const
     QStringList zimsInDir;
     for (auto str : getBookIds()) {
         auto filePath = QString::fromStdString(getBookById(str).getPath());
+        if ( filePath.endsWith(".beingdownloadedbykiwix") )
+                continue;
         QDir absoluteDir = QFileInfo(filePath).absoluteDir();
         if (absoluteDir == dir) {
             zimsInDir.push_back(filePath);
@@ -154,8 +193,14 @@ void Library::updateFromDir(QString monitorDir)
     QStringList removedZims = (oldDir - newDir).values();
     auto manager = kiwix::Manager(LibraryManipulator(this));
     bool needsRefresh = !removedZims.empty();
-    for (auto book : addedZims) {
-        needsRefresh |= manager.addBookFromPath(book.toStdString());
+    for (auto bookPath : addedZims) {
+        if ( isBeingDownloadedByUs(bookPath) ) {
+            // qDebug() << "DBG: Library::updateFromDir(): "
+            //          << bookPath
+            //          << " ignored since it is being downloaded by us.";
+        } else {
+            needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
+        }
     }
     for (auto bookPath : removedZims) {
         try {
@@ -170,7 +215,7 @@ void Library::updateFromDir(QString monitorDir)
 
 void Library::asyncUpdateFromDir(QString dir)
 {
-    QtConcurrent::run( [=]() {
+    (void) QtConcurrent::run([=]() {
         updateFromDir(dir);
     });
 }

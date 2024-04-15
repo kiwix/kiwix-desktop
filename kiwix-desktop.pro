@@ -8,6 +8,9 @@ QT       += core gui network
 QT       += webenginewidgets
 QT       += printsupport
 
+# Avoid stripping incompatible files, due to false identification as executables, on WSL
+DETECT_WSL = $$system(test -f /proc/sys/fs/binfmt_misc/WSLInterop && echo true || echo false)
+equals(DETECT_WSL , "true"): CONFIG += nostrip
 CONFIG += link_pkgconfig
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -15,7 +18,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = kiwix-desktop
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++17
+QMAKE_CXXFLAGS += -std=c++17 -Werror
 QMAKE_LFLAGS +=  -std=c++17
 
 # Also change resources/org.kiwix.desktop.appdata.xml

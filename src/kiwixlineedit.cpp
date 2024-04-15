@@ -16,6 +16,8 @@ void KiwixLineEdit::resizeEvent(QResizeEvent *event)
 }
 bool KiwixLineEdit::eventFilter(QObject* object, QEvent* event)
 {
+    Q_UNUSED(object);
+
     if (event->type() == QEvent::MouseButtonPress) {
         emit(clicked());
     } else if (event->type() == QEvent::FocusIn) {

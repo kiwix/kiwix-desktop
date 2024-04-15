@@ -4,6 +4,7 @@
 			"Adam-Yourist",
 			"DDPAT",
 			"Diman Russkov",
+			"Dirruw'o",
 			"Helpau",
 			"Ice bulldog",
 			"Kareyac",
@@ -174,5 +175,6 @@
 	"content-type-searcher-placeholder": "Фильтровать тип контента",
 	"no-details": "Только введение",
 	"no-pictures": "Без картинок",
-	"no-videos": "Без видео"
+	"no-videos": "Без видео",
+	"open-previous-tabs-at-startup": "Открыть предыдущие вкладки при запуске"
 }

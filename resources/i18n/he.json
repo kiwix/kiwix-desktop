@@ -129,6 +129,7 @@
 	"ok": "אישור",
 	"no-filter": "ללא מסנן",
 	"open-link-in-web-browser": "פתיחת קישור בדפדפן",
+	"open-link-new-tab": "פתיחת קישור בלשונית חדשה",
 	"download-dir-dialog-title": "להחליף את תיקיית ההורדה?",
 	"download-dir-dialog-msg": "נתיב תיקיית ההורדה החדש הוא:\n{{DIRECTORY}}",
 	"invalid-port": "פתחה שגויה",
@@ -165,5 +166,6 @@
 	"content-type-searcher-placeholder": "סינון לפי סוג תוכן",
 	"no-details": "הקדמה בלבד",
 	"no-pictures": "ללא תמונות",
-	"no-videos": "ללא סרטים"
+	"no-videos": "ללא סרטים",
+	"open-previous-tabs-at-startup": "לפתוח את הלשוניות הקודמות בעת ההפעלה"
 }

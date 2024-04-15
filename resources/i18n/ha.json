@@ -129,6 +129,7 @@
 	"ok": "ok",
 	"no-filter": "babu tacewa",
 	"open-link-in-web-browser": "Bude hanyar haɗi a cikin burauzar yanar gizo",
+	"open-link-new-tab": "Bude mahadar a sabon shafi?",
 	"download-dir-dialog-title": "Shin kun tabbata kuna so ku canza kundin saukewa?",
 	"download-dir-dialog-msg": "Sabuwar hanyar duba jagorar za ta kasance:\n{{DIRECTORY}}",
 	"invalid-port": "Rami marar inganci",

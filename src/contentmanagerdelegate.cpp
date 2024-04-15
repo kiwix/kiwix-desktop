@@ -1,5 +1,5 @@
-#include <QtGui>
 #include "contentmanagerdelegate.h"
+#include <QtGui>
 #include <QApplication>
 #include <QDialog>
 #include <QStyleOptionViewItem>
@@ -233,6 +233,8 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
 bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
+    Q_UNUSED(model);
+
     if(event->type() == QEvent::MouseButtonRelease )
     {
         QMouseEvent * e = (QMouseEvent *)event;
@@ -274,7 +276,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
     if (const auto downloadState = node->getDownloadState()) {
         if (downloadState->paused) {
             if (clickX < (x + w/2)) {
-                KiwixApp::instance()->getContentManager()->cancelBook(id, index);
+                KiwixApp::instance()->getContentManager()->cancelBook(id);
             } else {
                 KiwixApp::instance()->getContentManager()->resumeBook(id, index);
             }
@@ -293,6 +295,8 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
 QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(option);
+
     if (index.parent().isValid()) {
         return QSize(300, 70);
     }

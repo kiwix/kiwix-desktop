@@ -41,17 +41,14 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
         QMessageBox::critical(nullptr, "Translation error", e.what());
         return;
     }
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    m_qtTranslator.load(QLocale(), "qt", "_",
-                        QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-#else
-    m_qtTranslator.load(QLocale(), "qt", "_",
-                        QLibraryInfo::path(QLibraryInfo::TranslationsPath));
-#endif
-    installTranslator(&m_qtTranslator);
 
-    m_appTranslator.load(QLocale(), "kiwix-desktop", "_", ":/i18n/");
-    installTranslator(&m_appTranslator);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QString path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#else
+    QString path = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#endif
+    loadAndInstallTranslations(m_qtTranslator, "qt", path);
+    loadAndInstallTranslations(m_appTranslator, "kiwix-desktop", ":/i18n/");
 
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawkb.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawkl.ttf");
@@ -59,6 +56,12 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawksl.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawk.ttf");
     setFont(QFont("Selawik"));
+}
+
+void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory) {
+    if (translator.load(QLocale(), filename, "_", directory)) {
+        installTranslator(&translator);
+    }
 }
 
 void KiwixApp::init()
@@ -441,10 +444,10 @@ void KiwixApp::createActions()
     mpa_actions[FindInPageAction]->setShortcuts({QKeySequence::Find, Qt::Key_F3});
     connect(mpa_actions[FindInPageAction], &QAction::triggered,
             this, [=]() { getTabWidget()->openFindInPageBar(); });
-    
+
     const auto fullScreenKeySeq = QKeySequence(QKeySequence::FullScreen).isEmpty()
-                                ? Qt::Key_F11
-                                : QKeySequence::FullScreen;
+                                ? QKeySequence(Qt::Key_F11)
+                                : QKeySequence(QKeySequence::FullScreen);
     CREATE_ACTION_ICON_SHORTCUT(ToggleFullscreenAction, "full-screen-enter", gt("set-fullscreen"), fullScreenKeySeq);
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
