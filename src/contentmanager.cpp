@@ -600,6 +600,8 @@ void ContentManager::downloadBook(const QString &id)
     std::string downloadId;
     try {
         downloadId = startDownload(book);
+    } catch (const ContentManagerError& ) {
+        throw;
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
