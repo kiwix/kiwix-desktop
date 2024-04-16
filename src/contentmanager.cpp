@@ -53,8 +53,21 @@ void throwDownloadUnavailableError()
                               gt("download-unavailable-text"));
 }
 
-void checkEnoughStorageAvailable(const kiwix::Book& book, QString targetDir)
+void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
 {
+    const QFileInfo targetDirInfo(targetDir);
+    if ( !targetDirInfo.isDir() ) {
+        throw ContentManagerError(gt("download-storage-error"),
+                                  gt("download-dir-missing"));
+    }
+
+    // XXX: This may lie under Windows
+    // XXX: (see https://doc.qt.io/qt-5/qfile.html#platform-specific-issues)
+    if ( !targetDirInfo.isWritable() ) {
+        throw ContentManagerError(gt("download-storage-error"),
+                                  gt("download-dir-not-writable"));
+    }
+
     QStorageInfo storage(targetDir);
     auto bytesAvailable = storage.bytesAvailable();
     if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
@@ -580,7 +593,7 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
 std::string ContentManager::startDownload(const kiwix::Book& book)
 {
     auto downloadPath = getSettingsManager()->getDownloadDir();
-    checkEnoughStorageAvailable(book, downloadPath);
+    checkThatBookCanBeSaved(book, downloadPath);
 
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
 

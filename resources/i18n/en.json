@@ -146,6 +146,8 @@
     "delete-book-text": "Are you sure you want to delete <b>{{ZIM}}</b>?",
     "download-storage-error": "Storage Error",
     "download-storage-error-text": "The system doesn't have enough storage available.",
+    "download-dir-missing": "Download directory doesn't exist.",
+    "download-dir-not-writable": "Download directory is not writable.",
     "download-unavailable": "Download Unavailable",
     "download-unavailable-text": "This download is unavailable.",
     "open-book": "Open book",
