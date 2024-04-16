@@ -97,9 +97,5 @@ void ContentManagerSide::setCategories(QStringList categories)
 
 void ContentManagerSide::setLanguages(ContentManager::LanguageList langList)
 {
-    qDebug() << "List of languages:";
-    for (const QPair<QString, QString>& languagePair : langList) {
-        qDebug() << languagePair.first;
-    }
     mp_languages->setSelections(langList, KiwixApp::instance()->getSettingsManager()->getLanguageList());
 }

@@ -154,6 +154,42 @@ void SettingsManager::setContentType(FilterList contentTypeList)
     emit(contentTypeChanged(m_contentTypeList));
 }
 
+QString SettingsManager::getLanguageName(QString fileName) // Get native language name based on filename
+{
+    QString dirPath = "resources/i18n";
+    QFile file(dirPath + "/" + fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData, &error);
+    if (error.error != QJsonParseError::NoError) {
+        qDebug() << "Error parsing JSON " << fileName << ":" << error.errorString();
+        return QString();
+    }
+
+    QJsonObject obj = doc.object();
+    if (obj.contains("name")) { return obj.value("name").toString(); }
+    else { qDebug() << "Cannot find element \"name\" in " << fileName; }
+
+    return QString();
+}
+
+void SettingsManager::loadAvailableLanguages() {
+    QString dirPath = "resources/i18n";
+    QDir directory(dirPath);
+    if (!directory.exists()) {
+        qDebug() << "Directory does not exist:" << dirPath;
+        return;
+    }
+    QStringList jsonFiles = directory.entryList(QDir::Files);
+    for(QString &fileName : jsonFiles) {
+        if(getLanguageName(fileName).isEmpty() || fileName == "qqq.json") { continue; }
+        m_appLangCodes.append(fileName.split(".")[0]);
+    }
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
@@ -164,25 +200,21 @@ void SettingsManager::initSettings()
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     m_reopenTab = m_settings.value("reopenTab", false).toBool();
     // This regards the application language
-    m_appLangCodes = {
-        "ar", "bcl", "bn", "br", "ca", "cs", "da", "dag", "de", "diq",
-        "en", "eo", "es", "fa", "fi", "fr", "gsw", "ha", "he", "hi",
-        "hy", "ia", "id", "ie", "ig", "igl", "io", "it", "ja", "ko",
-        "ku-latn", "lb", "mk", "ms", "my", "nb", "nl", "nqo", "or",
-        "pl", "pt-br", "pt", "qqq", "ro", "roa-tara", "ru", "sc",
-        "scn", "sdc", "se", "sk", "skr-arab", "sl", "sms", "sq",
-        "sr-ec", "sro", "sv", "sw", "ta", "te", "th", "tn", "tr",
-        "uk", "yo", "zgh", "zh-hans", "zh-hant"
-    };
+    loadAvailableLanguages();
+
     int i = 0, defaultLanguage = -1;
     for (const QString& code : m_appLangCodes) {
         QString name = QLocale::languageToString(QLocale(code).language());
-        if(name == "English") defaultLanguage = i;
+        if(name == "English") 
+        { 
+            defaultLanguage = i; 
+            break;
+        }
         i++;
     }
     m_appLangIndex = m_settings.value("app/languageIndex", defaultLanguage).toInt();
     // Below regards the search filters
-    QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
+    QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0); // TODO maybe needs fix
     QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
     defaultLangList.append(defaultLang);
     QVariant defaultLangVariant(defaultLangList);

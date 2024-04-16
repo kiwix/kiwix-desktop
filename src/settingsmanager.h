@@ -32,6 +32,8 @@ public:
     bool getReopenTab() const { return m_reopenTab; }
     QList<QString> getLanguageCodes() { return m_appLangCodes; }
     int getAppLanguageIndex() { return m_appLangIndex; }
+    QString getLanguageName(QString fileName);
+    void loadAvailableLanguages();
     FilterList getLanguageList() { return deducePair(m_langList); }
     FilterList getCategoryList() { return deducePair(m_categoryList); }
     FilterList getContentType() { return deducePair(m_contentTypeList); }

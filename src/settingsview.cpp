@@ -55,7 +55,10 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir, const QStri
     const QList<QString> languageCodes = KiwixApp::instance()->getSettingsManager()->getLanguageCodes();
     QStringList languageList;
     for (const QString& code : languageCodes) {
-        QString name = QLocale::languageToString(QLocale(code).language());
+        QString name = KiwixApp::instance()->getSettingsManager()->getLanguageName(code + ".json");
+        QString qName = QLocale::languageToString(QLocale(code).language());
+        if("C" == qName) { continue; }
+        // qInfo() << name;
         languageList.append(name);
     }
     ui->comboBoxLanguage->addItems(languageList);
@@ -171,6 +174,24 @@ void SettingsView::onDownloadDirChanged(const QString &dir)
 
 void SettingsView::languageSelected(const int &languageIndex)
 {
+    // QMessageBox msgBox;
+    // msgBox.setIcon(QMessageBox::Question);
+    // msgBox.setText("Restart to apply language change?");
+    // msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    // msgBox.setDefaultButton(QMessageBox::Yes);
+    // int ret = msgBox.exec();
+    // if (ret == QMessageBox::Yes) {
+    //     ui->comboBoxLanguage->setCurrentIndex(languageIndex);
+    //     KiwixApp::instance()->getSettingsManager()->setAppLanguage(languageIndex);
+    //     qInfo() << "restarting";
+    //     qApp->quit();
+    //     // QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    //     exit(0);
+    // } else {
+    //     int previousIndex = KiwixApp::instance()->getSettingsManager()->getAppLanguageIndex();
+    //     ui->comboBoxLanguage->setCurrentIndex(previousIndex); // TODO causes issues with re emit
+    // } 
+
     ui->comboBoxLanguage->setCurrentIndex(languageIndex);
     KiwixApp::instance()->getSettingsManager()->setAppLanguage(languageIndex);
 }
