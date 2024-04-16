@@ -39,6 +39,9 @@ void ReadingListBar::setupList()
         } catch (std::out_of_range& e) {
             continue;
         }
+        if ( !archive ) {
+            continue;
+        }
         try {
             auto illustration = archive->getIllustrationItem(48);
             std::string content = illustration.getData();
