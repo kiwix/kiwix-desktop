@@ -217,6 +217,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         icon.paint(painter, QRect(x+10, y+10, 30, 50));
         painter->setPen(QPen(QColor("#cccccc")));
         painter->drawLine(x, y + h - 1, x + w, y + h - 1);
+        painter->setPen(QPen(QColor("black")));
         return;
     }
     if (index.column() == 1) {
