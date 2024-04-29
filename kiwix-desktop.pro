@@ -18,8 +18,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = kiwix-desktop
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++17 -Werror
+QMAKE_CXXFLAGS += -std=c++17
 QMAKE_LFLAGS +=  -std=c++17
+
+!win32 {
+    QMAKE_CXXFLAGS += -Werror
+}
 
 # Also change resources/org.kiwix.desktop.appdata.xml
 DEFINES += VERSION="2.3.1"
