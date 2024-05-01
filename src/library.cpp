@@ -60,7 +60,11 @@ QString Library::openBookFromPath(const QString &zimPath)
 
 std::shared_ptr<zim::Archive> Library::getArchive(const QString &zimId)
 {
-    return mp_library->getArchiveById(zimId.toStdString());
+    const auto archive =  mp_library->getArchiveById(zimId.toStdString());
+    if ( ! archive ) {
+        throw std::out_of_range("ZIM file doesn't exist (or cannot be opened)");
+    }
+    return archive;
 }
 
 std::shared_ptr<zim::Searcher> Library::getSearcher(const QString &zimId)
