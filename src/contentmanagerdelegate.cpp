@@ -169,8 +169,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     try {
         const auto id = node->getBookId();
         const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-        if(KiwixApp::instance()->getContentManager()->getBookInfos(id, {"downloadId"})["downloadId"] != "") {
-        } else {
+        if ( book.getDownloadId().empty() ) {
             button.text = gt("open");
         }
     } catch (std::out_of_range& e) {

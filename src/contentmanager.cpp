@@ -385,7 +385,6 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
     if ( a == "date" )        return QString::fromStdString(b.getDate());
     if ( a == "url" )         return QString::fromStdString(b.getUrl());
     if ( a == "name" )        return QString::fromStdString(b.getName());
-    if ( a == "downloadId" )  return QString::fromStdString(b.getDownloadId());
     if ( a == "favicon")      return getFaviconDataOrUrl(b);
     if ( a == "size" )        return QString::number(b.getSize());
     if ( a == "tags" )        return getBookTags(b);
@@ -422,9 +421,9 @@ void ContentManager::openBookWithIndex(const QModelIndex &index)
         QString bookId;
         auto bookNode = static_cast<Node*>(index.internalPointer());
         bookId = bookNode->getBookId();
-        // check if the book is available in local library, will throw std::out_of_range if it isn't.
-        mp_library->getBookById(bookId);
-        if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
+        // throws std::out_of_range if the book isn't available in local library
+        const kiwix::Book& book = mp_library->getBookById(bookId);
+        if ( !book.getDownloadId().empty() )
             return;
         openBook(bookId);
     } catch (std::out_of_range &e) {}
