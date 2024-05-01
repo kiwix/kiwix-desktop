@@ -157,8 +157,7 @@ void ContentManager::restoreDownloads()
 {
     for ( const auto& bookId : mp_library->getBookIds() ) {
         const kiwix::Book& book = mp_library->getBookById(bookId);
-        const QString downloadId = QString::fromStdString(book.getDownloadId());
-        if ( ! downloadId.isEmpty() ) {
+        if ( ! book.getDownloadId().empty() ) {
             const auto newDownload = std::make_shared<DownloadState>();
             newDownload->paused = true;
             m_downloads.set(bookId, newDownload);
@@ -195,7 +194,6 @@ void ContentManager::updateModel()
     const auto bookIds = getBookIds();
     BookInfoList bookList;
     QStringList keys = {"title", "tags", "date", "id", "size", "description", "favicon"};
-    QIcon bookIcon;
     for (auto bookId : bookIds) {
         auto mp = getBookInfos(bookId, keys);
         bookList.append(mp);
@@ -418,9 +416,8 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
 void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
     try {
-        QString bookId;
         auto bookNode = static_cast<Node*>(index.internalPointer());
-        bookId = bookNode->getBookId();
+        const QString bookId = bookNode->getBookId();
         // throws std::out_of_range if the book isn't available in local library
         const kiwix::Book& book = mp_library->getBookById(bookId);
         if ( !book.getDownloadId().empty() )
@@ -444,7 +441,6 @@ void ContentManager::openBook(const QString &id)
         mp_library->removeBookFromLibraryById(id);
         tabBar->setCurrentIndex(0);
         emit(booksChanged());
-        return;
     }
 }
 
