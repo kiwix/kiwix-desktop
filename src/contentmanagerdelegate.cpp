@@ -251,23 +251,21 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
     ContentManager& contentMgr = *KiwixApp::instance()->getContentManager();
     if (const auto downloadState = node->getDownloadState()) {
-        if (downloadState->paused) {
-            if (clickX < (x + w/2)) {
-                contentMgr.cancelBook(id);
-            } else {
-                contentMgr.resumeBook(id, index);
-            }
-        } else {
+        if ( !downloadState->paused ) {
             contentMgr.pauseBook(id, index);
+        } else if (clickX < (x + w/2)) {
+            contentMgr.cancelBook(id);
+        } else {
+            contentMgr.resumeBook(id, index);
         }
     } else {
-            try {
-                const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-                contentMgr.openBook(id);
-            } catch (std::out_of_range& e) {
-                contentMgr.downloadBook(id, index);
-            }
-      }
+        try {
+            const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
+            contentMgr.openBook(id);
+        } catch (std::out_of_range& e) {
+            contentMgr.downloadBook(id, index);
+        }
+    }
 }
 
 QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
