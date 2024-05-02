@@ -249,22 +249,23 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
     int x = r.left();
     int w = r.width();
 
+    ContentManager& contentMgr = *KiwixApp::instance()->getContentManager();
     if (const auto downloadState = node->getDownloadState()) {
         if (downloadState->paused) {
             if (clickX < (x + w/2)) {
-                KiwixApp::instance()->getContentManager()->cancelBook(id);
+                contentMgr.cancelBook(id);
             } else {
-                KiwixApp::instance()->getContentManager()->resumeBook(id, index);
+                contentMgr.resumeBook(id, index);
             }
         } else {
-            KiwixApp::instance()->getContentManager()->pauseBook(id, index);
+            contentMgr.pauseBook(id, index);
         }
     } else {
             try {
                 const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-                KiwixApp::instance()->getContentManager()->openBook(id);
+                contentMgr.openBook(id);
             } catch (std::out_of_range& e) {
-                KiwixApp::instance()->getContentManager()->downloadBook(id, index);
+                contentMgr.downloadBook(id, index);
             }
       }
 }
