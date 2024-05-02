@@ -394,18 +394,25 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
 
 ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
-    BookInfo values;
-    const kiwix::Book* b = [=]()->const kiwix::Book* {
-        try {
-            return &mp_library->getBookById(id);
-        } catch (...) {
-            try {
-                QMutexLocker locker(&remoteLibraryLocker);
-                return &mp_remoteLibrary->getBookById(id.toStdString());
-            } catch(...) { return nullptr; }
+    const kiwix::Book* b = nullptr;
+    try {
+        b = &mp_library->getBookById(id);
+        if ( ! b->getDownloadId().empty() ) {
+            // The book is still being downloaded and has been entered into the
+            // local library for technical reasons only. Get the book info from
+            // the remote library.
+            b = nullptr;
         }
-    }();
+    } catch (...) {}
 
+    if ( !b ) {
+        try {
+            QMutexLocker locker(&remoteLibraryLocker);
+            b = &mp_remoteLibrary->getBookById(id.toStdString());
+        } catch(...) {}
+    }
+
+    BookInfo values;
     for(auto& key: keys){
         values.insert(key, b ? getBookAttribute(*b, key) : "");
     }
