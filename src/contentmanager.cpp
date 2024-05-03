@@ -390,6 +390,19 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
     return QVariant();
 }
 
+ContentManager::BookState getStateOfLocalBook(const kiwix::Book& book)
+{
+    if ( !book.isPathValid() ) {
+        return ContentManager::BookState::ERROR_MISSING_ZIM_FILE;
+    }
+
+    // XXX: When a book is detected to be corrupted, information about that
+    // XXX: has to be recorded somewhere so that we can return
+    // XXX: ERROR_CORRUPTED_ZIM_FILE here
+
+    return ContentManager::BookState::AVAILABLE_LOCALLY_AND_HEALTHY;
+}
+
 } // unnamed namespace
 
 ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
@@ -420,17 +433,40 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
     return values;
 }
 
+ContentManager::BookState ContentManager::getBookState(QString bookId)
+{
+    if ( const auto downloadState = m_downloads.value(bookId) ) {
+        return downloadState->paused
+             ? BookState::DOWNLOAD_PAUSED
+             : BookState::DOWNLOADING;
+             // TODO: a download may be in error state
+    }
+
+    try {
+        const kiwix::Book& b = mp_library->getBookById(bookId);
+        return b.getDownloadId().empty()
+             ? getStateOfLocalBook(b)
+             : BookState::DOWNLOADING;
+    } catch (...) {}
+
+    try {
+        QMutexLocker locker(&remoteLibraryLocker);
+        const kiwix::Book& b = mp_remoteLibrary->getBookById(bookId.toStdString());
+        return !b.getUrl().empty()
+             ? BookState::AVAILABLE_ONLINE
+             : BookState::METADATA_ONLY;
+    } catch (...) {}
+
+    return BookState::INVALID;
+}
+
 void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
-    try {
-        auto bookNode = static_cast<Node*>(index.internalPointer());
-        const QString bookId = bookNode->getBookId();
-        // throws std::out_of_range if the book isn't available in local library
-        const kiwix::Book& book = mp_library->getBookById(bookId);
-        if ( !book.getDownloadId().empty() )
-            return;
+    auto bookNode = static_cast<Node*>(index.internalPointer());
+    const QString bookId = bookNode->getBookId();
+    if ( getBookState(bookId) == BookState::AVAILABLE_LOCALLY_AND_HEALTHY ) {
         openBook(bookId);
-    } catch (std::out_of_range &e) {}
+    }
 }
 
 void ContentManager::openBook(const QString &id)
