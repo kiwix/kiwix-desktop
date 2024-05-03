@@ -146,17 +146,39 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     createArc(painter, startAngle, spanAngle, rectangle, pen);
 }
 
-void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t) const
 {
     QStyleOptionButton button;
-    QRect r = option.rect;
-    int x,y,w,h;
-    x = r.left();
-    y = r.top();
-    w = r.width();
-    h = r.height();
-    button.rect = QRect(x,y,w,h);
+    button.rect = r;
     button.state = QStyle::State_Enabled;
+    button.text = t;
+    baseButton->style()->drawControl( QStyle::CE_PushButton, &button, p, baseButton.data());
+}
+
+void ContentManagerDelegate::paintBookState(QPainter *p, QRect r, const QModelIndex &index) const
+{
+    const auto node = static_cast<RowNode*>(index.internalPointer());
+    const auto id = node->getBookId();
+    switch ( KiwixApp::instance()->getContentManager()->getBookState(id) ) {
+    case ContentManager::BookState::AVAILABLE_LOCALLY_AND_HEALTHY:
+        return paintButton(p, r, gt("open"));
+
+    case ContentManager::BookState::AVAILABLE_ONLINE:
+        return paintButton(p, r, gt("download"));
+
+    case ContentManager::BookState::DOWNLOADING:
+    case ContentManager::BookState::DOWNLOAD_PAUSED:
+    case ContentManager::BookState::DOWNLOAD_ERROR:
+        return showDownloadProgress(p, r, *node->getDownloadState());
+
+    default:
+        return;
+    }
+}
+
+void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    QRect r = option.rect;
     if (index.parent().isValid()) {
         // additional info
         QRect nRect = r;
@@ -165,24 +187,9 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         painter->drawText(nRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole+1).toString());
         return;
     }
-    auto node = static_cast<RowNode*>(index.internalPointer());
-    try {
-        const auto id = node->getBookId();
-        const auto book = KiwixApp::instance()->getLibrary()->getBookById(id);
-        if ( book.getDownloadId().empty() ) {
-            button.text = gt("open");
-        }
-    } catch (std::out_of_range& e) {
-        button.text = gt("download");
-    }
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 5) {
-        if (const auto downloadState = node->getDownloadState()) {
-            showDownloadProgress(painter, r, *downloadState);
-        }
-        else {
-            baseButton->style()->drawControl( QStyle::CE_PushButton, &button, painter, baseButton.data());
-        }
+        paintBookState(painter, option.rect, index);
         return;
     }
     if (index.column() == 0) {
@@ -192,7 +199,7 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         QPixmap pix;
         pix.loadFromData(iconData);
         QIcon icon(pix);
-        icon.paint(painter, QRect(x+10, y+10, 30, 50));
+        icon.paint(painter, QRect(r.left()+10, r.top()+10, 30, 50));
         return;
     }
     if (index.column() == 1) {
