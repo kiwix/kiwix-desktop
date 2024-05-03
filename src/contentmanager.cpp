@@ -218,15 +218,19 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuCancelBook(gt("cancel-download"), this);
     QAction menuOpenFolder(gt("open-folder"), this);
 
-    if (const auto download = bookNode->getDownloadState()) {
-        if (download->paused) {
-            contextMenu.addAction(&menuResumeBook);
-        } else {
-            contextMenu.addAction(&menuPauseBook);
-        }
+    switch ( getBookState(id) ) {
+    case BookState::DOWNLOAD_PAUSED:
+        contextMenu.addAction(&menuResumeBook);
         contextMenu.addAction(&menuCancelBook);
-    } else {
-        try {
+        break;
+
+    case BookState::DOWNLOADING:
+        contextMenu.addAction(&menuPauseBook);
+        contextMenu.addAction(&menuCancelBook);
+        break;
+
+    case BookState::AVAILABLE_LOCALLY_AND_HEALTHY:
+        {
             const auto book = mp_library->getBookById(id);
             auto bookPath = QString::fromStdString(book.getPath());
             contextMenu.addAction(&menuOpenBook);
@@ -235,9 +239,14 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
             connect(&menuOpenFolder, &QAction::triggered, [=]() {
                 openFileLocation(bookPath, mp_view);
             });
-        } catch (...) {
-            contextMenu.addAction(&menuDownloadBook);
+            break;
         }
+
+    case BookState::AVAILABLE_ONLINE:
+        contextMenu.addAction(&menuDownloadBook);
+        break;
+
+    default: break;
     }
 
     connect(&menuDeleteBook, &QAction::triggered, [=]() {
