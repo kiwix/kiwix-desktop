@@ -157,8 +157,7 @@ void ContentManager::restoreDownloads()
 {
     for ( const auto& bookId : mp_library->getBookIds() ) {
         const kiwix::Book& book = mp_library->getBookById(bookId);
-        const QString downloadId = QString::fromStdString(book.getDownloadId());
-        if ( ! downloadId.isEmpty() ) {
+        if ( ! book.getDownloadId().empty() ) {
             const auto newDownload = std::make_shared<DownloadState>();
             newDownload->paused = true;
             m_downloads.set(bookId, newDownload);
@@ -195,7 +194,6 @@ void ContentManager::updateModel()
     const auto bookIds = getBookIds();
     BookInfoList bookList;
     QStringList keys = {"title", "tags", "date", "id", "size", "description", "favicon"};
-    QIcon bookIcon;
     for (auto bookId : bookIds) {
         auto mp = getBookInfos(bookId, keys);
         bookList.append(mp);
@@ -385,7 +383,6 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
     if ( a == "date" )        return QString::fromStdString(b.getDate());
     if ( a == "url" )         return QString::fromStdString(b.getUrl());
     if ( a == "name" )        return QString::fromStdString(b.getName());
-    if ( a == "downloadId" )  return QString::fromStdString(b.getDownloadId());
     if ( a == "favicon")      return getFaviconDataOrUrl(b);
     if ( a == "size" )        return QString::number(b.getSize());
     if ( a == "tags" )        return getBookTags(b);
@@ -397,18 +394,25 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
 
 ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringList &keys)
 {
-    BookInfo values;
-    const kiwix::Book* b = [=]()->const kiwix::Book* {
-        try {
-            return &mp_library->getBookById(id);
-        } catch (...) {
-            try {
-                QMutexLocker locker(&remoteLibraryLocker);
-                return &mp_remoteLibrary->getBookById(id.toStdString());
-            } catch(...) { return nullptr; }
+    const kiwix::Book* b = nullptr;
+    try {
+        b = &mp_library->getBookById(id);
+        if ( ! b->getDownloadId().empty() ) {
+            // The book is still being downloaded and has been entered into the
+            // local library for technical reasons only. Get the book info from
+            // the remote library.
+            b = nullptr;
         }
-    }();
+    } catch (...) {}
 
+    if ( !b ) {
+        try {
+            QMutexLocker locker(&remoteLibraryLocker);
+            b = &mp_remoteLibrary->getBookById(id.toStdString());
+        } catch(...) {}
+    }
+
+    BookInfo values;
     for(auto& key: keys){
         values.insert(key, b ? getBookAttribute(*b, key) : "");
     }
@@ -419,12 +423,11 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
 void ContentManager::openBookWithIndex(const QModelIndex &index)
 {
     try {
-        QString bookId;
         auto bookNode = static_cast<Node*>(index.internalPointer());
-        bookId = bookNode->getBookId();
-        // check if the book is available in local library, will throw std::out_of_range if it isn't.
-        mp_library->getBookById(bookId);
-        if (getBookInfos(bookId, {"downloadId"})["downloadId"] != "")
+        const QString bookId = bookNode->getBookId();
+        // throws std::out_of_range if the book isn't available in local library
+        const kiwix::Book& book = mp_library->getBookById(bookId);
+        if ( !book.getDownloadId().empty() )
             return;
         openBook(bookId);
     } catch (std::out_of_range &e) {}
@@ -445,7 +448,6 @@ void ContentManager::openBook(const QString &id)
         mp_library->removeBookFromLibraryById(id);
         tabBar->setCurrentIndex(0);
         emit(booksChanged());
-        return;
     }
 }
 
