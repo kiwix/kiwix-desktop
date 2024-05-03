@@ -218,7 +218,8 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuCancelBook(gt("cancel-download"), this);
     QAction menuOpenFolder(gt("open-folder"), this);
 
-    switch ( getBookState(id) ) {
+    const auto bookState = getBookState(id);
+    switch ( bookState ) {
     case BookState::DOWNLOAD_PAUSED:
         contextMenu.addAction(&menuResumeBook);
         contextMenu.addAction(&menuCancelBook);
@@ -230,10 +231,14 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         break;
 
     case BookState::AVAILABLE_LOCALLY_AND_HEALTHY:
+    case BookState::ERROR_MISSING_ZIM_FILE:
+    case BookState::ERROR_CORRUPTED_ZIM_FILE:
         {
             const auto book = mp_library->getBookById(id);
             auto bookPath = QString::fromStdString(book.getPath());
-            contextMenu.addAction(&menuOpenBook);
+            if ( bookState == BookState::AVAILABLE_LOCALLY_AND_HEALTHY ) {
+                contextMenu.addAction(&menuOpenBook);
+            }
             contextMenu.addAction(&menuDeleteBook);
             contextMenu.addAction(&menuOpenFolder);
             connect(&menuOpenFolder, &QAction::triggered, [=]() {
