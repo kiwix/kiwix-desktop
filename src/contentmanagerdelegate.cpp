@@ -117,6 +117,8 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     int arcW = w - 90;
     int arcH = h - 40;
 
+    QRect pauseResumeButtonRect(arcX, arcY, arcW, arcH);
+
     double progress  = (double) (downloadInfo.progress) / 100;
     progress = -progress;
     auto completedLength = downloadInfo.completedLength;
@@ -135,15 +137,13 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    QRect rectangle(arcX, arcY, arcW, arcH);
-
     pen.setColor("#eaecf0");
-    createArc(painter, 0, 360, rectangle, pen);
+    createArc(painter, 0, 360, pauseResumeButtonRect, pen);
 
     int startAngle = 0;
     int spanAngle = progress * 360;
     pen.setColor("#3366cc");
-    createArc(painter, startAngle, spanAngle, rectangle, pen);
+    createArc(painter, startAngle, spanAngle, pauseResumeButtonRect, pen);
 }
 
 void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t) const
