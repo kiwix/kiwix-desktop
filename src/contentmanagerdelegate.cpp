@@ -24,13 +24,16 @@ ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     placeholderIconFile.save(&buffer, "png");
 }
 
-void createPauseSymbol(QPainter *painter, int x, int y)
+namespace
+{
+
+void createPauseSymbol(QPainter *painter, const QRect& buttonRect)
 {
     QPen pen;
     pen.setWidth(3);
     QPainterPath path;
-    x += 12.5;
-    y += 10;
+    const int x = buttonRect.left() + 12.5;
+    const int y = buttonRect.top() + 10;
     pen.setColor("#3366cc");
     path.moveTo(x, y);
     path.lineTo(x, y + 10);
@@ -40,13 +43,13 @@ void createPauseSymbol(QPainter *painter, int x, int y)
     painter->strokePath(path, pen);
 }
 
-void createResumeSymbol(QPainter *painter, int x, int y)
+void createResumeSymbol(QPainter *painter, const QRect& buttonRect)
 {
     QPen pen;
     pen.setWidth(3);
     QPainterPath path;
-    x += 12.5;
-    y += 8;
+    const int x = buttonRect.left() + 12.5;
+    const int y = buttonRect.top() + 8;
     pen.setColor("#3366cc");
     path.moveTo(x, y);
     path.lineTo(x, y + 15);
@@ -69,20 +72,18 @@ void createArc(QPainter *painter, int startAngle, int spanAngle, QRect rectangle
     painter->strokePath(path, pen);
 }
 
-void createCancelSymbol(QPainter *painter, int x, int y, int w, int h)
+void createCancelButton(QPainter *painter, const QRect& r)
 {
     QPen p;
     p.setWidth(3);
     p.setColor("#dd3333");
-    QRect r(x, y, w, h);
     createArc(painter, 0, 360, r, p);
     painter->setPen(p);
-    QRect nRect(x, y, w, h);
     auto oldFont = painter->font();
     auto bFont = oldFont;
     bFont.setBold(true);
     painter->setFont(bFont);
-    painter->drawText(nRect, Qt::AlignCenter | Qt::AlignJustify, "X");
+    painter->drawText(r, Qt::AlignCenter | Qt::AlignJustify, "X");
     painter->setFont(oldFont);
 }
 
@@ -106,18 +107,16 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
 
 void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& downloadInfo)
 {
-    int x,y,w,h;
-    x = box.left();
-    y = box.top();
-    w = box.width();
-    h = box.height();
+    const int x = box.left();
+    const int y = box.top();
+    const int w = box.width();
+    const int h = box.height();
 
-    int arcX = x + w/2 + 20;
-    int arcY = y + 20;
-    int arcW = w - 90;
-    int arcH = h - 40;
+    const int buttonW = w - 90;
+    const int buttonH = h - 40;
 
-    QRect pauseResumeButtonRect(arcX, arcY, arcW, arcH);
+    QRect pauseResumeButtonRect(x + w/2 + 20, y + 20, buttonW, buttonH);
+    QRect cancelButtonRect     (x + w/2 - 20, y + 20, buttonW, buttonH);
 
     double progress  = (double) (downloadInfo.progress) / 100;
     progress = -progress;
@@ -125,10 +124,10 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     auto downloadSpeed = downloadInfo.downloadSpeed;
 
     if (downloadInfo.paused) {
-        createResumeSymbol(painter, arcX, arcY);
-        createCancelSymbol(painter, x + w/2 - 20, arcY, arcW, arcH);
+        createResumeSymbol(painter, pauseResumeButtonRect);
+        createCancelButton(painter, cancelButtonRect);
     } else {
-        createPauseSymbol(painter, arcX, arcY);
+        createPauseSymbol(painter, pauseResumeButtonRect);
         createDownloadStats(painter, box, downloadSpeed, completedLength);
     }
 
@@ -145,6 +144,8 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     pen.setColor("#3366cc");
     createArc(painter, startAngle, spanAngle, pauseResumeButtonRect, pen);
 }
+
+} // unnamed namespace
 
 void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t) const
 {
