@@ -105,7 +105,13 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
     painter->setFont(oldFont);
 }
 
-void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& downloadInfo)
+struct DownloadControlLayout
+{
+    QRect pauseResumeButtonRect;
+    QRect cancelButtonRect;
+};
+
+DownloadControlLayout getDownloadControlLayout(QRect box)
 {
     const int x = box.left();
     const int y = box.top();
@@ -115,19 +121,25 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     const int buttonW = w - 90;
     const int buttonH = h - 40;
 
-    QRect pauseResumeButtonRect(x + w/2 + 20, y + 20, buttonW, buttonH);
-    QRect cancelButtonRect     (x + w/2 - 20, y + 20, buttonW, buttonH);
+    DownloadControlLayout dcl;
+    dcl.pauseResumeButtonRect = QRect(x + w/2 + 20, y + 20, buttonW, buttonH);
+    dcl.cancelButtonRect      = QRect(x + w/2 - 20, y + 20, buttonW, buttonH);
+    return dcl;
+}
 
+void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& downloadInfo)
+{
+    const DownloadControlLayout dcl = getDownloadControlLayout(box);
     double progress  = (double) (downloadInfo.progress) / 100;
     progress = -progress;
     auto completedLength = downloadInfo.completedLength;
     auto downloadSpeed = downloadInfo.downloadSpeed;
 
     if (downloadInfo.paused) {
-        createResumeSymbol(painter, pauseResumeButtonRect);
-        createCancelButton(painter, cancelButtonRect);
+        createResumeSymbol(painter, dcl.pauseResumeButtonRect);
+        createCancelButton(painter, dcl.cancelButtonRect);
     } else {
-        createPauseSymbol(painter, pauseResumeButtonRect);
+        createPauseSymbol(painter, dcl.pauseResumeButtonRect);
         createDownloadStats(painter, box, downloadSpeed, completedLength);
     }
 
@@ -137,12 +149,12 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     painter->setRenderHint(QPainter::Antialiasing);
 
     pen.setColor("#eaecf0");
-    createArc(painter, 0, 360, pauseResumeButtonRect, pen);
+    createArc(painter, 0, 360, dcl.pauseResumeButtonRect, pen);
 
     int startAngle = 0;
     int spanAngle = progress * 360;
     pen.setColor("#3366cc");
-    createArc(painter, startAngle, spanAngle, pauseResumeButtonRect, pen);
+    createArc(painter, startAngle, spanAngle, dcl.pauseResumeButtonRect, pen);
 }
 
 } // unnamed namespace
