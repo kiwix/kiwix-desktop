@@ -263,11 +263,11 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 {
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
-    int clickX = portutils::getX(*mouseEvent);
 
-    QRect r = option.rect;
-    int x = r.left();
-    int w = r.width();
+    const int clickX = portutils::getX(*mouseEvent);
+    const int clickY = portutils::getY(*mouseEvent);
+    const QPoint clickPoint(clickX, clickY);
+    const DownloadControlLayout dcl = getDownloadControlLayout(option.rect);
 
     ContentManager& contentMgr = *KiwixApp::instance()->getContentManager();
     switch ( contentMgr.getBookState(id) ) {
@@ -278,12 +278,18 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
         return contentMgr.downloadBook(id, index);
 
     case ContentManager::BookState::DOWNLOADING:
-        return contentMgr.pauseBook(id, index);
+        if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
+            contentMgr.pauseBook(id, index);
+        }
+        return;
 
     case ContentManager::BookState::DOWNLOAD_PAUSED:
-        return clickX < (x + w/2)
-             ? contentMgr.cancelBook(id)
-             : contentMgr.resumeBook(id, index);
+        if ( dcl.cancelButtonRect.contains(clickPoint) ) {
+             contentMgr.cancelBook(id);
+        } else if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
+             contentMgr.resumeBook(id, index);
+        }
+        return;
 
     default:
         return;
