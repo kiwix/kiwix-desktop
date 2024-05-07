@@ -11,10 +11,10 @@
 #include <QThread>
 #include <QToolBar>
 
-class SearchButton : public QPushButton {
+class BookmarkButton : public QPushButton {
     Q_OBJECT
 public:
-    SearchButton(QWidget *parent = nullptr);
+    BookmarkButton(QWidget *parent = nullptr);
 
 public slots:
     void update_display();
@@ -39,7 +39,6 @@ private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
     QVector<QUrl> m_urlList;
-    SearchButton m_button;
     QString m_title;
     QString m_searchbarInput;
     bool m_returnPressed = false;
@@ -64,5 +63,6 @@ signals:
 
 private:
     SearchBarLineEdit m_searchBarLineEdit;
+    BookmarkButton m_bookmarkButton;
 };
 #endif // SEARCHBAR_H

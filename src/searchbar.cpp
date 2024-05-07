@@ -6,14 +6,14 @@
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
 
-SearchButton::SearchButton(QWidget *parent) :
+BookmarkButton::BookmarkButton(QWidget *parent) :
     QPushButton(parent)
 {
-    setFlat(true);
-    connect(this, &QPushButton::clicked, this, &SearchButton::on_buttonClicked);
+    connect(this, &QPushButton::clicked, this, &BookmarkButton::on_buttonClicked);
+    connect(this, &QPushButton::clicked, this, &BookmarkButton::update_display);
 }
 
-void SearchButton::update_display()
+void BookmarkButton::update_display()
 {
     auto kiwixApp = KiwixApp::instance();
     if (kiwixApp->isCurrentArticleBookmarked()) {
@@ -26,7 +26,7 @@ void SearchButton::update_display()
     setIconSize(QSize(32, 32));
 }
 
-void SearchButton::on_buttonClicked()
+void BookmarkButton::on_buttonClicked()
 {
     auto kiwixApp = KiwixApp::instance();
     auto library = kiwixApp->getLibrary();
@@ -44,14 +44,12 @@ void SearchButton::on_buttonClicked()
         bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());
         library->addBookmark(bookmark);
     }
-    update_display();
     library->save();
 }
 
 SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
-    m_completer(&m_completionModel, this),
-    m_button(this)
+    m_completer(&m_completionModel, this)
 {
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
@@ -106,7 +104,6 @@ void SearchBarLineEdit::clearSuggestions()
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
 {
-    m_button.update_display();
     if (this->hasFocus()) {
         return;
     }
@@ -191,15 +188,21 @@ void SearchBarLineEdit::openCompletion(const QString& text, int index)
 
 SearchBar::SearchBar(QWidget *parent) :
     QToolBar(parent),
-    m_searchBarLineEdit(this)
+    m_searchBarLineEdit(this),
+    m_bookmarkButton(this)
 {
     QLabel* searchIconLabel = new QLabel; 
     searchIconLabel->setObjectName("searchIcon");
     searchIconLabel->setPixmap(QIcon(":/icons/search.svg").pixmap(QSize(27, 27)));
 
+    setIconSize(QSize(32, 32));
+
     addWidget(searchIconLabel);
     addWidget(&m_searchBarLineEdit);
+    addWidget(&m_bookmarkButton);
 
     connect(this, &SearchBar::currentTitleChanged, &m_searchBarLineEdit,
             &SearchBarLineEdit::on_currentTitleChanged);
+    connect(this, &SearchBar::currentTitleChanged, &m_bookmarkButton,
+            &BookmarkButton::update_display);
 }
