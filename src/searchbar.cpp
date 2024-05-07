@@ -7,38 +7,27 @@
 #include "suggestionlistworker.h"
 
 SearchButton::SearchButton(QWidget *parent) :
-    QPushButton(parent),
-    m_searchMode(true)
+    QPushButton(parent)
 {
     setFlat(true);
-    setIcon(QIcon(":/icons/search.svg"));
     connect(this, &QPushButton::clicked, this, &SearchButton::on_buttonClicked);
 }
 
-void SearchButton::set_searchMode(bool searchMode)
+void SearchButton::update_display()
 {
-    m_searchMode = searchMode;
-    if (m_searchMode) {
-        setIcon(QIcon(":/icons/search.svg"));
-        setIconSize(QSize(27, 27));
+    auto kiwixApp = KiwixApp::instance();
+    if (kiwixApp->isCurrentArticleBookmarked()) {
+        setIcon(QIcon(":/icons/star-active.svg"));
+        setToolTip(gt("remove-bookmark"));
     } else {
-        auto kiwixApp = KiwixApp::instance();
-        if (kiwixApp->isCurrentArticleBookmarked()) {
-            setIcon(QIcon(":/icons/star-active.svg"));
-            setToolTip(gt("remove-bookmark"));
-        } else {
-            setIcon(QIcon(":/icons/star.svg"));
-            setToolTip(gt("add-bookmark"));
-        }
-        setIconSize(QSize(32, 32));
+        setIcon(QIcon(":/icons/star.svg"));
+        setToolTip(gt("add-bookmark"));
     }
+    setIconSize(QSize(32, 32));
 }
 
 void SearchButton::on_buttonClicked()
 {
-    if (m_searchMode)
-        return;
-
     auto kiwixApp = KiwixApp::instance();
     auto library = kiwixApp->getLibrary();
     auto tabWidget = kiwixApp->getTabWidget();
@@ -55,7 +44,7 @@ void SearchButton::on_buttonClicked()
         bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());
         library->addBookmark(bookmark);
     }
-    set_searchMode(false);
+    update_display();
     library->save();
 }
 
@@ -117,6 +106,7 @@ void SearchBarLineEdit::clearSuggestions()
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
 {
+    m_button.update_display();
     if (this->hasFocus()) {
         return;
     }
@@ -125,7 +115,6 @@ void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
     } else {
         setText("");
     }
-    m_button.set_searchMode(title.isEmpty());
     m_title = title;
 }
 
@@ -142,14 +131,12 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
         this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion));
     }
     QLineEdit::focusInEvent(event);
-    m_button.set_searchMode(true);
 }
 
 void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)
 {
     setReadOnly(true);
     if (event->reason() == Qt::MouseFocusReason && text().isEmpty()) {
-        m_button.set_searchMode(false);
         setText(m_title);
     }
     deselect();
@@ -206,6 +193,11 @@ SearchBar::SearchBar(QWidget *parent) :
     QToolBar(parent),
     m_searchBarLineEdit(this)
 {
+    QLabel* searchIconLabel = new QLabel; 
+    searchIconLabel->setObjectName("searchIcon");
+    searchIconLabel->setPixmap(QIcon(":/icons/search.svg").pixmap(QSize(27, 27)));
+
+    addWidget(searchIconLabel);
     addWidget(&m_searchBarLineEdit);
 
     connect(this, &SearchBar::currentTitleChanged, &m_searchBarLineEdit,

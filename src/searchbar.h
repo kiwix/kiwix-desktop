@@ -17,11 +17,8 @@ public:
     SearchButton(QWidget *parent = nullptr);
 
 public slots:
-    void set_searchMode(bool searchMode);
+    void update_display();
     void on_buttonClicked();
-
-protected:
-    bool m_searchMode;
 };
 
 class SearchBarLineEdit : public QLineEdit
