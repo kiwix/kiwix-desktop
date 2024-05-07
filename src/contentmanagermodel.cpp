@@ -36,7 +36,7 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 
         r = getThumbnail(r);
 
-        if ( r.type() == QVariant::ByteArray )
+        if ( r.userType() == QMetaType::QByteArray )
             return r;
 
         const QString faviconUrl = r.toString();
@@ -136,7 +136,7 @@ void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads
 // QString) from where the actual data can be obtained.
 QVariant ContentManagerModel::getThumbnail(const QVariant& faviconEntry) const
 {
-    if ( faviconEntry.type() == QVariant::ByteArray )
+    if ( faviconEntry.userType() == QMetaType::QByteArray )
         return faviconEntry;
 
     const auto faviconUrl = faviconEntry.toString();
