@@ -32,22 +32,51 @@ QToolButton {
 
 SearchBar {
     background-color: white;
-    padding: 2px 2px 2px 40px;
-    max-height: 38px;
     margin: 2px 5px;
-    color: #666;
-    font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 3px;
+
+    max-height: 40px;
 }
 
-SearchBar > QPushButton {
-    margin: 8px 0px 8px 12px;
+SearchBar > QLabel#searchIcon {
+    padding: 0;
+    border: none;
+    background-color: none;
+    margin: 0px 4px 0px 9px;
+
+    max-height: 38px;
+    max-width: 38px;
+}
+
+SearchBar > SearchBarLineEdit {
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    color: #666;
+    border: none;
+    font-size: 16px;
+
+    max-height: 38px;
+}
+
+SearchBar > QToolButton {
     padding: 0;
     border: 0 solid #fff;
-    background-color: white;
-    height: 32px;
-    width: 32px;
+    background-color: none;
+    max-height: 38px;
+    max-width: 38px;
+}
+
+SearchBar > BookmarkButton {
+    margin-right: 4px;   
+}
+
+SearchBar > QToolButton:pressed,
+SearchBar > QToolButton:hover {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    border-radius: 3px;
 }
 
 TopWidget QToolButton:pressed,
