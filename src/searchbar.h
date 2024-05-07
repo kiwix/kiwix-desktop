@@ -9,6 +9,7 @@
 #include <QUrl>
 #include <QTimer>
 #include <QThread>
+#include <QToolBar>
 
 class SearchButton : public QPushButton {
     Q_OBJECT
@@ -23,11 +24,11 @@ protected:
     bool m_searchMode;
 };
 
-class SearchBar : public QLineEdit
+class SearchBarLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    SearchBar(QWidget *parent = nullptr);
+    SearchBarLineEdit(QWidget *parent = nullptr);
     void hideSuggestions();
 
 public slots:
@@ -54,4 +55,17 @@ private slots:
     void openCompletion(const QString& text, int index);
 };
 
+
+class SearchBar : public QToolBar {
+    Q_OBJECT
+public:
+    SearchBar(QWidget *parent = nullptr);
+    SearchBarLineEdit& getLineEdit() { return m_searchBarLineEdit; };
+
+signals:
+    void currentTitleChanged(const QString &title);
+
+private:
+    SearchBarLineEdit m_searchBarLineEdit;
+};
 #endif // SEARCHBAR_H

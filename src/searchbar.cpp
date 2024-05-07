@@ -59,7 +59,7 @@ void SearchButton::on_buttonClicked()
     library->save();
 }
 
-SearchBar::SearchBar(QWidget *parent) :
+SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_completionModel, this),
     m_button(this)
@@ -76,7 +76,7 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
     qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
-    connect(mp_typingTimer, &QTimer::timeout, this, &SearchBar::updateCompletion);
+    connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
 
     connect(this, &QLineEdit::textEdited, this,
             [=](const QString &text) {
@@ -103,19 +103,19 @@ SearchBar::SearchBar(QWidget *parent) :
             });
 }
 
-void SearchBar::hideSuggestions()
+void SearchBarLineEdit::hideSuggestions()
 {
     m_completer.popup()->hide();
 }
 
-void SearchBar::clearSuggestions()
+void SearchBarLineEdit::clearSuggestions()
 {
     QStringList empty;
     m_completionModel.setStringList(empty);
     m_urlList.clear();
 }
 
-void SearchBar::on_currentTitleChanged(const QString& title)
+void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
 {
     if (this->hasFocus()) {
         return;
@@ -129,7 +129,7 @@ void SearchBar::on_currentTitleChanged(const QString& title)
     m_title = title;
 }
 
-void SearchBar::focusInEvent( QFocusEvent* event)
+void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
 {
     setReadOnly(false);
     if (event->reason() == Qt::MouseFocusReason && text() == m_title) {
@@ -139,13 +139,13 @@ void SearchBar::focusInEvent( QFocusEvent* event)
         event->reason() == Qt::MouseFocusReason ||
         event->reason() == Qt::ShortcutFocusReason) {
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
-        this, QOverload<const QModelIndex &>::of(&SearchBar::openCompletion));
+        this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion));
     }
     QLineEdit::focusInEvent(event);
     m_button.set_searchMode(true);
 }
 
-void SearchBar::focusOutEvent(QFocusEvent* event)
+void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)
 {
     setReadOnly(true);
     if (event->reason() == Qt::MouseFocusReason && text().isEmpty()) {
@@ -156,7 +156,7 @@ void SearchBar::focusOutEvent(QFocusEvent* event)
     return QLineEdit::focusOutEvent(event);
 }
 
-void SearchBar::updateCompletion()
+void SearchBarLineEdit::updateCompletion()
 {
     mp_typingTimer->stop();
     clearSuggestions();
@@ -184,14 +184,14 @@ void SearchBar::updateCompletion()
     suggestionWorker->start();
 }
 
-void SearchBar::openCompletion(const QModelIndex &index)
+void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
     if (m_urlList.size() != 0) {
         openCompletion(index.data().toString(), index.row());
     }
 }
 
-void SearchBar::openCompletion(const QString& text, int index)
+void SearchBarLineEdit::openCompletion(const QString& text, int index)
 {
     QUrl url;
     if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
@@ -200,4 +200,14 @@ void SearchBar::openCompletion(const QString& text, int index)
         url = m_urlList.last();
     }
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
+}
+
+SearchBar::SearchBar(QWidget *parent) :
+    QToolBar(parent),
+    m_searchBarLineEdit(this)
+{
+    addWidget(&m_searchBarLineEdit);
+
+    connect(this, &SearchBar::currentTitleChanged, &m_searchBarLineEdit,
+            &SearchBarLineEdit::on_currentTitleChanged);
 }

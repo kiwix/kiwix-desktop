@@ -61,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
             });
 
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
-            &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::on_currentTitleChanged);
+            &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::currentTitleChanged);
 
     // This signal emited more often than the history really updated
     // but for now we have no better signal for it.

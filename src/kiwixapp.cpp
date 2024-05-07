@@ -144,11 +144,11 @@ KiwixApp::~KiwixApp()
 void KiwixApp::newTab()
 {
     getTabWidget()->createNewTab(true, false);
-    auto& searchBar = mp_mainWindow->getTopWidget()->getSearchBar();
-    searchBar.setFocus(Qt::MouseFocusReason);
-    searchBar.clear();
-    searchBar.clearSuggestions();
-    searchBar.hideSuggestions();
+    auto& searchBarLineEdit = mp_mainWindow->getTopWidget()->getSearchBar().getLineEdit();
+    searchBarLineEdit.setFocus(Qt::MouseFocusReason);
+    searchBarLineEdit.clear();
+    searchBarLineEdit.clearSuggestions();
+    searchBarLineEdit.hideSuggestions();
 }
 
 QString KiwixApp::findLibraryDirectory()
