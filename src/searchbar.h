@@ -5,13 +5,13 @@
 #include <QStringListModel>
 #include <QCompleter>
 #include <QIcon>
-#include <QPushButton>
+#include <QToolButton>
 #include <QUrl>
 #include <QTimer>
 #include <QThread>
 #include <QToolBar>
 
-class BookmarkButton : public QPushButton {
+class BookmarkButton : public QToolButton {
     Q_OBJECT
 public:
     BookmarkButton(QWidget *parent = nullptr);

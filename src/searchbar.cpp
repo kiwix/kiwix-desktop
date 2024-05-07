@@ -7,23 +7,20 @@
 #include "suggestionlistworker.h"
 
 BookmarkButton::BookmarkButton(QWidget *parent) :
-    QPushButton(parent)
+    QToolButton(parent)
 {
-    connect(this, &QPushButton::clicked, this, &BookmarkButton::on_buttonClicked);
-    connect(this, &QPushButton::clicked, this, &BookmarkButton::update_display);
+    connect(this, &QToolButton::triggered, this, &BookmarkButton::on_buttonClicked);
+    connect(this, &QToolButton::triggered, this, &BookmarkButton::update_display);
+    setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::Actions::ToggleAddBookmarkAction));
 }
 
 void BookmarkButton::update_display()
 {
-    auto kiwixApp = KiwixApp::instance();
-    if (kiwixApp->isCurrentArticleBookmarked()) {
-        setIcon(QIcon(":/icons/star-active.svg"));
-        setToolTip(gt("remove-bookmark"));
-    } else {
-        setIcon(QIcon(":/icons/star.svg"));
-        setToolTip(gt("add-bookmark"));
-    }
-    setIconSize(QSize(32, 32));
+    auto isBookMarked = KiwixApp::instance()->isCurrentArticleBookmarked();
+    auto buttonText = isBookMarked ? gt("remove-bookmark") : gt("add-bookmark");
+    defaultAction()->setChecked(isBookMarked);
+    defaultAction()->setToolTip(buttonText);
+    defaultAction()->setText(buttonText);
 }
 
 void BookmarkButton::on_buttonClicked()
