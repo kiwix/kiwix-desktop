@@ -20,6 +20,43 @@ public: // types
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
 
+    enum class BookState
+    {
+        // Nothing known about a book with that id
+        INVALID,
+
+        // Only (some) metadata is available for the book, however neither a
+        // ZIM-file nor a URL is associated with it.
+        METADATA_ONLY,
+
+        // No ZIM file is associated with the book but a URL is provided.
+        AVAILABLE_ONLINE,
+
+        // The book is being downloaded.
+        DOWNLOADING,
+
+        // The book started downloading, but the download is currently paused.
+        DOWNLOAD_PAUSED,
+
+        // The book started downloading but the download was stopped due to
+        // errors.
+        DOWNLOAD_ERROR,
+
+        // A valid ZIM file path is associated with the book and no evidence
+        // about any issues with that ZIM file has so far been obtained.
+        AVAILABLE_LOCALLY_AND_HEALTHY,
+
+        // A ZIM file path is associated with the book but no such file seems
+        // to exist (may be caused by missing read permissions for the directory
+        // containing the ZIM file).
+        ERROR_MISSING_ZIM_FILE,
+
+        // A ZIM file is associated with the book but it cannot be opened
+        // due to issues with its content.
+        ERROR_CORRUPTED_ZIM_FILE
+    };
+
+
 public: // functions
     explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
     virtual ~ContentManager();
@@ -49,6 +86,7 @@ signals:
 public slots:
     QStringList getTranslations(const QStringList &keys);
     BookInfo getBookInfos(QString id, const QStringList &keys);
+    BookState getBookState(QString id);
     void openBook(const QString& id);
     void downloadBook(const QString& id);
     void downloadBook(const QString& id, QModelIndex index);

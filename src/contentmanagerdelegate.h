@@ -15,6 +15,10 @@ public:
     bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
+private: // functions
+    void paintBookState(QPainter *p, QRect r, const QModelIndex &index) const;
+    void paintButton(QPainter *p, const QRect &r, QString t) const;
+
 private:
     QScopedPointer<QPushButton> baseButton;
     QByteArray placeholderIcon;
