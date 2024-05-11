@@ -5,29 +5,27 @@
 #include <QStringListModel>
 #include <QCompleter>
 #include <QIcon>
-#include <QPushButton>
+#include <QToolButton>
 #include <QUrl>
 #include <QTimer>
 #include <QThread>
+#include <QToolBar>
 
-class SearchButton : public QPushButton {
+class BookmarkButton : public QToolButton {
     Q_OBJECT
 public:
-    SearchButton(QWidget *parent = nullptr);
+    BookmarkButton(QWidget *parent = nullptr);
 
 public slots:
-    void set_searchMode(bool searchMode);
+    void update_display();
     void on_buttonClicked();
-
-protected:
-    bool m_searchMode;
 };
 
-class SearchBar : public QLineEdit
+class SearchBarLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    SearchBar(QWidget *parent = nullptr);
+    SearchBarLineEdit(QWidget *parent = nullptr);
     void hideSuggestions();
 
 public slots:
@@ -41,7 +39,6 @@ private:
     QStringListModel m_completionModel;
     QCompleter m_completer;
     QVector<QUrl> m_urlList;
-    SearchButton m_button;
     QString m_title;
     QString m_searchbarInput;
     bool m_returnPressed = false;
@@ -54,4 +51,18 @@ private slots:
     void openCompletion(const QString& text, int index);
 };
 
+
+class SearchBar : public QToolBar {
+    Q_OBJECT
+public:
+    SearchBar(QWidget *parent = nullptr);
+    SearchBarLineEdit& getLineEdit() { return m_searchBarLineEdit; };
+
+signals:
+    void currentTitleChanged(const QString &title);
+
+private:
+    SearchBarLineEdit m_searchBarLineEdit;
+    BookmarkButton m_bookmarkButton;
+};
 #endif // SEARCHBAR_H

@@ -46,6 +46,7 @@ public:
         ToggleFullscreenAction,
         ToggleTOCAction,
         ToggleReadingListAction,
+        ToggleAddBookmarkAction,
         ZoomInAction,
         ZoomOutAction,
         ZoomResetAction,

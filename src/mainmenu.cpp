@@ -35,6 +35,7 @@ MainMenu::MainMenu(QWidget *parent) :
     m_editMenu.ADD_ACTION(SearchArticleAction);
     m_editMenu.ADD_ACTION(SearchLibraryAction);
     m_editMenu.ADD_ACTION(FindInPageAction);
+    m_editMenu.ADD_ACTION(ToggleAddBookmarkAction);
     addMenu(&m_editMenu);
 
     m_viewMenu.setTitle(gt("view"));

@@ -6,39 +6,25 @@
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
 
-SearchButton::SearchButton(QWidget *parent) :
-    QPushButton(parent),
-    m_searchMode(true)
+BookmarkButton::BookmarkButton(QWidget *parent) :
+    QToolButton(parent)
 {
-    setFlat(true);
-    setIcon(QIcon(":/icons/search.svg"));
-    connect(this, &QPushButton::clicked, this, &SearchButton::on_buttonClicked);
+    connect(this, &QToolButton::triggered, this, &BookmarkButton::on_buttonClicked);
+    connect(this, &QToolButton::triggered, this, &BookmarkButton::update_display);
+    setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::Actions::ToggleAddBookmarkAction));
 }
 
-void SearchButton::set_searchMode(bool searchMode)
+void BookmarkButton::update_display()
 {
-    m_searchMode = searchMode;
-    if (m_searchMode) {
-        setIcon(QIcon(":/icons/search.svg"));
-        setIconSize(QSize(27, 27));
-    } else {
-        auto kiwixApp = KiwixApp::instance();
-        if (kiwixApp->isCurrentArticleBookmarked()) {
-            setIcon(QIcon(":/icons/star-active.svg"));
-            setToolTip(gt("remove-bookmark"));
-        } else {
-            setIcon(QIcon(":/icons/star.svg"));
-            setToolTip(gt("add-bookmark"));
-        }
-        setIconSize(QSize(32, 32));
-    }
+    auto isBookMarked = KiwixApp::instance()->isCurrentArticleBookmarked();
+    auto buttonText = isBookMarked ? gt("remove-bookmark") : gt("add-bookmark");
+    defaultAction()->setChecked(isBookMarked);
+    defaultAction()->setToolTip(buttonText);
+    defaultAction()->setText(buttonText);
 }
 
-void SearchButton::on_buttonClicked()
+void BookmarkButton::on_buttonClicked()
 {
-    if (m_searchMode)
-        return;
-
     auto kiwixApp = KiwixApp::instance();
     auto library = kiwixApp->getLibrary();
     auto tabWidget = kiwixApp->getTabWidget();
@@ -55,14 +41,12 @@ void SearchButton::on_buttonClicked()
         bookmark.setTitle(tabWidget->currentArticleTitle().toStdString());
         library->addBookmark(bookmark);
     }
-    set_searchMode(false);
     library->save();
 }
 
-SearchBar::SearchBar(QWidget *parent) :
+SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
-    m_completer(&m_completionModel, this),
-    m_button(this)
+    m_completer(&m_completionModel, this)
 {
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
@@ -76,7 +60,7 @@ SearchBar::SearchBar(QWidget *parent) :
     m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
     qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
-    connect(mp_typingTimer, &QTimer::timeout, this, &SearchBar::updateCompletion);
+    connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
 
     connect(this, &QLineEdit::textEdited, this,
             [=](const QString &text) {
@@ -103,19 +87,19 @@ SearchBar::SearchBar(QWidget *parent) :
             });
 }
 
-void SearchBar::hideSuggestions()
+void SearchBarLineEdit::hideSuggestions()
 {
     m_completer.popup()->hide();
 }
 
-void SearchBar::clearSuggestions()
+void SearchBarLineEdit::clearSuggestions()
 {
     QStringList empty;
     m_completionModel.setStringList(empty);
     m_urlList.clear();
 }
 
-void SearchBar::on_currentTitleChanged(const QString& title)
+void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
 {
     if (this->hasFocus()) {
         return;
@@ -125,11 +109,10 @@ void SearchBar::on_currentTitleChanged(const QString& title)
     } else {
         setText("");
     }
-    m_button.set_searchMode(title.isEmpty());
     m_title = title;
 }
 
-void SearchBar::focusInEvent( QFocusEvent* event)
+void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
 {
     setReadOnly(false);
     if (event->reason() == Qt::MouseFocusReason && text() == m_title) {
@@ -139,24 +122,22 @@ void SearchBar::focusInEvent( QFocusEvent* event)
         event->reason() == Qt::MouseFocusReason ||
         event->reason() == Qt::ShortcutFocusReason) {
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
-        this, QOverload<const QModelIndex &>::of(&SearchBar::openCompletion));
+        this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion));
     }
     QLineEdit::focusInEvent(event);
-    m_button.set_searchMode(true);
 }
 
-void SearchBar::focusOutEvent(QFocusEvent* event)
+void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)
 {
     setReadOnly(true);
     if (event->reason() == Qt::MouseFocusReason && text().isEmpty()) {
-        m_button.set_searchMode(false);
         setText(m_title);
     }
     deselect();
     return QLineEdit::focusOutEvent(event);
 }
 
-void SearchBar::updateCompletion()
+void SearchBarLineEdit::updateCompletion()
 {
     mp_typingTimer->stop();
     clearSuggestions();
@@ -184,14 +165,14 @@ void SearchBar::updateCompletion()
     suggestionWorker->start();
 }
 
-void SearchBar::openCompletion(const QModelIndex &index)
+void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
     if (m_urlList.size() != 0) {
         openCompletion(index.data().toString(), index.row());
     }
 }
 
-void SearchBar::openCompletion(const QString& text, int index)
+void SearchBarLineEdit::openCompletion(const QString& text, int index)
 {
     QUrl url;
     if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
@@ -200,4 +181,25 @@ void SearchBar::openCompletion(const QString& text, int index)
         url = m_urlList.last();
     }
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
+}
+
+SearchBar::SearchBar(QWidget *parent) :
+    QToolBar(parent),
+    m_searchBarLineEdit(this),
+    m_bookmarkButton(this)
+{
+    QLabel* searchIconLabel = new QLabel; 
+    searchIconLabel->setObjectName("searchIcon");
+    searchIconLabel->setPixmap(QIcon(":/icons/search.svg").pixmap(QSize(27, 27)));
+
+    setIconSize(QSize(32, 32));
+
+    addWidget(searchIconLabel);
+    addWidget(&m_searchBarLineEdit);
+    addWidget(&m_bookmarkButton);
+
+    connect(this, &SearchBar::currentTitleChanged, &m_searchBarLineEdit,
+            &SearchBarLineEdit::on_currentTitleChanged);
+    connect(this, &SearchBar::currentTitleChanged, &m_bookmarkButton,
+            &BookmarkButton::update_display);
 }
