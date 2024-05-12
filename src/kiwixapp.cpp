@@ -225,18 +225,18 @@ void KiwixApp::openZimFile(const QString &zimfile)
 {
     QString _zimfile;
     if (zimfile.isEmpty()) {
-        _zimfile = QFileDialog::getOpenFileName(
-                    getMainWindow(),
-                    gt("open-zim"),
-                    QString(),
-                    "ZIM Files (*.zim);;Splitted ZIM Files (*.zimaa)");
-
-        if (_zimfile.isEmpty()) {
-            return;
+        QString importDir = mp_session->value("zim-import-dir").toString();
+        if (importDir.isEmpty()) { 
+            importDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+            if (importDir.isEmpty()) { importDir = QDir::currentPath(); }
         }
-        _zimfile = QDir::toNativeSeparators(_zimfile);
-    }
+        _zimfile = QFileDialog::getOpenFileName(getMainWindow(), gt("open-zim"), importDir, "ZIM Files (*.zim);;Split ZIM Files (*.zimaa)");
 
+        if (_zimfile.isEmpty()) { return; }
+        _zimfile = QDir::toNativeSeparators(_zimfile);
+        QFileInfo fileInfo(_zimfile);
+        mp_session->setValue("zim-import-dir", fileInfo.absolutePath());
+    }
     QString zimId;
     const auto &validZimFile = zimfile.isEmpty() ? _zimfile : zimfile;
     try {
