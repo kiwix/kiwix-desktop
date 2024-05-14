@@ -24,25 +24,60 @@ int ContentManagerModel::columnCount(const QModelIndex &parent) const
     return rootNode->columnCount();
 }
 
+namespace
+{
+
+QIcon makeIcon(const QByteArray& iconData)
+{
+    QPixmap pix;
+    pix.loadFromData(iconData);
+    return QIcon(pix);
+}
+
+QIcon createPlaceholderIcon()
+{
+    QImage placeholderIconFile(":/icons/placeholder-icon.png");
+    QByteArray iconData;
+    QBuffer buffer(&iconData);
+    buffer.open(QIODevice::WriteOnly);
+    placeholderIconFile.save(&buffer, "png");
+    return makeIcon(iconData);
+}
+
+QIcon getIcon(const QByteArray& iconData)
+{
+    static QIcon placeholderIcon = createPlaceholderIcon();
+
+    return iconData.isNull() ? placeholderIcon : makeIcon(iconData);
+}
+
+} // unnamed namespace
+
 QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 {
-    const auto displayRole = role == Qt::DisplayRole;
-    const auto additionalInfoRole = role == Qt::UserRole+1;
-    if ( (displayRole || additionalInfoRole) && index.isValid() ) {
-        const auto item = static_cast<Node*>(index.internalPointer());
-        QVariant r = item->data(index.column());
-        if ( index.column() != 0 )
-            return r;
+    if ( ! index.isValid() )
+        return QVariant();
 
-        r = getThumbnail(r);
+    const auto col = index.column();
+    const bool isThumbnailRequest = col == 0 && role == Qt::DecorationRole;
+    const bool otherDataRequest = col != 0 && (role == Qt::DisplayRole || role == Qt::UserRole+1 );
 
-        if ( r.userType() == QMetaType::QByteArray )
-            return r;
+    if ( !isThumbnailRequest && !otherDataRequest )
+        return QVariant();
 
-        const QString faviconUrl = r.toString();
-        if ( !faviconUrl.isEmpty() )
-            td.addDownload(faviconUrl, item->getBookId());
-    }
+    const auto item = static_cast<Node*>(index.internalPointer());
+    QVariant r = item->data(col);
+    if ( !isThumbnailRequest )
+        return r;
+
+    r = getThumbnail(r);
+
+    if ( r.userType() == QMetaType::QByteArray )
+        return getIcon(r.toByteArray());
+
+    const QString faviconUrl = r.toString();
+    if ( !faviconUrl.isEmpty() )
+        td.addDownload(faviconUrl, item->getBookId());
 
     return QVariant();
 }

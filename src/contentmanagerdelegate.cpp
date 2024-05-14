@@ -18,10 +18,6 @@ ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
                               "font-family: Selawik;"
                               "color: blue;"
                               "margin: 4px;");
-    QImage placeholderIconFile(":/icons/placeholder-icon.png");
-    QBuffer buffer(&placeholderIcon);
-    buffer.open(QIODevice::WriteOnly);
-    placeholderIconFile.save(&buffer, "png");
 }
 
 namespace
@@ -203,16 +199,6 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 5) {
         paintBookState(painter, option.rect, index);
-        return;
-    }
-    if (index.column() == 0) {
-        auto iconData = index.data().value<QByteArray>();
-        if (iconData.isNull())
-            iconData = placeholderIcon;
-        QPixmap pix;
-        pix.loadFromData(iconData);
-        QIcon icon(pix);
-        icon.paint(painter, QRect(r.left()+10, r.top()+10, 30, 50));
         return;
     }
     if (index.column() == 1) {

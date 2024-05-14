@@ -21,7 +21,6 @@ private: // functions
 
 private:
     QScopedPointer<QPushButton> baseButton;
-    QByteArray placeholderIcon;
     void handleLastColumnClicked(const QModelIndex& index, QMouseEvent *event, const QStyleOptionViewItem &option);
 };
 

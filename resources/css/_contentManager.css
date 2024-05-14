@@ -20,6 +20,7 @@ QTreeView {
     font-family: 'Selawik';
     padding: 4px;
     border: none;
+    qproperty-iconSize: 30px;
 }
 
 QTreeView::item:hover {
