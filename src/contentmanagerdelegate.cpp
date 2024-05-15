@@ -12,7 +12,7 @@
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
 {
-    baseButton->setStyleSheet("background-color: white;"
+    baseButton->setStyleSheet("background-color: #00000000;"
                               "border: 0;"
                               "font-weight: bold;"
                               "font-family: Selawik;"
@@ -144,7 +144,7 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    pen.setColor("#eaecf0");
+    pen.setColor("#dadce0");
     createArc(painter, 0, 360, dcl.pauseResumeButtonRect, pen);
 
     int startAngle = 0;
@@ -198,6 +198,9 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
     }
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 5) {
+        if (option.state & QStyle::State_MouseOver) {
+            painter->fillRect(option.rect, QBrush("#eaecf0"));
+        }
         paintBookState(painter, option.rect, index);
         return;
     }
