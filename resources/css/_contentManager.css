@@ -28,6 +28,7 @@ QTreeView {
     font-family: 'Selawik';
     padding: 4px;
     border: none;
+    selection-color: black;
     qproperty-iconSize: 30px;
 }
 
