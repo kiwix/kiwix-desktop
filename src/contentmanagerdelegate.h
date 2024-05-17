@@ -16,7 +16,7 @@ public:
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private: // functions
-    void paintBookState(QPainter *p, QRect r, const QModelIndex &index) const;
+    void paintBookState(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
     void paintButton(QPainter *p, const QRect &r, QString t) const;
 
 private:

@@ -164,8 +164,14 @@ void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t)
     baseButton->style()->drawControl( QStyle::CE_PushButton, &button, p, baseButton.data());
 }
 
-void ContentManagerDelegate::paintBookState(QPainter *p, QRect r, const QModelIndex &index) const
+void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
+    const QRect r = opt.rect;
+    if (opt.state & QStyle::State_MouseOver) {
+        // don't paint over the line separator
+        const auto cellInternalArea = r.adjusted(0, 0, 0, -1);
+        p->fillRect(cellInternalArea, QBrush("#eaecf0"));
+    }
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
     switch ( KiwixApp::instance()->getContentManager()->getBookState(id) ) {
@@ -197,13 +203,6 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         return;
     }
     QStyleOptionViewItem eOpt = option;
-    if (index.column() == 5) {
-        if (option.state & QStyle::State_MouseOver) {
-            painter->fillRect(option.rect, QBrush("#eaecf0"));
-        }
-        paintBookState(painter, option.rect, index);
-        return;
-    }
     if (index.column() == 1) {
         auto bFont = painter->font();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -213,7 +212,12 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 #endif
         eOpt.font = bFont;
     }
+
     QStyledItemDelegate::paint(painter, eOpt, index);
+
+    if (index.column() == 5) {
+        paintBookState(painter, eOpt, index);
+    }
 }
 
 bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
