@@ -7,8 +7,9 @@
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
 
-ContentManagerModel::ContentManagerModel(QObject *parent)
-    : QAbstractItemModel(parent)
+ContentManagerModel::ContentManagerModel(ContentManager *contentMgr)
+    : QAbstractItemModel(contentMgr)
+    , m_contentMgr(*contentMgr)
 {
     connect(&td, &ThumbnailDownloader::oneThumbnailDownloaded, this, &ContentManagerModel::updateImage);
 }
@@ -225,7 +226,7 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
         default:
             sortBy = "unsorted";
     }
-    KiwixApp::instance()->getContentManager()->setSortBy(sortBy, order == Qt::AscendingOrder);
+    m_contentMgr.setSortBy(sortBy, order == Qt::AscendingOrder);
 }
 
 RowNode* ContentManagerModel::getRowNode(size_t row)
