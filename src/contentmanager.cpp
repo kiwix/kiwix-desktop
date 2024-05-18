@@ -217,17 +217,20 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     QAction menuResumeBook(gt("resume-download"), this);
     QAction menuCancelBook(gt("cancel-download"), this);
     QAction menuOpenFolder(gt("open-folder"), this);
+    QAction menuPreviewBook(gt("preview-book-in-web-browser"), this);
 
     const auto bookState = getBookState(id);
     switch ( bookState ) {
     case BookState::DOWNLOAD_PAUSED:
         contextMenu.addAction(&menuResumeBook);
         contextMenu.addAction(&menuCancelBook);
+        contextMenu.addAction(&menuPreviewBook);
         break;
 
     case BookState::DOWNLOADING:
         contextMenu.addAction(&menuPauseBook);
         contextMenu.addAction(&menuCancelBook);
+        contextMenu.addAction(&menuPreviewBook);
         break;
 
     case BookState::AVAILABLE_LOCALLY_AND_HEALTHY:
@@ -249,6 +252,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
 
     case BookState::AVAILABLE_ONLINE:
         contextMenu.addAction(&menuDownloadBook);
+        contextMenu.addAction(&menuPreviewBook);
         break;
 
     default: break;
@@ -271,6 +275,9 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     });
     connect(&menuResumeBook, &QAction::triggered, [=]() {
         resumeBook(id, index);
+    });
+    connect(&menuPreviewBook, &QAction::triggered, [=]() {
+        openBookPreview(id);
     });
 
     contextMenu.exec(mp_view->getView()->viewport()->mapToGlobal(point));
@@ -501,6 +508,25 @@ void ContentManager::openBook(const QString &id)
     }
 }
 
+void ContentManager::openBookPreview(const QString &id)
+{   
+    try {
+        QMutexLocker locker(&remoteLibraryLocker);
+        const std::string &downloadUrl =
+            mp_remoteLibrary->getBookById(id.toStdString()).getUrl();
+        locker.unlock();
+
+        /* Extract the Zim name from the book's download URL */
+        const auto zimNameStartIndex = downloadUrl.find_last_of('/') + 1;
+        const std::string& zimName = downloadUrl.substr(
+            zimNameStartIndex,
+            downloadUrl.find(".zim", zimNameStartIndex) - zimNameStartIndex);
+
+        const QUrl previewUrl = getRemoteLibraryUrl() + "/viewer#" + zimName.c_str();
+        QDesktopServices::openUrl(previewUrl);
+    } catch (...) {}
+}
+
 namespace
 {
 
@@ -640,6 +666,14 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
     } catch (...) {
         return mp_library->getBookById(id);
     }
+}
+
+QString ContentManager::getRemoteLibraryUrl() const
+{
+    auto host = m_remoteLibraryManager.getCatalogHost();
+    auto port = m_remoteLibraryManager.getCatalogPort();
+    return port == 443 ? "https://" + host
+                        : "http://" + host + ":" + QString::number(port);
 }
 
 std::string ContentManager::startDownload(const kiwix::Book& book)
@@ -887,27 +921,12 @@ void ContentManager::updateLibrary() {
     } catch (std::runtime_error&) {}
 }
 
-namespace
-{
-
-QString makeHttpUrl(QString host, int port)
-{
-    return port == 443
-         ? "https://" + host
-         : "http://" + host + ":" + QString::number(port);
-}
-
-} // unnamed namespace
-
 void ContentManager::updateRemoteLibrary(const QString& content) {
     (void) QtConcurrent::run([=]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
-        const auto catalogHost = m_remoteLibraryManager.getCatalogHost();
-        const auto catalogPort = m_remoteLibraryManager.getCatalogPort();
-        const auto catalogUrl = makeHttpUrl(catalogHost, catalogPort);
-        manager.readOpds(content.toStdString(), catalogUrl.toStdString());
+        manager.readOpds(content.toStdString(), getRemoteLibraryUrl().toStdString());
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
     });

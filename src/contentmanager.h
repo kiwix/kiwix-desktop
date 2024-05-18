@@ -88,6 +88,7 @@ public slots:
     BookInfo getBookInfos(QString id, const QStringList &keys);
     BookState getBookState(QString id);
     void openBook(const QString& id);
+    void openBookPreview(const QString& id);
     void downloadBook(const QString& id);
     void downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
@@ -121,6 +122,7 @@ private: // functions
     // Get the book with the specified id from
     // the remote or local library (in that order).
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
+    QString getRemoteLibraryUrl() const;
 
     void startDownloadUpdaterThread();
     std::string startDownload(const kiwix::Book& book);

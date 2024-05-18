@@ -50,5 +50,6 @@
 	"monitor-clear-dir-dialog-title": "\"Monitor\" means \"watch\" in this context. The monitor directory is monitored/watched for new ZIM files.",
 	"monitor-clear-dir-dialog-msg": "\"Monitor\" means \"watch\" in this context. The monitor directory is monitored/watched for new ZIM files.",
 	"open-book": "\"Open\" is a imperative, not an adjective.",
-	"open-previous-tabs-at-startup": "The tabs that were open when the user closed the application is opened again when the application is restarted."
+	"open-previous-tabs-at-startup": "The tabs that were open when the user closed the application is opened again when the application is restarted.",
+	"preview-book-in-web-browser": "Preview this book by opening the link to its preview website in the native web browser"
 }
