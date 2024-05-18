@@ -121,6 +121,7 @@ private: // functions
     // Get the book with the specified id from
     // the remote or local library (in that order).
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
+    QString getRemoteLibraryUrl() const;
 
     void startDownloadUpdaterThread();
     std::string startDownload(const kiwix::Book& book);

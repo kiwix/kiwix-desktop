@@ -642,6 +642,14 @@ const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
     }
 }
 
+QString ContentManager::getRemoteLibraryUrl() const
+{
+    auto host = m_remoteLibraryManager.getCatalogHost();
+    auto port = m_remoteLibraryManager.getCatalogPort();
+    return port == 443 ? "https://" + host
+                        : "http://" + host + ":" + QString::number(port);
+}
+
 std::string ContentManager::startDownload(const kiwix::Book& book)
 {
     auto downloadPath = getSettingsManager()->getDownloadDir();
@@ -887,27 +895,12 @@ void ContentManager::updateLibrary() {
     } catch (std::runtime_error&) {}
 }
 
-namespace
-{
-
-QString makeHttpUrl(QString host, int port)
-{
-    return port == 443
-         ? "https://" + host
-         : "http://" + host + ":" + QString::number(port);
-}
-
-} // unnamed namespace
-
 void ContentManager::updateRemoteLibrary(const QString& content) {
     (void) QtConcurrent::run([=]() {
         QMutexLocker locker(&remoteLibraryLocker);
         mp_remoteLibrary = kiwix::Library::create();
         kiwix::Manager manager(mp_remoteLibrary);
-        const auto catalogHost = m_remoteLibraryManager.getCatalogHost();
-        const auto catalogPort = m_remoteLibraryManager.getCatalogPort();
-        const auto catalogUrl = makeHttpUrl(catalogHost, catalogPort);
-        manager.readOpds(content.toStdString(), catalogUrl.toStdString());
+        manager.readOpds(content.toStdString(), getRemoteLibraryUrl().toStdString());
         emit(this->booksChanged());
         emit(this->pendingRequest(false));
     });
