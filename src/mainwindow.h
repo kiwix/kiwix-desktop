@@ -31,8 +31,8 @@ protected:
 
 private slots:
     void toggleFullScreen();
-    void when_ReadingList_toggled(bool state);
-    void when_libraryPageDisplayed(bool showed);
+    void tabChanged(TabBar::TabType);
+    void readingListToggled(bool state);
     void hideTabAndTop();
     void showTabAndTop();
 
