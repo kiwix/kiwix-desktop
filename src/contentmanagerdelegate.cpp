@@ -12,16 +12,12 @@
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
 {
-    baseButton->setStyleSheet("background-color: white;"
+    baseButton->setStyleSheet("background-color: #00000000;"
                               "border: 0;"
                               "font-weight: bold;"
                               "font-family: Selawik;"
                               "color: blue;"
                               "margin: 4px;");
-    QImage placeholderIconFile(":/icons/placeholder-icon.png");
-    QBuffer buffer(&placeholderIcon);
-    buffer.open(QIODevice::WriteOnly);
-    placeholderIconFile.save(&buffer, "png");
 }
 
 namespace
@@ -148,7 +144,7 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    pen.setColor("#eaecf0");
+    pen.setColor("#dadce0");
     createArc(painter, 0, 360, dcl.pauseResumeButtonRect, pen);
 
     int startAngle = 0;
@@ -168,8 +164,14 @@ void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t)
     baseButton->style()->drawControl( QStyle::CE_PushButton, &button, p, baseButton.data());
 }
 
-void ContentManagerDelegate::paintBookState(QPainter *p, QRect r, const QModelIndex &index) const
+void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
+    const QRect r = opt.rect;
+    if (opt.state & QStyle::State_MouseOver) {
+        // don't paint over the line separator
+        const auto cellInternalArea = r.adjusted(0, 0, 0, -1);
+        p->fillRect(cellInternalArea, QBrush("#eaecf0"));
+    }
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
     switch ( KiwixApp::instance()->getContentManager()->getBookState(id) ) {
@@ -201,20 +203,6 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
         return;
     }
     QStyleOptionViewItem eOpt = option;
-    if (index.column() == 5) {
-        paintBookState(painter, option.rect, index);
-        return;
-    }
-    if (index.column() == 0) {
-        auto iconData = index.data().value<QByteArray>();
-        if (iconData.isNull())
-            iconData = placeholderIcon;
-        QPixmap pix;
-        pix.loadFromData(iconData);
-        QIcon icon(pix);
-        icon.paint(painter, QRect(r.left()+10, r.top()+10, 30, 50));
-        return;
-    }
     if (index.column() == 1) {
         auto bFont = painter->font();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -224,7 +212,12 @@ void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 #endif
         eOpt.font = bFont;
     }
+
     QStyledItemDelegate::paint(painter, eOpt, index);
+
+    if (index.column() == 5) {
+        paintBookState(painter, eOpt, index);
+    }
 }
 
 bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)

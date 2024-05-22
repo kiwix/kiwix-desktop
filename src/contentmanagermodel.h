@@ -11,6 +11,7 @@
 #include "rownode.h"
 #include <memory>
 
+class ContentManager;
 class RowNode;
 class Node;
 class DescriptionNode;
@@ -58,7 +59,7 @@ public: // types
 
 
 public: // functions
-    explicit ContentManagerModel(QObject *parent = nullptr);
+    explicit ContentManagerModel(ContentManager* contentMgr);
     ~ContentManagerModel();
 
     QVariant data(const QModelIndex &index, int role) const override;
@@ -89,6 +90,7 @@ private: // functions
     RowNode* getRowNode(size_t row);
 
 private: // data
+    ContentManager& m_contentMgr;
     std::shared_ptr<RowNode> rootNode;
     mutable ThumbnailDownloader td;
     QMap<QString, size_t> bookIdToRowMap;

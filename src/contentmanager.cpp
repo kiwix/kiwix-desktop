@@ -124,9 +124,10 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     header->setHighlightSections(true);
     treeView->setWordWrap(true);
     treeView->resizeColumnToContents(4);
-    treeView->setColumnWidth(0, 80);
+    treeView->setColumnWidth(0, 70);
     treeView->setColumnWidth(5, 120);
     // TODO: set width for all columns based on viewport
+    treeView->setAllColumnsShowFocus(true);
 
     setCurrentLanguage(getSettingsManager()->getLanguageList());
     setCurrentCategoryFilter(getSettingsManager()->getCategoryList());

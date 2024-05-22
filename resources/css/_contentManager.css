@@ -12,6 +12,14 @@ QTreeView::branch:closed:has-children {
     padding: 7px;
 }
 
+QTreeView::branch:has-children {
+    border-bottom: 1px solid #cccccc;
+}
+
+QTreeView::branch:has-children:hover {
+    background-color: #eaecf0;
+}
+
 QTreeView::item:has-children {
     border-bottom: 1px solid #cccccc;
 }
@@ -20,6 +28,8 @@ QTreeView {
     font-family: 'Selawik';
     padding: 4px;
     border: none;
+    selection-color: black;
+    qproperty-iconSize: 30px;
 }
 
 QTreeView::item:hover {
