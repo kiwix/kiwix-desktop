@@ -37,6 +37,40 @@ void DownloadState::update(const DownloadInfo& downloadInfos)
 // DowloadManager
 ////////////////////////////////////////////////////////////////////////////////
 
-DownloadManager::DownloadManager(kiwix::Downloader *downloader)
-    : mp_downloader(downloader)
+DownloadManager::DownloadManager(const Library* lib, kiwix::Downloader *downloader)
+    : mp_library(lib)
+    , mp_downloader(downloader)
 {}
+
+namespace
+{
+
+QString downloadStatus2QString(kiwix::Download::StatusResult status)
+{
+    switch(status){
+    case kiwix::Download::K_ACTIVE:   return "active";
+    case kiwix::Download::K_WAITING:  return "waiting";
+    case kiwix::Download::K_PAUSED:   return "paused";
+    case kiwix::Download::K_ERROR:    return "error";
+    case kiwix::Download::K_COMPLETE: return "completed";
+    case kiwix::Download::K_REMOVED:  return "removed";
+    default:                          return "unknown";
+    }
+}
+
+} // unnamed namespace
+
+DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
+{
+    auto& b = mp_library->getBookById(bookId);
+    const auto d = mp_downloader->getDownload(b.getDownloadId());
+    d->updateStatus(true);
+
+    return {
+             { "status"          , downloadStatus2QString(d->getStatus())   },
+             { "completedLength" , QString::number(d->getCompletedLength()) },
+             { "totalLength"     , QString::number(d->getTotalLength())     },
+             { "downloadSpeed"   , QString::number(d->getDownloadSpeed())   },
+             { "path"            , QString::fromStdString(d->getPath())     }
+    };
+}

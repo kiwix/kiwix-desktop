@@ -95,7 +95,7 @@ void openFileLocation(QString path, QWidget *parent = nullptr)
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
-      DownloadManager(downloader),
+      DownloadManager(library, downloader),
       mp_library(library),
       mp_remoteLibrary(kiwix::Library::create()),
       m_remoteLibraryManager()
@@ -528,24 +528,6 @@ void ContentManager::openBookPreview(const QString &id)
     } catch (...) {}
 }
 
-namespace
-{
-
-QString downloadStatus2QString(kiwix::Download::StatusResult status)
-{
-    switch(status){
-    case kiwix::Download::K_ACTIVE:   return "active";
-    case kiwix::Download::K_WAITING:  return "waiting";
-    case kiwix::Download::K_PAUSED:   return "paused";
-    case kiwix::Download::K_ERROR:    return "error";
-    case kiwix::Download::K_COMPLETE: return "completed";
-    case kiwix::Download::K_REMOVED:  return "removed";
-    default:                          return "unknown";
-    }
-}
-
-} // unnamed namespace
-
 void ContentManager::downloadStarted(const kiwix::Book& book, const std::string& downloadId)
 {
     kiwix::Book bookCopy(book);
@@ -588,21 +570,6 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     } else {
         emit(mp_library->booksChanged());
     }
-}
-
-DownloadInfo ContentManager::getDownloadInfo(QString bookId) const
-{
-    auto& b = mp_library->getBookById(bookId);
-    const auto d = mp_downloader->getDownload(b.getDownloadId());
-    d->updateStatus(true);
-
-    return {
-             { "status"          , downloadStatus2QString(d->getStatus())   },
-             { "completedLength" , QString::number(d->getCompletedLength()) },
-             { "totalLength"     , QString::number(d->getTotalLength())     },
-             { "downloadSpeed"   , QString::number(d->getDownloadSpeed())   },
-             { "path"            , QString::fromStdString(d->getPath())     }
-    };
 }
 
 void ContentManager::updateDownload(QString bookId, const DownloadInfo& downloadInfo)

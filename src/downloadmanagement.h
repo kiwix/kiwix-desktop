@@ -11,6 +11,8 @@
 
 #include <kiwix/downloader.h>
 
+#include "library.h"
+
 typedef QMap<QString, QVariant> DownloadInfo;
 
 class DownloadState
@@ -63,9 +65,12 @@ public: // types
     };
 
 public: // functions
-    explicit DownloadManager(kiwix::Downloader *downloader);
+    DownloadManager(const Library* lib, kiwix::Downloader *downloader);
+
+    DownloadInfo getDownloadInfo(QString bookId) const;
 
 protected: // data
+    const Library* const     mp_library;
     kiwix::Downloader* const mp_downloader;
     Downloads                m_downloads;
 };
