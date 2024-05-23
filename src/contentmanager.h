@@ -58,7 +58,7 @@ public: // types
 
 
 public: // functions
-    explicit ContentManager(Library* library, kiwix::Downloader *downloader, QObject *parent = nullptr);
+    ContentManager(Library* library, kiwix::Downloader *downloader);
     virtual ~ContentManager();
 
     ContentManagerView* getView() { return mp_view; }

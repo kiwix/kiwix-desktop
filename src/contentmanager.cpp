@@ -93,9 +93,8 @@ void openFileLocation(QString path, QWidget *parent = nullptr)
 
 } // unnamed namespace
 
-ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
-    : QObject(parent),
-      DownloadManager(library, downloader),
+ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
+    : DownloadManager(library, downloader),
       mp_library(library),
       mp_remoteLibrary(kiwix::Library::create()),
       m_remoteLibraryManager()
