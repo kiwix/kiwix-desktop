@@ -73,6 +73,7 @@ public: // functions
     DownloadInfo getDownloadInfo(QString bookId) const;
     void restoreDownloads();
     void updateDownloads();
+    void pauseDownload(const QString& bookId);
 
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
