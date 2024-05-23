@@ -2,8 +2,12 @@
 #define DOWNLOADMANAGEMENT_H
 
 #include <QMap>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QString>
 #include <QVariant>
+
+#include <memory>
 
 typedef QMap<QString, QVariant> DownloadInfo;
 
@@ -17,6 +21,44 @@ public:
 
 public:
     void update(const DownloadInfo& info);
+};
+
+class DownloadManager
+{
+public: // types
+
+    // BookId -> DownloadState map
+    class Downloads
+    {
+    private:
+        typedef std::shared_ptr<DownloadState> DownloadStatePtr;
+        typedef QMap<QString, DownloadStatePtr> ImplType;
+
+    public:
+        void set(const QString& id, DownloadStatePtr d) {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
+            impl[id] = d;
+        }
+
+        DownloadStatePtr value(const QString& id) const {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
+            return impl.value(id);
+        }
+
+        QList<QString> keys() const {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
+            return impl.keys();
+        }
+
+        void remove(const QString& id) {
+            const QMutexLocker threadSafetyGuarantee(&mutex);
+            impl.remove(id);
+        }
+
+    private:
+        ImplType impl;
+        mutable QMutex mutex;
+    };
 };
 
 #endif // DOWNLOADMANAGEMENT_H
