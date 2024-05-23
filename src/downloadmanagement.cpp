@@ -56,6 +56,21 @@ void DownloadManager::restoreDownloads()
     }
 }
 
+void DownloadManager::updateDownloads()
+{
+    DownloadInfo downloadInfo;
+    for ( const auto& bookId : m_downloads.keys() ) {
+        try {
+            downloadInfo = getDownloadInfo(bookId);
+        } catch ( ... ) {
+            emit downloadDisappeared(bookId);
+            continue;
+        }
+
+        emit downloadUpdated(bookId, downloadInfo);
+    }
+}
+
 namespace
 {
 
