@@ -733,11 +733,7 @@ void ContentManager::pauseBook(const QString& id, QModelIndex index)
 
 void ContentManager::resumeBook(const QString& id, QModelIndex index)
 {
-    auto& b = mp_library->getBookById(id);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
-    if (download->getStatus() == kiwix::Download::K_PAUSED) {
-        download->resumeDownload();
-    }
+    DownloadManager::resumeDownload(id);
     managerModel->triggerDataUpdateAt(index);
 }
 

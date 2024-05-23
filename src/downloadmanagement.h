@@ -74,6 +74,7 @@ public: // functions
     void restoreDownloads();
     void updateDownloads();
     void pauseDownload(const QString& bookId);
+    void resumeDownload(const QString& bookId);
 
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );

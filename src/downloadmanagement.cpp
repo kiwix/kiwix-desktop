@@ -130,3 +130,11 @@ void DownloadManager::pauseDownload(const QString& bookId)
     }
 }
 
+void DownloadManager::resumeDownload(const QString& bookId)
+{
+    auto& b = mp_library->getBookById(bookId);
+    auto download = mp_downloader->getDownload(b.getDownloadId());
+    if (download->getStatus() == kiwix::Download::K_PAUSED) {
+        download->resumeDownload();
+    }
+}
