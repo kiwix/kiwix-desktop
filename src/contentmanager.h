@@ -130,7 +130,6 @@ private: // functions
     void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadDisappeared(QString bookId);
     void downloadCompleted(QString bookId, QString path);
-    void restoreDownloads();
 
 private: // data
     Library* mp_library;
