@@ -73,6 +73,9 @@ public: // functions
     DownloadInfo getDownloadInfo(QString bookId) const;
     void restoreDownloads();
     void updateDownloads();
+
+    // returns the download id
+    std::string startDownload(const std::string& url, const std::string& downloadDirPath);
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
 

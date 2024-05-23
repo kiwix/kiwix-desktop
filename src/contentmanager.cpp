@@ -622,12 +622,7 @@ std::string ContentManager::startDownload(const kiwix::Book& book)
     auto downloadPath = getSettingsManager()->getDownloadDir();
     checkThatBookCanBeSaved(book, downloadPath);
 
-    typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
-
-    const DownloadOptions downloadOptions{{"dir", downloadPath.toStdString()}};
-
-    const auto d = mp_downloader->startDownload(book.getUrl(), downloadOptions);
-    return d->getDid();
+    return DownloadManager::startDownload(book.getUrl(), downloadPath.toStdString());
 }
 
 void ContentManager::downloadBook(const QString &id)

@@ -104,6 +104,16 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
     };
 }
 
+std::string DownloadManager::startDownload(const std::string& url, const std::string& downloadDirPath)
+{
+    typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
+
+    const DownloadOptions downloadOptions{{"dir", downloadDirPath}};
+
+    const auto d = mp_downloader->startDownload(url, downloadOptions);
+    return d->getDid();
+}
+
 void DownloadManager::pauseDownload(const QString& bookId)
 {
     const auto downloadId = mp_library->getBookById(bookId).getDownloadId();
