@@ -15,7 +15,7 @@
 #include <QPrintDialog>
 #include <thread>
 #include <QMessageBox>
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtPlatformHeaders\QWindowsWindowFunctions>
 #endif
 
@@ -96,7 +96,12 @@ void KiwixApp::init()
 #ifdef Q_OS_WIN
     QWindow *window = mp_mainWindow->windowHandle();
     if (window) {
-        QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
+        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+            QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
+        #else
+            HWND handle = reinterpret_cast<HWND>(window->winId());
+            SetWindowLongPtr(handle, GWL_STYLE, GetWindowLongPtr(handle, GWL_STYLE) | WS_BORDER);
+        #endif
     }
 #endif
     connect(this, &QtSingleApplication::messageReceived, this, [=](const QString &message) {
