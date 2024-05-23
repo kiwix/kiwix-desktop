@@ -68,6 +68,7 @@ public: // functions
     DownloadManager(const Library* lib, kiwix::Downloader *downloader);
 
     DownloadInfo getDownloadInfo(QString bookId) const;
+    void restoreDownloads();
 
 protected: // data
     const Library* const     mp_library;

@@ -40,7 +40,21 @@ void DownloadState::update(const DownloadInfo& downloadInfos)
 DownloadManager::DownloadManager(const Library* lib, kiwix::Downloader *downloader)
     : mp_library(lib)
     , mp_downloader(downloader)
-{}
+{
+    restoreDownloads();
+}
+
+void DownloadManager::restoreDownloads()
+{
+    for ( const auto& bookId : mp_library->getBookIds() ) {
+        const kiwix::Book& book = mp_library->getBookById(bookId);
+        if ( ! book.getDownloadId().empty() ) {
+            const auto newDownload = std::make_shared<DownloadState>();
+            newDownload->paused = true;
+            m_downloads.set(bookId, newDownload);
+        }
+    }
+}
 
 namespace
 {
