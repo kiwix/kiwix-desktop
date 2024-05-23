@@ -5,20 +5,7 @@
 #include <QList>
 #include <QIcon>
 #include "kiwix/book.h"
-
-typedef QMap<QString, QVariant> DownloadInfo;
-
-class DownloadState
-{
-public:
-    double progress = 0;
-    QString completedLength;
-    QString downloadSpeed;
-    bool paused = false;
-
-public:
-    void update(const DownloadInfo& info);
-};
+#include "downloadmanagement.h"
 
 class RowNode : public Node
 {
