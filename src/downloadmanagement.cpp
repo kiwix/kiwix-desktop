@@ -32,3 +32,11 @@ void DownloadState::update(const DownloadInfo& downloadInfos)
     const bool paused = downloadInfos["status"] == "paused";
     *this = {percent, completedLength, downloadSpeed, paused};
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// DowloadManager
+////////////////////////////////////////////////////////////////////////////////
+
+DownloadManager::DownloadManager(kiwix::Downloader *downloader)
+    : mp_downloader(downloader)
+{}

@@ -95,9 +95,9 @@ void openFileLocation(QString path, QWidget *parent = nullptr)
 
 ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, QObject *parent)
     : QObject(parent),
+      DownloadManager(downloader),
       mp_library(library),
       mp_remoteLibrary(kiwix::Library::create()),
-      mp_downloader(downloader),
       m_remoteLibraryManager()
 {
     restoreDownloads();
@@ -510,7 +510,7 @@ void ContentManager::openBook(const QString &id)
 }
 
 void ContentManager::openBookPreview(const QString &id)
-{   
+{
     try {
         QMutexLocker locker(&remoteLibraryLocker);
         const std::string &downloadUrl =

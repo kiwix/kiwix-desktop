@@ -4,12 +4,12 @@
 #include <QObject>
 #include "library.h"
 #include "contentmanagerview.h"
-#include <kiwix/downloader.h>
 #include "opdsrequestmanager.h"
 #include "contenttypefilter.h"
 #include "contentmanagermodel.h"
+#include "downloadmanagement.h"
 
-class ContentManager : public QObject
+class ContentManager : public QObject, private DownloadManager
 {
     Q_OBJECT
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
@@ -136,8 +136,6 @@ private: // functions
 private: // data
     Library* mp_library;
     kiwix::LibraryPtr mp_remoteLibrary;
-    kiwix::Downloader* mp_downloader;
-    ContentManagerModel::Downloads m_downloads;
     QThread* mp_downloadUpdaterThread = nullptr;
     OpdsRequestManager m_remoteLibraryManager;
     ContentManagerView* mp_view;
