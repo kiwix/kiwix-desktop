@@ -143,8 +143,11 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
     setCategories();
     setLanguages();
 
-    connect(this, &ContentManager::downloadUpdated,
+    connect(this, &DownloadManager::downloadUpdated,
             this, &ContentManager::updateDownload);
+
+    connect(this, &DownloadManager::downloadDisappeared,
+            this, &ContentManager::downloadDisappeared);
 
     if ( mp_downloader ) {
         startDownloadUpdaterThread();
@@ -567,21 +570,6 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
             downloadState->update(downloadInfo);
             managerModel->updateDownload(bookId);
         }
-    }
-}
-
-void ContentManager::updateDownloads()
-{
-    DownloadInfo downloadInfo;
-    for ( const auto& bookId : m_downloads.keys() ) {
-        try {
-            downloadInfo = getDownloadInfo(bookId);
-        } catch ( ... ) {
-            downloadDisappeared(bookId);
-            continue;
-        }
-
-        emit downloadUpdated(bookId, downloadInfo);
     }
 }
 

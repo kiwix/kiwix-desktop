@@ -1,6 +1,7 @@
 #ifndef DOWNLOADMANAGEMENT_H
 #define DOWNLOADMANAGEMENT_H
 
+#include <QObject>
 #include <QMap>
 #include <QMutex>
 #include <QMutexLocker>
@@ -27,8 +28,10 @@ public:
     void update(const DownloadInfo& info);
 };
 
-class DownloadManager
+class DownloadManager : public QObject
 {
+    Q_OBJECT
+
 public: // types
 
     // BookId -> DownloadState map
@@ -69,6 +72,11 @@ public: // functions
 
     DownloadInfo getDownloadInfo(QString bookId) const;
     void restoreDownloads();
+    void updateDownloads();
+
+signals:
+    void downloadUpdated(QString bookId, const DownloadInfo& );
+    void downloadDisappeared(QString bookId);
 
 protected: // data
     const Library* const     mp_library;

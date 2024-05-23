@@ -9,7 +9,7 @@
 #include "contentmanagermodel.h"
 #include "downloadmanagement.h"
 
-class ContentManager : public QObject, private DownloadManager
+class ContentManager : public DownloadManager
 {
     Q_OBJECT
     Q_PROPERTY(bool isLocal MEMBER m_local READ isLocal WRITE setLocal NOTIFY localChanged)
@@ -81,7 +81,6 @@ signals:
     void categoriesLoaded(QStringList);
     void languagesLoaded(LanguageList);
     void localChanged(const bool);
-    void downloadUpdated(QString bookId, const DownloadInfo& );
 
 public slots:
     QStringList getTranslations(const QStringList &keys);
@@ -105,7 +104,6 @@ public slots:
     void cancelBook(const QString& id);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
-    void updateDownloads();
     void updateDownload(QString bookId, const DownloadInfo& downloadInfo);
 
 private: // functions
