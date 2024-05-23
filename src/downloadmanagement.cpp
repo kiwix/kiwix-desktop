@@ -103,3 +103,30 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
              { "path"            , QString::fromStdString(d->getPath())     }
     };
 }
+
+void DownloadManager::pauseDownload(const QString& bookId)
+{
+    const auto downloadId = mp_library->getBookById(bookId).getDownloadId();
+    if ( downloadId.empty() ) {
+        // Completion of the download has been detected (and its id was reset)
+        // before the pause-download action was triggered (most likely through
+        // the context menu which can stay open for an arbitrarily long time,
+        // or, unlikely, through the ⏸ button during the last milliseconds of
+        // the download progress).
+        return;
+    }
+
+    auto download = mp_downloader->getDownload(downloadId);
+    if (download->getStatus() == kiwix::Download::K_ACTIVE) {
+        try {
+            download->pauseDownload();
+        } catch (const kiwix::AriaError&) {
+            // Download has completed before the pause request was handled.
+            // Most likely the download was already complete at the time
+            // when ContentManager::pauseBook() started executing, but its
+            // completion was not yet detected (and/or handled) by the download
+            // updater thread.
+        }
+    }
+}
+
