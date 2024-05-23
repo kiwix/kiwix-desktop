@@ -9,6 +9,8 @@
 
 #include <memory>
 
+#include <kiwix/downloader.h>
+
 typedef QMap<QString, QVariant> DownloadInfo;
 
 class DownloadState
@@ -59,6 +61,13 @@ public: // types
         ImplType impl;
         mutable QMutex mutex;
     };
+
+public: // functions
+    explicit DownloadManager(kiwix::Downloader *downloader);
+
+protected: // data
+    kiwix::Downloader* const mp_downloader;
+    Downloads                m_downloads;
 };
 
 #endif // DOWNLOADMANAGEMENT_H
