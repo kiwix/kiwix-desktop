@@ -104,12 +104,32 @@ void Library::removeBookFromLibraryById(const QString& id) {
 namespace
 {
 
+const char BEINGDOWNLOADEDSUFFIX[] = ".beingdownloadedbykiwix";
+
 std::string pseudoPathOfAFileBeingDownloaded(const std::string& path)
 {
-    return path + ".beingdownloadedbykiwix";
+    return path + BEINGDOWNLOADEDSUFFIX;
+}
+
+std::string dropSuffix(const std::string& str, const std::string& suffix)
+{
+    const size_t s = suffix.size();
+    const size_t n = str.size();
+    return n > s && str.substr(n - s, s) == suffix
+         ? str.substr(0, n - s)
+         : str;
 }
 
 } // unnamed namespace
+
+std::string Library::getBookFilePath(const QString& bookId) const
+{
+    const auto& book = getBookById(bookId);
+    const std::string bookPath = book.getPath();
+    return book.getDownloadId().empty()
+         ? bookPath
+         : dropSuffix(bookPath, BEINGDOWNLOADEDSUFFIX);
+}
 
 void Library::addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir)
 {
@@ -132,6 +152,9 @@ void Library::addBookBeingDownloaded(const kiwix::Book& book, QString downloadDi
 
 void Library::updateBookBeingDownloaded(const QString& bookId, const QString& bookPath)
 {
+    if ( bookPath.isEmpty() )
+        return;
+
     const kiwix::Book& book = getBookById(bookId);
     const auto bookPseudoPath = pseudoPathOfAFileBeingDownloaded(bookPath.toStdString());
     if ( bookPseudoPath != book.getPath() ) {
@@ -181,7 +204,7 @@ QStringList Library::getLibraryZimsFromDir(QString dir) const
     QStringList zimsInDir;
     for (auto str : getBookIds()) {
         auto filePath = QString::fromStdString(getBookById(str).getPath());
-        if ( filePath.endsWith(".beingdownloadedbykiwix") )
+        if ( filePath.endsWith(BEINGDOWNLOADEDSUFFIX) )
                 continue;
         QDir absoluteDir = QFileInfo(filePath).absoluteDir();
         if (absoluteDir == dir) {
