@@ -564,9 +564,11 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
 {
     const auto downloadState = m_downloads.value(bookId);
     if ( downloadState ) {
+        const auto downloadPath = downloadInfo["path"].toString();
         if ( downloadInfo["status"].toString() == "completed" ) {
-            downloadCompleted(bookId, downloadInfo["path"].toString());
+            downloadCompleted(bookId, downloadPath);
         } else {
+            mp_library->updateBookBeingDownloaded(bookId, downloadPath);
             downloadState->update(downloadInfo);
             managerModel->updateDownload(bookId);
         }

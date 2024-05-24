@@ -116,7 +116,10 @@ void Library::addBookBeingDownloaded(const kiwix::Book& book, QString downloadDi
     const QString downloadUrl = QString::fromStdString(book.getUrl());
 
     // XXX: This works if the URL is a direct link to a ZIM file
-    // XXX: rather than to a torrent or a metalink file
+    // XXX: rather than to a torrent or a metalink file. In those cases
+    // XXX: the file name of the download will be discovered after the
+    // XXX: the metalink or torrent file is downloaded. Then the real
+    // XXX: file name of a book must be set via updateBookBeingDownloaded();
     const QString fileName = downloadUrl.split('/').back();
 
     const QString path = QDir(downloadDir).absoluteFilePath(fileName);
@@ -125,6 +128,18 @@ void Library::addBookBeingDownloaded(const kiwix::Book& book, QString downloadDi
     kiwix::Book bookCopy(book);
     bookCopy.setPath(pseudoPathOfAFileBeingDownloaded(stlPath));
     addBookToLibrary(bookCopy);
+}
+
+void Library::updateBookBeingDownloaded(const QString& bookId, const QString& bookPath)
+{
+    const kiwix::Book& book = getBookById(bookId);
+    const auto bookPseudoPath = pseudoPathOfAFileBeingDownloaded(bookPath.toStdString());
+    if ( bookPseudoPath != book.getPath() ) {
+        kiwix::Book bookCopy(book);
+        bookCopy.setPath(bookPseudoPath);
+        mp_library->addOrUpdateBook(bookCopy);
+        save();
+    }
 }
 
 bool Library::isBeingDownloadedByUs(QString path) const
