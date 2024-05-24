@@ -78,6 +78,7 @@ public: // functions
     std::string startDownload(const std::string& url, const std::string& downloadDirPath);
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
+    bool cancelDownload(const QString& bookId);
 
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
