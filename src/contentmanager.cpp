@@ -689,8 +689,7 @@ void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
 {
     auto tabBar = KiwixApp::instance()->getTabWidget();
     tabBar->closeTabsByZimId(id);
-    kiwix::Book book = mp_library->getBookById(id);
-    eraseBookFilesFromComputer(book.getPath(), moveToTrash);
+    eraseBookFilesFromComputer(mp_library->getBookFilePath(id), moveToTrash);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit mp_library->bookmarksChanged();
@@ -767,7 +766,7 @@ void ContentManager::reallyCancelBook(const QString& id)
     removeDownload(id);
 
     // incompleted downloaded file should be perma deleted
-    eraseBookFilesFromComputer(download->getPath(), false);
+    eraseBookFilesFromComputer(mp_library->getBookFilePath(id), false);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
     emit(oneBookChanged(id));
