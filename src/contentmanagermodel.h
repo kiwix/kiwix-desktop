@@ -23,8 +23,6 @@ public: // types
     typedef QMap<QString, QVariant> BookInfo;
     typedef QList<BookInfo>         BookInfoList;
 
-    typedef DownloadManager::Downloads Downloads;
-
 public: // functions
     explicit ContentManagerModel(ContentManager* contentMgr);
     ~ContentManagerModel();
@@ -38,7 +36,7 @@ public: // functions
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-    void setBooksData(const BookInfoList& data, const Downloads& downloads);
+    void setBooksData(const BookInfoList& data, const DownloadManager& downloadMgr);
     bool hasChildren(const QModelIndex &parent) const override;
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder) override;
 

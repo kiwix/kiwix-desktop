@@ -35,6 +35,7 @@ class DownloadManager : public QObject
 public: // types
     typedef std::shared_ptr<DownloadState> DownloadStatePtr;
 
+private:
     // BookId -> DownloadState map
     class Downloads
     {
