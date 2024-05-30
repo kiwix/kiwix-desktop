@@ -597,9 +597,6 @@ QString ContentManager::getRemoteLibraryUrl() const
 
 void ContentManager::downloadBook(const QString &id)
 {
-    if ( ! DownloadManager::downloadingFunctionalityAvailable() )
-        throwDownloadUnavailableError();
-
     const auto& book = getRemoteOrLocalBook(id);
 
     const auto downloadPath = getSettingsManager()->getDownloadDir();
