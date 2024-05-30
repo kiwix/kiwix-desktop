@@ -137,6 +137,9 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
 
 std::string DownloadManager::startDownload(const kiwix::Book& book, const std::string& downloadDirPath)
 {
+    if ( ! DownloadManager::downloadingFunctionalityAvailable() )
+        throw std::runtime_error("Downloading functionality is not available");
+
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
 
     const std::string& url = book.getUrl();
