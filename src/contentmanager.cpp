@@ -154,30 +154,6 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
     }
 }
 
-void DownloadManager::startDownloadUpdaterThread()
-{
-    // so that DownloadInfo can be copied across threads
-    qRegisterMetaType<DownloadInfo>("DownloadInfo");
-
-    mp_downloadUpdaterThread = QThread::create([=]() {
-       while ( mp_downloadUpdaterThread != nullptr ) {
-            updateDownloads();
-            QThread::msleep(1000);
-        }
-    });
-    mp_downloadUpdaterThread->start();
-}
-
-DownloadManager::~DownloadManager()
-{
-    if ( mp_downloadUpdaterThread )
-    {
-        QThread* t = mp_downloadUpdaterThread;
-        mp_downloadUpdaterThread = nullptr; // tell the thread to terminate
-        t->wait();
-    }
-}
-
 void ContentManager::updateModel()
 {
     const auto bookIds = getBookIds();
