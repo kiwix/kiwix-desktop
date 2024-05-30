@@ -593,9 +593,7 @@ void ContentManager::downloadBook(const QString &id, QModelIndex index)
     {
         downloadBook(id);
         auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
-        const auto newDownload = std::make_shared<DownloadState>();
-        m_downloads.set(id, newDownload);
-        node->setDownloadState(newDownload);
+        node->setDownloadState(DownloadManager::getDownloadState(id));
     }
     catch ( const ContentManagerError& err )
     {
@@ -626,7 +624,7 @@ std::string ContentManager::startDownload(const kiwix::Book& book)
     auto downloadPath = getSettingsManager()->getDownloadDir();
     checkThatBookCanBeSaved(book, downloadPath);
 
-    return DownloadManager::startDownload(book.getUrl(), downloadPath.toStdString());
+    return DownloadManager::startDownload(book, downloadPath.toStdString());
 }
 
 void ContentManager::downloadBook(const QString &id)
