@@ -553,22 +553,12 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
     }
 }
 
-namespace
-{
-
-std::shared_ptr<RowNode> getSharedPointer(RowNode* ptr)
-{
-    return std::static_pointer_cast<RowNode>(ptr->shared_from_this());
-}
-
-} // unnamed namespace
-
 void ContentManager::downloadBook(const QString &id, QModelIndex index)
 {
     try
     {
         downloadBook(id);
-        auto node = getSharedPointer(static_cast<RowNode*>(index.internalPointer()));
+        const auto node = static_cast<RowNode*>(index.internalPointer());
         node->setDownloadState(DownloadManager::getDownloadState(id));
     }
     catch ( const ContentManagerError& err )
