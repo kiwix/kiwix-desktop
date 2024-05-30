@@ -262,7 +262,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
         return contentMgr.openBook(id);
 
     case ContentManager::BookState::AVAILABLE_ONLINE:
-        return contentMgr.downloadBook(id, index);
+        return contentMgr.downloadBook(id);
 
     case ContentManager::BookState::DOWNLOADING:
         if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
