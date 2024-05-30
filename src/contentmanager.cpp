@@ -494,15 +494,6 @@ void ContentManager::openBookPreview(const QString &id)
     } catch (...) {}
 }
 
-void ContentManager::downloadStarted(const kiwix::Book& book, const std::string& downloadId)
-{
-    kiwix::Book bookCopy(book);
-    bookCopy.setDownloadId(downloadId);
-    mp_library->addBookBeingDownloaded(bookCopy, getSettingsManager()->getDownloadDir());
-    mp_library->save();
-    emit(oneBookChanged(QString::fromStdString(book.getId())));
-}
-
 void ContentManager::removeDownload(QString bookId)
 {
     DownloadManager::removeDownload(bookId);
@@ -560,6 +551,7 @@ void ContentManager::downloadBook(const QString &id, QModelIndex /*index*/)
         downloadBook(id);
         const auto downloadState = DownloadManager::getDownloadState(id);
         managerModel->setDownloadState(id, downloadState);
+        emit(oneBookChanged(id));
     }
     catch ( const ContentManagerError& err )
     {
@@ -587,7 +579,7 @@ QString ContentManager::getRemoteLibraryUrl() const
 
 void ContentManager::downloadBook(const QString &id)
 {
-    const auto& book = getRemoteOrLocalBook(id);
+    kiwix::Book book = getRemoteOrLocalBook(id);
 
     const auto downloadPath = getSettingsManager()->getDownloadDir();
     checkThatBookCanBeSaved(book, downloadPath);
@@ -598,7 +590,10 @@ void ContentManager::downloadBook(const QString &id)
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
-    downloadStarted(book, downloadId);
+
+    book.setDownloadId(downloadId);
+    mp_library->addBookBeingDownloaded(book, downloadPath);
+    mp_library->save();
 }
 
 static const char MSG_FOR_PREVENTED_RMSTAR_OPERATION[] = R"(
