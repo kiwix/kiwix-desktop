@@ -56,6 +56,11 @@ DownloadManager::~DownloadManager()
     }
 }
 
+bool DownloadManager::downloadingFunctionalityAvailable() const
+{
+    return mp_downloader != nullptr;
+}
+
 void DownloadManager::startDownloadUpdaterThread()
 {
     // so that DownloadInfo can be copied across threads

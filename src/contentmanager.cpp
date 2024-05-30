@@ -149,7 +149,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
     connect(this, &DownloadManager::downloadDisappeared,
             this, &ContentManager::downloadDisappeared);
 
-    if ( mp_downloader ) {
+    if ( DownloadManager::downloadingFunctionalityAvailable() ) {
         startDownloadUpdaterThread();
     }
 }
@@ -605,7 +605,7 @@ std::string ContentManager::startDownload(const kiwix::Book& book)
 
 void ContentManager::downloadBook(const QString &id)
 {
-    if (!mp_downloader)
+    if ( ! DownloadManager::downloadingFunctionalityAvailable() )
         throwDownloadUnavailableError();
 
     const auto& book = getRemoteOrLocalBook(id);

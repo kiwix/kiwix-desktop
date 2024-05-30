@@ -72,6 +72,8 @@ public: // functions
     DownloadManager(const Library* lib, kiwix::Downloader *downloader);
     virtual ~DownloadManager();
 
+    bool downloadingFunctionalityAvailable() const;
+
     void startDownloadUpdaterThread();
 
     DownloadInfo getDownloadInfo(QString bookId) const;
@@ -94,11 +96,9 @@ signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
     void downloadDisappeared(QString bookId);
 
-protected: // data
+private: // data
     const Library* const     mp_library;
     kiwix::Downloader* const mp_downloader;
-
-private:
     Downloads                m_downloads;
     QThread*                 mp_downloadUpdaterThread = nullptr;
 };
