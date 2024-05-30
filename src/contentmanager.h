@@ -88,7 +88,6 @@ public slots:
     void openBook(const QString& id);
     void openBookPreview(const QString& id);
     void downloadBook(const QString& id);
-    void downloadBook(const QString& id, QModelIndex index);
     void updateLibrary();
     void setSearch(const QString& search);
     void setSortBy(const QString& sortBy, const bool sortOrderAsc);
@@ -124,6 +123,7 @@ private: // functions
     void removeDownload(QString bookId);
     void downloadDisappeared(QString bookId);
     void downloadCompleted(QString bookId, QString path);
+    void downloadBook(kiwix::Book book, const QString& downloadPath);
 
 private: // data
     Library* mp_library;

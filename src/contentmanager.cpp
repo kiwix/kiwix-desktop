@@ -232,7 +232,7 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
         openBook(id);
     });
     connect(&menuDownloadBook, &QAction::triggered, [=]() {
-        downloadBook(id, index);
+        downloadBook(id);
     });
     connect(&menuPauseBook, &QAction::triggered, [=]() {
         pauseBook(id, index);
@@ -544,11 +544,14 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
     }
 }
 
-void ContentManager::downloadBook(const QString &id, QModelIndex /*index*/)
+void ContentManager::downloadBook(const QString &id)
 {
+    kiwix::Book book = getRemoteOrLocalBook(id);
+    const auto downloadPath = getSettingsManager()->getDownloadDir();
+
     try
     {
-        downloadBook(id);
+        downloadBook(book, downloadPath);
         const auto downloadState = DownloadManager::getDownloadState(id);
         managerModel->setDownloadState(id, downloadState);
         emit(oneBookChanged(id));
@@ -577,11 +580,8 @@ QString ContentManager::getRemoteLibraryUrl() const
                         : "http://" + host + ":" + QString::number(port);
 }
 
-void ContentManager::downloadBook(const QString &id)
+void ContentManager::downloadBook(kiwix::Book book, const QString& downloadPath)
 {
-    kiwix::Book book = getRemoteOrLocalBook(id);
-
-    const auto downloadPath = getSettingsManager()->getDownloadDir();
     checkThatBookCanBeSaved(book, downloadPath);
 
     std::string downloadId;
