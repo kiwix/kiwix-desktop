@@ -11,6 +11,11 @@ KProfile::KProfile(QObject *parent) :
     connect(this, &QWebEngineProfile::downloadRequested, this, &KProfile::startDownload);
     installUrlSchemeHandler("zim", &m_schemeHandler);
     settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
+#if QT_VERSION < QT_VERSION_CHECK(5, 13, 0) // Earlier than Qt 5.13
+    setRequestInterceptor(new ExternalReqInterceptor(this));
+#else // Qt 5.13 and later
+    setUrlRequestInterceptor(new ExternalReqInterceptor(this));
+#endif
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -47,4 +52,14 @@ void KProfile::downloadFinished()
     QMessageBox msgBox;
     msgBox.setText(gt("download-finished-message"));
     msgBox.exec();
+}
+
+void ExternalReqInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
+{
+    const QString reqUrl = info.requestUrl().toString();
+    if (!reqUrl.startsWith("zim://"))
+    {
+        qDebug() << "Blocked external request to URL: " << reqUrl;
+        info.block(true);
+    }
 }
