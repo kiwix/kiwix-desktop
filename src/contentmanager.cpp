@@ -445,7 +445,7 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
 
 ContentManager::BookState ContentManager::getBookState(QString bookId)
 {
-    if ( const auto downloadState = m_downloads.value(bookId) ) {
+    if ( const auto downloadState = DownloadManager::getDownloadState(bookId) ) {
         return downloadState->paused
              ? BookState::DOWNLOAD_PAUSED
              : BookState::DOWNLOADING;
@@ -562,7 +562,7 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
 
 void ContentManager::updateDownload(QString bookId, const DownloadInfo& downloadInfo)
 {
-    const auto downloadState = m_downloads.value(bookId);
+    const auto downloadState = DownloadManager::getDownloadState(bookId);
     if ( downloadState ) {
         const auto downloadPath = downloadInfo["path"].toString();
         if ( downloadInfo["status"].toString() == "completed" ) {

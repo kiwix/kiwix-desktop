@@ -33,12 +33,12 @@ class DownloadManager : public QObject
     Q_OBJECT
 
 public: // types
+    typedef std::shared_ptr<DownloadState> DownloadStatePtr;
 
     // BookId -> DownloadState map
     class Downloads
     {
     private:
-        typedef std::shared_ptr<DownloadState> DownloadStatePtr;
         typedef QMap<QString, DownloadStatePtr> ImplType;
 
     public:
@@ -80,6 +80,11 @@ public: // functions
     void resumeDownload(const QString& bookId);
     bool cancelDownload(const QString& bookId);
     void removeDownload(QString bookId);
+
+    DownloadStatePtr getDownloadState(QString bookId) const
+    {
+        return m_downloads.value(bookId);
+    }
 
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
