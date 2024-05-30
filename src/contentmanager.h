@@ -122,7 +122,6 @@ private: // functions
     QString getRemoteLibraryUrl() const;
 
     void removeDownload(QString bookId);
-    void downloadStarted(const kiwix::Book& book, const std::string& downloadId);
     void downloadDisappeared(QString bookId);
     void downloadCompleted(QString bookId, QString path);
 
