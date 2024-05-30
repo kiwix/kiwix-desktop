@@ -527,7 +527,7 @@ void ContentManager::downloadStarted(const kiwix::Book& book, const std::string&
 
 void ContentManager::removeDownload(QString bookId)
 {
-    m_downloads.remove(bookId);
+    DownloadManager::removeDownload(bookId);
     managerModel->removeDownload(bookId);
 }
 
