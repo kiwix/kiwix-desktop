@@ -45,7 +45,7 @@ public: // functions
 public slots:
     void updateImage(QString bookId, QString url, QByteArray imageData);
     void triggerDataUpdateAt(QModelIndex index);
-    void removeDownload(QString bookId);
+    void setDownloadState(QString bookId, std::shared_ptr<DownloadState> ds);
     void updateDownload(QString bookId);
 
 private: // functions

@@ -265,14 +265,14 @@ void ContentManagerModel::triggerDataUpdateAt(QModelIndex index)
     emit dataChanged(index, index);
 }
 
-void ContentManagerModel::removeDownload(QString bookId)
+void ContentManagerModel::setDownloadState(QString bookId, std::shared_ptr<DownloadState> ds)
 {
     const auto it = bookIdToRowMap.constFind(bookId);
     if ( it == bookIdToRowMap.constEnd() )
         return;
 
     const size_t row = it.value();
-    getRowNode(row)->setDownloadState(nullptr);
+    getRowNode(row)->setDownloadState(ds);
     triggerDataUpdateAt( this->index(row, 5) );
 }
 

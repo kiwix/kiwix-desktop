@@ -506,7 +506,7 @@ void ContentManager::downloadStarted(const kiwix::Book& book, const std::string&
 void ContentManager::removeDownload(QString bookId)
 {
     DownloadManager::removeDownload(bookId);
-    managerModel->removeDownload(bookId);
+    managerModel->setDownloadState(bookId, nullptr);
 }
 
 void ContentManager::downloadDisappeared(QString bookId)
@@ -553,13 +553,13 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
     }
 }
 
-void ContentManager::downloadBook(const QString &id, QModelIndex index)
+void ContentManager::downloadBook(const QString &id, QModelIndex /*index*/)
 {
     try
     {
         downloadBook(id);
-        const auto node = static_cast<RowNode*>(index.internalPointer());
-        node->setDownloadState(DownloadManager::getDownloadState(id));
+        const auto downloadState = DownloadManager::getDownloadState(id);
+        managerModel->setDownloadState(id, downloadState);
     }
     catch ( const ContentManagerError& err )
     {
