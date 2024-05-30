@@ -70,6 +70,9 @@ private:
 
 public: // functions
     DownloadManager(const Library* lib, kiwix::Downloader *downloader);
+    virtual ~DownloadManager();
+
+    void startDownloadUpdaterThread();
 
     DownloadInfo getDownloadInfo(QString bookId) const;
     void restoreDownloads();
@@ -97,6 +100,7 @@ protected: // data
 
 private:
     Downloads                m_downloads;
+    QThread*                 mp_downloadUpdaterThread = nullptr;
 };
 
 #endif // DOWNLOADMANAGEMENT_H
