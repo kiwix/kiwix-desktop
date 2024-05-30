@@ -595,14 +595,6 @@ QString ContentManager::getRemoteLibraryUrl() const
                         : "http://" + host + ":" + QString::number(port);
 }
 
-std::string ContentManager::startDownload(const kiwix::Book& book)
-{
-    auto downloadPath = getSettingsManager()->getDownloadDir();
-    checkThatBookCanBeSaved(book, downloadPath);
-
-    return DownloadManager::startDownload(book, downloadPath.toStdString());
-}
-
 void ContentManager::downloadBook(const QString &id)
 {
     if ( ! DownloadManager::downloadingFunctionalityAvailable() )
@@ -610,11 +602,12 @@ void ContentManager::downloadBook(const QString &id)
 
     const auto& book = getRemoteOrLocalBook(id);
 
+    const auto downloadPath = getSettingsManager()->getDownloadDir();
+    checkThatBookCanBeSaved(book, downloadPath);
+
     std::string downloadId;
     try {
-        downloadId = startDownload(book);
-    } catch (const ContentManagerError& ) {
-        throw;
+        downloadId = DownloadManager::startDownload(book, downloadPath.toStdString());
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
