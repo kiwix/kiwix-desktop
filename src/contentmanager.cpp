@@ -154,7 +154,7 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
     }
 }
 
-void ContentManager::startDownloadUpdaterThread()
+void DownloadManager::startDownloadUpdaterThread()
 {
     // so that DownloadInfo can be copied across threads
     qRegisterMetaType<DownloadInfo>("DownloadInfo");
@@ -168,7 +168,7 @@ void ContentManager::startDownloadUpdaterThread()
     mp_downloadUpdaterThread->start();
 }
 
-ContentManager::~ContentManager()
+DownloadManager::~DownloadManager()
 {
     if ( mp_downloadUpdaterThread )
     {
