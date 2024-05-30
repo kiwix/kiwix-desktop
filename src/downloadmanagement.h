@@ -76,7 +76,7 @@ public: // functions
     void updateDownloads();
 
     // returns the download id
-    std::string startDownload(const std::string& url, const std::string& downloadDirPath);
+    std::string startDownload(const kiwix::Book& book, const std::string& downloadDirPath);
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
     bool cancelDownload(const QString& bookId);
@@ -94,6 +94,8 @@ signals:
 protected: // data
     const Library* const     mp_library;
     kiwix::Downloader* const mp_downloader;
+
+private:
     Downloads                m_downloads;
 };
 

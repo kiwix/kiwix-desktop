@@ -104,13 +104,16 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
     };
 }
 
-std::string DownloadManager::startDownload(const std::string& url, const std::string& downloadDirPath)
+std::string DownloadManager::startDownload(const kiwix::Book& book, const std::string& downloadDirPath)
 {
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
 
+    const std::string& url = book.getUrl();
+    const QString bookId = QString::fromStdString(book.getId());
     const DownloadOptions downloadOptions{{"dir", downloadDirPath}};
 
     const auto d = mp_downloader->startDownload(url, downloadOptions);
+    m_downloads.set(bookId, std::make_shared<DownloadState>());
     return d->getDid();
 }
 
