@@ -172,3 +172,8 @@ bool DownloadManager::cancelDownload(const QString& bookId)
         return false;
     }
 }
+
+void DownloadManager::removeDownload(QString bookId)
+{
+    m_downloads.remove(bookId);
+}

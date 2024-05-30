@@ -79,6 +79,7 @@ public: // functions
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
     bool cancelDownload(const QString& bookId);
+    void removeDownload(QString bookId);
 
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
