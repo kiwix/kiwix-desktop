@@ -187,7 +187,9 @@ void ContentManager::updateModel()
         auto mp = getBookInfos(bookId, keys);
         bookList.append(mp);
     }
-    managerModel->setBooksData(bookList, m_downloads);
+
+    const DownloadManager& downloadMgr = *this;
+    managerModel->setBooksData(bookList, downloadMgr);
 }
 
 void ContentManager::onCustomContextMenu(const QPoint &point)
