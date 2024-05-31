@@ -44,4 +44,24 @@ void showConfirmBox(QString title, QString text, QWidget *parent,
     });
 }
 
+class KiwixAppError : public std::runtime_error
+{
+public:
+    KiwixAppError(const QString& summary, const QString& details)
+        : std::runtime_error(summary.toStdString())
+        , m_details(details)
+    {}
+
+    QString summary() const { return QString::fromStdString(what()); }
+    QString details() const { return m_details; }
+
+private:
+    QString m_details;
+};
+
+inline void showErrorBox(const KiwixAppError& err, QWidget *parent = nullptr)
+{
+    showInfoBox(err.summary(), err.details(), parent);
+}
+
 #endif // KIWIXCONFIRMBOX_H
