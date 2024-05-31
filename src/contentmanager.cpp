@@ -8,7 +8,6 @@
 #include <QUrlQuery>
 #include <QUrl>
 #include <QDir>
-#include <QStorageInfo>
 #include <QMessageBox>
 #include "contentmanagermodel.h"
 #include <zim/error.h>
@@ -30,35 +29,6 @@ namespace
 SettingsManager* getSettingsManager()
 {
     return KiwixApp::instance()->getSettingsManager();
-}
-
-void throwDownloadUnavailableError()
-{
-    throw KiwixAppError(gt("download-unavailable"),
-                        gt("download-unavailable-text"));
-}
-
-void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
-{
-    const QFileInfo targetDirInfo(targetDir);
-    if ( !targetDirInfo.isDir() ) {
-        throw KiwixAppError(gt("download-storage-error"),
-                            gt("download-dir-missing"));
-    }
-
-    // XXX: This may lie under Windows
-    // XXX: (see https://doc.qt.io/qt-5/qfile.html#platform-specific-issues)
-    if ( !targetDirInfo.isWritable() ) {
-        throw KiwixAppError(gt("download-storage-error"),
-                            gt("download-dir-not-writable"));
-    }
-
-    QStorageInfo storage(targetDir);
-    auto bytesAvailable = storage.bytesAvailable();
-    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        throw KiwixAppError(gt("download-storage-error"),
-                            gt("download-storage-error-text"));
-    }
 }
 
 // Opens the directory containing the input file path.
@@ -567,14 +537,7 @@ QString ContentManager::getRemoteLibraryUrl() const
 
 void ContentManager::downloadBook(kiwix::Book book, const QString& downloadPath)
 {
-    checkThatBookCanBeSaved(book, downloadPath);
-
-    std::string downloadId;
-    try {
-        downloadId = DownloadManager::startDownload(book, downloadPath.toStdString());
-    } catch (std::exception& e) {
-        throwDownloadUnavailableError();
-    }
+    const std::string downloadId = DownloadManager::startDownload(book, downloadPath);
 
     book.setDownloadId(downloadId);
     mp_library->addBookBeingDownloaded(book, downloadPath);
