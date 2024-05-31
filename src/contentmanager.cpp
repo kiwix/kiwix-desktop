@@ -32,47 +32,32 @@ SettingsManager* getSettingsManager()
     return KiwixApp::instance()->getSettingsManager();
 }
 
-class ContentManagerError : public std::runtime_error
-{
-public:
-    ContentManagerError(const QString& summary, const QString& details)
-        : std::runtime_error(summary.toStdString())
-        , m_details(details)
-    {}
-
-    QString summary() const { return QString::fromStdString(what()); }
-    QString details() const { return m_details; }
-
-private:
-    QString m_details;
-};
-
 void throwDownloadUnavailableError()
 {
-    throw ContentManagerError(gt("download-unavailable"),
-                              gt("download-unavailable-text"));
+    throw KiwixAppError(gt("download-unavailable"),
+                        gt("download-unavailable-text"));
 }
 
 void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
 {
     const QFileInfo targetDirInfo(targetDir);
     if ( !targetDirInfo.isDir() ) {
-        throw ContentManagerError(gt("download-storage-error"),
-                                  gt("download-dir-missing"));
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-dir-missing"));
     }
 
     // XXX: This may lie under Windows
     // XXX: (see https://doc.qt.io/qt-5/qfile.html#platform-specific-issues)
     if ( !targetDirInfo.isWritable() ) {
-        throw ContentManagerError(gt("download-storage-error"),
-                                  gt("download-dir-not-writable"));
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-dir-not-writable"));
     }
 
     QStorageInfo storage(targetDir);
     auto bytesAvailable = storage.bytesAvailable();
     if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        throw ContentManagerError(gt("download-storage-error"),
-                                  gt("download-storage-error-text"));
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-storage-error-text"));
     }
 }
 
@@ -556,9 +541,9 @@ void ContentManager::downloadBook(const QString &id)
         managerModel->setDownloadState(id, downloadState);
         emit(oneBookChanged(id));
     }
-    catch ( const ContentManagerError& err )
+    catch ( const KiwixAppError& err )
     {
-        showInfoBox(err.summary(), err.details(), mp_view);
+        showErrorBox(err, mp_view);
     }
 }
 
