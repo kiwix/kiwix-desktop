@@ -1,5 +1,9 @@
 #include "downloadmanagement.h"
 
+#include "kiwixapp.h"
+#include "kiwixconfirmbox.h"
+
+#include <QStorageInfo>
 #include <QThread>
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -135,20 +139,63 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
     };
 }
 
-std::string DownloadManager::startDownload(const kiwix::Book& book, const std::string& downloadDirPath)
+namespace
+{
+
+void throwDownloadUnavailableError()
+{
+    throw KiwixAppError(gt("download-unavailable"),
+                        gt("download-unavailable-text"));
+}
+
+void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
+{
+    const QFileInfo targetDirInfo(targetDir);
+    if ( !targetDirInfo.isDir() ) {
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-dir-missing"));
+    }
+
+    // XXX: This may lie under Windows
+    // XXX: (see https://doc.qt.io/qt-5/qfile.html#platform-specific-issues)
+    if ( !targetDirInfo.isWritable() ) {
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-dir-not-writable"));
+    }
+
+    QStorageInfo storage(targetDir);
+    auto bytesAvailable = storage.bytesAvailable();
+    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-storage-error-text"));
+    }
+}
+
+} // unnamed namespace
+
+
+std::string DownloadManager::startDownload(const kiwix::Book& book, const QString& downloadDirPath)
 {
     if ( ! DownloadManager::downloadingFunctionalityAvailable() )
-        throw std::runtime_error("Downloading functionality is not available");
+        throwDownloadUnavailableError();
+
+    checkThatBookCanBeSaved(book, downloadDirPath);
 
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
 
     const std::string& url = book.getUrl();
     const QString bookId = QString::fromStdString(book.getId());
-    const DownloadOptions downloadOptions{{"dir", downloadDirPath}};
+    const DownloadOptions downloadOptions{{"dir", downloadDirPath.toStdString()}};
 
-    const auto d = mp_downloader->startDownload(url, downloadOptions);
+    std::string downloadId;
+    try {
+        const auto d = mp_downloader->startDownload(url, downloadOptions);
+        downloadId = d->getDid();
+    } catch (std::exception& e) {
+        throwDownloadUnavailableError();
+    }
     m_downloads.set(bookId, std::make_shared<DownloadState>());
-    return d->getDid();
+    return downloadId;
 }
 
 void DownloadManager::pauseDownload(const QString& bookId)

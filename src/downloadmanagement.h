@@ -81,7 +81,7 @@ public: // functions
     void updateDownloads();
 
     // returns the download id
-    std::string startDownload(const kiwix::Book& book, const std::string& downloadDirPath);
+    std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
     bool cancelDownload(const QString& bookId);
