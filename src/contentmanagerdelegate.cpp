@@ -221,25 +221,14 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
     if(event->type() == QEvent::MouseButtonRelease )
     {
         QMouseEvent * e = (QMouseEvent *)event;
-        int clickX = portutils::getX(*e);
-        int clickY = portutils::getY(*e);
-
-        QRect r = option.rect;
-        int x,y,w,h;
-        x = r.left();
-        y = r.top();
-        w = r.width();
-        h = r.height();
-
         if (e->button() == Qt::MiddleButton && index.column() != 5) {
             KiwixApp::instance()->getContentManager()->openBookWithIndex(index);
             return true;
         }
 
-        const auto lastColumnClicked = ((index.column() == 5) && (clickX > x && clickX < x + w)
-                                                        && (clickY > y && clickY < y + h));
+        const QPoint clickPoint(portutils::getX(*e), portutils::getY(*e));
 
-        if (lastColumnClicked)
+        if ( index.column() == 5 && option.rect.contains(clickPoint, true) )
             handleLastColumnClicked(index, e, option);
     }
 
