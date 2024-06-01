@@ -218,6 +218,10 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
 {
     Q_UNUSED(model);
 
+    if (index.parent().isValid()) {
+        return true;
+    }
+
     if(event->type() == QEvent::MouseButtonRelease )
     {
         QMouseEvent * e = (QMouseEvent *)event;
