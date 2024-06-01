@@ -41,7 +41,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     QVector<QString> interfaces;
     interfaces.reserve(interfacesMap.size() + 1);
     for (const auto &interfacePair : interfacesMap) {
-        QString ip = QString::fromStdString(interfacePair.second);
+        QString ip = QString::fromStdString(interfacePair.second.addr);
         interfaces.push_back(ip);
     }
     std::sort(interfaces.begin(), interfaces.end());
@@ -88,7 +88,7 @@ void LocalKiwixServer::runOrStopServer()
         settingsManager->setKiwixServerPort(m_port);
         settingsManager->setKiwixServerIpAddress(m_ipAddress);
         mp_server->setAddress(m_ipAddress.toStdString());
-        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
+        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp(false));
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         ui->IpAddress->setReadOnly(true);
         if (!mp_server->start()) {
