@@ -26,6 +26,15 @@ QString convertToUnits(double bytes)
     return preciseBytes + " " + units[unitIndex];
 }
 
+DownloadState::Status getDownloadStatus(QString status)
+{
+    if ( status == "active" )    return DownloadState::DOWNLOADING;
+    if ( status == "paused" )    return DownloadState::PAUSED;
+    if ( status == "waiting" )   return DownloadState::WAITING;
+    if ( status == "error" )     return DownloadState::DOWNLOAD_ERROR;
+    return DownloadState::UNKNOWN;
+}
+
 } // unnamed namespace
 
 void DownloadState::update(const DownloadInfo& downloadInfos)
@@ -35,8 +44,8 @@ void DownloadState::update(const DownloadInfo& downloadInfos)
     percent = QString::number(percent, 'g', 3).toDouble();
     auto completedLength = convertToUnits(downloadInfos["completedLength"].toDouble());
     auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toDouble()) + "/s";
-    const bool paused = downloadInfos["status"] == "paused";
-    *this = {percent, completedLength, downloadSpeed, paused};
+    const auto status = getDownloadStatus(downloadInfos["status"].toString());
+    *this = {percent, completedLength, downloadSpeed, status};
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +94,7 @@ void DownloadManager::restoreDownloads()
         const kiwix::Book& book = mp_library->getBookById(bookId);
         if ( ! book.getDownloadId().empty() ) {
             const auto newDownload = std::make_shared<DownloadState>();
-            newDownload->paused = true;
+            newDownload->status = DownloadState::UNKNOWN;
             m_downloads.set(bookId, newDownload);
         }
     }

@@ -19,10 +19,22 @@ typedef QMap<QString, QVariant> DownloadInfo;
 class DownloadState
 {
 public:
+    enum Status {
+        UNKNOWN,
+        WAITING,
+        PREALLOCATING,
+        DOWNLOAD_ERROR,
+        DOWNLOADING,
+        PAUSE_REQUESTED,
+        PAUSED,
+        RESUME_REQUESTED,
+        CANCEL_REQUESTED
+    };
+
     double progress = 0;
     QString completedLength;
     QString downloadSpeed;
-    bool paused = false;
+    Status status = UNKNOWN;
 
 public:
     void update(const DownloadInfo& info);
