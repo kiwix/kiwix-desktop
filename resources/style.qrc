@@ -3,7 +3,7 @@
         <file>css/style.css</file>
         <file>css/popup.css</file>
         <file>css/localServer.css</file>
-        <file>css/confirmBox.css</file>
+        <file>css/messageBox.css</file>
         <file>css/contentmanagerside.css</file>
         <file>css/choiceBox.css</file>
     </qresource>
