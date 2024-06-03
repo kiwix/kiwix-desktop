@@ -3,26 +3,36 @@
 #include <QFile>
 #include "kiwixapp.h"
 
-KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent) :
+KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent,
+                                 QString leftAction, QString rightAction) :
     QDialog(parent), m_confirmTitle(confirmTitle), m_confirmText(confirmText),
     ui(new Ui::kiwixmessagebox)
 {
     ui->setupUi(this);
     setWindowFlag(Qt::FramelessWindowHint, true);
-    setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/confirmBox.css"));
+    setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/messageBox.css"));
     connect(ui->yesButton, &QPushButton::clicked, [=]() {
         emit yesClicked();
+        m_result = YesClicked;
+        accept();
     });
     connect(ui->noButton, &QPushButton::clicked, [=]() {
         emit noClicked();
+        m_result = NoClicked;
+        reject();
     });
     connect(ui->okButton, &QPushButton::clicked, [=]() {
         emit okClicked();
+        m_result = OkClicked;
+    });
+    connect(ui->closeButton, &QPushButton::clicked, [=]() {
+        this->close();
+        m_result = CloseClicked;
     });
     ui->confirmText->setText(confirmText);
     ui->confirmTitle->setText(confirmTitle);
-    ui->yesButton->setText(gt("yes"));
-    ui->noButton->setText(gt("no"));
+    ui->yesButton->setText(leftAction);
+    ui->noButton->setText(rightAction);
     ui->okButton->setText(gt("ok"));
     ui->okButton->hide();
     if (okDialog) {
@@ -45,3 +55,13 @@ void showInfoBox(QString title, QString text, QWidget *parent)
         dialog->deleteLater();
     });
 }
+
+KiwixMessageBox::Result showKiwixMessageBox(QString title, QString text, QWidget *parent, QString leftTitle, QString rightTitle)
+{
+    KiwixMessageBox *dialog = new KiwixMessageBox(title, text, false, parent, leftTitle, rightTitle);
+    QObject::connect(dialog, &KiwixMessageBox::finished, [=]() {
+        dialog->deleteLater();
+    });
+    return dialog->execDialog();
+}
+
