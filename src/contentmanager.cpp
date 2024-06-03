@@ -17,7 +17,7 @@
 #include "node.h"
 #include "rownode.h"
 #include "descriptionnode.h"
-#include "kiwixconfirmbox.h"
+#include "kiwixmessagebox.h"
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
