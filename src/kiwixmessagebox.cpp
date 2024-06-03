@@ -1,11 +1,11 @@
-#include "kiwixconfirmbox.h"
-#include "ui_kiwixconfirmbox.h"
+#include "kiwixmessagebox.h"
+#include "ui_kiwixmessagebox.h"
 #include <QFile>
 #include "kiwixapp.h"
 
-KiwixConfirmBox::KiwixConfirmBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent) :
+KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent) :
     QDialog(parent), m_confirmTitle(confirmTitle), m_confirmText(confirmText),
-    ui(new Ui::kiwixconfirmbox)
+    ui(new Ui::kiwixmessagebox)
 {
     ui->setupUi(this);
     setWindowFlag(Qt::FramelessWindowHint, true);
@@ -32,16 +32,16 @@ KiwixConfirmBox::KiwixConfirmBox(QString confirmTitle, QString confirmText, bool
     }
 }
 
-KiwixConfirmBox::~KiwixConfirmBox()
+KiwixMessageBox::~KiwixMessageBox()
 {
     delete ui;
 }
 
 void showInfoBox(QString title, QString text, QWidget *parent)
 {
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, true, parent);
+    KiwixMessageBox *dialog = new KiwixMessageBox(title, text, true, parent);
     dialog->show();
-    QObject::connect(dialog, &KiwixConfirmBox::okClicked, [=]() {
+    QObject::connect(dialog, &KiwixMessageBox::okClicked, [=]() {
         dialog->deleteLater();
     });
 }
