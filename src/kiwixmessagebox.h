@@ -4,16 +4,16 @@
 #include <QDialog>
 
 namespace Ui {
-class kiwixconfirmbox;
+class kiwixmessagebox;
 }
 
-class KiwixConfirmBox : public QDialog
+class KiwixMessageBox : public QDialog
 {
     Q_OBJECT
 
 public:
-    KiwixConfirmBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr);
-    ~KiwixConfirmBox();
+    KiwixMessageBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr);
+    ~KiwixMessageBox();
 
 signals:
     void yesClicked();
@@ -23,7 +23,7 @@ signals:
 private:
     QString m_confirmTitle;
     QString m_confirmText;
-    Ui::kiwixconfirmbox *ui;
+    Ui::kiwixmessagebox *ui;
 };
 
 
@@ -33,13 +33,13 @@ template<class YesAction>
 void showConfirmBox(QString title, QString text, QWidget *parent,
                     YesAction yesAction)
 {
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, false, parent);
+    KiwixMessageBox *dialog = new KiwixMessageBox(title, text, false, parent);
     dialog->show();
-    QObject::connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+    QObject::connect(dialog, &KiwixMessageBox::yesClicked, [=]() {
         yesAction();
         dialog->deleteLater();
     });
-    QObject::connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+    QObject::connect(dialog, &KiwixMessageBox::noClicked, [=]() {
         dialog->deleteLater();
     });
 }
