@@ -62,4 +62,3 @@ KiwixMessageBox::Result showKiwixMessageBox(QString title, QString text, QWidget
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     return dialog->execDialog();
 }
-
