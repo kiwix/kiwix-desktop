@@ -79,6 +79,10 @@ DownloadManager::~DownloadManager()
     {
         QThread* t = mp_downloadUpdaterThread;
         mp_downloadUpdaterThread = nullptr; // tell the thread to terminate
+
+        // At this point the thread may be stuck waiting for data.
+        // Let's wake it up.
+        m_requestQueue.enqueue("");
         t->wait();
     }
 }
@@ -88,20 +92,36 @@ bool DownloadManager::downloadingFunctionalityAvailable() const
     return mp_downloader != nullptr;
 }
 
+void DownloadManager::processDownloadActions()
+{
+   while ( mp_downloadUpdaterThread != nullptr ) {
+        const QString bookId = m_requestQueue.dequeue();
+        if ( !bookId.isEmpty() ) {
+            updateDownload(bookId);
+        }
+    }
+}
+
 void DownloadManager::startDownloadUpdaterThread()
 {
     // so that DownloadInfo can be copied across threads
     qRegisterMetaType<DownloadInfo>("DownloadInfo");
 
     mp_downloadUpdaterThread = QThread::create([=]() {
-       while ( mp_downloadUpdaterThread != nullptr ) {
+        processDownloadActions();
+    });
+
+    mp_downloadUpdaterThread->start();
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, [this]() {
+        if ( m_requestQueue.isEmpty() ) {
             for ( const auto& bookId : m_downloads.keys() ) {
-                updateDownload(bookId);
+                m_requestQueue.enqueue(bookId);
             }
-            QThread::msleep(1000);
         }
     });
-    mp_downloadUpdaterThread->start();
+    timer->start(1000);
 }
 
 void DownloadManager::restoreDownloads()
