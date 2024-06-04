@@ -97,7 +97,6 @@ public: // functions
 
     DownloadInfo getDownloadInfo(QString bookId) const;
     void restoreDownloads();
-    void updateDownloads();
 
     // returns the download id
     std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
@@ -114,6 +113,9 @@ public: // functions
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
     void downloadDisappeared(QString bookId);
+
+private: // functions
+    void updateDownload(QString bookId);
 
 private: // data
     const Library* const     mp_library;

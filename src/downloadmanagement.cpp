@@ -95,7 +95,9 @@ void DownloadManager::startDownloadUpdaterThread()
 
     mp_downloadUpdaterThread = QThread::create([=]() {
        while ( mp_downloadUpdaterThread != nullptr ) {
-            updateDownloads();
+            for ( const auto& bookId : m_downloads.keys() ) {
+                updateDownload(bookId);
+            }
             QThread::msleep(1000);
         }
     });
@@ -114,19 +116,17 @@ void DownloadManager::restoreDownloads()
     }
 }
 
-void DownloadManager::updateDownloads()
+void DownloadManager::updateDownload(QString bookId)
 {
     DownloadInfo downloadInfo;
-    for ( const auto& bookId : m_downloads.keys() ) {
-        try {
-            downloadInfo = getDownloadInfo(bookId);
-        } catch ( ... ) {
-            emit downloadDisappeared(bookId);
-            continue;
-        }
-
-        emit downloadUpdated(bookId, downloadInfo);
+    try {
+        downloadInfo = getDownloadInfo(bookId);
+    } catch ( ... ) {
+        emit downloadDisappeared(bookId);
+        return;
     }
+
+    emit downloadUpdated(bookId, downloadInfo);
 }
 
 namespace
