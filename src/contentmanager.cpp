@@ -622,13 +622,13 @@ void ContentManager::eraseBook(const QString& id)
 
 void ContentManager::pauseBook(const QString& id, QModelIndex index)
 {
-    DownloadManager::pauseDownload(id);
+    DownloadManager::addRequest(DownloadManager::PAUSE, id);
     managerModel->triggerDataUpdateAt(index);
 }
 
 void ContentManager::resumeBook(const QString& id, QModelIndex index)
 {
-    DownloadManager::resumeDownload(id);
+    DownloadManager::addRequest(DownloadManager::RESUME, id);
     managerModel->triggerDataUpdateAt(index);
 }
 

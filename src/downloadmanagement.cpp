@@ -82,7 +82,7 @@ DownloadManager::~DownloadManager()
 
         // At this point the thread may be stuck waiting for data.
         // Let's wake it up.
-        m_requestQueue.enqueue("");
+        m_requestQueue.enqueue({UPDATE, ""});
         t->wait();
     }
 }
@@ -95,9 +95,15 @@ bool DownloadManager::downloadingFunctionalityAvailable() const
 void DownloadManager::processDownloadActions()
 {
    while ( mp_downloadUpdaterThread != nullptr ) {
-        const QString bookId = m_requestQueue.dequeue();
-        if ( !bookId.isEmpty() ) {
-            updateDownload(bookId);
+        const Request req = m_requestQueue.dequeue();
+        if ( !req.bookId.isEmpty() ) {
+            switch ( req.action ) {
+            case START:  /* startDownload(req.bookId); */ break;  // API problem
+            case PAUSE:  pauseDownload(req.bookId);  break;
+            case RESUME: resumeDownload(req.bookId); break;
+            case CANCEL: /* cancelDownload(req.bookId); */ break; // API problem
+            case UPDATE: updateDownload(req.bookId); break;
+            }
         }
     }
 }
@@ -117,7 +123,7 @@ void DownloadManager::startDownloadUpdaterThread()
     connect(timer, &QTimer::timeout, [this]() {
         if ( m_requestQueue.isEmpty() ) {
             for ( const auto& bookId : m_downloads.keys() ) {
-                m_requestQueue.enqueue(bookId);
+                addRequest(UPDATE, bookId);
             }
         }
     });
@@ -239,6 +245,11 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
     }
     m_downloads.set(bookId, std::make_shared<DownloadState>());
     return downloadId;
+}
+
+void DownloadManager::addRequest(Action action, QString bookId)
+{
+    m_requestQueue.enqueue({action, bookId});
 }
 
 void DownloadManager::pauseDownload(const QString& bookId)
