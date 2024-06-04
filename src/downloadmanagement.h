@@ -8,6 +8,7 @@
 #include <QString>
 #include <QVariant>
 
+#include <chrono>
 #include <memory>
 
 #include <kiwix/downloader.h>
@@ -18,7 +19,7 @@ typedef QMap<QString, QVariant> DownloadInfo;
 
 class DownloadState
 {
-public:
+public: // types
     enum Status {
         UNKNOWN,
         WAITING,
@@ -27,13 +28,23 @@ public:
         PAUSED
     };
 
+
+public: // data
+
     double progress = 0;
     QString completedLength;
-    QString downloadSpeed;
     Status status = UNKNOWN;
 
-public:
+public: // functions
     void update(const DownloadInfo& info);
+    QString getDownloadSpeed() const;
+
+    // time in seconds since last update
+    double timeSinceLastUpdate() const;
+
+private: // data
+    QString downloadSpeed;
+    std::chrono::steady_clock::time_point lastUpdated;
 };
 
 class DownloadManager : public QObject

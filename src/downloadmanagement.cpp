@@ -37,15 +37,29 @@ DownloadState::Status getDownloadStatus(QString status)
 
 } // unnamed namespace
 
-void DownloadState::update(const DownloadInfo& downloadInfos)
+void DownloadState::update(const DownloadInfo& info)
 {
-    double percent = downloadInfos["completedLength"].toDouble() / downloadInfos["totalLength"].toDouble();
-    percent *= 100;
-    percent = QString::number(percent, 'g', 3).toDouble();
-    auto completedLength = convertToUnits(downloadInfos["completedLength"].toDouble());
-    auto downloadSpeed = convertToUnits(downloadInfos["downloadSpeed"].toDouble()) + "/s";
-    const auto status = getDownloadStatus(downloadInfos["status"].toString());
-    *this = {percent, completedLength, downloadSpeed, status};
+    const auto completedBytes = info["completedLength"].toDouble();
+    const double percentage = completedBytes / info["totalLength"].toDouble();
+
+    progress = QString::number(100 * percentage, 'g', 3).toDouble();
+    completedLength = convertToUnits(completedBytes);
+    downloadSpeed = convertToUnits(info["downloadSpeed"].toDouble()) + "/s";
+    status = getDownloadStatus(info["status"].toString());
+    lastUpdated = std::chrono::steady_clock::now();
+}
+
+double DownloadState::timeSinceLastUpdate() const
+{
+    typedef std::chrono::duration<double> Seconds;
+
+    const auto dt = std::chrono::steady_clock::now() - lastUpdated;
+    return std::chrono::duration_cast<Seconds>(dt).count();
+}
+
+QString DownloadState::getDownloadSpeed() const
+{
+    return timeSinceLastUpdate() > 2.0 ? "---" : downloadSpeed;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
