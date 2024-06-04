@@ -88,6 +88,15 @@ class DownloadManager : public QObject
 public: // types
     typedef std::shared_ptr<DownloadState> DownloadStatePtr;
 
+    enum Action
+    {
+        START,
+        PAUSE,
+        RESUME,
+        CANCEL,
+        UPDATE
+    };
+
 private:
     // BookId -> DownloadState map
     class Downloads
@@ -132,10 +141,10 @@ public: // functions
     DownloadInfo getDownloadInfo(QString bookId) const;
     void restoreDownloads();
 
+    void addRequest(Action action, QString bookId);
+
     // returns the download id
     std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
-    void pauseDownload(const QString& bookId);
-    void resumeDownload(const QString& bookId);
     bool cancelDownload(const QString& bookId);
     void removeDownload(QString bookId);
 
@@ -149,10 +158,18 @@ signals:
     void downloadDisappeared(QString bookId);
 
 private: // types
-    typedef ThreadSafeQueue<QString> RequestQueue;
+    struct Request
+    {
+        Action  action;
+        QString bookId;
+    };
+
+    typedef ThreadSafeQueue<Request> RequestQueue;
 
 private: // functions
     void processDownloadActions();
+    void pauseDownload(const QString& bookId);
+    void resumeDownload(const QString& bookId);
     void updateDownload(QString bookId);
 
 private: // data
