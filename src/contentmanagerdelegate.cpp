@@ -129,7 +129,7 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     double progress  = (double) (downloadInfo.progress) / 100;
     progress = -progress;
     auto completedLength = downloadInfo.completedLength;
-    auto downloadSpeed = downloadInfo.downloadSpeed;
+    auto downloadSpeed = downloadInfo.getDownloadSpeed();
 
     if (downloadInfo.status == DownloadState::PAUSED) {
         createResumeSymbol(painter, dcl.pauseResumeButtonRect);
