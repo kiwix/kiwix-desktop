@@ -19,17 +19,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     loader = new KiwixLoader(mp_ui->loading);
     mp_ui->stackedWidget->setCurrentIndex(0);
 
-    connect(mp_ui->m_view, &QTreeView::clicked, [=](QModelIndex index) {
-        if (index.column() == (mp_ui->m_view->model()->columnCount() - 1))
-            return;
-
-        auto zeroColIndex = index.siblingAtColumn(0);
-        if (mp_ui->m_view->isExpanded(zeroColIndex)) {
-            mp_ui->m_view->collapse(zeroColIndex);
-        } else {
-            mp_ui->m_view->expand(zeroColIndex);
-        }
-    });
+    connect(mp_ui->m_view, &QTreeView::clicked, this, &ContentManagerView::onClicked);
 }
 
 ContentManagerView::~ContentManagerView()
@@ -44,5 +34,18 @@ void ContentManagerView::showLoader(bool show)
         loader->startAnimation();
     } else {
         loader->stopAnimation();
+    }
+}
+
+void ContentManagerView::onClicked(QModelIndex index)
+{
+    if (index.column() == (mp_ui->m_view->model()->columnCount() - 1))
+        return;
+
+    auto zeroColIndex = index.siblingAtColumn(0);
+    if (mp_ui->m_view->isExpanded(zeroColIndex)) {
+        mp_ui->m_view->collapse(zeroColIndex);
+    } else {
+        mp_ui->m_view->expand(zeroColIndex);
     }
 }
