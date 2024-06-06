@@ -2,8 +2,24 @@
 #include "ui_settings.h"
 #include "kiwixapp.h"
 #include <kiwix/tools.h>
+#include <QClipboard>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QToolTip>
+
+namespace 
+{
+    QString formatDownloadDir(const QString& input) {
+        const int maxLength = 40;
+        if (input.length() > maxLength) {
+            QString suffix = input.right(maxLength);
+            int directoryIndex = suffix.indexOf('/');
+            return "..." + suffix.mid(directoryIndex != -1 ? directoryIndex : 0);
+        }
+        return input;
+    }
+}
+
 SettingsView::SettingsView(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Settings)
@@ -14,6 +30,7 @@ SettingsView::SettingsView(QWidget *parent)
     connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->reopenTabToggle, &QCheckBox::clicked, this, &SettingsView::setReopenTab);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
+    connect(ui->downloadDirPathCopy, &QPushButton::clicked, this, &SettingsView::copyDownloadPathToClipboard);
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
     connect(ui->monitorBrowse, &QPushButton::clicked, this, &SettingsView::browseMonitorDir);
     connect(ui->monitorClear, &QPushButton::clicked, this, &SettingsView::clearMonitorDir);
@@ -30,6 +47,9 @@ SettingsView::SettingsView(QWidget *parent)
     ui->browseButton->setText(gt("browse"));
     ui->monitorClear->setText(gt("clear"));
     ui->monitorBrowse->setText(gt("browse"));
+    QIcon copyIcon(":/icons/copy.svg");
+    ui->downloadDirPathCopy->setIcon(copyIcon);
+    ui->downloadDirPathCopy->setIconSize(QSize(24, 24));
     ui->monitorHelp->setText("<b>?</b>");
     ui->monitorHelp->setToolTip(gt("monitor-directory-tooltip"));
     ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
@@ -47,7 +67,7 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir,
                         bool reopentab)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
-    ui->downloadDirPath->setText(downloadDir);
+    SettingsView::onDownloadDirChanged(downloadDir);
     if (monitorDir == QString()) {
         ui->monitorClear->hide();
     }
@@ -156,7 +176,17 @@ void SettingsView::setReopenTab(bool reopen)
 
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
-    ui->downloadDirPath->setText(dir);
+    ui->downloadDirPath->setText(formatDownloadDir(dir));
+    ui->downloadDirPath->setToolTip(dir);
+}
+
+void SettingsView::copyDownloadPathToClipboard()
+{
+    QString downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
+    QApplication::clipboard()->setText(downloadPath);
+
+    QPoint globalPos = ui->downloadDirPathCopy->mapToGlobal(QPoint(0, -ui->downloadDirPathCopy->height()));
+    QToolTip::showText(globalPos, gt("path-was-copied"), ui->downloadDirPathCopy);
 }
 
 void SettingsView::onMonitorDirChanged(const QString &dir)

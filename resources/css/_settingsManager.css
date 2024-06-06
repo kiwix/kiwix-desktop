@@ -43,6 +43,17 @@ QPushButton:hover {
     color: white;
 }
 
+#downloadDirPathCopy {
+    background-color: none;
+    border: 1px solid transparent;
+}
+
+#downloadDirPathCopy:hover {
+    background-color: #D9E9FF;
+    border: 1px solid #3366CC;
+    border-radius: 3px;
+}
+
 #monitorDirLabel {
     padding-right: 0;
 }
