@@ -144,14 +144,18 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     const auto bookState = getBookState(id);
     switch ( bookState ) {
     case BookState::DOWNLOAD_PAUSED:
+        if ( getDownloadState(id)->getStatus() == DownloadState::PAUSED ) {
         contextMenu.addAction(&menuResumeBook);
         contextMenu.addAction(&menuCancelBook);
+        }
         contextMenu.addAction(&menuPreviewBook);
         break;
 
     case BookState::DOWNLOADING:
+        if ( getDownloadState(id)->getStatus() == DownloadState::DOWNLOADING ) {
         contextMenu.addAction(&menuPauseBook);
         contextMenu.addAction(&menuCancelBook);
+        }
         contextMenu.addAction(&menuPreviewBook);
         break;
 
@@ -622,13 +626,13 @@ void ContentManager::eraseBook(const QString& id)
 
 void ContentManager::pauseBook(const QString& id, QModelIndex index)
 {
-    DownloadManager::addRequest(DownloadManager::PAUSE, id);
+    DownloadManager::addRequest(DownloadState::PAUSE, id);
     managerModel->triggerDataUpdateAt(index);
 }
 
 void ContentManager::resumeBook(const QString& id, QModelIndex index)
 {
-    DownloadManager::addRequest(DownloadManager::RESUME, id);
+    DownloadManager::addRequest(DownloadState::RESUME, id);
     managerModel->triggerDataUpdateAt(index);
 }
 

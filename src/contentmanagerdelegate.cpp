@@ -134,7 +134,7 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     if (downloadInfo.getStatus() == DownloadState::PAUSED) {
         createResumeSymbol(painter, dcl.pauseResumeButtonRect);
         createCancelButton(painter, dcl.cancelButtonRect);
-    } else {
+    } else if (downloadInfo.getStatus() == DownloadState::DOWNLOADING) {
         createPauseSymbol(painter, dcl.pauseResumeButtonRect);
         createDownloadStats(painter, box, downloadSpeed, completedLength);
     }
@@ -239,6 +239,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 {
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
+    const auto downloadState = node->getDownloadState();
 
     const int clickX = portutils::getX(*mouseEvent);
     const int clickY = portutils::getY(*mouseEvent);
@@ -254,16 +255,20 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
         return contentMgr.downloadBook(id);
 
     case ContentManager::BookState::DOWNLOADING:
+        if ( downloadState->getStatus() == DownloadState::DOWNLOADING ) {
         if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
             contentMgr.pauseBook(id, index);
+        }
         }
         return;
 
     case ContentManager::BookState::DOWNLOAD_PAUSED:
+        if ( downloadState->getStatus() == DownloadState::PAUSED ) {
         if ( dcl.cancelButtonRect.contains(clickPoint) ) {
              contentMgr.cancelBook(id);
         } else if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
              contentMgr.resumeBook(id, index);
+        }
         }
         return;
 
