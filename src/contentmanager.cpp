@@ -145,16 +145,16 @@ void ContentManager::onCustomContextMenu(const QPoint &point)
     switch ( bookState ) {
     case BookState::DOWNLOAD_PAUSED:
         if ( getDownloadState(id)->getStatus() == DownloadState::PAUSED ) {
-        contextMenu.addAction(&menuResumeBook);
-        contextMenu.addAction(&menuCancelBook);
+            contextMenu.addAction(&menuResumeBook);
+            contextMenu.addAction(&menuCancelBook);
         }
         contextMenu.addAction(&menuPreviewBook);
         break;
 
     case BookState::DOWNLOADING:
         if ( getDownloadState(id)->getStatus() == DownloadState::DOWNLOADING ) {
-        contextMenu.addAction(&menuPauseBook);
-        contextMenu.addAction(&menuCancelBook);
+            contextMenu.addAction(&menuPauseBook);
+            contextMenu.addAction(&menuCancelBook);
         }
         contextMenu.addAction(&menuPreviewBook);
         break;

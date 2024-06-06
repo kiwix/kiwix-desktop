@@ -256,19 +256,19 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
     case ContentManager::BookState::DOWNLOADING:
         if ( downloadState->getStatus() == DownloadState::DOWNLOADING ) {
-        if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
-            contentMgr.pauseBook(id, index);
-        }
+            if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
+                contentMgr.pauseBook(id, index);
+            }
         }
         return;
 
     case ContentManager::BookState::DOWNLOAD_PAUSED:
         if ( downloadState->getStatus() == DownloadState::PAUSED ) {
-        if ( dcl.cancelButtonRect.contains(clickPoint) ) {
-             contentMgr.cancelBook(id);
-        } else if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
-             contentMgr.resumeBook(id, index);
-        }
+            if ( dcl.cancelButtonRect.contains(clickPoint) ) {
+                 contentMgr.cancelBook(id);
+            } else if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
+                 contentMgr.resumeBook(id, index);
+            }
         }
         return;
 
