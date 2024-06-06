@@ -89,6 +89,8 @@ public:
     bool isCurrentArticleBookmarked();
     QString parseStyleFromFile(QString filePath);
     void saveListOfOpenTabs();
+    void saveWindowState();
+    void restoreWindowState();
 
 public slots:
     void newTab();
