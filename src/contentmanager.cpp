@@ -379,7 +379,7 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
 ContentManager::BookState ContentManager::getBookState(QString bookId)
 {
     if ( const auto downloadState = DownloadManager::getDownloadState(bookId) ) {
-        return downloadState->status == DownloadState::PAUSED
+        return downloadState->getStatus() == DownloadState::PAUSED
              ? BookState::DOWNLOAD_PAUSED
              : BookState::DOWNLOADING;
              // TODO: a download may be in error state

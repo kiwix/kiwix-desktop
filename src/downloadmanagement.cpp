@@ -136,7 +136,6 @@ void DownloadManager::restoreDownloads()
         const kiwix::Book& book = mp_library->getBookById(bookId);
         if ( ! book.getDownloadId().empty() ) {
             const auto newDownload = std::make_shared<DownloadState>();
-            newDownload->status = DownloadState::UNKNOWN;
             m_downloads.set(bookId, newDownload);
         }
     }
