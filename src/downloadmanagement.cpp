@@ -62,6 +62,24 @@ QString DownloadState::getDownloadSpeed() const
     return timeSinceLastUpdate() > 2.0 ? "---" : downloadSpeed;
 }
 
+void DownloadState::changeState(Action action)
+{
+    const auto oldStatus = status;
+    if ( action == PAUSE ) {
+        if ( status == DOWNLOADING ) {
+            status = PAUSE_REQUESTED;
+        }
+    } else if ( action == RESUME ) {
+        if ( status == PAUSED ) {
+            status = RESUME_REQUESTED;
+        }
+    }
+
+    if ( status != oldStatus ) {
+        lastUpdated = std::chrono::steady_clock::now();
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // DowloadManager
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +100,7 @@ DownloadManager::~DownloadManager()
 
         // At this point the thread may be stuck waiting for data.
         // Let's wake it up.
-        m_requestQueue.enqueue({UPDATE, ""});
+        m_requestQueue.enqueue({DownloadState::UPDATE, ""});
         t->wait();
     }
 }
@@ -98,11 +116,11 @@ void DownloadManager::processDownloadActions()
         const Request req = m_requestQueue.dequeue();
         if ( !req.bookId.isEmpty() ) {
             switch ( req.action ) {
-            case START:  /* startDownload(req.bookId); */ break;  // API problem
-            case PAUSE:  pauseDownload(req.bookId);  break;
-            case RESUME: resumeDownload(req.bookId); break;
-            case CANCEL: /* cancelDownload(req.bookId); */ break; // API problem
-            case UPDATE: updateDownload(req.bookId); break;
+            case DownloadState::START:  /* startDownload(req.bookId); */ break;  // API problem
+            case DownloadState::PAUSE:  pauseDownload(req.bookId);  break;
+            case DownloadState::RESUME: resumeDownload(req.bookId); break;
+            case DownloadState::CANCEL: /* cancelDownload(req.bookId); */ break; // API problem
+            case DownloadState::UPDATE: updateDownload(req.bookId); break;
             }
         }
     }
@@ -123,7 +141,7 @@ void DownloadManager::startDownloadUpdaterThread()
     connect(timer, &QTimer::timeout, [this]() {
         if ( m_requestQueue.isEmpty() ) {
             for ( const auto& bookId : m_downloads.keys() ) {
-                addRequest(UPDATE, bookId);
+                addRequest(DownloadState::UPDATE, bookId);
             }
         }
     });
@@ -248,7 +266,12 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
 
 void DownloadManager::addRequest(Action action, QString bookId)
 {
-    m_requestQueue.enqueue({action, bookId});
+    if ( const auto downloadState = getDownloadState(bookId) ) {
+        m_requestQueue.enqueue({action, bookId});
+        if ( action != DownloadState::UPDATE ) {
+            downloadState->changeState(action);
+        }
+    }
 }
 
 void DownloadManager::pauseDownload(const QString& bookId)

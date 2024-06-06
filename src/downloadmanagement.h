@@ -54,6 +54,14 @@ private: // data
 class DownloadState
 {
 public: // types
+    enum Action {
+        START,
+        PAUSE,
+        RESUME,
+        CANCEL,
+        UPDATE
+    };
+
     enum Status {
         UNKNOWN,
         WAITING,
@@ -75,6 +83,7 @@ public: // functions
     void update(const DownloadInfo& info);
     QString getDownloadSpeed() const;
     Status getStatus() const { return status; }
+    void changeState(Action action);
 
     // time in seconds since last update
     double timeSinceLastUpdate() const;
@@ -91,15 +100,7 @@ class DownloadManager : public QObject
 
 public: // types
     typedef std::shared_ptr<DownloadState> DownloadStatePtr;
-
-    enum Action
-    {
-        START,
-        PAUSE,
-        RESUME,
-        CANCEL,
-        UPDATE
-    };
+    typedef DownloadState::Action Action;
 
 private:
     // BookId -> DownloadState map
