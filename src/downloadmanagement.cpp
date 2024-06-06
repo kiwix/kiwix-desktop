@@ -37,6 +37,15 @@ DownloadState::Status getDownloadStatus(QString status)
 
 } // unnamed namespace
 
+bool DownloadState::isLateUpdateInfo(const DownloadInfo& info) const
+{
+    if ( ! stateChangeHasBeenRequested() )
+       return false;
+
+    const auto updateRequestTime = info["updateRequestTime"].toDouble();
+    return updateRequestTime < lastUpdated.time_since_epoch().count();
+}
+
 void DownloadState::update(const DownloadInfo& info)
 {
     const auto completedBytes = info["completedLength"].toDouble();
@@ -45,7 +54,9 @@ void DownloadState::update(const DownloadInfo& info)
     progress = QString::number(100 * percentage, 'g', 3).toDouble();
     completedLength = convertToUnits(completedBytes);
     downloadSpeed = convertToUnits(info["downloadSpeed"].toDouble()) + "/s";
-    status = getDownloadStatus(info["status"].toString());
+    if ( !isLateUpdateInfo(info) ) {
+        status = getDownloadStatus(info["status"].toString());
+    }
     lastUpdated = std::chrono::steady_clock::now();
 }
 
@@ -161,6 +172,7 @@ void DownloadManager::restoreDownloads()
 
 void DownloadManager::updateDownload(QString bookId)
 {
+    const auto updateRequestTime = std::chrono::steady_clock::now();
     DownloadInfo downloadInfo;
     try {
         downloadInfo = getDownloadInfo(bookId);
@@ -169,6 +181,7 @@ void DownloadManager::updateDownload(QString bookId)
         return;
     }
 
+    downloadInfo["updateRequestTime"] = double(updateRequestTime.time_since_epoch().count());
     emit downloadUpdated(bookId, downloadInfo);
 }
 

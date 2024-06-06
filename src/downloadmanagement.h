@@ -84,6 +84,13 @@ public: // functions
     QString getDownloadSpeed() const;
     Status getStatus() const { return status; }
     void changeState(Action action);
+    bool stateChangeHasBeenRequested() const
+    {
+       return status == PAUSE_REQUESTED
+           || status == RESUME_REQUESTED
+           || status == CANCEL_REQUESTED;
+    }
+    bool isLateUpdateInfo(const DownloadInfo& info) const;
 
     // time in seconds since last update
     double timeSinceLastUpdate() const;
