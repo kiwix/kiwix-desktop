@@ -5,13 +5,13 @@
 #include <QMap>
 #include <QMutex>
 #include <QMutexLocker>
-#include <QQueue>
 #include <QString>
 #include <QVariant>
 #include <QWaitCondition>
 
 #include <chrono>
 #include <memory>
+#include <queue>
 
 #include <kiwix/downloader.h>
 
@@ -20,34 +20,36 @@
 typedef QMap<QString, QVariant> DownloadInfo;
 
 template<class T>
-class ThreadSafeQueue
+class ThreadSafePriorityQueue
 {
 public:
     void enqueue(const T& x)
     {
         const QMutexLocker threadSafetyGuarantee(&m_mutex);
-        m_queue.enqueue(x);
+        m_queue.push(x);
         m_queueIsNotEmpty.wakeAll();
     }
 
     T dequeue()
     {
         const QMutexLocker threadSafetyGuarantee(&m_mutex);
-        if ( m_queue.isEmpty() )
+        if ( m_queue.empty() )
             m_queueIsNotEmpty.wait(&m_mutex);
 
-        return m_queue.dequeue();
+        const T ret = m_queue.top();
+        m_queue.pop();
+        return ret;
     }
 
     bool isEmpty() const
     {
         const QMutexLocker threadSafetyGuarantee(&m_mutex);
-        return m_queue.isEmpty();
+        return m_queue.empty();
     }
 
 private: // data
     mutable QMutex  m_mutex;
-    QQueue<T>       m_queue;
+    std::priority_queue<T> m_queue;
     QWaitCondition  m_queueIsNotEmpty;
 };
 
@@ -55,11 +57,11 @@ class DownloadState
 {
 public: // types
     enum Action {
+        UPDATE,
         START,
         PAUSE,
         RESUME,
-        CANCEL,
-        UPDATE
+        CANCEL
     };
 
     enum Status {
@@ -165,9 +167,13 @@ private: // types
     {
         Action  action;
         QString bookId;
+
+        bool operator<(const Request& other) const {
+            return this->action < other.action;
+        }
     };
 
-    typedef ThreadSafeQueue<Request> RequestQueue;
+    typedef ThreadSafePriorityQueue<Request> RequestQueue;
 
 private: // functions
     void processDownloadActions();
