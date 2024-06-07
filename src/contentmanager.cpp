@@ -511,17 +511,20 @@ void ContentManager::downloadBook(const QString &id)
     kiwix::Book book = getRemoteOrLocalBook(id);
     const auto downloadPath = getSettingsManager()->getDownloadDir();
 
-    try
-    {
-        downloadBook(book, downloadPath);
-        const auto downloadState = DownloadManager::getDownloadState(id);
-        managerModel->setDownloadState(id, downloadState);
-        emit(oneBookChanged(id));
-    }
-    catch ( const KiwixAppError& err )
-    {
+    std::string downloadId;
+    try {
+        downloadId = DownloadManager::startDownload(book, downloadPath);
+    } catch ( const KiwixAppError& err ) {
         showErrorBox(err, mp_view);
+        return;
     }
+
+    book.setDownloadId(downloadId);
+    mp_library->addBookBeingDownloaded(book, downloadPath);
+    mp_library->save();
+    const auto downloadState = DownloadManager::getDownloadState(id);
+    managerModel->setDownloadState(id, downloadState);
+    emit(oneBookChanged(id));
 }
 
 const kiwix::Book& ContentManager::getRemoteOrLocalBook(const QString &id)
@@ -540,15 +543,6 @@ QString ContentManager::getRemoteLibraryUrl() const
     auto port = m_remoteLibraryManager.getCatalogPort();
     return port == 443 ? "https://" + host
                         : "http://" + host + ":" + QString::number(port);
-}
-
-void ContentManager::downloadBook(kiwix::Book book, const QString& downloadPath)
-{
-    const std::string downloadId = DownloadManager::startDownload(book, downloadPath);
-
-    book.setDownloadId(downloadId);
-    mp_library->addBookBeingDownloaded(book, downloadPath);
-    mp_library->save();
 }
 
 static const char MSG_FOR_PREVENTED_RMSTAR_OPERATION[] = R"(
