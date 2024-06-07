@@ -121,7 +121,6 @@ private: // functions
     void removeDownload(QString bookId);
     void downloadDisappeared(QString bookId);
     void downloadCompleted(QString bookId, QString path);
-    void downloadBook(kiwix::Book book, const QString& downloadPath);
 
 private: // data
     Library* mp_library;
