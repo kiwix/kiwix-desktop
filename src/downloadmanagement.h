@@ -159,7 +159,6 @@ public: // functions
 
     // returns the download id
     std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
-    bool cancelDownload(const QString& bookId);
     void removeDownload(QString bookId);
 
     DownloadStatePtr getDownloadState(QString bookId) const
@@ -169,6 +168,7 @@ public: // functions
 
 signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
+    void downloadCancelled(QString bookId);
     void downloadDisappeared(QString bookId);
 
 private: // types
@@ -189,6 +189,7 @@ private: // functions
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
     void updateDownload(QString bookId);
+    void cancelDownload(const QString& bookId);
 
 private: // data
     const Library* const     mp_library;

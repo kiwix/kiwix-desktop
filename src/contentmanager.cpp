@@ -101,6 +101,9 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
     connect(this, &DownloadManager::downloadUpdated,
             this, &ContentManager::updateDownload);
 
+    connect(this, &DownloadManager::downloadCancelled,
+            this, &ContentManager::downloadWasCancelled);
+
     connect(this, &DownloadManager::downloadDisappeared,
             this, &ContentManager::downloadDisappeared);
 
@@ -641,15 +644,12 @@ void ContentManager::cancelBook(const QString& id)
     auto text = gt("cancel-download-text");
     text = text.replace("{{ZIM}}", QString::fromStdString(mp_library->getBookById(id).getTitle()));
     showConfirmBox(gt("cancel-download"), text, mp_view, [=]() {
-        reallyCancelBook(id);
+        DownloadManager::addRequest(DownloadState::CANCEL, id);
     });
 }
 
-void ContentManager::reallyCancelBook(const QString& id)
+void ContentManager::downloadWasCancelled(const QString& id)
 {
-    if ( !DownloadManager::cancelDownload(id) )
-        return;
-
     removeDownload(id);
 
     // incompleted downloaded file should be perma deleted

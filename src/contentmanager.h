@@ -98,16 +98,14 @@ public slots:
     void updateCategories(const QString& content);
     void pauseBook(const QString& id, QModelIndex index);
     void resumeBook(const QString& id, QModelIndex index);
-    // cancelBook() asks for confirmation (reallyCancelBook() doesn't)
     void cancelBook(const QString& id);
     void onCustomContextMenu(const QPoint &point);
     void openBookWithIndex(const QModelIndex& index);
     void updateDownload(QString bookId, const DownloadInfo& downloadInfo);
+    void downloadWasCancelled(const QString& id);
 
 private: // functions
     QStringList getBookIds();
-    // reallyCancelBook() doesn't ask for confirmation (unlike cancelBook())
-    void reallyCancelBook(const QString& id);
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
     void reallyEraseBook(const QString& id, bool moveToTrash);
     void eraseBookFilesFromComputer(const std::string& bookPath, bool moveToTrash);
