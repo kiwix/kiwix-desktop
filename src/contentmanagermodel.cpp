@@ -86,7 +86,7 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
 Qt::ItemFlags ContentManagerModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
-    if (index.isValid() && index.parent().isValid()) {
+    if (isDescriptionIndex(index)) {
         return defaultFlags & ~Qt::ItemIsDropEnabled & ~Qt::ItemIsDragEnabled & ~Qt::ItemIsSelectable & ~Qt::ItemIsEditable & ~Qt::ItemIsUserCheckable;
     }
     return defaultFlags;

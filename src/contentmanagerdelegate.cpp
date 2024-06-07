@@ -194,7 +194,7 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
 void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QRect r = option.rect;
-    if (index.parent().isValid()) {
+    if (isDescriptionIndex(index)) {
         // additional info
         QRect nRect = r;
         auto viewWidth = KiwixApp::instance()->getContentManager()->getView()->getView()->width();
@@ -293,7 +293,7 @@ QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const
 {
     Q_UNUSED(option);
 
-    if (index.parent().isValid()) {
+    if (isDescriptionIndex(index)) {
         return QSize(300, 70);
     }
     return QSize(50, 70);
