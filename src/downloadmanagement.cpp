@@ -84,6 +84,10 @@ void DownloadState::changeState(Action action)
         if ( status == PAUSED ) {
             status = RESUME_REQUESTED;
         }
+    } else if ( action == CANCEL ) {
+        if ( status == DOWNLOADING || status == PAUSED ) {
+            status = CANCEL_REQUESTED;
+        }
     }
 
     if ( status != oldStatus ) {
@@ -130,7 +134,7 @@ void DownloadManager::processDownloadActions()
             case DownloadState::START:  /* startDownload(req.bookId); */ break;  // API problem
             case DownloadState::PAUSE:  pauseDownload(req.bookId);  break;
             case DownloadState::RESUME: resumeDownload(req.bookId); break;
-            case DownloadState::CANCEL: /* cancelDownload(req.bookId); */ break; // API problem
+            case DownloadState::CANCEL: cancelDownload(req.bookId); break;
             case DownloadState::UPDATE: updateDownload(req.bookId); break;
             }
         }
@@ -322,19 +326,18 @@ void DownloadManager::resumeDownload(const QString& bookId)
     }
 }
 
-bool DownloadManager::cancelDownload(const QString& bookId)
+void DownloadManager::cancelDownload(const QString& bookId)
 {
     const auto downloadId = mp_library->getBookById(bookId).getDownloadId();
     if ( downloadId.empty() ) {
         // Completion of the download has been detected (and its id was reset)
         // before the confirmation to cancel the download was granted.
-        return false;
+        return;
     }
 
     auto download = mp_downloader->getDownload(downloadId);
     try {
         download->cancelDownload();
-        return true;
     } catch (const kiwix::AriaError&) {
         // Download has completed before the cancel request was handled.
         // Most likely the download was already complete at the time
@@ -342,8 +345,9 @@ bool DownloadManager::cancelDownload(const QString& bookId)
         // its completion was not yet detected (and/or handled) by the
         // download updater thread (letting the code pass past the empty
         // downloadId check above).
-        return false;
+        return;
     }
+    emit downloadCancelled(bookId);
 }
 
 void DownloadManager::removeDownload(QString bookId)
