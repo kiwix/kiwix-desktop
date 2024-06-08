@@ -207,13 +207,7 @@ void KiwixApp::restoreTabs()
     {
       for (const auto &zimUrl : tabsToOpen)
       {
-        try
-        {
-          /* Throws exception if zim file cannot be found */
-          m_library.getArchive(QUrl(zimUrl).host().split('.')[0]);
-          openUrl(QUrl(zimUrl));
-        }
-        catch (std::exception &e) { /* Blank */ }
+        openUrl(QUrl(zimUrl));
       }
     }
 }
