@@ -125,6 +125,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QMainWindow::resizeEvent(event);
+    KiwixApp::instance()->getContentManager()->getView()->updateSizeHint();
+}
+
 void MainWindow::readingListToggled(bool state)
 {
     if (state) {

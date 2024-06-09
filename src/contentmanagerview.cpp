@@ -21,6 +21,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
 
     connect(mp_ui->m_view, &QTreeView::clicked, this, &ContentManagerView::onClicked);
     connect(mp_ui->m_view, &QTreeView::expanded, this, &ContentManagerView::onExpanded);
+    connect(this, &ContentManagerView::sizeHintChanged, managerDelegate, &QStyledItemDelegate::sizeHintChanged);
 }
 
 ContentManagerView::~ContentManagerView()
@@ -55,4 +56,22 @@ void ContentManagerView::onExpanded(QModelIndex index)
 {
     if (!mp_ui->m_view->isFirstColumnSpanned(0, index))
         mp_ui->m_view->setFirstColumnSpanned(0, index, true);
+}
+
+/**
+ * @brief Notify delegate to update size hint of the visible description rows.
+ */
+void ContentManagerView::updateSizeHint()
+{
+    auto view = this->getView();
+    if (!view->isVisible())
+        return;
+
+    auto visibleIndex = view->indexAt(view->rect().topLeft());
+    while (visibleIndex.isValid())
+    {
+        if (isDescriptionIndex(visibleIndex))
+            emit sizeHintChanged(visibleIndex);
+        visibleIndex = view->indexBelow(visibleIndex);
+    }
 }
