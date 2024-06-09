@@ -20,6 +20,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     mp_ui->stackedWidget->setCurrentIndex(0);
 
     connect(mp_ui->m_view, &QTreeView::clicked, this, &ContentManagerView::onClicked);
+    connect(mp_ui->m_view, &QTreeView::expanded, this, &ContentManagerView::onExpanded);
 }
 
 ContentManagerView::~ContentManagerView()
@@ -48,4 +49,10 @@ void ContentManagerView::onClicked(QModelIndex index)
     } else {
         mp_ui->m_view->expand(zeroColIndex);
     }
+}
+
+void ContentManagerView::onExpanded(QModelIndex index)
+{
+    if (!mp_ui->m_view->isFirstColumnSpanned(0, index))
+        mp_ui->m_view->setFirstColumnSpanned(0, index, true);
 }

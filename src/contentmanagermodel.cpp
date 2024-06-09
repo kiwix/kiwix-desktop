@@ -60,10 +60,13 @@ QVariant ContentManagerModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     const auto col = index.column();
-    const bool isThumbnailRequest = col == 0 && role == Qt::DecorationRole;
-    const bool otherDataRequest = col != 0 && (role == Qt::DisplayRole || role == Qt::UserRole+1 );
+    const bool isThumbnailRequest =
+        !isDescriptionIndex(index) && col == 0 && role == Qt::DecorationRole;
+    const bool isDescriptionRequest =
+        isDescriptionIndex(index) && col == 0 && role == Qt::DisplayRole;
+    const bool otherDataRequest = col != 0 && role == Qt::DisplayRole;
 
-    if ( !isThumbnailRequest && !otherDataRequest )
+    if ( !isThumbnailRequest && !otherDataRequest && !isDescriptionRequest )
         return QVariant();
 
     const auto item = static_cast<Node*>(index.internalPointer());

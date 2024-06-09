@@ -21,6 +21,7 @@ public:
 public slots:
     void showLoader(bool show);
     void onClicked(QModelIndex index);
+    void onExpanded(QModelIndex index);
 
 private:
     Ui::contentmanagerview *mp_ui;

@@ -193,15 +193,9 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
 
 void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QRect r = option.rect;
-    if (isDescriptionIndex(index)) {
-        // additional info
-        QRect nRect = r;
-        auto viewWidth = KiwixApp::instance()->getContentManager()->getView()->getView()->width();
-        nRect.setWidth(viewWidth);
-        painter->drawText(nRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole+1).toString());
-        return;
-    }
+    if (isDescriptionIndex(index))
+        return QStyledItemDelegate::paint(painter, option, index);
+
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 1) {
         auto bFont = painter->font();
