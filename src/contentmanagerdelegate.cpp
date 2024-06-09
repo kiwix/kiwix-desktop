@@ -285,10 +285,22 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
 QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(option);
+    if (isDescriptionIndex(index))
+    {
+        const auto treeView = KiwixApp::instance()->getContentManager()->getView()->getView();
 
-    if (isDescriptionIndex(index)) {
-        return QSize(300, 70);
+        const int width = treeView->header()->length() - 2*treeView->indentation();
+        // XXX: see QTreeView::padding in resources/css/_contentManager.css
+        const int verticalPadding = 4;
+        const int horizontalPadding = 4;
+        QRect descRect(0, 0, width - 2 * horizontalPadding, 0);
+
+        /* Based on the rectangle and text, find the best fitting size. */
+        QFontMetrics fm(option.font);
+        const QString text = index.data().toString();
+        const auto format = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap;
+        const int textHeight = fm.boundingRect(descRect, format, text).height();
+        return QSize(width, std::max(textHeight + verticalPadding, 70));
     }
     return QSize(50, 70);
 }
