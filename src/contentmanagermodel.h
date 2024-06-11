@@ -97,4 +97,9 @@ private: // data
     QMap<QString, QByteArray> m_iconMap;
 };
 
+inline bool isDescriptionIndex(const QModelIndex& index)
+{
+    return index.parent().isValid();
+}
+
 #endif // CONTENTMANAGERMODEL_H

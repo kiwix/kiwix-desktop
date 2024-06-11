@@ -19,17 +19,9 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     loader = new KiwixLoader(mp_ui->loading);
     mp_ui->stackedWidget->setCurrentIndex(0);
 
-    connect(mp_ui->m_view, &QTreeView::clicked, [=](QModelIndex index) {
-        if (index.column() == (mp_ui->m_view->model()->columnCount() - 1))
-            return;
-
-        auto zeroColIndex = index.siblingAtColumn(0);
-        if (mp_ui->m_view->isExpanded(zeroColIndex)) {
-            mp_ui->m_view->collapse(zeroColIndex);
-        } else {
-            mp_ui->m_view->expand(zeroColIndex);
-        }
-    });
+    connect(mp_ui->m_view, &QTreeView::clicked, this, &ContentManagerView::onClicked);
+    connect(mp_ui->m_view, &QTreeView::expanded, this, &ContentManagerView::onExpanded);
+    connect(this, &ContentManagerView::sizeHintChanged, managerDelegate, &QStyledItemDelegate::sizeHintChanged);
 }
 
 ContentManagerView::~ContentManagerView()
@@ -44,5 +36,42 @@ void ContentManagerView::showLoader(bool show)
         loader->startAnimation();
     } else {
         loader->stopAnimation();
+    }
+}
+
+void ContentManagerView::onClicked(QModelIndex index)
+{
+    if (index.column() == (mp_ui->m_view->model()->columnCount() - 1))
+        return;
+
+    auto zeroColIndex = index.siblingAtColumn(0);
+    if (mp_ui->m_view->isExpanded(zeroColIndex)) {
+        mp_ui->m_view->collapse(zeroColIndex);
+    } else {
+        mp_ui->m_view->expand(zeroColIndex);
+    }
+}
+
+void ContentManagerView::onExpanded(QModelIndex index)
+{
+    if (!mp_ui->m_view->isFirstColumnSpanned(0, index))
+        mp_ui->m_view->setFirstColumnSpanned(0, index, true);
+}
+
+/**
+ * @brief Notify delegate to update size hint of the visible description rows.
+ */
+void ContentManagerView::updateSizeHint()
+{
+    auto view = this->getView();
+    if (!view->isVisible())
+        return;
+
+    auto visibleIndex = view->indexAt(view->rect().topLeft());
+    while (visibleIndex.isValid())
+    {
+        if (isDescriptionIndex(visibleIndex))
+            emit sizeHintChanged(visibleIndex);
+        visibleIndex = view->indexBelow(visibleIndex);
     }
 }

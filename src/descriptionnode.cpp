@@ -36,7 +36,7 @@ int DescriptionNode::columnCount() const
 
 QVariant DescriptionNode::data(int column)
 {
-    if (column == 1)
+    if (column == 0)
         return m_desc;
     return QVariant();
 }

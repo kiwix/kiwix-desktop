@@ -20,6 +20,12 @@ public:
 
 public slots:
     void showLoader(bool show);
+    void onClicked(QModelIndex index);
+    void onExpanded(QModelIndex index);
+    void updateSizeHint();
+
+signals:
+    void sizeHintChanged(const QModelIndex& index);
 
 private:
     Ui::contentmanagerview *mp_ui;

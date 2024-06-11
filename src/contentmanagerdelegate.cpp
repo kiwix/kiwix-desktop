@@ -193,15 +193,9 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
 
 void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QRect r = option.rect;
-    if (index.parent().isValid()) {
-        // additional info
-        QRect nRect = r;
-        auto viewWidth = KiwixApp::instance()->getContentManager()->getView()->getView()->width();
-        nRect.setWidth(viewWidth);
-        painter->drawText(nRect, Qt::AlignLeft | Qt::AlignVCenter, index.data(Qt::UserRole+1).toString());
-        return;
-    }
+    if (isDescriptionIndex(index))
+        return QStyledItemDelegate::paint(painter, option, index);
+
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 1) {
         auto bFont = painter->font();
@@ -291,10 +285,22 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 
 QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(option);
+    if (isDescriptionIndex(index))
+    {
+        const auto treeView = KiwixApp::instance()->getContentManager()->getView()->getView();
 
-    if (index.parent().isValid()) {
-        return QSize(300, 70);
+        const int width = treeView->header()->length() - 2*treeView->indentation();
+        // XXX: see QTreeView::padding in resources/css/_contentManager.css
+        const int verticalPadding = 4;
+        const int horizontalPadding = 4;
+        QRect descRect(0, 0, width - 2 * horizontalPadding, 0);
+
+        /* Based on the rectangle and text, find the best fitting size. */
+        QFontMetrics fm(option.font);
+        const QString text = index.data().toString();
+        const auto format = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap;
+        const int textHeight = fm.boundingRect(descRect, format, text).height();
+        return QSize(width, std::max(textHeight + verticalPadding, 70));
     }
     return QSize(50, 70);
 }
