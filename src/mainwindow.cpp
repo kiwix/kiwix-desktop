@@ -119,6 +119,12 @@ bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
     return false;
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    KiwixApp::instance()->saveWindowState();
+    QMainWindow::closeEvent(event);
+}
+
 void MainWindow::readingListToggled(bool state)
 {
     if (state) {

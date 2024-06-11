@@ -124,6 +124,7 @@ void KiwixApp::init()
     }
 
     restoreTabs();
+    restoreWindowState();
 }
 
 KiwixApp::~KiwixApp()
@@ -556,4 +557,16 @@ QString KiwixApp::parseStyleFromFile(QString filePath)
 void KiwixApp::saveListOfOpenTabs()
 {
   return mp_session->setValue("reopenTabList", getTabWidget()->getTabUrls());
+}
+
+void KiwixApp::saveWindowState()
+{
+  mp_session->setValue("geometry", getMainWindow()->saveGeometry());
+  mp_session->setValue("windowState", getMainWindow()->saveState());
+}
+
+void KiwixApp::restoreWindowState()
+{
+  getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
+  getMainWindow()->restoreState(mp_session->value("windowState").toByteArray());
 }
