@@ -60,7 +60,8 @@ void KProfile::openFile(WebEngineDownloadType* download)
 void KProfile::saveFile(WebEngineDownloadType* download)
 {
     QString defaultFileName = download->url().fileName();
-    QString fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(), gt("save-file-as-window-title"), defaultFileName);
+    QString fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(), gt("save-file-as-window-title"),
+                                               QDir::cleanPath(KiwixApp::instance()->getZimImportDir() + QDir::separator() + defaultFileName));
     if (fileName.isEmpty()) {
         download->cancel();
         return;
@@ -70,6 +71,8 @@ void KProfile::saveFile(WebEngineDownloadType* download)
         fileName.append(extension);
     }
     setDownloadFilePath(download, fileName);
+    QFileInfo fileInfo(fileName);
+    KiwixApp::instance()->setZimImportDir(fileInfo.absolutePath());
     connect(download, &DownloadFinishedSignal, [=]() {
         showInfoBox(gt("download-finished"), gt("download-finished-message"), KiwixApp::instance()->getMainWindow());
     });
