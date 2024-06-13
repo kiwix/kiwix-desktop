@@ -37,7 +37,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
         }
     });
 
-    const auto interfacesMap = kiwix::getNetworkInterfaces();
+    const auto interfacesMap = kiwix::getNetworkInterfacesIPv4Or6();
     QVector<QString> interfaces;
     interfaces.reserve(interfacesMap.size() + 1);
     for (const auto &interfacePair : interfacesMap) {
