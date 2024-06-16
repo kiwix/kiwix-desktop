@@ -207,7 +207,9 @@ void KiwixApp::restoreTabs()
     {
       for (const auto &zimUrl : tabsToOpen)
       {
-        if (zimUrl.isEmpty())
+        if (zimUrl == "SettingsTab")
+          getTabWidget()->openOrSwitchToSettingsTab();
+        else if (zimUrl.isEmpty())
           getTabWidget()->createNewTab(true, true);
         else
           openUrl(QUrl(zimUrl));

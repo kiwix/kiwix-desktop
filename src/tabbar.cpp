@@ -81,6 +81,7 @@ void TabBar::openOrSwitchToSettingsTab()
     insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
     setCloseTabButton(index);
     setCurrentIndex(index);
+    KiwixApp::instance()->saveListOfOpenTabs();
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {
@@ -275,6 +276,8 @@ QStringList TabBar::getTabUrls() const {
     {
         if (ZimView* zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(index)))
             idList.push_back(zv->getWebView()->url().url());
+        else if (qobject_cast<SettingsView*>(mp_stackedWidget->widget(index)))
+            idList.push_back("SettingsTab");
     }
     return idList;
 }
