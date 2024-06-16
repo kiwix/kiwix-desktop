@@ -207,7 +207,10 @@ void KiwixApp::restoreTabs()
     {
       for (const auto &zimUrl : tabsToOpen)
       {
-        openUrl(QUrl(zimUrl));
+        if (zimUrl.isEmpty())
+          getTabWidget()->createNewTab(true, true);
+        else
+          openUrl(QUrl(zimUrl));
       }
     }
 }

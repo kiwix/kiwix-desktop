@@ -163,6 +163,7 @@ ZimView* TabBar::createNewTab(bool setCurrent, bool nextToCurrentTab)
     connect(tab, &ZimView::webActionEnabledChanged,
             this, &TabBar::onWebviewHistoryActionChanged);
 
+    KiwixApp::instance()->saveListOfOpenTabs();
     return tab;
 }
 
