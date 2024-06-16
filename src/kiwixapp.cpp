@@ -215,6 +215,9 @@ void KiwixApp::restoreTabs()
           openUrl(QUrl(zimUrl));
       }
     }
+
+    /* Restore current tab index. */
+    getTabWidget()->setCurrentIndex(mp_session->value("currentTabIndex", 0).toInt());
 }
 
 KiwixApp *KiwixApp::instance()
@@ -568,4 +571,9 @@ void KiwixApp::restoreWindowState()
 {
   getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
   getMainWindow()->restoreState(mp_session->value("windowState").toByteArray());
+}
+
+void KiwixApp::saveCurrentTabIndex()
+{
+  return mp_session->setValue("currentTabIndex", getTabWidget()->currentIndex());
 }

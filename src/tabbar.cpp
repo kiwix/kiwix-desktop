@@ -338,6 +338,8 @@ void TabBar::onCurrentChanged(int index)
         // In the future, other types of tabs can be added.
         // For example, About dialog, or Kiwix Server control panel.
     }
+
+    KiwixApp::instance()->saveCurrentTabIndex();
 }
 
 void TabBar::fullScreenRequested(QWebEngineFullScreenRequest request)
