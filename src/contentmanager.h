@@ -73,6 +73,8 @@ public: // functions
 signals:
     void filterParamsChanged();
     void booksChanged();
+    void libraryBooksChanged();
+    void libraryBookmarksChanged();
     void oneBookChanged(const QString&);
     void bookRemoved(const QString&);
     void downloadsChanged();

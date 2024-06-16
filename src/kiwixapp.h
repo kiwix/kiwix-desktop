@@ -92,6 +92,9 @@ public:
     void saveWindowState();
     void restoreWindowState();
 
+signals:
+    void libraryBooksChanged();
+
 public slots:
     void newTab();
     void openZimFile(const QString& zimfile="");

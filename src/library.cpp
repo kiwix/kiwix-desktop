@@ -16,9 +16,7 @@ class LibraryManipulator: public kiwix::LibraryManipulator {
     {}
     virtual ~LibraryManipulator() {}
     bool addBookToLibrary(kiwix::Book book) {
-        auto ret = mp_library->mp_library->addBook(book);
-        emit(mp_library->booksChanged());
-        return ret;
+        return mp_library->addBookToLibraryWithSignal(book);
     }
     void addBookmarkToLibrary(kiwix::Bookmark bookmark) {
         mp_library->mp_library->addBookmark(bookmark);
@@ -95,6 +93,12 @@ QStringList Library::listBookIds(const kiwix::Filter& filter, kiwix::supportedLi
 void Library::addBookToLibrary(kiwix::Book &book)
 {
     mp_library->addBook(book);
+}
+
+bool Library::addBookToLibraryWithSignal(kiwix::Book &book) {
+    auto ret = mp_library->addBook(book);
+    emit(booksChanged());
+    return ret;
 }
 
 void Library::removeBookFromLibraryById(const QString& id) {

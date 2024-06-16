@@ -37,6 +37,7 @@ public:
     QStringList getLibraryZimsFromDir(QString dir) const;
     void setMonitorDirZims(QString monitorDir, QStringList zimList);
     void addBookToLibrary(kiwix::Book& book);
+    bool addBookToLibraryWithSignal(kiwix::Book& book);
     void addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir);
     bool isBeingDownloadedByUs(QString path) const;
     void removeBookFromLibraryById(const QString& id);

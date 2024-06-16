@@ -74,6 +74,7 @@ void KiwixApp::init()
     }
     mp_manager = new ContentManager(&m_library, mp_downloader);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
+    connect(this, &KiwixApp::libraryBooksChanged, &m_library, &Library::booksChanged);
 
     auto icon = QIcon();
     icon.addFile(":/icons/kiwix-app-icons-square.svg");
@@ -509,7 +510,7 @@ void KiwixApp::createActions()
 void KiwixApp::postInit() {
     connect(getTabWidget(), &TabBar::tabDisplayed,
             this, &KiwixApp::handleItemsState);
-    emit(m_library.booksChanged());
+    emit libraryBooksChanged();
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
     handleItemsState(TabType::LibraryTab);
 }

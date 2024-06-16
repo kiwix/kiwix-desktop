@@ -133,6 +133,8 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader, 
     setCurrentCategoryFilter(getSettingsManager()->getCategoryList());
     setCurrentContentTypeFilter(getSettingsManager()->getContentType());
     connect(mp_library, &Library::booksChanged, this, [=]() {emit(this->booksChanged());});
+    connect(this, &ContentManager::libraryBooksChanged, mp_library, &Library::booksChanged);
+    connect(this, &ContentManager::libraryBookmarksChanged, mp_library, &Library::bookmarksChanged);
     connect(this, &ContentManager::filterParamsChanged, this, &ContentManager::updateLibrary);
     connect(this, &ContentManager::booksChanged, this, [=]() {
         updateModel();
@@ -568,7 +570,7 @@ void ContentManager::downloadDisappeared(QString bookId)
     bCopy.setDownloadId("");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
     mp_library->save();
-    emit(mp_library->booksChanged());
+    emit libraryBooksChanged();
 }
 
 void ContentManager::downloadCompleted(QString bookId, QString path)
@@ -586,7 +588,7 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     if (!m_local) {
         emit(oneBookChanged(bookId));
     } else {
-        emit(mp_library->booksChanged());
+        emit libraryBooksChanged();
     }
 }
 
@@ -756,7 +758,7 @@ void ContentManager::reallyEraseBook(const QString& id, bool moveToTrash)
     eraseBookFilesFromComputer(book.getPath(), moveToTrash);
     mp_library->removeBookFromLibraryById(id);
     mp_library->save();
-    emit mp_library->bookmarksChanged();
+    emit libraryBookmarksChanged();
     if (m_local) {
         emit(bookRemoved(id));
     } else {
