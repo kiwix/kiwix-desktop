@@ -10,6 +10,7 @@ KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool
 {
     ui->setupUi(this);
     setWindowFlag(Qt::FramelessWindowHint, true);
+    setAttribute(Qt::WA_DeleteOnClose);
     setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/messageBox.css"));
     connect(ui->yesButton, &QPushButton::clicked, [=]() {
         emit yesClicked();
@@ -24,10 +25,12 @@ KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool
     connect(ui->okButton, &QPushButton::clicked, [=]() {
         emit okClicked();
         m_result = OkClicked;
+        accept();
     });
     connect(ui->closeButton, &QPushButton::clicked, [=]() {
         this->close();
         m_result = CloseClicked;
+        reject();
     });
     ui->confirmText->setText(confirmText);
     ui->confirmTitle->setText(confirmTitle);
@@ -51,14 +54,10 @@ void showInfoBox(QString title, QString text, QWidget *parent)
 {
     KiwixMessageBox *dialog = new KiwixMessageBox(title, text, true, parent);
     dialog->show();
-    QObject::connect(dialog, &KiwixMessageBox::okClicked, [=]() {
-        dialog->deleteLater();
-    });
 }
 
 KiwixMessageBox::Result showKiwixMessageBox(QString title, QString text, QWidget *parent, QString leftTitle, QString rightTitle)
 {
     KiwixMessageBox *dialog = new KiwixMessageBox(title, text, false, parent, leftTitle, rightTitle);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
     return dialog->execDialog();
 }

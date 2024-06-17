@@ -45,14 +45,10 @@ void showConfirmBox(QString title, QString text, QWidget *parent,
                     YesAction yesAction)
 {
     KiwixMessageBox *dialog = new KiwixMessageBox(title, text, false, parent);
-    dialog->show();
-    QObject::connect(dialog, &KiwixMessageBox::yesClicked, [=]() {
+    auto res = dialog->execDialog();
+    if (res == KiwixMessageBox::Result::YesClicked) {
         yesAction();
-        dialog->deleteLater();
-    });
-    QObject::connect(dialog, &KiwixMessageBox::noClicked, [=]() {
-        dialog->deleteLater();
-    });
+    }
 }
 
 #endif // KIWIXMESSAGEBOX_H
