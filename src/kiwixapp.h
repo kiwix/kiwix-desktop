@@ -91,6 +91,7 @@ public:
     void saveListOfOpenTabs();
     void saveWindowState();
     void restoreWindowState();
+    void saveCurrentTabIndex();
 
 public slots:
     void newTab();

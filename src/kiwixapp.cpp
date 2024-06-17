@@ -207,15 +207,17 @@ void KiwixApp::restoreTabs()
     {
       for (const auto &zimUrl : tabsToOpen)
       {
-        try
-        {
-          /* Throws exception if zim file cannot be found */
-          m_library.getArchive(QUrl(zimUrl).host().split('.')[0]);
+        if (zimUrl == "SettingsTab")
+          getTabWidget()->openOrSwitchToSettingsTab();
+        else if (zimUrl.isEmpty())
+          getTabWidget()->createNewTab(true, true);
+        else
           openUrl(QUrl(zimUrl));
-        }
-        catch (std::exception &e) { /* Blank */ }
       }
     }
+
+    /* Restore current tab index. */
+    getTabWidget()->setCurrentIndex(mp_session->value("currentTabIndex", 0).toInt());
 }
 
 KiwixApp *KiwixApp::instance()
@@ -569,4 +571,9 @@ void KiwixApp::restoreWindowState()
 {
   getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
   getMainWindow()->restoreState(mp_session->value("windowState").toByteArray());
+}
+
+void KiwixApp::saveCurrentTabIndex()
+{
+  return mp_session->setValue("currentTabIndex", getTabWidget()->currentIndex());
 }
