@@ -35,16 +35,15 @@ SettingsView::SettingsView(QWidget *parent)
     ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
     ui->reopenTabLabel->setText(gt("open-previous-tabs-at-startup"));
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    ui->line_5->hide();
+    ui->lineMonitor->hide();
     ui->moveToTrashLabel->hide();
     ui->moveToTrashToggle->hide();
 #endif
 
 }
 
-void SettingsView::init(int zoomPercent, const QString &downloadDir,
-                        const QString &monitorDir, const bool moveToTrash,
-                        bool reopentab)
+
+void SettingsView::init(int zoomPercent, const QString &downloadDir, const QString &monitorDir, const int &langIndex, const bool moveToTrash, bool reopentab)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     ui->downloadDirPath->setText(downloadDir);
@@ -52,8 +51,22 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir,
         ui->monitorClear->hide();
     }
     ui->monitorDirPath->setText(monitorDir);
+    // Application Language Code
+    const QList<QString> languageCodes = KiwixApp::instance()->getSettingsManager()->getLanguageCodes();
+    QStringList languageList;
+    for (const QString& code : languageCodes) {
+        QString name = KiwixApp::instance()->getSettingsManager()->getLanguageName(code + ".json");
+        QString qName = QLocale::languageToString(QLocale(code).language());
+        if("C" == qName) { continue; }
+        // qInfo() << name;
+        languageList.append(name);
+    }
+    ui->comboBoxLanguage->addItems(languageList);
+    ui->comboBoxLanguage->setCurrentIndex(langIndex);
     ui->moveToTrashToggle->setChecked(moveToTrash);
     ui->reopenTabToggle->setChecked(reopentab);
+    // Connect comboBox to change handler after initialization to avoid false calls
+    connect(ui->comboBoxLanguage, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::languageSelected); 
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
 {
@@ -157,6 +170,30 @@ void SettingsView::setReopenTab(bool reopen)
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
     ui->downloadDirPath->setText(dir);
+}
+
+void SettingsView::languageSelected(const int &languageIndex)
+{
+    // QMessageBox msgBox;
+    // msgBox.setIcon(QMessageBox::Question);
+    // msgBox.setText("Restart to apply language change?");
+    // msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    // msgBox.setDefaultButton(QMessageBox::Yes);
+    // int ret = msgBox.exec();
+    // if (ret == QMessageBox::Yes) {
+    //     ui->comboBoxLanguage->setCurrentIndex(languageIndex);
+    //     KiwixApp::instance()->getSettingsManager()->setAppLanguage(languageIndex);
+    //     qInfo() << "restarting";
+    //     qApp->quit();
+    //     // QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    //     exit(0);
+    // } else {
+    //     int previousIndex = KiwixApp::instance()->getSettingsManager()->getAppLanguageIndex();
+    //     ui->comboBoxLanguage->setCurrentIndex(previousIndex); // TODO causes issues with re emit
+    // } 
+
+    ui->comboBoxLanguage->setCurrentIndex(languageIndex);
+    KiwixApp::instance()->getSettingsManager()->setAppLanguage(languageIndex);
 }
 
 void SettingsView::onMonitorDirChanged(const QString &dir)

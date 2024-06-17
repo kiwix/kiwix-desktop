@@ -328,6 +328,8 @@ void ContentManager::setLanguages()
         for (auto language : languageData) {
             auto langCode = QString::fromStdString(language);
             auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
+            // qDebug() << langCode;
+            // qDebug() << selfName << "!";
             languages.push_back({langCode, selfName});
         }
         m_languages = languages;

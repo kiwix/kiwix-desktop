@@ -19,8 +19,7 @@ SettingsView* SettingsManager::getView()
 {
     if (m_view == nullptr) {
         auto view = new SettingsView();
-        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir,
-                   m_moveToTrash, m_reopenTab);
+        view->init(m_zoomFactor * 100, m_downloadDir, m_monitorDir, m_appLangIndex, m_moveToTrash, m_reopenTab);
         connect(view, &QObject::destroyed, this, [=]() { m_view = nullptr; });
         m_view = view;
     }
@@ -127,11 +126,18 @@ SettingsManager::FilterList SettingsManager::deducePair(QList<QVariant> variantL
     return pairList;
 }
 
-void SettingsManager::setLanguage(FilterList langList)
+void SettingsManager::setLanguage(FilterList langList)  // This regards the search filter languages
 {
     m_langList = flattenPair(langList);
     setSettings("language", m_langList);
     emit(languageChanged(m_langList));
+}
+
+void SettingsManager::setAppLanguage(int languageIndex) // This regards the application language
+{   
+    m_appLangIndex = languageIndex;
+    KiwixApp::instance()->setAppLanguage();
+    m_settings.setValue("app/languageIndex", languageIndex);
 }
 
 void SettingsManager::setCategory(FilterList categoryList)
@@ -148,6 +154,42 @@ void SettingsManager::setContentType(FilterList contentTypeList)
     emit(contentTypeChanged(m_contentTypeList));
 }
 
+QString SettingsManager::getLanguageName(QString fileName) // Get native language name based on filename
+{
+    QString dirPath = "resources/i18n";
+    QFile file(dirPath + "/" + fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(jsonData, &error);
+    if (error.error != QJsonParseError::NoError) {
+        qDebug() << "Error parsing JSON " << fileName << ":" << error.errorString();
+        return QString();
+    }
+
+    QJsonObject obj = doc.object();
+    if (obj.contains("name")) { return obj.value("name").toString(); }
+    else { qDebug() << "Cannot find element \"name\" in " << fileName; }
+
+    return QString();
+}
+
+void SettingsManager::loadAvailableLanguages() {
+    QString dirPath = "resources/i18n";
+    QDir directory(dirPath);
+    if (!directory.exists()) {
+        qDebug() << "Directory does not exist:" << dirPath;
+        return;
+    }
+    QStringList jsonFiles = directory.entryList(QDir::Files);
+    for(QString &fileName : jsonFiles) {
+        if(getLanguageName(fileName).isEmpty() || fileName == "qqq.json") { continue; }
+        m_appLangCodes.append(fileName.split(".")[0]);
+    }
+}
+
 void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
@@ -157,8 +199,26 @@ void SettingsManager::initSettings()
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     m_reopenTab = m_settings.value("reopenTab", false).toBool();
-    QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
+    // This regards the application language
+    loadAvailableLanguages();
 
+    int i = 0, defaultLanguage = -1;
+    for (const QString& code : m_appLangCodes) {
+        QString name = QLocale::languageToString(QLocale(code).language());
+        if(name == "English") 
+        { 
+            defaultLanguage = i; 
+            break;
+        }
+        i++;
+    }
+    m_appLangIndex = m_settings.value("app/languageIndex", defaultLanguage).toInt();
+    // Below regards the search filters
+    QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0); // TODO maybe needs fix
+    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
+    defaultLangList.append(defaultLang);
+    QVariant defaultLangVariant(defaultLangList);
+    m_langList = m_settings.value("language", defaultLangVariant).toList();
     /*
      * Qt5 & Qt6 have slightly different behaviors with regards to initializing QVariant.
      * The below approach is specifically chosen to work with both versions.
@@ -170,11 +230,6 @@ void SettingsManager::initSettings()
      *
      * QList(QVariant(QChar, 'E'), QVariant(QChar, 'n'), QVariant(QChar, 'g'), ...
      */
-    QList<QString> defaultLangList; // Qt5 QList doesn't support supplying a constructor list
-    defaultLangList.append(defaultLang);
-    QVariant defaultLangVariant(defaultLangList);
-    m_langList = m_settings.value("language", defaultLangVariant).toList();
-
     m_categoryList = m_settings.value("category", {}).toList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }
