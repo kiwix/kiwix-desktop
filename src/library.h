@@ -30,6 +30,7 @@ public:
     virtual ~Library();
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<zim::Archive> getArchive(const QString& zimId);
+    zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
     std::shared_ptr<zim::Searcher> getSearcher(const QString& zimId);
     QStringList getBookIds() const;
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
