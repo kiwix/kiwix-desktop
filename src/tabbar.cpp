@@ -48,6 +48,10 @@ TabBar::TabBar(QWidget *parent) :
             });
     connect(getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, &TabBar::openOrSwitchToSettingsTab);
+    connect(getAction(KiwixApp::SavePageAsAction), &QAction::triggered, this, [=](){
+        if (WebView* view = currentWebView())
+            view->downloadViewContent();
+    });
 
     for (int i = 0 ; i <= 9 ; i++) {
         QAction *a = new QAction(this);

@@ -168,5 +168,6 @@
     "no-pictures": "No Pictures",
     "no-videos": "No Videos",
     "open-previous-tabs-at-startup": "Open previous tabs at startup",
-    "preview-book-in-web-browser": "Preview book in web browser"
+    "preview-book-in-web-browser": "Preview book in web browser",
+    "pdf-files-filter": "PDF files"
 }
