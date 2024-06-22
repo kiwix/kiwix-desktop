@@ -18,25 +18,10 @@ UrlSchemeHandler::UrlSchemeHandler()
 {
 }
 
-zim::Entry getEntryFromPath(const zim::Archive& archive, const std::string& path)
-{
-  try {
-    return archive.getEntryByPath(path);
-  } catch (zim::EntryNotFound& e) {
-    if (path.empty() || path == "/") {
-      return archive.getMainEntry();
-    }
-  }
-  throw zim::EntryNotFound("Cannot find entry for non empty path");
-}
-
 void
 UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
 {
     auto qurl = request->requestUrl();
-    std::string url = qurl.path().toUtf8().constData();
-    if (url[0] == '/')
-        url = url.substr(1);
     auto library = KiwixApp::instance()->getLibrary();
     auto zim_id = qurl.host();
     zim_id.resize(zim_id.length()-4);
@@ -48,7 +33,7 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
       return;
     }
     try {
-        auto entry = getEntryFromPath(*archive, url);
+        auto entry = library->getArchiveEntryFromUrl(*archive, qurl);
         auto item = entry.getItem(true);
         if (entry.isRedirect()) {
             auto path = QString("/") + QString::fromStdString(item.getPath());

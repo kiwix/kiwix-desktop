@@ -3,6 +3,7 @@
 
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
+#include <zim/error.h>
 
 #include <QtDebug>
 #include <QtConcurrent/QtConcurrentRun>
@@ -65,6 +66,22 @@ std::shared_ptr<zim::Archive> Library::getArchive(const QString &zimId)
         throw std::out_of_range("ZIM file doesn't exist (or cannot be opened)");
     }
     return archive;
+}
+
+zim::Entry Library::getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url)
+{
+    std::string path = url.path().toUtf8().constData();
+    if (path[0] == '/')
+        path = path.substr(1);
+
+    try {
+        return archive.getEntryByPath(path);
+    } catch (zim::EntryNotFound& e) {
+        if (path.empty() || path == "/") {
+            return archive.getMainEntry();
+        }
+    }
+    throw zim::EntryNotFound("Cannot find entry for non empty path");
 }
 
 std::shared_ptr<zim::Searcher> Library::getSearcher(const QString &zimId)
