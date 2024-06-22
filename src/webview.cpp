@@ -146,18 +146,21 @@ void WebView::downloadViewContent()
         auto mimeType = QByteArray::fromStdString(item.getMimetype());
         mimeType = mimeType.split(';')[0];
 
+        auto suggestedDir = app->getPrevSaveDir();
+        auto suggestedPath = suggestedDir + "/" + item.getTitle().c_str() + ".pdf";
         if (mimeType == "text/html")
         {
             QString fileName = QFileDialog::getSaveFileName(
-                app->getMainWindow(), gt("save-file-as-window-title"), "",
-                gt("pdf-files-filter") + " (*.pdf)");
+                app->getMainWindow(), gt("save-file-as-window-title"),
+                suggestedPath, gt("pdf-files-filter") + " (*.pdf)");
             if (fileName.isEmpty())
                 return;
 
+            app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
             page()->printToPdf(fileName);
         }
         else
-            page()->download(this->url());
+            page()->download(this->url(), suggestedPath);
     }
     catch (...) { /* Blank */}
 }

@@ -19,6 +19,8 @@
 #include <QtPlatformHeaders\QWindowsWindowFunctions>
 #endif
 
+const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
 ////////////////////////////////////////////////////////////////////////////////
 // KiwixApp
 ////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +127,7 @@ void KiwixApp::init()
 
     restoreTabs();
     restoreWindowState();
+    restorePrevSaveDir();
 }
 
 KiwixApp::~KiwixApp()
@@ -218,6 +221,11 @@ void KiwixApp::restoreTabs()
 
     /* Restore current tab index. */
     getTabWidget()->setCurrentIndex(mp_session->value("currentTabIndex", 0).toInt());
+}
+
+void KiwixApp::restorePrevSaveDir()
+{
+  m_prevSaveDir = mp_session->value("prevSaveDir", DEFAULT_SAVE_DIR).toString();
 }
 
 KiwixApp *KiwixApp::instance()
@@ -572,4 +580,16 @@ void KiwixApp::restoreWindowState()
 void KiwixApp::saveCurrentTabIndex()
 {
   return mp_session->setValue("currentTabIndex", getTabWidget()->currentIndex());
+}
+
+void KiwixApp::savePrevSaveDir(const QString &prevSaveDir)
+{
+  m_prevSaveDir = prevSaveDir;
+  mp_session->setValue("prevSaveDir", m_prevSaveDir);
+}
+
+QString KiwixApp::getPrevSaveDir() const
+{
+  QDir dir(m_prevSaveDir);
+  return dir.exists() ? m_prevSaveDir : DEFAULT_SAVE_DIR;
 }

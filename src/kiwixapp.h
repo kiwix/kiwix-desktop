@@ -92,6 +92,8 @@ public:
     void saveWindowState();
     void restoreWindowState();
     void saveCurrentTabIndex();
+    void savePrevSaveDir(const QString& prevSaveDir);
+    QString getPrevSaveDir() const;
 
 public slots:
     void newTab();
@@ -112,6 +114,7 @@ private:
     SettingsManager m_settingsManager;
     KProfile m_profile;
     QString m_libraryDirectory;
+    QString m_prevSaveDir;
     Library m_library;
     kiwix::Downloader* mp_downloader;
     ContentManager* mp_manager;
@@ -127,6 +130,7 @@ private:
 
     QString findLibraryDirectory();
     void restoreTabs();
+    void restorePrevSaveDir();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
 };
 
