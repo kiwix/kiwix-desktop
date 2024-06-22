@@ -24,10 +24,7 @@ MainMenu::MainMenu(QWidget *parent) :
     m_fileMenu.ADD_ACTION(BrowseLibraryAction);
     m_fileMenu.ADD_ACTION(OpenFileAction);
     m_fileMenu.ADD_ACTION(OpenRecentAction);
-
-    /* TODO See https://github.com/kiwix/kiwix-desktop/issues/77
     m_fileMenu.ADD_ACTION(SavePageAsAction);
-    */
 
     addMenu(&m_fileMenu);
 
