@@ -85,6 +85,8 @@ public:
     kiwix::Server* getLocalServer() { return &m_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     QString getText(const QString &key) { return m_translation.getText(key); };
+    QString getZimImportDir() const;
+    void setZimImportDir(QString);
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
     QString parseStyleFromFile(QString filePath);

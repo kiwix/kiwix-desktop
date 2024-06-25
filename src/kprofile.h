@@ -16,19 +16,21 @@ class KProfile : public QWebEngineProfile
     Q_OBJECT
 public:
     KProfile(QObject *parent = nullptr);
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    typedef QWebEngineDownloadItem WebEngineDownloadType;
+#else
+    typedef QWebEngineDownloadRequest WebEngineDownloadType;
+#endif
 private:
     UrlSchemeHandler m_schemeHandler;
 
 signals:
 public slots:
+    void startDownload(WebEngineDownloadType*);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    void startDownload(QWebEngineDownloadItem*);
-#else
-    void startDownload(QWebEngineDownloadRequest*);
-#endif
-    void downloadFinished();
+private slots:
+    void saveFile(WebEngineDownloadType*);
+    void openFile(WebEngineDownloadType*);
 };
 
 /**
