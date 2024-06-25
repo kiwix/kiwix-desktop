@@ -174,5 +174,6 @@
 	"clear-filter": "Represents the action of clearing the filters selected for a filter type.",
 	"no-details": "A content type for Zim files representing it only has an introduction.",
 	"no-pictures": "A content type for Zim files that does not contain pictures.",
-	"no-videos": "A content type for Zim files that does not contain videos."
+	"no-videos": "A content type for Zim files that does not contain videos.",
+	"path-was-copied": "Tooltip confirming that the download path from settings was copied."
 }

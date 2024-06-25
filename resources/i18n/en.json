@@ -135,6 +135,7 @@
     "monitor-dir-dialog-title":"Are you sure you want to change the monitor directory?",
     "monitor-dir-dialog-msg":"The new monitor directory path will be:\n{{DIRECTORY}}",
     "monitor-clear-dir-dialog-title":"Are you sure you want to clear the monitor directory?",
+    "path-was-copied": "Path was copied",
     "monitor-clear-dir-dialog-msg":"This will stop checking the monitor directory for new ZIM files.",
     "monitor-directory-tooltip":"All ZIM files in this directory will be automatically added to the library.",
     "next-tab":"Move to next tab",
