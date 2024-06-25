@@ -107,6 +107,8 @@ ContentManager::ContentManager(Library* library, kiwix::Downloader* downloader)
     connect(this, &DownloadManager::downloadDisappeared,
             this, &ContentManager::downloadDisappeared);
 
+    connect(this, &DownloadManager::error, this, &ContentManager::handleError);
+
     if ( DownloadManager::downloadingFunctionalityAvailable() ) {
         startDownloadUpdaterThread();
     }
@@ -506,6 +508,11 @@ void ContentManager::updateDownload(QString bookId, const DownloadInfo& download
     }
 }
 
+void ContentManager::handleError(QString errSummary, QString errDetails)
+{
+    showErrorBox(KiwixAppError(errSummary, errDetails), mp_view);
+}
+
 void ContentManager::downloadBook(const QString &id)
 {
     kiwix::Book book = getRemoteOrLocalBook(id);
@@ -530,7 +537,7 @@ void ContentManager::startDownload(QString id)
     try {
         downloadId = DownloadManager::startDownload(book, downloadPath);
     } catch ( const KiwixAppError& err ) {
-        showErrorBox(err, mp_view);
+        emit error(err.summary(), err.details());
         return;
     }
 

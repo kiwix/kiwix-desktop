@@ -170,6 +170,7 @@ public: // functions
     }
 
 signals:
+    void error(QString errSummary, QString errDetails);
     void downloadUpdated(QString bookId, const DownloadInfo& );
     void downloadCancelled(QString bookId);
     void downloadDisappeared(QString bookId);

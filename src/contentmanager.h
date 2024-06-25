@@ -103,6 +103,7 @@ public slots:
     void openBookWithIndex(const QModelIndex& index);
     void updateDownload(QString bookId, const DownloadInfo& downloadInfo);
     void downloadWasCancelled(const QString& id);
+    void handleError(QString errSummary, QString errDetails);
 
 private: // functions
     QStringList getBookIds();
