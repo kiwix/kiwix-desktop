@@ -144,7 +144,7 @@ private:
     };
 
 public: // functions
-    DownloadManager(const Library* lib, kiwix::Downloader *downloader);
+    explicit DownloadManager(const Library* lib);
     virtual ~DownloadManager();
 
     bool downloadingFunctionalityAvailable() const;
@@ -200,7 +200,7 @@ private: // functions
 
 private: // data
     const Library* const     mp_library;
-    kiwix::Downloader* const mp_downloader;
+    const std::unique_ptr<kiwix::Downloader> mp_downloader;
     Downloads                m_downloads;
     QThread*                 mp_downloadUpdaterThread = nullptr;
     RequestQueue             m_requestQueue;

@@ -99,9 +99,25 @@ void DownloadState::changeState(Action action)
 // DowloadManager
 ////////////////////////////////////////////////////////////////////////////////
 
-DownloadManager::DownloadManager(const Library* lib, kiwix::Downloader *downloader)
+namespace
+{
+
+kiwix::Downloader* createDownloader()
+{
+    try {
+        return new kiwix::Downloader();
+    } catch (std::exception& e) {
+        QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
+        gt("error-downloader-launch-message") + "<br><br>" + e.what());
+        return nullptr;
+    }
+}
+
+} // unnamed namespace
+
+DownloadManager::DownloadManager(const Library* lib)
     : mp_library(lib)
-    , mp_downloader(downloader)
+    , mp_downloader(createDownloader())
 {
     restoreDownloads();
 }
@@ -122,7 +138,7 @@ DownloadManager::~DownloadManager()
 
 bool DownloadManager::downloadingFunctionalityAvailable() const
 {
-    return mp_downloader != nullptr;
+    return mp_downloader.get() != nullptr;
 }
 
 void DownloadManager::processDownloadActions()
