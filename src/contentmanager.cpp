@@ -513,6 +513,7 @@ void ContentManager::downloadBook(const QString &id)
 
     std::string downloadId;
     try {
+        DownloadManager::checkThatBookCanBeDownloaded(book, downloadPath);
         downloadId = DownloadManager::startDownload(book, downloadPath);
     } catch ( const KiwixAppError& err ) {
         showErrorBox(err, mp_view);

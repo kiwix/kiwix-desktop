@@ -257,13 +257,16 @@ void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
 } // unnamed namespace
 
 
-std::string DownloadManager::startDownload(const kiwix::Book& book, const QString& downloadDirPath)
+void DownloadManager::checkThatBookCanBeDownloaded(const kiwix::Book& book, const QString& downloadDirPath)
 {
     if ( ! DownloadManager::downloadingFunctionalityAvailable() )
         throwDownloadUnavailableError();
 
     checkThatBookCanBeSaved(book, downloadDirPath);
+}
 
+std::string DownloadManager::startDownload(const kiwix::Book& book, const QString& downloadDirPath)
+{
     typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
 
     const std::string& url = book.getUrl();

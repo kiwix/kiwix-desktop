@@ -156,6 +156,10 @@ public: // functions
 
     void addRequest(Action action, QString bookId);
 
+    // Throws a KiwixAppError in case of any foreseeable problem preventing a
+    // successful download
+    void checkThatBookCanBeDownloaded(const kiwix::Book& book, const QString& downloadDirPath);
+
     // returns the download id
     std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
     void removeDownload(QString bookId);
