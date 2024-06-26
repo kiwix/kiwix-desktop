@@ -58,7 +58,7 @@ public: // types
 
 
 public: // functions
-    ContentManager(Library* library, kiwix::Downloader *downloader);
+    ContentManager(Library* library);
 
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
