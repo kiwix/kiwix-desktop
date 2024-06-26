@@ -511,9 +511,23 @@ void ContentManager::downloadBook(const QString &id)
     kiwix::Book book = getRemoteOrLocalBook(id);
     const auto downloadPath = getSettingsManager()->getDownloadDir();
 
-    std::string downloadId;
     try {
         DownloadManager::checkThatBookCanBeDownloaded(book, downloadPath);
+    } catch ( const KiwixAppError& err ) {
+        showErrorBox(err, mp_view);
+        return;
+    }
+
+    startDownload(id);
+}
+
+void ContentManager::startDownload(QString id)
+{
+    kiwix::Book book = getRemoteOrLocalBook(id);
+    const auto downloadPath = getSettingsManager()->getDownloadDir();
+
+    std::string downloadId;
+    try {
         downloadId = DownloadManager::startDownload(book, downloadPath);
     } catch ( const KiwixAppError& err ) {
         showErrorBox(err, mp_view);
