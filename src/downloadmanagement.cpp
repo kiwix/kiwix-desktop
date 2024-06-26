@@ -131,7 +131,7 @@ void DownloadManager::processDownloadActions()
         const Request req = m_requestQueue.dequeue();
         if ( !req.bookId.isEmpty() ) {
             switch ( req.action ) {
-            case DownloadState::START:  /* startDownload(req.bookId); */ break;  // API problem
+            case DownloadState::START:  startDownload(req.bookId);  break;
             case DownloadState::PAUSE:  pauseDownload(req.bookId);  break;
             case DownloadState::RESUME: resumeDownload(req.bookId); break;
             case DownloadState::CANCEL: cancelDownload(req.bookId); break;
@@ -280,12 +280,15 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
-    m_downloads.set(bookId, std::make_shared<DownloadState>());
     return downloadId;
 }
 
 void DownloadManager::addRequest(Action action, QString bookId)
 {
+    if ( action == DownloadState::START ) {
+        m_downloads.set(bookId, std::make_shared<DownloadState>());
+    }
+
     if ( const auto downloadState = getDownloadState(bookId) ) {
         m_requestQueue.enqueue({action, bookId});
         if ( action != DownloadState::UPDATE ) {
