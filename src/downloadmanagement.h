@@ -161,8 +161,6 @@ public: // functions
     // successful download
     void checkThatBookCanBeDownloaded(const kiwix::Book& book, const QString& downloadDirPath);
 
-    // returns the download id
-    std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
     void removeDownload(QString bookId);
 
     DownloadStatePtr getDownloadState(QString bookId) const
@@ -175,6 +173,10 @@ signals:
     void downloadUpdated(QString bookId, const DownloadInfo& );
     void downloadCancelled(QString bookId);
     void downloadDisappeared(QString bookId);
+
+protected:
+    // returns the download id
+    std::string startDownload(const kiwix::Book& book, const QString& downloadDirPath);
 
 private: // types
     struct Request
@@ -191,6 +193,7 @@ private: // types
 
 private: // functions
     void processDownloadActions();
+    virtual void startDownload(QString bookId) = 0;
     void pauseDownload(const QString& bookId);
     void resumeDownload(const QString& bookId);
     void updateDownload(QString bookId);

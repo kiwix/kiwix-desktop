@@ -525,16 +525,36 @@ void ContentManager::downloadBook(const QString &id)
         return;
     }
 
-    startDownload(id);
+    mp_library->addBookBeingDownloaded(book, downloadPath);
+    mp_library->save();
+
+    DownloadManager::addRequest(DownloadState::START, id);
+    const auto downloadState = DownloadManager::getDownloadState(id);
+    managerModel->setDownloadState(id, downloadState);
 }
 
+// This function is called asynchronously in a worker thread processing all
+// download operations. The call is initiated in downloadBook().
 void ContentManager::startDownload(QString id)
 {
     kiwix::Book book = getRemoteOrLocalBook(id);
     const auto downloadPath = getSettingsManager()->getDownloadDir();
+    // downloadPath may be different from the value used in
+    // downloadBook(). This may happen in the following scenario:
+    //
+    // 1. aria2c is stuck because of having to save to
+    //    slow storage (and the fact that it is a single-threaded
+    //    application). This may result in startDownload() being
+    //    called with significant delay after downloadBook().
+    //
+    // 2. The user changes the download directory after starting
+    //    a download.
+    //
+    // That's why the checkThatBookCanBeDownloaded() check is repeated here.
 
     std::string downloadId;
     try {
+        DownloadManager::checkThatBookCanBeDownloaded(book, downloadPath);
         downloadId = DownloadManager::startDownload(book, downloadPath);
     } catch ( const KiwixAppError& err ) {
         emit error(err.summary(), err.details());
@@ -544,8 +564,6 @@ void ContentManager::startDownload(QString id)
     book.setDownloadId(downloadId);
     mp_library->addBookBeingDownloaded(book, downloadPath);
     mp_library->save();
-    const auto downloadState = DownloadManager::getDownloadState(id);
-    managerModel->setDownloadState(id, downloadState);
     emit(oneBookChanged(id));
 }
 
