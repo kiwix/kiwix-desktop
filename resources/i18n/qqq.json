@@ -175,5 +175,6 @@
 	"no-details": "A content type for Zim files representing it only has an introduction.",
 	"no-pictures": "A content type for Zim files that does not contain pictures.",
 	"no-videos": "A content type for Zim files that does not contain videos.",
-	"path-was-copied": "Tooltip confirming that the download path from settings was copied."
+	"path-was-copied": "Tooltip confirming that the download path from settings was copied.",
+	"pdf-files-filter": "Text displayed to notify user PDF files are filtered when user is selecting a file from dialog."
 }
