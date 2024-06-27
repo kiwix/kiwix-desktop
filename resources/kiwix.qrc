@@ -63,5 +63,6 @@
         <file>icons/kiwix-logo.svg</file>
         <file>icons/check-solid.svg</file>
         <file>icons/xmark-solid.svg</file>
+        <file>icons/home-button.svg</file>
     </qresource>
 </RCC>

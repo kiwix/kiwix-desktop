@@ -41,11 +41,7 @@ TabBar::TabBar(QWidget *parent) :
                 this->closeTab(currentIndex());
             });
     connect(getAction(KiwixApp::OpenHomePageAction), &QAction::triggered,
-            this, [=]() {
-                auto current = this->currentWebView();
-                QUITIFNULL(current);
-                current->setUrl("zim://" + current->zimId() + ".zim/");
-            });
+            this, &TabBar::openHomePage);
     connect(getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, &TabBar::openOrSwitchToSettingsTab);
 
@@ -64,6 +60,12 @@ TabBar::TabBar(QWidget *parent) :
     // the slot relies the connection will be direct to reverting back the tab
     connect(this, SIGNAL(tabMoved(int,int)),
             this, SLOT(onTabMoved(int,int)), Qt::DirectConnection);
+}
+
+void TabBar::openHomePage() {
+    auto current = this->currentWebView();
+    QUITIFNULL(current);
+    current->setUrl("zim://" + current->zimId() + ".zim/");
 }
 
 void TabBar::openOrSwitchToSettingsTab()

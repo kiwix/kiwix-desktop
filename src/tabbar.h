@@ -62,6 +62,7 @@ signals:
 
 public slots:
     void closeTab(int index);
+    void openHomePage();
     void openOrSwitchToSettingsTab();
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);

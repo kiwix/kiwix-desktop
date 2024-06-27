@@ -404,7 +404,7 @@ void KiwixApp::createActions()
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
             this, [=]() { this->openRandomUrl(false); });
 
-    CREATE_ACTION_SHORTCUT(OpenHomePageAction, gt("home-page"), QKeySequence(Qt::ALT | Qt::Key_Home));
+    CREATE_ACTION_ICON_SHORTCUT(OpenHomePageAction, "home-button", gt("home-page"), QKeySequence(Qt::ALT | Qt::Key_Home));
 
     if (QGuiApplication::isLeftToRight()) {
       CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-left", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Left));
