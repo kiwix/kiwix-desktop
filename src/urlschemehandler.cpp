@@ -180,6 +180,7 @@ void UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                                             const QString &zimId)
 {
     QBuffer *buffer = new QBuffer;
+    auto namePathPair = KiwixApp::instance()->getRemovedZimBookInfoById(zimId);
     QString contentHtml = "<section><div>"
                           "<h1>" +
                           gt("file-not-found-title") +
@@ -189,6 +190,12 @@ void UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                           "</p>"
                           "<p>" +
                           gt("zim-id") + ": <b>" + zimId +
+                          "</b></p>"
+                          "<p>" +
+                          gt("zim-name") + ": <b>" + namePathPair.first +
+                          "</b></p>"
+                          "<p>" +
+                          gt("zim-path") + ": <b>" + namePathPair.second +
                           "</b></p>"
                           "</div></section>";
 

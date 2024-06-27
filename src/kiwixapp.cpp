@@ -124,6 +124,7 @@ void KiwixApp::init()
     }
 
     restoreTabs();
+    cleanupRemovedZimBookInfo();
     restoreWindowState();
 }
 
@@ -348,6 +349,20 @@ bool KiwixApp::isCurrentArticleBookmarked()
         }
     }
     return false;
+}
+
+QPair<QString,QString> KiwixApp::getRemovedZimBookInfoById(const QString & zimId)
+{
+    QMutexLocker locker(&m_updateBookInfoMutex);
+    auto bookInfoMap = mp_session->value("removedZimBookInfo", QVariantMap{}).toMap();
+    if (bookInfoMap.contains(zimId))
+    {
+        QJsonObject obj = bookInfoMap.value(zimId).toJsonObject();
+        auto name = obj.value("name").toString();
+        auto path = obj.value("path").toString();
+        return QPair<QString,QString>(name, path);
+    }
+    return QPair<QString,QString>("N/A", "N/A");
 }
 
 void KiwixApp::setMonitorDir(const QString &dir) {
@@ -576,4 +591,36 @@ void KiwixApp::restoreWindowState()
 void KiwixApp::saveCurrentTabIndex()
 {
   return mp_session->setValue("currentTabIndex", getTabWidget()->currentIndex());
+}
+
+void KiwixApp::addRemovedZimBookInfo(const QList<kiwix::Book> &books)
+{
+    QMutexLocker locker(&m_updateBookInfoMutex);
+    auto bookInfoMap = mp_session->value("removedZimBookInfo", QVariantMap{}).toMap();
+    for (auto& book : books)
+    {
+        auto id = QString::fromStdString(book.getId());
+        auto name = QString::fromStdString(book.getName());
+        auto path = QString::fromStdString(book.getPath());
+        bookInfoMap[id] = QJsonObject{{"name", name}, {"path", path}};
+    }
+    mp_session->setValue("removedZimBookInfo", bookInfoMap);
+}
+
+/**
+ * @brief Removes only the book infos that has no trace left in the app.
+ * 
+ */
+void KiwixApp::cleanupRemovedZimBookInfo()
+{
+    QMutexLocker locker(&m_updateBookInfoMutex);
+    auto bookInfoMap = mp_session->value("removedZimBookInfo", QVariantMap{}).toMap();
+    auto existingZimIds = getTabWidget()->getTabZimIds();
+
+    for (const auto& zimId : bookInfoMap.keys())
+    {
+        if (!existingZimIds.contains(zimId))
+            bookInfoMap.remove(zimId);
+    }
+    mp_session->setValue("removedZimBookInfo", bookInfoMap);
 }
