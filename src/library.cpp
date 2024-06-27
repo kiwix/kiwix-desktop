@@ -6,6 +6,7 @@
 
 #include <QtDebug>
 #include <QtConcurrent/QtConcurrentRun>
+#include <QJsonObject>
 
 
 class LibraryManipulator: public kiwix::LibraryManipulator {
@@ -206,11 +207,18 @@ void Library::updateFromDir(QString monitorDir)
             needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
         }
     }
+
+    QList<kiwix::Book> removedBookList;
     for (auto bookPath : removedZims) {
         try {
-            removeBookFromLibraryById(QString::fromStdString(mp_library->getBookByPath(bookPath.toStdString()).getId()));
+            auto& book = mp_library->getBookByPath(bookPath.toStdString());
+            removedBookList.push_back(book);
+            removeBookFromLibraryById(QString::fromStdString(book.getId()));
         } catch (...) {}
     }
+    if (!removedBookList.isEmpty())
+        KiwixApp::instance()->addRemovedZimBookInfo(std::move(removedBookList));
+
     if (needsRefresh) {
         emit(booksChanged());
         setMonitorDirZims(monitorDir, newDir.values());

@@ -85,6 +85,7 @@ public:
     kiwix::Server* getLocalServer() { return &m_server; }
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     QString getText(const QString &key) { return m_translation.getText(key); };
+    QPair<QString, QString> getRemovedZimBookInfoById(const QString& zimId);
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
     QString parseStyleFromFile(QString filePath);
@@ -92,6 +93,8 @@ public:
     void saveWindowState();
     void restoreWindowState();
     void saveCurrentTabIndex();
+    void addRemovedZimBookInfo(const QList<kiwix::Book>& books);
+    void cleanupRemovedZimBookInfo();
 
 public slots:
     void newTab();
@@ -113,6 +116,7 @@ private:
     KProfile m_profile;
     QString m_libraryDirectory;
     Library m_library;
+    QMutex m_updateBookInfoMutex;
     kiwix::Downloader* mp_downloader;
     ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
