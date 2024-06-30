@@ -47,6 +47,7 @@ SOURCES += \
     src/contentmanagermodel.cpp \
     src/contenttypefilter.cpp \
     src/descriptionnode.cpp \
+    src/downloadmanagement.cpp \
     src/findinpagebar.cpp \
     src/flowlayout.cpp \
     src/kiwixchoicebox.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     src/contentmanagerview.h \
     src/contenttypefilter.h \
     src/descriptionnode.h \
+    src/downloadmanagement.h \
     src/findinpagebar.h \
     src/flowlayout.h \
     src/kiwixchoicebox.h \

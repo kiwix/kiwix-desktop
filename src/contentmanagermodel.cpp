@@ -153,7 +153,7 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
     }
 }
 
-void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads& downloads)
+void ContentManagerModel::setBooksData(const BookInfoList& data, const DownloadManager& downloadMgr)
 {
     rootNode = std::shared_ptr<RowNode>(new RowNode({tr("Icon"), tr("Name"), tr("Date"), tr("Size"), tr("Content Type"), tr("Download")}, "", std::weak_ptr<RowNode>()));
     beginResetModel();
@@ -162,7 +162,7 @@ void ContentManagerModel::setBooksData(const BookInfoList& data, const Downloads
         const auto rowNode = createNode(bookItem);
 
         // Restore download state during model updates (filtering, etc)
-        rowNode->setDownloadState(downloads.value(rowNode->getBookId()));
+        rowNode->setDownloadState(downloadMgr.getDownloadState(rowNode->getBookId()));
 
         bookIdToRowMap[bookItem["id"].toString()] = rootNode->childCount();
         rootNode->appendChild(rowNode);
@@ -265,14 +265,14 @@ void ContentManagerModel::triggerDataUpdateAt(QModelIndex index)
     emit dataChanged(index, index);
 }
 
-void ContentManagerModel::removeDownload(QString bookId)
+void ContentManagerModel::setDownloadState(QString bookId, std::shared_ptr<DownloadState> ds)
 {
     const auto it = bookIdToRowMap.constFind(bookId);
     if ( it == bookIdToRowMap.constEnd() )
         return;
 
     const size_t row = it.value();
-    getRowNode(row)->setDownloadState(nullptr);
+    getRowNode(row)->setDownloadState(ds);
     triggerDataUpdateAt( this->index(row, 5) );
 }
 
