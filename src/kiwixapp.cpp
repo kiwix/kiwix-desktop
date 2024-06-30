@@ -131,12 +131,6 @@ KiwixApp::~KiwixApp()
 {
     m_server.stop();
     if (mp_downloader) {
-        try {
-            mp_downloader->close();
-        } catch (const std::exception& err) {
-            std::cerr << "ERROR: Failed to save the downloader state: "
-                      << err.what() << std::endl;
-        }
         delete mp_downloader;
     }
     if (mp_manager) {
@@ -234,7 +228,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
     QString _zimfile;
     if (zimfile.isEmpty()) {
         QString importDir = mp_session->value("zim-import-dir").toString();
-        if (importDir.isEmpty()) { 
+        if (importDir.isEmpty()) {
             importDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
             if (importDir.isEmpty()) { importDir = QDir::currentPath(); }
         }
