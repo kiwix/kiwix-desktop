@@ -467,7 +467,15 @@ void ContentManager::removeDownload(QString bookId)
 void ContentManager::downloadDisappeared(QString bookId)
 {
     removeDownload(bookId);
-    kiwix::Book bCopy(mp_library->getBookById(bookId));
+    kiwix::Book bCopy;
+    try {
+        bCopy = mp_library->getBookById(bookId);
+    } catch ( const std::out_of_range& ) {
+        // If the download has disappeared as a result of some
+        // obscure chain of events, the book may have disappeared too.
+        return;
+    }
+
     bCopy.setDownloadId("");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
     mp_library->save();
