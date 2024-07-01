@@ -2,6 +2,7 @@
 #define SETTINGSVIEW_H
 
 #include <QWidget>
+#include <QPushButton>
 namespace Ui {
 class Settings;
 }
@@ -23,7 +24,7 @@ public:
     void setMoveToTrash(bool moveToTrash);
     void setReopenTab(bool reopen);
     void onDownloadDirChanged(const QString &dir);
-    void copyDownloadPathToClipboard();
+    void copySettingsPathToClipboard(QString pathToCopy, QPushButton* button);
     void onMonitorDirChanged(const QString &dir);
     void onZoomChanged(qreal zoomFactor);
     void onMoveToTrashChanged(bool moveToTrash);

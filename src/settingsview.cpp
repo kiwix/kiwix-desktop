@@ -9,7 +9,7 @@
 
 namespace 
 {
-    QString formatDownloadDir(const QString& input) {
+    QString formatSettingsDir(const QString& input) {
         const int maxLength = 40;
         if (input.length() > maxLength) {
             QString suffix = input.right(maxLength);
@@ -24,13 +24,19 @@ SettingsView::SettingsView(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Settings)
 {
+    SettingsManager *settingsMgr = KiwixApp::instance()->getSettingsManager();
     ui->setupUi(this);
     ui->widget->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/_settingsManager.css"));
     connect(ui->zoomPercentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setZoom);
     connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->reopenTabToggle, &QCheckBox::clicked, this, &SettingsView::setReopenTab);
     connect(ui->browseButton, &QPushButton::clicked, this, &SettingsView::browseDownloadDir);
-    connect(ui->downloadDirPathCopy, &QPushButton::clicked, this, &SettingsView::copyDownloadPathToClipboard);
+    connect(ui->downloadDirPathCopy, &QPushButton::clicked, [this, settingsMgr]() {
+        copySettingsPathToClipboard(settingsMgr->getDownloadDir(), ui->downloadDirPathCopy);
+    });
+    connect(ui->monitorDirPathCopy, &QPushButton::clicked, [this, settingsMgr]() {
+        copySettingsPathToClipboard(settingsMgr->getMonitorDir(), ui->monitorDirPathCopy);
+    });
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
     connect(ui->monitorBrowse, &QPushButton::clicked, this, &SettingsView::browseMonitorDir);
     connect(ui->monitorClear, &QPushButton::clicked, this, &SettingsView::clearMonitorDir);
@@ -50,6 +56,8 @@ SettingsView::SettingsView(QWidget *parent)
     QIcon copyIcon(":/icons/copy.svg");
     ui->downloadDirPathCopy->setIcon(copyIcon);
     ui->downloadDirPathCopy->setIconSize(QSize(24, 24));
+    ui->monitorDirPathCopy->setIcon(copyIcon);
+    ui->monitorDirPathCopy->setIconSize(QSize(24, 24));
     ui->monitorHelp->setText("<b>?</b>");
     ui->monitorHelp->setToolTip(gt("monitor-directory-tooltip"));
     ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
@@ -68,10 +76,7 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir,
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     SettingsView::onDownloadDirChanged(downloadDir);
-    if (monitorDir == QString()) {
-        ui->monitorClear->hide();
-    }
-    ui->monitorDirPath->setText(monitorDir);
+    SettingsView::onMonitorDirChanged(monitorDir);
     ui->moveToTrashToggle->setChecked(moveToTrash);
     ui->reopenTabToggle->setChecked(reopentab);
 }
@@ -176,27 +181,23 @@ void SettingsView::setReopenTab(bool reopen)
 
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
-    ui->downloadDirPath->setText(formatDownloadDir(dir));
+    ui->downloadDirPath->setText(formatSettingsDir(dir));
     ui->downloadDirPath->setToolTip(dir);
 }
 
-void SettingsView::copyDownloadPathToClipboard()
+void SettingsView::copySettingsPathToClipboard(QString pathToCopy, QPushButton* button)
 {
-    QString downloadPath = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
-    QApplication::clipboard()->setText(downloadPath);
-
-    QPoint globalPos = ui->downloadDirPathCopy->mapToGlobal(QPoint(0, -ui->downloadDirPathCopy->height()));
-    QToolTip::showText(globalPos, gt("path-was-copied"), ui->downloadDirPathCopy);
+    QApplication::clipboard()->setText(pathToCopy);
+    QPoint globalPos = button->mapToGlobal(QPoint(0, -button->height()));
+    QToolTip::showText(globalPos, gt("path-was-copied"), button);
 }
 
 void SettingsView::onMonitorDirChanged(const QString &dir)
 {
-    if (dir == "") {
-        ui->monitorClear->hide();
-    } else {
-        ui->monitorClear->show();
-    }
-    ui->monitorDirPath->setText(dir);
+    ui->monitorClear->setVisible(!dir.isEmpty());
+    ui->monitorDirPathCopy->setVisible(!dir.isEmpty());
+    ui->monitorDirPath->setText(formatSettingsDir(dir));
+    ui->monitorDirPath->setToolTip(dir);
 }
 
 void SettingsView::onZoomChanged(qreal zoomFactor)
