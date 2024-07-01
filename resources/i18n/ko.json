@@ -35,6 +35,7 @@
 	"set-fullscreen": "전체 화면 설정",
 	"quit-fullscreen": "전체 화면에서 나가기",
 	"table-of-content": "목차",
+	"add-bookmark": "읽기 목록에 추가",
 	"reading-list": "읽기 목록",
 	"reading-list-title": "읽기 목록",
 	"zoom-in": "확대",
@@ -76,7 +77,6 @@
 	"zoom-level-setting": "기본 확대/축소 수준",
 	"download-directory-setting": "다운로드 디렉터리",
 	"monitor-directory-setting": "모니터 디렉터리",
-	"monitor-directory-default": "설정되지 않음",
 	"reset": "재설정",
 	"clear": "비우기",
 	"browse": "찾아보기",
@@ -135,5 +135,7 @@
 	"monitor-clear-dir-dialog-msg": "새 ZIM 파일의 모니터 디렉터리의 확인을 중단합니다.",
 	"monitor-directory-tooltip": "이 디렉터리의 모든 ZIM 파일은 자동으로 라이브러리에 추가됩니다.",
 	"next-tab": "다음 탭으로 이동",
-	"previous-tab": "이전 탭으로 이동"
+	"previous-tab": "이전 탭으로 이동",
+	"download-dir-missing": "다운로드 디렉터리가 존재하지 않습니다.",
+	"download-dir-not-writable": "다운로드 디렉터리에 쓸 수 없습니다."
 }
