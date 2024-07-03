@@ -59,6 +59,8 @@ void showInfoBox(QString title, QString text, QWidget *parent)
 KiwixMessageBox::Result showKiwixMessageBox(QString title, QString text, QWidget *parent, QString leftTitle, QString rightTitle)
 {
     KiwixMessageBox *dialog = new KiwixMessageBox(title, text, false, parent, leftTitle, rightTitle);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    QObject::connect(dialog, &KiwixMessageBox::finished, [=]() {
+        dialog->deleteLater();
+    });
     return dialog->execDialog();
 }
