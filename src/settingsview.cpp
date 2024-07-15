@@ -40,11 +40,11 @@ SettingsView::SettingsView(QWidget *parent)
     connect(ui->resetButton, &QPushButton::clicked, this, &SettingsView::resetDownloadDir);
     connect(ui->monitorBrowse, &QPushButton::clicked, this, &SettingsView::browseMonitorDir);
     connect(ui->monitorClear, &QPushButton::clicked, this, &SettingsView::clearMonitorDir);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::downloadDirChanged, this, &SettingsView::onDownloadDirChanged);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::monitorDirChanged, this, &SettingsView::onMonitorDirChanged);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, &SettingsView::onZoomChanged);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::moveToTrashChanged, this, &SettingsView::onMoveToTrashChanged);
-    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::reopenTabChanged, this, &SettingsView::onReopenTabChanged);
+    connect(settingsMgr, &SettingsManager::downloadDirChanged, this, &SettingsView::onDownloadDirChanged);
+    connect(settingsMgr, &SettingsManager::monitorDirChanged, this, &SettingsView::onMonitorDirChanged);
+    connect(settingsMgr, &SettingsManager::zoomChanged, this, &SettingsView::onZoomChanged);
+    connect(settingsMgr, &SettingsManager::moveToTrashChanged, this, &SettingsView::onMoveToTrashChanged);
+    connect(settingsMgr, &SettingsManager::reopenTabChanged, this, &SettingsView::onReopenTabChanged);
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
