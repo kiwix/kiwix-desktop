@@ -25,15 +25,20 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
 #endif
 {
     auto app = KiwixApp::instance();
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    QString defaultFileName = QUrl(download->path()).fileName();
+#else
+    QString defaultFileName = download->downloadFileName();
+#endif
+    QString suggestedPath = app->getPrevSaveDir() + "/" + defaultFileName;
     bool isSavePageDownload = download->isSavePageDownload();
-    QString defaultFileName = download->url().fileName();
     QString extension =
         isSavePageDownload ? ".pdf" : "." + defaultFileName.section('.', -1);
     QString filter = extension != '.' ? "(*" + extension + ")" : "";
 
     QString fileName = QFileDialog::getSaveFileName(
             app->getMainWindow(), gt("save-file-as-window-title"),
-            defaultFileName, filter);
+            suggestedPath, filter);
 
     if (fileName.isEmpty()) {
         return;
@@ -41,6 +46,7 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
     if (!fileName.endsWith(extension)) {
         fileName.append(extension);
     }
+    app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
 
     if (isSavePageDownload) {
         download->page()->printToPdf(fileName);
