@@ -18,7 +18,7 @@ jobs:
           - ubuntu-jammy
           - ubuntu-focal
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # Determine which PPA we should upload to
       - name: PPA
@@ -33,7 +33,7 @@ jobs:
         env:
           REF: ${{ github.ref }}
 
-      - uses: legoktm/gh-action-auto-dch@master
+      - uses: legoktm/gh-action-auto-dch@main
         with:
           fullname: Kiwix builder
           email: release+launchpad@kiwix.org
@@ -55,12 +55,12 @@ jobs:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: Packages for ${{ matrix.distro }}
           path: output
 
-      - uses: legoktm/gh-action-dput@master
+      - uses: legoktm/gh-action-dput@main
         name: Upload dev package
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main' && startswith(matrix.distro, 'ubuntu-')
         with:
@@ -68,7 +68,7 @@ jobs:
           repository: ppa:kiwixteam/dev
           packages: output/*_source.changes
 
-      - uses: legoktm/gh-action-dput@master
+      - uses: legoktm/gh-action-dput@main
         name: Upload release package
         if: github.event_name == 'release' && startswith(matrix.distro, 'ubuntu-')
         with:
