@@ -29,4 +29,11 @@ QPushButton:hover {
     color: white;
 }
 
+#closeButton {
+    border: 0;
+}
+
+#closeButton:hover {
+    background-color: transparent;
+}
 
