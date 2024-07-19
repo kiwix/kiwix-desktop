@@ -22,6 +22,12 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     connect(mp_ui->m_view, &QTreeView::clicked, this, &ContentManagerView::onClicked);
     connect(mp_ui->m_view, &QTreeView::expanded, this, &ContentManagerView::onExpanded);
     connect(this, &ContentManagerView::sizeHintChanged, managerDelegate, &QStyledItemDelegate::sizeHintChanged);
+
+    // Needed to reveal the situation with downloads not being updated timely
+    // (due to aria2c becoming unresponsive when saving to slow storage)
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, [this]() { this->update(); });
+    timer->start(1000);
 }
 
 ContentManagerView::~ContentManagerView()

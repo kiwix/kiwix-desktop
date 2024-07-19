@@ -129,12 +129,12 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     double progress  = (double) (downloadInfo.progress) / 100;
     progress = -progress;
     auto completedLength = downloadInfo.completedLength;
-    auto downloadSpeed = downloadInfo.downloadSpeed;
+    auto downloadSpeed = downloadInfo.getDownloadSpeed();
 
-    if (downloadInfo.paused) {
+    if (downloadInfo.getStatus() == DownloadState::PAUSED) {
         createResumeSymbol(painter, dcl.pauseResumeButtonRect);
         createCancelButton(painter, dcl.cancelButtonRect);
-    } else {
+    } else if (downloadInfo.getStatus() == DownloadState::DOWNLOADING) {
         createPauseSymbol(painter, dcl.pauseResumeButtonRect);
         createDownloadStats(painter, box, downloadSpeed, completedLength);
     }
@@ -221,25 +221,14 @@ bool ContentManagerDelegate::editorEvent(QEvent *event, QAbstractItemModel *mode
     if(event->type() == QEvent::MouseButtonRelease )
     {
         QMouseEvent * e = (QMouseEvent *)event;
-        int clickX = portutils::getX(*e);
-        int clickY = portutils::getY(*e);
-
-        QRect r = option.rect;
-        int x,y,w,h;
-        x = r.left();
-        y = r.top();
-        w = r.width();
-        h = r.height();
-
         if (e->button() == Qt::MiddleButton && index.column() != 5) {
             KiwixApp::instance()->getContentManager()->openBookWithIndex(index);
             return true;
         }
 
-        const auto lastColumnClicked = ((index.column() == 5) && (clickX > x && clickX < x + w)
-                                                        && (clickY > y && clickY < y + h));
+        const QPoint clickPoint(portutils::getX(*e), portutils::getY(*e));
 
-        if (lastColumnClicked)
+        if ( index.column() == 5 && option.rect.contains(clickPoint, true) )
             handleLastColumnClicked(index, e, option);
     }
 
@@ -250,6 +239,7 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
 {
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
+    const auto downloadState = node->getDownloadState();
 
     const int clickX = portutils::getX(*mouseEvent);
     const int clickY = portutils::getY(*mouseEvent);
@@ -262,19 +252,23 @@ void ContentManagerDelegate::handleLastColumnClicked(const QModelIndex& index, Q
         return contentMgr.openBook(id);
 
     case ContentManager::BookState::AVAILABLE_ONLINE:
-        return contentMgr.downloadBook(id, index);
+        return contentMgr.downloadBook(id);
 
     case ContentManager::BookState::DOWNLOADING:
-        if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
-            contentMgr.pauseBook(id, index);
+        if ( downloadState->getStatus() == DownloadState::DOWNLOADING ) {
+            if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
+                contentMgr.pauseBook(id, index);
+            }
         }
         return;
 
     case ContentManager::BookState::DOWNLOAD_PAUSED:
-        if ( dcl.cancelButtonRect.contains(clickPoint) ) {
-             contentMgr.cancelBook(id);
-        } else if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
-             contentMgr.resumeBook(id, index);
+        if ( downloadState->getStatus() == DownloadState::PAUSED ) {
+            if ( dcl.cancelButtonRect.contains(clickPoint) ) {
+                 contentMgr.cancelBook(id);
+            } else if ( dcl.pauseResumeButtonRect.contains(clickPoint) ) {
+                 contentMgr.resumeBook(id, index);
+            }
         }
         return;
 

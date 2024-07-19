@@ -28,7 +28,6 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_profile(),
       m_libraryDirectory(findLibraryDirectory()),
       m_library(m_libraryDirectory),
-      mp_downloader(nullptr),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
       mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
@@ -66,13 +65,7 @@ void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString
 
 void KiwixApp::init()
 {
-    try {
-        mp_downloader = new kiwix::Downloader();
-    } catch (std::exception& e) {
-        QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
-        gt("error-downloader-launch-message") + "<br><br>" + e.what());
-    }
-    mp_manager = new ContentManager(&m_library, mp_downloader);
+    mp_manager = new ContentManager(&m_library);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 
     auto icon = QIcon();
@@ -130,15 +123,6 @@ void KiwixApp::init()
 KiwixApp::~KiwixApp()
 {
     m_server.stop();
-    if (mp_downloader) {
-        try {
-            mp_downloader->close();
-        } catch (const std::exception& err) {
-            std::cerr << "ERROR: Failed to save the downloader state: "
-                      << err.what() << std::endl;
-        }
-        delete mp_downloader;
-    }
     if (mp_manager) {
         delete mp_manager;
     }
@@ -234,7 +218,7 @@ void KiwixApp::openZimFile(const QString &zimfile)
     QString _zimfile;
     if (zimfile.isEmpty()) {
         QString importDir = mp_session->value("zim-import-dir").toString();
-        if (importDir.isEmpty()) { 
+        if (importDir.isEmpty()) {
             importDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
             if (importDir.isEmpty()) { importDir = QDir::currentPath(); }
         }

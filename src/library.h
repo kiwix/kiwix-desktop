@@ -39,6 +39,8 @@ public:
     void addBookToLibrary(kiwix::Book& book);
     void addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir);
     bool isBeingDownloadedByUs(QString path) const;
+    void updateBookBeingDownloaded(const QString& bookId, const QString& bookPath);
+    std::string getBookFilePath(const QString& bookId) const;
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);

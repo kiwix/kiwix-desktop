@@ -78,7 +78,6 @@ public:
     Library* getLibrary() { return &m_library; }
     MainWindow* getMainWindow() { return mp_mainWindow; }
     ContentManager* getContentManager() { return mp_manager; }
-    kiwix::Downloader* getDownloader() { return mp_downloader; }
     TabBar* getTabWidget() { return getMainWindow()->getTabBar(); }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
@@ -113,7 +112,6 @@ private:
     KProfile m_profile;
     QString m_libraryDirectory;
     Library m_library;
-    kiwix::Downloader* mp_downloader;
     ContentManager* mp_manager;
     MainWindow* mp_mainWindow;
     QErrorMessage* mp_errorDialog;
