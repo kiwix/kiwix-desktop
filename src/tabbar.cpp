@@ -422,6 +422,8 @@ void TabBar::paintEvent(QPaintEvent *e)
         initStyleOption(&tabopt, i);
 
         bool need_fade_out = false;
+        bool textRightToLeft = tab_title.isRightToLeft();
+        bool appRightToLeft = QWidget::isRightToLeft();
 
         QRect tabTextRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tabopt, this);
 
@@ -429,8 +431,6 @@ void TabBar::paintEvent(QPaintEvent *e)
 
         if (fontTextRect.width() > tabTextRect.width())
             need_fade_out = true;
-
-        bool right_to_left = tab_title.isRightToLeft();
 
         if (need_fade_out) {
             // draw the most of tab text extent with the normal color,
@@ -444,7 +444,7 @@ void TabBar::paintEvent(QPaintEvent *e)
             const int mid_Y = tabTextRect.center().y();
             QLinearGradient gr;
 
-            if (right_to_left) {
+            if (textRightToLeft) {
                 // arabic right-to-left text
                 gr.setStart(tabTextRect.x(), mid_Y);
                 gr.setFinalStop(tabTextRect.x() + 0.2 * tabTextRect.width(), mid_Y);
@@ -463,7 +463,13 @@ void TabBar::paintEvent(QPaintEvent *e)
 
         int align = Qt::AlignVCenter;
         if (need_fade_out) {
-            align |= (right_to_left)? Qt::AlignRight : Qt::AlignLeft;
+            /* 
+               We align LTR text in LTR app to the left, while RTL text in RTL app
+               to the right. Since Qt mirror alignment, we can simply do ALignLeft
+               for both cases. When text and app direction doesn't match, we flip
+               the text alignment.
+            */
+            align |= (textRightToLeft == appRightToLeft) ? Qt::AlignLeft : Qt::AlignRight;
         }
 
         style()->drawItemText(&p, tabTextRect, align,
