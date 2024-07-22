@@ -194,21 +194,21 @@ void Library::save()
     mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
-void Library::setMonitorDirZims(QString monitorDir, QStringList zimList)
+void Library::setMonitorDirZims(QString monitorDir, QStringSet zimList)
 {
     m_knownZimsInDir[monitorDir] = zimList;
 }
 
-QStringList Library::getLibraryZimsFromDir(QString dir) const
+Library::QStringSet Library::getLibraryZimsFromDir(QString dir) const
 {
-    QStringList zimsInDir;
+    QStringSet zimsInDir;
     for (auto str : getBookIds()) {
         auto filePath = QString::fromStdString(getBookById(str).getPath());
         if ( filePath.endsWith(BEINGDOWNLOADEDSUFFIX) )
                 continue;
         QDir absoluteDir = QFileInfo(filePath).absoluteDir();
         if (absoluteDir == dir) {
-            zimsInDir.push_back(filePath);
+            zimsInDir.insert(filePath);
         }
     }
     return zimsInDir;
@@ -219,20 +219,18 @@ void Library::updateFromDir(QString monitorDir)
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(monitorDir);
     QStringList newDirEntries = dir.entryList({"*.zim"});
-    QStringList oldDirEntries = m_knownZimsInDir[monitorDir];
+    const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
     for (auto &str : newDirEntries) {
         str = QDir::toNativeSeparators(monitorDir + "/" + str);
     }
-    QSet<QString> newDir, oldDir;
+    QSet<QString> newDir;
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     newDir = QSet<QString>::fromList(newDirEntries);
-    oldDir = QSet<QString>::fromList(oldDirEntries);
 #else
     newDir = QSet<QString>(newDirEntries.begin(), newDirEntries.end());
-    oldDir = QSet<QString>(oldDirEntries.begin(), oldDirEntries.end());
 #endif
-    QStringList addedZims = (newDir - oldDir).values();
-    QStringList removedZims = (oldDir - newDir).values();
+    QStringList addedZims = (newDir - oldDirEntries).values();
+    QStringList removedZims = (oldDirEntries - newDir).values();
     auto manager = kiwix::Manager(LibraryManipulator(this));
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : addedZims) {
@@ -251,7 +249,7 @@ void Library::updateFromDir(QString monitorDir)
     }
     if (needsRefresh) {
         emit(booksChanged());
-        setMonitorDirZims(monitorDir, newDir.values());
+        setMonitorDirZims(monitorDir, newDir);
     }
 }
 
