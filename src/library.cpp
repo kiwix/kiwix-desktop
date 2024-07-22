@@ -218,19 +218,13 @@ void Library::updateFromDir(QString monitorDir)
 {
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(monitorDir);
-    QStringList newDirEntries = dir.entryList({"*.zim"});
     const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
-    for (auto &str : newDirEntries) {
-        str = QDir::toNativeSeparators(monitorDir + "/" + str);
+    QStringSet newDirEntries;
+    for (const auto &file : dir.entryList({"*.zim"})) {
+        newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
     }
-    QSet<QString> newDir;
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    newDir = QSet<QString>::fromList(newDirEntries);
-#else
-    newDir = QSet<QString>(newDirEntries.begin(), newDirEntries.end());
-#endif
-    QStringList addedZims = (newDir - oldDirEntries).values();
-    QStringList removedZims = (oldDirEntries - newDir).values();
+    QStringList addedZims = (newDirEntries - oldDirEntries).values();
+    QStringList removedZims = (oldDirEntries - newDirEntries).values();
     auto manager = kiwix::Manager(LibraryManipulator(this));
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : addedZims) {
@@ -249,7 +243,7 @@ void Library::updateFromDir(QString monitorDir)
     }
     if (needsRefresh) {
         emit(booksChanged());
-        setMonitorDirZims(monitorDir, newDir);
+        setMonitorDirZims(monitorDir, newDirEntries);
     }
 }
 
