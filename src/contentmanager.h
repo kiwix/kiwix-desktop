@@ -69,6 +69,9 @@ public: // functions
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
 
+    void setMonitorDirZims(QString monitorDir, Library::QStringSet zimList);
+    void asyncUpdateLibraryFromDir(QString dir);
+
 signals:
     void filterParamsChanged();
     void booksChanged();
@@ -113,6 +116,7 @@ private: // functions
     void updateModel();
     void setCategories();
     void setLanguages();
+    void updateLibraryFromDir(QString dir);
 
     // Get the book with the specified id from
     // the remote or local library (in that order).
@@ -141,6 +145,9 @@ private: // data
 
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
+
+    QMutex m_updateFromDirMutex;
+    QMap<QString, Library::QStringSet> m_knownZimsInDir;
 };
 
 #endif // CONTENTMANAGER_H

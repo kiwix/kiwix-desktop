@@ -850,20 +850,22 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
     emit(booksChanged());
 }
 
-void Library::setMonitorDirZims(QString monitorDir, QStringSet zimList)
+void ContentManager::setMonitorDirZims(QString monitorDir, Library::QStringSet zimList)
 {
     m_knownZimsInDir[monitorDir] = zimList;
 }
 
-void Library::asyncUpdateFromDir(QString dir)
+void ContentManager::asyncUpdateLibraryFromDir(QString dir)
 {
     (void) QtConcurrent::run([=]() {
-        updateFromDir(dir);
+        updateLibraryFromDir(dir);
     });
 }
 
-void Library::updateFromDir(QString monitorDir)
+void ContentManager::updateLibraryFromDir(QString monitorDir)
 {
+    typedef Library::QStringSet QStringSet;
+
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(monitorDir);
     const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
@@ -873,11 +875,12 @@ void Library::updateFromDir(QString monitorDir)
     }
     const QStringSet addedZims = newDirEntries - oldDirEntries;
     const QStringSet removedZims = oldDirEntries - newDirEntries;
-    kiwix::Manager manager(getKiwixLibrary());
+    const auto kiwixLib = mp_library->getKiwixLibrary();
+    kiwix::Manager manager(kiwixLib);
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : addedZims) {
-        if ( isBeingDownloadedByUs(bookPath) ) {
-            // qDebug() << "DBG: Library::updateFromDir(): "
+        if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
+            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
             //          << bookPath
             //          << " ignored since it is being downloaded by us.";
         } else {
@@ -886,8 +889,8 @@ void Library::updateFromDir(QString monitorDir)
     }
     for (auto bookPath : removedZims) {
         try {
-            const auto book = mp_library->getBookByPath(bookPath.toStdString());
-            removeBookFromLibraryById(QString::fromStdString(book.getId()));
+            const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
+            mp_library->removeBookFromLibraryById(QString::fromStdString(book.getId()));
         } catch (...) {}
     }
     if (needsRefresh) {

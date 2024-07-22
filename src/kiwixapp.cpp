@@ -103,7 +103,7 @@ void KiwixApp::init()
         }
     });
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, [=](QString monitorDir) {
-        m_library.asyncUpdateFromDir(monitorDir);
+        mp_manager->asyncUpdateLibraryFromDir(monitorDir);
     });
 
     setupDirectoryMonitoring();
@@ -119,9 +119,10 @@ void KiwixApp::setupDirectoryMonitoring()
     auto dirList = QSet<QString>({monitorDir, downloadDir});
     for (auto dir : dirList) {
         if (dir != "") {
-            m_library.setMonitorDirZims(dir, m_library.getLibraryZimsFromDir(dir));
+            const auto zimsInDir = m_library.getLibraryZimsFromDir(dir);
+            mp_manager->setMonitorDirZims(dir, zimsInDir);
             m_watcher.addPath(dir);
-            m_library.asyncUpdateFromDir(dir);
+            mp_manager->asyncUpdateLibraryFromDir(dir);
         }
     }
 }
