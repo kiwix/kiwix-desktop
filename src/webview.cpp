@@ -15,6 +15,12 @@ class QMenu;
 #include <zim/error.h>
 #include <zim/item.h>
 
+#ifdef Q_OS_WIN
+    const QRegularExpression reservedCharsRe("[<>:\"/\\\\|?*]");
+#else
+    const QRegularExpression reservedCharsRe("/");
+#endif
+
 void WebViewBackMenu::showEvent(QShowEvent *)
 {
     /* In Qt 5.12 CSS options for shifting this menu didn't work.
@@ -146,7 +152,11 @@ void WebView::saveViewContent()
         auto mimeType = QByteArray::fromStdString(item.getMimetype());
         mimeType = mimeType.split(';')[0];
 
+        /* We have to sanitize here, as parsing will start once we pass the file
+           name to either save or download method.
+        */
         QString suggestedFileName = item.getTitle().c_str();
+        suggestedFileName = suggestedFileName.replace(reservedCharsRe, "_");
         if (mimeType == "text/html")
             page()->save(suggestedFileName + ".pdf");
         else
