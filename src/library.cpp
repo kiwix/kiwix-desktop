@@ -223,9 +223,9 @@ void Library::updateFromDir(QString monitorDir)
     for (const auto &file : dir.entryList({"*.zim"})) {
         newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
     }
-    QStringList addedZims = (newDirEntries - oldDirEntries).values();
-    QStringList removedZims = (oldDirEntries - newDirEntries).values();
-    auto manager = kiwix::Manager(LibraryManipulator(this));
+    const QStringSet addedZims = newDirEntries - oldDirEntries;
+    const QStringSet removedZims = oldDirEntries - newDirEntries;
+    kiwix::Manager manager(LibraryManipulator(this));
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : addedZims) {
         if ( isBeingDownloadedByUs(bookPath) ) {
@@ -238,7 +238,8 @@ void Library::updateFromDir(QString monitorDir)
     }
     for (auto bookPath : removedZims) {
         try {
-            removeBookFromLibraryById(QString::fromStdString(mp_library->getBookByPath(bookPath.toStdString()).getId()));
+            const auto book = mp_library->getBookByPath(bookPath.toStdString());
+            removeBookFromLibraryById(QString::fromStdString(book.getId()));
         } catch (...) {}
     }
     if (needsRefresh) {
