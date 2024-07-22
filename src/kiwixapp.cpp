@@ -342,15 +342,10 @@ bool KiwixApp::isCurrentArticleBookmarked()
 
 void KiwixApp::setMonitorDir(const QString &dir) {
     m_settingsManager.setMonitorDir(dir);
-    m_library.setMonitorDirZims(dir, QStringList());
     for (auto path : m_watcher.directories()) {
         m_watcher.removePath(path);
     }
-    if (dir != "") {
-        m_watcher.addPath(dir);
-        m_watcher.addPath(m_settingsManager.getDownloadDir());
-        m_library.asyncUpdateFromDir(dir);
-    }
+    setupDirectoryMonitoring();
 }
 
 #define CREATE_ACTION(ID, TEXT) \
