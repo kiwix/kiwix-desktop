@@ -275,6 +275,8 @@ QMenu* WebView::createStandardContextMenu() {
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
 
+    menu->addAction(app->getAction(KiwixApp::SavePageAsAction));
+
     return menu;
 }
 
