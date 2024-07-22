@@ -878,6 +878,12 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
     const auto kiwixLib = mp_library->getKiwixLibrary();
     kiwix::Manager manager(kiwixLib);
     bool needsRefresh = !removedZims.empty();
+    for (auto bookPath : removedZims) {
+        try {
+            const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
+            mp_library->removeBookFromLibraryById(QString::fromStdString(book.getId()));
+        } catch (...) {}
+    }
     for (auto bookPath : addedZims) {
         if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
             // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
@@ -886,12 +892,6 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
         } else {
             needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
         }
-    }
-    for (auto bookPath : removedZims) {
-        try {
-            const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
-            mp_library->removeBookFromLibraryById(QString::fromStdString(book.getId()));
-        } catch (...) {}
     }
     if (needsRefresh) {
         emit(booksChanged());
