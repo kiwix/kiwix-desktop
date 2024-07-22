@@ -105,6 +105,15 @@ void KiwixApp::init()
     connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, [=](QString monitorDir) {
         m_library.asyncUpdateFromDir(monitorDir);
     });
+
+    setupDirectoryMonitoring();
+
+    restoreTabs();
+    restoreWindowState();
+}
+
+void KiwixApp::setupDirectoryMonitoring()
+{
     QString monitorDir = m_settingsManager.getMonitorDir();
     QString downloadDir = m_settingsManager.getDownloadDir();
     auto dirList = QSet<QString>({monitorDir, downloadDir});
@@ -115,9 +124,6 @@ void KiwixApp::init()
             m_library.asyncUpdateFromDir(dir);
         }
     }
-
-    restoreTabs();
-    restoreWindowState();
 }
 
 KiwixApp::~KiwixApp()
