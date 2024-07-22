@@ -880,6 +880,8 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : removedZims) {
         try {
+            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
+            //          << "file disappeared: " << bookPath;
             const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
             mp_library->removeBookFromLibraryById(QString::fromStdString(book.getId()));
         } catch (...) {}
@@ -890,10 +892,13 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
             //          << bookPath
             //          << " ignored since it is being downloaded by us.";
         } else {
+            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
+            //          << "file appeared: " << bookPath;
             needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
         }
     }
     if (needsRefresh) {
+        mp_library->save();
         emit(booksChanged());
         setMonitorDirZims(monitorDir, newDirEntries);
     }
