@@ -883,7 +883,7 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
             // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
             //          << "file disappeared: " << bookPath;
             const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
-            mp_library->removeBookFromLibraryById(QString::fromStdString(book.getId()));
+            handleDisappearedZimFile(QString::fromStdString(book.getId()));
         } catch (...) {}
     }
     for (auto bookPath : addedZims) {
@@ -902,4 +902,9 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
         emit(booksChanged());
         setMonitorDirZims(monitorDir, newDirEntries);
     }
+}
+
+void ContentManager::handleDisappearedZimFile(QString bookId)
+{
+    mp_library->removeBookFromLibraryById(bookId);
 }

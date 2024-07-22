@@ -117,6 +117,7 @@ private: // functions
     void setCategories();
     void setLanguages();
     void updateLibraryFromDir(QString dir);
+    void handleDisappearedZimFile(QString bookId);
 
     // Get the book with the specified id from
     // the remote or local library (in that order).
