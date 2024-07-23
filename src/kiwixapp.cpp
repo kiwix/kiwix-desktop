@@ -388,7 +388,7 @@ void KiwixApp::createActions()
     connect(mpa_actions[RandomArticleAction], &QAction::triggered,
             this, [=]() { this->openRandomUrl(false); });
 
-    CREATE_ACTION_SHORTCUT(OpenHomePageAction, gt("home-page"), QKeySequence(Qt::ALT | Qt::Key_Home));
+    CREATE_ACTION_ICON_SHORTCUT(OpenHomePageAction, "home-button", gt("home-page"), QKeySequence(Qt::ALT | Qt::Key_Home));
 
     if (QGuiApplication::isLeftToRight()) {
       CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-left", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Left));
@@ -504,17 +504,19 @@ void KiwixApp::handleItemsState(TabType tabType)
 {
     auto libraryOrSettingsTab =  (tabType == TabType::LibraryTab || tabType == TabType::SettingsTab);
     auto notBookmarkableTab = libraryOrSettingsTab || getTabWidget()->currentArticleUrl().isEmpty();
-    KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryOrSettingsTab);
-    KiwixApp::instance()->getAction(KiwixApp::ToggleAddBookmarkAction)->setDisabled(notBookmarkableTab);
-    KiwixApp::instance()->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryOrSettingsTab);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryOrSettingsTab);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryOrSettingsTab);
-    KiwixApp::instance()->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryOrSettingsTab);
-    KiwixApp::instance()->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryOrSettingsTab);
+    auto app = KiwixApp::instance();
+    app->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ToggleAddBookmarkAction)->setDisabled(notBookmarkableTab);
+    app->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::OpenHomePageAction)->setDisabled(libraryOrSettingsTab);
 
     /* Non-Zim tabs are not bookmarkable therefore never in reading list. */
     if (notBookmarkableTab)
-        KiwixApp::instance()->getAction(KiwixApp::ToggleAddBookmarkAction)->setChecked(false);
+        app->getAction(KiwixApp::ToggleAddBookmarkAction)->setChecked(false);
 }
 
 void KiwixApp::updateNameMapper()
