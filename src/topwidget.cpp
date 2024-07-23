@@ -16,14 +16,14 @@ TopWidget::TopWidget(QWidget *parent) :
     auto app = KiwixApp::instance();
 
     QAction *back = app->getAction(KiwixApp::HistoryBackAction);
-    connect(back, &QAction::triggered, [](){
-        KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
+    connect(back, &QAction::triggered, [app](){
+        app->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
     });
     addAction(back);
 
     QAction *forward = app->getAction(KiwixApp::HistoryForwardAction);
-    connect(forward, &QAction::triggered, [](){
-        KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
+    connect(forward, &QAction::triggered, [app](){
+        app->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
     addAction(forward);
 
@@ -42,11 +42,12 @@ TopWidget::TopWidget(QWidget *parent) :
     addSeparator();
 
     addWidget(&m_searchEntry);
-    addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction));
+
+    addAction(app->getAction(KiwixApp::ToggleReadingListAction));
 
     addSeparator();
 
-    addAction(KiwixApp::instance()->getAction(KiwixApp::OpenFileAction));
+    addAction(app->getAction(KiwixApp::OpenFileAction));
 
     QMenu* menu = new MainMenu();
     QToolButton *toolButton = new QToolButton(menu);
@@ -61,8 +62,8 @@ TopWidget::TopWidget(QWidget *parent) :
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
 #endif
-    addAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction));
-    widgetForAction(KiwixApp::instance()->getAction(KiwixApp::ToggleFullscreenAction))->setObjectName("fullScreenButton");
+    addAction(app->getAction(KiwixApp::ToggleFullscreenAction));
+    widgetForAction(app->getAction(KiwixApp::ToggleFullscreenAction))->setObjectName("fullScreenButton");
 #if !SYSTEMTITLEBAR
     addAction(QIcon(":/icons/close.svg"), "close", parent, SLOT(close()));
 #endif
