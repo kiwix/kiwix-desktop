@@ -41,6 +41,8 @@ TopWidget::TopWidget(QWidget *parent) :
 
     addSeparator();
 
+    addAction(app->getAction(KiwixApp::OpenHomePageAction));
+
     addWidget(&m_searchEntry);
 
     addAction(app->getAction(KiwixApp::ToggleReadingListAction));
