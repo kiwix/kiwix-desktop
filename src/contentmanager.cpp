@@ -849,3 +849,49 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
     m_sortOrderAsc = sortOrderAsc;
     emit(booksChanged());
 }
+
+void Library::setMonitorDirZims(QString monitorDir, QStringSet zimList)
+{
+    m_knownZimsInDir[monitorDir] = zimList;
+}
+
+void Library::asyncUpdateFromDir(QString dir)
+{
+    (void) QtConcurrent::run([=]() {
+        updateFromDir(dir);
+    });
+}
+
+void Library::updateFromDir(QString monitorDir)
+{
+    QMutexLocker locker(&m_updateFromDirMutex);
+    const QDir dir(monitorDir);
+    const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
+    QStringSet newDirEntries;
+    for (const auto &file : dir.entryList({"*.zim"})) {
+        newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
+    }
+    const QStringSet addedZims = newDirEntries - oldDirEntries;
+    const QStringSet removedZims = oldDirEntries - newDirEntries;
+    kiwix::Manager manager(getKiwixLibrary());
+    bool needsRefresh = !removedZims.empty();
+    for (auto bookPath : addedZims) {
+        if ( isBeingDownloadedByUs(bookPath) ) {
+            // qDebug() << "DBG: Library::updateFromDir(): "
+            //          << bookPath
+            //          << " ignored since it is being downloaded by us.";
+        } else {
+            needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
+        }
+    }
+    for (auto bookPath : removedZims) {
+        try {
+            const auto book = mp_library->getBookByPath(bookPath.toStdString());
+            removeBookFromLibraryById(QString::fromStdString(book.getId()));
+        } catch (...) {}
+    }
+    if (needsRefresh) {
+        emit(booksChanged());
+        setMonitorDirZims(monitorDir, newDirEntries);
+    }
+}

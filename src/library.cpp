@@ -194,11 +194,6 @@ void Library::save()
     mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
-void Library::setMonitorDirZims(QString monitorDir, QStringSet zimList)
-{
-    m_knownZimsInDir[monitorDir] = zimList;
-}
-
 Library::QStringSet Library::getLibraryZimsFromDir(QString dir) const
 {
     QStringSet zimsInDir;
@@ -212,47 +207,6 @@ Library::QStringSet Library::getLibraryZimsFromDir(QString dir) const
         }
     }
     return zimsInDir;
-}
-
-void Library::updateFromDir(QString monitorDir)
-{
-    QMutexLocker locker(&m_updateFromDirMutex);
-    const QDir dir(monitorDir);
-    const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
-    QStringSet newDirEntries;
-    for (const auto &file : dir.entryList({"*.zim"})) {
-        newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
-    }
-    const QStringSet addedZims = newDirEntries - oldDirEntries;
-    const QStringSet removedZims = oldDirEntries - newDirEntries;
-    kiwix::Manager manager(getKiwixLibrary());
-    bool needsRefresh = !removedZims.empty();
-    for (auto bookPath : addedZims) {
-        if ( isBeingDownloadedByUs(bookPath) ) {
-            // qDebug() << "DBG: Library::updateFromDir(): "
-            //          << bookPath
-            //          << " ignored since it is being downloaded by us.";
-        } else {
-            needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
-        }
-    }
-    for (auto bookPath : removedZims) {
-        try {
-            const auto book = mp_library->getBookByPath(bookPath.toStdString());
-            removeBookFromLibraryById(QString::fromStdString(book.getId()));
-        } catch (...) {}
-    }
-    if (needsRefresh) {
-        emit(booksChanged());
-        setMonitorDirZims(monitorDir, newDirEntries);
-    }
-}
-
-void Library::asyncUpdateFromDir(QString dir)
-{
-    (void) QtConcurrent::run([=]() {
-        updateFromDir(dir);
-    });
 }
 
 const kiwix::Book &Library::getBookById(QString id) const
