@@ -225,7 +225,7 @@ void Library::updateFromDir(QString monitorDir)
     }
     const QStringSet addedZims = newDirEntries - oldDirEntries;
     const QStringSet removedZims = oldDirEntries - newDirEntries;
-    kiwix::Manager manager(LibraryManipulator(this));
+    kiwix::Manager manager(getKiwixLibrary());
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : addedZims) {
         if ( isBeingDownloadedByUs(bookPath) ) {
