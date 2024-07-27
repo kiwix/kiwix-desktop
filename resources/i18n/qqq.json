@@ -175,5 +175,6 @@
 	"no-details": "A content type for Zim files representing it only has an introduction.",
 	"no-pictures": "A content type for Zim files that does not contain pictures.",
 	"no-videos": "A content type for Zim files that does not contain videos.",
-	"path-was-copied": "Tooltip confirming that the download path from settings was copied."
+	"path-was-copied": "Tooltip confirming that the download path from settings was copied.",
+	"save-as": "Represents the action of saving the current tab content to a file chosen by the user."
 }
