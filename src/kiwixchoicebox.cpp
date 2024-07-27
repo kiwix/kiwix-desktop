@@ -10,8 +10,12 @@
 #include <QDebug>
 #include <QAbstractItemView>
 #include <QScrollBar>
+#include <QtWidgets>
 #include "kiwixlineedit.h"
 #include "kiwixlistwidget.h"
+
+private :
+Ui:: kiwixchoicebox * ui;
 
 KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     QWidget(parent),
@@ -287,4 +291,43 @@ KiwixChoiceBox::SelectionList KiwixChoiceBox::getCurrentSelected()
         selections.append({item->text(), item->data(Qt::UserRole).toString()});
     }
     return selections;
+}
+
+
+class KiwixChoiceBox : public QWidget {
+public:
+    KiwixChoiceBox(QWidget * parent = nullptr) : QWidget(parent) {
+        QVBoxLayout *layout = new QVBoxLayout(this);
+        QLabel * label =  new QLabel("Choose your options:", this);
+        QPushButton * button = new QPushButton("Clear", this);
+        QCheckBox *darkmodecheckbox = new QCheckBox("Dark Mode", this);
+        layout ->  ddWidget(label);
+        layout -> addWidget(button);
+        layout-> addWidget(darkmodecheckbox);
+
+        connect( darkmodecheckbox, &QCheckBox :: stateChanged, this, &KiwixChoiceBox:: toggleDarkMode);
+    }
+
+public slots:
+    void toggleDarkMode(int state) {
+        if (state == Qt::Checked) 
+        {
+            // here the code enables the dar mode 
+            qApp->setStyleSheet("background-color: black; color: white;");
+        } 
+        
+        else 
+        {
+
+            // the accordingly will disable the dark mode if the check box is not selected..
+            qApp->setStyleSheet("");
+        }
+    }
+};
+
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    KiwixChoiceBox box;
+    box.show();
+    return app.exec();
 }

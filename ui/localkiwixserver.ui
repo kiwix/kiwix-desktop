@@ -123,7 +123,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="StartServerOptions">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -177,6 +177,17 @@
          </property>
          <property name="flat">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="DarkModeOptions">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <item>
+        <widget class="QCheckBox" name="darkModeCheckbox">
+         <property name="text">
+          <string>Dark Mode</string>
          </property>
         </widget>
        </item>

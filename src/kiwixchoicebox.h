@@ -2,6 +2,7 @@
 #define KIWIXCHOICEBOX_H
 
 #include <QWidget>
+#include <QtWidgets>
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QListWidget>
