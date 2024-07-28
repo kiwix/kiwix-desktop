@@ -22,6 +22,7 @@ public slots:
     void onItemDoubleClicked(QListWidgetItem *item);
     void onItemPressed(QListWidgetItem* item, Qt::MouseButtons buttons);
     void onItemActivated(QListWidgetItem *item, Qt::MouseButtons buttons);
+    void onExport();
 private:
     Ui::readinglistbar *ui;
     int clickKind;

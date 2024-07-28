@@ -461,6 +461,8 @@ void KiwixApp::createActions()
 
     CREATE_ACTION_ONOFF_ICON_SHORTCUT(ToggleReadingListAction, "reading-list-active", "reading-list", gt("reading-list"), QKeySequence(Qt::CTRL | Qt::Key_B));
 
+    CREATE_ACTION(ExportReadingListAction, gt("export-reading-list"));
+
     CREATE_ACTION_ONOFF_ICON_SHORTCUT(ToggleAddBookmarkAction, "star-active", "star", gt("add-bookmark"), QKeySequence(Qt::CTRL | Qt::Key_D));
 
     CREATE_ACTION_SHORTCUTS(ZoomInAction, gt("zoom-in"), QList<QKeySequence>({QKeySequence::ZoomIn, QKeySequence(Qt::CTRL | Qt::Key_Equal)}));

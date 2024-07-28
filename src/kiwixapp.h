@@ -62,6 +62,7 @@ public:
         SettingAction,
         DonateAction,
         ExitAction,
+        ExportReadingListAction,
         MAX_ACTION
     };
 
