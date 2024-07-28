@@ -94,9 +94,9 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
     painter->setPen(pen);
     auto oldFont = painter->font();
     painter->setFont(QFont("Selawik", 8));
-    QRect nRect(x - 10, y - 10, w, h);
+    QRect nRect(x - 20, y - 10, w, h);
     painter->drawText(nRect,Qt::AlignCenter | Qt::AlignJustify, downloadSpeed);
-    QRect fRect(x - 10, y + 10, w, h);
+    QRect fRect(x - 20, y + 10, w, h);
     painter->drawText(fRect,Qt::AlignCenter | Qt::AlignJustify, completedLength);
     painter->setFont(oldFont);
 }
@@ -118,8 +118,8 @@ DownloadControlLayout getDownloadControlLayout(QRect box)
     const int buttonH = h - 40;
 
     DownloadControlLayout dcl;
-    dcl.pauseResumeButtonRect = QRect(x + w/2 + 20, y + 20, buttonW, buttonH);
-    dcl.cancelButtonRect      = QRect(x + w/2 - 20, y + 20, buttonW, buttonH);
+    dcl.pauseResumeButtonRect = QRect(x + w/2 + 10, y + 20, buttonW, buttonH);
+    dcl.cancelButtonRect      = QRect(x + w/2 - 40, y + 20, buttonW, buttonH);
     return dcl;
 }
 
