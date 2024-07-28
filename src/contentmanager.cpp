@@ -849,3 +849,62 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
     m_sortOrderAsc = sortOrderAsc;
     emit(booksChanged());
 }
+
+void ContentManager::setMonitorDirZims(QString monitorDir, Library::QStringSet zimList)
+{
+    m_knownZimsInDir[monitorDir] = zimList;
+}
+
+void ContentManager::asyncUpdateLibraryFromDir(QString dir)
+{
+    (void) QtConcurrent::run([=]() {
+        updateLibraryFromDir(dir);
+    });
+}
+
+void ContentManager::updateLibraryFromDir(QString monitorDir)
+{
+    typedef Library::QStringSet QStringSet;
+
+    QMutexLocker locker(&m_updateFromDirMutex);
+    const QDir dir(monitorDir);
+    const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
+    QStringSet newDirEntries;
+    for (const auto &file : dir.entryList({"*.zim"})) {
+        newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
+    }
+    const QStringSet addedZims = newDirEntries - oldDirEntries;
+    const QStringSet removedZims = oldDirEntries - newDirEntries;
+    const auto kiwixLib = mp_library->getKiwixLibrary();
+    kiwix::Manager manager(kiwixLib);
+    bool needsRefresh = !removedZims.empty();
+    for (auto bookPath : removedZims) {
+        try {
+            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
+            //          << "file disappeared: " << bookPath;
+            const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
+            handleDisappearedZimFile(QString::fromStdString(book.getId()));
+        } catch (...) {}
+    }
+    for (auto bookPath : addedZims) {
+        if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
+            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
+            //          << bookPath
+            //          << " ignored since it is being downloaded by us.";
+        } else {
+            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
+            //          << "file appeared: " << bookPath;
+            needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
+        }
+    }
+    if (needsRefresh) {
+        mp_library->save();
+        emit(booksChanged());
+        setMonitorDirZims(monitorDir, newDirEntries);
+    }
+}
+
+void ContentManager::handleDisappearedZimFile(QString bookId)
+{
+    mp_library->removeBookFromLibraryById(bookId);
+}

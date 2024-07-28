@@ -26,6 +26,8 @@ class Library : public QObject
     Q_OBJECT
     Q_PROPERTY(QStringList bookIds READ getBookIds NOTIFY booksChanged)
 public:
+    typedef QSet<QString> QStringSet;
+
     Library(const QString& libraryDirectory);
     virtual ~Library();
     QString openBookFromPath(const QString& zimPath);
@@ -34,8 +36,7 @@ public:
     QStringList getBookIds() const;
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
     const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return mp_library->getBookmarks(onlyValidBookmarks); }
-    QStringList getLibraryZimsFromDir(QString dir) const;
-    void setMonitorDirZims(QString monitorDir, QStringList zimList);
+    QStringSet getLibraryZimsFromDir(QString dir) const;
     void addBookToLibrary(kiwix::Book& book);
     void addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir);
     bool isBeingDownloadedByUs(QString path) const;
@@ -45,8 +46,6 @@ public:
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
     void save();
-    void updateFromDir(QString dir);
-    void asyncUpdateFromDir(QString dir);
     kiwix::LibraryPtr getKiwixLibrary() { return mp_library; }
 public slots:
     const kiwix::Book& getBookById(QString id) const;
@@ -56,10 +55,8 @@ signals:
     void bookmarksChanged();
 
 private:
-    QMutex m_updateFromDirMutex;
     kiwix::LibraryPtr mp_library;
     QString m_libraryDirectory;
-    QMap<QString, QStringList> m_knownZimsInDir;
 friend class LibraryManipulator;
 };
 
