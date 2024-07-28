@@ -284,6 +284,15 @@ QStringList TabBar::getTabUrls() const {
     return idList;
 }
 
+QStringList TabBar::getTabZimIds() const
+{ 
+    QStringList idList;
+    for (int index = 0; index <= mp_stackedWidget->count(); index++)
+        if (ZimView* zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(index)))
+            idList.push_back(zv->getWebView()->zimId());
+    return idList;
+}
+
 void TabBar::closeTab(int index)
 {
     // The first and last tabs (i.e. the library tab and the + (new tab) button)

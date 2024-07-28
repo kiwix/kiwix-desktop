@@ -50,6 +50,7 @@ public:
     void openFindInPageBar();
     void closeTabsByZimId(const QString &id);
     QStringList getTabUrls() const;
+    QStringList getTabZimIds() const;
 
 protected:
     void mousePressEvent(QMouseEvent *event);

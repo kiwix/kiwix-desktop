@@ -175,5 +175,10 @@
 	"no-details": "A content type for Zim files representing it only has an introduction.",
 	"no-pictures": "A content type for Zim files that does not contain pictures.",
 	"no-videos": "A content type for Zim files that does not contain videos.",
-	"path-was-copied": "Tooltip confirming that the download path from settings was copied."
+	"path-was-copied": "Tooltip confirming that the download path from settings was copied.",
+	"file-not-found-title": "Error title text displayed when the desktop application cannot find the Zim file needed to display the web page.",
+	"file-not-found-text": "Error description text for when the desktop application cannot find the Zim file needed to display the web page.",
+	"zim-id": "The term for the unique identifier of a zim file.",
+	"zim-name": "The term for the name of a Zim file",
+	"zim-path": "The term for the path of a Zim file"
 }

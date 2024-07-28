@@ -906,5 +906,6 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
 
 void ContentManager::handleDisappearedZimFile(QString bookId)
 {
-    mp_library->removeBookFromLibraryById(bookId);
+    if (!KiwixApp::instance()->getTabWidget()->getTabZimIds().contains(bookId))
+        mp_library->removeBookFromLibraryById(bookId);
 }
