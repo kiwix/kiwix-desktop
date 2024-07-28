@@ -168,5 +168,8 @@
     "no-pictures": "No Pictures",
     "no-videos": "No Videos",
     "open-previous-tabs-at-startup": "Open previous tabs at startup",
-    "preview-book-in-web-browser": "Preview book in web browser"
+    "preview-book-in-web-browser": "Preview book in web browser",
+    "file-not-found-title": "ZIM File Not Found",
+    "file-not-found-text": "ZIM file doesn't exist or is not readable",
+    "zim-id": "ZIM Id"
 }

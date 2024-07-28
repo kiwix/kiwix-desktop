@@ -13,6 +13,8 @@ private:
     void handleMetaRequest(QWebEngineUrlRequestJob *request);
     void handleContentRequest(QWebEngineUrlRequestJob *request);
     void handleSearchRequest(QWebEngineUrlRequestJob *request);
+
+    void replyZimNotFoundPage(QWebEngineUrlRequestJob *request, const QString& zimId);
 };
 
 #endif // URLSCHEMEHANDLER_H

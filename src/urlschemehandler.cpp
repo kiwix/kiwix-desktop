@@ -44,7 +44,7 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
     try {
       archive = library->getArchive(zim_id);
     } catch (std::out_of_range& e) {
-      request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+      replyZimNotFoundPage(request, zim_id);
       return;
     }
     try {
@@ -173,6 +173,31 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     QBuffer *buffer = new QBuffer;
     buffer->setData(content.data(), content.size());
     connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
+    request->reply("text/html", buffer);
+}
+
+void
+UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
+                                       const QString &zimId)
+{
+    QBuffer *buffer = new QBuffer;
+    QString contentHtml = "<section><div>"
+                          "<h1>" +
+                          gt("file-not-found-title") +
+                          "</h1>"
+                          "<p>" +
+                          gt("file-not-found-text") +
+                          "</p>"
+                          "<p>" +
+                          gt("zim-id") + ": <b>" + zimId +
+                          "</b></p>"
+                          "</div></section>";
+
+    buffer->open(QIODevice::WriteOnly);
+    buffer->write(contentHtml.toStdString().c_str());
+    buffer->close();
+
+    connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
     request->reply("text/html", buffer);
 }
 
