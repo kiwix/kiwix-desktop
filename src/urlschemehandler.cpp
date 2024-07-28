@@ -181,6 +181,15 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                                        const QString &zimId)
 {
     QBuffer *buffer = new QBuffer;
+    QString path = "N/A", name = "N/A";
+    try 
+    {
+        auto& book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
+        path = QString::fromStdString(book.getPath());
+        name = QString::fromStdString(book.getName());
+    }
+    catch (...) { /* Blank */ }
+
     QString contentHtml = "<section><div>"
                           "<h1>" +
                           gt("file-not-found-title") +
@@ -190,6 +199,12 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                           "</p>"
                           "<p>" +
                           gt("zim-id") + ": <b>" + zimId +
+                          "</b></p>"
+                          "<p>" +
+                          gt("zim-name") + ": <b>" + name +
+                          "</b></p>"
+                          "<p>" +
+                          gt("zim-path") + ": <b>" + path +
                           "</b></p>"
                           "</div></section>";
 

@@ -171,5 +171,7 @@
     "preview-book-in-web-browser": "Preview book in web browser",
     "file-not-found-title": "ZIM File Not Found",
     "file-not-found-text": "ZIM file doesn't exist or is not readable",
-    "zim-id": "ZIM Id"
+    "zim-id": "Zim Id",
+    "zim-name": "Zim Name",
+    "zim-path": "Zim File Path"
 }
