@@ -45,6 +45,7 @@ public:
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
+    bool readBookMarksFile(const std::string& filename);
     void save();
     kiwix::LibraryPtr getKiwixLibrary() { return mp_library; }
 public slots:

@@ -31,7 +31,9 @@ ReadingListBar::ReadingListBar(QWidget *parent) :
 
     auto app = KiwixApp::instance();
     auto exportAction = app->getAction(KiwixApp::ExportReadingListAction);
+    auto importAction = app->getAction(KiwixApp::ImportReadingListAction);
     connect(exportAction, &QAction::triggered, this, &ReadingListBar::onExport);
+    connect(importAction, &QAction::triggered, this, &ReadingListBar::onImport);
     ui->label->setText(gt("reading-list-title"));
 }
 
@@ -120,6 +122,20 @@ void ReadingListBar::onExport()
 
     if (!kiwixLibrary->writeBookmarksToFile(fileName.toStdString()))
         app->showMessage(gt("export-reading-list-error"), gt("error-title"), QMessageBox::Information);
+}
+
+void ReadingListBar::onImport()
+{
+    auto app = KiwixApp::instance();
+    auto library = app->getLibrary();
+    QString fileName = QFileDialog::getOpenFileName(app->getMainWindow(),
+                                                    gt("open-file"),
+                                                    QString(), "(*.xml)");
+    if (fileName.isEmpty())
+        return;
+
+    if (!library->readBookMarksFile(fileName.toStdString()))
+        app->showMessage(gt("import-reading-list-error"), gt("error-title"), QMessageBox::Information);
 }
 
 void ReadingListBar::openUrl(QListWidgetItem* item, bool newTab)
