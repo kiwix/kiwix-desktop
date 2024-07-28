@@ -5,6 +5,7 @@
 #include "zim/item.h"
 
 #include <QListWidgetItem>
+#include <QFileDialog>
 
 ReadingListBar::ReadingListBar(QWidget *parent) :
     QWidget(parent),
@@ -28,6 +29,9 @@ ReadingListBar::ReadingListBar(QWidget *parent) :
 
     setupList();
 
+    auto app = KiwixApp::instance();
+    auto exportAction = app->getAction(KiwixApp::ExportReadingListAction);
+    connect(exportAction, &QAction::triggered, this, &ReadingListBar::onExport);
     ui->label->setText(gt("reading-list-title"));
 }
 
@@ -102,6 +106,20 @@ void ReadingListBar::onItemActivated(QListWidgetItem* item, Qt::MouseButtons but
     if (!buttons) { // clicks are handled elsewhere, handle only the activation key case 
         openUrl(item, true);
     }
+}
+
+void ReadingListBar::onExport()
+{
+    auto app = KiwixApp::instance();
+    auto kiwixLibrary = app->getLibrary()->getKiwixLibrary();
+    QString fileName = QFileDialog::getSaveFileName(app->getMainWindow(),
+                                                    gt("save-file-as-window-title"),
+                                                    "kiwix_readinglist.xml", "(*.xml)");
+    if (fileName.isEmpty())
+        return;
+
+    if (!kiwixLibrary->writeBookmarksToFile(fileName.toStdString()))
+        app->showMessage(gt("export-reading-list-error"), gt("error-title"), QMessageBox::Information);
 }
 
 void ReadingListBar::openUrl(QListWidgetItem* item, bool newTab)

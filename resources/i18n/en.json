@@ -173,5 +173,7 @@
     "file-not-found-text": "ZIM file doesn't exist or is not readable",
     "zim-id": "Zim Id",
     "zim-name": "Zim Name",
-    "zim-path": "Zim File Path"
+    "zim-path": "Zim File Path",
+    "export-reading-list": "Export reading list",
+    "export-reading-list-error": "An error has occured during export of the reading list."
 }
