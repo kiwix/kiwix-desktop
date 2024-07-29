@@ -22,6 +22,12 @@
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
 
+#ifndef QT_NO_DEBUG
+#define DBGOUT(X) qDebug() << "DBG: " << X
+#else
+#define DBGOUT(X)
+#endif
+
 namespace
 {
 
@@ -876,20 +882,19 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
     bool needsRefresh = !removedZims.empty();
     for (auto bookPath : removedZims) {
         try {
-            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
-            //          << "file disappeared: " << bookPath;
+            DBGOUT("ContentManager::updateLibraryFromDir(): "
+                    << "file disappeared: " << bookPath);
             const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
             handleDisappearedZimFile(QString::fromStdString(book.getId()));
         } catch (...) {}
     }
     for (auto bookPath : addedZims) {
         if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
-            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
-            //          << bookPath
-            //          << " ignored since it is being downloaded by us.";
+            DBGOUT("ContentManager::updateLibraryFromDir(): " << bookPath
+                    << " ignored since it is being downloaded by us.");
         } else {
-            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
-            //          << "file appeared: " << bookPath;
+            DBGOUT("ContentManager::updateLibraryFromDir(): "
+                   << "file appeared: " << bookPath);
             needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
         }
     }
