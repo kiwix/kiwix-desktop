@@ -918,7 +918,8 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
     if (!removedZims.empty() || !successfullyAddedZims.empty()) {
         mp_library->save();
         emit(booksChanged());
-        setMonitorDirZims(monitorDir, zimsInDir);
+        const QStringSet problematicZims = zimsNotInLib - successfullyAddedZims;
+        setMonitorDirZims(monitorDir, zimsInDir - problematicZims);
     }
 }
 
