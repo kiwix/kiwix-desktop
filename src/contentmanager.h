@@ -19,6 +19,7 @@ public: // types
     typedef QList<QPair<QString, QString>> FilterList;
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
+    typedef Library::QStringSet QStringSet;
 
     enum class BookState
     {
@@ -69,7 +70,7 @@ public: // functions
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
 
-    void setMonitorDirZims(QString monitorDir, Library::QStringSet zimList);
+    void setMonitorDirZims(QString monitorDir, QStringSet zimList);
     void asyncUpdateLibraryFromDir(QString dir);
 
 signals:
@@ -117,6 +118,7 @@ private: // functions
     void setCategories();
     void setLanguages();
     void updateLibraryFromDir(QString dir);
+    void handleDisappearedZimFiles(const QStringSet& zimPaths);
     void handleDisappearedZimFile(QString bookId);
 
     // Get the book with the specified id from
@@ -148,7 +150,7 @@ private: // data
     QMutex remoteLibraryLocker;
 
     QMutex m_updateFromDirMutex;
-    QMap<QString, Library::QStringSet> m_knownZimsInDir;
+    QMap<QString, QStringSet> m_knownZimsInDir;
 };
 
 #endif // CONTENTMANAGER_H

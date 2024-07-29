@@ -864,6 +864,21 @@ void ContentManager::asyncUpdateLibraryFromDir(QString dir)
     });
 }
 
+void ContentManager::handleDisappearedZimFiles(const QStringSet& zimPaths)
+{
+    const auto kiwixLib = mp_library->getKiwixLibrary();
+    for (auto bookPath : zimPaths) {
+        try {
+            DBGOUT("directory monitoring: file disappeared: " << bookPath);
+            const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
+            handleDisappearedZimFile(QString::fromStdString(book.getId()));
+        } catch (const std::exception& err) {
+            DBGOUT("directory monitoring: "
+                   "error while dropping the disappeared book: " << err.what());
+        }
+    }
+}
+
 void ContentManager::updateLibraryFromDir(QString monitorDir)
 {
     typedef Library::QStringSet QStringSet;
@@ -880,25 +895,17 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
     const auto kiwixLib = mp_library->getKiwixLibrary();
     kiwix::Manager manager(kiwixLib);
     bool needsRefresh = !removedZims.empty();
-    for (auto bookPath : removedZims) {
-        try {
-            DBGOUT("ContentManager::updateLibraryFromDir(): "
-                    << "file disappeared: " << bookPath);
-            const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
-            handleDisappearedZimFile(QString::fromStdString(book.getId()));
-        } catch (...) {}
-    }
+    handleDisappearedZimFiles(removedZims);
     for (auto bookPath : addedZims) {
         if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
-            DBGOUT("ContentManager::updateLibraryFromDir(): " << bookPath
+            DBGOUT("directory monitoring: " << bookPath
                     << " ignored since it is being downloaded by us.");
         } else {
-            DBGOUT("ContentManager::updateLibraryFromDir(): "
-                   << "file appeared: " << bookPath);
+            DBGOUT("directory monitoring: file appeared: " << bookPath);
             const bool added = manager.addBookFromPath(bookPath.toStdString());
-            DBGOUT("                                        "
+            DBGOUT("                     "
                    << (added ? "and was added" : "but could not be added")
-                   << " to the library");
+                   << "to the library");
             needsRefresh |= added;
         }
     }
