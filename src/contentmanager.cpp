@@ -895,7 +895,11 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
         } else {
             DBGOUT("ContentManager::updateLibraryFromDir(): "
                    << "file appeared: " << bookPath);
-            needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
+            const bool added = manager.addBookFromPath(bookPath.toStdString());
+            DBGOUT("                                        "
+                   << (added ? "and was added" : "but could not be added")
+                   << " to the library");
+            needsRefresh |= added;
         }
     }
     if (needsRefresh) {
