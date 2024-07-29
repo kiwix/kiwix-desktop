@@ -906,19 +906,19 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
 {
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(monitorDir);
-    const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
-    QStringSet newDirEntries;
+    const QStringSet zimsPresentInLib = m_knownZimsInDir[monitorDir];
+    QStringSet zimsInDir;
     for (const auto &file : dir.entryList({"*.zim"})) {
-        newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
+        zimsInDir.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
     }
-    const QStringSet addedZims = newDirEntries - oldDirEntries;
-    const QStringSet removedZims = oldDirEntries - newDirEntries;
+    const QStringSet zimsNotInLib = zimsInDir - zimsPresentInLib;
+    const QStringSet removedZims = zimsPresentInLib - zimsInDir;
     handleDisappearedZimFiles(removedZims);
-    const auto successfullyAddedZims = handleNewZimFiles(addedZims);
+    const auto successfullyAddedZims = handleNewZimFiles(zimsNotInLib);
     if (!removedZims.empty() || !successfullyAddedZims.empty()) {
         mp_library->save();
         emit(booksChanged());
-        setMonitorDirZims(monitorDir, newDirEntries);
+        setMonitorDirZims(monitorDir, zimsInDir);
     }
 }
 
