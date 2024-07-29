@@ -879,10 +879,27 @@ void ContentManager::handleDisappearedZimFiles(const QStringSet& zimPaths)
     }
 }
 
+ContentManager::QStringSet ContentManager::handleNewZimFiles(const QStringSet& zimPaths)
+{
+    QStringSet successfullyAddedZims;
+    const auto kiwixLib = mp_library->getKiwixLibrary();
+    kiwix::Manager manager(kiwixLib);
+    for (auto bookPath : zimPaths) {
+        DBGOUT("directory monitoring: file appeared: " << bookPath);
+        if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
+            DBGOUT("                      it is being downloaded by us, ignoring...");
+        } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
+            DBGOUT("                      and was added to the library");
+            successfullyAddedZims.insert(bookPath);
+        } else {
+            DBGOUT("                      but could not be added to the library");
+        }
+    }
+    return successfullyAddedZims;
+}
+
 void ContentManager::updateLibraryFromDir(QString monitorDir)
 {
-    typedef Library::QStringSet QStringSet;
-
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(monitorDir);
     const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
@@ -892,24 +909,9 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
     }
     const QStringSet addedZims = newDirEntries - oldDirEntries;
     const QStringSet removedZims = oldDirEntries - newDirEntries;
-    const auto kiwixLib = mp_library->getKiwixLibrary();
-    kiwix::Manager manager(kiwixLib);
-    bool needsRefresh = !removedZims.empty();
     handleDisappearedZimFiles(removedZims);
-    for (auto bookPath : addedZims) {
-        if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
-            DBGOUT("directory monitoring: " << bookPath
-                    << " ignored since it is being downloaded by us.");
-        } else {
-            DBGOUT("directory monitoring: file appeared: " << bookPath);
-            const bool added = manager.addBookFromPath(bookPath.toStdString());
-            DBGOUT("                     "
-                   << (added ? "and was added" : "but could not be added")
-                   << " to the library");
-            needsRefresh |= added;
-        }
-    }
-    if (needsRefresh) {
+    const auto successfullyAddedZims = handleNewZimFiles(addedZims);
+    if (!removedZims.empty() || !successfullyAddedZims.empty()) {
         mp_library->save();
         emit(booksChanged());
         setMonitorDirZims(monitorDir, newDirEntries);
