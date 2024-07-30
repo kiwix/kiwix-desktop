@@ -119,8 +119,8 @@ private: // functions
     void setLanguages();
     void updateLibraryFromDir(QString dir);
     void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
-    QStringSet handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
-    void handleDisappearedZimFile(QString bookId);
+    size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    bool handleDisappearedBook(QString bookId);
 
     // Get the book with the specified id from
     // the remote or local library (in that order).
