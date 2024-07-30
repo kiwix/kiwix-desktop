@@ -71,7 +71,6 @@ public: // functions
     LanguageList getLanguages() const { return m_languages; }
 
     void setMonitoredDirectories(QStringSet dirList);
-    void asyncUpdateLibraryFromDir(QString dir);
 
 signals:
     void filterParamsChanged();
@@ -117,6 +116,7 @@ private: // functions
     void updateModel();
     void setCategories();
     void setLanguages();
+    void asyncUpdateLibraryFromDir(QString dir);
     void updateLibraryFromDir(QString dir);
     void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
     size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
