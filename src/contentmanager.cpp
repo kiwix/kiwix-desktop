@@ -867,24 +867,30 @@ void ContentManager::asyncUpdateLibraryFromDir(QString dir)
 void ContentManager::handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
     const auto kiwixLib = mp_library->getKiwixLibrary();
+    auto& zimsInDir = m_knownZimsInDir[dirPath];
     for (const auto& file : fileNames) {
         const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
         try {
             DBGOUT("directory monitoring: file disappeared: " << bookPath);
             const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
-            handleDisappearedZimFile(QString::fromStdString(book.getId()));
+            if ( handleDisappearedBook(QString::fromStdString(book.getId())) ) {
+                zimsInDir.remove(file);
+            }
         } catch (const std::exception& err) {
             DBGOUT("directory monitoring: "
                    "error while dropping the disappeared book: " << err.what());
+            // the book was removed by the user via the UI
+            zimsInDir.remove(file);
         }
     }
 }
 
-ContentManager::QStringSet ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames)
+size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
-    QStringSet successfullyAddedZims;
+    size_t countOfSuccessfullyAddedZims = 0;
     const auto kiwixLib = mp_library->getKiwixLibrary();
     kiwix::Manager manager(kiwixLib);
+    auto& zimsInDir = m_knownZimsInDir[dirPath];
     for (const auto& file : fileNames) {
         const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
         DBGOUT("directory monitoring: file appeared: " << bookPath);
@@ -892,12 +898,13 @@ ContentManager::QStringSet ContentManager::handleNewZimFiles(const QString& dirP
             DBGOUT("                      it is being downloaded by us, ignoring...");
         } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
             DBGOUT("                      and was added to the library");
-            successfullyAddedZims.insert(file);
+            zimsInDir.insert(file);
+            ++countOfSuccessfullyAddedZims;
         } else {
             DBGOUT("                      but could not be added to the library");
         }
     }
-    return successfullyAddedZims;
+    return countOfSuccessfullyAddedZims;
 }
 
 void ContentManager::updateLibraryFromDir(QString dirPath)
@@ -914,17 +921,18 @@ void ContentManager::updateLibraryFromDir(QString dirPath)
     const QStringSet zimsNotInLib = zimsInDir - zimsPresentInLib;
     const QStringSet removedZims = zimsPresentInLib - zimsInDir;
     handleDisappearedZimFiles(dirPath, removedZims);
-    const auto successfullyAddedZims = handleNewZimFiles(dirPath, zimsNotInLib);
-    if (!removedZims.empty() || !successfullyAddedZims.empty()) {
+    const auto countOfAddedZims = handleNewZimFiles(dirPath, zimsNotInLib);
+    if (!removedZims.empty() || countOfAddedZims != 0) {
         mp_library->save();
         emit(booksChanged());
-        const QStringSet problematicZims = zimsNotInLib - successfullyAddedZims;
-        setMonitorDirZims(dirPath, zimsInDir - problematicZims);
     }
 }
 
-void ContentManager::handleDisappearedZimFile(QString bookId)
+bool ContentManager::handleDisappearedBook(QString bookId)
 {
-    if (!KiwixApp::instance()->getTabWidget()->getTabZimIds().contains(bookId))
-        mp_library->removeBookFromLibraryById(bookId);
+    if ( KiwixApp::instance()->getTabWidget()->getTabZimIds().contains(bookId) )
+        return false;
+
+    mp_library->removeBookFromLibraryById(bookId);
+    return true;
 }
