@@ -119,21 +119,6 @@ void KiwixApp::setupDirectoryMonitoring()
     mp_manager->setMonitoredDirectories(dirList);
 }
 
-void ContentManager::setMonitoredDirectories(QStringSet dirList)
-{
-    for (auto path : m_watcher.directories()) {
-        m_watcher.removePath(path);
-    }
-    for (auto dir : dirList) {
-        if (dir != "") {
-            const auto zimsInDir = mp_library->getLibraryZimsFromDir(dir);
-            setMonitorDirZims(dir, zimsInDir);
-            m_watcher.addPath(dir);
-            asyncUpdateLibraryFromDir(dir);
-        }
-    }
-}
-
 KiwixApp::~KiwixApp()
 {
     m_server.stop();
