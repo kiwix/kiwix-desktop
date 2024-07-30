@@ -864,6 +864,7 @@ void ContentManager::setMonitoredDirectories(QStringSet dirList)
     for (auto path : m_watcher.directories()) {
         m_watcher.removePath(path);
     }
+    m_knownZimsInDir.clear();
     for (auto dir : dirList) {
         if (dir != "") {
             m_knownZimsInDir[dir] = mp_library->getLibraryZimsFromDir(dir);
