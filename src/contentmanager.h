@@ -118,8 +118,8 @@ private: // functions
     void setCategories();
     void setLanguages();
     void updateLibraryFromDir(QString dir);
-    void handleDisappearedZimFiles(const QStringSet& zimPaths);
-    QStringSet handleNewZimFiles(const QStringSet& zimPaths);
+    void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    QStringSet handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
     void handleDisappearedZimFile(QString bookId);
 
     // Get the book with the specified id from
