@@ -859,11 +859,6 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
 // Directory monitoring stuff
 ////////////////////////////////////////////////////////////////////////////////
 
-void ContentManager::setMonitorDirZims(QString monitorDir, Library::QStringSet zimList)
-{
-    m_knownZimsInDir[monitorDir] = zimList;
-}
-
 void ContentManager::setMonitoredDirectories(QStringSet dirList)
 {
     for (auto path : m_watcher.directories()) {
@@ -871,8 +866,7 @@ void ContentManager::setMonitoredDirectories(QStringSet dirList)
     }
     for (auto dir : dirList) {
         if (dir != "") {
-            const auto zimsInDir = mp_library->getLibraryZimsFromDir(dir);
-            setMonitorDirZims(dir, zimsInDir);
+            m_knownZimsInDir[dir] = mp_library->getLibraryZimsFromDir(dir);
             m_watcher.addPath(dir);
             asyncUpdateLibraryFromDir(dir);
         }

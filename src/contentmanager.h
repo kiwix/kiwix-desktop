@@ -71,7 +71,6 @@ public: // functions
     LanguageList getLanguages() const { return m_languages; }
 
     void setMonitoredDirectories(QStringSet dirList);
-    void setMonitorDirZims(QString monitorDir, QStringSet zimList);
     void asyncUpdateLibraryFromDir(QString dir);
 
 signals:
