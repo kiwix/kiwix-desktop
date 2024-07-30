@@ -104,9 +104,6 @@ void KiwixApp::init()
             this->openZimFile(message);
         }
     });
-    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this, [=](QString monitorDir) {
-        mp_manager->asyncUpdateLibraryFromDir(monitorDir);
-    });
 
     /* Restore Tabs before directory monitoring to ensure we know what tabs user had. */
     restoreTabs();
@@ -119,20 +116,20 @@ void KiwixApp::setupDirectoryMonitoring()
     QString monitorDir = m_settingsManager.getMonitorDir();
     QString downloadDir = m_settingsManager.getDownloadDir();
     auto dirList = QSet<QString>({monitorDir, downloadDir});
-    setMonitoredDirectories(dirList);
+    mp_manager->setMonitoredDirectories(dirList);
 }
 
-void KiwixApp::setMonitoredDirectories(QSet<QString> dirList)
+void ContentManager::setMonitoredDirectories(QStringSet dirList)
 {
     for (auto path : m_watcher.directories()) {
         m_watcher.removePath(path);
     }
     for (auto dir : dirList) {
         if (dir != "") {
-            const auto zimsInDir = m_library.getLibraryZimsFromDir(dir);
-            mp_manager->setMonitorDirZims(dir, zimsInDir);
+            const auto zimsInDir = mp_library->getLibraryZimsFromDir(dir);
+            setMonitorDirZims(dir, zimsInDir);
             m_watcher.addPath(dir);
-            mp_manager->asyncUpdateLibraryFromDir(dir);
+            asyncUpdateLibraryFromDir(dir);
         }
     }
 }

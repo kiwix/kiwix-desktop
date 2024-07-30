@@ -70,6 +70,7 @@ public: // functions
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
 
+    void setMonitoredDirectories(QStringSet dirList);
     void setMonitorDirZims(QString monitorDir, QStringSet zimList);
     void asyncUpdateLibraryFromDir(QString dir);
 
@@ -150,6 +151,7 @@ private: // data
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
 
+    QFileSystemWatcher m_watcher;
     QMutex m_updateFromDirMutex;
     QMap<QString, QStringSet> m_knownZimsInDir;
 };

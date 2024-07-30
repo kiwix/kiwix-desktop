@@ -118,6 +118,9 @@ ContentManager::ContentManager(Library* library)
     if ( DownloadManager::downloadingFunctionalityAvailable() ) {
         startDownloadUpdaterThread();
     }
+
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged,
+            this, &ContentManager::asyncUpdateLibraryFromDir);
 }
 
 void ContentManager::updateModel()

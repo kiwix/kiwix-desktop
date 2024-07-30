@@ -122,13 +122,11 @@ private:
     std::shared_ptr<kiwix::UpdatableNameMapper> mp_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
-    QFileSystemWatcher m_watcher;
     QSettings* mp_session;
 
     QAction*     mpa_actions[MAX_ACTION];
 
     void setupDirectoryMonitoring();
-    void setMonitoredDirectories(QSet<QString> dirList);
     QString findLibraryDirectory();
     void restoreTabs();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
