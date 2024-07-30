@@ -864,10 +864,11 @@ void ContentManager::asyncUpdateLibraryFromDir(QString dir)
     });
 }
 
-void ContentManager::handleDisappearedZimFiles(const QStringSet& zimPaths)
+void ContentManager::handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
     const auto kiwixLib = mp_library->getKiwixLibrary();
-    for (auto bookPath : zimPaths) {
+    for (const auto& file : fileNames) {
+        const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
         try {
             DBGOUT("directory monitoring: file disappeared: " << bookPath);
             const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
@@ -879,18 +880,19 @@ void ContentManager::handleDisappearedZimFiles(const QStringSet& zimPaths)
     }
 }
 
-ContentManager::QStringSet ContentManager::handleNewZimFiles(const QStringSet& zimPaths)
+ContentManager::QStringSet ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
     QStringSet successfullyAddedZims;
     const auto kiwixLib = mp_library->getKiwixLibrary();
     kiwix::Manager manager(kiwixLib);
-    for (auto bookPath : zimPaths) {
+    for (const auto& file : fileNames) {
+        const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
         DBGOUT("directory monitoring: file appeared: " << bookPath);
         if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
             DBGOUT("                      it is being downloaded by us, ignoring...");
         } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
             DBGOUT("                      and was added to the library");
-            successfullyAddedZims.insert(bookPath);
+            successfullyAddedZims.insert(file);
         } else {
             DBGOUT("                      but could not be added to the library");
         }
@@ -906,13 +908,13 @@ void ContentManager::updateLibraryFromDir(QString dirPath)
 
     QStringSet zimsInDir;
     for (const auto &file : dir.entryList({"*.zim"})) {
-        zimsInDir.insert(QDir::toNativeSeparators(dirPath + "/" + file));
+        zimsInDir.insert(file);
     }
 
     const QStringSet zimsNotInLib = zimsInDir - zimsPresentInLib;
     const QStringSet removedZims = zimsPresentInLib - zimsInDir;
-    handleDisappearedZimFiles(removedZims);
-    const auto successfullyAddedZims = handleNewZimFiles(zimsNotInLib);
+    handleDisappearedZimFiles(dirPath, removedZims);
+    const auto successfullyAddedZims = handleNewZimFiles(dirPath, zimsNotInLib);
     if (!removedZims.empty() || !successfullyAddedZims.empty()) {
         mp_library->save();
         emit(booksChanged());
