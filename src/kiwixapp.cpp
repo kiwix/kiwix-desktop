@@ -119,6 +119,14 @@ void KiwixApp::setupDirectoryMonitoring()
     QString monitorDir = m_settingsManager.getMonitorDir();
     QString downloadDir = m_settingsManager.getDownloadDir();
     auto dirList = QSet<QString>({monitorDir, downloadDir});
+    setMonitoredDirectories(dirList);
+}
+
+void KiwixApp::setMonitoredDirectories(QSet<QString> dirList)
+{
+    for (auto path : m_watcher.directories()) {
+        m_watcher.removePath(path);
+    }
     for (auto dir : dirList) {
         if (dir != "") {
             const auto zimsInDir = m_library.getLibraryZimsFromDir(dir);
@@ -345,9 +353,6 @@ bool KiwixApp::isCurrentArticleBookmarked()
 
 void KiwixApp::setMonitorDir(const QString &dir) {
     m_settingsManager.setMonitorDir(dir);
-    for (auto path : m_watcher.directories()) {
-        m_watcher.removePath(path);
-    }
     setupDirectoryMonitoring();
 }
 

@@ -128,6 +128,7 @@ private:
     QAction*     mpa_actions[MAX_ACTION];
 
     void setupDirectoryMonitoring();
+    void setMonitoredDirectories(QSet<QString> dirList);
     QString findLibraryDirectory();
     void restoreTabs();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
