@@ -864,6 +864,21 @@ void ContentManager::setMonitorDirZims(QString monitorDir, Library::QStringSet z
     m_knownZimsInDir[monitorDir] = zimList;
 }
 
+void ContentManager::setMonitoredDirectories(QStringSet dirList)
+{
+    for (auto path : m_watcher.directories()) {
+        m_watcher.removePath(path);
+    }
+    for (auto dir : dirList) {
+        if (dir != "") {
+            const auto zimsInDir = mp_library->getLibraryZimsFromDir(dir);
+            setMonitorDirZims(dir, zimsInDir);
+            m_watcher.addPath(dir);
+            asyncUpdateLibraryFromDir(dir);
+        }
+    }
+}
+
 void ContentManager::asyncUpdateLibraryFromDir(QString dir)
 {
     (void) QtConcurrent::run([=]() {
