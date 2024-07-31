@@ -859,19 +859,8 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
     emit(booksChanged());
 }
 
-namespace
-{
-
-QDateTime getLastModifiedTime(QString dir, QString fileName)
-{
-    const auto filePath = QDir::toNativeSeparators(dir + "/" + fileName);
-    return QFileInfo(filePath).lastModified();
-}
-
-} // unnamed namespace
-
-ContentManager::ZimFileInfo::ZimFileInfo(QString dirPath, QString fname, bool isInLib)
-    : lastModified(getLastModifiedTime(dirPath, fname))
+ContentManager::ZimFileInfo::ZimFileInfo(QString filePath, bool isInLib)
+    : lastModified(QFileInfo(filePath).lastModified())
     , isInLibrary(isInLib)
 {}
 
@@ -885,7 +874,8 @@ void ContentManager::setMonitoredDirectories(QStringSet dirList)
         if (dir != "") {
             auto& zimsInDir = m_knownZimsInDir[dir];
             for ( const auto& fname : mp_library->getLibraryZimsFromDir(dir) ) {
-                zimsInDir.insert(fname, ZimFileInfo(dir, fname, true));
+                const auto fpath = QDir::toNativeSeparators(dir + "/" + fname);
+                zimsInDir.insert(fname, ZimFileInfo(fpath, true));
             }
             m_watcher.addPath(dir);
             asyncUpdateLibraryFromDir(dir);
@@ -922,13 +912,12 @@ void ContentManager::handleDisappearedZimFiles(const QString& dirPath, const QSt
 size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
     size_t countOfSuccessfullyAddedZims = 0;
-    const auto kiwixLib = mp_library->getKiwixLibrary();
-    kiwix::Manager manager(kiwixLib);
+    kiwix::Manager manager(mp_library->getKiwixLibrary());
     auto& zimsInDir = m_knownZimsInDir[dirPath];
     for (const auto& file : fileNames) {
         const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
 
-        ZimFileInfo zimFileInfo(dirPath, file, false);
+        ZimFileInfo zimFileInfo(bookPath, false);
         const auto fileInfoEntry = zimsInDir.constFind(file);
         if ( fileInfoEntry != zimsInDir.end() &&
              fileInfoEntry.value().lastModified == zimFileInfo.lastModified ) {

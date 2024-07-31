@@ -111,7 +111,7 @@ public slots:
 private: // types
     struct ZimFileInfo
     {
-        ZimFileInfo(QString dirPath, QString fname, bool isInLib);
+        ZimFileInfo(QString filePath, bool isInLib);
 
         QDateTime lastModified;
         bool isInLibrary;
