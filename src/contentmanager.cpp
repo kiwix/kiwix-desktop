@@ -927,16 +927,29 @@ size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSe
     auto& zimsInDir = m_knownZimsInDir[dirPath];
     for (const auto& file : fileNames) {
         const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
-        DBGOUT("directory monitoring: file appeared: " << bookPath);
+
+        ZimFileInfo zimFileInfo(dirPath, file, false);
+        const auto fileInfoEntry = zimsInDir.constFind(file);
+        if ( fileInfoEntry != zimsInDir.end() &&
+             fileInfoEntry.value().lastModified == zimFileInfo.lastModified ) {
+            DBGOUT("directory monitoring: bad zim file unchanged:" << bookPath);
+            continue;
+        }
+
+        DBGOUT("directory monitoring: file appeared or changed: " << bookPath);
         if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
             DBGOUT("                      it is being downloaded by us, ignoring...");
-        } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
-            DBGOUT("                      and was added to the library");
-            zimsInDir.insert(file, ZimFileInfo(dirPath, file, true));
-            ++countOfSuccessfullyAddedZims;
-        } else {
-            DBGOUT("                      but could not be added to the library");
+            continue;
         }
+
+        const bool addedToLib = manager.addBookFromPath(bookPath.toStdString());
+        zimFileInfo.isInLibrary = addedToLib;
+        zimsInDir.insert(file, zimFileInfo);
+        countOfSuccessfullyAddedZims += zimFileInfo.isInLibrary;
+        DBGOUT((zimFileInfo.isInLibrary
+                ? "                      and was added to the library"
+                : "                      but could not be added to the library"
+        ));
     }
     return countOfSuccessfullyAddedZims;
 }
