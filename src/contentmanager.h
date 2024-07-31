@@ -132,6 +132,7 @@ private: // functions
     void updateModel();
     void setCategories();
     void setLanguages();
+    QStringSet getLibraryZims(QString dirPath) const;
     void asyncUpdateLibraryFromDir(QString dir);
     void updateLibraryFromDir(QString dir);
     void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);

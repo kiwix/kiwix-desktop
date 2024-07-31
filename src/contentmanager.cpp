@@ -951,11 +951,16 @@ int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
     }
 }
 
+ContentManager::QStringSet ContentManager::getLibraryZims(QString dirPath) const
+{
+    return m_knownZimsInDir[dirPath];
+}
+
 void ContentManager::updateLibraryFromDir(QString dirPath)
 {
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(dirPath);
-    const QStringSet zimsPresentInLib = m_knownZimsInDir[dirPath];
+    const QStringSet zimsPresentInLib = getLibraryZims(dirPath);
 
     QStringSet zimsInDir;
     for (const auto &file : dir.entryList({"*.zim"})) {
