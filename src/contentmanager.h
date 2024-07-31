@@ -120,6 +120,7 @@ private: // functions
     void updateLibraryFromDir(QString dir);
     void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
     size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    int handleZimFileInMonitoredDir(QString dirPath, QString fileName);
     bool handleDisappearedBook(QString bookId);
 
     // Get the book with the specified id from

@@ -905,10 +905,18 @@ void ContentManager::handleDisappearedZimFiles(const QString& dirPath, const QSt
 size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
     size_t countOfSuccessfullyAddedZims = 0;
+    for (const auto& file : fileNames) {
+        const bool addedToLib = handleZimFileInMonitoredDir(dirPath, file);
+        countOfSuccessfullyAddedZims += addedToLib;
+    }
+    return countOfSuccessfullyAddedZims;
+}
+
+int ContentManager::handleZimFileInMonitoredDir(QString dirPath, QString file)
+{
     const auto kiwixLib = mp_library->getKiwixLibrary();
     kiwix::Manager manager(kiwixLib);
     auto& zimsInDir = m_knownZimsInDir[dirPath];
-    for (const auto& file : fileNames) {
         const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
         DBGOUT("directory monitoring: file appeared: " << bookPath);
         if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
@@ -916,12 +924,11 @@ size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSe
         } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
             DBGOUT("                      and was added to the library");
             zimsInDir.insert(file);
-            ++countOfSuccessfullyAddedZims;
+            return 1;
         } else {
             DBGOUT("                      but could not be added to the library");
         }
-    }
-    return countOfSuccessfullyAddedZims;
+    return 0;
 }
 
 void ContentManager::updateLibraryFromDir(QString dirPath)
