@@ -108,6 +108,17 @@ public slots:
     void downloadWasCancelled(const QString& id);
     void handleError(QString errSummary, QString errDetails);
 
+private: // types
+    struct ZimFileInfo
+    {
+        ZimFileInfo(QString dirPath, QString fname, bool isInLib);
+
+        QDateTime lastModified;
+        bool isInLibrary;
+    };
+
+    typedef QMap<QString, ZimFileInfo> ZimFileName2InfoMap;
+
 private: // functions
     QStringList getBookIds();
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
@@ -153,7 +164,7 @@ private: // data
 
     QFileSystemWatcher m_watcher;
     QMutex m_updateFromDirMutex;
-    QMap<QString, QStringSet> m_knownZimsInDir;
+    QMap<QString, ZimFileName2InfoMap> m_knownZimsInDir;
 };
 
 #endif // CONTENTMANAGER_H
