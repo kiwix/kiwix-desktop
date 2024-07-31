@@ -922,11 +922,16 @@ size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSe
     return countOfSuccessfullyAddedZims;
 }
 
+ContentManager::QStringSet ContentManager::getLibraryZims(QString dirPath) const
+{
+    return m_knownZimsInDir[dirPath];
+}
+
 void ContentManager::updateLibraryFromDir(QString dirPath)
 {
     QMutexLocker locker(&m_updateFromDirMutex);
     const QDir dir(dirPath);
-    const QStringSet zimsPresentInLib = m_knownZimsInDir[dirPath];
+    const QStringSet zimsPresentInLib = getLibraryZims(dirPath);
     const QStringList zimsInDirList = dir.entryList({"*.zim"});
     const QStringSet zimsInDir(zimsInDirList.begin(), zimsInDirList.end());
     const QStringSet zimsNotInLib = zimsInDir - zimsPresentInLib;
