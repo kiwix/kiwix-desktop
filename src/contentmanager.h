@@ -19,6 +19,7 @@ public: // types
     typedef QList<QPair<QString, QString>> FilterList;
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
+    typedef Library::QStringSet QStringSet;
 
     enum class BookState
     {
@@ -69,8 +70,7 @@ public: // functions
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
 
-    void setMonitorDirZims(QString monitorDir, Library::QStringSet zimList);
-    void asyncUpdateLibraryFromDir(QString dir);
+    void setMonitoredDirectories(QStringSet dirList);
 
 signals:
     void filterParamsChanged();
@@ -108,6 +108,17 @@ public slots:
     void downloadWasCancelled(const QString& id);
     void handleError(QString errSummary, QString errDetails);
 
+private: // types
+    struct ZimFileInfo
+    {
+        ZimFileInfo(QString filePath, bool isInLib);
+
+        QDateTime lastModified;
+        bool isInLibrary;
+    };
+
+    typedef QMap<QString, ZimFileInfo> ZimFileName2InfoMap;
+
 private: // functions
     QStringList getBookIds();
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
@@ -116,8 +127,12 @@ private: // functions
     void updateModel();
     void setCategories();
     void setLanguages();
+    QStringSet getLibraryZims(QString dirPath) const;
+    void asyncUpdateLibraryFromDir(QString dir);
     void updateLibraryFromDir(QString dir);
-    void handleDisappearedZimFile(QString bookId);
+    void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    bool handleDisappearedBook(QString bookId);
 
     // Get the book with the specified id from
     // the remote or local library (in that order).
@@ -147,8 +162,9 @@ private: // data
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
 
+    QFileSystemWatcher m_watcher;
     QMutex m_updateFromDirMutex;
-    QMap<QString, Library::QStringSet> m_knownZimsInDir;
+    QMap<QString, ZimFileName2InfoMap> m_knownZimsInDir;
 };
 
 #endif // CONTENTMANAGER_H

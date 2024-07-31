@@ -118,7 +118,6 @@ private:
     std::shared_ptr<kiwix::UpdatableNameMapper> mp_nameMapper;
     kiwix::Server m_server;
     Translation m_translation;
-    QFileSystemWatcher m_watcher;
     QSettings* mp_session;
 
     QAction*     mpa_actions[MAX_ACTION];
