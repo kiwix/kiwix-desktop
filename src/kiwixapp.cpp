@@ -389,6 +389,10 @@ void KiwixApp::createActions()
     DISABLE_ACTION(HistoryBackAction);
     DISABLE_ACTION(HistoryForwardAction);
 
+    CREATE_ACTION_SHORTCUT(ReadArticleAction, gt("read-article"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_N));
+
+    CREATE_ACTION_SHORTCUT(ReadTextAction, gt("read-text"), QKeySequence(Qt::CTRL | Qt::Key_N));
+
     CREATE_ACTION_ICON_SHORTCUT(PrintAction, "print", gt("print"), QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
             this, &KiwixApp::printPage);

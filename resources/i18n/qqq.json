@@ -152,6 +152,7 @@
 	"move-files-to-trash-text": "Description text for the action of moving ZIM files to trash, similar to deleting them.",
 	"perma-delete-files-text": "Description text for the action of permanently deleting ZIM files.",
 	"clear-filter": "Represents the action of clearing the filters selected for a filter type.",
+<<<<<<< HEAD
 	"language-searcher-placeholder": "Placeholder text displayed to indicate the ZIM file searcher will filter by language",
 	"category-searcher-placeholder": "Placeholder text displayed to indicate the ZIM file searcher will filter by category",
 	"content-type-searcher-placeholder": "Placeholder text displayed to indicate the ZIM file searcher will filter by content type",
@@ -176,5 +177,7 @@
 	"save-page-as": "Represents the action of saving the current tab content to a file chosen by the user.",
 	"portable-disabled-tooltip": "Tooltip used to explain disabled components in the portable version.",
 	"scroll-next-tab": "Represents the action of scrolling to the next tab of the current tab which toward the end of the tab bar.",
-	"scroll-previous-tab": "Represents the action of scrolling to the previous tab of the current tab which toward the start of the tab bar."
+	"scroll-previous-tab": "Represents the action of scrolling to the previous tab of the current tab which toward the start of the tab bar.",
+	"read-article": "Represents the action of letting the computer read out all the text in the current article.",
+	"read-text": "Represents the action of letting the computer read out the selected text on the article."
 }
