@@ -3,21 +3,42 @@
 #include <QAction>
 #include <QVBoxLayout>
 #include <QToolTip>
+#if defined(QT_TEXTTOSPEECH_LIB) && QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+#include "texttospeechbar.h"
+#endif
 
 ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     : QWidget(parent),
       mp_tabBar(tabBar),
       mp_findInPageBar(new FindInPageBar(this))
 {
+    auto app = KiwixApp::instance();
     mp_webView = new WebView();
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(mp_webView);
+#if defined(QT_TEXTTOSPEECH_LIB) && QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+    mp_ttsBar = new TextToSpeechBar(this);
+    layout->addWidget(mp_ttsBar);
+    connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered,
+            this, [=]() {
+                if (mp_tabBar->currentZimView() != this)
+                    return;
+                mp_webView->page()->toPlainText([=](const QString& articleText){
+                    mp_ttsBar->speak(articleText);
+                });
+            });
+    connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered,
+            this, [=]() {
+                if (mp_tabBar->currentZimView() != this || !mp_webView->page()->hasSelection())
+                    return;
+                mp_ttsBar->speak(mp_webView->page()->selectedText());
+            });
+#endif
     layout->addWidget(mp_findInPageBar);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     setLayout(layout); // now 'mp_webView' has 'this' as the parent QObject
     mp_findInPageBar->hide();
-    auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
                 if (mp_tabBar->currentZimView() != this)
