@@ -359,4 +359,28 @@ ContentTypeFilter {
 #readinglistbar QPushButton::menu-indicator {
     width: 0;
     height: 0;
+
+/* ----------------------------------------
+    Text to Speech Page
+*/
+
+#TextToSpeechBar {
+    border-top: 1px solid #ccc;
+}
+
+TextToSpeechBar > #closeButton {
+    outline: none;
+    max-height: 36px;
+    max-width: 36px;
+    border: 1px solid #ccc;
+    border-radius: 0;
+}
+
+TextToSpeechBar > #closeButton:pressed {
+    background-color: #D9E9FF;
+    border: 1px solid #3366CC;
+}
+
+TextToSpeechBar > #stopButton:disabled {
+    color: grey;
 }

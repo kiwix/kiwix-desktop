@@ -170,5 +170,6 @@
     "scroll-next-tab": "Scroll to next tab",
     "scroll-previous-tab": "Scroll to previous tab",
     "read-article": "Read article",
-    "read-text": "Read selected text"
+    "read-text": "Read selected text",
+    "stop": "Stop"
 }

@@ -33,6 +33,16 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                     return;
                 mp_ttsBar->speak(mp_webView->page()->selectedText());
             });
+    connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered, [=](){
+        if (mp_tabBar->currentZimView() != this)
+            return;
+        if (this->getWebView()->page()->hasSelection())
+            mp_ttsBar->show();
+    });
+    connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered, [=](){
+        if (mp_tabBar->currentZimView() == this)
+            mp_ttsBar->show();
+    });
 #endif
     layout->addWidget(mp_findInPageBar);
     layout->setContentsMargins(0,0,0,0);
