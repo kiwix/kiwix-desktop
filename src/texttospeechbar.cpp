@@ -10,6 +10,7 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
     close();
     mp_ui->setupUi(this);
     mp_ui->stopButton->setText(gt("stop"));
+    mp_ui->voiceLabel->setText(gt("voice"));
     connect(mp_speech, &QTextToSpeech::stateChanged, this,
             &TextToSpeechBar::onStateChanged);
     connect(mp_ui->stopButton, &QPushButton::released, this,
@@ -59,7 +60,25 @@ void TextToSpeechBar::onStateChanged(QTextToSpeech::State state)
 void TextToSpeechBar::languageSelected(int index)
 {
     QLocale locale = mp_ui->langComboBox->itemData(index).toLocale();
-    mp_speech->setLocale(locale);
+    disconnect(mp_ui->voiceComboBox, &QComboBox::currentIndexChanged, this, &TextToSpeechBar::voiceSelected);
+    mp_ui->voiceComboBox->clear();
+
+    m_voices = mp_speech->availableVoices();
+    QVoice currentVoice = mp_speech->voice();
+    for (auto voice : m_voices)
+    {
+        mp_ui->voiceComboBox->addItem(QString("%1 - %2 - %3").arg(voice.name())
+                          .arg(QVoice::genderName(voice.gender()))
+                          .arg(QVoice::ageName(voice.age())));
+        if (voice.name() == currentVoice.name())
+            mp_ui->voiceComboBox->setCurrentIndex(mp_ui->voiceComboBox->count() - 1);
+    }
+    connect(mp_ui->voiceComboBox, &QComboBox::currentIndexChanged, this, &TextToSpeechBar::voiceSelected);
+}
+
+void TextToSpeechBar::voiceSelected(int index)
+{
+    mp_speech->setVoice(m_voices.at(index));
 }
 
 void TextToSpeechBar::speechBarClose()

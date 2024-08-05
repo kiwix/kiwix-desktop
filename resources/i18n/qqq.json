@@ -183,5 +183,6 @@
 	"zim-path": "The term for the path of a Zim file",
 	"read-article": "Represents the action of letting the computer read out all the text in the current article.",
 	"read-text": "Represents the action of letting the computer read out the selected text on the article.",
-	"stop": "{{Identical|Stop}}"
+	"stop": "{{Identical|Stop}}",
+	"voice": "{{Identical|Voice}}"
 }
