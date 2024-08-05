@@ -180,5 +180,6 @@
 	"scroll-previous-tab": "Represents the action of scrolling to the previous tab of the current tab which toward the start of the tab bar.",
 	"read-article": "Represents the action of letting the computer read out all the text in the current article.",
 	"read-text": "Represents the action of letting the computer read out the selected text on the article.",
-	"stop": "{{Identical|Stop}}"
+	"stop": "{{Identical|Stop}}",
+	"voice": "{{Identical|Voice}}"
 }
