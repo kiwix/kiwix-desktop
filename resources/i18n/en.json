@@ -175,5 +175,6 @@
     "zim-name": "Zim Name",
     "zim-path": "Zim File Path",
     "read-article": "Read article",
-    "read-text": "Read selected text"
+    "read-text": "Read selected text",
+    "stop": "Stop"
 }

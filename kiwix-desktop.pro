@@ -158,6 +158,8 @@ FORMS += \
     ui/localkiwixserver.ui \
     ui/settings.ui
 
+equals(HAS_TTS, TRUE): FORMS += src/texttospeechbar.ui
+
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8
 
