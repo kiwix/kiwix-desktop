@@ -9,7 +9,6 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
 {
     close();
     mp_ui->setupUi(this);
-    mp_speech->setLocale(QLocale::system().language());
     mp_ui->stopButton->setText(gt("stop"));
     connect(mp_speech, &QTextToSpeech::stateChanged, this,
             &TextToSpeechBar::onStateChanged);
@@ -17,6 +16,29 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
             &TextToSpeechBar::stop);
     connect(mp_ui->closeButton, &QPushButton::released,
                 this, &TextToSpeechBar::speechBarClose);
+
+    mp_ui->langLabel->setText(gt("language"));
+    mp_ui->langComboBox->setMaxVisibleItems(10);
+    QLocale current = QLocale::system().language();
+    for (auto locale : mp_speech->availableLocales())
+    {
+        QString name(QString("%1 (%2)")
+                        .arg(QLocale::languageToString(locale.language()))
+                        .arg(locale.nativeLanguageName()));
+        QVariant localeVariant(locale);
+        mp_ui->langComboBox->addItem(name, localeVariant);
+        if (locale.name() == current.name())
+            current = locale;
+    }
+
+    /* Work around to both have max visible item and a read-only combobox.*/
+    mp_ui->langComboBox->lineEdit()->setReadOnly(true);
+    mp_ui->langComboBox->lineEdit()->setFrame(false);
+
+    connect(mp_ui->langComboBox, &QComboBox::currentIndexChanged,
+                this, &TextToSpeechBar::languageSelected);
+    mp_ui->langComboBox->setCurrentIndex(mp_ui->langComboBox->findData(current));
+    languageSelected(mp_ui->langComboBox->currentIndex());
 }
 
 void TextToSpeechBar::speak(const QString &text)
@@ -32,6 +54,12 @@ void TextToSpeechBar::stop()
 void TextToSpeechBar::onStateChanged(QTextToSpeech::State state)
 {
     mp_ui->stopButton->setEnabled(state != QTextToSpeech::Ready);
+}
+
+void TextToSpeechBar::languageSelected(int index)
+{
+    QLocale locale = mp_ui->langComboBox->itemData(index).toLocale();
+    mp_speech->setLocale(locale);
 }
 
 void TextToSpeechBar::speechBarClose()

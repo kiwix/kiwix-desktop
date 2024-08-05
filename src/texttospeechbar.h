@@ -19,6 +19,7 @@ public:
 
 public slots:
     void speechBarClose();
+    void languageSelected(int index);
     void onStateChanged(QTextToSpeech::State state);
 
 private:
