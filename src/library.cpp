@@ -209,6 +209,16 @@ Library::QStringSet Library::getLibraryZimsFromDir(QString dir) const
     return zimsInDir;
 }
 
+bool Library::readBookMarksFile(const std::string &filename)
+{
+    kiwix::Manager manager(mp_library);
+    if (!manager.readBookmarkFile(filename))
+        return false;
+
+    emit bookmarksChanged();
+    return true;
+}
+
 const kiwix::Book &Library::getBookById(QString id) const
 {
     return mp_library->getBookById(id.toStdString());

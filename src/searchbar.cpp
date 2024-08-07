@@ -12,6 +12,9 @@ BookmarkButton::BookmarkButton(QWidget *parent) :
     connect(this, &QToolButton::triggered, this, &BookmarkButton::on_buttonClicked);
     connect(this, &QToolButton::triggered, this, &BookmarkButton::update_display);
     setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::Actions::ToggleAddBookmarkAction));
+
+    auto library = KiwixApp::instance()->getLibrary();
+    connect(library, &Library::bookmarksChanged, this, &BookmarkButton::update_display);
 }
 
 void BookmarkButton::update_display()
