@@ -425,8 +425,22 @@ void TabBar::paintEvent(QPaintEvent *e)
         bool textRightToLeft = tab_title.isRightToLeft();
         bool appRightToLeft = QWidget::isRightToLeft();
 
+        // See QTabBar::tab::padding value in resources/css/style.css
+        const int padding = 4;
         QRect tabTextRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tabopt, this);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        // See QTabBar::tab::border value in resources/css/style.css
+        const int border = 1;
 
+        // Add Padding to left, right. Padding is 4px. Add 5 to account for 
+        // Extra pixel from border.
+        tabTextRect.setX(tabTextRect.x() + padding + border);
+        tabTextRect.setWidth(tabTextRect.width() - padding - border);
+#else
+        // Qt6 correctly adds left and right padding but now incorrectly adds
+        // top or bottom padding.
+        tabTextRect.setY(tabTextRect.y() - padding);
+#endif
         QRect fontTextRect = fontMetrics().boundingRect(tab_title);
 
         if (fontTextRect.width() > tabTextRect.width())
