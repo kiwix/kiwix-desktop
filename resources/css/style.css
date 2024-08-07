@@ -177,8 +177,7 @@ QTabWidget::pane {
 }
 
 QTabBar::tab {
-    border: none;
-    border-right: 1px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 0;
     padding: 2px;
 }
@@ -191,10 +190,6 @@ QTabBar::tab:selected {
 QTabBar::tab:first {
     padding-top: 6px;
     padding-left: 5px;
-}
-
-QTabBar::tab:last {
-    border: none;
 }
 
 QTabBar::tab:last QToolButton {
