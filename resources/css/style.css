@@ -69,7 +69,8 @@ SearchBar > QToolButton {
 }
 
 SearchBar > BookmarkButton {
-    margin-right: 4px;   
+    margin-right: 3px;
+    margin-left: 3px; 
 }
 
 SearchBar > QToolButton:pressed,
@@ -175,25 +176,22 @@ QTabWidget::pane {
     border-top: 1px solid #ccc;
 }
 
+/* paintEvent of src/tabbar.cpp references the value of border and padding */
 QTabBar::tab {
-    border: none;
-    border-right: 1px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 0;
-    padding: 2px;
+    padding: 4px;
+    padding-top: 6px;
 }
 
 QTabBar::tab:selected {
     background-color: white;
-    border-bottom: 2px solid white;
+    border-bottom: 1px solid white;
 }
 
 QTabBar::tab:first {
     padding-top: 6px;
     padding-left: 5px;
-}
-
-QTabBar::tab:last {
-    border: none;
 }
 
 QTabBar::tab:last QToolButton {
