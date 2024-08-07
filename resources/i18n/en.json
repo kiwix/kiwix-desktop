@@ -173,5 +173,9 @@
     "file-not-found-text": "ZIM file doesn't exist or is not readable",
     "zim-id": "Zim Id",
     "zim-name": "Zim Name",
-    "zim-path": "Zim File Path"
+    "zim-path": "Zim File Path",
+    "read-article": "Read article",
+    "read-text": "Read selected text",
+    "stop": "Stop",
+    "voice": "Voice"
 }
