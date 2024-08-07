@@ -69,7 +69,8 @@ SearchBar > QToolButton {
 }
 
 SearchBar > BookmarkButton {
-    margin-right: 4px;   
+    margin-right: 3px;
+    margin-left: 3px; 
 }
 
 SearchBar > QToolButton:pressed,
