@@ -7,6 +7,7 @@
 			"Meno25",
 			"Ravan",
 			"Tala Ali",
+			"بهتين شوكت",
 			"علاء",
 			"محمد أحمد عبد الفتاح"
 		]
@@ -79,7 +80,6 @@
 	"zoom-level-setting": "مستوى التكبير الافتراضي",
 	"download-directory-setting": "دليل التنزيل",
 	"monitor-directory-setting": "دليل المراقبة",
-	"monitor-directory-default": "غير مضبوطة",
 	"reset": "إعادة الضبط",
 	"clear": "مسح",
 	"browse": "تصفح",
@@ -141,5 +141,10 @@
 	"monitor-directory-tooltip": "ستتم إضافة جميع ملفات ZIM الموجودة في هذا الدليل تلقائيًا إلى المكتبة.",
 	"next-tab": "انتقل إلى علامة التبويب التالية",
 	"previous-tab": "انتقل إلى علامة التبويب السابقة",
-	"cancel-download": "إلغاء التنزيل"
+	"cancel-download": "إلغاء التنزيل",
+	"file-not-found-title": "لم يبقي إيجاد ملف زيم",
+	"file-not-found-text": "ملف زيم مش موجود أو مش قابل للقراءة",
+	"zim-id": "معرف زيم",
+	"zim-name": "اسم زيم",
+	"zim-path": "مسار ملف زيم"
 }

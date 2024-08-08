@@ -15,7 +15,7 @@
 	"error-downloader-window-title": "Nie można utworzyć pobierania",
 	"error-downloader-launch-message": "Nie można uruchomić pobierania, uruchomi się Kiwix-desktop, ale wszystkie funkcje pobierania nie będą działać!",
 	"error-launch-server-message": "Wystąpił błąd!",
-	"open-zim": "Otwórz Zim",
+	"open-zim": "Otwórz plik ZIM",
 	"local-kiwix-server": "Lokalny serwer Kiwix",
 	"random-article": "Losowy artykuł",
 	"random-article-error": "Nie udało się otworzyć losowego artykułu.",
@@ -77,7 +77,6 @@
 	"zoom-level-setting": "Domyślny poziom powiększenia",
 	"download-directory-setting": "Pobierz katalog",
 	"monitor-directory-setting": "Katalog monitorowany",
-	"monitor-directory-default": "Nie ustawione",
 	"reset": "Resetuj",
 	"clear": "Wyczyść",
 	"browse": "Przeglądaj",
@@ -154,5 +153,6 @@
 	"couldnt-open-location": "Nie udało się otworzyć lokalizacji",
 	"couldnt-open-location-text": "Kiwix nie może otworzyć folderu {{FOLDER}}",
 	"move-files-to-trash": "Przenieś usunięte pliki do kosza",
-	"move-files-to-trash-text": "Ta czynność spowoduje przeniesienie pliku do kosza."
+	"move-files-to-trash-text": "Ta czynność spowoduje przeniesienie pliku do kosza.",
+	"no-videos": "Brak filmów"
 }

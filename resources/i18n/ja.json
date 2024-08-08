@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chqaz",
 			"Funa-enpitu",
 			"LaMagiaaa",
 			"MathXplore",
@@ -17,6 +18,7 @@
 	"error-launch-server-message": "エラーが発生しました。",
 	"error-archive": "アーカイブを取得できない",
 	"open-zim": "ZIMファイルを開く",
+	"random-article": "おまかせ記事",
 	"print": "印刷",
 	"print-page-error": "印刷中にエラーが発生しました。",
 	"new-tab": "新しいタブ",
@@ -36,7 +38,6 @@
 	"date": "日付",
 	"open": "開く",
 	"delete": "削除",
-	"monitor-directory-default": "セットされていません",
 	"clear": "クリア",
 	"about-kiwix-desktop-description": "Kiwix を使えば、あなたがどこへ行くときでもウィキペディア全体を一緒に持ち歩くことができます！ボートの上でも、なんでもない場所のど真ん中でも、あるいは刑務所でも、Kiwix は全人類の知識へのアクセスを可能にします。インターネットは必要ありません、すべてはあなたのコンピューター上に保存されます。",
 	"about-reporting-problem-title": "問題を報告",

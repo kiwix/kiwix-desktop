@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AlexanderFF",
 			"Carlespera",
 			"DDPAT",
 			"Destinid10 2",
@@ -42,6 +43,8 @@
 	"set-fullscreen": "Establecer pantalla completa",
 	"quit-fullscreen": "Salir de la pantalla completa",
 	"table-of-content": "Sumario",
+	"add-bookmark": "Añadir a lista de lectura",
+	"remove-bookmark": "Quitar de la lista de lectura",
 	"reading-list": "Lista de lectura",
 	"reading-list-title": "Lista de lectura",
 	"zoom-in": "Acercar",
@@ -83,7 +86,6 @@
 	"zoom-level-setting": "Nivel de escala predeterminado",
 	"download-directory-setting": "Directorio de descargas",
 	"monitor-directory-setting": "Supervisar directorio",
-	"monitor-directory-default": "No establecido",
 	"reset": "Restablecer",
 	"clear": "Limpiar",
 	"browse": "Explorar",
@@ -102,6 +104,8 @@
 	"fullscreen-notification": "Ahora estás en modo de pantalla completa. Presione ESC para salir!",
 	"online-files": "Archivos en línea",
 	"local-files": "Archivos locales",
+	"category": "Categoría",
+	"language": "Idioma",
 	"hide": "Ocultar",
 	"open-in-browser": "Abrir en el navegador",
 	"start-kiwix-server": "Iniciar servidor Kiwix",
@@ -135,6 +139,7 @@
 	"ok": "correcto",
 	"no-filter": "Sin filtro",
 	"open-link-in-web-browser": "Abrir enlace en navegador web",
+	"open-link-new-tab": "Abrir enlace en una nueva pestaña",
 	"download-dir-dialog-title": "¿Está seguro de que desea cambiar el directorio de descarga?",
 	"download-dir-dialog-msg": "La nueva ruta del directorio de descarga será:\n{{DIRECTORY}}",
 	"invalid-port": "Puerto no válido",
@@ -153,6 +158,8 @@
 	"delete-book-text": "¿Está seguro de que desea eliminar <b>{{ZIM}}</b> ?",
 	"download-storage-error": "Erro de almacenamiento",
 	"download-storage-error-text": "El sistema no tiene suficiente almacenamiento disponible.",
+	"download-dir-missing": "El directorio de descargas no existe.",
+	"download-dir-not-writable": "El directorio de descarga no se puede escribir.",
 	"download-unavailable": "Descarga no disponible",
 	"download-unavailable-text": "Esta descarga no está disponible.",
 	"open-book": "Abrir libro",
@@ -165,5 +172,8 @@
 	"move-files-to-trash": "Mover archivos eliminados a la papelera",
 	"move-files-to-trash-text": "Esta acción moverá el archivo a la papelera.",
 	"perma-delete-files-text": "Esta acción eliminará permanentemente el archivo.",
+	"language-searcher-placeholder": "Filtrar idioma",
+	"category-searcher-placeholder": "Filtrar categoría",
+	"content-type-searcher-placeholder": "Filtrar tipo de contenido",
 	"open-previous-tabs-at-startup": "Abrir pestañas anteriores al inicio"
 }
