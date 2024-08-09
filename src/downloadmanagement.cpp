@@ -283,15 +283,12 @@ void DownloadManager::checkThatBookCanBeDownloaded(const kiwix::Book& book, cons
 
 std::string DownloadManager::startDownload(const kiwix::Book& book, const QString& downloadDirPath)
 {
-    typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
-
     const std::string& url = book.getUrl();
     const QString bookId = QString::fromStdString(book.getId());
-    const DownloadOptions downloadOptions{{"dir", downloadDirPath.toStdString()}};
 
     std::string downloadId;
     try {
-        const auto d = mp_downloader->startDownload(url, downloadOptions);
+        const auto d = mp_downloader->startDownload(url, downloadDirPath.toStdString());
         downloadId = d->getDid();
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
