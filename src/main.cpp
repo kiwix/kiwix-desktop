@@ -5,6 +5,10 @@
 #include <QCommandLineParser>
 #include <iostream>
 #include <sstream>
+#ifdef Q_OS_WIN
+    #include <kiwix/tools.h>
+    #include <windows.h>
+#endif
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   #include <QWebEngineUrlScheme>
 #endif
@@ -18,6 +22,15 @@ int main(int argc, char *argv[])
     }
 // End of hack ^^^
 
+#ifdef Q_OS_WIN
+    std::string driveLetter = kiwix::getExecutablePath().substr(0, 3);
+    qInfo() << driverLetter;
+    UINT driveType = GetDriveTypeA(driveLetter.c_str());
+    if(driveType == DRIVE_REMOTE) {
+        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
+        qInfo() << "Disabled sandbox";
+    }
+#endif
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // High DPI Scaling is enabled by default in Qt6. This attribute no longer exists in 6.0 and later
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
