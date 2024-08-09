@@ -157,7 +157,7 @@ QString KiwixApp::findLibraryDirectory()
     return currentDataDir;
 
   // Check for default dataDirectory.
-  currentDataDir = QString::fromStdString(kiwix::getDataDirectory());
+  currentDataDir = getDataDirectory();
   libraryFile = QFileInfo(currentDataDir, "library.xml");
   if (libraryFile.exists())
     return currentDataDir;

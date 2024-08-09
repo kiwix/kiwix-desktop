@@ -77,4 +77,5 @@ private:
     QList<QVariant> m_contentTypeList;
 };
 
+QString getDataDirectory();
 #endif // SETTINGSMANAGER_H
