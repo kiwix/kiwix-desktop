@@ -102,10 +102,10 @@ void DownloadState::changeState(Action action)
 namespace
 {
 
-kiwix::Downloader* createDownloader()
+kiwix::Downloader* createDownloader(std::string dataDir)
 {
     try {
-        return new kiwix::Downloader();
+        return new kiwix::Downloader(dataDir);
     } catch (std::exception& e) {
         QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
         gt("error-downloader-launch-message") + "<br><br>" + e.what());
@@ -117,7 +117,7 @@ kiwix::Downloader* createDownloader()
 
 DownloadManager::DownloadManager(const Library* lib)
     : mp_library(lib)
-    , mp_downloader(createDownloader())
+    , mp_downloader(createDownloader(getDataDirectory()))
 {
     restoreDownloads();
 }
