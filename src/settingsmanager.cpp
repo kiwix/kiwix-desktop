@@ -7,6 +7,50 @@
 #include <QLocale>
 #include <QList>
 
+/*
+ * Returns the default directory (UTF-8 encoded) where downloaded files should be saved.
+ * Can be overriden via the options parameter of `kiwix::Downloader::startDownload()`. 
+ * Its path can vary and is determined as follows:
+ *
+ * On Windows:
+ *   * `$APPDATA/kiwix` if environment variable `$APPDATA` set, *otherwise...*
+ *   * `$USERPROFILE/kiwix` if environment variable `$USERPROFILE` set, *otherwise...*
+ * On other OSs:
+ *   * `$XDG_DATA_HOME/kiwix` if environment variable `$XDG_DATA_HOME` set, *otherwise...*
+ *   * `$HOME/.local/share/kiwx` if environment variable `$HOME` set, *otherwise...*
+ *
+ * * Current working directory.
+ */
+std::string getDataDirectory()
+{
+  std::string dataDir;
+#ifdef _WIN32
+  wchar_t* cDataDir = ::_wgetenv(L"APPDATA");
+  if (cDataDir == nullptr)
+    cDataDir = ::_wgetenv(L"USERPROFILE");
+  if (cDataDir != nullptr)
+    dataDir = WideToUtf8(cDataDir);
+#else
+  char* cDataDir = ::getenv("XDG_DATA_HOME");
+  if (cDataDir != nullptr) {
+    dataDir = cDataDir;
+  } else {
+    cDataDir = ::getenv("HOME");
+    if (cDataDir != nullptr) {
+      dataDir = cDataDir;
+      dataDir = kiwix::appendToDirectory(dataDir, ".local");
+      dataDir = kiwix::appendToDirectory(dataDir, "share");
+    }
+  }
+#endif
+  if (!dataDir.empty()) {
+    dataDir = kiwix::appendToDirectory(dataDir, "kiwix");
+    kiwix::makeDirectory(dataDir);
+    return dataDir;
+  }
+  return kiwix::getCurrentDirectory();
+}
+
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
     m_settings("Kiwix", "Kiwix-desktop"),
@@ -152,7 +196,7 @@ void SettingsManager::initSettings()
 {
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
-    m_downloadDir = m_settings.value("download/dir", QString::fromStdString(kiwix::getDataDirectory())).toString();
+    m_downloadDir = m_settings.value("download/dir", QString::fromStdString(getDataDirectory())).toString();
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
     m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();

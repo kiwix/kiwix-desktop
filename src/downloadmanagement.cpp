@@ -102,10 +102,10 @@ void DownloadState::changeState(Action action)
 namespace
 {
 
-kiwix::Downloader* createDownloader()
+kiwix::Downloader* createDownloader(std::string dataDir)
 {
     try {
-        return new kiwix::Downloader();
+        return new kiwix::Downloader(dataDir);
     } catch (std::exception& e) {
         QMessageBox::critical(nullptr, gt("error-downloader-window-title"),
         gt("error-downloader-launch-message") + "<br><br>" + e.what());
@@ -117,7 +117,7 @@ kiwix::Downloader* createDownloader()
 
 DownloadManager::DownloadManager(const Library* lib)
     : mp_library(lib)
-    , mp_downloader(createDownloader())
+    , mp_downloader(createDownloader(getDataDirectory()))
 {
     restoreDownloads();
 }
@@ -283,15 +283,12 @@ void DownloadManager::checkThatBookCanBeDownloaded(const kiwix::Book& book, cons
 
 std::string DownloadManager::startDownload(const kiwix::Book& book, const QString& downloadDirPath)
 {
-    typedef std::vector<std::pair<std::string, std::string>> DownloadOptions;
-
     const std::string& url = book.getUrl();
     const QString bookId = QString::fromStdString(book.getId());
-    const DownloadOptions downloadOptions{{"dir", downloadDirPath.toStdString()}};
 
     std::string downloadId;
     try {
-        const auto d = mp_downloader->startDownload(url, downloadOptions);
+        const auto d = mp_downloader->startDownload(url, downloadDirPath.toStdString());
         downloadId = d->getDid();
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
