@@ -35,6 +35,11 @@ ReadingListBar::ReadingListBar(QWidget *parent) :
     connect(exportAction, &QAction::triggered, this, &ReadingListBar::onExport);
     connect(importAction, &QAction::triggered, this, &ReadingListBar::onImport);
     ui->label->setText(gt("reading-list-title"));
+
+    QMenu *portMenu = new QMenu(this);
+    portMenu->addAction(exportAction);
+    portMenu->addAction(importAction);
+    ui->readingListMenuButton->setMenu(portMenu);
 }
 
 ReadingListBar::~ReadingListBar()

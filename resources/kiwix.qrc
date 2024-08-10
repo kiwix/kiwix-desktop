@@ -64,5 +64,6 @@
         <file>icons/check-solid.svg</file>
         <file>icons/xmark-solid.svg</file>
         <file>icons/home-button.svg</file>
+        <file>icons/more-vertical.svg</file>
     </qresource>
 </RCC>
