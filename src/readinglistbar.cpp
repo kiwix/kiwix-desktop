@@ -6,6 +6,9 @@
 
 #include <QListWidgetItem>
 #include <QFileDialog>
+#include <QStandardPaths>
+
+const QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 
 ReadingListBar::ReadingListBar(QWidget *parent) :
     QWidget(parent),
@@ -119,9 +122,10 @@ void ReadingListBar::onExport()
 {
     auto app = KiwixApp::instance();
     auto kiwixLibrary = app->getLibrary()->getKiwixLibrary();
+    auto suggestedFilePath = documentsDir + "/kiwix_readinglist.xml";
     QString fileName = QFileDialog::getSaveFileName(app->getMainWindow(),
                                                     gt("save-file-as-window-title"),
-                                                    "kiwix_readinglist.xml", "(*.xml)");
+                                                    suggestedFilePath, "(*.xml)");
     if (fileName.isEmpty())
         return;
 
@@ -135,7 +139,7 @@ void ReadingListBar::onImport()
     auto library = app->getLibrary();
     QString fileName = QFileDialog::getOpenFileName(app->getMainWindow(),
                                                     gt("open-file"),
-                                                    QString(), "(*.xml)");
+                                                    documentsDir, "(*.xml)");
     if (fileName.isEmpty())
         return;
 
