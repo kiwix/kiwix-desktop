@@ -180,5 +180,9 @@
 	"file-not-found-text": "Error description text for when the desktop application cannot find the Zim file needed to display the web page.",
 	"zim-id": "The term for the unique identifier of a zim file.",
 	"zim-name": "The term for the name of a Zim file",
-	"zim-path": "The term for the path of a Zim file"
+	"zim-path": "The term for the path of a Zim file",
+	"export-reading-list": "Represents the action of exporting the reading list to a file.",
+	"export-reading-list-error": "Error description text for when exporting the reading list to a file failed.",
+	"import-reading-list": "Represents the action of importing a reading list from a file.",
+	"import-reading-list-error": "Error description text for when importing a reading list from a file failed."
 }

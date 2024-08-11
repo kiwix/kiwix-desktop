@@ -329,3 +329,18 @@ ContentTypeFilter {
     font-size: 16px;
     margin-bottom: 10px;
 }
+
+#readinglistbar QPushButton {
+    margin-left: 4px;
+}
+
+#readinglistbar QPushButton::hover {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    border-radius: 3px;
+}
+
+#readinglistbar QPushButton::menu-indicator {
+    width: 0;
+    height: 0;
+}
