@@ -34,6 +34,7 @@
 	"pause": "Դադար",
 	"cancel": "Չեղարկել",
 	"apply": "Կիրառել",
+	"about-reporting-problem-title": "Հաղորդել խնդիրների մասին",
 	"about-libraries-title": "Գրադարաններ",
 	"category": "Կատեգորիա",
 	"language": "Լեզու",
@@ -53,6 +54,7 @@
 	"wiktionary": "Վիքիբառարան",
 	"yes": "այո",
 	"no": "ոչ",
-	"language-searcher-placeholder": "Զտել լեզուն",
+	"language-searcher-placeholder": "Զտել ըստ լեզվի",
+	"category-searcher-placeholder": "Զտել ըստ կատեգորիայի",
 	"no-videos": "Տեսանյութ չկա"
 }
