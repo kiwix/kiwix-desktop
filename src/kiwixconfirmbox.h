@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include <stdexcept>
+
 namespace Ui {
 class kiwixconfirmbox;
 }
