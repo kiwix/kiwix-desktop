@@ -50,7 +50,6 @@
 	"pause": "اجھکو",
 	"cancel": "منسوخ",
 	"apply": "اطلاق",
-	"monitor-directory-default": "سیٹ نی تھیا",
 	"reset": "ولدا ٹھیک کرو",
 	"clear": "صاف",
 	"browse": "براؤز",
@@ -85,5 +84,6 @@
 	"delete-book": "کتاب مٹاؤ",
 	"open-book": "کتاب کھولو",
 	"open-folder": "فولڈر کھولو",
-	"no-videos": "ویڈیو کائنی"
+	"no-videos": "ویڈیو کائنی",
+	"zim-name": "Zim ناں"
 }
