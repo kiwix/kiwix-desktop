@@ -15,6 +15,7 @@ private:
     void handleSearchRequest(QWebEngineUrlRequestJob *request);
 
     void replyZimNotFoundPage(QWebEngineUrlRequestJob *request, const QString& zimId);
+    void replyBadZimFilePage(QWebEngineUrlRequestJob *request, const QString& zimId);
 };
 
 #endif // URLSCHEMEHANDLER_H

@@ -64,6 +64,8 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
         request->reply(mimeType, buffer);
     } catch (zim::EntryNotFound&) {
       request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+    } catch (const zim::ZimFileFormatError&) {
+      replyBadZimFilePage(request, zim_id);
     }
 }
 
@@ -182,7 +184,7 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
 {
     QBuffer *buffer = new QBuffer;
     QString path = "N/A", name = "N/A";
-    try 
+    try
     {
         auto& book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
         path = QString::fromStdString(book.getPath());
@@ -206,6 +208,33 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                           "<p>" +
                           gt("zim-path") + ": <b>" + path +
                           "</b></p>"
+                          "</div></section>";
+
+    buffer->open(QIODevice::WriteOnly);
+    buffer->write(contentHtml.toStdString().c_str());
+    buffer->close();
+
+    connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
+    request->reply("text/html", buffer);
+}
+
+void
+UrlSchemeHandler::replyBadZimFilePage(QWebEngineUrlRequestJob *request,
+                                  const QString &zimId)
+{
+    QBuffer *buffer = new QBuffer;
+    const auto& book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
+    const QString path = QString::fromStdString(book.getPath());
+    const QString name = QString::fromStdString(book.getName());
+    const QString zimEntryPath = request->requestUrl().path();
+
+    QString contentHtml = "<section><div>"
+                          "<h1>" + gt("bad-zim-file-error-page-title") + "</h1>"
+                          "<p>"  + gt("bad-zim-file-error-page-text") + "</p>"
+                          "<p>"  + gt("zim-id")   + ": <b>" + zimId + "</b></p>"
+                          "<p>"  + gt("zim-name") + ": <b>" + name  + "</b></p>"
+                          "<p>"  + gt("zim-path") + ": <b>" + path  + "</b></p>"
+                          "<p>" +  gt("zim-entry-path") + ": <b>" + zimEntryPath + "</b></p>"
                           "</div></section>";
 
     buffer->open(QIODevice::WriteOnly);
