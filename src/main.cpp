@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_WIN
     std::string driveLetter = kiwix::getExecutablePath().substr(0, 3);
-    qInfo() << driverLetter;
     UINT driveType = GetDriveTypeA(driveLetter.c_str());
     if(driveType == DRIVE_REMOTE) {
         qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
