@@ -26,8 +26,9 @@ int main(int argc, char *argv[])
     std::string driveLetter = kiwix::getExecutablePath().substr(0, 3);
     UINT driveType = GetDriveTypeA(driveLetter.c_str());
     if(driveType == DRIVE_REMOTE) {
-        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
-        qInfo() << "Disabled sandbox";
+        int msgboxID = MessageBoxA(NULL, gt("disable-sandbox"), gt("about-kiwix-desktop-title"), MB_YESNO | MB_ICONQUESTION);
+        if (msgboxID == IDYES)
+            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
     }
 #endif
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
