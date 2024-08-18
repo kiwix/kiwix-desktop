@@ -26,7 +26,11 @@ int main(int argc, char *argv[])
     std::string driveLetter = kiwix::getExecutablePath().substr(0, 3);
     UINT driveType = GetDriveTypeA(driveLetter.c_str());
     if(driveType == DRIVE_REMOTE) {
-        int msgboxID = MessageBoxA(NULL, gt("disable-sandbox"), gt("about-kiwix-desktop-title"), MB_YESNO | MB_ICONQUESTION);
+        const std::wstring messageStr = gt("disable-sandbox").toStdWString();
+        const std::wstring titleStr = gt("about-kiwix-desktop-title").toStdWString();
+        const wchar_t* message = message_str.c_str();
+        const wchar_t* title = title_str.c_str();
+        int msgboxID = MessageBoxExW(NULL, message, title, MB_YESNO | MB_ICONQUESTION, 0);
         if (msgboxID == IDYES)
             qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
     }
