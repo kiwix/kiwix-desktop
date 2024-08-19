@@ -178,6 +178,21 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     request->reply("text/html", buffer);
 }
 
+namespace
+{
+
+QString completeHtml(const QString& htmlBodyContent)
+{
+    const QString htmlHead = R"(<head><meta charset="utf-8"></head>)";
+    const QString fullHtml = "<!DOCTYPE html><html>"
+                             + htmlHead
+                             + "<body>" + htmlBodyContent + "</body>"
+                             + "</html>";
+    return fullHtml;
+}
+
+} // unnamed namespace
+
 void
 UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                                        const QString &zimId)
@@ -211,7 +226,7 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                           "</div></section>";
 
     buffer->open(QIODevice::WriteOnly);
-    buffer->write(contentHtml.toStdString().c_str());
+    buffer->write(completeHtml(contentHtml).toStdString().c_str());
     buffer->close();
 
     connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
@@ -238,7 +253,7 @@ UrlSchemeHandler::replyBadZimFilePage(QWebEngineUrlRequestJob *request,
                           "</div></section>";
 
     buffer->open(QIODevice::WriteOnly);
-    buffer->write(contentHtml.toStdString().c_str());
+    buffer->write(completeHtml(contentHtml).toStdString().c_str());
     buffer->close();
 
     connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
