@@ -64,6 +64,8 @@ UrlSchemeHandler::handleContentRequest(QWebEngineUrlRequestJob *request)
         request->reply(mimeType, buffer);
     } catch (zim::EntryNotFound&) {
       request->fail(QWebEngineUrlRequestJob::UrlNotFound);
+    } catch (const zim::ZimFileFormatError&) {
+      replyBadZimFilePage(request, zim_id);
     }
 }
 
@@ -176,13 +178,39 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     request->reply("text/html", buffer);
 }
 
+namespace
+{
+
+QString completeHtml(const QString& htmlBodyContent)
+{
+    const QString htmlHead = R"(<head><meta charset="utf-8"></head>)";
+    const QString fullHtml = "<!DOCTYPE html><html>"
+                             + htmlHead
+                             + "<body>" + htmlBodyContent + "</body>"
+                             + "</html>";
+    return fullHtml;
+}
+
+void
+sendHtmlResponse(QWebEngineUrlRequestJob *request, const QString& htmlBodyContent)
+{
+    QBuffer *buffer = new QBuffer;
+    buffer->open(QIODevice::WriteOnly);
+    buffer->write(completeHtml(htmlBodyContent).toStdString().c_str());
+    buffer->close();
+
+    QObject::connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
+    request->reply("text/html", buffer);
+}
+
+} // unnamed namespace
+
 void
 UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                                        const QString &zimId)
 {
-    QBuffer *buffer = new QBuffer;
     QString path = "N/A", name = "N/A";
-    try 
+    try
     {
         auto& book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
         path = QString::fromStdString(book.getPath());
@@ -208,12 +236,28 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                           "</b></p>"
                           "</div></section>";
 
-    buffer->open(QIODevice::WriteOnly);
-    buffer->write(contentHtml.toStdString().c_str());
-    buffer->close();
+    sendHtmlResponse(request, contentHtml);
+}
 
-    connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
-    request->reply("text/html", buffer);
+void
+UrlSchemeHandler::replyBadZimFilePage(QWebEngineUrlRequestJob *request,
+                                  const QString &zimId)
+{
+    const auto& book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
+    const QString path = QString::fromStdString(book.getPath());
+    const QString name = QString::fromStdString(book.getName());
+    const QString zimEntryPath = request->requestUrl().path();
+
+    QString contentHtml = "<section><div>"
+                          "<h1>" + gt("bad-zim-file-error-page-title") + "</h1>"
+                          "<p>"  + gt("bad-zim-file-error-page-text") + "</p>"
+                          "<p>"  + gt("zim-id")   + ": <b>" + zimId + "</b></p>"
+                          "<p>"  + gt("zim-name") + ": <b>" + name  + "</b></p>"
+                          "<p>"  + gt("zim-path") + ": <b>" + path  + "</b></p>"
+                          "<p>" +  gt("zim-entry-path") + ": <b>" + zimEntryPath + "</b></p>"
+                          "</div></section>";
+
+    sendHtmlResponse(request, contentHtml);
 }
 
 void
