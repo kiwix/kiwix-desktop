@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
     if(driveType == DRIVE_REMOTE) {
         const std::wstring messageStr = gt("disable-sandbox").toStdWString();
         const std::wstring titleStr = gt("about-kiwix-desktop-title").toStdWString();
-        const wchar_t* message = message_str.c_str();
-        const wchar_t* title = title_str.c_str();
+        const wchar_t* message = messageStr.c_str();
+        const wchar_t* title = titleStr.c_str();
         int msgboxID = MessageBoxExW(NULL, message, title, MB_YESNO | MB_ICONQUESTION, 0);
         if (msgboxID == IDYES)
             qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
