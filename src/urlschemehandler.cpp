@@ -191,13 +191,24 @@ QString completeHtml(const QString& htmlBodyContent)
     return fullHtml;
 }
 
+void
+sendHtmlResponse(QWebEngineUrlRequestJob *request, const QString& htmlBodyContent)
+{
+    QBuffer *buffer = new QBuffer;
+    buffer->open(QIODevice::WriteOnly);
+    buffer->write(completeHtml(htmlBodyContent).toStdString().c_str());
+    buffer->close();
+
+    QObject::connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
+    request->reply("text/html", buffer);
+}
+
 } // unnamed namespace
 
 void
 UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                                        const QString &zimId)
 {
-    QBuffer *buffer = new QBuffer;
     QString path = "N/A", name = "N/A";
     try
     {
@@ -225,19 +236,13 @@ UrlSchemeHandler::replyZimNotFoundPage(QWebEngineUrlRequestJob *request,
                           "</b></p>"
                           "</div></section>";
 
-    buffer->open(QIODevice::WriteOnly);
-    buffer->write(completeHtml(contentHtml).toStdString().c_str());
-    buffer->close();
-
-    connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
-    request->reply("text/html", buffer);
+    sendHtmlResponse(request, contentHtml);
 }
 
 void
 UrlSchemeHandler::replyBadZimFilePage(QWebEngineUrlRequestJob *request,
                                   const QString &zimId)
 {
-    QBuffer *buffer = new QBuffer;
     const auto& book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
     const QString path = QString::fromStdString(book.getPath());
     const QString name = QString::fromStdString(book.getName());
@@ -252,12 +257,7 @@ UrlSchemeHandler::replyBadZimFilePage(QWebEngineUrlRequestJob *request,
                           "<p>" +  gt("zim-entry-path") + ": <b>" + zimEntryPath + "</b></p>"
                           "</div></section>";
 
-    buffer->open(QIODevice::WriteOnly);
-    buffer->write(completeHtml(contentHtml).toStdString().c_str());
-    buffer->close();
-
-    connect(request, SIGNAL(destroyed()), buffer, SLOT(deleteLater()));
-    request->reply("text/html", buffer);
+    sendHtmlResponse(request, contentHtml);
 }
 
 void
