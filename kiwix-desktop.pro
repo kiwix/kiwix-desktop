@@ -57,6 +57,7 @@ SOURCES += \
     src/kiwixloader.cpp \
     src/rownode.cpp \
     src/suggestionlistworker.cpp \
+    src/suggestionlistmodel.cpp \
     src/thumbnaildownloader.cpp \
     src/translation.cpp \
     src/main.cpp \
@@ -105,6 +106,7 @@ HEADERS += \
     src/node.h \
     src/rownode.h \
     src/suggestionlistworker.h \
+    src/suggestionlistmodel.h \
     src/thumbnaildownloader.h \
     src/translation.h \
     src/mainwindow.h \
