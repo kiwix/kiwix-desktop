@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QThread>
 #include <QToolBar>
+#include "suggestionlistmodel.h"
 
 class BookmarkButton : public QToolButton {
     Q_OBJECT
@@ -36,7 +37,7 @@ protected:
     virtual void focusInEvent(QFocusEvent *);
     virtual void focusOutEvent(QFocusEvent *);
 private:
-    QStringListModel m_completionModel;
+    SuggestionListModel m_suggestionModel;
     QCompleter m_completer;
     QVector<QUrl> m_urlList;
     QString m_title;

@@ -49,7 +49,7 @@ void BookmarkButton::on_buttonClicked()
 
 SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
-    m_completer(&m_completionModel, this)
+    m_completer(&m_suggestionModel, this)
 {
     setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
@@ -111,8 +111,7 @@ void SearchBarLineEdit::hideSuggestions()
 
 void SearchBarLineEdit::clearSuggestions()
 {
-    QStringList empty;
-    m_completionModel.setStringList(empty);
+    m_suggestionModel.resetSuggestions();
     m_urlList.clear();
 }
 
@@ -175,7 +174,7 @@ void SearchBarLineEdit::updateCompletion()
             openCompletion(suggestions.first(), 0);
             return;
         }
-        m_completionModel.setStringList(suggestions);
+        m_suggestionModel.append(suggestions);
         m_completer.complete();
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
