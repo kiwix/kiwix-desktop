@@ -109,7 +109,7 @@ bool SettingsView::confirmDialogMonitorDir(const QString &dir) {
 
 void SettingsView::resetDownloadDir()
 {
-    auto dir = QString::fromStdString(kiwix::getDataDirectory());
+    auto dir = getDataDirectory();
     const auto &downloadDir = KiwixApp::instance()->getSettingsManager()->getDownloadDir();
     if (dir == downloadDir) {
         return;
