@@ -193,14 +193,19 @@ unix {
   INSTALLS += mime_file
 }
 
-PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 kiwix < 14.0.0 libzim >= 9.0.0 libzim < 10.0.0\")
+DEPS_DEFINITION = \"kiwix >= 13.0.0 kiwix < 14.0.0 libzim >= 9.0.0 libzim < 10.0.0\"
+
+PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
 
 QMAKE_CXXFLAGS += $$PKGCONFIG_CFLAGS
 QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
-LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 kiwix < 14.0.0 libzim >= 9.0.0 libzim < 10.0.0\")
+!win32 {
+   LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
+}
 
 win32 {
+  LIBS += $$system(python scripts/pkg-config-wrapper.py --libs $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
   LIBS += -lUser32
 }
 
