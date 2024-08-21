@@ -200,6 +200,10 @@ QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
 LIBS += $$system(pkg-config --libs $$PKGCONFIG_OPTION \"kiwix >= 13.0.0 kiwix < 14.0.0 libzim >= 9.0.0 libzim < 10.0.0\")
 
+win32 {
+  LIBS += -lUser32
+}
+
 RESOURCES += \
     resources/kiwix.qrc \
     resources/translations.qrc \
