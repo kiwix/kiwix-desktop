@@ -10,7 +10,7 @@
 # So at the end, we try to link with `foo.lib` but we have `libfoo.a`
 # Solution could be :
 # - Rename `libfoo.a` to `foo.lib`, but it would mean modify deps libraries on the FS
-# - Don't use LIBS and direction set QMAKE_LFLAGS but we would have to handle different command line option format
+# - Don't use LIBS and directly set QMAKE_LFLAGS but we would have to handle different command line option format
 #   between g++/clang and msvc
 # - Update meson build system of each projet to explicitly set the library naming.
 # - Replace `-lfoo` with absolute path to static library. This is what meson is doing internally and what
@@ -24,35 +24,36 @@
 import sys, subprocess
 from pathlib import Path
 
+
 def forward_to_pkg_config():
-    completeProcess = subprocess.run(["pkg-config", *sys.argv[1:]], capture_output=True, check=True, text=True)
+    completeProcess = subprocess.run(
+        ["pkg-config", *sys.argv[1:]], capture_output=True, check=True, text=True
+    )
     return completeProcess.stdout
-   
-def search_static_lib(lib_name, search_pathes):
-    for path in search_pathes:
-        lib_path = path/f"lib{lib_name}.a"
+
+
+def search_static_lib(lib_name, search_paths):
+    for path in search_paths:
+        lib_path = path / f"lib{lib_name}.a"
         if lib_path.exists():
-            return f"lib{lib_name}.a"
+            return str(lib_path)
     return None
-    
+
 
 def replace_static_lib(pkg_output):
-    search_pathes = []
+    search_paths = []
     for option in pkg_output.split():
         if option.startswith("-L"):
-            search_pathes.append(Path(option[2:]))
+            search_paths.append(Path(option[2:]))
             yield option
         if option.startswith("-l"):
-            static_lib = search_static_lib(option[2:], search_pathes)
+            static_lib = search_static_lib(option[2:], search_paths)
             if static_lib:
                 yield static_lib
             else:
                 yield option
-                
+
+
 if __name__ == "__main__":
     pkg_output = forward_to_pkg_config()
     print(" ".join(replace_static_lib(pkg_output)))
-
-
-
-
