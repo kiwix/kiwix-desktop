@@ -16,10 +16,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup python 3.8
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: '3.8'
 
@@ -74,7 +74,7 @@ jobs:
           target_platform: linux-x86_64-dyn
 
       - name: Retrieve source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Compile source code
         shell: bash
