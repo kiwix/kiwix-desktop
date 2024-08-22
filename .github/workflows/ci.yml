@@ -7,6 +7,50 @@ on:
       - main
 
 jobs:
+  Windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - native_mixed
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup python 3.8
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.8'
+
+    - name: Install packages
+      run: |
+        choco.exe install pkgconfiglite
+
+    - name: Install QT
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: 5.15.2
+        modules: "qtwebengine"
+        setup-python: false
+
+    - name: Setup MSVC compiler
+      uses: bus1/cabuild/action/msdevshell@v1
+      with:
+        architecture: x64
+
+    - name: Install dependencies
+      uses: kiwix/kiwix-build/actions/dl_deps_archive@main
+      with:
+        target_platform: win-x86_64-mixed
+
+    - name: Compile
+      shell: cmd
+      run: |
+        set PKG_CONFIG_PATH=%cd%\BUILD_win-amd64\INSTALL\lib\pkgconfig
+        qmake PREFIX=%cd%\BUILD_win-amd64\INSTALL
+        nmake debug-all
+
   Linux:
     strategy:
       fail-fast: false
@@ -30,7 +74,7 @@ jobs:
           target_platform: linux-x86_64-dyn
 
       - name: Retrieve source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Compile source code
         shell: bash
