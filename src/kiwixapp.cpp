@@ -143,6 +143,10 @@ void KiwixApp::newTab()
 QString KiwixApp::findLibraryDirectory()
 {
     auto currentDataDir = QString::fromStdString(kiwix::removeLastPathElement(kiwix::getExecutablePath()));
+    
+    if (isPortableMode())
+        return currentDataDir + QDir::separator() + "data";
+
     // Check for library.xml in the same directory as the executable.
     auto libraryFile = QFileInfo(currentDataDir, "library.xml");
     if (libraryFile.exists())
