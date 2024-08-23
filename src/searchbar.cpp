@@ -51,6 +51,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_completionModel, this)
 {
+    setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
     setPlaceholderText(gt("search"));
@@ -77,6 +78,12 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
                 if (m_returnPressed) {
                     this->setText(m_searchbarInput);
                 }
+
+                /* Empty text is LTR which changes the line edit alignment.
+                   Need to explicitly align right. This is a generalized
+                   solution that aligns text to the direction of the app. */
+                bool isSameDirection = text.isRightToLeft() == KiwixApp::isRightToLeft();
+                setAlignment(isSameDirection ? Qt::AlignLeft : Qt::AlignRight);
     });
     connect(this, &QLineEdit::returnPressed, this, [=]() {
         m_returnPressed = true;
