@@ -142,38 +142,36 @@ void KiwixApp::newTab()
 
 QString KiwixApp::findLibraryDirectory()
 {
-  // Check for library.xml in the same directory than the executable (portable kiwix-desktop)
-  auto currentDataDir = QString::fromStdString(kiwix::removeLastPathElement(kiwix::getExecutablePath()));
-  auto libraryFile = QFileInfo(currentDataDir, "library.xml");
-  if (libraryFile.exists())
-    return currentDataDir;
+    auto currentDataDir = QString::fromStdString(kiwix::removeLastPathElement(kiwix::getExecutablePath()));
+    // Check for library.xml in the same directory as the executable.
+    auto libraryFile = QFileInfo(currentDataDir, "library.xml");
+    if (libraryFile.exists())
+        return currentDataDir;
 
-  // Check for default dataDirectory.
-  currentDataDir = getDataDirectory();
-  libraryFile = QFileInfo(currentDataDir, "library.xml");
-  if (libraryFile.exists())
-    return currentDataDir;
+    // Check for default dataDirectory.
+    currentDataDir = getDataDirectory();
+    libraryFile = QFileInfo(currentDataDir, "library.xml");
+    if (libraryFile.exists())
+        return currentDataDir;
 
-  // There is no library.xml in default dataDirectory.
-  // Either, it is a first launch, or user used a pre-release version with wrong directory.
-  // Let's try to move data from old directory to new one if needed.
-  auto oldDataDir = QDir(currentDataDir);
-  oldDataDir.cdUp();
-  libraryFile = QFileInfo(oldDataDir, "library.xml");
-  if (libraryFile.exists()) {
-    // We have to move all zims file and xml file to the new dataDir
-    for (auto& fileInfo: oldDataDir.entryInfoList({"*.zim", "library*.xml"})) {
-      auto newFileInfo = QFileInfo(currentDataDir, fileInfo.fileName());
-      QFile::rename(fileInfo.absoluteFilePath(), newFileInfo.absoluteFilePath());
+    // Check if this is a pre-release version with wrong directory.
+    auto oldDataDir = QDir(currentDataDir);
+    oldDataDir.cdUp();
+    libraryFile = QFileInfo(oldDataDir, "library.xml");
+    if (libraryFile.exists()) {
+        // We have to move all zim files and xml file to the new dataDir
+        for (auto& fileInfo: oldDataDir.entryInfoList({"*.zim", "library*.xml"})) {
+            auto newFileInfo = QFileInfo(currentDataDir, fileInfo.fileName());
+            QFile::rename(fileInfo.absoluteFilePath(), newFileInfo.absoluteFilePath());
+        }
+        // Aria2 stores information about the current download using absolute path.
+        // Let's remove everything. User will lose its ongoing download but it should be pretty rare.
+        for (auto& fileInfo: oldDataDir.entryInfoList({"*.aria2", "*.meta4", "kiwix.session"}))
+            QFile::remove(fileInfo.absoluteFilePath());
     }
-    // Aria2 store informations about the current download using absolute path.
-    // Let's remove everything. User will loose its ongoing download but it should be pretty rare.
-    for (auto& fileInfo: oldDataDir.entryInfoList({"*.aria2", "*.meta4", "kiwix.session"})) {
-      QFile::remove(fileInfo.absoluteFilePath());
-    }
-  }
 
-  return currentDataDir;
+    // This is a first launch
+    return currentDataDir;
 }
 
 void KiwixApp::restoreTabs()
