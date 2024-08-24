@@ -51,12 +51,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     });
 
     FilterList contentTypeList = {
-      {"_pictures:yes", gt("pictures")},
-      {"_pictures:no", gt("no-pictures")},
-      {"_videos:yes", gt("videos")},
-      {"_videos:no", gt("no-videos")},
-      {"_details:yes", gt("details")},
-      {"_details:no", gt("no-details")}
+      {gt("pictures"), "_pictures:yes"},
+      {gt("no-pictures"), "_pictures:no"},
+      {gt("videos"), "_videos:yes"},
+      {gt("no-videos"), "_videos:no"},
+      {gt("details"), "_details:yes"},
+      {gt("no-details"), "_details:no"}
     };
 
     mp_contentType->setSelections(contentTypeList, KiwixApp::instance()->getSettingsManager()->getContentType());

@@ -258,7 +258,7 @@ void ContentManager::setLanguages()
         for (auto language : languageData) {
             auto langCode = QString::fromStdString(language);
             auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
-            languages.push_back({langCode, selfName});
+            languages.push_back({selfName, langCode});
         }
         m_languages = languages;
         emit(languagesLoaded(m_languages));
@@ -779,7 +779,7 @@ void ContentManager::updateLanguages(const QString& content) {
     for (auto language : languages) {
         auto code = QString::fromStdString(language.first);
         auto title = QString::fromStdString(language.second);
-        tempLanguages.push_back({code, title});
+        tempLanguages.push_back({title, code});
     }
     m_languages = tempLanguages;
     emit(languagesLoaded(m_languages));

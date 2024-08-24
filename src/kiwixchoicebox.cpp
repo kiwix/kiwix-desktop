@@ -241,15 +241,16 @@ void KiwixChoiceBox::setSelections(SelectionList selections, SelectionList defau
     choiceSelector->clear();
     for (const auto &selection: selections)
     {
-        auto item = new KListWidgetItem(beautifyString(selection.second));
-        item->setData(Qt::UserRole, selection.first);
+        auto item = new KListWidgetItem(beautifyString(selection.first));
+        item->setData(Qt::UserRole, selection.second);
         choiceSelector->addItem(item);
     }
 
     for (const auto &defSel : defaultSelection) {
-        auto itemList = choiceSelector->findItems(defSel.first, Qt::MatchExactly);
+        QString displayStr = beautifyString(defSel.first);
+        auto itemList = choiceSelector->findItems(displayStr, Qt::MatchExactly);
         if (itemList.isEmpty()) {
-            auto item = new KListWidgetItem(defSel.first);
+            auto item = new KListWidgetItem(displayStr);
             item->setData(Qt::UserRole, defSel.second);
             choiceSelector->addItem(item);
             addSelection(item, false);
