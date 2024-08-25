@@ -942,6 +942,16 @@ bool ContentManager::handleZimFileInMonitoredDirLogged(QString dir, QString file
     return status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
 }
 
+ContentManager::MonitoredZimFileInfo ContentManager::getMonitoredZimFileInfo(QString dir, QString fileName) const
+{
+    Q_UNUSED(dir);
+    Q_UNUSED(fileName);
+    // TODO: implement properly
+    MonitoredZimFileInfo zfi;
+    zfi.status = MonitoredZimFileInfo::PROCESS_NOW;
+    return zfi;
+}
+
 int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
 {
     const auto bookPath = QDir::toNativeSeparators(dir + "/" + fileName);
@@ -950,13 +960,15 @@ int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
         return MonitoredZimFileInfo::BEING_DOWNLOADED_BY_US;
     }
 
-    MonitoredZimFileInfo zfi;
+    MonitoredZimFileInfo zfi = getMonitoredZimFileInfo(dir, fileName);
+    if ( zfi.status == MonitoredZimFileInfo::PROCESS_NOW ) {
     kiwix::Manager manager(mp_library->getKiwixLibrary());
     const bool addedToLib = manager.addBookFromPath(bookPath.toStdString());
     zfi.status = addedToLib
                ? MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY
                : MonitoredZimFileInfo::COULD_NOT_BE_ADDED_TO_THE_LIBRARY;
     m_knownZimsInDir[dir].insert(fileName, zfi);
+    }
     return zfi.status;
 }
 

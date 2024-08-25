@@ -114,7 +114,7 @@ private: // types
         enum ZimFileStatus
         {
             // try to add this file to the library right away
-            NO_INFO,
+            PROCESS_NOW,
 
             // the file is known to be downloaded by our own download manager
             BEING_DOWNLOADED_BY_US,
@@ -126,7 +126,7 @@ private: // types
             COULD_NOT_BE_ADDED_TO_THE_LIBRARY
         };
 
-        ZimFileStatus status = NO_INFO;
+        ZimFileStatus status = PROCESS_NOW;
     };
 
     typedef QMap<QString, MonitoredZimFileInfo> ZimFileName2InfoMap;
@@ -146,6 +146,7 @@ private: // functions
     size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
     bool handleZimFileInMonitoredDirLogged(QString dirPath, QString fileName);
     int handleZimFileInMonitoredDir(QString dirPath, QString fileName);
+    MonitoredZimFileInfo getMonitoredZimFileInfo(QString dir, QString fileName) const;
     bool handleDisappearedBook(QString bookId);
 
     // Get the book with the specified id from
