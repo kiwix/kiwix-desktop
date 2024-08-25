@@ -122,7 +122,11 @@ private: // types
             // the attempt to add the file to the library failed
             COULD_NOT_BE_ADDED_TO_THE_LIBRARY
         };
+
+        ZimFileStatus status = ADDED_TO_THE_LIBRARY;
     };
+
+    typedef QMap<QString, MonitoredZimFileInfo> ZimFileName2InfoMap;
 
 private: // functions
     QStringList getBookIds();
@@ -171,7 +175,7 @@ private: // data
 
     QFileSystemWatcher m_watcher;
     QMutex m_updateFromDirMutex;
-    QMap<QString, QStringSet> m_knownZimsInDir;
+    QMap<QString, ZimFileName2InfoMap> m_knownZimsInDir;
 };
 
 #endif // CONTENTMANAGER_H

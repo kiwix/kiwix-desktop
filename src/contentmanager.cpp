@@ -865,9 +865,14 @@ void ContentManager::setMonitoredDirectories(QStringSet dirList)
         m_watcher.removePath(path);
     }
     m_knownZimsInDir.clear();
+    MonitoredZimFileInfo libraryZimFileInfo;
+    libraryZimFileInfo.status = MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
     for (auto dir : dirList) {
         if (dir != "") {
-            m_knownZimsInDir[dir] = mp_library->getLibraryZimsFromDir(dir);
+            auto& zimsInDir = m_knownZimsInDir[dir];
+            for ( const auto& fname : mp_library->getLibraryZimsFromDir(dir) ) {
+                zimsInDir.insert(fname, libraryZimFileInfo);
+            }
             m_watcher.addPath(dir);
             asyncUpdateLibraryFromDir(dir);
         }
@@ -919,6 +924,7 @@ namespace
 
 // indexed by MonitoredZimFileInfo::ZimFileStatus enum
 const char* monitoredDirZimFileHandlingMsgs[] = {
+    "",
     "it is being downloaded by us, ignoring...",
     "the file was added to the library",
     "the file could not be added to the library"
@@ -944,7 +950,7 @@ int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
     if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
         return MonitoredZimFileInfo::BEING_DOWNLOADED_BY_US;
     } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
-        m_knownZimsInDir[dir].insert(fileName);
+        m_knownZimsInDir[dir].insert(fileName, MonitoredZimFileInfo());
         return MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
     } else {
         return MonitoredZimFileInfo::COULD_NOT_BE_ADDED_TO_THE_LIBRARY;
@@ -953,7 +959,13 @@ int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
 
 ContentManager::QStringSet ContentManager::getLibraryZims(QString dirPath) const
 {
-    return m_knownZimsInDir[dirPath];
+    QStringSet zimFileNames;
+    const auto& zimsInDir = m_knownZimsInDir[dirPath];
+    for ( auto it = zimsInDir.begin(); it != zimsInDir.end(); ++it ) {
+        if ( it.value().status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY )
+            zimFileNames.insert(it.key());
+    }
+    return zimFileNames;
 }
 
 void ContentManager::updateLibraryFromDir(QString dirPath)
