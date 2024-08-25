@@ -927,7 +927,8 @@ const char* monitoredDirZimFileHandlingMsgs[] = {
     "",
     "it is being downloaded by us, ignoring...",
     "the file was added to the library",
-    "the file could not be added to the library"
+    "the file could not be added to the library",
+    "it is an unchanged known bad zim file"
 };
 
 #endif
@@ -942,14 +943,32 @@ bool ContentManager::handleZimFileInMonitoredDirLogged(QString dir, QString file
     return status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
 }
 
+void ContentManager::MonitoredZimFileInfo::updateStatus(const MonitoredZimFileInfo& prevInfo)
+{
+    Q_ASSERT(prevInfo.status != ADDED_TO_THE_LIBRARY);
+
+    if ( this->lastModified == prevInfo.lastModified ) {
+        this->status = UNCHANGED_KNOWN_BAD_ZIM_FILE;
+    } else {
+        this->status = PROCESS_NOW;
+    }
+}
+
 ContentManager::MonitoredZimFileInfo ContentManager::getMonitoredZimFileInfo(QString dir, QString fileName) const
 {
-    Q_UNUSED(dir);
-    Q_UNUSED(fileName);
-    // TODO: implement properly
-    MonitoredZimFileInfo zfi;
-    zfi.status = MonitoredZimFileInfo::PROCESS_NOW;
-    return zfi;
+    const auto bookPath = QDir::toNativeSeparators(dir + "/" + fileName);
+
+    MonitoredZimFileInfo zimFileInfo;
+
+    zimFileInfo.lastModified = QFileInfo(bookPath).lastModified();
+
+    const auto& zimsInDir = m_knownZimsInDir[dir];
+    const auto fileInfoEntry = zimsInDir.constFind(fileName);
+    if ( fileInfoEntry != zimsInDir.constEnd() ) {
+        zimFileInfo.updateStatus(fileInfoEntry.value());
+    }
+
+    return zimFileInfo;
 }
 
 int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)

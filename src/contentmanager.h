@@ -123,10 +123,17 @@ private: // types
             ADDED_TO_THE_LIBRARY,
 
             // the attempt to add the file to the library failed
-            COULD_NOT_BE_ADDED_TO_THE_LIBRARY
+            COULD_NOT_BE_ADDED_TO_THE_LIBRARY,
+
+            // the file couldn't be added to the library earlier and hasn't
+            // changed since then
+            UNCHANGED_KNOWN_BAD_ZIM_FILE
         };
 
+        void updateStatus(const MonitoredZimFileInfo& prevInfo);
+
         ZimFileStatus status = PROCESS_NOW;
+        QDateTime lastModified;
     };
 
     typedef QMap<QString, MonitoredZimFileInfo> ZimFileName2InfoMap;
