@@ -962,12 +962,12 @@ int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
 
     MonitoredZimFileInfo zfi = getMonitoredZimFileInfo(dir, fileName);
     if ( zfi.status == MonitoredZimFileInfo::PROCESS_NOW ) {
-    kiwix::Manager manager(mp_library->getKiwixLibrary());
-    const bool addedToLib = manager.addBookFromPath(bookPath.toStdString());
-    zfi.status = addedToLib
-               ? MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY
-               : MonitoredZimFileInfo::COULD_NOT_BE_ADDED_TO_THE_LIBRARY;
-    m_knownZimsInDir[dir].insert(fileName, zfi);
+        kiwix::Manager manager(mp_library->getKiwixLibrary());
+        const bool addedToLib = manager.addBookFromPath(bookPath.toStdString());
+        zfi.status = addedToLib
+                   ? MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY
+                   : MonitoredZimFileInfo::COULD_NOT_BE_ADDED_TO_THE_LIBRARY;
+        m_knownZimsInDir[dir].insert(fileName, zfi);
     }
     return zfi.status;
 }
