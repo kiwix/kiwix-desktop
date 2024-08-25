@@ -917,17 +917,17 @@ int ContentManager::handleZimFileInMonitoredDir(QString dirPath, QString file)
     const auto kiwixLib = mp_library->getKiwixLibrary();
     kiwix::Manager manager(kiwixLib);
     auto& zimsInDir = m_knownZimsInDir[dirPath];
-        const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
-        DBGOUT("directory monitoring: file appeared: " << bookPath);
-        if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
-            DBGOUT("                      it is being downloaded by us, ignoring...");
-        } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
-            DBGOUT("                      and was added to the library");
-            zimsInDir.insert(file);
-            return 1;
-        } else {
-            DBGOUT("                      but could not be added to the library");
-        }
+    const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
+    DBGOUT("directory monitoring: file appeared: " << bookPath);
+    if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
+        DBGOUT("                      it is being downloaded by us, ignoring...");
+    } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
+        DBGOUT("                      and was added to the library");
+        zimsInDir.insert(file);
+        return 1;
+    } else {
+        DBGOUT("                      but could not be added to the library");
+    }
     return 0;
 }
 
