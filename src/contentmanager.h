@@ -127,9 +127,16 @@ private: // types
 
             // the file couldn't be added to the library earlier and hasn't
             // changed since then
-            UNCHANGED_KNOWN_BAD_ZIM_FILE
+            UNCHANGED_KNOWN_BAD_ZIM_FILE,
+
+            // try to add this file to the library at a later time
+            PROCESS_LATER,
+
+            // this file is known to be enqueued for later processing
+            DEFERRED_PROCESSING_ALREADY_PENDING
         };
 
+        bool fileKeepsBeingModified() const;
         void updateStatus(const MonitoredZimFileInfo& prevInfo);
 
         ZimFileStatus status = PROCESS_NOW;
@@ -154,6 +161,8 @@ private: // functions
     bool handleZimFileInMonitoredDirLogged(QString dirPath, QString fileName);
     int handleZimFileInMonitoredDir(QString dirPath, QString fileName);
     MonitoredZimFileInfo getMonitoredZimFileInfo(QString dir, QString fileName) const;
+    void deferHandlingOfZimFileInMonitoredDir(QString dir, QString fileName);
+    void handleZimFileInMonitoredDirDeferred(QString dirPath, QString fileName);
     bool handleDisappearedBook(QString bookId);
 
     // Get the book with the specified id from

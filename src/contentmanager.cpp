@@ -928,7 +928,9 @@ const char* monitoredDirZimFileHandlingMsgs[] = {
     "it is being downloaded by us, ignoring...",
     "the file was added to the library",
     "the file could not be added to the library",
-    "it is an unchanged known bad zim file"
+    "it is an unchanged known bad zim file",
+    "deferring the check of an updated bad zim file",
+    "bad zim file was updated but a deferred request to check it is pending"
 };
 
 #endif
@@ -943,12 +945,26 @@ bool ContentManager::handleZimFileInMonitoredDirLogged(QString dir, QString file
     return status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
 }
 
+bool ContentManager::MonitoredZimFileInfo::fileKeepsBeingModified() const
+{
+    // A file is considered stable if it has stayed unchanged for at least
+    // this long.
+    const qint64 FILE_STABILITY_DURATION_MS = 1000;
+
+    const QDateTime now = QDateTime::currentDateTime();
+    return this->lastModified > now.addMSecs(-FILE_STABILITY_DURATION_MS);
+}
+
 void ContentManager::MonitoredZimFileInfo::updateStatus(const MonitoredZimFileInfo& prevInfo)
 {
     Q_ASSERT(prevInfo.status != ADDED_TO_THE_LIBRARY);
 
     if ( this->lastModified == prevInfo.lastModified ) {
         this->status = UNCHANGED_KNOWN_BAD_ZIM_FILE;
+    } else if ( prevInfo.status == PROCESS_LATER ) {
+        this->status = DEFERRED_PROCESSING_ALREADY_PENDING;
+    } else if ( this->fileKeepsBeingModified() ) {
+        this->status = PROCESS_LATER;
     } else {
         this->status = PROCESS_NOW;
     }
@@ -980,7 +996,9 @@ int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
     }
 
     MonitoredZimFileInfo zfi = getMonitoredZimFileInfo(dir, fileName);
-    if ( zfi.status == MonitoredZimFileInfo::PROCESS_NOW ) {
+    if ( zfi.status == MonitoredZimFileInfo::PROCESS_LATER ) {
+        deferHandlingOfZimFileInMonitoredDir(dir, fileName);
+    } else if ( zfi.status == MonitoredZimFileInfo::PROCESS_NOW ) {
         kiwix::Manager manager(mp_library->getKiwixLibrary());
         const bool addedToLib = manager.addBookFromPath(bookPath.toStdString());
         zfi.status = addedToLib
@@ -1021,6 +1039,28 @@ void ContentManager::updateLibraryFromDir(QString dirPath)
         mp_library->save();
         emit(booksChanged());
     }
+}
+
+void ContentManager::handleZimFileInMonitoredDirDeferred(QString dir, QString fileName)
+{
+    QMutexLocker locker(&m_updateFromDirMutex);
+    DBGOUT("ContentManager::handleZimFileInMonitoredDirDeferred(" << dir << ", " << fileName << ")");
+    m_knownZimsInDir[dir][fileName].status = MonitoredZimFileInfo::PROCESS_NOW;
+    if ( handleZimFileInMonitoredDirLogged(dir, fileName) ) {
+        mp_library->save();
+        emit(booksChanged());
+    }
+}
+
+void ContentManager::deferHandlingOfZimFileInMonitoredDir(QString dir, QString fname)
+{
+    const qint64 DEBOUNCING_DELAY_MILLISECONDS = 1000;
+
+    m_knownZimsInDir[dir][fname].status = MonitoredZimFileInfo::PROCESS_LATER;
+
+    QTimer::singleShot(DEBOUNCING_DELAY_MILLISECONDS, this, [=]() {
+        handleZimFileInMonitoredDirDeferred(dir, fname);
+    });
 }
 
 bool ContentManager::handleDisappearedBook(QString bookId)
