@@ -906,27 +906,49 @@ size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSe
 {
     size_t countOfSuccessfullyAddedZims = 0;
     for (const auto& file : fileNames) {
-        const bool addedToLib = handleZimFileInMonitoredDir(dirPath, file);
+        const bool addedToLib = handleZimFileInMonitoredDirLogged(dirPath, file);
         countOfSuccessfullyAddedZims += addedToLib;
     }
     return countOfSuccessfullyAddedZims;
+}
+
+namespace
+{
+
+#ifndef QT_NO_DEBUG
+
+// indexed by MonitoredZimFileInfo::ZimFileStatus enum
+const char* monitoredDirZimFileHandlingMsgs[] = {
+    "it is being downloaded by us, ignoring...",
+    "the file was added to the library",
+    "the file could not be added to the library"
+};
+
+#endif
+
+} // unnamed namespace
+
+bool ContentManager::handleZimFileInMonitoredDirLogged(QString dir, QString fileName)
+{
+    DBGOUT("ContentManager::handleZimFileInMonitoredDir(" << dir << ", " << fileName << ")");
+    const int status = handleZimFileInMonitoredDir(dir, fileName);
+    DBGOUT("\t" << monitoredDirZimFileHandlingMsgs[status]);
+    return status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
 }
 
 int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
 {
     const auto bookPath = QDir::toNativeSeparators(dir + "/" + fileName);
     kiwix::Manager manager(mp_library->getKiwixLibrary());
-    DBGOUT("directory monitoring: file appeared: " << bookPath);
+
     if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
-        DBGOUT("                      it is being downloaded by us, ignoring...");
+        return MonitoredZimFileInfo::BEING_DOWNLOADED_BY_US;
     } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
-        DBGOUT("                      and was added to the library");
         m_knownZimsInDir[dir].insert(fileName);
-        return 1;
+        return MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
     } else {
-        DBGOUT("                      but could not be added to the library");
+        return MonitoredZimFileInfo::COULD_NOT_BE_ADDED_TO_THE_LIBRARY;
     }
-    return 0;
 }
 
 void ContentManager::updateLibraryFromDir(QString dirPath)

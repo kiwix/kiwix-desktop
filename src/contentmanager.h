@@ -108,6 +108,22 @@ public slots:
     void downloadWasCancelled(const QString& id);
     void handleError(QString errSummary, QString errDetails);
 
+private: // types
+    struct MonitoredZimFileInfo
+    {
+        enum ZimFileStatus
+        {
+            // the file is known to be downloaded by our own download manager
+            BEING_DOWNLOADED_BY_US,
+
+            // the file was added the library successfully
+            ADDED_TO_THE_LIBRARY,
+
+            // the attempt to add the file to the library failed
+            COULD_NOT_BE_ADDED_TO_THE_LIBRARY
+        };
+    };
+
 private: // functions
     QStringList getBookIds();
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
@@ -120,6 +136,7 @@ private: // functions
     void updateLibraryFromDir(QString dir);
     void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
     size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    bool handleZimFileInMonitoredDirLogged(QString dirPath, QString fileName);
     int handleZimFileInMonitoredDir(QString dirPath, QString fileName);
     bool handleDisappearedBook(QString bookId);
 
