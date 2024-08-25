@@ -912,18 +912,16 @@ size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSe
     return countOfSuccessfullyAddedZims;
 }
 
-int ContentManager::handleZimFileInMonitoredDir(QString dirPath, QString file)
+int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
 {
-    const auto kiwixLib = mp_library->getKiwixLibrary();
-    kiwix::Manager manager(kiwixLib);
-    auto& zimsInDir = m_knownZimsInDir[dirPath];
-    const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
+    const auto bookPath = QDir::toNativeSeparators(dir + "/" + fileName);
+    kiwix::Manager manager(mp_library->getKiwixLibrary());
     DBGOUT("directory monitoring: file appeared: " << bookPath);
     if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
         DBGOUT("                      it is being downloaded by us, ignoring...");
     } else if ( manager.addBookFromPath(bookPath.toStdString()) ) {
         DBGOUT("                      and was added to the library");
-        zimsInDir.insert(file);
+        m_knownZimsInDir[dir].insert(fileName);
         return 1;
     } else {
         DBGOUT("                      but could not be added to the library");
