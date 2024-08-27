@@ -136,6 +136,7 @@
 	"delete-book-text": "A question to confirm the action to delete an existing ZIM file.",
 	"download-storage-error": "Error title text displayed when something is wrong with the directory of storage for ZIM files",
 	"download-storage-error-text": "Error description text for when something is wrong with the directory of storage for ZIM files.",
+	"download-exceeds-max-file-size": "Error text for the case when the download size exceeds the maximum files size of the filesystem where the download is going to be saved. Reported before the download is started.",
 	"download-dir-missing": "Error text displayed when it turns out that the download directory doesn't exist.",
 	"download-dir-not-writable": "Error text displayed when files cannot be created/saved in the download directory due to permissions",
 	"download-unavailable": "Error title text displayed when the downloading functionality is not available.",
