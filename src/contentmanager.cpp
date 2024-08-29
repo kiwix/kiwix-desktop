@@ -725,17 +725,13 @@ void ContentManager::setCurrentLanguage(FilterList langPairList)
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentCategoryFilter(FilterList categoryPairList)
+void ContentManager::setCurrentCategoryFilter(QStringList categoryList)
 {
-    QStringList categoryList;
-    for (auto &catPair : categoryPairList) {
-        categoryList.append(catPair.second);
-    }
     categoryList.sort();
     if (m_categoryFilter == categoryList.join(","))
         return;
     m_categoryFilter = categoryList.join(",");
-    getSettingsManager()->setCategory(categoryPairList);
+    getSettingsManager()->setCategory(categoryList);
     emit(filterParamsChanged());
 }
 

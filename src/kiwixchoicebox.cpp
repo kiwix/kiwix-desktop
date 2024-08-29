@@ -226,15 +226,6 @@ QString beautifyString(QString word)
     return word;
 }
 
-void KiwixChoiceBox::setSelections(QStringList selections, SelectionList defaultSelection)
-{
-    SelectionList sList;
-    for (const auto &sel : selections) {
-        sList.append({sel, sel});
-    }
-    setSelections(sList, defaultSelection);
-}
-
 void KiwixChoiceBox::setSelections(SelectionList selections, SelectionList defaultSelection)
 {
     clearSelections();

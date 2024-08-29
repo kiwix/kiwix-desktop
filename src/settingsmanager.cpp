@@ -144,9 +144,9 @@ void SettingsManager::setLanguage(FilterList langList)
     emit(languageChanged(m_langList));
 }
 
-void SettingsManager::setCategory(FilterList categoryList)
+void SettingsManager::setCategory(QStringList categoryList)
 {
-    m_categoryList = flattenPair(categoryList);
+    m_categoryList = categoryList;
     setSettings("category", m_categoryList);
     emit(categoryChanged(m_categoryList));
 }
@@ -185,6 +185,6 @@ void SettingsManager::initSettings()
     QVariant defaultLangVariant(defaultLangList);
     m_langList = m_settings.value("language", defaultLangVariant).toList();
 
-    m_categoryList = m_settings.value("category", {}).toList();
+    m_categoryList = m_settings.value("category", {}).toStringList();
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }

@@ -30,7 +30,6 @@ public:
     explicit KiwixChoiceBox(QWidget *parent = nullptr);
     void setType(QString type);
     void setSelections(SelectionList selections, SelectionList defaultSelection);
-    void setSelections(QStringList selections, SelectionList defaultSelection);
     ~KiwixChoiceBox();
     void adjustSize();
 

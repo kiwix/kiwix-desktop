@@ -31,7 +31,7 @@ public:
     bool getMoveToTrash() const { return m_moveToTrash; }
     bool getReopenTab() const { return m_reopenTab; }
     FilterList getLanguageList() { return deducePair(m_langList); }
-    FilterList getCategoryList() { return deducePair(m_categoryList); }
+    QStringList getCategoryList() { return m_categoryList; }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
 
 public slots:
@@ -43,7 +43,7 @@ public slots:
     void setMoveToTrash(bool moveToTrash);
     void setReopenTab(bool reopenTab);
     void setLanguage(FilterList langList);
-    void setCategory(FilterList categoryList);
+    void setCategory(QStringList categoryList);
     void setContentType(FilterList contentTypeList);
 
 private:
@@ -59,7 +59,7 @@ signals:
     void moveToTrashChanged(bool moveToTrash);
     void reopenTabChanged(bool reopenTab);
     void languageChanged(QList<QVariant> langList);
-    void categoryChanged(QList<QVariant> categoryList);
+    void categoryChanged(QStringList categoryList);
     void contentTypeChanged(QList<QVariant> contentTypeList);
 
 private:
@@ -73,7 +73,7 @@ private:
     bool m_moveToTrash;
     bool m_reopenTab;
     QList<QVariant> m_langList;
-    QList<QVariant> m_categoryList;
+    QStringList m_categoryList;
     QList<QVariant> m_contentTypeList;
 };
 

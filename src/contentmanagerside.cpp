@@ -83,16 +83,36 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
         mp_contentManager->setCurrentLanguage(values);
     });
     connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
-        mp_contentManager->setCurrentCategoryFilter(values);
+        QStringList categoryList;
+        for (const auto& pair : values)
+            categoryList.append(pair.second);
+        mp_contentManager->setCurrentCategoryFilter(categoryList);
     });
     connect(mp_contentType, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
         mp_contentManager->setCurrentContentTypeFilter(values);
     });
 }
 
+namespace
+{
+
+KiwixChoiceBox::SelectionList getCategorySelectionList(QStringList categoryList)
+{
+    KiwixChoiceBox::SelectionList sList;
+    for (const auto &category : categoryList) {
+        sList.append({category, category});
+    }
+    return sList;
+}
+
+}
+
 void ContentManagerSide::setCategories(QStringList categories)
 {
-    mp_categories->setSelections(categories, KiwixApp::instance()->getSettingsManager()->getCategoryList());
+    auto categorySelections = getCategorySelectionList(categories);
+    auto defaultSelections = getCategorySelectionList(
+        KiwixApp::instance()->getSettingsManager()->getCategoryList());
+    mp_categories->setSelections(categorySelections, defaultSelections);
 }
 
 void ContentManagerSide::setLanguages(ContentManager::LanguageList langList)
