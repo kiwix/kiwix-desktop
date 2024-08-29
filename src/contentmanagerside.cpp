@@ -6,6 +6,7 @@
 #include <QDebug>
 
 #include "klistwidgetitem.h"
+#include <kiwix/i18n.h>
 
 ContentManagerSide::ContentManagerSide(QWidget *parent) :
     QWidget(parent),
@@ -98,9 +99,11 @@ namespace
 
 KiwixChoiceBox::SelectionList getCategorySelectionList(QStringList categoryList)
 {
+    const auto lang = QLocale().name().split('_')[0].toStdString();
     KiwixChoiceBox::SelectionList sList;
     for (const auto &category : categoryList) {
-        sList.append({category, category});
+        const auto translation = QString::fromStdString(kiwix::translateBookCategory(lang, category.toStdString()));
+        sList.append({translation, category});
     }
     return sList;
 }
