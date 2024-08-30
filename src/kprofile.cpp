@@ -24,15 +24,31 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
 void KProfile::startDownload(QWebEngineDownloadRequest* download)
 #endif
 {
-    QString defaultFileName = download->url().fileName();
-    QString fileName = QFileDialog::getSaveFileName(KiwixApp::instance()->getMainWindow(),
-                                                       gt("save-file-as-window-title"), defaultFileName);
+    auto app = KiwixApp::instance();
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+    QString defaultFileName = QUrl(download->path()).fileName();
+#else
+    QString defaultFileName = download->downloadFileName();
+#endif
+    QString suggestedPath = app->getPrevSaveDir() + "/" + defaultFileName;
+    QString extension = defaultFileName.section('.', -1);
+    QString filter = extension != '.' ? "(*" + extension + ")" : "";
+
+    QString fileName = QFileDialog::getSaveFileName(
+            app->getMainWindow(), gt("save-file-as-window-title"),
+            suggestedPath, filter);
+
     if (fileName.isEmpty()) {
         return;
     }
-    QString extension = "." + download->url().url().section('.', -1);
     if (!fileName.endsWith(extension)) {
         fileName.append(extension);
+    }
+    app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
+
+    if (download->isSavePageDownload()) {
+        download->page()->printToPdf(fileName);
+        return;
     }
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     download->setPath(fileName);

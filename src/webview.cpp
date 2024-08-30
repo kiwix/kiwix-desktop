@@ -11,8 +11,12 @@ class QMenu;
 #include <QWebEngineSettings>
 #include <QWebEngineHistory>
 #include <QVBoxLayout>
+#include <QFileDialog>
 #include <zim/error.h>
 #include <zim/item.h>
+#include <kiwix/tools.h>
+
+zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 
 void WebViewBackMenu::showEvent(QShowEvent *)
 {
@@ -131,6 +135,32 @@ QMenu* WebView::getHistoryForwardMenu() const
     return ret;
 }
 
+void WebView::saveViewContent()
+{
+    try {
+        auto app = KiwixApp::instance();
+        auto library = app->getLibrary();
+        auto archive = library->getArchive(m_currentZimId);
+        auto entry = getArchiveEntryFromUrl(*archive, this->url());
+        if (entry.isRedirect()) 
+            return;
+
+        auto item = entry.getItem(true);
+        auto mimeType = QByteArray::fromStdString(item.getMimetype());
+        mimeType = mimeType.split(';')[0];
+
+        /* We have to sanitize here, as parsing will start once we pass the file
+           name to either save or download method.
+        */
+        QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
+        if (mimeType == "text/html")
+            page()->save(suggestedFileName + ".pdf");
+        else
+            page()->download(this->url(), suggestedFileName);
+    }
+    catch (...) { /* Blank */}
+}
+
 void WebView::addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const
 {
     QAction *a = menu->addAction(item.title());
@@ -241,6 +271,7 @@ QMenu* WebView::createStandardContextMenu() {
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
 
+    menu->addAction(app->getAction(KiwixApp::SavePageAsAction));
     return menu;
 }
 

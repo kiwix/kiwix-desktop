@@ -45,6 +45,8 @@ public:
     QMenu* getHistoryBackMenu() const;
     QMenu* getHistoryForwardMenu() const;
 
+    void saveViewContent();
+
 public slots:
     void onUrlChanged(const QUrl& url);
 

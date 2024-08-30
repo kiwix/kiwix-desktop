@@ -19,6 +19,8 @@
 #include <QtPlatformHeaders\QWindowsWindowFunctions>
 #endif
 
+const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
 ////////////////////////////////////////////////////////////////////////////////
 // KiwixApp
 ////////////////////////////////////////////////////////////////////////////////
@@ -427,11 +429,7 @@ void KiwixApp::createActions()
     CREATE_ACTION(OpenRecentAction, gt("open-recent"));
     HIDE_ACTION(OpenRecentAction);
 
-    /* TODO See https://github.com/kiwix/kiwix-desktop/issues/77
-    CREATE_ACTION(SavePageAsAction, tr("Save page as ..."));
-    // SET_SHORTCUT(SavePageAsAction, QKeySequence::SaveAs);
-    HIDE_ACTION(SavePageAsAction);
-    */
+    CREATE_ACTION_SHORTCUT(SavePageAsAction, gt("save-page-as"), QKeySequence::Save);
 
     CREATE_ACTION_SHORTCUTS(SearchArticleAction, gt("search-article"), QList<QKeySequence>({QKeySequence(Qt::Key_F6), QKeySequence(Qt::CTRL | Qt::Key_L), QKeySequence(Qt::ALT | Qt::Key_D)}));
 
@@ -568,4 +566,16 @@ void KiwixApp::restoreWindowState()
 void KiwixApp::saveCurrentTabIndex()
 {
   return mp_session->setValue("currentTabIndex", getTabWidget()->currentIndex());
+}
+
+void KiwixApp::savePrevSaveDir(const QString &prevSaveDir)
+{
+  mp_session->setValue("prevSaveDir", prevSaveDir);
+}
+
+QString KiwixApp::getPrevSaveDir() const
+{
+  QString prevSaveDir = mp_session->value("prevSaveDir", DEFAULT_SAVE_DIR).toString();
+  QDir dir(prevSaveDir);
+  return dir.exists() ? prevSaveDir : DEFAULT_SAVE_DIR;
 }
