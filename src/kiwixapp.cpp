@@ -427,11 +427,7 @@ void KiwixApp::createActions()
     CREATE_ACTION(OpenRecentAction, gt("open-recent"));
     HIDE_ACTION(OpenRecentAction);
 
-    /* TODO See https://github.com/kiwix/kiwix-desktop/issues/77
-    CREATE_ACTION(SavePageAsAction, tr("Save page as ..."));
-    // SET_SHORTCUT(SavePageAsAction, QKeySequence::SaveAs);
-    HIDE_ACTION(SavePageAsAction);
-    */
+    CREATE_ACTION_SHORTCUT(SavePageAsAction, gt("save-page-as"), QKeySequence::Save);
 
     CREATE_ACTION_SHORTCUTS(SearchArticleAction, gt("search-article"), QList<QKeySequence>({QKeySequence(Qt::Key_F6), QKeySequence(Qt::CTRL | Qt::Key_L), QKeySequence(Qt::ALT | Qt::Key_D)}));
 

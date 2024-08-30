@@ -49,6 +49,11 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                 auto key = mp_webView->zimId() + "/zoomFactor";
                 settingsManager->deleteSettings(key);
             });
+    connect(app->getAction(KiwixApp::SavePageAsAction), &QAction::triggered, 
+            this, [=](){
+                if (mp_tabBar->currentZimView() == this)
+                    mp_webView->saveViewContent();
+            });
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::zoomChanged, this, [=]() {
         auto key = mp_webView->zimId() + "/zoomFactor";
         auto zimZoomFactor = KiwixApp::instance()->getSettingsManager()->getSettings(key);

@@ -11,8 +11,11 @@ class QMenu;
 #include <QWebEngineSettings>
 #include <QWebEngineHistory>
 #include <QVBoxLayout>
+#include <QFileDialog>
 #include <zim/error.h>
 #include <zim/item.h>
+
+zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 
 void WebViewBackMenu::showEvent(QShowEvent *)
 {
@@ -129,6 +132,28 @@ QMenu* WebView::getHistoryForwardMenu() const
         addHistoryItemAction(ret, h->itemAt(i), i);
     }
     return ret;
+}
+
+void WebView::saveViewContent()
+{
+    try {
+        auto app = KiwixApp::instance();
+        auto library = app->getLibrary();
+        auto archive = library->getArchive(m_currentZimId);
+        auto entry = getArchiveEntryFromUrl(*archive, this->url());
+        if (entry.isRedirect()) 
+            return;
+
+        auto item = entry.getItem(true);
+        auto mimeType = QByteArray::fromStdString(item.getMimetype());
+        mimeType = mimeType.split(';')[0];
+
+        if (mimeType == "text/html")
+            page()->save(QString());
+        else
+            page()->download(this->url());
+    }
+    catch (...) { /* Blank */}
 }
 
 void WebView::addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const
