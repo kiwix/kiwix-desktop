@@ -93,6 +93,8 @@ public:
     void saveWindowState();
     void restoreWindowState();
     void saveCurrentTabIndex();
+    void savePrevSaveDir(const QString& prevSaveDir);
+    QString getPrevSaveDir() const;
 
 public slots:
     void newTab();

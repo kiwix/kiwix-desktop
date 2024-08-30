@@ -148,10 +148,11 @@ void WebView::saveViewContent()
         auto mimeType = QByteArray::fromStdString(item.getMimetype());
         mimeType = mimeType.split(';')[0];
 
+        QString suggestedFileName = item.getTitle().c_str();
         if (mimeType == "text/html")
-            page()->save(QString());
+            page()->save(suggestedFileName + ".pdf");
         else
-            page()->download(this->url());
+            page()->download(this->url(), suggestedFileName);
     }
     catch (...) { /* Blank */}
 }

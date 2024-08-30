@@ -30,12 +30,13 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
 #else
     QString defaultFileName = download->downloadFileName();
 #endif
+    QString suggestedPath = app->getPrevSaveDir() + "/" + defaultFileName;
     QString extension = defaultFileName.section('.', -1);
     QString filter = extension != '.' ? "(*" + extension + ")" : "";
 
     QString fileName = QFileDialog::getSaveFileName(
             app->getMainWindow(), gt("save-file-as-window-title"),
-            defaultFileName, filter);
+            suggestedPath, filter);
 
     if (fileName.isEmpty()) {
         return;
@@ -43,6 +44,7 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
     if (!fileName.endsWith(extension)) {
         fileName.append(extension);
     }
+    app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
 
     if (download->isSavePageDownload()) {
         download->page()->printToPdf(fileName);
