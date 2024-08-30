@@ -128,6 +128,7 @@
     "delete-book-text": "Are you sure you want to delete <b>{{ZIM}}</b>?",
     "download-storage-error": "Storage Error",
     "download-storage-error-text": "The system doesn't have enough storage available.",
+    "download-exceeds-max-file-size": "Download size exceeds the max file size supported by the target filesystem.",
     "download-dir-missing": "Download directory doesn't exist.",
     "download-dir-not-writable": "Download directory is not writable.",
     "download-unavailable": "Download Unavailable",

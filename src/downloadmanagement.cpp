@@ -247,6 +247,27 @@ void throwDownloadUnavailableError()
                         gt("download-unavailable-text"));
 }
 
+uint64_t getMaxFileSize(const QStorageInfo& storageInfo)
+{
+    const uint64_t GiB = 1024UL*1024UL*1024UL;
+
+    // Maximum file size limits of filesystems that are expected to be
+    // encountered in practice and cause problems should be entered below
+    static const QMap<QByteArray, uint64_t> problematicFileSystems = {
+// The output of QStorageInfo::fileSystemType() is platform dependent
+#ifdef _WIN32
+        // XXX: find out the real name for FAT32 as reported under Windows
+        { "FAT32", 4*GiB - 1 }
+#else
+        { "vfat",  4*GiB - 1 }
+#endif
+    };
+
+    const uint64_t virtuallyNoLimit = std::numeric_limits<uint64_t>::max();
+    const auto fsType = storageInfo.fileSystemType();
+    return problematicFileSystems.value(fsType, virtuallyNoLimit);
+}
+
 void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
 {
     const QFileInfo targetDirInfo(targetDir);
@@ -267,6 +288,11 @@ void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
     if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
         throw KiwixAppError(gt("download-storage-error"),
                             gt("download-storage-error-text"));
+    }
+
+    if ( book.getSize() > getMaxFileSize(storage) ) {
+        throw KiwixAppError(gt("download-storage-error"),
+                            gt("download-exceeds-max-file-size"));
     }
 }
 
@@ -293,7 +319,7 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
     }
-    
+
     return downloadId;
 }
 
