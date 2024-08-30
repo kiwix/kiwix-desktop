@@ -6,6 +6,7 @@
 #include <QDebug>
 
 #include "klistwidgetitem.h"
+#include <kiwix/i18n.h>
 
 ContentManagerSide::ContentManagerSide(QWidget *parent) :
     QWidget(parent),
@@ -51,12 +52,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
     });
 
     FilterList contentTypeList = {
-      {"_pictures:yes", gt("pictures")},
-      {"_pictures:no", gt("no-pictures")},
-      {"_videos:yes", gt("videos")},
-      {"_videos:no", gt("no-videos")},
-      {"_details:yes", gt("details")},
-      {"_details:no", gt("no-details")}
+      {gt("pictures"), "_pictures:yes"},
+      {gt("no-pictures"), "_pictures:no"},
+      {gt("videos"), "_videos:yes"},
+      {gt("no-videos"), "_videos:no"},
+      {gt("details"), "_details:yes"},
+      {gt("no-details"), "_details:no"}
     };
 
     mp_contentType->setSelections(contentTypeList, KiwixApp::instance()->getSettingsManager()->getContentType());
@@ -83,16 +84,38 @@ void ContentManagerSide::setContentManager(ContentManager *contentManager)
         mp_contentManager->setCurrentLanguage(values);
     });
     connect(mp_categories, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
-        mp_contentManager->setCurrentCategoryFilter(values);
+        QStringList categoryList;
+        for (const auto& pair : values)
+            categoryList.append(pair.second);
+        mp_contentManager->setCurrentCategoryFilter(categoryList);
     });
     connect(mp_contentType, &KiwixChoiceBox::choiceUpdated, this, [=](FilterList values) {
         mp_contentManager->setCurrentContentTypeFilter(values);
     });
 }
 
+namespace
+{
+
+KiwixChoiceBox::SelectionList getCategorySelectionList(QStringList categoryList)
+{
+    const auto lang = QLocale().name().split('_')[0].toStdString();
+    KiwixChoiceBox::SelectionList sList;
+    for (const auto &category : categoryList) {
+        const auto translation = QString::fromStdString(kiwix::translateBookCategory(lang, category.toStdString()));
+        sList.append({translation, category});
+    }
+    return sList;
+}
+
+}
+
 void ContentManagerSide::setCategories(QStringList categories)
 {
-    mp_categories->setSelections(categories, KiwixApp::instance()->getSettingsManager()->getCategoryList());
+    auto categorySelections = getCategorySelectionList(categories);
+    auto defaultSelections = getCategorySelectionList(
+        KiwixApp::instance()->getSettingsManager()->getCategoryList());
+    mp_categories->setSelections(categorySelections, defaultSelections);
 }
 
 void ContentManagerSide::setLanguages(ContentManager::LanguageList langList)

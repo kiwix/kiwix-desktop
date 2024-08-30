@@ -226,30 +226,22 @@ QString beautifyString(QString word)
     return word;
 }
 
-void KiwixChoiceBox::setSelections(QStringList selections, SelectionList defaultSelection)
-{
-    SelectionList sList;
-    for (const auto &sel : selections) {
-        sList.append({sel, sel});
-    }
-    setSelections(sList, defaultSelection);
-}
-
 void KiwixChoiceBox::setSelections(SelectionList selections, SelectionList defaultSelection)
 {
     clearSelections();
     choiceSelector->clear();
     for (const auto &selection: selections)
     {
-        auto item = new KListWidgetItem(beautifyString(selection.second));
-        item->setData(Qt::UserRole, selection.first);
+        auto item = new KListWidgetItem(beautifyString(selection.first));
+        item->setData(Qt::UserRole, selection.second);
         choiceSelector->addItem(item);
     }
 
     for (const auto &defSel : defaultSelection) {
-        auto itemList = choiceSelector->findItems(defSel.first, Qt::MatchExactly);
+        QString displayStr = beautifyString(defSel.first);
+        auto itemList = choiceSelector->findItems(displayStr, Qt::MatchExactly);
         if (itemList.isEmpty()) {
-            auto item = new KListWidgetItem(defSel.first);
+            auto item = new KListWidgetItem(displayStr);
             item->setData(Qt::UserRole, defSel.second);
             choiceSelector->addItem(item);
             addSelection(item, false);

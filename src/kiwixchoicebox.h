@@ -24,13 +24,12 @@ class KiwixChoiceBox : public QWidget
 {
     Q_OBJECT
 
+public:
     typedef QList<QPair<QString,QString>> SelectionList;
 
-public:
     explicit KiwixChoiceBox(QWidget *parent = nullptr);
     void setType(QString type);
     void setSelections(SelectionList selections, SelectionList defaultSelection);
-    void setSelections(QStringList selections, SelectionList defaultSelection);
     ~KiwixChoiceBox();
     void adjustSize();
 

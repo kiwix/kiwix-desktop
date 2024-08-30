@@ -258,7 +258,7 @@ void ContentManager::setLanguages()
         for (auto language : languageData) {
             auto langCode = QString::fromStdString(language);
             auto selfName = QString::fromStdString(kiwix::getLanguageSelfName(language));
-            languages.push_back({langCode, selfName});
+            languages.push_back({selfName, langCode});
         }
         m_languages = languages;
         emit(languagesLoaded(m_languages));
@@ -725,17 +725,13 @@ void ContentManager::setCurrentLanguage(FilterList langPairList)
     emit(filterParamsChanged());
 }
 
-void ContentManager::setCurrentCategoryFilter(FilterList categoryPairList)
+void ContentManager::setCurrentCategoryFilter(QStringList categoryList)
 {
-    QStringList categoryList;
-    for (auto &catPair : categoryPairList) {
-        categoryList.append(catPair.second);
-    }
     categoryList.sort();
     if (m_categoryFilter == categoryList.join(","))
         return;
     m_categoryFilter = categoryList.join(",");
-    getSettingsManager()->setCategory(categoryPairList);
+    getSettingsManager()->setCategory(categoryList);
     emit(filterParamsChanged());
 }
 
@@ -779,7 +775,7 @@ void ContentManager::updateLanguages(const QString& content) {
     for (auto language : languages) {
         auto code = QString::fromStdString(language.first);
         auto title = QString::fromStdString(language.second);
-        tempLanguages.push_back({code, title});
+        tempLanguages.push_back({title, code});
     }
     m_languages = tempLanguages;
     emit(languagesLoaded(m_languages));

@@ -63,7 +63,7 @@ public: // functions
     ContentManagerView* getView() { return mp_view; }
     void setLocal(bool local);
     void setCurrentLanguage(FilterList languageList);
-    void setCurrentCategoryFilter(FilterList category);
+    void setCurrentCategoryFilter(QStringList categoryList);
     void setCurrentContentTypeFilter(FilterList contentTypeFilter);
     bool isLocal() const { return m_local; }
     QStringList getCategories() const { return m_categories; }
