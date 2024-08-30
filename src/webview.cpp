@@ -14,6 +14,7 @@ class QMenu;
 #include <QFileDialog>
 #include <zim/error.h>
 #include <zim/item.h>
+#include <kiwix/tools.h>
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 
@@ -148,7 +149,10 @@ void WebView::saveViewContent()
         auto mimeType = QByteArray::fromStdString(item.getMimetype());
         mimeType = mimeType.split(';')[0];
 
-        QString suggestedFileName = item.getTitle().c_str();
+        /* We have to sanitize here, as parsing will start once we pass the file
+           name to either save or download method.
+        */
+        QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
         if (mimeType == "text/html")
             page()->save(suggestedFileName + ".pdf");
         else
