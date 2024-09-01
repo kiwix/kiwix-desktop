@@ -1,4 +1,7 @@
 #include "suggestionlistmodel.h"
+#include "kiwixapp.h"
+
+#include <QIcon>
 
 SuggestionListModel::SuggestionListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -32,6 +35,15 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
         case Qt::UserRole:
             if (row < m_urlList.size())
                 return m_urlList.at(row);
+            break;
+        case Qt::DecorationRole:
+            if (row < m_urlList.size())
+            {
+                auto library = KiwixApp::instance()->getLibrary();
+                const auto zimId = m_urlList.at(row).host().split(".")[0];
+                const auto defaultIcon = QIcon(":/icons/placeholder-icon.png");
+                return library->getZimIcon(zimId, defaultIcon);
+            }
             break;
     }
     return QVariant();
