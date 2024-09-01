@@ -2,10 +2,11 @@
 #include "kiwixapp.h"
 #include <zim/suggestion.h>
 
-SuggestionListWorker::SuggestionListWorker(const QString& text, int token, QObject *parent)
+SuggestionListWorker::SuggestionListWorker(const QString& text, int token, int start, QObject *parent)
 : QThread(parent),
   m_text(text),
-  m_token(token)
+  m_token(token),
+  m_start(start)
 {
 }
 
@@ -24,11 +25,10 @@ void SuggestionListWorker::run()
         QUrl url;
         url.setScheme("zim");
         url.setHost(currentZimId + ".zim");
-        int suggestionsCount = 15;
         auto prefix = m_text.toStdString();
         auto suggestionSearcher = zim::SuggestionSearcher(*archive);
         auto suggestionSearch = suggestionSearcher.suggest(prefix);
-        const auto suggestions = suggestionSearch.getResults(0, suggestionsCount);
+        const auto suggestions = suggestionSearch.getResults(m_start, getFetchSize());
         for (auto current : suggestions) {
             QString path = QString("/") + QString::fromStdString(current.getPath());
             url.setPath(path);
