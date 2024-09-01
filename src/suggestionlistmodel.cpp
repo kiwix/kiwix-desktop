@@ -9,10 +9,8 @@ SuggestionListModel::~SuggestionListModel()
 {
 }
 
-int SuggestionListModel::rowCount(const QModelIndex &parent) const
+int SuggestionListModel::rowCount(const QModelIndex &) const
 {
-    Q_UNUSED(parent);
-
     return m_suggestions.size();
 }
 
@@ -26,7 +24,9 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
     {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return m_suggestions.at(row);
+            return m_suggestions.at(row).text;
+        case Qt::UserRole:
+            return m_suggestions.at(row).url;
     }
     return QVariant();
 }
@@ -38,12 +38,16 @@ void SuggestionListModel::resetSuggestions()
     endResetModel();
 }
 
-void SuggestionListModel::append(const QStringList &suggestions)
+void SuggestionListModel::append(const QStringList &suggestions,
+                                 const QVector<QUrl> &urlList)
 {
     beginResetModel();
-    for (int i = 0; i < suggestions.size(); i++)
-    {
-        m_suggestions.append(suggestions[i]);
-    }
+    for (int i = 0; i < std::min(suggestions.size(), urlList.size()); i++)
+        m_suggestions.append({suggestions[i], urlList[i]});
     endResetModel();
+}
+
+QModelIndex SuggestionListModel::lastIndex() const
+{
+    return index(rowCount() - 1);
 }

@@ -2,6 +2,13 @@
 #define SUGGESTIONLISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QUrl>
+
+struct SuggestionData
+{
+    QString text;
+    QUrl url;
+};
 
 class SuggestionListModel : public QAbstractListModel
 {
@@ -15,10 +22,12 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void resetSuggestions();
-    void append(const QStringList& suggestions);
+    void append(const QStringList& suggestions, const QVector<QUrl>& urlList);
+
+    QModelIndex lastIndex() const;
 
 private:
-    QList<QString> m_suggestions;
+    QList<SuggestionData> m_suggestions;
 };
 
 #endif // SUGGESTIONLISTMODEL_H

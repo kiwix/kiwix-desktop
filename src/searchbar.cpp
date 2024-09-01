@@ -112,7 +112,6 @@ void SearchBarLineEdit::hideSuggestions()
 void SearchBarLineEdit::clearSuggestions()
 {
     m_suggestionModel.resetSuggestions();
-    m_urlList.clear();
 }
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
@@ -169,12 +168,12 @@ void SearchBarLineEdit::updateCompletion()
         if (token != m_token) {
             return;
         }
-        m_urlList = urlList;
+
+        m_suggestionModel.append(suggestions, urlList);
         if (m_returnPressed) {
-            openCompletion(suggestions.first(), 0);
+            openCompletion(m_suggestionModel.index(0));
             return;
         }
-        m_suggestionModel.append(suggestions);
         m_completer.complete();
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
@@ -183,20 +182,17 @@ void SearchBarLineEdit::updateCompletion()
 
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
-    if (m_urlList.size() != 0) {
-        openCompletion(index.data().toString(), index.row());
+    if (m_suggestionModel.rowCount() != 0) 
+    {
+        QUrl url;
+        auto editText = index.data().toString();
+        if (this->text().compare(editText, Qt::CaseInsensitive) == 0) {
+            url = index.data(Qt::UserRole).toUrl();
+        } else {
+            url = m_suggestionModel.lastIndex().data(Qt::UserRole).toUrl();
+        }
+        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
     }
-}
-
-void SearchBarLineEdit::openCompletion(const QString& text, int index)
-{
-    QUrl url;
-    if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
-        url = m_urlList.at(index);
-    } else {
-        url = m_urlList.last();
-    }
-    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
 }
 
 SearchBar::SearchBar(QWidget *parent) :
