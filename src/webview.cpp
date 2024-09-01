@@ -203,24 +203,10 @@ void WebView::onUrlChanged(const QUrl& url) {
     }
     m_currentZimId = zimId;
     emit zimIdChanged(m_currentZimId);
-    std::shared_ptr<zim::Archive> archive;
-    try {
-        archive = app->getLibrary()->getArchive(m_currentZimId);
-    } catch (std::out_of_range& e) {
-        return;
-    }
+    m_icon = app->getLibrary()->getZimIcon(m_currentZimId);
     auto zoomFactor = app->getSettingsManager()->getZoomFactorByZimId(zimId);
     this->setZoomFactor(zoomFactor);
-    try {
-        std::string favicon, _mimetype;
-        auto item = archive->getIllustrationItem(48);
-        favicon = item.getData();
-        _mimetype = item.getMimetype();
-        QPixmap pixmap;
-        pixmap.loadFromData((const uchar*)favicon.data(), favicon.size());
-        m_icon = QIcon(pixmap);
-        emit iconChanged(m_icon);
-    } catch (zim::EntryNotFound& e) {}
+    emit iconChanged(m_icon);
 }
 
 void WebView::wheelEvent(QWheelEvent *event) {
