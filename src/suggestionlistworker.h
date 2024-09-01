@@ -9,7 +9,9 @@ class SuggestionListWorker : public QThread
 {
     Q_OBJECT
 public:
-    SuggestionListWorker(const QString& text, int token, QObject *parent = nullptr);
+    static int getFetchSize() { return 15; };
+
+    SuggestionListWorker(const QString& text, int token, int start, QObject *parent = nullptr);
     void run() override;
 
 signals:
@@ -18,6 +20,7 @@ signals:
 private:
     QString m_text;
     int m_token = 0;
+    int m_start;
 };
 
 #endif // SUGGESTIONLISTWORKER_H
