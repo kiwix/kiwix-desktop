@@ -1,4 +1,9 @@
 #include "suggestionlistmodel.h"
+#include "kiwixapp.h"
+
+#include <QIcon>
+
+QString getZimIdFromUrl(QUrl url);
 
 SuggestionListModel::SuggestionListModel(QObject *parent)
     : QAbstractListModel(parent)
@@ -29,6 +34,10 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
             return m_suggestions.at(row).text;
         case Qt::UserRole:
             return m_suggestions.at(row).url;
+        case Qt::DecorationRole:
+            const auto library = KiwixApp::instance()->getLibrary();
+            const auto zimId = getZimIdFromUrl(m_suggestions.at(row).url);
+            return library->getBookIcon(zimId);
     }
     return QVariant();
 }
