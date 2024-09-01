@@ -3,6 +3,7 @@
 
 #include <kiwix/manager.h>
 #include <kiwix/tools.h>
+#include <zim/item.h>
 
 #include <QtDebug>
 #include <QtConcurrent/QtConcurrentRun>
@@ -70,6 +71,23 @@ std::shared_ptr<zim::Archive> Library::getArchive(const QString &zimId)
 std::shared_ptr<zim::Searcher> Library::getSearcher(const QString &zimId)
 {
     return mp_library->getSearcherById(zimId.toStdString());
+}
+
+QIcon Library::getZimIcon(const QString &zimId, QIcon defaultIcon)
+{
+    try 
+    {
+        std::shared_ptr<zim::Archive> archive = getArchive(zimId);
+        auto illustration = archive->getIllustrationItem(48);
+        std::string content = illustration.getData();
+        QPixmap pixmap;
+        pixmap.loadFromData((const uchar*)content.data(), content.size());
+        return QIcon(pixmap);
+    } 
+    catch (...) 
+    {
+        return defaultIcon;
+    }
 }
 
 QStringList Library::getBookIds() const

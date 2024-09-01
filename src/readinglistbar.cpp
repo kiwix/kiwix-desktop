@@ -57,28 +57,17 @@ void ReadingListBar::setupList()
     auto listWidget = ui->listWidget;
     listWidget->clear();
     for(auto& bookmark:bookmarks) {
-        std::shared_ptr<zim::Archive> archive;
+        auto zimId = QString::fromStdString(bookmark.getBookId());
         try {
-            archive = library->getArchive(QString::fromStdString(bookmark.getBookId()));
+            library->getArchive(zimId);
         } catch (std::out_of_range& e) {
             continue;
         }
-        try {
-            auto illustration = archive->getIllustrationItem(48);
-            std::string content = illustration.getData();
-            std::string mimeType = illustration.getMimetype();
-            QPixmap pixmap;
-            pixmap.loadFromData(reinterpret_cast<const uchar*>(content.data()), content.size());
-            auto icon = QIcon(pixmap);
-            new QListWidgetItem(
-                icon,
+        auto item = new QListWidgetItem(
+                library->getZimIcon(zimId),
                 QString::fromStdString(bookmark.getTitle()),
                 listWidget);
-        } catch (zim::EntryNotFound& e) {
-            new QListWidgetItem(
-                QString::fromStdString(bookmark.getTitle()),
-                listWidget);
-        }
+        item->setTextAlignment(Qt::TextWordWrap);
     }
 }
 
