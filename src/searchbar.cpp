@@ -162,7 +162,7 @@ void SearchBarLineEdit::updateCompletion()
         return;
     }
     m_token++;
-    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, this);
+    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, 0, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
     [=] (const QList<SuggestionData>& suggestionList, int token) {
         if (token != m_token) {
