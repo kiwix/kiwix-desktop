@@ -2,6 +2,7 @@
 #define SUGGESTIONLISTMODEL_H
 
 #include <QAbstractListModel>
+#include <QUrl>
 
 class SuggestionListModel : public QAbstractListModel
 {
@@ -15,9 +16,11 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void resetSuggestions(const QStringList& suggestions = QStringList{});
+    void resetUrlList(const QVector<QUrl>& urlList = QVector<QUrl>{});
 
 private:
     QStringList m_suggestions;
+    QVector<QUrl> m_urlList;
 };
 
 #endif // SUGGESTIONLISTMODEL_H
