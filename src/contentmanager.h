@@ -116,7 +116,7 @@ private: // types
             // the file is known to be downloaded by our own download manager
             BEING_DOWNLOADED_BY_US,
 
-            // the file was added the library successfully
+            // the file was added to the library successfully
             ADDED_TO_THE_LIBRARY,
 
             // the attempt to add the file to the library failed
