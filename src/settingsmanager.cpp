@@ -186,5 +186,13 @@ void SettingsManager::initSettings()
     m_langList = m_settings.value("language", defaultLangVariant).toList();
 
     m_categoryList = m_settings.value("category", {}).toStringList();
+
+    /* Older versions used to save both the category identifier/code and its
+     * name as shown to the user (separated by the | symbol). Now we store only
+     * the category identifier from which the name is generated after loading.
+     * In order to avoid user confusion we drop entries stored in the old format
+     */
+    setCategory(m_categoryList.filter(QRegularExpression(R"(^[^|]*$)")));
+
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }
