@@ -23,7 +23,7 @@
 #include <QDesktopServices>
 
 #ifndef QT_NO_DEBUG
-#define DBGOUT(X) qDebug() << "DBG: " << X
+#define DBGOUT(X) qDebug().nospace() << "DBG: " << X
 #else
 #define DBGOUT(X)
 #endif
