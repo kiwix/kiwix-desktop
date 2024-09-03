@@ -905,7 +905,7 @@ void ContentManager::updateLibraryFromDir(QString monitorDir)
             const bool added = manager.addBookFromPath(bookPath.toStdString());
             DBGOUT("                     "
                    << (added ? "and was added" : "but could not be added")
-                   << "to the library");
+                   << " to the library");
             needsRefresh |= added;
         }
     }
