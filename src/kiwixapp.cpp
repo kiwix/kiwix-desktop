@@ -385,16 +385,12 @@ void KiwixApp::createActions()
 
     if (QGuiApplication::isLeftToRight()) {
       CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-left", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Left));
-    } else {
-      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-right", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Right));
-    }
-    DISABLE_ACTION(HistoryBackAction);
-
-    if (QGuiApplication::isLeftToRight()) {
       CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-right", gt("forward"), QKeySequence(Qt::ALT | Qt::Key_Right));
     } else {
+      CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-right", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Right));
       CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-left", gt("forward"), QKeySequence(Qt::ALT | Qt::Key_Left));
     }
+    DISABLE_ACTION(HistoryBackAction);
     DISABLE_ACTION(HistoryForwardAction);
 
     CREATE_ACTION_ICON_SHORTCUT(PrintAction, "print", gt("print"), QKeySequence::Print);
