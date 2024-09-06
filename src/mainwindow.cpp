@@ -27,6 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
     addAction(app->getAction(KiwixApp::NextTabAction));
     addAction(app->getAction(KiwixApp::PreviousTabAction));
 
+    mp_ui->nextTabButton->setDefaultAction(app->getAction(KiwixApp::ScrollNextTabAction));
+    mp_ui->prevTabButton->setDefaultAction(app->getAction(KiwixApp::ScrollPreviousTabAction));
+
+    connect(mp_ui->nextTabButton, &QToolButton::triggered, mp_ui->tabBar, &TabBar::scrollNextTab);
+    connect(mp_ui->prevTabButton, &QToolButton::triggered, mp_ui->tabBar, &TabBar::scrollPreviousTab);
+
     connect(app->getAction(KiwixApp::ExitAction), &QAction::triggered,
             this, &QMainWindow::close);
     connect(app->getAction(KiwixApp::ToggleFullscreenAction), &QAction::triggered,

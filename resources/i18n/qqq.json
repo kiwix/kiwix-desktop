@@ -172,5 +172,7 @@
 	"export-reading-list-error": "Error description text for when exporting the reading list to a file failed.",
 	"import-reading-list": "Represents the action of importing a reading list from a file.",
 	"import-reading-list-error": "Error description text for when importing a reading list from a file failed.",
-	"save-page-as": "Represents the action of saving the current tab content to a file chosen by the user."
+	"save-page-as": "Represents the action of saving the current tab content to a file chosen by the user.",
+	"scroll-next-tab": "Represents the action of scrolling to the next tab of the current tab which toward the end of the tab bar.",
+	"scroll-previous-tab": "Represents the action of scrolling to the previous tab of the current tab which toward the start of the tab bar."
 }

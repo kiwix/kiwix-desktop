@@ -69,6 +69,8 @@ public slots:
     void on_webview_titleChanged(const QString& title);
     void moveToNextTab();
     void moveToPreviousTab();
+    void scrollNextTab();
+    void scrollPreviousTab();
 
 private:
     void setCloseTabButton(int index);

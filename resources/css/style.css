@@ -201,7 +201,12 @@ QTabBar::tab:first {
     border-radius: 3px;
 }
 
-#closeTabButton:hover, #newTabButton:hover {
+#nextTabButton, #prevTabButton {
+    border: 1px solid #ccc;
+}
+
+#closeTabButton:hover, #newTabButton:hover,
+#nextTabButton:hover, #prevTabButton:hover{
     border: 1px solid #3366CC;
     background-color: #D9E9FF;
     border-radius: 3px;

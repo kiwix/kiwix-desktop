@@ -134,6 +134,18 @@ void TabBar::moveToPreviousTab()
     setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
 }
 
+void TabBar::scrollNextTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index + 1);
+}
+
+void TabBar::scrollPreviousTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index - 1);
+}
+
 void TabBar::setCloseTabButton(int index)
 {
     Q_ASSERT(index > 0 && index < realTabCount());
