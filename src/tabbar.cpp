@@ -104,6 +104,7 @@ void TabBar::setContentManagerView(ContentManagerView* view)
 void TabBar::setNewTabButton(QAction* newTabAction)
 {
     QToolButton *tb = new QToolButton();
+    tb->setObjectName("newTabButton");
     tb->setDefaultAction(newTabAction);
     tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
     int idx = addTab("");
@@ -138,6 +139,7 @@ void TabBar::setCloseTabButton(int index)
     Q_ASSERT(index > 0 && index < realTabCount());
 
     QToolButton *tb = new QToolButton(this);
+    tb->setObjectName("closeTabButton");
     QAction *a = new QAction(QIcon(":/icons/close.svg"), gt("close-tab"), tb);
     a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
     tb->setDefaultAction(a);
