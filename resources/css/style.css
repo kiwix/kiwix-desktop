@@ -207,6 +207,12 @@ QTabBar::tab:first {
     border-radius: 3px;
 }
 
+QTabBar::scroller {
+    width: 0px;
+    height: 0px;
+    border: none;
+}
+
 /* -----------------------------------------
     TabWidget
 */
