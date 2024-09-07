@@ -22,6 +22,12 @@
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
 
+#ifndef QT_NO_DEBUG
+#define DBGOUT(X) qDebug().nospace() << "DBG: " << X
+#else
+#define DBGOUT(X)
+#endif
+
 namespace
 {
 
@@ -112,6 +118,9 @@ ContentManager::ContentManager(Library* library)
     if ( DownloadManager::downloadingFunctionalityAvailable() ) {
         startDownloadUpdaterThread();
     }
+
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged,
+            this, &ContentManager::asyncUpdateLibraryFromDir);
 }
 
 void ContentManager::updateModel()
@@ -846,9 +855,28 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
     emit(booksChanged());
 }
 
-void ContentManager::setMonitorDirZims(QString monitorDir, Library::QStringSet zimList)
+////////////////////////////////////////////////////////////////////////////////
+// Directory monitoring stuff
+////////////////////////////////////////////////////////////////////////////////
+
+void ContentManager::setMonitoredDirectories(QStringSet dirList)
 {
-    m_knownZimsInDir[monitorDir] = zimList;
+    for (auto path : m_watcher.directories()) {
+        m_watcher.removePath(path);
+    }
+    m_knownZimsInDir.clear();
+    MonitoredZimFileInfo libraryZimFileInfo;
+    libraryZimFileInfo.status = MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
+    for (auto dir : dirList) {
+        if (dir != "") {
+            auto& zimsInDir = m_knownZimsInDir[dir];
+            for ( const auto& fname : mp_library->getLibraryZimsFromDir(dir) ) {
+                zimsInDir.insert(fname, libraryZimFileInfo);
+            }
+            m_watcher.addPath(dir);
+            asyncUpdateLibraryFromDir(dir);
+        }
+    }
 }
 
 void ContentManager::asyncUpdateLibraryFromDir(QString dir)
@@ -858,50 +886,188 @@ void ContentManager::asyncUpdateLibraryFromDir(QString dir)
     });
 }
 
-void ContentManager::updateLibraryFromDir(QString monitorDir)
+void ContentManager::handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
-    typedef Library::QStringSet QStringSet;
-
-    QMutexLocker locker(&m_updateFromDirMutex);
-    const QDir dir(monitorDir);
-    const QStringSet oldDirEntries = m_knownZimsInDir[monitorDir];
-    QStringSet newDirEntries;
-    for (const auto &file : dir.entryList({"*.zim"})) {
-        newDirEntries.insert(QDir::toNativeSeparators(monitorDir + "/" + file));
-    }
-    const QStringSet addedZims = newDirEntries - oldDirEntries;
-    const QStringSet removedZims = oldDirEntries - newDirEntries;
     const auto kiwixLib = mp_library->getKiwixLibrary();
-    kiwix::Manager manager(kiwixLib);
-    bool needsRefresh = !removedZims.empty();
-    for (auto bookPath : removedZims) {
+    auto& zimsInDir = m_knownZimsInDir[dirPath];
+    for (const auto& file : fileNames) {
+        const auto bookPath = QDir::toNativeSeparators(dirPath + "/" + file);
         try {
-            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
-            //          << "file disappeared: " << bookPath;
+            DBGOUT("directory monitoring: file disappeared: " << bookPath);
             const auto book = kiwixLib->getBookByPath(bookPath.toStdString());
-            handleDisappearedZimFile(QString::fromStdString(book.getId()));
-        } catch (...) {}
-    }
-    for (auto bookPath : addedZims) {
-        if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
-            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
-            //          << bookPath
-            //          << " ignored since it is being downloaded by us.";
-        } else {
-            // qDebug() << "DBG: ContentManager::updateLibraryFromDir(): "
-            //          << "file appeared: " << bookPath;
-            needsRefresh |= manager.addBookFromPath(bookPath.toStdString());
+            if ( handleDisappearedBook(QString::fromStdString(book.getId())) ) {
+                zimsInDir.remove(file);
+            }
+        } catch (const std::exception& err) {
+            DBGOUT("directory monitoring: "
+                   "error while dropping the disappeared book: " << err.what());
+            // the book was removed by the user via the UI
+            zimsInDir.remove(file);
         }
-    }
-    if (needsRefresh) {
-        mp_library->save();
-        emit(booksChanged());
-        setMonitorDirZims(monitorDir, newDirEntries);
     }
 }
 
-void ContentManager::handleDisappearedZimFile(QString bookId)
+size_t ContentManager::handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames)
 {
-    if (!KiwixApp::instance()->getTabWidget()->getTabZimIds().contains(bookId))
-        mp_library->removeBookFromLibraryById(bookId);
+    size_t countOfSuccessfullyAddedZims = 0;
+    for (const auto& file : fileNames) {
+        const bool addedToLib = handleZimFileInMonitoredDirLogged(dirPath, file);
+        countOfSuccessfullyAddedZims += addedToLib;
+    }
+    return countOfSuccessfullyAddedZims;
+}
+
+namespace
+{
+
+#ifndef QT_NO_DEBUG
+
+// indexed by MonitoredZimFileInfo::ZimFileStatus enum
+const char* monitoredDirZimFileHandlingMsgs[] = {
+    "",
+    "it is being downloaded by us, ignoring...",
+    "the file was added to the library",
+    "the file could not be added to the library",
+    "it is an unchanged known bad zim file",
+    "deferring the check of an updated bad zim file",
+    "bad zim file was updated but a deferred request to check it is pending"
+};
+
+#endif
+
+} // unnamed namespace
+
+bool ContentManager::handleZimFileInMonitoredDirLogged(QString dir, QString fileName)
+{
+    DBGOUT("ContentManager::handleZimFileInMonitoredDir(" << dir << ", " << fileName << ")");
+    const int status = handleZimFileInMonitoredDir(dir, fileName);
+    DBGOUT("\t" << monitoredDirZimFileHandlingMsgs[status]);
+    return status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY;
+}
+
+bool ContentManager::MonitoredZimFileInfo::fileKeepsBeingModified() const
+{
+    // A file is considered stable if it has stayed unchanged for at least
+    // this long.
+    const qint64 FILE_STABILITY_DURATION_MS = 1000;
+
+    const QDateTime now = QDateTime::currentDateTime();
+    return this->lastModified > now.addMSecs(-FILE_STABILITY_DURATION_MS);
+}
+
+void ContentManager::MonitoredZimFileInfo::updateStatus(const MonitoredZimFileInfo& prevInfo)
+{
+    Q_ASSERT(prevInfo.status != ADDED_TO_THE_LIBRARY);
+
+    if ( this->lastModified == prevInfo.lastModified ) {
+        this->status = UNCHANGED_KNOWN_BAD_ZIM_FILE;
+    } else if ( prevInfo.status == PROCESS_LATER ) {
+        this->status = DEFERRED_PROCESSING_ALREADY_PENDING;
+    } else if ( this->fileKeepsBeingModified() ) {
+        this->status = PROCESS_LATER;
+    } else {
+        this->status = PROCESS_NOW;
+    }
+}
+
+ContentManager::MonitoredZimFileInfo ContentManager::getMonitoredZimFileInfo(QString dir, QString fileName) const
+{
+    const auto bookPath = QDir::toNativeSeparators(dir + "/" + fileName);
+
+    MonitoredZimFileInfo zimFileInfo;
+
+    zimFileInfo.lastModified = QFileInfo(bookPath).lastModified();
+
+    const auto& zimsInDir = m_knownZimsInDir[dir];
+    const auto fileInfoEntry = zimsInDir.constFind(fileName);
+    if ( fileInfoEntry != zimsInDir.constEnd() ) {
+        zimFileInfo.updateStatus(fileInfoEntry.value());
+    }
+
+    return zimFileInfo;
+}
+
+int ContentManager::handleZimFileInMonitoredDir(QString dir, QString fileName)
+{
+    const auto bookPath = QDir::toNativeSeparators(dir + "/" + fileName);
+
+    if ( mp_library->isBeingDownloadedByUs(bookPath) ) {
+        return MonitoredZimFileInfo::BEING_DOWNLOADED_BY_US;
+    }
+
+    MonitoredZimFileInfo zfi = getMonitoredZimFileInfo(dir, fileName);
+    if ( zfi.status == MonitoredZimFileInfo::PROCESS_LATER ) {
+        deferHandlingOfZimFileInMonitoredDir(dir, fileName);
+    } else if ( zfi.status == MonitoredZimFileInfo::PROCESS_NOW ) {
+        kiwix::Manager manager(mp_library->getKiwixLibrary());
+        const bool addedToLib = manager.addBookFromPath(bookPath.toStdString());
+        zfi.status = addedToLib
+                   ? MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY
+                   : MonitoredZimFileInfo::COULD_NOT_BE_ADDED_TO_THE_LIBRARY;
+        m_knownZimsInDir[dir].insert(fileName, zfi);
+    }
+    return zfi.status;
+}
+
+ContentManager::QStringSet ContentManager::getLibraryZims(QString dirPath) const
+{
+    QStringSet zimFileNames;
+    const auto& zimsInDir = m_knownZimsInDir[dirPath];
+    for ( auto it = zimsInDir.begin(); it != zimsInDir.end(); ++it ) {
+        if ( it.value().status == MonitoredZimFileInfo::ADDED_TO_THE_LIBRARY )
+            zimFileNames.insert(it.key());
+    }
+    return zimFileNames;
+}
+
+void ContentManager::updateLibraryFromDir(QString dirPath)
+{
+    QMutexLocker locker(&m_updateFromDirMutex);
+    const QDir dir(dirPath);
+    const QStringSet zimsPresentInLib = getLibraryZims(dirPath);
+
+    QStringSet zimsInDir;
+    for (const auto &file : dir.entryList({"*.zim"})) {
+        zimsInDir.insert(file);
+    }
+
+    const QStringSet zimsNotInLib = zimsInDir - zimsPresentInLib;
+    const QStringSet removedZims = zimsPresentInLib - zimsInDir;
+    handleDisappearedZimFiles(dirPath, removedZims);
+    const auto countOfAddedZims = handleNewZimFiles(dirPath, zimsNotInLib);
+    if (!removedZims.empty() || countOfAddedZims != 0) {
+        mp_library->save();
+        emit(booksChanged());
+    }
+}
+
+void ContentManager::handleZimFileInMonitoredDirDeferred(QString dir, QString fileName)
+{
+    QMutexLocker locker(&m_updateFromDirMutex);
+    DBGOUT("ContentManager::handleZimFileInMonitoredDirDeferred(" << dir << ", " << fileName << ")");
+    m_knownZimsInDir[dir][fileName].status = MonitoredZimFileInfo::PROCESS_NOW;
+    if ( handleZimFileInMonitoredDirLogged(dir, fileName) ) {
+        mp_library->save();
+        emit(booksChanged());
+    }
+}
+
+void ContentManager::deferHandlingOfZimFileInMonitoredDir(QString dir, QString fname)
+{
+    const qint64 DEBOUNCING_DELAY_MILLISECONDS = 1000;
+
+    m_knownZimsInDir[dir][fname].status = MonitoredZimFileInfo::PROCESS_LATER;
+
+    QTimer::singleShot(DEBOUNCING_DELAY_MILLISECONDS, this, [=]() {
+        handleZimFileInMonitoredDirDeferred(dir, fname);
+    });
+}
+
+bool ContentManager::handleDisappearedBook(QString bookId)
+{
+    if ( KiwixApp::instance()->getTabWidget()->getTabZimIds().contains(bookId) )
+        return false;
+
+    mp_library->removeBookFromLibraryById(bookId);
+    return true;
 }

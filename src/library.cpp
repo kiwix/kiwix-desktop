@@ -201,9 +201,9 @@ Library::QStringSet Library::getLibraryZimsFromDir(QString dir) const
         auto filePath = QString::fromStdString(getBookById(str).getPath());
         if ( filePath.endsWith(BEINGDOWNLOADEDSUFFIX) )
                 continue;
-        QDir absoluteDir = QFileInfo(filePath).absoluteDir();
-        if (absoluteDir == dir) {
-            zimsInDir.insert(filePath);
+        const QFileInfo fileInfo(filePath);
+        if (fileInfo.absoluteDir() == dir) {
+            zimsInDir.insert(fileInfo.fileName());
         }
     }
     return zimsInDir;

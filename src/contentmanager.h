@@ -19,6 +19,7 @@ public: // types
     typedef QList<QPair<QString, QString>> FilterList;
     typedef ContentManagerModel::BookInfo     BookInfo;
     typedef ContentManagerModel::BookInfoList BookInfoList;
+    typedef Library::QStringSet QStringSet;
 
     enum class BookState
     {
@@ -69,8 +70,7 @@ public: // functions
     QStringList getCategories() const { return m_categories; }
     LanguageList getLanguages() const { return m_languages; }
 
-    void setMonitorDirZims(QString monitorDir, Library::QStringSet zimList);
-    void asyncUpdateLibraryFromDir(QString dir);
+    void setMonitoredDirectories(QStringSet dirList);
 
 signals:
     void filterParamsChanged();
@@ -108,6 +108,43 @@ public slots:
     void downloadWasCancelled(const QString& id);
     void handleError(QString errSummary, QString errDetails);
 
+private: // types
+    struct MonitoredZimFileInfo
+    {
+        enum ZimFileStatus
+        {
+            // try to add this file to the library right away
+            PROCESS_NOW,
+
+            // the file is known to be downloaded by our own download manager
+            BEING_DOWNLOADED_BY_US,
+
+            // the file was added to the library successfully
+            ADDED_TO_THE_LIBRARY,
+
+            // the attempt to add the file to the library failed
+            COULD_NOT_BE_ADDED_TO_THE_LIBRARY,
+
+            // the file couldn't be added to the library earlier and hasn't
+            // changed since then
+            UNCHANGED_KNOWN_BAD_ZIM_FILE,
+
+            // try to add this file to the library at a later time
+            PROCESS_LATER,
+
+            // this file is known to be enqueued for later processing
+            DEFERRED_PROCESSING_ALREADY_PENDING
+        };
+
+        bool fileKeepsBeingModified() const;
+        void updateStatus(const MonitoredZimFileInfo& prevInfo);
+
+        ZimFileStatus status = PROCESS_NOW;
+        QDateTime lastModified;
+    };
+
+    typedef QMap<QString, MonitoredZimFileInfo> ZimFileName2InfoMap;
+
 private: // functions
     QStringList getBookIds();
     // reallyEraseBook() doesn't ask for confirmation (unlike eraseBook())
@@ -116,8 +153,17 @@ private: // functions
     void updateModel();
     void setCategories();
     void setLanguages();
+    QStringSet getLibraryZims(QString dirPath) const;
+    void asyncUpdateLibraryFromDir(QString dir);
     void updateLibraryFromDir(QString dir);
-    void handleDisappearedZimFile(QString bookId);
+    void handleDisappearedZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    size_t handleNewZimFiles(const QString& dirPath, const QStringSet& fileNames);
+    bool handleZimFileInMonitoredDirLogged(QString dirPath, QString fileName);
+    int handleZimFileInMonitoredDir(QString dirPath, QString fileName);
+    MonitoredZimFileInfo getMonitoredZimFileInfo(QString dir, QString fileName) const;
+    void deferHandlingOfZimFileInMonitoredDir(QString dir, QString fileName);
+    void handleZimFileInMonitoredDirDeferred(QString dirPath, QString fileName);
+    bool handleDisappearedBook(QString bookId);
 
     // Get the book with the specified id from
     // the remote or local library (in that order).
@@ -147,8 +193,9 @@ private: // data
     ContentManagerModel *managerModel;
     QMutex remoteLibraryLocker;
 
+    QFileSystemWatcher m_watcher;
     QMutex m_updateFromDirMutex;
-    QMap<QString, Library::QStringSet> m_knownZimsInDir;
+    QMap<QString, ZimFileName2InfoMap> m_knownZimsInDir;
 };
 
 #endif // CONTENTMANAGER_H
