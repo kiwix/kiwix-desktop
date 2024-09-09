@@ -173,5 +173,13 @@
 	"file-not-found-text": "ZIM文件不存在或无法读取",
 	"zim-id": "ZIM ID",
 	"zim-name": "ZIM名称",
-	"zim-path": "ZIM文件路径"
+	"zim-path": "ZIM文件路径",
+	"bad-zim-file-error-page-title": "无效的 ZIM 文件",
+	"bad-zim-file-error-page-text": "ZIM 文件无效或已损坏。",
+	"zim-entry-path": "ZIM 入口路径",
+	"export-reading-list": "导出阅读列表",
+	"export-reading-list-error": "导出阅读列表时发生了错误。",
+	"import-reading-list": "导入阅读列表",
+	"import-reading-list-error": "导入阅读列表时发生了错误。",
+	"disable-sandbox": "应用程序是从网络驱动器启动的。已知这会导致由沙盒引起的兼容性问题。您是否愿意冒险禁用它？"
 }

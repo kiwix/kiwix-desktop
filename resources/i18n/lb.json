@@ -109,5 +109,9 @@
 	"language-searcher-placeholder": "No Sprooch filteren",
 	"category-searcher-placeholder": "No Kategorie filteren",
 	"no-pictures": "Keng Biller",
-	"no-videos": "Keng Videoen"
+	"no-videos": "Keng Videoen",
+	"export-reading-list": "Lieslëscht exportéieren",
+	"export-reading-list-error": "Beim Exportéiere vun der Lieslëscht ass ee Feeler geschitt.",
+	"import-reading-list": "Lieslëscht importéieren",
+	"import-reading-list-error": "Beim Importéiere vun der Lieslëscht ass ee Feeler geschitt."
 }

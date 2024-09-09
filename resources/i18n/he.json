@@ -132,6 +132,7 @@
 	"delete-book-text": "האם באמת למחוק את <b>{{ZIM}}</b>?",
 	"download-storage-error": "שגיאת אחסון",
 	"download-storage-error-text": "במערכת אין מספיק אחסון זמין.",
+	"download-exceeds-max-file-size": "גודל ההורדה חורג מגודל הקובץ המרבי הנתמך על־ידי מערכת הקבצים ביעד.",
 	"download-dir-missing": "תיקיית ההורדות לא קיימת.",
 	"download-dir-not-writable": "תיקיית ההורדות נעולה לכתיבה.",
 	"download-unavailable": "הורדה אינה זמינה",
@@ -160,8 +161,13 @@
 	"zim-id": "מזהה ה־Zim",
 	"zim-name": "שם ה־Zim",
 	"zim-path": "נתיב קובץ ה־Zim",
+	"bad-zim-file-error-page-title": "קובץ ZIM בלתי־תקין",
+	"bad-zim-file-error-page-text": "קובץ ה־ZIM בלתי־תקין או מקולקל.",
+	"zim-entry-path": "נתיב כניסה ל־ZIM",
 	"export-reading-list": "יצוא רשימת קריאה",
 	"export-reading-list-error": "אירעה שגיאה בעת יצוא רשימת קריאה.",
 	"import-reading-list": "יבוא רשימת קריאה",
-	"import-reading-list-error": "אירעה שגיאה בעת יבוא רשימת קריאה."
+	"import-reading-list-error": "אירעה שגיאה בעת יבוא רשימת קריאה.",
+	"disable-sandbox": "היישום הופעל מכונן רשת. זה ידוע כגורם לבעיות תאימות בשל ארגז החול. האם לקחת את הסיכונים ולהשבית אותו?",
+	"save-page-as": "שמירה בשם..."
 }

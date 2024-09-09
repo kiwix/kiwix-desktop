@@ -5,7 +5,8 @@
 			"Eduardoaddad",
 			"McDutchie",
 			"Obiru",
-			"Saturnow"
+			"Saturnow",
+			"YoReaper"
 		]
 	},
 	"name": "Português do Brasil",
@@ -86,7 +87,7 @@
 	"about-release-title": "Lançamento",
 	"about-source-code": "Este software é lançado sob os termos da GNU General Public License version 3. Veja o código fonte em <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "Versão : {{VERSION}}",
-	"about-reporting-problem-title": "Reportar um problema",
+	"about-reporting-problem-title": "Reportando problema(s)",
 	"about-report-issue": "Para abrir um problema, visite <a href='{{TRACKER_URL}}'>Kiwix-desktop issue tracker</a> e abra um problema descrevendo o seu problema.",
 	"about-report-issue-2": "Por favor mencione a versão na edição.",
 	"about-libraries-title": "Bibliotecas",

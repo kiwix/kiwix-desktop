@@ -56,5 +56,9 @@
 	"hide": "پنهان کن",
 	"open-in-browser": "در مرورگر باز کن",
 	"all": "همه",
-	"open-link-new-tab": "گشودن پیوند در زبانه‌ای جدید"
+	"open-link-new-tab": "گشودن پیوند در زبانه‌ای جدید",
+	"export-reading-list": "برون‌بری فهرست مطالعه",
+	"export-reading-list-error": "در طول برون‌بری فهرست مطالعه خطایی رخ داد.",
+	"import-reading-list": "درون‌ریزی فهرست مطالعه",
+	"import-reading-list-error": "در طول درون‌ریزی فهرست مطالعه خطایی رخ داد."
 }

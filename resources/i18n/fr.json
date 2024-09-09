@@ -3,6 +3,7 @@
 		"authors": [
 			"Florian COLLIN",
 			"Gomoko",
+			"Goombiis",
 			"Graineahumus",
 			"Hecatonchire",
 			"McDutchie",
@@ -164,5 +165,7 @@
 	"file-not-found-text": "Le fichier ZIM n'existe pas ou n'est pas lisible",
 	"zim-id": "ZIM Id",
 	"zim-name": "Nom Zim",
-	"zim-path": "Voie du fichier Zim"
+	"zim-path": "Voie du fichier Zim",
+	"export-reading-list": "Exporter la liste de lecture",
+	"import-reading-list-error": "Une erreur s'est produite lors de l'importation de la liste de lecture."
 }
