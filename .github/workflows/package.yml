@@ -15,6 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         distro:
+#          - debian-unstable
+#          - debian-trixie
+#          - debian-bookworm
+#          - debian-bullseye
+          - ubuntu-noble
           - ubuntu-jammy
           - ubuntu-focal
     steps:
@@ -33,11 +38,41 @@ jobs:
         env:
           REF: ${{ github.ref }}
 
-      - uses: legoktm/gh-action-auto-dch@main
+#      - uses: legoktm/gh-action-build-deb@debian-unstable
+#        if: matrix.distro == 'debian-unstable'
+#        name: Build package for debian-unstable
+#        id: build-debian-unstable
+#        with:
+#          args: --no-sign
+#
+#      - uses: legoktm/gh-action-build-deb@b47978ba8498dc8b8153cc3b5f99a5fc1afa5de1 # pin@debian-trixie
+#        if: matrix.distro == 'debian-trixie'
+#        name: Build package for debian-trixie
+#        id: build-debian-trixie
+#        with:
+#          args: --no-sign
+#
+#      - uses: legoktm/gh-action-build-deb@1f4e86a6bb34aaad388167eaf5eb85d553935336 # pin@debian-bookworm
+#        if: matrix.distro == 'debian-bookworm'
+#        name: Build package for debian-bookworm
+#        id: build-debian-bookworm
+#        with:
+#          args: --no-sign
+#
+#      - uses: legoktm/gh-action-build-deb@084b4263209252ec80a75d2c78a586192c17f18d # pin@debian-bullseye
+#        if: matrix.distro == 'debian-bullseye'
+#        name: Build package for debian-bullseye
+#        id: build-debian-bullseye
+#        with:
+#          args: --no-sign
+
+      - uses: legoktm/gh-action-build-deb@9114a536498b65c40b932209b9833aa942bf108d # pin@ubuntu-noble
+        if: matrix.distro == 'ubuntu-noble'
+        name: Build package for ubuntu-noble
+        id: build-ubuntu-noble
         with:
-          fullname: Kiwix builder
-          email: release+launchpad@kiwix.org
-          distro: ${{ matrix.distro }}
+          args: --no-sign
+          ppa: ${{ steps.ppa.outputs.ppa }}
 
       - uses: legoktm/gh-action-build-deb@ubuntu-jammy
         if: matrix.distro == 'ubuntu-jammy'
@@ -54,6 +89,12 @@ jobs:
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
+
+      - uses: legoktm/gh-action-auto-dch@main
+        with:
+          fullname: Kiwix builder
+          email: release+launchpad@kiwix.org
+          distro: ${{ matrix.distro }}
 
       - uses: actions/upload-artifact@v4
         with:
