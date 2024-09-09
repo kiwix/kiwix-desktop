@@ -131,6 +131,7 @@
 	"delete-book-text": "您確定要刪除<b>{{ZIM}}</b>嗎？",
 	"download-storage-error": "儲存錯誤",
 	"download-storage-error-text": "系統沒有足夠的可用儲存空間。",
+	"download-exceeds-max-file-size": "下載大小超過目標檔案系統所支援的最大檔案大小。",
 	"download-dir-missing": "下載目錄不存在。",
 	"download-dir-not-writable": "下載目錄不可寫入。",
 	"download-unavailable": "無法下載",
@@ -159,8 +160,13 @@
 	"zim-id": "ZIM ID",
 	"zim-name": "ZIM 名稱",
 	"zim-path": "ZIM 檔案路徑",
+	"bad-zim-file-error-page-title": "無效的 ZIM 檔案",
+	"bad-zim-file-error-page-text": "ZIM 檔案無效或已損毀。",
+	"zim-entry-path": "ZIM 入口路徑",
 	"export-reading-list": "匯出閱讀清單",
 	"export-reading-list-error": "匯出閱讀清單時發生錯誤。",
 	"import-reading-list": "匯入閱讀清單",
-	"import-reading-list-error": "匯入閱讀清單時發生錯誤。"
+	"import-reading-list-error": "匯入閱讀清單時發生錯誤。",
+	"disable-sandbox": "應用程式是從網路磁碟機啟動。目前已知這會因沙盒而導致相容性問題。您想冒風險來停用嗎？",
+	"save-page-as": "另存為…"
 }

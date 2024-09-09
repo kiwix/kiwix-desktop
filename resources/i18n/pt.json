@@ -1,7 +1,6 @@
 {
 	"@metadata": {
 		"authors": [
-			"Ajeje Brazorf",
 			"B3rnas",
 			"Unamane"
 		]
@@ -50,5 +49,5 @@
 	"download": "Descarregar",
 	"resume": "Continuar",
 	"pause": "Pausar",
-	"cancel": "Cancelar",
+	"cancel": "Cancelar"
 }
