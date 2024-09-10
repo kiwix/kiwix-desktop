@@ -78,4 +78,6 @@ private:
 };
 
 QString getDataDirectory();
+bool isPortableMode();
+
 #endif // SETTINGSMANAGER_H
