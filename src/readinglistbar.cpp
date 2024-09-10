@@ -70,16 +70,14 @@ void ReadingListBar::setupList()
             QPixmap pixmap;
             pixmap.loadFromData(reinterpret_cast<const uchar*>(content.data()), content.size());
             auto icon = QIcon(pixmap);
-            auto item = new QListWidgetItem(
+            new QListWidgetItem(
                 icon,
                 QString::fromStdString(bookmark.getTitle()),
                 listWidget);
-            item->setTextAlignment(Qt::TextWordWrap);
         } catch (zim::EntryNotFound& e) {
-            auto item = new QListWidgetItem(
+            new QListWidgetItem(
                 QString::fromStdString(bookmark.getTitle()),
                 listWidget);
-            item->setTextAlignment(Qt::TextWordWrap);
         }
     }
 }
