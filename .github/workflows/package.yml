@@ -38,6 +38,12 @@ jobs:
         env:
           REF: ${{ github.ref }}
 
+      - uses: legoktm/gh-action-auto-dch@main
+        with:
+          fullname: Kiwix builder
+          email: release+launchpad@kiwix.org
+          distro: ${{ matrix.distro }}
+
 #      - uses: legoktm/gh-action-build-deb@debian-unstable
 #        if: matrix.distro == 'debian-unstable'
 #        name: Build package for debian-unstable
@@ -89,12 +95,6 @@ jobs:
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
-
-      - uses: legoktm/gh-action-auto-dch@main
-        with:
-          fullname: Kiwix builder
-          email: release+launchpad@kiwix.org
-          distro: ${{ matrix.distro }}
 
       - uses: actions/upload-artifact@v4
         with:
