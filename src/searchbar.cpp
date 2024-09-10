@@ -51,9 +51,17 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_completionModel, this)
 {
+    setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
-    setPlaceholderText(gt("search"));
+
+    /* Placeholder does not affect line edit alignment and is aligned to line
+       edit purely by text direction (LTR leading RTL ending). Thus, we need
+       directional mask to make it LTR at leading position.
+       https://stackoverflow.com/questions/66430215/english-and-arabic-mixed-string-not-ordered-correctly-qt
+    */
+    const QString ltrConversionChar = QString{"\u200e"};
+    setPlaceholderText(ltrConversionChar + gt("search"));
     setToolTip(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
@@ -77,6 +85,12 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
                 if (m_returnPressed) {
                     this->setText(m_searchbarInput);
                 }
+
+                /* Empty text is LTR which changes the line edit alignment.
+                   Need to explicitly align right. This is a generalized
+                   solution that aligns text to the direction of the app. */
+                bool isSameDirection = text.isRightToLeft() == KiwixApp::isRightToLeft();
+                setAlignment(isSameDirection ? Qt::AlignLeft : Qt::AlignRight);
     });
     connect(this, &QLineEdit::returnPressed, this, [=]() {
         m_returnPressed = true;
