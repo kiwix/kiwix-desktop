@@ -9,7 +9,7 @@ QT       += webenginewidgets
 QT       += printsupport
 
 HAS_TTS = FALSE
-versionAtLeast(QT_VERSION, 6.4.0) : qtHaveModule(texttospeech) {
+qtHaveModule(texttospeech) {
     HAS_TTS = TRUE
 }
 equals(HAS_TTS, TRUE) : QT += texttospeech
@@ -18,6 +18,7 @@ equals(HAS_TTS, TRUE) : QT += texttospeech
 DETECT_WSL = $$system(test -f /proc/sys/fs/binfmt_misc/WSLInterop && echo true || echo false)
 equals(DETECT_WSL , "true"): CONFIG += nostrip
 CONFIG += link_pkgconfig
+CONFIG += warn_off
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

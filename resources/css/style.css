@@ -359,16 +359,16 @@ ContentTypeFilter {
 #readinglistbar QPushButton::menu-indicator {
     width: 0;
     height: 0;
-
+}
 /* ----------------------------------------
     Text to Speech Page
 */
 
-#TextToSpeechBar {
+TextToSpeechBar {
     border-top: 1px solid #ccc;
 }
 
-TextToSpeechBar > #closeButton {
+TextToSpeechBar #closeButton {
     outline: none;
     max-height: 36px;
     max-width: 36px;
@@ -376,11 +376,48 @@ TextToSpeechBar > #closeButton {
     border-radius: 0;
 }
 
-TextToSpeechBar > #closeButton:pressed {
+TextToSpeechBar #stopButton {
+    outline: none;
+    max-height: 36px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 0;
+}
+
+TextToSpeechBar #stopButton:hover {
     background-color: #D9E9FF;
     border: 1px solid #3366CC;
 }
 
-TextToSpeechBar > #stopButton:disabled {
+TextToSpeechBar #stopButton:disabled {
     color: grey;
+    background-color: darkgrey;
+}
+
+TextToSpeechBar QComboBox::drop-down {
+    height: 22px;
+    width: 15px;
+    padding-left: 2px;
+    padding-right: 2px;
+    /* width: 22px; */
+    margin: 0px;
+    image: url(":/icons/drop-down.svg");
+    background-color: white;
+}
+
+TextToSpeechBar QComboBox {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+TextToSpeechBar QAbstractItemView QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+TextToSpeechBar QAbstractItemView QScrollBar::handle {
+    background-color: grey;
 }

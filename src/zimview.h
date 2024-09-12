@@ -5,7 +5,7 @@
 #include <QWebEnginePage>
 
 class FindInPageBar;
-#if defined(QT_TEXTTOSPEECH_LIB) && QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+#if defined(QT_TEXTTOSPEECH_LIB)
 class TextToSpeechBar;
 #endif
 class TabBar;
@@ -28,7 +28,7 @@ private:
     WebView *mp_webView;
     TabBar *mp_tabBar;
     FindInPageBar *mp_findInPageBar;
-#if defined(QT_TEXTTOSPEECH_LIB) && QT_VERSION >= QT_VERSION_CHECK(6, 4, 0)
+#if defined(QT_TEXTTOSPEECH_LIB)
     TextToSpeechBar *mp_ttsBar;
 #endif
 };
