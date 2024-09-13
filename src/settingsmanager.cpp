@@ -186,12 +186,15 @@ void SettingsManager::setContentType(FilterList contentTypeList)
 
 void SettingsManager::initSettings()
 {
+    if(isPortableMode()) {
+        m_downloadDir = m_monitorDir = getDataDirectory();
+    } else {
+        m_downloadDir = m_settings.value("download/dir", getDataDirectory()).toString();
+        m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
+    }
     m_kiwixServerPort = m_settings.value("localKiwixServer/port", 8080).toInt();
     m_zoomFactor = m_settings.value("view/zoomFactor", 1).toDouble();
-    QString dataDir = getDataDirectory();
-    m_downloadDir = isPortableMode() ? dataDir : m_settings.value("download/dir", dataDir).toString();
     m_kiwixServerIpAddress = m_settings.value("localKiwixServer/ipAddress", QString("0.0.0.0")).toString();
-    m_monitorDir = m_settings.value("monitor/dir", QString("")).toString();
     m_moveToTrash = m_settings.value("moveToTrash", true).toBool();
     m_reopenTab = m_settings.value("reopenTab", false).toBool();
     QString defaultLang = QLocale::languageToString(QLocale().language()) + '|' + QLocale().name().split("_").at(0);
