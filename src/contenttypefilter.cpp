@@ -12,7 +12,7 @@ ContentTypeFilter::ContentTypeFilter(QString name, QWidget *parent)
     m_states[Qt::Checked] = gt("no");
     setText(gt(m_name) + " : " + m_states[checkState()]);
     setStyleSheet("* { color: #666666; }");
-    #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
         connect(this, &QCheckBox::checkStateChanged, this, &ContentTypeFilter::onStateChanged);
     #else
         connect(this, &QCheckBox::stateChanged, this, &ContentTypeFilter::onStateChanged);
