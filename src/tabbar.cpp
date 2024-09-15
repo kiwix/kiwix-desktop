@@ -252,7 +252,7 @@ QSize TabBar::tabSizeHint(int index) const
 {
     QWidget *w = mp_stackedWidget->widget(index);
 
-    if (w && qobject_cast<ContentManagerView*>(w))
+    if ((w && qobject_cast<ContentManagerView*>(w)) || index >= count() - 1)
         return QSize(40, 40); // the "Library" tab is only icon
 
     return QSize(205, 40); // "Settings" and content tabs have text

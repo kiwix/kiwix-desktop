@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     addAction(app->getAction(KiwixApp::NextTabAction));
     addAction(app->getAction(KiwixApp::PreviousTabAction));
 
+    mp_ui->newTabSideButton->setDefaultAction(app->getAction(KiwixApp::NewTabAction));
     mp_ui->nextTabButton->setDefaultAction(app->getAction(KiwixApp::ScrollNextTabAction));
     mp_ui->prevTabButton->setDefaultAction(app->getAction(KiwixApp::ScrollPreviousTabAction));
 
