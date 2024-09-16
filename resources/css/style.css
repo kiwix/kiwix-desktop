@@ -167,7 +167,9 @@ QTabBar {
 }
 
 QTabBar::tear {
-     background-color: blue;
+    width: 0px;
+    height: 0px;
+    border: none;
 }
 
 QTabWidget::pane {
