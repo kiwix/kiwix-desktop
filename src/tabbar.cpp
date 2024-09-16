@@ -137,13 +137,13 @@ void TabBar::moveToPreviousTab()
 void TabBar::scrollNextTab()
 {
     const int index = currentIndex();
-    setCurrentIndex(index + 1);
+    setCurrentIndex(index == realTabCount() - 1 ? index : index + 1);
 }
 
 void TabBar::scrollPreviousTab()
 {
     const int index = currentIndex();
-    setCurrentIndex(index - 1);
+    setCurrentIndex(index <= 0 ? index : index - 1);
 }
 
 void TabBar::setCloseTabButton(int index)
@@ -503,6 +503,24 @@ void TabBar::paintEvent(QPaintEvent *e)
         style()->drawItemText(&p, tabTextRect, align,
                   tabopt.palette, true, tab_title, QPalette::ButtonText);
     }
+}
+
+void TabBar::tabRemoved(int index)
+{
+    QTabBar::tabRemoved(index);
+    emit tabRemovedSignal(index);
+}
+
+void TabBar::tabInserted(int index)
+{
+    QTabBar::tabInserted(index);
+    emit tabInsertedSignal(index);
+}
+
+void TabBar::resizeEvent(QResizeEvent *event)
+{
+    QTabBar::resizeEvent(event);
+    emit sizeChanged();
 }
 
 void TabBar::onTabMoved(int from, int to)

@@ -31,6 +31,11 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_ui->nextTabButton->setDefaultAction(app->getAction(KiwixApp::ScrollNextTabAction));
     mp_ui->prevTabButton->setDefaultAction(app->getAction(KiwixApp::ScrollPreviousTabAction));
 
+    connect(mp_ui->tabBar, &TabBar::sizeChanged, this, &MainWindow::updateTabButtons);
+    connect(mp_ui->tabBar, &QTabBar::currentChanged, this, &MainWindow::updateTabButtons);
+    connect(mp_ui->tabBar, &TabBar::tabRemovedSignal, this, &MainWindow::updateTabButtons);
+    connect(mp_ui->tabBar, &TabBar::tabInsertedSignal, this, &MainWindow::updateTabButtons);
+
     connect(mp_ui->nextTabButton, &QToolButton::triggered, mp_ui->tabBar, &TabBar::scrollNextTab);
     connect(mp_ui->prevTabButton, &QToolButton::triggered, mp_ui->tabBar, &TabBar::scrollPreviousTab);
 
@@ -109,6 +114,32 @@ void MainWindow::showTabAndTop() {
     getTopWidget()->show();
 }
 
+void MainWindow::updateTabButtons()
+{
+    auto tabBar = getTabBar();
+    QRect tabBarRect = getTabBar()->rect();
+    QRect newTabButtonRect = tabBar->tabRect(tabBar->count() - 1);
+
+    /* Decision is made at half way of the new button tab for smoothness */
+    newTabButtonRect.setWidth(newTabButtonRect.width() / 2);
+    bool newTabButtonVisible = tabBarRect.contains(newTabButtonRect);
+    mp_ui->newTabSideButton->setHidden(newTabButtonVisible);
+
+    int lastTabIndex = tabBar->realTabCount() - 1;
+    QRect firstTabRect = tabBar->tabRect(0);
+    QRect lastTabRect = tabBar->tabRect(lastTabIndex);
+
+    bool firstVisible = tabBarRect.contains(firstTabRect);
+    bool lastVisible = tabBarRect.contains(lastTabRect);
+    bool noOverFlow = firstVisible && lastVisible;
+
+    mp_ui->prevTabButton->setHidden(noOverFlow);
+    mp_ui->nextTabButton->setHidden(noOverFlow);
+
+    mp_ui->prevTabButton->setDisabled(tabBar->currentIndex() == 0);
+    mp_ui->nextTabButton->setDisabled(tabBar->currentIndex() == lastTabIndex);
+}
+
 bool MainWindow::eventFilter(QObject* /*object*/, QEvent* event)
 {
     if (event->type() == QEvent::MouseMove && isFullScreen())
@@ -136,6 +167,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);
     KiwixApp::instance()->getContentManager()->getView()->updateSizeHint();
+    updateTabButtons();
 }
 
 void MainWindow::readingListToggled(bool state)

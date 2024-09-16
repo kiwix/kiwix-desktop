@@ -216,7 +216,9 @@ QTabBar::tab:first {
 QTabBar::scroller {
     width: 0px;
     height: 0px;
-    border: none;
+    
+    /* Last tab size is off by 1 if border not set. */
+    border: 1px solid transparent;
 }
 
 /* -----------------------------------------

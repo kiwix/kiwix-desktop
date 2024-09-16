@@ -37,6 +37,7 @@ private slots:
     void readingListToggled(bool state);
     void hideTabAndTop();
     void showTabAndTop();
+    void updateTabButtons();
 
 private:
     Ui::MainWindow *mp_ui;

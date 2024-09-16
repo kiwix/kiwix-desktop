@@ -59,11 +59,17 @@ public:
 protected:
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *);
+    void tabRemoved(int index) override;
+    void tabInserted(int index) override;
+    void resizeEvent(QResizeEvent *) override;
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void tabDisplayed(TabType tabType);
     void currentTitleChanged(const QString& title);
+    void tabRemovedSignal(int index);
+    void tabInsertedSignal(int index);
+    void sizeChanged();
 
 public slots:
     void closeTab(int index);
