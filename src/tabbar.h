@@ -52,6 +52,10 @@ public:
     QStringList getTabUrls() const;
     QStringList getTabZimIds() const;
 
+    // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
+    // This function returns the count of real tabs.
+    int realTabCount() const;
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *);
@@ -78,10 +82,6 @@ private:
 private:
     QStackedWidget*     mp_stackedWidget;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
-
-    // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
-    // This function returns the count of real tabs.
-    int realTabCount() const;
 
 private slots:
     void onTabMoved(int from, int to);
