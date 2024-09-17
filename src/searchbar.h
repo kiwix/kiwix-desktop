@@ -12,6 +12,8 @@
 #include <QToolBar>
 #include "suggestionlistmodel.h"
 
+class QTreeView;
+
 class BookmarkButton : public QToolButton {
     Q_OBJECT
 public:
@@ -42,6 +44,7 @@ protected:
     virtual void focusOutEvent(QFocusEvent *);
 private:
     SuggestionListModel m_suggestionModel;
+    QTreeView *m_suggestionView;
     QCompleter m_completer;
     QString m_title;
     QString m_searchbarInput;
