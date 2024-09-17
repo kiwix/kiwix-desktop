@@ -202,7 +202,7 @@ void SearchBarLineEdit::updateCompletion()
 
 void SearchBarLineEdit::fetchMoreSuggestion()
 {
-    int start = m_suggestionModel.lastIndex().row();
+    int start = m_suggestionModel.countOfRegularSuggestions();
     auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
     [=] (const QList<SuggestionData>& suggestionList, int token) {
@@ -269,8 +269,10 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
         auto editText = index.data().toString();
         if (this->text().compare(editText, Qt::CaseInsensitive) == 0) {
             url = index.data(Qt::UserRole).toUrl();
-        } else {
+        } else if (m_suggestionModel.hasFullTextSearchSuggestion()) {
             url = m_suggestionModel.lastIndex().data(Qt::UserRole).toUrl();
+        } else {
+            return;
         }
         QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
     }
