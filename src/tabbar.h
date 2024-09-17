@@ -52,14 +52,24 @@ public:
     QStringList getTabUrls() const;
     QStringList getTabZimIds() const;
 
+    // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
+    // This function returns the count of real tabs.
+    int realTabCount() const;
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *);
+    void tabRemoved(int index) override;
+    void tabInserted(int index) override;
+    void resizeEvent(QResizeEvent *) override;
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void tabDisplayed(TabType tabType);
     void currentTitleChanged(const QString& title);
+    void tabRemovedSignal(int index);
+    void tabInsertedSignal(int index);
+    void sizeChanged();
 
 public slots:
     void closeTab(int index);
@@ -69,6 +79,8 @@ public slots:
     void on_webview_titleChanged(const QString& title);
     void moveToNextTab();
     void moveToPreviousTab();
+    void scrollNextTab();
+    void scrollPreviousTab();
 
 private:
     void setCloseTabButton(int index);
@@ -76,10 +88,6 @@ private:
 private:
     QStackedWidget*     mp_stackedWidget;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
-
-    // The "+" (new tab) button is implemented as a tab (that is always placed at the end).
-    // This function returns the count of real tabs.
-    int realTabCount() const;
 
 private slots:
     void onTabMoved(int from, int to);

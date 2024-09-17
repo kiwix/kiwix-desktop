@@ -104,6 +104,7 @@ void TabBar::setContentManagerView(ContentManagerView* view)
 void TabBar::setNewTabButton(QAction* newTabAction)
 {
     QToolButton *tb = new QToolButton();
+    tb->setObjectName("newTabButton");
     tb->setDefaultAction(newTabAction);
     tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
     int idx = addTab("");
@@ -133,11 +134,24 @@ void TabBar::moveToPreviousTab()
     setCurrentIndex(index <= 0 ? realTabCount() - 1 : index - 1);
 }
 
+void TabBar::scrollNextTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index == realTabCount() - 1 ? index : index + 1);
+}
+
+void TabBar::scrollPreviousTab()
+{
+    const int index = currentIndex();
+    setCurrentIndex(index <= 0 ? index : index - 1);
+}
+
 void TabBar::setCloseTabButton(int index)
 {
     Q_ASSERT(index > 0 && index < realTabCount());
 
     QToolButton *tb = new QToolButton(this);
+    tb->setObjectName("closeTabButton");
     QAction *a = new QAction(QIcon(":/icons/close.svg"), gt("close-tab"), tb);
     a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
     tb->setDefaultAction(a);
@@ -238,7 +252,7 @@ QSize TabBar::tabSizeHint(int index) const
 {
     QWidget *w = mp_stackedWidget->widget(index);
 
-    if (w && qobject_cast<ContentManagerView*>(w))
+    if ((w && qobject_cast<ContentManagerView*>(w)) || index >= count() - 1)
         return QSize(40, 40); // the "Library" tab is only icon
 
     return QSize(205, 40); // "Settings" and content tabs have text
@@ -489,6 +503,24 @@ void TabBar::paintEvent(QPaintEvent *e)
         style()->drawItemText(&p, tabTextRect, align,
                   tabopt.palette, true, tab_title, QPalette::ButtonText);
     }
+}
+
+void TabBar::tabRemoved(int index)
+{
+    QTabBar::tabRemoved(index);
+    emit tabRemovedSignal(index);
+}
+
+void TabBar::tabInserted(int index)
+{
+    QTabBar::tabInserted(index);
+    emit tabInsertedSignal(index);
+}
+
+void TabBar::resizeEvent(QResizeEvent *event)
+{
+    QTabBar::resizeEvent(event);
+    emit sizeChanged();
 }
 
 void TabBar::onTabMoved(int from, int to)

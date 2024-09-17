@@ -64,6 +64,8 @@ public:
         ExitAction,
         ExportReadingListAction,
         ImportReadingListAction,
+        ScrollPreviousTabAction,
+        ScrollNextTabAction,
         MAX_ACTION
     };
 

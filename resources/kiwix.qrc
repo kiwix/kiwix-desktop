@@ -65,5 +65,6 @@
         <file>icons/xmark-solid.svg</file>
         <file>icons/home-button.svg</file>
         <file>icons/more-vertical.svg</file>
+        <file>icons/caret-left-solid.svg</file>
     </qresource>
 </RCC>
