@@ -50,6 +50,21 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+QVariant SuggestionListModel::headerData(int section,
+                                         Qt::Orientation orientation,
+                                         int role) const
+{
+    if (section != 0 || orientation != Qt::Orientation::Horizontal)
+        return QVariant();
+
+    switch (role)
+    {
+        case Qt::DisplayRole:
+            return gt("kiwix-search");
+    }
+    return QVariant();
+}
+
 void SuggestionListModel::resetSuggestions(const QStringList &suggestions)
 {
     beginResetModel();
