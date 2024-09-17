@@ -15,13 +15,10 @@ void SuggestionListWorker::run()
     QStringList suggestionList;
     QVector<QUrl> urlList;
 
-    WebView *current = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if(!current)
-        return;
-    auto qurl = current->url();
-    auto currentZimId = qurl.host().split(".")[0];
+    auto app = KiwixApp::instance();
+    auto currentZimId = app->getSearchBar().getMultiZimButtom().getZimId();
     try {
-        auto archive = KiwixApp::instance()->getLibrary()->getArchive(currentZimId);
+        auto archive = app->getLibrary()->getArchive(currentZimId);
         QUrl url;
         url.setScheme("zim");
         url.setHost(currentZimId + ".zim");

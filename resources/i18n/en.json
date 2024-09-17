@@ -166,5 +166,6 @@
     "import-reading-list-error": "An error has occured during import of the reading list.",
     "disable-sandbox": "Application was launched from a network drive. This is known to cause compatibility issues due to the sandbox. Do you want to take the risks and disable it?",
     "save-page-as": "Save As...",
-    "kiwix-search": "Kiwix search"
+    "kiwix-search": "Kiwix Search",
+    "multi-zim-search": "Multi-Zim Search"
 }
