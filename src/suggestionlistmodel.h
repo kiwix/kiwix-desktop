@@ -18,6 +18,8 @@ public:
     void resetSuggestions(const QStringList& suggestions = QStringList{});
     void resetUrlList(const QVector<QUrl>& urlList = QVector<QUrl>{});
 
+    QModelIndex lastIndex() const;
+
 private:
     QStringList m_suggestions;
     QVector<QUrl> m_urlList;
