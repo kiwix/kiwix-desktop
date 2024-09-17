@@ -2,6 +2,7 @@
 
 #include <QCompleter>
 #include <QFocusEvent>
+#include <QScrollBar>
 
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
@@ -65,10 +66,14 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     setToolTip(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
-    m_completer.setMaxVisibleItems(16);
+
+    /* The items should be less than fetch size to enable scrolling. */
+    m_completer.setMaxVisibleItems(SuggestionListWorker::getFetchSize() / 2);
     setCompleter(&m_completer);
 
     m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+    connect(m_completer.popup()->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &SearchBarLineEdit::onScroll);
 
     qRegisterMetaType<QList<SuggestionData>>("QList<SuggestionData>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
@@ -178,6 +183,47 @@ void SearchBarLineEdit::updateCompletion()
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
+}
+
+void SearchBarLineEdit::fetchMoreSuggestion()
+{
+    int start = m_suggestionModel.lastIndex().row();
+    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
+    connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
+    [=] (const QList<SuggestionData>& suggestionList, int token) {
+        if (token != m_token) {
+            return;
+        }
+
+        m_suggestionModel.append(suggestionList);
+
+        /* Set selection to be at the last row of the previous list */
+        m_completer.popup()->setCurrentIndex(m_suggestionModel.index(start));
+        m_completer.popup()->show();
+    });
+    connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
+    suggestionWorker->start();
+}
+
+void SearchBarLineEdit::onScroll(int value)
+{
+    auto suggestionScroller = m_completer.popup()->verticalScrollBar();
+    bool scrolledToEnd = value == suggestionScroller->maximum();
+
+    /* We only fetch when user scrolls down twice, otherwise user can never
+        reach the fulltext option. Create this illusion there are more items
+        by manually extending scroller.
+    */
+    auto scrollMin = suggestionScroller->minimum();
+    auto scrollMax = suggestionScroller->maximum();
+    if (m_scrolledEndBefore && scrolledToEnd)
+        fetchMoreSuggestion();
+    else if (scrolledToEnd)
+        suggestionScroller->setRange(scrollMin, scrollMax + 1);
+    else if (m_scrolledEndBefore)
+        suggestionScroller->setRange(scrollMin, scrollMax - 1);
+
+    m_scrolledEndBefore = !m_scrolledEndBefore && scrolledToEnd;
 }
 
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
