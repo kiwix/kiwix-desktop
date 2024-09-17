@@ -69,6 +69,12 @@ void SuggestionListModel::append(const QStringList &suggestions,
                                  const QVector<QUrl> &urlList)
 {
     beginResetModel();
+    if (m_hasFullText)
+    {
+        m_urlList.pop_back();
+        m_suggestions.pop_back();
+    }
+
     for (int i = 0; i < urlList.size(); i++)
     {
         m_urlList.append(urlList[i]);
@@ -80,4 +86,10 @@ void SuggestionListModel::append(const QStringList &suggestions,
 QModelIndex SuggestionListModel::lastIndex() const
 {
     return index(rowCount() - 1);
+}
+
+QModelIndex SuggestionListModel::fetchEndIndex() const
+{
+    int trueFetchSize = m_urlList.size() - (m_hasFullText ? 1 : 0);
+    return index(trueFetchSize - 1);
 }

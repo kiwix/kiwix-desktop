@@ -185,7 +185,7 @@ void SearchBarLineEdit::updateCompletion()
     m_token++;
     auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, 0, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
-    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, int token) {
+    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, bool hasFullText, int token) {
         if (token != m_token) {
             return;
         }
@@ -194,6 +194,8 @@ void SearchBarLineEdit::updateCompletion()
             openCompletion(m_suggestionModel.index(0));
             return;
         }
+
+        m_suggestionModel.setHasFullText(hasFullText);
         m_suggestionModel.resetSuggestions(suggestions);
         m_completer.complete();
     });
@@ -203,10 +205,10 @@ void SearchBarLineEdit::updateCompletion()
 
 void SearchBarLineEdit::fetchMoreSuggestion()
 {
-    int start = m_suggestionModel.lastIndex().row();
+    int start = m_suggestionModel.fetchEndIndex().row() + 1;
     auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
-    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, int token) {
+    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, bool, int token) {
         if (token != m_token) {
             return;
         }
