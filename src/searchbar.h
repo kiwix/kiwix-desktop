@@ -57,6 +57,7 @@ private slots:
     void updateCompletion();
     void fetchMoreSuggestions();
     void onScroll(int value);
+    void onScrollPastEnd();
     void openCompletion(const QModelIndex& index);
     void onInitialSuggestions(int);
     void onAdditionalSuggestions(int start);

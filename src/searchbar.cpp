@@ -177,6 +177,9 @@ void SearchBarLineEdit::fetchMoreSuggestions()
 
 void SearchBarLineEdit::onScroll(int value)
 {
+    if (!m_completer.popup()->currentIndex().isValid())
+        onScrollPastEnd();
+
     auto suggestionScroller = m_completer.popup()->verticalScrollBar();
     auto scrollMin = suggestionScroller->minimum();
     auto scrollMax = suggestionScroller->maximum();
@@ -186,10 +189,7 @@ void SearchBarLineEdit::onScroll(int value)
     {
         /* The user's intention to scroll past end has been confirmed */
         if (scrolledToEnd)
-        {
-            fetchMoreSuggestions();
-            m_aboutToScrollPastEnd = false; /* Relax until next time */
-        }
+            onScrollPastEnd();
         else
         {
             /* Scrolling past end did not happen - remove the extra scroll 
@@ -206,6 +206,21 @@ void SearchBarLineEdit::onScroll(int value)
         /* Create some fictitious room for an extra scroll */
         suggestionScroller->setRange(scrollMin, scrollMax + 1);
     }
+}
+
+void SearchBarLineEdit::onScrollPastEnd()
+{
+    m_aboutToScrollPastEnd = false;
+
+    /* m_completer.popup()->currentIndex() being invalid means the list
+       has been scrolled from bottom to top. We undo this here, as it avoids
+       scroll bar flicker as well. Block signal to avoid recursion.
+    */
+    auto old = m_completer.popup()->verticalScrollBar()->blockSignals(true);
+    m_completer.popup()->scrollToBottom();
+    m_completer.popup()->verticalScrollBar()->blockSignals(old);
+    
+    return fetchMoreSuggestions();
 }
 
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
