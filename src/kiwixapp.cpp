@@ -142,30 +142,22 @@ void KiwixApp::newTab()
 
 QString KiwixApp::findLibraryDirectory()
 {
-    auto currentDataDir = QString::fromStdString(kiwix::removeLastPathElement(kiwix::getExecutablePath()));
-    
+    auto dataDir = getDataDirectory();
     if (isPortableMode())
-        return currentDataDir + QDir::separator() + "data";
+        return dataDir;
 
-    // Check for library.xml in the same directory as the executable.
-    auto libraryFile = QFileInfo(currentDataDir, "library.xml");
+    auto libraryFile = QFileInfo(dataDir, "library.xml");
     if (libraryFile.exists())
-        return currentDataDir;
-
-    // Check for default dataDirectory.
-    currentDataDir = getDataDirectory();
-    libraryFile = QFileInfo(currentDataDir, "library.xml");
-    if (libraryFile.exists())
-        return currentDataDir;
+        return dataDir;
 
     // Check if this is a pre-release version with wrong directory.
-    auto oldDataDir = QDir(currentDataDir);
+    auto oldDataDir = QDir(dataDir);
     oldDataDir.cdUp();
     libraryFile = QFileInfo(oldDataDir, "library.xml");
     if (libraryFile.exists()) {
         // We have to move all zim files and xml file to the new dataDir
         for (auto& fileInfo: oldDataDir.entryInfoList({"*.zim", "library*.xml"})) {
-            auto newFileInfo = QFileInfo(currentDataDir, fileInfo.fileName());
+            auto newFileInfo = QFileInfo(dataDir, fileInfo.fileName());
             QFile::rename(fileInfo.absoluteFilePath(), newFileInfo.absoluteFilePath());
         }
         // Aria2 stores information about the current download using absolute path.
@@ -175,7 +167,7 @@ QString KiwixApp::findLibraryDirectory()
     }
 
     // This is a first launch
-    return currentDataDir;
+    return dataDir;
 }
 
 void KiwixApp::restoreTabs()
