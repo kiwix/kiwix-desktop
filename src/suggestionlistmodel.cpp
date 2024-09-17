@@ -52,7 +52,27 @@ void SuggestionListModel::resetSuggestions()
 void SuggestionListModel::append(const QList<SuggestionData> &suggestionList)
 {
     beginResetModel();
+    if (hasFullTextSearchSuggestion())
+        m_suggestions.pop_back();
+
     for (const auto& suggestion : suggestionList)
         m_suggestions.append(suggestion);
     endResetModel();
+}
+
+int SuggestionListModel::countOfRegularSuggestions() const
+{
+    return hasFullTextSearchSuggestion()
+            ? rowCount() - 1
+            : rowCount();
+}
+
+bool SuggestionListModel::hasFullTextSearchSuggestion() const
+{
+    return rowCount() > 0 && m_suggestions.last().isFullTextSearchSuggestion();
+}
+
+bool SuggestionData::isFullTextSearchSuggestion() const
+{
+    return url.host().endsWith(".search");
 }

@@ -274,7 +274,7 @@ void SearchBarLineEdit::onAdditionalSuggestions(int start)
 
 void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
 {
-    const int start = m_suggestionModel.rowCount();
+    const int start = m_suggestionModel.countOfRegularSuggestions();
     const auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
             [=] (const QList<SuggestionData>& suggestionList, int token) {
@@ -296,11 +296,13 @@ QModelIndex SearchBarLineEdit::getDefaulSuggestionIndex() const
         return firstSuggestionIndex;
 
     /* If the first entry matches the typed text, use it as default, otherwise
-       use the last entry which is the fulltext search. */
+       use the last entry if fulltext search exist. */
     const auto firstSuggestionText = firstSuggestionIndex.data().toString();
     if (this->text().compare(firstSuggestionText, Qt::CaseInsensitive) == 0)
         return firstSuggestionIndex;
-    return m_suggestionModel.index(m_suggestionModel.rowCount() - 1);
+    else if (m_suggestionModel.hasFullTextSearchSuggestion())
+        return m_suggestionModel.index(m_suggestionModel.rowCount() - 1);
+    return QModelIndex();
 }
 
 SearchBar::SearchBar(QWidget *parent) :

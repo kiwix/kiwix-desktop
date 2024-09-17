@@ -8,6 +8,8 @@ struct SuggestionData
 {
     QString text;
     QUrl url;
+
+    bool isFullTextSearchSuggestion() const;
 };
 
 class SuggestionListModel : public QAbstractListModel
@@ -23,6 +25,9 @@ public:
 
     void resetSuggestions();
     void append(const QList<SuggestionData>& suggestionList);
+
+    int countOfRegularSuggestions() const;
+    bool hasFullTextSearchSuggestion() const;
 
 private:
     QList<SuggestionData> m_suggestions;
