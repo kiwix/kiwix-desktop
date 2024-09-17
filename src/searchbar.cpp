@@ -210,6 +210,21 @@ void SearchBarLineEdit::fetchMoreSuggestion()
 
 void SearchBarLineEdit::onScrollToEnd(int value)
 {
+    if (!m_completer.popup()->currentIndex().isValid())
+    {
+        m_scrolledEndBefore = false;
+
+        /* m_completer.popup()->currentIndex() being invalid means the list
+           has been scrolled from bottom to top. We undo this here, as it avoids
+           scroll bar flicker as well. Block signal to avoid recursion.
+        */
+        auto old = m_completer.popup()->verticalScrollBar()->blockSignals(true);
+        m_completer.popup()->scrollToBottom();
+        m_completer.popup()->verticalScrollBar()->blockSignals(old);
+        
+        return fetchMoreSuggestion();
+    }
+
     auto suggestionScroller = m_completer.popup()->verticalScrollBar();
     bool scrolledToEnd = value == suggestionScroller->maximum();
 
