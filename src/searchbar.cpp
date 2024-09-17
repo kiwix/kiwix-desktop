@@ -259,6 +259,11 @@ void SearchBarLineEdit::onInitialSuggestions(int)
         openCompletion(getDefaulSuggestionIndex());
     } else {
         m_completer.complete();
+
+        /* Make row 0 appear but do not highlight it */
+        auto completerFirstIdx = m_completer.popup()->model()->index(0, 0);
+        auto completerSelModel = m_completer.popup()->selectionModel();
+        completerSelModel->setCurrentIndex(completerFirstIdx, QItemSelectionModel::Current);
     }
 }
 
