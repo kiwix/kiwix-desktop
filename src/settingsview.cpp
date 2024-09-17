@@ -18,6 +18,14 @@ namespace
         }
         return input;
     }
+
+    void disableInPortableMode(QWidget* w)
+    {
+        w->setEnabled(false); 
+        QString disabledStyle = "color: gray;";
+        w->setStyleSheet(disabledStyle);
+        w->setToolTip(gt("portable-disabled-tooltip"));
+    }
 }
 
 SettingsView::SettingsView(QWidget *parent)
@@ -62,6 +70,12 @@ SettingsView::SettingsView(QWidget *parent)
     ui->monitorHelp->setToolTip(gt("monitor-directory-tooltip"));
     ui->moveToTrashLabel->setText(gt("move-files-to-trash"));
     ui->reopenTabLabel->setText(gt("open-previous-tabs-at-startup"));
+    if(isPortableMode()) {
+        disableInPortableMode(ui->browseButton);
+        disableInPortableMode(ui->resetButton);
+        disableInPortableMode(ui->monitorBrowse);
+        disableInPortableMode(ui->monitorClear);
+    }
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     ui->line_5->hide();
     ui->moveToTrashLabel->hide();
