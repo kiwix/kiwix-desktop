@@ -15,7 +15,7 @@ public:
     void run() override;
 
 signals:
-    void searchFinished(const QStringList& suggestions, const QVector<QUrl>& urlList, int token);
+    void searchFinished(const QStringList& suggestions, const QVector<QUrl>& urlList, bool hasFullText, int token);
 
 private:
     QString m_text;

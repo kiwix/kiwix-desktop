@@ -20,10 +20,14 @@ public:
     void append(const QStringList& suggestions, const QVector<QUrl>& urlList);
 
     QModelIndex lastIndex() const;
+    QModelIndex fetchEndIndex() const;
+    void setHasFullText(bool hasFullText) { m_hasFullText = hasFullText; }
+    bool hasFullText() const { return m_hasFullText; }
 
 private:
     QStringList m_suggestions;
     QVector<QUrl> m_urlList;
+    bool m_hasFullText = true;
 };
 
 #endif // SUGGESTIONLISTMODEL_H
