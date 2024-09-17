@@ -17,6 +17,7 @@ public:
 
     void resetSuggestions(const QStringList& suggestions = QStringList{});
     void resetUrlList(const QVector<QUrl>& urlList = QVector<QUrl>{});
+    void append(const QStringList& suggestions, const QVector<QUrl>& urlList);
 
     QModelIndex lastIndex() const;
 

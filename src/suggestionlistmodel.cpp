@@ -65,6 +65,18 @@ void SuggestionListModel::resetUrlList(const QVector<QUrl> &urlList)
     endResetModel();
 }
 
+void SuggestionListModel::append(const QStringList &suggestions,
+                                 const QVector<QUrl> &urlList)
+{
+    beginResetModel();
+    for (int i = 0; i < urlList.size(); i++)
+    {
+        m_urlList.append(urlList[i]);
+        m_suggestions.append(suggestions[i]);
+    }
+    endResetModel();
+}
+
 QModelIndex SuggestionListModel::lastIndex() const
 {
     return index(rowCount() - 1);
