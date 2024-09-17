@@ -197,6 +197,9 @@ void SearchBarLineEdit::updateCompletion()
             return;
         }
         m_completer.complete();
+
+        /* Make row 0 appear but does not highlight it */
+        m_completer.popup()->selectionModel()->setCurrentIndex(m_suggestionModel.index(0), QItemSelectionModel::Current);
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
