@@ -80,7 +80,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
-    connect(m_completer.popup()->verticalScrollBar(), &QScrollBar::valueChanged,
+    connect(m_suggestionView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &SearchBarLineEdit::onScroll);
 
     qRegisterMetaType<QList<SuggestionData>>("QList<SuggestionData>");
@@ -119,7 +119,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 
 void SearchBarLineEdit::hideSuggestions()
 {
-    m_completer.popup()->hide();
+    m_suggestionView->hide();
 }
 
 bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
@@ -222,15 +222,15 @@ void SearchBarLineEdit::onScroll(int value)
        to intercept the scrolling in eventFilter so, until we find out how, this
        code is here to stay.
     */
-    if (!m_completer.popup()->currentIndex().isValid())
+    if (!m_suggestionView->currentIndex().isValid())
     {
-        const auto old = m_completer.popup()->verticalScrollBar()->blockSignals(true);
-        m_completer.popup()->scrollToBottom();
-        m_completer.popup()->verticalScrollBar()->blockSignals(old);
+        const auto old = m_suggestionView->verticalScrollBar()->blockSignals(true);
+        m_suggestionView->scrollToBottom();
+        m_suggestionView->verticalScrollBar()->blockSignals(old);
         return;
     }
 
-    const auto suggestionScroller = m_completer.popup()->verticalScrollBar();
+    const auto suggestionScroller = m_suggestionView->verticalScrollBar();
     const auto scrollMin = suggestionScroller->minimum();
     const auto scrollMax = suggestionScroller->maximum();
     const bool scrolledToEnd = value == suggestionScroller->maximum();
@@ -277,8 +277,8 @@ void SearchBarLineEdit::onInitialSuggestions(int)
         m_completer.complete();
 
         /* Make row 0 appear but do not highlight it */
-        const auto completerFirstIdx = m_completer.popup()->model()->index(0, 0);
-        const auto completerSelModel = m_completer.popup()->selectionModel();
+        const auto completerFirstIdx = m_suggestionView->model()->index(0, 0);
+        const auto completerSelModel = m_suggestionView->selectionModel();
         completerSelModel->setCurrentIndex(completerFirstIdx, QItemSelectionModel::Current);
     }
 }
@@ -286,9 +286,9 @@ void SearchBarLineEdit::onInitialSuggestions(int)
 void SearchBarLineEdit::onAdditionalSuggestions(int start)
 {
     /* Set selection to be at the last row of the previous list */
-    const auto completerStartIdx = m_completer.popup()->model()->index(start, 0);
-    m_completer.popup()->setCurrentIndex(completerStartIdx);
-    m_completer.popup()->show();
+    const auto completerStartIdx = m_suggestionView->model()->index(start, 0);
+    m_suggestionView->setCurrentIndex(completerStartIdx);
+    m_suggestionView->show();
 }
 
 void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
