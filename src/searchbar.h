@@ -48,10 +48,18 @@ private:
     QTimer* mp_typingTimer;
     int m_token;
 
+    /* We only fetch more suggestions when the user is at the end and tries to
+       scroll again. This variable is set whenever the user scrolled to the end,
+       indicating the next scroll should trigger a fetch more action. */
+    bool m_aboutToScrollPastEnd = false;
+
 private slots:
     void updateCompletion();
+    void fetchMoreSuggestions();
+    void onScroll(int value);
     void openCompletion(const QModelIndex& index);
     void onInitialSuggestions(int);
+    void onAdditionalSuggestions(int start);
     void fetchSuggestions(NewSuggestionHandlerFuncPtr callback);
 
     QModelIndex getDefaulSuggestionIndex() const;
