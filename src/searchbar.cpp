@@ -2,6 +2,7 @@
 
 #include <QCompleter>
 #include <QFocusEvent>
+#include <QScrollBar>
 
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
@@ -65,10 +66,14 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     setToolTip(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
-    m_completer.setMaxVisibleItems(16);
+
+    /* The items should be less than fetch size to enable scrolling. */
+    m_completer.setMaxVisibleItems(SuggestionListWorker::getFetchSize() / 2);
     setCompleter(&m_completer);
 
     m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+    connect(m_completer.popup()->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &SearchBarLineEdit::onScroll);
 
     qRegisterMetaType<QList<SuggestionData>>("QList<SuggestionData>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
@@ -165,6 +170,44 @@ void SearchBarLineEdit::updateCompletion()
     fetchSuggestions(&SearchBarLineEdit::onInitialSuggestions);
 }
 
+void SearchBarLineEdit::fetchMoreSuggestions()
+{
+    fetchSuggestions(&SearchBarLineEdit::onAdditionalSuggestions);
+}
+
+void SearchBarLineEdit::onScroll(int value)
+{
+    auto suggestionScroller = m_completer.popup()->verticalScrollBar();
+    auto scrollMin = suggestionScroller->minimum();
+    auto scrollMax = suggestionScroller->maximum();
+    bool scrolledToEnd = value == suggestionScroller->maximum();
+    
+    if (m_aboutToScrollPastEnd)
+    {
+        /* The user's intention to scroll past end has been confirmed */
+        if (scrolledToEnd)
+        {
+            fetchMoreSuggestions();
+            m_aboutToScrollPastEnd = false; /* Relax until next time */
+        }
+        else
+        {
+            /* Scrolling past end did not happen - remove the extra scroll 
+               room created for detecting the intention of scrolling past end
+            */
+            suggestionScroller->setRange(scrollMin, scrollMax - 1);
+            m_aboutToScrollPastEnd = false; /* ... and relax */
+        }
+    }
+    else if (scrolledToEnd)
+    {
+        /* The user has scrolled to end - monitor for furthur scrolling */
+        m_aboutToScrollPastEnd = true;
+        /* Create some fictitious room for an extra scroll */
+        suggestionScroller->setRange(scrollMin, scrollMax + 1);
+    }
+}
+
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
     if (m_suggestionModel.rowCount() != 0) 
@@ -181,6 +224,14 @@ void SearchBarLineEdit::onInitialSuggestions(int)
     } else {
         m_completer.complete();
     }
+}
+
+void SearchBarLineEdit::onAdditionalSuggestions(int start)
+{
+    /* Set selection to be at the last row of the previous list */
+    auto completerStartIdx = m_completer.popup()->model()->index(start, 0);
+    m_completer.popup()->setCurrentIndex(completerStartIdx);
+    m_completer.popup()->show();
 }
 
 void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
