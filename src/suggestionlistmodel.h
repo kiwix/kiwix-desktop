@@ -14,6 +14,7 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
     void resetSuggestions(const QStringList& suggestions = QStringList{});
     void resetUrlList(const QVector<QUrl>& urlList = QVector<QUrl>{});

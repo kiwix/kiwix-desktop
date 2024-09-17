@@ -172,5 +172,6 @@
 	"export-reading-list-error": "Error description text for when exporting the reading list to a file failed.",
 	"import-reading-list": "Represents the action of importing a reading list from a file.",
 	"import-reading-list-error": "Error description text for when importing a reading list from a file failed.",
-	"save-page-as": "Represents the action of saving the current tab content to a file chosen by the user."
+	"save-page-as": "Represents the action of saving the current tab content to a file chosen by the user.",
+	"kiwix-search": "Title text for a list of search results, which notes ot the user those are from Kiwix's Search Engine"
 }

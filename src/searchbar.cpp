@@ -50,6 +50,7 @@ void BookmarkButton::on_buttonClicked()
 
 SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
+    m_suggestionView(new QTreeView),
     m_completer(&m_suggestionModel, this)
 {
     installEventFilter(this);
@@ -72,7 +73,13 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_completer.setMaxVisibleItems(8);
     setCompleter(&m_completer);
 
-    m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+    /* QCompleter's uses default list views, which do not have headers. */
+    m_completer.setPopup(m_suggestionView);
+
+    m_suggestionView->header()->setStretchLastSection(true);
+    m_suggestionView->setRootIsDecorated(false);
+    m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+
     connect(m_completer.popup()->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &SearchBarLineEdit::onScrollToEnd);
 
