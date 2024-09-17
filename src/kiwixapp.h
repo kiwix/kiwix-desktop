@@ -81,6 +81,7 @@ public:
     MainWindow* getMainWindow() { return mp_mainWindow; }
     ContentManager* getContentManager() { return mp_manager; }
     TabBar* getTabWidget() { return getMainWindow()->getTabBar(); }
+    SearchBar& getSearchBar() { return getMainWindow()->getTopWidget()->getSearchBar(); }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
     kiwix::Server* getLocalServer() { return &m_server; }

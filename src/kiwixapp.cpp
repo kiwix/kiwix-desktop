@@ -133,7 +133,7 @@ KiwixApp::~KiwixApp()
 void KiwixApp::newTab()
 {
     getTabWidget()->createNewTab(true, false);
-    auto& searchBarLineEdit = mp_mainWindow->getTopWidget()->getSearchBar().getLineEdit();
+    auto& searchBarLineEdit = getSearchBar().getLineEdit();
     searchBarLineEdit.setFocus(Qt::MouseFocusReason);
     searchBarLineEdit.clear();
     searchBarLineEdit.clearSuggestions();
