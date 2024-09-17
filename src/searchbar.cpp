@@ -52,6 +52,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_suggestionModel, this)
 {
+    installEventFilter(this);
     setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
@@ -112,6 +113,19 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 void SearchBarLineEdit::hideSuggestions()
 {
     m_completer.popup()->hide();
+}
+
+bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
+{
+    if (auto e = static_cast<QKeyEvent *>(event))
+    {
+        if (e->key() == Qt::Key_PageDown && m_aboutToScrollPastEnd)
+        {
+            onScrollPastEnd();
+            return true;
+        }
+    }
+    return false;
 }
 
 void SearchBarLineEdit::clearSuggestions()

@@ -31,6 +31,7 @@ class SearchBarLineEdit : public QLineEdit
 public:
     SearchBarLineEdit(QWidget *parent = nullptr);
     void hideSuggestions();
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 public slots:
     void on_currentTitleChanged(const QString &title);
