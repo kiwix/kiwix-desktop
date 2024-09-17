@@ -52,6 +52,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_suggestionModel, this)
 {
+    installEventFilter(this);
     setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
@@ -112,6 +113,27 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 void SearchBarLineEdit::hideSuggestions()
 {
     m_completer.popup()->hide();
+}
+
+bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
+{
+    if (!m_aboutToScrollPastEnd)
+        return false;
+
+    if (const auto e = dynamic_cast<QKeyEvent *>(event))
+    {
+        const auto key = e->key();
+        const bool isScrollDownKey = key == Qt::Key_Down || key == Qt::Key_PageDown;
+        const bool noModifiers = e->modifiers().testFlag(Qt::NoModifier);
+        
+        if (isScrollDownKey && noModifiers)
+        {
+            m_aboutToScrollPastEnd = false;
+            fetchMoreSuggestions();
+            return true;
+        }
+    }
+    return false;
 }
 
 void SearchBarLineEdit::clearSuggestions()
@@ -181,6 +203,19 @@ void SearchBarLineEdit::fetchMoreSuggestions()
 
 void SearchBarLineEdit::onScroll(int value)
 {
+    /* Scrolling using key_down past end will teleport scroller to the top.
+       We undo this here. Block signal to avoid recursion. We cannot find a way
+       to intercept the scrolling in eventFilter so, until we find out how, this
+       code is here to stay.
+    */
+    if (!m_completer.popup()->currentIndex().isValid())
+    {
+        const auto old = m_completer.popup()->verticalScrollBar()->blockSignals(true);
+        m_completer.popup()->scrollToBottom();
+        m_completer.popup()->verticalScrollBar()->blockSignals(old);
+        return;
+    }
+
     const auto suggestionScroller = m_completer.popup()->verticalScrollBar();
     const auto scrollMin = suggestionScroller->minimum();
     const auto scrollMax = suggestionScroller->maximum();
