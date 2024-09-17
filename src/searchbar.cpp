@@ -52,6 +52,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
     m_completer(&m_suggestionModel, this)
 {
+    installEventFilter(this);
     setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
@@ -112,6 +113,20 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 void SearchBarLineEdit::hideSuggestions()
 {
     m_completer.popup()->hide();
+}
+
+bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
+{
+    if (auto e = static_cast<QKeyEvent *>(event))
+    {
+        if (e->key() == Qt::Key_PageDown && m_scrolledEndBefore)
+        {
+            m_scrolledEndBefore = false;
+            fetchMoreSuggestion();
+            return true;
+        }
+    }
+    return false;
 }
 
 void SearchBarLineEdit::clearSuggestions()
@@ -198,8 +213,13 @@ void SearchBarLineEdit::fetchMoreSuggestion()
 
         m_suggestionModel.append(suggestions, urlList);
 
-        /* Set selection to be at the last row of the previous list */
-        m_completer.popup()->setCurrentIndex(m_suggestionModel.index(start));
+        /* Set selection to be at the last row of the previous list.
+
+           m_completer has a private QCompleterModel wrapper class for 
+           m_completer.popup(). Page Down behavior only works if indexes' parent
+           is that instance.
+        */
+        m_completer.popup()->setCurrentIndex(m_completer.popup()->model()->index(start, 0));
         m_completer.popup()->show();
 
         
