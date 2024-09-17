@@ -44,9 +44,12 @@ private:
     bool m_returnPressed = false;
     QTimer* mp_typingTimer;
     int m_token;
+    bool m_scrolledEndBefore = false;
 
 private slots:
     void updateCompletion();
+    void fetchMoreSuggestion();
+    void onScrollToEnd(int value);
     void openCompletion(const QModelIndex& index);
 };
 
