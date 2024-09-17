@@ -190,7 +190,7 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
         if (this->text().compare(editText, Qt::CaseInsensitive) == 0) {
             url = index.data(Qt::UserRole).toUrl();
         } else {
-            url = m_suggestionModel.index(m_suggestionModel.rowCount() - 1).data(Qt::UserRole).toUrl();
+            url = m_suggestionModel.lastIndex().data(Qt::UserRole).toUrl();
         }
         QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
     }

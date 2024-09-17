@@ -64,3 +64,8 @@ void SuggestionListModel::resetUrlList(const QVector<QUrl> &urlList)
     m_urlList = urlList;
     endResetModel();
 }
+
+QModelIndex SuggestionListModel::lastIndex() const
+{
+    return index(rowCount() - 1);
+}
