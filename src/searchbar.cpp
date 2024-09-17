@@ -80,7 +80,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
-    connect(m_completer.popup()->verticalScrollBar(), &QScrollBar::valueChanged,
+    connect(m_suggestionView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &SearchBarLineEdit::onScrollToEnd);
 
     qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
@@ -119,7 +119,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 
 void SearchBarLineEdit::hideSuggestions()
 {
-    m_completer.popup()->hide();
+    m_suggestionView->hide();
 }
 
 bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
@@ -207,7 +207,7 @@ void SearchBarLineEdit::updateCompletion()
         m_completer.complete();
 
         /* Make row 0 appear but does not highlight it */
-        m_completer.popup()->selectionModel()->setCurrentIndex(m_suggestionModel.index(0), QItemSelectionModel::Current);
+        m_suggestionView->selectionModel()->setCurrentIndex(m_suggestionModel.index(0), QItemSelectionModel::Current);
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
@@ -231,8 +231,8 @@ void SearchBarLineEdit::fetchMoreSuggestion()
            m_completer.popup(). Page Down behavior only works if indexes' parent
            is that instance.
         */
-        m_completer.popup()->setCurrentIndex(m_completer.popup()->model()->index(start, 0));
-        m_completer.popup()->show();
+        m_suggestionView->setCurrentIndex(m_suggestionView->model()->index(start, 0));
+        m_suggestionView->show();
 
         
     });
@@ -256,14 +256,14 @@ void SearchBarLineEdit::onScrollToEnd(int value)
            has been scrolled from bottom to top. We undo this here, as it avoids
            scroll bar flicker as well. Block signal to avoid recursion.
         */
-        auto old = m_completer.popup()->verticalScrollBar()->blockSignals(true);
-        m_completer.popup()->scrollToBottom();
-        m_completer.popup()->verticalScrollBar()->blockSignals(old);
+        auto old = m_suggestionView->verticalScrollBar()->blockSignals(true);
+        m_suggestionView->scrollToBottom();
+        m_suggestionView->verticalScrollBar()->blockSignals(old);
         
         return fetchMoreSuggestion();
     }
 
-    auto suggestionScroller = m_completer.popup()->verticalScrollBar();
+    auto suggestionScroller = m_suggestionView->verticalScrollBar();
     bool scrolledToEnd = value == suggestionScroller->maximum();
 
     /* We only fetch when user scrolls down twice, otherwise user can never
