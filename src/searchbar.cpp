@@ -232,6 +232,12 @@ void SearchBarLineEdit::fetchMoreSuggestion()
 
 void SearchBarLineEdit::onScrollToEnd(int value)
 {
+    if (m_suggestionModel.noMoreSuggestion())
+    {
+        m_scrolledEndBefore = false;
+        return;
+    }
+
     if (!m_completer.popup()->currentIndex().isValid())
     {
         m_scrolledEndBefore = false;
