@@ -166,7 +166,8 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
         event->reason() == Qt::ShortcutFocusReason ||
         event->reason() == Qt::PopupFocusReason) {
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
-        this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion));
+        this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion),
+        Qt::UniqueConnection);
     }
     QLineEdit::focusInEvent(event);
 }
