@@ -32,7 +32,7 @@ QToolButton {
 
 SearchBar {
     background-color: white;
-    margin: 2px 5px;
+    margin: 2px;
     border: 1px solid #ccc;
     border-radius: 3px;
 
@@ -43,7 +43,7 @@ SearchBar > QLabel#searchIcon {
     padding: 0;
     border: none;
     background-color: none;
-    margin: 0px 4px 0px 9px;
+    margin: 0px 6px;
 
     max-height: 38px;
     max-width: 38px;
@@ -69,8 +69,8 @@ SearchBar > QToolButton {
 }
 
 SearchBar > BookmarkButton {
-    margin-right: 3px;
-    margin-left: 3px; 
+    margin-right: 2px;
+    margin-left: 2px; 
 }
 
 SearchBar > QToolButton:pressed,
