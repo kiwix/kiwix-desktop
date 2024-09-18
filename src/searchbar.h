@@ -46,6 +46,9 @@ private:
     QTimer* mp_typingTimer;
     int m_token;
     bool m_scrolledEndBefore = false;
+    bool m_noMoreSuggestion = true;
+
+    void setNoMoreSuggestion(int fetchedSize);
 
 private slots:
     void updateCompletion();

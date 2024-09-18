@@ -119,7 +119,7 @@ bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
 {
     if (auto e = static_cast<QKeyEvent *>(event))
     {
-        if (e->key() == Qt::Key_PageDown && m_scrolledEndBefore)
+        if (e->key() == Qt::Key_PageDown && m_scrolledEndBefore && m_noMoreSuggestion)
         {
             m_scrolledEndBefore = false;
             fetchMoreSuggestion();
@@ -132,6 +132,7 @@ bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
 void SearchBarLineEdit::clearSuggestions()
 {
     m_suggestionModel.resetSuggestions();
+    m_noMoreSuggestion = true;
 }
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
@@ -190,6 +191,7 @@ void SearchBarLineEdit::updateCompletion()
         }
 
         m_suggestionModel.append(suggestionList);
+        setNoMoreSuggestion(suggestionList.size());
         if (m_returnPressed) {
             openCompletion(m_suggestionModel.index(0));
             return;
@@ -198,6 +200,12 @@ void SearchBarLineEdit::updateCompletion()
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
+}
+
+void SearchBarLineEdit::setNoMoreSuggestion(int fetchedSize)
+{
+    int trueFetchSize = fetchedSize - (m_suggestionModel.hasFullTextSearchSuggestion() ? 1 : 0);
+    m_noMoreSuggestion = trueFetchSize < SuggestionListWorker::getFetchSize();
 }
 
 void SearchBarLineEdit::fetchMoreSuggestion()
@@ -211,6 +219,7 @@ void SearchBarLineEdit::fetchMoreSuggestion()
         }
 
         m_suggestionModel.append(suggestionList);
+        setNoMoreSuggestion(suggestionList.size());
 
         /* Set selection to be at the last row of the previous list.
 
@@ -227,6 +236,12 @@ void SearchBarLineEdit::fetchMoreSuggestion()
 
 void SearchBarLineEdit::onScroll(int value)
 {
+    if (m_noMoreSuggestion)
+    {
+        m_scrolledEndBefore = false;
+        return;
+    }
+
     if (!m_completer.popup()->currentIndex().isValid())
     {
         m_scrolledEndBefore = false;
