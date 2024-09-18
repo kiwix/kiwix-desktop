@@ -206,13 +206,44 @@ void SearchBarLineEdit::updateCompletion()
 
         m_suggestionModel.setHasFullText(hasFullText);
         m_suggestionModel.resetSuggestions(suggestions);
-        m_completer.complete();
+        m_completer.complete(getCompleterRect());
 
         /* Make row 0 appear but does not highlight it */
         m_suggestionView->selectionModel()->setCurrentIndex(m_suggestionModel.index(0), QItemSelectionModel::Current);
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
+}
+
+QRect SearchBarLineEdit::getCompleterRect()
+{
+    auto& searchBar = KiwixApp::instance()->getSearchBar();
+    auto searchGeo = searchBar.geometry();
+    auto searchLineEditGeo = searchBar.getLineEdit().geometry();
+
+    /* See SearchBar border and margin size in resources/css/style.css */
+    int top = searchGeo.height() - 6; /* top&bottom margin + border */
+    int width = searchGeo.width() - 6; /* left&right margin + border */
+    
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool lineEditFlipped = KiwixApp::isRightToLeft();
+#else
+    bool lineEditFlipped = m_searchbarInput.isRightToLeft();
+#endif
+
+    /* When not flipped, match left of completer to search bar. Popups are
+       shifted by margin and border so we undo those changes to stay in border.
+
+       When flipped, we first match left of completer to right of search bar.
+       In addition to the popup shift due to border and margin, We move right by
+       one more border size to match the right border pixel. We then move it 
+       left by width to match left of search bar.    
+    */
+    int left = lineEditFlipped ? -searchLineEditGeo.left() + 4 - width
+                               : -searchLineEditGeo.left() + 3;
+
+    /* Can't set height to 0. Will cause rectangle to be ignored. */
+    return QRect(QPoint(left, top), QSize(width, 1));
 }
 
 void SearchBarLineEdit::fetchMoreSuggestion()

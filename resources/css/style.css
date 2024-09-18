@@ -30,6 +30,7 @@ QToolButton {
     border: none;
 }
 
+/* getCompleterRect of src/searchbar.cpp references the margin and border */
 SearchBar {
     background-color: white;
     margin: 2px;

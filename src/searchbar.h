@@ -51,6 +51,8 @@ private:
     int m_token;
     bool m_scrolledEndBefore = false;
 
+    QRect getCompleterRect();
+
 private slots:
     void updateCompletion();
     void fetchMoreSuggestion();
