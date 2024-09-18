@@ -48,6 +48,7 @@ private:
     bool m_returnPressed = false;
     QTimer* mp_typingTimer;
     int m_token;
+    bool m_moreSuggestionsAreAvailable = false;
 
     /* We only fetch more suggestions when the user is at the end and tries to
        scroll again. This variable is set whenever the user scrolled to the end,

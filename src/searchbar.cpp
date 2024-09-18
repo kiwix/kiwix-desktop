@@ -119,7 +119,7 @@ bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
 {
     if (auto e = static_cast<QKeyEvent *>(event))
     {
-        if (e->key() == Qt::Key_PageDown && m_aboutToScrollPastEnd)
+        if (e->key() == Qt::Key_PageDown && m_aboutToScrollPastEnd && m_moreSuggestionsAreAvailable)
         {
             onScrollPastEnd();
             return true;
@@ -131,6 +131,7 @@ bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
 void SearchBarLineEdit::clearSuggestions()
 {
     m_suggestionModel.resetSuggestions();
+    m_moreSuggestionsAreAvailable = false;
 }
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
@@ -191,6 +192,12 @@ void SearchBarLineEdit::fetchMoreSuggestions()
 
 void SearchBarLineEdit::onScroll(int value)
 {
+    if (!m_moreSuggestionsAreAvailable)
+    {
+        m_aboutToScrollPastEnd = false;
+        return;
+    }
+
     if (!m_completer.popup()->currentIndex().isValid())
         onScrollPastEnd();
 
@@ -274,6 +281,10 @@ void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
                 }
 
                 m_suggestionModel.append(suggestionList);
+                int listSize = suggestionList.size();
+                bool hasFullText = listSize > 0 && suggestionList.back().isFullTextSearchSuggestion();
+                int maxFetchSize = SuggestionListWorker::getFetchSize() + hasFullText;
+                m_moreSuggestionsAreAvailable = listSize >= maxFetchSize;
                 (this->*callback)(start);
             });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
