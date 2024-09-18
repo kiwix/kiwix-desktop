@@ -23,11 +23,15 @@ public:
     QModelIndex fetchEndIndex() const;
     void setHasFullText(bool hasFullText) { m_hasFullText = hasFullText; }
     bool hasFullText() const { return m_hasFullText; }
+    bool noMoreSuggestion() const { return m_noMoreSuggestion; }
 
 private:
     QStringList m_suggestions;
     QVector<QUrl> m_urlList;
     bool m_hasFullText = true;
+    bool m_noMoreSuggestion = true;
+
+    void setNoMoreSuggestion(int fetchedSize);
 };
 
 #endif // SUGGESTIONLISTMODEL_H

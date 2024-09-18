@@ -1,5 +1,6 @@
 #include "suggestionlistmodel.h"
 #include "kiwixapp.h"
+#include "suggestionlistworker.h"
 
 #include <QIcon>
 
@@ -62,6 +63,7 @@ void SuggestionListModel::resetUrlList(const QVector<QUrl> &urlList)
 {
     beginResetModel();
     m_urlList = urlList;
+    setNoMoreSuggestion(urlList.size());
     endResetModel();
 }
 
@@ -80,6 +82,7 @@ void SuggestionListModel::append(const QStringList &suggestions,
         m_urlList.append(urlList[i]);
         m_suggestions.append(suggestions[i]);
     }
+    setNoMoreSuggestion(urlList.size());
     endResetModel();
 }
 
@@ -92,4 +95,10 @@ QModelIndex SuggestionListModel::fetchEndIndex() const
 {
     int trueFetchSize = m_urlList.size() - (m_hasFullText ? 1 : 0);
     return index(trueFetchSize - 1);
+}
+
+void SuggestionListModel::setNoMoreSuggestion(int fetchedSize)
+{
+    int trueFetchSize = fetchedSize - (m_hasFullText ? 1 : 0);
+    m_noMoreSuggestion = trueFetchSize < SuggestionListWorker::getFetchSize();
 }
