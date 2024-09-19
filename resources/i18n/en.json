@@ -167,5 +167,6 @@
     "disable-sandbox": "Application was launched from a network drive. This is known to cause compatibility issues due to the sandbox. Do you want to take the risks and disable it?",
     "save-page-as": "Save As...",
     "kiwix-search": "Kiwix Search",
-    "multi-zim-search": "Multi-Zim Search"
+    "multi-zim-search": "Multi-Zim Search",
+    "select-all": "Select all"
 }

@@ -5,6 +5,7 @@
 
 class QListWidget;
 class QButtonGroup;
+class QCheckBox;
 
 class MultiZimButton : public QToolButton {
     Q_OBJECT
@@ -19,6 +20,7 @@ public slots:
 private:
     QListWidget* mp_buttonList;
     QButtonGroup* mp_radioButtonGroup;
+    QCheckBox* mp_selectAllButton;
     QString m_zimId;
 };
 

@@ -3,21 +3,32 @@
 #include <QWidgetAction>
 #include <QButtonGroup>
 #include <QRadioButton>
+#include <QCheckBox>
 #include "kiwixapp.h"
 #include "multizimbutton.h"
 
 MultiZimButton::MultiZimButton(QWidget *parent) :
     QToolButton(parent), 
     mp_buttonList(new QListWidget),
-    mp_radioButtonGroup(new QButtonGroup(this))
+    mp_radioButtonGroup(new QButtonGroup(this)),
+    mp_selectAllButton(new QCheckBox(gt("select-all"), this))
 {
     setMenu(new QMenu(this));
     setPopupMode(QToolButton::InstantPopup);
     setIcon(QIcon(":/icons/filter.svg"));
     setToolTip(gt("multi-zim-search"));
 
+    QWidget *menuWidget = new QWidget;
+    menuWidget->setLayout(new QVBoxLayout);
+    menuWidget->layout()->addWidget(mp_buttonList);
+    menuWidget->layout()->addWidget(mp_selectAllButton);
+    
+    /* TODO: connect with list widget after multi-zim */
+    mp_selectAllButton->setDisabled(true);
+    mp_selectAllButton->hide();
+
     auto popupAction = new QWidgetAction(menu());
-    popupAction->setDefaultWidget(mp_buttonList);
+    popupAction->setDefaultWidget(menuWidget);
     menu()->addAction(popupAction);
 }
 
