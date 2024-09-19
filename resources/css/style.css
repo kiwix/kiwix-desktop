@@ -81,6 +81,28 @@ SearchBar > QToolButton:hover {
     border-radius: 3px;
 }
 
+/* updateDisplay of src/multizimbutton.cpp references the padding */
+MultiZimButton QListWidget {
+    border: 0px;
+    outline: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#selectAllButton {
+    padding-bottom: 10px;
+}
+
+MultiZimButton QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+MultiZimButton QScrollBar::handle {
+    background-color: grey;
+}
+
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;

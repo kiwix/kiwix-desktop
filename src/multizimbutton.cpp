@@ -20,12 +20,16 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
 
     QWidget *menuWidget = new QWidget;
     menuWidget->setLayout(new QVBoxLayout);
+    menuWidget->layout()->setSpacing(0);
+    menuWidget->layout()->setContentsMargins(0, 0, 0, 0);
     menuWidget->layout()->addWidget(mp_buttonList);
     menuWidget->layout()->addWidget(mp_selectAllButton);
     
     /* TODO: connect with list widget after multi-zim */
     mp_selectAllButton->setDisabled(true);
     mp_selectAllButton->hide();
+    mp_selectAllButton->setFixedHeight(24);
+    mp_selectAllButton->setObjectName("selectAllButton");
 
     auto popupAction = new QWidgetAction(menu());
     popupAction->setDefaultWidget(menuWidget);
@@ -54,6 +58,7 @@ void MultiZimButton::update_display()
             QRadioButton* radioBt = new QRadioButton;
             QListWidgetItem* item = new QListWidgetItem();
             item->setData(Qt::UserRole, bookId);
+            item->setSizeHint(QSize(0, 34));
             radioBt->setIcon(zimIcon);
 
             if (current && current->zimId() == bookId)
@@ -81,6 +86,10 @@ void MultiZimButton::update_display()
     auto firstWidget = mp_buttonList->itemWidget(mp_buttonList->item(0));
     if (auto firstBt = qobject_cast<QRadioButton *>(firstWidget))
         firstBt->setChecked(true);
+
+    /* padding from resources/css/style.css QMultiZimButton QListWidget */
+    mp_buttonList->setFixedHeight(34 * std::min(7, mp_buttonList->count()) + 10);
+    mp_buttonList->setFixedWidth(menu()->width());
 }
 
 QString MultiZimButton::getZimId() const
