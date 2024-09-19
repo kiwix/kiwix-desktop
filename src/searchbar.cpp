@@ -80,6 +80,14 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
+    /* See line-height&padding resources/css/popup.css QHeaderView::section. */
+    m_suggestionView->setIconSize(QSize(24, 24));
+    connect(&m_suggestionModel, &QAbstractListModel::modelReset, [=](){
+        /* +1 for header. +10px for 5px top&bottom extra space */
+        int count = std::min(m_suggestionModel.rowCount(), m_completer.maxVisibleItems());
+        m_suggestionView->setMinimumHeight(m_suggestionView->sizeHintForRow(0) * (count + 1) + 10);
+    });
+
     connect(m_suggestionView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &SearchBarLineEdit::onScrollToEnd);
 
