@@ -126,7 +126,6 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     layout()->setAlignment({Qt::AlignVCenter | Qt::AlignLeading});
 
     QSize iconSize = QSize(24, 24);
-    textLabel->setText(text);
 
     /* Align text on same side irregardless of text direction. */
     bool needAlignReverse = KiwixApp::isRightToLeft() == text.isRightToLeft();
@@ -139,7 +138,21 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
        Avoid scroller from changing checkmark position.
     */
     auto menu = KiwixApp::instance()->getSearchBar().getMultiZimButtom().menu();
-    textLabel->setFixedWidth(menu->width() - 24 * 2 - 25 - 1);
+    int labelWidth = menu->width() - 24 * 2 - 25 - 1;
+    textLabel->setFixedWidth(labelWidth);
+
+    QFontMetrics metrics(textLabel->font());
+    int elideMarkerLength = metrics.tightBoundingRect("(...)").width();
+    int textLength = labelWidth - elideMarkerLength;
+    QString elidedText = metrics.elidedText(text, Qt::ElideRight, textLength);
+    if (elidedText != text)
+    {
+        /* Remove built-in elide marker */
+        elidedText.chop(1);
+        textLabel->setText(elidedText.trimmed() + "(...)");
+    }
+    else
+        textLabel->setText(text);
 
     iconLabel->setPixmap(icon.pixmap(iconSize));
     iconLabel->setFixedSize(iconSize);
