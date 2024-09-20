@@ -65,6 +65,23 @@ void SuggestionListDelegate::paintText(QPainter *p,
     
     int flag = {Qt::AlignVCenter | Qt::AlignLeading};
     QString text = index.data(Qt::DisplayRole).toString();
-    p->drawText(textRect, flag, text);
+
+    QFontMetrics metrics = opt.fontMetrics;
+    int elideMarkerLength = metrics.tightBoundingRect("(...)").width();
+    int textLength = textRect.width() - elideMarkerLength;
+    QString elidedText = metrics.elidedText(text, Qt::ElideRight, textLength);
+    if (elidedText != text)
+    {
+        /* Remove built-in elide marker */
+        elidedText.chop(1);
+
+        /* drawText's Align direction determines text direction */
+        bool textDirectionFlipped = KiwixApp::isRightToLeft() != text.isRightToLeft();
+        elidedText = textDirectionFlipped ? "(...)" + elidedText.trimmed() 
+                                          : elidedText.trimmed() + "(...)";
+        p->drawText(textRect, flag, elidedText);
+    }
+    else
+        p->drawText(textRect, flag, text);
     return;
 }
