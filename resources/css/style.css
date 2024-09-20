@@ -87,10 +87,60 @@ MultiZimButton QListWidget {
     outline: 0px;
     padding-top: 5px;
     padding-bottom: 5px;
+    background-color: white;
+}
+
+MultiZimButton QListWidget::item {
+    padding-right: 5px;
+    padding-left: 5px;
+    border: 1px solid transparent;
+    background-color: white;
+}
+
+MultiZimButton QListWidget::item:hover {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+}
+
+ZimItemWidget * {
+    background-color: transparent;
+}
+
+ZimItemWidget QLabel {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+ZimItemWidget QRadioButton::indicator {
+    image: none;
+}
+
+ZimItemWidget QRadioButton::indicator:checked {
+    image: url(:/icons/tick.svg);
 }
 
 #selectAllButton {
+    background-color: white;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-bottom: 10px;
+}
+
+#selectAllButton::indicator {
+    width: 24px;
+    height: 24px;
+}
+
+#selectAllButton::indicator:unchecked {
+    image: url(:/icons/checkbox.svg);
+}
+
+#selectAllButton::indicator:checked {
+    image: url(:/icons/checkbox-active.svg);
 }
 
 MultiZimButton QScrollBar {

@@ -28,7 +28,7 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
     /* TODO: connect with list widget after multi-zim */
     mp_selectAllButton->setDisabled(true);
     mp_selectAllButton->hide();
-    mp_selectAllButton->setFixedHeight(24);
+    mp_selectAllButton->setFixedHeight(34);
     mp_selectAllButton->setObjectName("selectAllButton");
 
     auto align = KiwixApp::isRightToLeft() ? Qt::LeftToRight : Qt::RightToLeft;
@@ -116,8 +116,9 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     radioBt(new QRadioButton(this))
 {
     setLayout(new QHBoxLayout);
-    layout()->setSpacing(0);
+    layout()->setSpacing(5);
     layout()->setContentsMargins(0, 0, 0, 0);
+    layout()->setAlignment({Qt::AlignVCenter | Qt::AlignLeading});
 
     QSize iconSize = QSize(24, 24);
     textLabel->setText(text);
@@ -126,6 +127,14 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     bool needAlignReverse = KiwixApp::isRightToLeft() == text.isRightToLeft();
     auto align = needAlignReverse ? Qt::AlignLeft : Qt::AlignRight;
     textLabel->setAlignment({Qt::AlignVCenter | align});
+
+    /* See padding from resources/css/style.css QMultiZimButton QScrollBar,
+       border from resources/css/style.css QMultiZimButton QListWidget::item,
+       and content margin and iconSize of this widget,.
+       Avoid scroller from changing checkmark position.
+    */
+    auto menu = KiwixApp::instance()->getSearchBar().getMultiZimButtom().menu();
+    textLabel->setFixedWidth(menu->width() - 24 * 2 - 25 - 1);
 
     iconLabel->setPixmap(icon.pixmap(iconSize));
     iconLabel->setFixedSize(iconSize);
