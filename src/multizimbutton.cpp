@@ -37,6 +37,11 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
     auto popupAction = new QWidgetAction(menu());
     popupAction->setDefaultWidget(menuWidget);
     menu()->addAction(popupAction);
+
+    connect(mp_buttonList, &QListWidget::itemClicked, this, [=](QListWidgetItem* item){
+        if (auto widget = getZimWidget(item))
+            widget->getRadioButton()->setChecked(true);
+    });
 }
 
 void MultiZimButton::update_display()
