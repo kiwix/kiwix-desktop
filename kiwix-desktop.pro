@@ -210,7 +210,6 @@ QMAKE_CFLAGS += $$PKGCONFIG_CFLAGS
 
 win32 {
   LIBS += $$system(python scripts/pkg-config-wrapper.py --libs $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
-  LIBS += -lUser32
 }
 
 RESOURCES += \
