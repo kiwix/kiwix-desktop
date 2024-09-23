@@ -4,6 +4,18 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QWebEngineSettings>
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
+
+QWebEngineScript getScript(QString filename,
+    QWebEngineScript::InjectionPoint point = QWebEngineScript::DocumentReady)
+{
+    QWebEngineScript script;
+    script.setInjectionPoint(point);
+    script.setWorldId(QWebEngineScript::UserWorld);
+    script.setSourceUrl(QUrl(filename));
+    return script;
+}
 
 KProfile::KProfile(QObject *parent) :
     QWebEngineProfile(parent)
@@ -16,6 +28,9 @@ KProfile::KProfile(QObject *parent) :
 #else // Qt 5.13 and later
     setUrlRequestInterceptor(new ExternalReqInterceptor(this));
 #endif
+
+    scripts()->insert(getScript("qrc:/js/toc.js"));
+    scripts()->insert(getScript("qrc:/js/tocCSS.js"));
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -73,7 +88,7 @@ void KProfile::downloadFinished()
 void ExternalReqInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
 {
     const QString reqUrl = info.requestUrl().toString();
-    if (!reqUrl.startsWith("zim://"))
+    if (!reqUrl.startsWith("zim://") && !reqUrl.startsWith("qrc:/"))
     {
         qDebug() << "Blocked external request to URL: " << reqUrl;
         info.block(true);
