@@ -224,6 +224,7 @@ RESOURCES += \
     resources/translations.qrc \
     resources/contentmanager.qrc \
     resources/settingsmanager.qrc \
-    resources/style.qrc
+    resources/style.qrc \
+    resources/js.qrc
 
 RC_ICONS = resources/icons/kiwix/app_icon.ico

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>js/toc.js</file>
+        <file>js/tocCSS.js</file>
+    </qresource>
+</RCC>
