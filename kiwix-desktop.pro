@@ -25,6 +25,10 @@ QMAKE_LFLAGS +=  -std=c++17
     QMAKE_CXXFLAGS += -Werror
 }
 
+!win32:!static {
+    QMAKE_LFLAGS += -Wl,-rpath-link,\'$$PREFIX/lib/x86_64-linux-gnu\'
+}
+
 # Also change resources/org.kiwix.desktop.appdata.xml
 DEFINES += VERSION="2.3.1"
 
@@ -193,7 +197,7 @@ unix {
   INSTALLS += mime_file
 }
 
-DEPS_DEFINITION = \"kiwix >= 14.0.0 kiwix < 15.0.0 libzim >= 9.0.0 libzim < 10.0.0\"
+DEPS_DEFINITION = \"libkiwix >= 14.0.0 libkiwix < 15.0.0 libzim >= 9.0.0 libzim < 10.0.0\"
 
 PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
 
