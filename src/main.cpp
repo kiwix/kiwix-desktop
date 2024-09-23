@@ -25,15 +25,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
     std::string driveLetter = kiwix::getExecutablePath().substr(0, 3);
     UINT driveType = GetDriveTypeA(driveLetter.c_str());
-    if(driveType == DRIVE_REMOTE) {
-        const std::wstring messageStr = gt("disable-sandbox").toStdWString();
-        const std::wstring titleStr = gt("about-kiwix-desktop-title").toStdWString();
-        const wchar_t* message = messageStr.c_str();
-        const wchar_t* title = titleStr.c_str();
-        int msgboxID = MessageBoxExW(NULL, message, title, MB_YESNO | MB_ICONQUESTION, 0);
-        if (msgboxID == IDYES)
-            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
-    }
+    if(driveType == DRIVE_REMOTE) qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
 #endif
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // High DPI Scaling is enabled by default in Qt6. This attribute no longer exists in 6.0 and later
@@ -65,6 +57,12 @@ int main(int argc, char *argv[])
         return 0;
     }
     a.init();
+#ifdef Q_OS_WIN
+    if(driveType == DRIVE_REMOTE) {
+        int result = QMessageBox::question(nullptr, gt("about-kiwix-desktop-title"), gt("disable-sandbox"), QMessageBox::Yes | QMessageBox::No);
+        if (result == QMessageBox::No) return 0;
+    }
+#endif
     for (QString zimfile : positionalArguments) {
         a.openZimFile(zimfile);
     }
