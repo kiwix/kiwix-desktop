@@ -25,6 +25,10 @@ QMAKE_LFLAGS +=  -std=c++17
     QMAKE_CXXFLAGS += -Werror
 }
 
+!win32:!static {
+    QMAKE_LFLAGS += -Wl,-rpath-link,\'$$PREFIX/lib/x86_64-linux-gnu\'
+}
+
 # Also change resources/org.kiwix.desktop.appdata.xml
 DEFINES += VERSION="2.3.1"
 
