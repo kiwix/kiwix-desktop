@@ -63,7 +63,6 @@ function setupTOC()
 
     var tocTitle = document.createElement('p');
     tocTitle.id = "kiwix-toc-title";
-    tocTitle.textContent = "Table of content";
 
     var tocSideDiv = document.createElement('div');
     tocSideDiv.id = "kiwix-toc-side";
@@ -73,6 +72,13 @@ function setupTOC()
     document.body.prepend(tocSideDiv);
 }
 
-document.body.style.marginLeft = "310px";
-document.body.style.maxWidth = "calc(100vw - 310px)";
-setupTOC();
+new QWebChannel(qt.webChannelTransport, function(channel) {
+
+    var kiwixObj = channel.objects.kiwixChannelObj
+    document.body.style.marginLeft = "310px";
+    document.body.style.maxWidth = "calc(100vw - 310px)";
+    setupTOC();
+
+    document.getElementById("kiwix-toc-title").textContent = kiwixObj.tocTitle;
+});
+
