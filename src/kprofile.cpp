@@ -54,6 +54,8 @@ KProfile::KProfile(QObject *parent) :
 
     scripts()->insert(getScript(":/js/toc.js"));
     scripts()->insert(getScript(":/js/tocCSS.js"));
+    scripts()->insert(getScript(":/qtwebchannel/qwebchannel.js", 
+                      QWebEngineScript::DocumentCreation));
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
