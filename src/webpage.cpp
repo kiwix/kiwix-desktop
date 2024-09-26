@@ -21,6 +21,10 @@ WebPage::WebPage(QObject *parent) :
     KiwixWebChannelObject *kiwixChannelObj = new KiwixWebChannelObject(this);
     setWebChannel(channel, QWebEngineScript::UserWorld);
     channel->registerObject("kiwixChannelObj", kiwixChannelObj);
+
+    auto app = KiwixApp::instance();
+    connect(app->getAction(KiwixApp::ToggleTOCAction), &QAction::toggled,
+            kiwixChannelObj, &KiwixWebChannelObject::tocVisibleChanged);
 }
 
 bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType /*type*/, bool /*isMainFrame*/)
