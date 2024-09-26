@@ -72,9 +72,17 @@ function setupTOC()
     var tocTitle = document.createElement('p');
     tocTitle.id = "kiwix-toc-title";
 
+    var tocHideButton = document.createElement('button');
+    tocHideButton.id = "kiwix-toc-hide-button"
+
+    var tocTitleDiv = document.createElement('div');
+    tocTitleDiv.id = "kiwix-toc-title-div";
+    tocTitleDiv.append(tocTitle);
+    tocTitleDiv.append(tocHideButton);
+
     var tocSideDiv = document.createElement('div');
     tocSideDiv.id = "kiwix-toc-side";
-    tocSideDiv.append(tocTitle);
+    tocSideDiv.append(tocTitleDiv);
     tocSideDiv.append(toc);
 
     document.body.prepend(tocSideDiv);
@@ -86,6 +94,11 @@ new QWebChannel(qt.webChannelTransport, function(channel) {
     setupTOC();
 
     document.getElementById("kiwix-toc-title").textContent = kiwixObj.tocTitle;
+
+    var tocHideButton = document.getElementById("kiwix-toc-hide-button");
+    tocHideButton.textContent = kiwixObj.hideButtontext;
+    tocHideButton.onclick = () => { kiwixObj.tocVisible = false; };
+
     kiwixObj.tocVisibleChanged.connect(function(visible) {
         makeTOCVisible(visible);
     });
