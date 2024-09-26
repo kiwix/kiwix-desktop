@@ -55,6 +55,14 @@ function tocHTMLStr()
     return recurseData.toc;
 }
 
+function makeTOCVisible(visible)
+{
+    var tocElem = document.getElementById("kiwix-toc-side");
+    tocElem.style.display = visible ? "block" : "none";
+    document.body.style.marginLeft = visible ? "310px" : null;
+    document.body.style.maxWidth = visible ?  "calc(100vw - 310px)" : null;
+}
+
 function setupTOC()
 {
     var toc = document.createElement('div');
@@ -75,10 +83,12 @@ function setupTOC()
 new QWebChannel(qt.webChannelTransport, function(channel) {
 
     var kiwixObj = channel.objects.kiwixChannelObj
-    document.body.style.marginLeft = "310px";
-    document.body.style.maxWidth = "calc(100vw - 310px)";
     setupTOC();
 
     document.getElementById("kiwix-toc-title").textContent = kiwixObj.tocTitle;
+    kiwixObj.tocVisibleChanged.connect(function(visible) {
+        makeTOCVisible(visible);
+    });
+    makeTOCVisible(kiwixObj.tocVisible);
 });
 
