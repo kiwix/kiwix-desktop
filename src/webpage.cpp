@@ -23,8 +23,18 @@ WebPage::WebPage(QObject *parent) :
     channel->registerObject("kiwixChannelObj", kiwixChannelObj);
 
     auto app = KiwixApp::instance();
-    connect(app->getAction(KiwixApp::ToggleTOCAction), &QAction::toggled,
+    auto tocAction = app->getAction(KiwixApp::ToggleTOCAction);
+    auto readingListAction = app->getAction(KiwixApp::ToggleReadingListAction);
+    connect(tocAction, &QAction::toggled,
             kiwixChannelObj, &KiwixWebChannelObject::tocVisibleChanged);
+    connect(readingListAction, &QAction::toggled, this, [=](bool visible){
+        if (visible && tocAction->isChecked())
+            tocAction->toggle();
+    });
+    connect(tocAction, &QAction::toggled, this, [=](bool visible){
+        if (visible && readingListAction->isChecked())
+            readingListAction->toggle();
+    });
 }
 
 bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType /*type*/, bool /*isMainFrame*/)
