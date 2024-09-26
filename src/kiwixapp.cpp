@@ -435,8 +435,8 @@ void KiwixApp::createActions()
     });
     mpa_actions[ToggleFullscreenAction]->setCheckable(true);
 
-    CREATE_ACTION_SHORTCUT(ToggleTOCAction, gt("table-of-content"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_1));
-    HIDE_ACTION(ToggleTOCAction);
+    CREATE_ACTION_ICON_SHORTCUT(ToggleTOCAction, "toc", gt("table-of-content"), QKeySequence(Qt::CTRL | Qt::Key_M));
+    mpa_actions[ToggleTOCAction]->setCheckable(true);
 
     CREATE_ACTION_ICON_SHORTCUT(OpenMultiZimAction, "filter", gt("search-options"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_L));
 
@@ -500,6 +500,7 @@ void KiwixApp::handleItemsState(TabType tabType)
     app->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::OpenHomePageAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ToggleTOCAction)->setDisabled(libraryOrSettingsTab);
 
     /* Non-Zim tabs are not bookmarkable therefore never in reading list. */
     if (notBookmarkableTab)
