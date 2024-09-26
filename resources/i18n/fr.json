@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Benoit74",
 			"Florian COLLIN",
 			"Gomoko",
 			"Goombiis",
@@ -9,6 +10,7 @@
 			"McDutchie",
 			"Méthodes Bulebe Hangi",
 			"Stephane",
+			"Terio legale",
 			"Verdy p",
 			"Wladek92"
 		]
@@ -138,6 +140,7 @@
 	"delete-book-text": "Êtes-vous sûr de vouloir supprimer <b>{{ZIM}}</b> ?",
 	"download-storage-error": "Erreur de stockage",
 	"download-storage-error-text": "Le système n’a pas assez de place de stockage disponible.",
+	"download-exceeds-max-file-size": "La taille du téléchargement dépasse la taille de fichier maximale prise en charge par le système de fichiers cible.",
 	"download-dir-missing": "Le répertoire de téléchargement n’existe pas.",
 	"download-dir-not-writable": "Le répertoire de téléchargement n’est pas accessible en écriture.",
 	"download-unavailable": "Téléchargement indisponible",
@@ -166,6 +169,16 @@
 	"zim-id": "ZIM Id",
 	"zim-name": "Nom Zim",
 	"zim-path": "Voie du fichier Zim",
+	"bad-zim-file-error-page-title": "Fichier ZIM non valide",
+	"bad-zim-file-error-page-text": "Le fichier ZIM est invalide ou corrompu.",
+	"zim-entry-path": "Chemin d'accès ZIM",
 	"export-reading-list": "Exporter la liste de lecture",
-	"import-reading-list-error": "Une erreur s'est produite lors de l'importation de la liste de lecture."
+	"export-reading-list-error": "Une erreur s'est produite lors de l'exportation de la liste de lecture.",
+	"import-reading-list": "Importer la liste de lecture",
+	"import-reading-list-error": "Une erreur s'est produite lors de l'importation de la liste de lecture.",
+	"disable-sandbox": "Kiwix a été lancé à partir d'un lecteur réseau. Ceci est connu pour causer des problèmes de compatibilité avec le sandbox (bac à sable) de navigation. Par conséquent, le sandbox (bac à sable) sera désactivé. Voulez-vous continuer ?",
+	"save-page-as": "Enregistrer sous...",
+	"portable-disabled-tooltip": "Fonction désactivée en mode portable",
+	"scroll-next-tab": "Faire défiler vers l' onglet suivant",
+	"scroll-previous-tab": "Faire défiler vers l' onglet précédent"
 }
