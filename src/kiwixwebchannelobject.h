@@ -12,8 +12,12 @@ public:
     Q_INVOKABLE QString getTocTitle() const;
     Q_PROPERTY(QString tocTitle READ getTocTitle CONSTANT);
 
+    Q_INVOKABLE QString getHideButtonText() const;
+    Q_PROPERTY(QString hideButtontext READ getHideButtonText CONSTANT);
+
     Q_INVOKABLE bool getTocVisible() const;
-    Q_PROPERTY(bool tocVisible READ getTocVisible NOTIFY tocVisibleChanged);
+    Q_INVOKABLE void setTocVisible(bool visible);
+    Q_PROPERTY(bool tocVisible READ getTocVisible WRITE setTocVisible NOTIFY tocVisibleChanged);
 
 signals:
     void tocVisibleChanged(bool visible);
