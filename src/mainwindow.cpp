@@ -1,4 +1,3 @@
-
 #include "mainwindow.h"
 #include "portutils.h"
 #include "ui_mainwindow.h"
@@ -84,6 +83,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mp_ui->contentmanagerside->setContentManager(app->getContentManager());
     mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);
+
+    // Add a new action in the UI to toggle the private mode status
+    QAction *togglePrivateModeAction = new QAction(tr("Toggle Private Mode"), this);
+    connect(togglePrivateModeAction, &QAction::triggered, this, &MainWindow::togglePrivateMode);
+    mp_ui->mainToolBar->addAction(togglePrivateModeAction);
 }
 
 MainWindow::~MainWindow()
@@ -202,4 +206,16 @@ TabBar* MainWindow::getTabBar()
 TopWidget *MainWindow::getTopWidget()
 {
     return mp_ui->mainToolBar;
+}
+
+void MainWindow::togglePrivateMode()
+{
+    auto app = KiwixApp::instance();
+    bool privateMode = app->isPrivateMode();
+    if (privateMode) {
+        QMessageBox::information(this, tr("Private Mode"), tr("Private mode is already active."));
+    } else {
+        QMessageBox::information(this, tr("Private Mode"), tr("Activating private mode."));
+        // Add logic to activate private mode here
+    }
 }

@@ -38,6 +38,7 @@ private slots:
     void hideTabAndTop();
     void showTabAndTop();
     void updateTabButtons();
+    void togglePrivateMode();
 
 private:
     Ui::MainWindow *mp_ui;

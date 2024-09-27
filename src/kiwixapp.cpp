@@ -34,7 +34,8 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_mainWindow(nullptr),
       mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
       m_server(m_library.getKiwixLibrary(), mp_nameMapper),
-      mp_session(nullptr)
+      mp_session(nullptr),
+      m_privateMode(m_settingsManager.isPrivateMode())
 {
     try {
         m_translation.setTranslation(QLocale());
@@ -67,6 +68,11 @@ void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString
 
 void KiwixApp::init()
 {
+    if (m_privateMode) {
+        qDebug() << "Private mode is active. No write operations will be performed.";
+        return;
+    }
+
     mp_manager = new ContentManager(&m_library);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 
@@ -559,4 +565,8 @@ QString KiwixApp::getPrevSaveDir() const
   QString prevSaveDir = mp_session->value("prevSaveDir", DEFAULT_SAVE_DIR).toString();
   QDir dir(prevSaveDir);
   return dir.exists() ? prevSaveDir : DEFAULT_SAVE_DIR;
+}
+
+bool KiwixApp::isPrivateMode() const {
+    return m_privateMode;
 }

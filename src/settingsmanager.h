@@ -33,6 +33,7 @@ public:
     FilterList getLanguageList() { return deducePair(m_langList); }
     QStringList getCategoryList() { return m_categoryList; }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
+    bool isPrivateMode() const;
 
 public slots:
     void setKiwixServerPort(int port);

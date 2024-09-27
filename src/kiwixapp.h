@@ -97,6 +97,7 @@ public:
     void saveCurrentTabIndex();
     void savePrevSaveDir(const QString& prevSaveDir);
     QString getPrevSaveDir() const;
+    bool isPrivateMode() const;
 
 public slots:
     void newTab();
@@ -127,6 +128,7 @@ private:
     QSettings* mp_session;
 
     QAction*     mpa_actions[MAX_ACTION];
+    bool m_privateMode;
 
     void setupDirectoryMonitoring();
     QString findLibraryDirectory();

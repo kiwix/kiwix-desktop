@@ -226,3 +226,11 @@ void SettingsManager::initSettings()
 
     m_contentTypeList = m_settings.value("contentType", {}).toList();
 }
+
+bool SettingsManager::isPrivateMode() const
+{
+    auto currentDataDir = QString::fromStdString(kiwix::removeLastPathElement(kiwix::getExecutablePath()));
+    auto privateFile = QFileInfo(currentDataDir, ".private");
+    
+    return privateFile.exists();
+}

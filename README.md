@@ -133,6 +133,21 @@ environment variable:
 LD_LIBRARY_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu"
 ```
 
+Private/Read-Only Mode
+----------------------
+
+Kiwix Desktop now includes a private/read-only mode to protect user privacy by not writing anything to storage. This mode can be activated via the UI or by creating a `.private` file in the same directory as the Kiwix executable.
+
+To activate private mode via the UI:
+1. Open Kiwix Desktop.
+2. Go to the main menu and select "Toggle Private Mode".
+
+To activate private mode via a `.private` file:
+1. Create an empty file named `.private` in the same directory as the Kiwix executable.
+2. Launch Kiwix Desktop.
+
+When private mode is active, no write operations will be performed, ensuring that no data is written to storage.
+
 ## Communication
 
 Available communication channels:
