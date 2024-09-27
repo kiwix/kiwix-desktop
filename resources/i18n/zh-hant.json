@@ -168,5 +168,8 @@
 	"import-reading-list": "匯入閱讀清單",
 	"import-reading-list-error": "匯入閱讀清單時發生錯誤。",
 	"disable-sandbox": "應用程式是從網路磁碟機啟動。目前已知這會因沙盒而導致相容性問題。您想冒風險來停用嗎？",
-	"save-page-as": "另存為…"
+	"save-page-as": "另存為…",
+	"portable-disabled-tooltip": "功能在可攜式模式下停用",
+	"scroll-next-tab": "捲動至下一個分頁",
+	"scroll-previous-tab": "捲動至上一個分頁"
 }

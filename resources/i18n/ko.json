@@ -119,5 +119,7 @@
 	"next-tab": "다음 탭으로 이동",
 	"previous-tab": "이전 탭으로 이동",
 	"download-dir-missing": "다운로드 디렉터리가 존재하지 않습니다.",
-	"download-dir-not-writable": "다운로드 디렉터리에 쓸 수 없습니다."
+	"download-dir-not-writable": "다운로드 디렉터리에 쓸 수 없습니다.",
+	"scroll-next-tab": "다음 탭으로 스크롤",
+	"scroll-previous-tab": "이전 탭으로 스크롤"
 }

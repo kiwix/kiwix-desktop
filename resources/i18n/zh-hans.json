@@ -146,6 +146,7 @@
 	"delete-book-text": "您确定要删除<b>{{ZIM}}</b>吗？",
 	"download-storage-error": "储存错误",
 	"download-storage-error-text": "存储空间不足。",
+	"download-exceeds-max-file-size": "下载大小超出了目标文件系统支持的最大文件大小。",
 	"download-dir-missing": "下载目录不存在。",
 	"download-dir-not-writable": "下载目录不可写。",
 	"download-unavailable": "下载不可用",
@@ -181,5 +182,9 @@
 	"export-reading-list-error": "导出阅读列表时发生了错误。",
 	"import-reading-list": "导入阅读列表",
 	"import-reading-list-error": "导入阅读列表时发生了错误。",
-	"disable-sandbox": "应用程序是从网络驱动器启动的。已知这会导致由沙盒引起的兼容性问题。您是否愿意冒险禁用它？"
+	"disable-sandbox": "应用程序是从网络驱动器启动的。已知这会导致由沙盒引起的兼容性问题。您是否愿意冒险禁用它？",
+	"save-page-as": "另存为...",
+	"portable-disabled-tooltip": "便携模式下此功能被禁用",
+	"scroll-next-tab": "滚动到下一个标签页",
+	"scroll-previous-tab": "滚动到上一个标签页"
 }
