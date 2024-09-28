@@ -46,6 +46,11 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
                 return library->getZimIcon(zimId, defaultIcon);
             }
             break;
+        case Qt::SizeHintRole:
+            /* See resources/css/popup.css QHeaderView::section.
+               Take line-height + 5 padding top and bottom.
+            */
+            return QSize(0, 34);
     }
     return QVariant();
 }
