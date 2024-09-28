@@ -31,7 +31,8 @@ function recurseChild(elem, recurseData)
                 recurseData.toc += '</li>';
 
             recurseData.level = parseInt(level);
-            recurseData.toc += '<li class="kiwix-toc-item"><a href="#' + anchor + '" class="kiwix-toc-item-a">' + headerText + '</a>';
+            recurseData.toc += '<li class="kiwix-toc-item"><a href="#' + anchor + '" class="kiwix-toc-item-a">' +
+            '<span class="kiwix-tool-tip">'  + headerText + '</span>' + headerText + '</a>';
         }
 
         var c = elem.children;
@@ -63,6 +64,27 @@ function makeTOCVisible(visible)
     document.body.style.maxWidth = visible ?  "calc(100vw - 310px)" : null;
 }
 
+function showToolTip (elem) {
+    var tooltip = elem.getElementsByClassName("kiwix-tool-tip")[0];
+
+    /* Check if there is overflow. */ 
+    if (tooltip && elem.offsetWidth < elem.scrollWidth)
+    {
+        tooltip.style.display = "block";
+
+        var rect = elem.getBoundingClientRect();
+        tooltip.style.top = (rect.top).toString() + "px";
+        tooltip.style.left = "306px";
+    }
+}
+
+function hideToolTip (elem) {
+    var tooltip = elem.getElementsByClassName("kiwix-tool-tip")[0];
+
+    if (tooltip)
+        tooltip.style.display = "";
+}
+
 function setupTOCItems()
 {
     var c = document.getElementsByClassName("kiwix-toc-item-a");
@@ -81,6 +103,9 @@ function setupTOCItems()
 
             /* We need manual padding to achieve visual effects on hover. */
             c[i].style.paddingLeft = ((count == -1 ? 0 : count) * 30).toString() + "px";
+
+            c[i].addEventListener("mouseover", (event) => { showToolTip(event.target); });
+            c[i].addEventListener("mouseout", (event) => { hideToolTip(event.target); });
         }
     }
 }
