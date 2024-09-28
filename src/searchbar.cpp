@@ -6,6 +6,7 @@
 
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
+#include "suggestionlistdelegate.h"
 
 BookmarkButton::BookmarkButton(QWidget *parent) :
     QToolButton(parent)
@@ -76,6 +77,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     /* QCompleter's uses default list views, which do not have headers. */
     m_completer.setPopup(m_suggestionView);
 
+    m_suggestionView->setItemDelegate(new SuggestionListDelegate(this));
     m_suggestionView->header()->setStretchLastSection(true);
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
