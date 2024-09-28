@@ -28,6 +28,7 @@ void MultiZimButton::update_display()
         mp_radioButtonGroup->removeButton(button);
 
     auto library = KiwixApp::instance()->getLibrary();
+    WebView* current = KiwixApp::instance()->getTabWidget()->currentWebView();
     for (const auto& bookId : library->getBookIds())
     {
         std::shared_ptr<zim::Archive> archive;
@@ -43,6 +44,14 @@ void MultiZimButton::update_display()
             QListWidgetItem* item = new QListWidgetItem();
             item->setData(Qt::UserRole, bookId);
             radioBt->setIcon(zimIcon);
+
+            if (current && current->zimId() == bookId)
+            {
+                mp_buttonList->insertItem(0, item);
+                bookTitle = "*" + bookTitle;
+            }
+            else
+                mp_buttonList->addItem(item);
             radioBt->setText(bookTitle);
             mp_radioButtonGroup->addButton(radioBt);
 
@@ -57,6 +66,7 @@ void MultiZimButton::update_display()
 
     setDisabled(mp_buttonList->model()->rowCount() == 0);
 
+    mp_buttonList->scrollToTop();
     auto firstWidget = mp_buttonList->itemWidget(mp_buttonList->item(0));
     if (auto firstBt = qobject_cast<QRadioButton *>(firstWidget))
         firstBt->setChecked(true);
