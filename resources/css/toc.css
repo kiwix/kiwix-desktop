@@ -114,6 +114,22 @@
 
 .kiwix-toc-item-a:before { content: counters(item, ".") " "; counter-increment: item; margin-right: 10px; padding-left: 10px; }
 
+.kiwix-tool-tip {
+    all: initial;
+    display: none;
+    position: fixed;
+
+    background-color: #ffffe1;
+    border: 1px solid black;
+    padding: 5px;
+
+    font-size: 16px;
+    line-height: 20px;
+    font-family: Arial;
+
+    z-index: 10000;
+}
+
 .kiwix-toc-a {
     all: inherit;
     pointer-events: none;
