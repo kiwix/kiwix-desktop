@@ -108,6 +108,19 @@
 
 .kiwix-toc-item-a:before { content: counters(item, ".") " "; counter-increment: item; margin-right: 10px; padding-left: 10px; }
 
+.kiwix-toc-a {
+    all: inherit;
+    pointer-events: none;
+}
+
+.kiwix-toc-a:hover {
+    all: inherit;
+}
+
+.kiwix-toc-a:visited {
+    all: inherit;
+}
+
 #kiwix-toc {
     all: initial;
     display: block;

@@ -20,7 +20,7 @@ function recurseChild(elem, recurseData)
             recurseData.count += 1;
 
             /* Wrap header content with something we can reference. */
-            elem.innerHTML = '<a href="#' + anchor + '" id="' + anchor + '">' + headerText + '</a>';
+            elem.innerHTML = '<a href="#' + anchor + '" id="' + anchor + '" class="kiwix-toc-a">' + headerText + '</a>';
 
             /* Start or end a list or item based on current and previous level */
             if (level > prevLevel) 
