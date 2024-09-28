@@ -24,14 +24,14 @@ function recurseChild(elem, recurseData)
 
             /* Start or end a list or item based on current and previous level */
             if (level > prevLevel) 
-                recurseData.toc += '<ul>';
+                recurseData.toc += '<ul class="kiwix-toc-list">';
             else if (level < prevLevel)
                 recurseData.toc += '</li></ul>';
             else
                 recurseData.toc += '</li>';
 
             recurseData.level = parseInt(level);
-            recurseData.toc += '<li><a href="#' + anchor + '">' + headerText + '</a>';
+            recurseData.toc += '<li class="kiwix-toc-item"><a href="#' + anchor + '" class="kiwix-toc-item-a">' + headerText + '</a>';
         }
 
         var c = elem.children;
@@ -63,6 +63,28 @@ function makeTOCVisible(visible)
     document.body.style.maxWidth = visible ?  "calc(100vw - 310px)" : null;
 }
 
+function setupTOCItems()
+{
+    var c = document.getElementsByClassName("kiwix-toc-item-a");
+    for (var i = 0; i < c.length; i++)
+    {
+        if (c[i] !== "undefined" && c[i].style) 
+        {
+            var p = c[i].parentNode;
+            var count = -1;
+            while (p)
+            {
+                if (p.nodeName.match(/^UL$/))
+                    count += 1;
+                p = p.parentNode;
+            }
+
+            /* We need manual padding to achieve visual effects on hover. */
+            c[i].style.paddingLeft = ((count == -1 ? 0 : count) * 30).toString() + "px";
+        }
+    }
+}
+
 function setupTOC()
 {
     var toc = document.createElement('div');
@@ -92,6 +114,7 @@ new QWebChannel(qt.webChannelTransport, function(channel) {
 
     var kiwixObj = channel.objects.kiwixChannelObj
     setupTOC();
+    setupTOCItems();
 
     document.getElementById("kiwix-toc-title").textContent = kiwixObj.tocTitle;
 
