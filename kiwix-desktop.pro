@@ -91,6 +91,7 @@ SOURCES += \
     src/fullscreenwindow.cpp \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
+    src/multizimbutton.cpp \
 
 HEADERS += \
     src/choiceitem.h \
@@ -142,6 +143,7 @@ HEADERS += \
     src/menuproxystyle.h \
     src/zimview.h \
     src/portutils.h \
+    src/multizimbutton.h \
 
 FORMS += \
     src/choiceitem.ui \
