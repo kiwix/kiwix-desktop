@@ -12,6 +12,54 @@
     z-index: 10000;
 }
 
+#kiwix-toc-title-div {
+    all: initial;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    font-size: 0px;
+    height: 30px;
+    margin: 0px;
+    border: 0px;
+    padding: 10px;
+}
+
+#kiwix-toc-title {
+    all: initial;
+    display: block;
+    position: relative;
+
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bold;
+    font-family: Arial;
+
+    margin: 0px;
+    padding: 0px;
+}
+
+#kiwix-toc-hide-button {
+    all: initial;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    background: white;
+    color: #3366CC;
+
+    margin: 0px;
+    margin-top: 7px;
+    padding: 0px;
+
+    font-size: 12px;
+    font-family: Arial;
+    font-weight: bold;
+}
+
+#kiwix-toc-hide-button:hover {
+    text-decoration: underline;
+}
+
 .kiwix-toc-item {
     all: initial;
     display: list-item;
