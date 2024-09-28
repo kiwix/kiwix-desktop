@@ -107,3 +107,27 @@
 }
 
 .kiwix-toc-item-a:before { content: counters(item, ".") " "; counter-increment: item; margin-right: 10px; padding-left: 10px; }
+
+#kiwix-toc {
+    all: initial;
+    display: block;
+    position: relative;
+
+    /* #kiwix-toc-title-div height&padding and #kiwix-toc border-top */
+    height: calc(100vh - 51px);
+
+    width: 100%;
+    overflow: auto;
+    border-top: 1px solid #ccc;
+}
+
+#kiwix-toc::-webkit-scrollbar {
+    width: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+#kiwix-toc::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: none;
+}
