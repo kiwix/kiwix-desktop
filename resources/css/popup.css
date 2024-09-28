@@ -1,6 +1,13 @@
-QWidget {
+QTreeView {
     background-color: white;
+    outline: 0px;
     border: none;
+}
+
+QTreeView::item:selected {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    color: black;
 }
 
 /* data of src/suggestionlistModel.cpp and SearchBarLineEdit of src/searchbar.cpp
