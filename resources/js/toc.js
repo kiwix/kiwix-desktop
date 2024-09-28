@@ -56,12 +56,18 @@ function tocHTMLStr()
     return recurseData.toc;
 }
 
+function getPixelWithZoom(pixel)
+{
+    var zoom = window.outerWidth / window.document.documentElement.clientWidth;
+    return (pixel / zoom.toFixed(1)).toString() + "px";
+}
+
 function makeTOCVisible(visible)
 {
     var tocElem = document.getElementById("kiwix-toc-side");
     tocElem.style.display = visible ? "block" : "none";
-    document.body.style.marginLeft = visible ? "310px" : null;
-    document.body.style.maxWidth = visible ?  "calc(100vw - 310px)" : null;
+    document.body.style.marginLeft = visible ? getPixelWithZoom(310) : null;
+    document.body.style.maxWidth = visible ?  "calc(100vw - " + getPixelWithZoom(310) + ")" : null;
 }
 
 function showToolTip (elem) {
@@ -74,7 +80,7 @@ function showToolTip (elem) {
 
         var rect = elem.getBoundingClientRect();
         tooltip.style.top = (rect.top).toString() + "px";
-        tooltip.style.left = "306px";
+        tooltip.style.left = getPixelWithZoom(306);
     }
 }
 
@@ -135,6 +141,16 @@ function setupTOC()
     document.body.prepend(tocSideDiv);
 }
 
+function resize(){
+    document.getElementById("kiwix-toc-side").style.width = getPixelWithZoom(306);
+
+    if (document.getElementById("kiwix-toc-side").style.display !== "none")
+    {
+        document.body.style.marginLeft = getPixelWithZoom(310);
+        document.body.style.maxWidth = "calc(100vw - " + getPixelWithZoom(310) + ")";
+    }
+}
+
 new QWebChannel(qt.webChannelTransport, function(channel) {
 
     var kiwixObj = channel.objects.kiwixChannelObj
@@ -151,5 +167,8 @@ new QWebChannel(qt.webChannelTransport, function(channel) {
         makeTOCVisible(visible);
     });
     makeTOCVisible(kiwixObj.tocVisible);
+
+    window.onresize = resize;
+    resize();
 });
 
