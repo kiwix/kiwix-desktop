@@ -43,6 +43,8 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     for (const auto &interfacePair : interfacesMap) {
         QString ip = QString::fromStdString(interfacePair.second.addr);
         interfaces.push_back(ip);
+        QString ipv6 = QString::fromStdString(interfacePair.second.addr6);
+        if (!ipv6.isEmpty()) interfaces.push_back(ipv6);
     }
     std::sort(interfaces.begin(), interfaces.end());
     interfaces.push_front(QString(gt("all")));
@@ -84,11 +86,12 @@ void LocalKiwixServer::runOrStopServer()
         auto settingsManager = KiwixApp::instance()->getSettingsManager();
         m_port = ui->PortChooser->text().toInt();
         mp_server->setPort(m_port);
-        m_ipAddress = (ui->IpChooser->currentText() != gt("all")) ? ui->IpChooser->currentText() : "0.0.0.0";
+        m_ipAddress = (ui->IpChooser->currentText() != gt("all")) ? ui->IpChooser->currentText() : "";
         settingsManager->setKiwixServerPort(m_port);
         settingsManager->setKiwixServerIpAddress(m_ipAddress);
         mp_server->setAddress(m_ipAddress.toStdString());
-        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
+        m_ipAddress = (m_ipAddress != "") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
+        if (m_ipAddress.contains(':')) m_ipAddress = "[" + m_ipAddress + "]";
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         ui->IpAddress->setReadOnly(true);
         if (!mp_server->start()) {
