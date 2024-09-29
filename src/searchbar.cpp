@@ -2,9 +2,11 @@
 
 #include <QCompleter>
 #include <QFocusEvent>
+#include <QScrollBar>
 
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
+#include "suggestionlistdelegate.h"
 
 BookmarkButton::BookmarkButton(QWidget *parent) :
     QToolButton(parent)
@@ -49,8 +51,10 @@ void BookmarkButton::on_buttonClicked()
 
 SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     QLineEdit(parent),
-    m_completer(&m_completionModel, this)
+    m_suggestionView(new QTreeView),
+    m_completer(&m_suggestionModel, this)
 {
+    installEventFilter(this);
     setAlignment(KiwixApp::isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft);
     mp_typingTimer = new QTimer(this);
     mp_typingTimer->setSingleShot(true);
@@ -65,10 +69,29 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     setToolTip(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);
-    m_completer.setMaxVisibleItems(16);
-    setCompleter(&m_completer);
 
-    m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+    /* The items should be less than fetch size to enable scrolling. */
+    m_completer.setMaxVisibleItems(8);
+    m_completer.setWidget(this);
+
+    /* QCompleter's uses default list views, which do not have headers. */
+    m_completer.setPopup(m_suggestionView);
+
+    m_suggestionView->setItemDelegate(new SuggestionListDelegate(this));
+    m_suggestionView->header()->setStretchLastSection(true);
+    m_suggestionView->setRootIsDecorated(false);
+    m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+
+    /* See line-height&padding resources/css/popup.css QHeaderView::section. */
+    m_suggestionView->setIconSize(QSize(24, 24));
+    connect(&m_suggestionModel, &QAbstractListModel::modelReset, [=](){
+        /* +1 for header. +10px for 5px top&bottom extra space */
+        int count = std::min(m_suggestionModel.rowCount(), m_completer.maxVisibleItems());
+        m_suggestionView->setMinimumHeight(m_suggestionView->sizeHintForRow(0) * (count + 1) + 10);
+    });
+
+    connect(m_suggestionView->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &SearchBarLineEdit::onScrollToEnd);
 
     qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
@@ -106,14 +129,27 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 
 void SearchBarLineEdit::hideSuggestions()
 {
-    m_completer.popup()->hide();
+    m_suggestionView->hide();
+}
+
+bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
+{
+    if (auto e = static_cast<QKeyEvent *>(event))
+    {
+        if (e->key() == Qt::Key_PageDown && m_scrolledEndBefore)
+        {
+            m_scrolledEndBefore = false;
+            fetchMoreSuggestion();
+            return true;
+        }
+    }
+    return false;
 }
 
 void SearchBarLineEdit::clearSuggestions()
 {
-    QStringList empty;
-    m_completionModel.setStringList(empty);
-    m_urlList.clear();
+    m_suggestionModel.resetSuggestions();
+    m_suggestionModel.resetUrlList();
 }
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
@@ -138,8 +174,17 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
     if (event->reason() == Qt::ActiveWindowFocusReason ||
         event->reason() == Qt::MouseFocusReason ||
         event->reason() == Qt::ShortcutFocusReason) {
+        connect(&m_completer, QOverload<const QString &>::of(&QCompleter::activated),
+        this, &QLineEdit::setText,Qt::UniqueConnection);
+
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
-        this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion));
+        this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion),
+        Qt::UniqueConnection);
+
+        connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::highlighted),
+        this, [=](const QModelIndex &index){
+            setText(index.isValid() ? index.data().toString() : m_searchbarInput);
+        }, Qt::UniqueConnection);
     }
     QLineEdit::focusInEvent(event);
 }
@@ -151,6 +196,7 @@ void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)
         setText(m_title);
     }
     deselect();
+    disconnect(&m_completer, nullptr, this, nullptr);
     return QLineEdit::focusOutEvent(event);
 }
 
@@ -164,40 +210,139 @@ void SearchBarLineEdit::updateCompletion()
         return;
     }
     m_token++;
-    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, this);
+    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, 0, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
-    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, int token) {
+    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, bool hasFullText, int token) {
         if (token != m_token) {
             return;
         }
-        m_urlList = urlList;
+        m_suggestionModel.resetUrlList(urlList);
         if (m_returnPressed) {
-            openCompletion(suggestions.first(), 0);
+            openCompletion(m_suggestionModel.index(0));
             return;
         }
-        m_completionModel.setStringList(suggestions);
-        m_completer.complete();
+
+        m_suggestionModel.setHasFullText(hasFullText);
+        m_suggestionModel.resetSuggestions(suggestions);
+        m_completer.complete(getCompleterRect());
+
+        /* Make row 0 appear but does not highlight it */
+        m_suggestionView->selectionModel()->setCurrentIndex(m_suggestionModel.index(0), QItemSelectionModel::Current);
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
 }
 
-void SearchBarLineEdit::openCompletion(const QModelIndex &index)
+QRect SearchBarLineEdit::getCompleterRect()
 {
-    if (m_urlList.size() != 0) {
-        openCompletion(index.data().toString(), index.row());
-    }
+    auto& searchBar = KiwixApp::instance()->getSearchBar();
+    auto searchGeo = searchBar.geometry();
+    auto searchLineEditGeo = searchBar.getLineEdit().geometry();
+
+    /* See SearchBar border and margin size in resources/css/style.css */
+    int top = searchGeo.height() - 6; /* top&bottom margin + border */
+    int width = searchGeo.width() - 6; /* left&right margin + border */
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool lineEditFlipped = KiwixApp::isRightToLeft();
+#else
+    bool lineEditFlipped = m_searchbarInput.isRightToLeft();
+#endif
+
+    /* When not flipped, match left of completer to search bar. Popups are
+       shifted by margin and border so we undo those changes to stay in border.
+       When flipped, we first match left of completer to right of search bar.
+       In addition to the popup shift due to border and margin, We move right by
+       one more border size to match the right border pixel. We then move it 
+       left by width to match left of search bar.    
+    */
+    int left = lineEditFlipped ? -searchLineEditGeo.left() + 4 - width
+                               : -searchLineEditGeo.left() + 3;
+
+    /* Can't set height to 0. Will cause rectangle to be ignored. */
+    return QRect(QPoint(left, top), QSize(width, 1));
 }
 
-void SearchBarLineEdit::openCompletion(const QString& text, int index)
+void SearchBarLineEdit::fetchMoreSuggestion()
 {
-    QUrl url;
-    if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
-        url = m_urlList.at(index);
-    } else {
-        url = m_urlList.last();
+    int start = m_suggestionModel.fetchEndIndex().row() + 1;
+    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
+    connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
+    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, bool, int token) {
+        if (token != m_token) {
+            return;
+        }
+
+        m_suggestionModel.append(suggestions, urlList);
+
+        /* Set selection to be at the last row of the previous list.
+
+           m_completer has a private QCompleterModel wrapper class for 
+           m_completer.popup(). Page Down behavior only works if indexes' parent
+           is that instance.
+        */
+        m_suggestionView->setCurrentIndex(m_suggestionView->model()->index(start, 0));
+        m_suggestionView->show();
+    });
+    connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
+    suggestionWorker->start();
+}
+
+void SearchBarLineEdit::onScrollToEnd(int value)
+{
+    if (m_suggestionModel.noMoreSuggestion())
+    {
+        m_scrolledEndBefore = false;
+        return;
     }
-    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
+
+    if (!m_completer.popup()->currentIndex().isValid())
+    {
+        m_scrolledEndBefore = false;
+
+        /* m_completer.popup()->currentIndex() being invalid means the list
+           has been scrolled from bottom to top. We undo this here, as it avoids
+           scroll bar flicker as well. Block signal to avoid recursion.
+        */
+        auto old = m_suggestionView->verticalScrollBar()->blockSignals(true);
+        m_suggestionView->scrollToBottom();
+        m_suggestionView->verticalScrollBar()->blockSignals(old);
+        
+        return fetchMoreSuggestion();
+    }
+
+    auto suggestionScroller = m_suggestionView->verticalScrollBar();
+    bool scrolledToEnd = value == suggestionScroller->maximum();
+
+    /* We only fetch when user scrolls down twice, otherwise user can never
+        reach the fulltext option. Create this illusion there are more items
+        by manually extending scroller.
+    */
+    auto scrollMin = suggestionScroller->minimum();
+    auto scrollMax = suggestionScroller->maximum();
+    if (m_scrolledEndBefore && scrolledToEnd)
+        fetchMoreSuggestion();
+    else if (scrolledToEnd)
+        suggestionScroller->setRange(scrollMin, scrollMax + 1);
+    else if (m_scrolledEndBefore)
+        suggestionScroller->setRange(scrollMin, scrollMax - 1);
+
+    m_scrolledEndBefore = !m_scrolledEndBefore && scrolledToEnd;
+}
+
+void SearchBarLineEdit::openCompletion(const QModelIndex &index)
+{
+    if (m_suggestionModel.rowCount() != 0) 
+    {
+        QUrl url;
+        auto editText = index.data().toString();
+        if (this->text().compare(editText, Qt::CaseInsensitive) == 0) {
+            url = index.data(Qt::UserRole).toUrl();
+        } else {
+            url = m_suggestionModel.lastIndex().data(Qt::UserRole).toUrl();
+        }
+        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
+    }
 }
 
 SearchBar::SearchBar(QWidget *parent) :
