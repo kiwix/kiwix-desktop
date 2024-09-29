@@ -41,15 +41,21 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     QVector<QString> interfaces;
     interfaces.reserve(interfacesMap.size() + 1);
     for (const auto &interfacePair : interfacesMap) {
-        QString ip = QString::fromStdString(interfacePair.second.addr);
-        interfaces.push_back(ip);
+        QString ipv4 = QString::fromStdString(interfacePair.second.addr);
+        if (!ipv4.isEmpty()) interfaces.push_back(ipv4);
+        QString ipv6 = QString::fromStdString(interfacePair.second.addr6);
+        if (!ipv6.isEmpty()) interfaces.push_back(ipv6);
     }
     std::sort(interfaces.begin(), interfaces.end());
-    interfaces.push_front(QString(gt("all")));
+    interfaces.push_front(QString(gt("ipv6")));
+    interfaces.push_front(QString(gt("ipv4")));
+    interfaces.push_front(QString(gt("all_ips")));
     for (const auto &interface : interfaces) {
         ui->IpChooser->addItem(interface);
     }
-    ui->IpChooser->setCurrentText(KiwixApp::instance()->getSettingsManager()->getKiwixServerIpAddress());
+    QString ipAddress = KiwixApp::instance()->getSettingsManager()->getKiwixServerIpAddress();
+    if (ipAddress == "0.0.0.0") ipAddress = "ipv4";
+    ui->IpChooser->setCurrentText(ipAddress == "all_ips" || ipAddress == "ipv4" || ipAddress == "ipv6" ? gt(ipAddress) : ipAddress);
     ui->PortChooser->setText(QString::number(m_port));
     ui->PortChooser->setValidator(new QIntValidator(1, 65535, this));
     ui->KiwixServerButton->setStyleSheet("QPushButton {background-color: RoyalBlue;"
@@ -84,18 +90,32 @@ void LocalKiwixServer::runOrStopServer()
         auto settingsManager = KiwixApp::instance()->getSettingsManager();
         m_port = ui->PortChooser->text().toInt();
         mp_server->setPort(m_port);
-        m_ipAddress = (ui->IpChooser->currentText() != gt("all")) ? ui->IpChooser->currentText() : "0.0.0.0";
         settingsManager->setKiwixServerPort(m_port);
-        settingsManager->setKiwixServerIpAddress(m_ipAddress);
-        mp_server->setAddress(m_ipAddress.toStdString());
-        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
-        ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
-        ui->IpAddress->setReadOnly(true);
+        mp_server->setIpMode(kiwix::IpMode::AUTO);
+        mp_server->setAddress("");
+        if (ui->IpChooser->currentText() == gt("all_ips")) {
+            mp_server->setIpMode(kiwix::IpMode::ALL);
+            settingsManager->setKiwixServerIpAddress("all_ips");
+        } else if (ui->IpChooser->currentText() == gt("ipv4")) {
+            mp_server->setIpMode(kiwix::IpMode::IPV4);
+            settingsManager->setKiwixServerIpAddress("ipv4");
+        } else if (ui->IpChooser->currentText() == gt("ipv6")) {
+            mp_server->setIpMode(kiwix::IpMode::IPV6);
+            settingsManager->setKiwixServerIpAddress("ipv6");
+        } else {
+            mp_server->setAddress(ui->IpChooser->currentText().toStdString());
+            settingsManager->setKiwixServerIpAddress(ui->IpChooser->currentText());
+        }
         if (!mp_server->start()) {
             QMessageBox messageBox;
             messageBox.critical(0,gt("error-title"),gt("error-launch-server-message"));
             return;
         }
+        kiwix::IpAddress serverAddress = mp_server->getAddress();
+        m_ipAddress = QString::fromStdString(serverAddress.addr.empty() ? serverAddress.addr6 : serverAddress.addr);
+        if (m_ipAddress.contains(':')) m_ipAddress = "[" + m_ipAddress + "]";
+        ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
+        ui->IpAddress->setReadOnly(true);
         m_active = true;
     } else {
         mp_server->stop();
