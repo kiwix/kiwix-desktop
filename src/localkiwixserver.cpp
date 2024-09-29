@@ -41,8 +41,8 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     QVector<QString> interfaces;
     interfaces.reserve(interfacesMap.size() + 1);
     for (const auto &interfacePair : interfacesMap) {
-        QString ip = QString::fromStdString(interfacePair.second.addr);
-        interfaces.push_back(ip);
+        QString ipv4 = QString::fromStdString(interfacePair.second.addr);
+        interfaces.push_back(ipv4);
         QString ipv6 = QString::fromStdString(interfacePair.second.addr6);
         if (!ipv6.isEmpty()) interfaces.push_back(ipv6);
     }
