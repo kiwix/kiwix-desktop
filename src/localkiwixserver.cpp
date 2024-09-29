@@ -88,7 +88,7 @@ void LocalKiwixServer::runOrStopServer()
         settingsManager->setKiwixServerPort(m_port);
         settingsManager->setKiwixServerIpAddress(m_ipAddress);
         mp_server->setAddress(m_ipAddress.toStdString());
-        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp(false));
+        m_ipAddress = (m_ipAddress != "0.0.0.0") ? m_ipAddress : QString::fromStdString(kiwix::getBestPublicIp());
         ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
         ui->IpAddress->setReadOnly(true);
         if (!mp_server->start()) {
