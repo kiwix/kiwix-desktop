@@ -3,21 +3,66 @@
 #include <QAction>
 #include <QVBoxLayout>
 #include <QToolTip>
+#include <kiwix/tools.h>
+#if defined(QT_TEXTTOSPEECH_LIB)
+#include "texttospeechbar.h"
+#endif
 
 ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     : QWidget(parent),
       mp_tabBar(tabBar),
       mp_findInPageBar(new FindInPageBar(this))
 {
+    auto app = KiwixApp::instance();
     mp_webView = new WebView();
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(mp_webView);
+#if defined(QT_TEXTTOSPEECH_LIB)
+    mp_ttsBar = new TextToSpeechBar(this);
+    layout->addWidget(mp_ttsBar);
+    connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered,
+            this, [=]() {
+                if (mp_tabBar->currentZimView() != this)
+                    return;
+                mp_webView->page()->toPlainText([=](const QString& articleText){
+                    mp_ttsBar->speak(articleText);
+                });
+            });
+    connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered,
+            this, [=]() {
+                if (mp_tabBar->currentZimView() != this || !mp_webView->page()->hasSelection())
+                    return;
+                mp_ttsBar->speak(mp_webView->page()->selectedText());
+            });
+    connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered, this, [=](){
+        if (mp_tabBar->currentZimView() != this)
+            return;
+        if (this->getWebView()->page()->hasSelection())
+            mp_ttsBar->show();
+    });
+    connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered, this, [=](){
+        if (mp_tabBar->currentZimView() == this)
+            mp_ttsBar->show();
+    });
+    connect(mp_webView, &WebView::zimIdChanged, mp_ttsBar, [=]{
+        try {
+            auto book = app->getLibrary()->getBookById(mp_tabBar->currentZimId());
+            auto iso2 = QString::fromStdString(book.getLanguages().at(0)).chopped(1);
+            auto iso3 = QString::fromStdString(book.getLanguages().at(0));
+            
+            /* Try both 3 letter and two letter name. */
+            auto cLocale = QLocale(QLocale::C);
+            auto locale = QLocale(iso2).language() == cLocale.language() ? QLocale(iso3) : QLocale(iso2);
+            mp_ttsBar->setLocale(locale);
+        } catch (...) { /* Blank */ }
+    });
+#endif
+    
     layout->addWidget(mp_findInPageBar);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     setLayout(layout); // now 'mp_webView' has 'this' as the parent QObject
     mp_findInPageBar->hide();
-    auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
                 if (mp_tabBar->currentZimView() != this)

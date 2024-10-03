@@ -54,6 +54,8 @@ public:
         PreviousTabAction,
         HistoryBackAction,
         HistoryForwardAction,
+        ReadTextAction,
+        ReadArticleAction,
         HelpAction,
         FeedbackAction,
         ReportBugAction,
@@ -93,10 +95,12 @@ public:
     QString parseStyleFromFile(QString filePath);
     void saveListOfOpenTabs();
     void saveWindowState();
+    void saveVoiceName(const QString& langName, const QString& voiceName);
     void restoreWindowState();
     void saveCurrentTabIndex();
     void savePrevSaveDir(const QString& prevSaveDir);
     QString getPrevSaveDir() const;
+    QString getSavedVoiceName(const QString& langName) const;
 
 public slots:
     void newTab();

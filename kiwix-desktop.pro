@@ -8,10 +8,17 @@ QT       += core gui network
 QT       += webenginewidgets
 QT       += printsupport
 
+HAS_TTS = FALSE
+qtHaveModule(texttospeech) {
+    HAS_TTS = TRUE
+}
+equals(HAS_TTS, TRUE) : QT += texttospeech
+
 # Avoid stripping incompatible files, due to false identification as executables, on WSL
 DETECT_WSL = $$system(test -f /proc/sys/fs/binfmt_misc/WSLInterop && echo true || echo false)
 equals(DETECT_WSL , "true"): CONFIG += nostrip
 CONFIG += link_pkgconfig
+CONFIG += warn_off
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -90,6 +97,8 @@ SOURCES += \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
 
+equals(HAS_TTS, TRUE): SOURCES += src/texttospeechbar.cpp
+
 HEADERS += \
     src/choiceitem.h \
     src/contentmanagerdelegate.h \
@@ -139,6 +148,8 @@ HEADERS += \
     src/zimview.h \
     src/portutils.h \
 
+equals(HAS_TTS, TRUE): HEADERS += src/texttospeechbar.h
+
 FORMS += \
     src/choiceitem.ui \
     src/contentmanagerview.ui \
@@ -151,6 +162,8 @@ FORMS += \
     src/readinglistbar.ui \
     ui/localkiwixserver.ui \
     ui/settings.ui
+
+equals(HAS_TTS, TRUE): FORMS += src/texttospeechbar.ui
 
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8

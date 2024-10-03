@@ -389,6 +389,10 @@ void KiwixApp::createActions()
     DISABLE_ACTION(HistoryBackAction);
     DISABLE_ACTION(HistoryForwardAction);
 
+    CREATE_ACTION_SHORTCUT(ReadArticleAction, gt("read-article"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_N));
+
+    CREATE_ACTION_SHORTCUT(ReadTextAction, gt("read-text"), QKeySequence(Qt::CTRL | Qt::Key_N));
+
     CREATE_ACTION_ICON_SHORTCUT(PrintAction, "print", gt("print"), QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
             this, &KiwixApp::printPage);
@@ -538,6 +542,11 @@ void KiwixApp::saveWindowState()
   mp_session->setValue("windowState", getMainWindow()->saveState());
 }
 
+void KiwixApp::saveVoiceName(const QString& langName, const QString& voiceName)
+{
+  mp_session->setValue(langName + "/voice", voiceName);
+}
+
 void KiwixApp::restoreWindowState()
 {
   getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
@@ -559,4 +568,9 @@ QString KiwixApp::getPrevSaveDir() const
   QString prevSaveDir = mp_session->value("prevSaveDir", DEFAULT_SAVE_DIR).toString();
   QDir dir(prevSaveDir);
   return dir.exists() ? prevSaveDir : DEFAULT_SAVE_DIR;
+}
+
+QString KiwixApp::getSavedVoiceName(const QString& langName) const
+{
+  return mp_session->value(langName + "/voice", "").toString();
 }

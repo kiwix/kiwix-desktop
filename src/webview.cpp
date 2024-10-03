@@ -243,6 +243,14 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
     } else {
         menu = createLinkContextMenu();
     }
+
+#if defined(QT_TEXTTOSPEECH_LIB)
+    auto app = KiwixApp::instance();
+    if (page()->hasSelection())
+        menu->addAction(app->getAction(KiwixApp::ReadTextAction));
+    menu->addAction(app->getAction(KiwixApp::ReadArticleAction));
+#endif
+
     menu->exec(event->globalPos());
 }
 

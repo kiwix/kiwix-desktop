@@ -168,5 +168,9 @@
     "save-page-as": "Save As...",
     "portable-disabled-tooltip": "Function disabled in portable mode",
     "scroll-next-tab": "Scroll to next tab",
-    "scroll-previous-tab": "Scroll to previous tab"
+    "scroll-previous-tab": "Scroll to previous tab",
+    "read-article": "Read article",
+    "read-text": "Read selected text",
+    "stop": "Stop",
+    "voice": "Voice"
 }

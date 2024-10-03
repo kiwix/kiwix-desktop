@@ -35,6 +35,10 @@ MainMenu::MainMenu(QWidget *parent) :
     m_editMenu.ADD_ACTION(SearchLibraryAction);
     m_editMenu.ADD_ACTION(FindInPageAction);
     m_editMenu.ADD_ACTION(ToggleAddBookmarkAction);
+#if defined(QT_TEXTTOSPEECH_LIB)
+    m_editMenu.ADD_ACTION(ReadArticleAction);
+    m_editMenu.ADD_ACTION(ReadTextAction);
+#endif
     addMenu(&m_editMenu);
 
     m_viewMenu.setTitle(gt("view"));

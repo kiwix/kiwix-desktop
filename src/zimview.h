@@ -5,6 +5,9 @@
 #include <QWebEnginePage>
 
 class FindInPageBar;
+#if defined(QT_TEXTTOSPEECH_LIB)
+class TextToSpeechBar;
+#endif
 class TabBar;
 class WebView;
 
@@ -25,6 +28,9 @@ private:
     WebView *mp_webView;
     TabBar *mp_tabBar;
     FindInPageBar *mp_findInPageBar;
+#if defined(QT_TEXTTOSPEECH_LIB)
+    TextToSpeechBar *mp_ttsBar;
+#endif
 };
 
 #endif // ZIMVIEW_H
