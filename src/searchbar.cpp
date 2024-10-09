@@ -70,7 +70,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 
     m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
-    qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
+    qRegisterMetaType<QList<SuggestionData>>("QList<SuggestionData>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
 
     connect(this, &QLineEdit::textEdited, this,
@@ -164,12 +164,12 @@ void SearchBarLineEdit::updateCompletion()
     m_token++;
     auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
-    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, int token) {
+    [=] (const QList<SuggestionData>& suggestionList, int token) {
         if (token != m_token) {
             return;
         }
 
-        m_suggestionModel.append(suggestions, urlList);
+        m_suggestionModel.append(suggestionList);
         if (m_returnPressed) {
             openCompletion(m_suggestionModel.index(0));
             return;

@@ -38,12 +38,11 @@ void SuggestionListModel::resetSuggestions()
     endResetModel();
 }
 
-void SuggestionListModel::append(const QStringList &suggestions,
-                                 const QVector<QUrl> &urlList)
+void SuggestionListModel::append(const QList<SuggestionData>& suggestionList)
 {
     beginResetModel();
-    for (int i = 0; i < std::min(suggestions.size(), urlList.size()); i++)
-        m_suggestions.append({suggestions[i], urlList[i]});
+    for (const auto& suggestion : suggestionList)
+        m_suggestions.append(suggestion);
     endResetModel();
 }
 

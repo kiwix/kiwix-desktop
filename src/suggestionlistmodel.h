@@ -22,7 +22,7 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void resetSuggestions();
-    void append(const QStringList& suggestions, const QVector<QUrl>& urlList);
+    void append(const QList<SuggestionData>& suggestionList);
 
     QModelIndex lastIndex() const;
 
