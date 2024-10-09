@@ -71,7 +71,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 
     /* The items should be less than fetch size to enable scrolling. */
     m_completer.setMaxVisibleItems(SuggestionListWorker::getFetchSize() / 2);
-    setCompleter(&m_completer);
+    m_completer.setWidget(this);
 
     /* QCompleter's uses default list views, which do not have headers. */
     m_completer.setPopup(m_suggestionView);
@@ -171,8 +171,17 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
     if (event->reason() == Qt::ActiveWindowFocusReason ||
         event->reason() == Qt::MouseFocusReason ||
         event->reason() == Qt::ShortcutFocusReason) {
+        connect(&m_completer, QOverload<const QString &>::of(&QCompleter::activated),
+                this, &QLineEdit::setText,Qt::UniqueConnection);
+
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::activated),
                 this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion),
+                Qt::UniqueConnection);
+
+        connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::highlighted), this,
+                [=](const QModelIndex &index){
+                    setText(index.isValid() ? index.data().toString() : m_searchbarInput);
+                },
                 Qt::UniqueConnection);
     }
     QLineEdit::focusInEvent(event);
@@ -185,6 +194,7 @@ void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)
         setText(m_title);
     }
     deselect();
+    disconnect(&m_completer, nullptr, this, nullptr);
     return QLineEdit::focusOutEvent(event);
 }
 
