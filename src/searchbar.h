@@ -25,6 +25,9 @@ public slots:
 class SearchBarLineEdit : public QLineEdit
 {
     Q_OBJECT
+
+    typedef void (SearchBarLineEdit::*NewSuggestionHandlerFuncPtr)(int start);
+
 public:
     SearchBarLineEdit(QWidget *parent = nullptr);
     void hideSuggestions();
@@ -48,6 +51,8 @@ private:
 private slots:
     void updateCompletion();
     void openCompletion(const QModelIndex& index);
+    void onInitialSuggestions(int);
+    void fetchSuggestions(NewSuggestionHandlerFuncPtr callback);
 
     QModelIndex getDefaulSuggestionIndex() const;
 };

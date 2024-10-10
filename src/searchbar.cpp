@@ -162,22 +162,7 @@ void SearchBarLineEdit::updateCompletion()
         return;
     }
     m_token++;
-    auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, 0, this);
-    connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
-    [=] (const QList<SuggestionData>& suggestionList, int token) {
-        if (token != m_token) {
-            return;
-        }
-
-        m_suggestionModel.append(suggestionList);
-        if (m_returnPressed) {
-            openCompletion(getDefaulSuggestionIndex());
-            return;
-        }
-        m_completer.complete();
-    });
-    connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
-    suggestionWorker->start();
+    fetchSuggestions(&SearchBarLineEdit::onInitialSuggestions);
 }
 
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
@@ -187,6 +172,32 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
         const QUrl url = index.data(Qt::UserRole).toUrl();
         QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
     }
+}
+
+void SearchBarLineEdit::onInitialSuggestions(int)
+{
+    if (m_returnPressed) {
+        openCompletion(getDefaulSuggestionIndex());
+    } else {
+        m_completer.complete();
+    }
+}
+
+void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
+{
+    const int start = m_suggestionModel.rowCount();
+    const auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
+    connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
+            [=] (const QList<SuggestionData>& suggestionList, int token) {
+                if (token != m_token) {
+                    return;
+                }
+
+                m_suggestionModel.append(suggestionList);
+                (this->*callback)(start);
+            });
+    connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
+    suggestionWorker->start();
 }
 
 QModelIndex SearchBarLineEdit::getDefaulSuggestionIndex() const
