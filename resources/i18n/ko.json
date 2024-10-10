@@ -6,6 +6,7 @@
 			"Fitoschido",
 			"McDutchie",
 			"Nuevo Paso",
+			"YeBoy371",
 			"Ykhwong",
 			"그냥기여자"
 		]
@@ -15,7 +16,7 @@
 	"error-downloader-window-title": "다운로더를 만들 수 없습니다",
 	"error-downloader-launch-message": "다운로더를 시작할 수 없습니다. Kiwix-desktop이 시작되더라도 모든 다운로드 기능이 작동하지 않을 것입니다!",
 	"error-launch-server-message": "오류가 발생했습니다!",
-	"open-zim": "Zim 열기",
+	"open-zim": "ZIM 파일 열기",
 	"local-kiwix-server": "로컬 Kiwix 서버",
 	"random-article": "임의의 문서",
 	"random-article-error": "임의의 문서 열기를 실패했습니다.",
@@ -94,6 +95,8 @@
 	"kiwix-server-description": "서버를 시작하면 로컬 네트워크의 다른 컴퓨터가 표준 웹 브라우저를 사용하여 Kiwix 라이브러리에 접근할 수 있습니다.",
 	"fullscreen-notification": "현재 전체 화면 모드입니다. 빠져나가려면 ESC를 누르십시오!",
 	"local-files": "로컬 파일",
+	"category": "분류",
+	"language": "언어",
 	"hide": "숨기기",
 	"open-in-browser": "브라우저에서 열기",
 	"start-kiwix-server": "Kiwix 서버 시작",
@@ -118,8 +121,11 @@
 	"monitor-directory-tooltip": "이 디렉터리의 모든 ZIM 파일은 자동으로 라이브러리에 추가됩니다.",
 	"next-tab": "다음 탭으로 이동",
 	"previous-tab": "이전 탭으로 이동",
+	"delete-book": "책 삭제",
+	"download-storage-error": "저장 오류",
 	"download-dir-missing": "다운로드 디렉터리가 존재하지 않습니다.",
 	"download-dir-not-writable": "다운로드 디렉터리에 쓸 수 없습니다.",
+	"download-book": "책 다운로드",
 	"scroll-next-tab": "다음 탭으로 스크롤",
 	"scroll-previous-tab": "이전 탭으로 스크롤"
 }
