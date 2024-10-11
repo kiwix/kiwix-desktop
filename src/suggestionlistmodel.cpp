@@ -27,6 +27,8 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole:
         case Qt::EditRole:
             return m_suggestions.at(row).text;
+        case Qt::UserRole:
+            return m_suggestions.at(row).url;
     }
     return QVariant();
 }
@@ -38,10 +40,10 @@ void SuggestionListModel::resetSuggestions()
     endResetModel();
 }
 
-void SuggestionListModel::append(const QStringList &suggestionList)
+void SuggestionListModel::append(const QList<SuggestionData> &suggestionList)
 {
     beginResetModel();
     for (const auto& suggestion : suggestionList)
-        m_suggestions.append({suggestion});
+        m_suggestions.append(suggestion);
     endResetModel();
 }

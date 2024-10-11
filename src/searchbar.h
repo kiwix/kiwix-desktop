@@ -39,7 +39,6 @@ protected:
 private:
     SuggestionListModel m_suggestionModel;
     QCompleter m_completer;
-    QVector<QUrl> m_urlList;
     QString m_title;
     QString m_searchbarInput;
     bool m_returnPressed = false;

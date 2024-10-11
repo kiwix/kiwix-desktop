@@ -70,7 +70,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
 
     m_completer.popup()->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
-    qRegisterMetaType<QVector<QUrl>>("QVector<QUrl>");
+    qRegisterMetaType<QList<SuggestionData>>("QList<SuggestionData>");
     connect(mp_typingTimer, &QTimer::timeout, this, &SearchBarLineEdit::updateCompletion);
 
     connect(this, &QLineEdit::textEdited, this,
@@ -112,7 +112,6 @@ void SearchBarLineEdit::hideSuggestions()
 void SearchBarLineEdit::clearSuggestions()
 {
     m_suggestionModel.resetSuggestions();
-    m_urlList.clear();
 }
 
 void SearchBarLineEdit::on_currentTitleChanged(const QString& title)
@@ -165,16 +164,16 @@ void SearchBarLineEdit::updateCompletion()
     m_token++;
     auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
-    [=] (const QStringList& suggestions, const QVector<QUrl>& urlList, int token) {
+    [=] (const QList<SuggestionData>& suggestionList, int token) {
         if (token != m_token) {
             return;
         }
-        m_urlList = urlList;
+
+        m_suggestionModel.append(suggestionList);
         if (m_returnPressed) {
-            openCompletion(suggestions.first(), 0);
+            openCompletion(suggestionList.first().text, 0);
             return;
         }
-        m_suggestionModel.append(suggestions);
         m_completer.complete();
     });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
@@ -183,7 +182,7 @@ void SearchBarLineEdit::updateCompletion()
 
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
-    if (m_urlList.size() != 0) {
+    if (m_suggestionModel.rowCount() != 0) {
         openCompletion(index.data().toString(), index.row());
     }
 }
@@ -192,9 +191,9 @@ void SearchBarLineEdit::openCompletion(const QString& text, int index)
 {
     QUrl url;
     if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
-        url = m_urlList.at(index);
+        url = m_suggestionModel.index(index).data(Qt::UserRole).toUrl();
     } else {
-        url = m_urlList.last();
+        url = m_suggestionModel.index(m_suggestionModel.rowCount() - 1).data(Qt::UserRole).toUrl();
     }
     QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
 }
