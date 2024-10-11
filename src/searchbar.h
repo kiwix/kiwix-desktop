@@ -48,7 +48,6 @@ private:
 private slots:
     void updateCompletion();
     void openCompletion(const QModelIndex& index);
-    void openCompletion(const QString& text, int index);
 };
 
 
