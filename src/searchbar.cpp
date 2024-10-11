@@ -171,7 +171,7 @@ void SearchBarLineEdit::updateCompletion()
 
         m_suggestionModel.append(suggestionList);
         if (m_returnPressed) {
-            openCompletion(suggestionList.first().text, 0);
+            openCompletion(m_suggestionModel.index(0));
             return;
         }
         m_completer.complete();
@@ -182,20 +182,18 @@ void SearchBarLineEdit::updateCompletion()
 
 void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
-    if (m_suggestionModel.rowCount() != 0) {
-        openCompletion(index.data().toString(), index.row());
-    }
-}
+    if (index.isValid())
+    {
+        QUrl url;
+        auto selectedSuggestionText = index.data().toString();
 
-void SearchBarLineEdit::openCompletion(const QString& text, int index)
-{
-    QUrl url;
-    if (this->text().compare(text, Qt::CaseInsensitive) == 0) {
-        url = m_suggestionModel.index(index).data(Qt::UserRole).toUrl();
-    } else {
-        url = m_suggestionModel.index(m_suggestionModel.rowCount() - 1).data(Qt::UserRole).toUrl();
+        if (this->text().compare(selectedSuggestionText, Qt::CaseInsensitive) == 0) {
+            url = index.data(Qt::UserRole).toUrl();
+        } else {
+            url = m_suggestionModel.index(m_suggestionModel.rowCount() - 1).data(Qt::UserRole).toUrl();
+        }
+        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
     }
-    QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
 }
 
 SearchBar::SearchBar(QWidget *parent) :
