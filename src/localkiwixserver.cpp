@@ -42,7 +42,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     interfaces.reserve(interfacesMap.size() + 1);
     for (const auto &interfacePair : interfacesMap) {
         QString ipv4 = QString::fromStdString(interfacePair.second.addr);
-        if (!ipv4.isEmpty()) interfaces.push_back(ipv4);
+        if (!ipv4.isEmpty() && !ipv4.startsWith("169.254")) interfaces.push_back(ipv4);
         QString ipv6 = QString::fromStdString(interfacePair.second.addr6);
         if (!ipv6.isEmpty()) interfaces.push_back(ipv6);
     }
