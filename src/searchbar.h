@@ -48,6 +48,8 @@ private:
 private slots:
     void updateCompletion();
     void openCompletion(const QModelIndex& index);
+
+    QModelIndex getDefaulSuggestionIndex() const;
 };
 
 
