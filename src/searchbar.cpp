@@ -171,7 +171,7 @@ void SearchBarLineEdit::updateCompletion()
 
         m_suggestionModel.append(suggestionList);
         if (m_returnPressed) {
-            openCompletion(m_suggestionModel.index(0));
+            openCompletion(getDefaulSuggestionIndex());
             return;
         }
         m_completer.complete();
@@ -184,16 +184,23 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
     if (index.isValid())
     {
-        QUrl url;
-        auto selectedSuggestionText = index.data().toString();
-
-        if (this->text().compare(selectedSuggestionText, Qt::CaseInsensitive) == 0) {
-            url = index.data(Qt::UserRole).toUrl();
-        } else {
-            url = m_suggestionModel.index(m_suggestionModel.rowCount() - 1).data(Qt::UserRole).toUrl();
-        }
+        const QUrl url = index.data(Qt::UserRole).toUrl();
         QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
     }
+}
+
+QModelIndex SearchBarLineEdit::getDefaulSuggestionIndex() const
+{
+    const auto firstSuggestionIndex = m_suggestionModel.index(0);
+    if (!firstSuggestionIndex.isValid())
+        return firstSuggestionIndex;
+
+    /* If the first entry matches the typed text, use it as default, otherwise
+       use the last entry which is the fulltext search. */
+    const auto firstSuggestionText = firstSuggestionIndex.data().toString();
+    if (this->text().compare(firstSuggestionText, Qt::CaseInsensitive) == 0)
+        return firstSuggestionIndex;
+    return m_suggestionModel.index(m_suggestionModel.rowCount() - 1);
 }
 
 SearchBar::SearchBar(QWidget *parent) :
