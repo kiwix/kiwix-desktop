@@ -1,6 +1,29 @@
-QWidget {
+QTreeView {
     background-color: white;
+    outline: 0px;
     border: none;
+}
+
+QTreeView::item:selected {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    color: black;
+}
+
+/* data of src/suggestionlistModel.cpp and SearchBarLineEdit of src/searchbar.cpp
+   references the line-height and padding.
+*/
+QHeaderView::section {
+    border: none;
+    color: 	#3b3b3b;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    background-color: white;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
 }
 
 QScrollBar {

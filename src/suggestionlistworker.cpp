@@ -2,10 +2,11 @@
 #include "kiwixapp.h"
 #include <zim/suggestion.h>
 
-SuggestionListWorker::SuggestionListWorker(const QString& text, int token, QObject *parent)
+SuggestionListWorker::SuggestionListWorker(const QString& text, int token, int start, QObject *parent)
 : QThread(parent),
   m_text(text),
-  m_token(token)
+  m_token(token),
+  m_start(start)
 {
 }
 
@@ -24,11 +25,10 @@ void SuggestionListWorker::run()
         QUrl url;
         url.setScheme("zim");
         url.setHost(currentZimId + ".zim");
-        int suggestionsCount = 15;
         auto prefix = m_text.toStdString();
         auto suggestionSearcher = zim::SuggestionSearcher(*archive);
         auto suggestionSearch = suggestionSearcher.suggest(prefix);
-        const auto suggestions = suggestionSearch.getResults(0, suggestionsCount);
+        const auto suggestions = suggestionSearch.getResults(m_start, getFetchSize());
         for (auto current : suggestions) {
             QString path = QString("/") + QString::fromStdString(current.getPath());
             url.setPath(path);
@@ -38,7 +38,8 @@ void SuggestionListWorker::run()
 
         // Propose fulltext search
         url.setPath("");
-        if (archive->hasFulltextIndex()) {
+        bool hasFullText = archive->hasFulltextIndex();
+        if (hasFullText) {
             // The host is used to determine the currentZimId
             // The content query item is used to know in which zim search (as for kiwix-serve)
             url.setHost(currentZimId + ".search");
@@ -49,12 +50,13 @@ void SuggestionListWorker::run()
             suggestionList.append(m_text + " (" + gt("fulltext-search") + ")");
             urlList.append(url);
         }
+        emit(searchFinished(suggestionList, urlList, hasFullText, m_token));
     } catch (std::out_of_range& e) {
         // Impossible to find the requested archive (bug ?)
         // We could propose a suggestion to do multi-zim search with:
         // url.setHost("library.search");
         // but we don't have a correct UI to select on which zim search, how to display results, ...
         // So do nothing for now
+        emit(searchFinished(suggestionList, urlList, false, m_token));
     }
-    emit(searchFinished(suggestionList, urlList, m_token));
 }
