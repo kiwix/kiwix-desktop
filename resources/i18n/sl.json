@@ -144,5 +144,6 @@
 	"content-type-searcher-placeholder": "Filtriranje vrste vsebine",
 	"no-details": "Samo uvod",
 	"no-pictures": "Ni slik",
-	"no-videos": "Ni videoposnetkov"
+	"no-videos": "Ni videoposnetkov",
+	"disable-sandbox": "Kiwix je bil zagnan z omrežnega pogona. Znano je, da to povzroča težave z združljivostjo s peskovnikom za brskanje. Peskovnik bo zato onemogočen. Ali želite nadaljevati?"
 }
