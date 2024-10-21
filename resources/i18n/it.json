@@ -104,6 +104,8 @@
 	"start-kiwix-server": "Avvia server Kiwix",
 	"stop-kiwix-server": "Arresta il server Kiwix",
 	"all": "Tutto",
+	"ipv4": "Modalità solo IPv4",
+	"ipv6": "Modalità solo IPv6",
 	"fulltext-search": "Ricerca nell'intero testo",
 	"pictures": "Immagini",
 	"videos": "Video",
