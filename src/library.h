@@ -12,6 +12,7 @@
 #include <QSharedPointer>
 #include <QMap>
 #include <QMutex>
+#include <QIcon>
 
 #define TQS(v) (QString::fromStdString(v))
 #define FORWARD_GETTER(METH) QString METH() const { return TQS(mp_book->METH()); }
@@ -33,6 +34,7 @@ public:
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<zim::Archive> getArchive(const QString& zimId);
     std::shared_ptr<zim::Searcher> getSearcher(const QString& zimId);
+    QIcon getBookIcon(const QString& zimId);
     QStringList getBookIds() const;
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
     const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return mp_library->getBookmarks(onlyValidBookmarks); }

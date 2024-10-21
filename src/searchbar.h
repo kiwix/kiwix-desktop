@@ -10,6 +10,9 @@
 #include <QTimer>
 #include <QThread>
 #include <QToolBar>
+#include "suggestionlistmodel.h"
+
+class QTreeView;
 
 class BookmarkButton : public QToolButton {
     Q_OBJECT
@@ -24,9 +27,13 @@ public slots:
 class SearchBarLineEdit : public QLineEdit
 {
     Q_OBJECT
+
+    typedef void (SearchBarLineEdit::*NewSuggestionHandlerFuncPtr)(int start);
+
 public:
     SearchBarLineEdit(QWidget *parent = nullptr);
     void hideSuggestions();
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 public slots:
     void on_currentTitleChanged(const QString &title);
@@ -36,19 +43,31 @@ protected:
     virtual void focusInEvent(QFocusEvent *);
     virtual void focusOutEvent(QFocusEvent *);
 private:
-    QStringListModel m_completionModel;
+    SuggestionListModel m_suggestionModel;
+    QTreeView *m_suggestionView;
     QCompleter m_completer;
-    QVector<QUrl> m_urlList;
     QString m_title;
     QString m_searchbarInput;
     bool m_returnPressed = false;
     QTimer* mp_typingTimer;
     int m_token;
+    bool m_moreSuggestionsAreAvailable = false;
+
+    /* We only fetch more suggestions when the user is at the end and tries to
+       scroll again. This variable is set whenever the user scrolled to the end,
+       indicating the next scroll should trigger a fetch more action. */
+    bool m_aboutToScrollPastEnd = false;
 
 private slots:
     void updateCompletion();
+    void fetchMoreSuggestions();
+    void onScroll(int value);
     void openCompletion(const QModelIndex& index);
-    void openCompletion(const QString& text, int index);
+    void onInitialSuggestions(int);
+    void onAdditionalSuggestions(int start);
+    void fetchSuggestions(NewSuggestionHandlerFuncPtr callback);
+
+    QModelIndex getDefaulSuggestionIndex() const;
 };
 
 
