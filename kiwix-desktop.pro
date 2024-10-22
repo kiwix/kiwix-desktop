@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network
-QT       += webenginewidgets
+QT       += webenginewidgets webchannel
 QT       += printsupport
 
 # Avoid stripping incompatible files, due to false identification as executables, on WSL
@@ -90,6 +90,7 @@ SOURCES += \
     src/fullscreenwindow.cpp \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
+    src/kiwixwebchannelobject.cpp \
 
 HEADERS += \
     src/choiceitem.h \
@@ -140,6 +141,7 @@ HEADERS += \
     src/menuproxystyle.h \
     src/zimview.h \
     src/portutils.h \
+    src/kiwixwebchannelobject.h \
 
 FORMS += \
     src/choiceitem.ui \
@@ -219,6 +221,7 @@ RESOURCES += \
     resources/translations.qrc \
     resources/contentmanager.qrc \
     resources/settingsmanager.qrc \
-    resources/style.qrc
+    resources/style.qrc \
+    resources/js.qrc
 
 RC_ICONS = resources/icons/kiwix/app_icon.ico

@@ -6,5 +6,6 @@
         <file>css/confirmBox.css</file>
         <file>css/contentmanagerside.css</file>
         <file>css/choiceBox.css</file>
+        <file>css/toc.css</file>
     </qresource>
 </RCC>
