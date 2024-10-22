@@ -7,6 +7,7 @@ class QMenu;
 #include <iostream>
 #include "kiwixapp.h"
 #include "webpage.h"
+#include "css_constants.h"
 #include <QToolTip>
 #include <QWebEngineSettings>
 #include <QWebEngineHistory>
@@ -35,7 +36,9 @@ void WebViewBackMenu::showEvent(QShowEvent *)
      */
 
     QRect geo = geometry();
-    geo.moveLeft(geo.left() + 6);  // see also: style.css: QToolButton#backButton { margin-left: 6px; }
+
+    const int marginLeft = CSS::TopWidget::QToolButton::backButton::marginLeft;
+    geo.moveLeft(geo.left() + marginLeft);
     geo.moveTop(geo.top() + 2);
     setGeometry(geo);
 }

@@ -24,9 +24,10 @@ QTreeView::item:has-children {
     border-bottom: 1px solid #cccccc;
 }
 
+
 QTreeView {
     font-family: 'Selawik';
-    padding: 4px;
+    padding: 4px; /* XXX: duplicated in css_constants.h */
     border: none;
     selection-color: black;
     qproperty-iconSize: 30px;

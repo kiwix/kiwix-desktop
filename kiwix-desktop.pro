@@ -140,6 +140,7 @@ HEADERS += \
     src/menuproxystyle.h \
     src/zimview.h \
     src/portutils.h \
+    src/css_constants.h \
 
 FORMS += \
     src/choiceitem.ui \

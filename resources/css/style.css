@@ -103,7 +103,7 @@ TopWidget QToolButton::menu-indicator {
 }
 
 TopWidget QToolButton#backButton {
-    margin-left: 6px;  /* see also: void WebViewBackMenu::showEvent(QShowEvent *) { geo.setX(geo.x() + 6); } */
+    margin-left: 6px; /* XXX: duplicated in css_constants.h */
 }
 
 TopWidget QToolButton#fullScreenButton {
@@ -178,11 +178,10 @@ QTabWidget::pane {
     border-top: 1px solid #ccc;
 }
 
-/* paintEvent of src/tabbar.cpp references the value of border and padding */
 QTabBar::tab {
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
     border-radius: 0;
-    padding: 4px;
+    padding: 4px; /* XXX: duplicated in css_constants.h */
     padding-top: 6px;
 }
 
