@@ -3,6 +3,7 @@
 #include <QCompleter>
 #include <QFocusEvent>
 #include <QScrollBar>
+#include <QStyledItemDelegate>
 
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
@@ -79,6 +80,8 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     /* QCompleter's uses default list views, which do not have headers. */
     m_completer.setPopup(m_suggestionView);
 
+    /* The Delegate was overwritten by setPopup(), which is not style-aware */
+    m_suggestionView->setItemDelegate(new QStyledItemDelegate(this));
     m_suggestionView->header()->setStretchLastSection(true);
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
