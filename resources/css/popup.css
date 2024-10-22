@@ -3,6 +3,23 @@ QWidget {
     border: none;
 }
 
+QHeaderView {
+    background-color: white;
+}
+
+QHeaderView::section {
+    border: none;
+    color: #3b3b3b;
+    background-color: white;
+
+    margin-top: 5px; /* XXX: duplicated in css_constants.h */
+    padding: 5px 10px; /* XXX: duplicated in css_constants.h */
+
+    font-size: 16px;
+    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    font-weight: 400;
+}
+
 QScrollBar {
     width: 5px;
     border: none;

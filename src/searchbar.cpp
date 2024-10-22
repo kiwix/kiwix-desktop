@@ -8,6 +8,8 @@
 #include "suggestionlistworker.h"
 #include "css_constants.h"
 
+namespace HeaderSectionCSS = CSS::PopupCSS::QHeaderView::section;
+
 BookmarkButton::BookmarkButton(QWidget *parent) :
     QToolButton(parent)
 {
@@ -80,6 +82,24 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_suggestionView->header()->setStretchLastSection(true);
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+
+    const int contentHeight = HeaderSectionCSS::lineHeight;
+    m_suggestionView->setIconSize(QSize(contentHeight, contentHeight));
+
+    /* The suggestionView sizing unfortunately is not aware of headers. We 
+       have to do this manually. We also sized header the same as items.
+    */
+    connect(&m_suggestionModel, &QAbstractListModel::modelReset, [=](){
+        /* +1 for header. */
+        const int maxItem = m_completer.maxVisibleItems();
+        const int count = std::min(m_suggestionModel.rowCount(), maxItem) + 1;
+
+        const int itemHeight = m_suggestionView->sizeHintForRow(0);
+
+        /* Extra space styling above header and below last suggestion item. */
+        const int extraMargin = 2 * HeaderSectionCSS::marginTop;
+        m_suggestionView->setFixedHeight(itemHeight * count + extraMargin);
+    });
 
     connect(m_suggestionView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &SearchBarLineEdit::onScroll);

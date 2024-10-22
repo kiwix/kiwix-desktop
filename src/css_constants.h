@@ -43,6 +43,17 @@ namespace QTreeView {
 }
 }
 
+/* In popup.css */
+namespace PopupCSS {
+namespace QHeaderView {
+namespace section {
+    const int marginTop = 5;
+    const int lineHeight = 24;
+    const int paddingVertical = 5;
+}
+}
+}
+
 }
 
 #endif // CSS_CONSTANTS_H
