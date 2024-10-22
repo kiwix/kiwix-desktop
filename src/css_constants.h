@@ -23,6 +23,11 @@ namespace tab {
 }
 }
 
+namespace SearchBar{
+    const int margin = 2;
+    const int border = 1;
+}
+
 namespace TopWidget {
 namespace QToolButton {
 namespace backButton {

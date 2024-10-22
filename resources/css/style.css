@@ -32,8 +32,8 @@ QToolButton {
 
 SearchBar {
     background-color: white;
-    margin: 2px;
-    border: 1px solid #ccc;
+    margin: 2px; /* XXX: duplicated in css_constants.h */
+    border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
     border-radius: 3px;
 
     max-height: 40px;
