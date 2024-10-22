@@ -1,6 +1,17 @@
-QWidget {
+QTreeView {
     background-color: white;
     border: none;
+    outline: none;
+}
+
+QTreeView::item {
+    border: 1px solid transparent;
+}
+
+QTreeView::item:selected {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    color: black;
 }
 
 QHeaderView {
