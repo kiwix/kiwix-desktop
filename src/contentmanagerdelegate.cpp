@@ -8,6 +8,7 @@
 #include "rownode.h"
 #include "descriptionnode.h"
 #include "portutils.h"
+#include "css_constants.h"
 
 ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
@@ -284,9 +285,8 @@ QSize ContentManagerDelegate::sizeHint(const QStyleOptionViewItem &option, const
         const auto treeView = KiwixApp::instance()->getContentManager()->getView()->getView();
 
         const int width = treeView->header()->length() - 2*treeView->indentation();
-        // XXX: see QTreeView::padding in resources/css/_contentManager.css
-        const int verticalPadding = 4;
-        const int horizontalPadding = 4;
+        const int verticalPadding = CSS::ContentManagerCSS::QTreeView::padding;
+        const int horizontalPadding = CSS::ContentManagerCSS::QTreeView::padding;
         QRect descRect(0, 0, width - 2 * horizontalPadding, 0);
 
         /* Based on the rectangle and text, find the best fitting size. */

@@ -1,7 +1,10 @@
 #include "suggestionlistmodel.h"
 #include "kiwixapp.h"
+#include "css_constants.h"
 
 #include <QIcon>
+
+namespace HeaderSectionCSS = CSS::PopupCSS::QHeaderView::section;
 
 QString getZimIdFromUrl(QUrl url);
 
@@ -35,9 +38,20 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
         case Qt::UserRole:
             return m_suggestions.at(row).url;
         case Qt::DecorationRole:
+        {
             const auto library = KiwixApp::instance()->getLibrary();
             const auto zimId = getZimIdFromUrl(m_suggestions.at(row).url);
             return library->getBookIcon(zimId);
+        }
+        case Qt::SizeHintRole:
+        {
+            /* Padding in css can't change height, we have to achieve padding
+               by increasing height.
+            */
+            const int padding = HeaderSectionCSS::paddingVertical;
+            const int lineHeight = HeaderSectionCSS::lineHeight;
+            return QSize(0, lineHeight + 2 * padding);
+        }
     }
     return QVariant();
 }

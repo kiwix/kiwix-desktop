@@ -3,6 +3,7 @@ class QMenu;
 #include "tabbar.h"
 
 #include "kiwixapp.h"
+#include "css_constants.h"
 #include <QAction>
 #include <QTimer>
 #include <QWebEnginePage>
@@ -439,12 +440,10 @@ void TabBar::paintEvent(QPaintEvent *e)
         bool textRightToLeft = tab_title.isRightToLeft();
         bool appRightToLeft = QWidget::isRightToLeft();
 
-        // See QTabBar::tab::padding value in resources/css/style.css
-        const int padding = 4;
+        const int padding = CSS::QTabBar::tab::padding;
         QRect tabTextRect = style()->subElementRect(QStyle::SE_TabBarTabText, &tabopt, this);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        // See QTabBar::tab::border value in resources/css/style.css
-        const int border = 1;
+        const int border = CSS::QTabBar::tab::border;
 
         // Add Padding to left, right. Padding is 4px. Add 5 to account for 
         // Extra pixel from border.
