@@ -17,6 +17,13 @@ SuggestionListModel::~SuggestionListModel()
 {
 }
 
+int SuggestionListModel::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent);
+
+    return 2;
+}
+
 int SuggestionListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -30,6 +37,15 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= rowCount())
         return QVariant();
 
+    if ( index.column() == 0 && role == Qt::DecorationRole )
+    {
+        const auto library = KiwixApp::instance()->getLibrary();
+        const auto zimId = getZimIdFromUrl(m_suggestions.at(row).url);
+        return library->getBookIcon(zimId);
+    }
+
+    if ( index.column() == 1 )
+    {
     switch (role)
     {
         case Qt::DisplayRole:
@@ -37,12 +53,6 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
             return m_suggestions.at(row).text;
         case Qt::UserRole:
             return m_suggestions.at(row).url;
-        case Qt::DecorationRole:
-        {
-            const auto library = KiwixApp::instance()->getLibrary();
-            const auto zimId = getZimIdFromUrl(m_suggestions.at(row).url);
-            return library->getBookIcon(zimId);
-        }
         case Qt::SizeHintRole:
         {
             /* Padding in css can't change height, we have to achieve padding
@@ -53,6 +63,7 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
             return QSize(0, lineHeight + 2 * padding);
         }
     }
+    }
     return QVariant();
 }
 
@@ -60,7 +71,7 @@ QVariant SuggestionListModel::headerData(int section,
                                          Qt::Orientation orientation,
                                          int role) const
 {
-    if (section != 0 || orientation != Qt::Orientation::Horizontal)
+    if (section != 1 || orientation != Qt::Orientation::Horizontal)
         return QVariant();
 
     switch (role)
