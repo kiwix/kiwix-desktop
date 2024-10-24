@@ -37,6 +37,9 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= rowCount())
         return QVariant();
 
+    if ( role == Qt::UserRole )
+            return m_suggestions.at(row).url;
+
     if ( index.column() == 0 && role == Qt::DecorationRole )
     {
         const auto library = KiwixApp::instance()->getLibrary();
@@ -51,8 +54,6 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
         case Qt::DisplayRole:
         case Qt::EditRole:
             return m_suggestions.at(row).text;
-        case Qt::UserRole:
-            return m_suggestions.at(row).url;
         case Qt::SizeHintRole:
         {
             /* Padding in css can't change height, we have to achieve padding
