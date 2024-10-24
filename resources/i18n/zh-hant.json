@@ -101,6 +101,9 @@
 	"start-kiwix-server": "啟動 Kiwix 伺服器",
 	"stop-kiwix-server": "停用 Kiwix 伺服器",
 	"all": "全部",
+	"all_ips": "全部 - 雙堆疊模式",
+	"ipv4": "僅 IPv4 模式",
+	"ipv6": "僅 IPv6 模式",
 	"fulltext-search": "全文搜尋",
 	"pictures": "圖片",
 	"videos": "影片",
@@ -167,9 +170,10 @@
 	"export-reading-list-error": "匯出閱讀清單時發生錯誤。",
 	"import-reading-list": "匯入閱讀清單",
 	"import-reading-list-error": "匯入閱讀清單時發生錯誤。",
-	"disable-sandbox": "應用程式是從網路磁碟機啟動。目前已知這會因沙盒而導致相容性問題。您想冒風險來停用嗎？",
+	"disable-sandbox": "Kiwix 已從網路磁碟機啟動。目前已知這會導致在瀏覽沙盒時發生相容性問題，因此已將沙盒功能關閉。您要繼續嗎？",
 	"save-page-as": "另存為…",
 	"portable-disabled-tooltip": "功能在可攜式模式下停用",
 	"scroll-next-tab": "捲動至下一個分頁",
-	"scroll-previous-tab": "捲動至上一個分頁"
+	"scroll-previous-tab": "捲動至上一個分頁",
+	"kiwix-search": "Kiwix 搜尋"
 }
