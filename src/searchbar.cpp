@@ -8,7 +8,6 @@
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
 #include "css_constants.h"
-#include "suggestionlistdelegate.h"
 
 namespace HeaderSectionCSS = CSS::PopupCSS::QHeaderView::section;
 
@@ -82,7 +81,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_completer.setPopup(m_suggestionView);
 
     /* The Delegate was overwritten by setPopup(), which is not style-aware */
-    m_suggestionView->setItemDelegate(new SuggestionListDelegate(this));
+    m_suggestionView->setItemDelegate(new QStyledItemDelegate(this));
     m_suggestionView->header()->setStretchLastSection(true);
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));

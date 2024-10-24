@@ -50,7 +50,6 @@ namespace section {
     const int marginTop = 5;
     const int lineHeight = 24;
     const int paddingVertical = 5;
-    const int paddingLeft = 10;
 }
 }
 }
