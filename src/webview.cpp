@@ -138,17 +138,33 @@ QMenu* WebView::getHistoryForwardMenu() const
     return ret;
 }
 
+namespace
+{
+
+/**
+ * @brief Get the Zim Item object corresponding to the given url.
+ * 
+ * @param url QUrl
+ * @return zim::Item
+ * 
+ * @exception throws exception if zimId is invalid, archive doesn't exist,
+ * entry is invalid or not found, or entry is redirect.
+ */
+zim::Item getZimItem(const QUrl& url)
+{
+    const auto app = KiwixApp::instance();
+    const auto library = app->getLibrary();
+    const auto archive = library->getArchive(getZimIdFromUrl(url));
+    const auto entry = getArchiveEntryFromUrl(*archive, url);
+    return entry.getItem(true);
+}
+
+}
+
 void WebView::saveViewContent()
 {
     try {
-        auto app = KiwixApp::instance();
-        auto library = app->getLibrary();
-        auto archive = library->getArchive(m_currentZimId);
-        auto entry = getArchiveEntryFromUrl(*archive, this->url());
-        if (entry.isRedirect()) 
-            return;
-
-        auto item = entry.getItem(true);
+        const auto item = getZimItem(url());
         auto mimeType = QByteArray::fromStdString(item.getMimetype());
         mimeType = mimeType.split(';')[0];
 
