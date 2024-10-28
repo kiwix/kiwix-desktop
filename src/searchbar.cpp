@@ -3,9 +3,14 @@
 #include <QCompleter>
 #include <QFocusEvent>
 #include <QScrollBar>
+#include <QStyledItemDelegate>
 
 #include "kiwixapp.h"
 #include "suggestionlistworker.h"
+#include "css_constants.h"
+#include "suggestionlistdelegate.h"
+
+namespace HeaderSectionCSS = CSS::PopupCSS::QHeaderView::section;
 
 BookmarkButton::BookmarkButton(QWidget *parent) :
     QToolButton(parent)
@@ -76,9 +81,29 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     /* QCompleter's uses default list views, which do not have headers. */
     m_completer.setPopup(m_suggestionView);
 
+    /* The Delegate was overwritten by setPopup(), which is not style-aware */
+    m_suggestionView->setItemDelegate(new SuggestionListDelegate(this));
     m_suggestionView->header()->setStretchLastSection(true);
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+
+    const int contentHeight = HeaderSectionCSS::lineHeight;
+    m_suggestionView->setIconSize(QSize(contentHeight, contentHeight));
+
+    /* The suggestionView sizing unfortunately is not aware of headers. We 
+       have to do this manually. We also sized header the same as items.
+    */
+    connect(&m_suggestionModel, &QAbstractListModel::modelReset, [=](){
+        /* +1 for header. */
+        const int maxItem = m_completer.maxVisibleItems();
+        const int count = std::min(m_suggestionModel.rowCount(), maxItem) + 1;
+
+        const int itemHeight = m_suggestionView->sizeHintForRow(0);
+
+        /* Extra space styling above header and below last suggestion item. */
+        const int extraMargin = 2 * HeaderSectionCSS::marginTop;
+        m_suggestionView->setFixedHeight(itemHeight * count + extraMargin);
+    });
 
     connect(m_suggestionView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &SearchBarLineEdit::onScroll);
@@ -285,7 +310,7 @@ void SearchBarLineEdit::onInitialSuggestions(int)
     if (m_returnPressed) {
         openCompletion(getDefaulSuggestionIndex());
     } else {
-        m_completer.complete();
+        m_completer.complete(getCompleterRect());
 
         /* Make row 0 appear but do not highlight it */
         const auto completerFirstIdx = m_suggestionView->model()->index(0, 0);
@@ -337,6 +362,43 @@ QModelIndex SearchBarLineEdit::getDefaulSuggestionIndex() const
     else if (m_suggestionModel.hasFullTextSearchSuggestion())
         return m_suggestionModel.index(m_suggestionModel.rowCount() - 1);
     return QModelIndex();
+}
+
+/* Line edit does not span the entire searchBar. Completer is displayed
+   based on line edit, and thus shifting and resizing is needed.
+*/
+QRect SearchBarLineEdit::getCompleterRect() const
+{
+    auto& searchBar = KiwixApp::instance()->getSearchBar();
+    const auto& searchGeo = searchBar.geometry();
+    const auto& searchLineEditGeo = searchBar.getLineEdit().geometry();
+
+    const int margin = CSS::SearchBar::margin;
+    const int border = CSS::SearchBar::border;
+    const int spaceAround = margin + border;
+
+    /* Border and margin are not accounted in height and width. */
+    const int top = searchGeo.height() - 2 * spaceAround;
+    const int width = searchGeo.width() - 2 * spaceAround;
+
+    /* Shift completer to one of the two laterals of search bar, where which 
+       one it shifted to dependes on whether the line edit is flipped.
+    */
+    int left = -searchLineEditGeo.left();
+
+    /* When not flipped, left() is relative to within the search bar border, 
+       thus, we shift by spaceAround to match the side of search bar.
+
+       When flipped, the completer starts at the right end of the search bar 
+       We shift it by width to make the completer start at left lateral of 
+       search bar. Since in a flipped state, left() also considered the opposite
+       side's border, which means we need to shift by a border width in 
+       addition to spaceAround.
+    */
+    left += isRightToLeft() ? -width + spaceAround + border : spaceAround;
+
+    /* Can't set height to 0. Will cause rectangle to be ignored. */
+    return QRect(QPoint(left, top), QSize(width, 1));
 }
 
 SearchBar::SearchBar(QWidget *parent) :

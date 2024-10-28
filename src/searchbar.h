@@ -68,6 +68,7 @@ private slots:
     void fetchSuggestions(NewSuggestionHandlerFuncPtr callback);
 
     QModelIndex getDefaulSuggestionIndex() const;
+    QRect getCompleterRect() const;
 };
 
 

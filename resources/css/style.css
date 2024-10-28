@@ -32,8 +32,8 @@ QToolButton {
 
 SearchBar {
     background-color: white;
-    margin: 2px 5px;
-    border: 1px solid #ccc;
+    margin: 2px; /* XXX: duplicated in css_constants.h */
+    border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
     border-radius: 3px;
 
     max-height: 40px;
@@ -43,7 +43,7 @@ SearchBar > QLabel#searchIcon {
     padding: 0;
     border: none;
     background-color: none;
-    margin: 0px 4px 0px 9px;
+    margin: 0px 6px;
 
     max-height: 38px;
     max-width: 38px;
@@ -66,11 +66,6 @@ SearchBar > QToolButton {
     background-color: none;
     max-height: 38px;
     max-width: 38px;
-}
-
-SearchBar > BookmarkButton {
-    margin-right: 3px;
-    margin-left: 3px; 
 }
 
 SearchBar > QToolButton:pressed,
@@ -103,7 +98,7 @@ TopWidget QToolButton::menu-indicator {
 }
 
 TopWidget QToolButton#backButton {
-    margin-left: 6px;  /* see also: void WebViewBackMenu::showEvent(QShowEvent *) { geo.setX(geo.x() + 6); } */
+    margin-left: 6px; /* XXX: duplicated in css_constants.h */
 }
 
 TopWidget QToolButton#fullScreenButton {
@@ -178,11 +173,10 @@ QTabWidget::pane {
     border-top: 1px solid #ccc;
 }
 
-/* paintEvent of src/tabbar.cpp references the value of border and padding */
 QTabBar::tab {
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
     border-radius: 0;
-    padding: 4px;
+    padding: 4px; /* XXX: duplicated in css_constants.h */
     padding-top: 6px;
 }
 

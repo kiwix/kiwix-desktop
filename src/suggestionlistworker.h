@@ -2,8 +2,7 @@
 #define SUGGESTIONLISTWORKER_H
 
 #include <QThread>
-
-struct SuggestionData;
+#include "suggestionlistmodel.h"
 
 class SuggestionListWorker : public QThread
 {
