@@ -11,6 +11,7 @@
 #include <QThread>
 #include <QToolBar>
 #include "suggestionlistmodel.h"
+#include "multizimbutton.h"
 
 class QTreeView;
 
@@ -77,6 +78,7 @@ class SearchBar : public QToolBar {
 public:
     SearchBar(QWidget *parent = nullptr);
     SearchBarLineEdit& getLineEdit() { return m_searchBarLineEdit; };
+    MultiZimButton& getMultiZimButton() { return m_multiZimButton; };
 
 signals:
     void currentTitleChanged(const QString &title);
@@ -84,5 +86,6 @@ signals:
 private:
     SearchBarLineEdit m_searchBarLineEdit;
     BookmarkButton m_bookmarkButton;
+    MultiZimButton m_multiZimButton;
 };
 #endif // SEARCHBAR_H
