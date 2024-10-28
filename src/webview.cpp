@@ -159,20 +159,25 @@ zim::Item getZimItem(const QUrl& url)
     return entry.getItem(true);
 }
 
+bool isHTMLContent(const zim::Item& item)
+{
+    auto mimeType = QByteArray::fromStdString(item.getMimetype());
+    mimeType = mimeType.split(';')[0];
+    return mimeType == "text/html";
+}
+
 }
 
 void WebView::saveViewContent()
 {
     try {
         const auto item = getZimItem(url());
-        auto mimeType = QByteArray::fromStdString(item.getMimetype());
-        mimeType = mimeType.split(';')[0];
 
         /* We have to sanitize here, as parsing will start once we pass the file
            name to either save or download method.
         */
         QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
-        if (mimeType == "text/html")
+        if (isHTMLContent(item))
             page()->save(suggestedFileName + ".pdf");
         else
             page()->download(this->url(), suggestedFileName);
