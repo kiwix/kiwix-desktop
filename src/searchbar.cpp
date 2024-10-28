@@ -414,7 +414,8 @@ QRect SearchBarLineEdit::getCompleterRect() const
 SearchBar::SearchBar(QWidget *parent) :
     QToolBar(parent),
     m_searchBarLineEdit(this),
-    m_bookmarkButton(this)
+    m_bookmarkButton(this),
+    m_multiZimButton(this)
 {
     QLabel* searchIconLabel = new QLabel; 
     searchIconLabel->setObjectName("searchIcon");
@@ -425,9 +426,15 @@ SearchBar::SearchBar(QWidget *parent) :
     addWidget(searchIconLabel);
     addWidget(&m_searchBarLineEdit);
     addWidget(&m_bookmarkButton);
+    addWidget(&m_multiZimButton);
 
     connect(this, &SearchBar::currentTitleChanged, &m_searchBarLineEdit,
             &SearchBarLineEdit::on_currentTitleChanged);
     connect(this, &SearchBar::currentTitleChanged, &m_bookmarkButton,
             &BookmarkButton::update_display);
+    connect(KiwixApp::instance()->getContentManager(),
+            &ContentManager::booksChanged, &m_multiZimButton,
+            &MultiZimButton::updateDisplay);
+    connect(this, &SearchBar::currentTitleChanged, &m_multiZimButton,
+            &MultiZimButton::updateDisplay);
 }

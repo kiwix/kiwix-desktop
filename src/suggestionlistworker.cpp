@@ -14,13 +14,13 @@ void SuggestionListWorker::run()
 {
     QList<SuggestionData> suggestionList;
 
-    WebView *current = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if(!current)
-        return;
-    auto qurl = current->url();
-    auto currentZimId = qurl.host().split(".")[0];
+    const auto app = KiwixApp::instance();
+    const auto selectedIdList = app->getSearchBar().getMultiZimButton().getZimIds();
+    
+    /* TODO: re-implement this after introducing the actual Multi-Zim. */
+    const auto currentZimId = selectedIdList[0];
     try {
-        auto archive = KiwixApp::instance()->getLibrary()->getArchive(currentZimId);
+        const auto archive = app->getLibrary()->getArchive(currentZimId);
         QUrl url;
         url.setScheme("zim");
         url.setHost(currentZimId + ".zim");
