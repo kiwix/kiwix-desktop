@@ -5,6 +5,23 @@
 
 class QListWidget;
 class QButtonGroup;
+class QListWidgetItem;
+class QRadioButton;
+class QLabel;
+
+class ZimItemWidget : public QWidget {
+    Q_OBJECT
+
+public:
+    ZimItemWidget(QString text, QIcon icon, QWidget *parent = nullptr);
+
+    QRadioButton* getRadioButton() const { return radioBt; }
+
+private:
+    QLabel* textLabel;
+    QLabel* iconLabel;
+    QRadioButton* radioBt;
+};
 
 class MultiZimButton : public QToolButton {
     Q_OBJECT
@@ -19,6 +36,9 @@ public slots:
 private:
     QListWidget* mp_buttonList;
     QButtonGroup* mp_radioButtonGroup;
+
+    ZimItemWidget* getZimWidget(int row) const;
+    void setItemZimWidget(QListWidgetItem* item, const QString& title, const QIcon& icon);
 };
 
 #endif // MULTIZIMBUTTON_H
