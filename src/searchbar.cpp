@@ -195,7 +195,8 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
     }
     if (event->reason() == Qt::ActiveWindowFocusReason ||
         event->reason() == Qt::MouseFocusReason ||
-        event->reason() == Qt::ShortcutFocusReason) {
+        event->reason() == Qt::ShortcutFocusReason ||
+        event->reason() == Qt::PopupFocusReason) {
         connect(&m_completer, QOverload<const QString &>::of(&QCompleter::activated),
                 this, &QLineEdit::setText,Qt::UniqueConnection);
 
