@@ -42,12 +42,8 @@ void MultiZimButton::updateDisplay()
         item->setData(Qt::UserRole, bookId);
         item->setData(Qt::DisplayRole, bookTitle);
 
-        const auto radioBt = new QRadioButton(bookTitle);
-        radioBt->setIcon(zimIcon);
-        mp_radioButtonGroup->addButton(radioBt);
-
         mp_buttonList->addItem(item);
-        mp_buttonList->setItemWidget(item, radioBt);
+        setItemZimWidget(item, bookTitle, zimIcon);
     }
 
     mp_buttonList->sortItems();
@@ -58,9 +54,8 @@ void MultiZimButton::updateDisplay()
 
     setDisabled(mp_buttonList->model()->rowCount() == 0);
 
-    const auto firstWidget = mp_buttonList->itemWidget(mp_buttonList->item(0));
-    if (const auto firstBt = qobject_cast<QRadioButton *>(firstWidget))
-        firstBt->setChecked(true);
+    if (const auto firstWidget = getZimWidget(0))
+        firstWidget->getRadioButton()->setChecked(true);
 }
 
 QStringList MultiZimButton::getZimIds() const
@@ -68,10 +63,44 @@ QStringList MultiZimButton::getZimIds() const
     QStringList idList;
     for (int row = 0; row < mp_buttonList->count(); row++)
     {
-        const auto listItem = mp_buttonList->item(row);
-        const auto radioBt = qobject_cast<QRadioButton *>(mp_buttonList->itemWidget(listItem));
-        if (radioBt && radioBt->isChecked())
-            idList.append(listItem->data(Qt::UserRole).toString());
+        const auto widget = getZimWidget(row);
+        if (widget && widget->getRadioButton()->isChecked())
+            idList.append(mp_buttonList->item(row)->data(Qt::UserRole).toString());
     }
     return idList;
+}
+
+ZimItemWidget *MultiZimButton::getZimWidget(int row) const
+{
+    const auto widget = mp_buttonList->itemWidget(mp_buttonList->item(row));
+    return qobject_cast<ZimItemWidget *>(widget);
+}
+
+void MultiZimButton::setItemZimWidget(QListWidgetItem *item,
+                                      const QString &title, const QIcon &icon)
+{
+    const auto zimWidget = new ZimItemWidget(title, icon);
+    mp_radioButtonGroup->addButton(zimWidget->getRadioButton());
+    mp_buttonList->setItemWidget(item, zimWidget);
+}
+
+ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
+    QWidget(parent),
+    textLabel(new QLabel(this)),
+    iconLabel(new QLabel(this)),
+    radioBt(new QRadioButton(this))
+{
+    setLayout(new QHBoxLayout);
+    layout()->setSpacing(0);
+    layout()->setContentsMargins(0, 0, 0, 0);
+
+    textLabel->setText(text);
+
+    /* TODO: change temporary values once size is defined laters */
+    const QSize iconSize = QSize(24, 24);
+    iconLabel->setPixmap(icon.pixmap(iconSize));
+
+    layout()->addWidget(iconLabel);
+    layout()->addWidget(textLabel);
+    layout()->addWidget(radioBt);
 }
