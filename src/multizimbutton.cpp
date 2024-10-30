@@ -7,6 +7,8 @@
 #include "multizimbutton.h"
 #include "css_constants.h"
 
+QString getElidedText(const QFont& font, int length, const QString& text);
+
 MultiZimButton::MultiZimButton(QWidget *parent) :
     QToolButton(parent), 
     mp_buttonList(new QListWidget),
@@ -153,9 +155,11 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     const int border = CSS::MultiZimButton::QListWidget::item::border;
     const int scrollerWidth = CSS::MultiZimButton::QScrollBar::width;
     const int contentWidthExcludeText = iconAndCheckerWidth + totalSpacing + scrollerWidth + border;
+    const int labelWidth = menu->width() - contentWidthExcludeText;
+    textLabel->setFixedWidth(labelWidth);
 
-    textLabel->setFixedWidth(menu->width() - contentWidthExcludeText);
-    textLabel->setText(text);
+    QString elidedText = getElidedText(textLabel->font(), labelWidth, text);
+    textLabel->setText(elidedText == text ? text : elidedText.trimmed() + "(...)");
 
     layout()->addWidget(iconLabel);
     layout()->addWidget(textLabel);
