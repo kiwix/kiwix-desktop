@@ -19,6 +19,11 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
     const auto popupAction = new QWidgetAction(menu());
     popupAction->setDefaultWidget(mp_buttonList);
     menu()->addAction(popupAction);
+
+    connect(mp_buttonList, &QListWidget::currentRowChanged, this, [=](int row){
+        if (const auto widget = getZimWidget(row))
+            widget->getRadioButton()->setChecked(true);
+    });
 }
 
 void MultiZimButton::updateDisplay()
@@ -72,8 +77,7 @@ void MultiZimButton::updateDisplay()
     setDisabled(mp_buttonList->model()->rowCount() == 0);
 
     mp_buttonList->scrollToTop();
-    if (const auto firstWidget = getZimWidget(0))
-        firstWidget->getRadioButton()->setChecked(true);
+    mp_buttonList->setCurrentRow(0);
 }
 
 QStringList MultiZimButton::getZimIds() const
