@@ -28,6 +28,9 @@ void MultiZimButton::updateDisplay()
         mp_radioButtonGroup->removeButton(button);
 
     const auto library = KiwixApp::instance()->getLibrary();
+    const auto view = KiwixApp::instance()->getTabWidget()->currentWebView();
+    QListWidgetItem* currentItem = nullptr;
+    QIcon currentIcon;
     for (const auto& bookId : library->getBookIds())
     {
         try
@@ -42,11 +45,25 @@ void MultiZimButton::updateDisplay()
         item->setData(Qt::UserRole, bookId);
         item->setData(Qt::DisplayRole, bookTitle);
 
+        if (view && view->zimId() == bookId)
+        {
+            currentItem = item;
+            currentIcon = zimIcon;
+            continue;
+        }
+
         mp_buttonList->addItem(item);
         setItemZimWidget(item, bookTitle, zimIcon);
     }
 
     mp_buttonList->sortItems();
+    if (currentItem)
+    {
+        mp_buttonList->insertItem(0, currentItem);
+
+        const auto title = currentItem->data(Qt::DisplayRole).toString();
+        setItemZimWidget(currentItem, "*" + title, currentIcon);
+    }
 
     /* Display should not be used other than for sorting. */
     for (int i = 0; i < mp_buttonList->count(); i++)
@@ -54,6 +71,7 @@ void MultiZimButton::updateDisplay()
 
     setDisabled(mp_buttonList->model()->rowCount() == 0);
 
+    mp_buttonList->scrollToTop();
     if (const auto firstWidget = getZimWidget(0))
         firstWidget->getRadioButton()->setChecked(true);
 }
