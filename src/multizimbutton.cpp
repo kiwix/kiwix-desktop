@@ -5,6 +5,7 @@
 #include <QRadioButton>
 #include "kiwixapp.h"
 #include "multizimbutton.h"
+#include "css_constants.h"
 
 MultiZimButton::MultiZimButton(QWidget *parent) :
     QToolButton(parent), 
@@ -36,6 +37,8 @@ void MultiZimButton::updateDisplay()
     const auto view = KiwixApp::instance()->getTabWidget()->currentWebView();
     QListWidgetItem* currentItem = nullptr;
     QIcon currentIcon;
+    const int paddingTopBot = CSS::MultiZimButton::QListWidget::paddingVertical * 2;
+    const int itemHeight = paddingTopBot + CSS::ZimItemWidget::QLabel::lineHeight;
     for (const auto& bookId : library->getBookIds())
     {
         try
@@ -49,6 +52,7 @@ void MultiZimButton::updateDisplay()
         const auto item = new QListWidgetItem();
         item->setData(Qt::UserRole, bookId);
         item->setData(Qt::DisplayRole, bookTitle);
+        item->setSizeHint(QSize(0, itemHeight));
 
         if (view && view->zimId() == bookId)
         {
@@ -78,6 +82,11 @@ void MultiZimButton::updateDisplay()
 
     mp_buttonList->scrollToTop();
     mp_buttonList->setCurrentRow(0);
+
+    /* We set a maximum display height for list. Respect padding. */
+    const int listHeight = itemHeight * std::min(7, mp_buttonList->count());
+    mp_buttonList->setFixedHeight(listHeight + paddingTopBot);
+    mp_buttonList->setFixedWidth(menu()->width());
 }
 
 QStringList MultiZimButton::getZimIds() const
@@ -118,8 +127,8 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
 
     textLabel->setText(text);
 
-    /* TODO: change temporary values once size is defined laters */
-    const QSize iconSize = QSize(24, 24);
+    const int iconWidth = CSS::ZimItemWidget::QLabel::lineHeight;
+    const QSize iconSize = QSize(iconWidth, iconWidth);
     iconLabel->setPixmap(icon.pixmap(iconSize));
 
     layout()->addWidget(iconLabel);

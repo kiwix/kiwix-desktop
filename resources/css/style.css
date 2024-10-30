@@ -75,6 +75,18 @@ SearchBar > QToolButton:hover {
     border-radius: 3px;
 }
 
+MultiZimButton QListWidget {
+    border: 0px;
+    outline: 0px;
+    padding: 5px 0px; /* XXX: duplicated in css_constants.h */
+    background-color: white;
+}
+
+ZimItemWidget QLabel {
+    font-size: 16px;
+    line-height: 24px; /* XXX: duplicated in css_constants.h */
+}
+
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;

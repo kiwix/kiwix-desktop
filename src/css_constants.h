@@ -28,6 +28,18 @@ namespace SearchBar{
     const int border = 1;
 }
 
+namespace MultiZimButton {
+namespace QListWidget {
+    const int paddingVertical = 5;
+}
+}
+
+namespace ZimItemWidget {
+namespace QLabel {
+    const int lineHeight = 24;
+}
+}
+
 namespace TopWidget {
 namespace QToolButton {
 namespace backButton {
