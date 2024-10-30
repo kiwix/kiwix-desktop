@@ -82,9 +82,43 @@ MultiZimButton QListWidget {
     background-color: white;
 }
 
+MultiZimButton QListWidget::item {
+    padding: 0px 5px; /* XXX: duplicated in css_constants.h */
+    border: 1px solid transparent; /* XXX: duplicated in css_constants.h */
+    background-color: white;
+}
+
+MultiZimButton QListWidget::item:hover,
+MultiZimButton QListWidget::item:selected:active {
+    border: 1px solid #3366CC;
+    background-color: #D9E9FF;
+}
+
+MultiZimButton QScrollBar {
+    width: 5px; /* XXX: duplicated in css_constants.h */
+    border: none;
+    outline: none;
+}
+
+MultiZimButton QScrollBar::handle {
+    background-color: grey;
+}
+
+ZimItemWidget * {
+    background-color: transparent;
+}
+
 ZimItemWidget QLabel {
     font-size: 16px;
     line-height: 24px; /* XXX: duplicated in css_constants.h */
+}
+
+ZimItemWidget QRadioButton::indicator {
+    image: none;
+}
+
+ZimItemWidget QRadioButton::indicator:checked {
+    image: url(:/icons/tick.svg);
 }
 
 TopWidget QToolButton:pressed,
