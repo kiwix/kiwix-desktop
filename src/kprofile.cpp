@@ -54,10 +54,6 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
         return;
     }
 
-    if (download->isSavePageDownload()) {
-        download->page()->printToPdf(fileName);
-        return;
-    }
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     download->setPath(fileName);
 #else

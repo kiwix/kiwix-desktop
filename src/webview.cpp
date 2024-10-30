@@ -18,6 +18,7 @@ class QMenu;
 #include <kiwix/tools.h>
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
+QString askForSaveFilePath(const QString& suggestedName);
 
 void WebViewBackMenu::showEvent(QShowEvent *)
 {
@@ -176,9 +177,13 @@ void WebView::saveViewContent()
         /* We have to sanitize here, as parsing will start once we pass the file
            name to either save or download method.
         */
-        QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
+        const QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
         if (isHTMLContent(item))
-            page()->save(suggestedFileName + ".pdf");
+        {
+            const QString fileName = askForSaveFilePath(suggestedFileName + ".pdf");
+            if (!fileName.isEmpty())
+                page()->printToPdf(fileName);
+        }
         else
             page()->download(this->url(), suggestedFileName);
     }
