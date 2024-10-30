@@ -48,6 +48,7 @@ private:
     QCompleter m_completer;
     QString m_title;
     QString m_searchbarInput;
+    QString m_suggestionsAreValidFor;
     bool m_returnPressed = false;
     QTimer* mp_typingTimer;
     int m_token;

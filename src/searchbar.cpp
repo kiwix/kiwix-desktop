@@ -132,6 +132,15 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     });
     connect(this, &QLineEdit::returnPressed, this, [=]() {
         m_returnPressed = true;
+
+        /* Open default index when nothing is selected.
+        
+           Key_Return can be pressed during typing, where suggestions no longer
+           match the text typed. Hence the suggestionsValid check.
+         */
+        const bool suggestionsValid = m_suggestionsAreValidFor == m_searchbarInput;
+        if (!m_suggestionView->currentIndex().isValid() && suggestionsValid)
+            openCompletion(getDefaulSuggestionIndex());
     });
     
     auto app = KiwixApp::instance();
@@ -312,10 +321,9 @@ void SearchBarLineEdit::onInitialSuggestions(int)
     } else {
         m_completer.complete(getCompleterRect());
 
-        /* Make row 0 appear but do not highlight it */
-        const auto completerFirstIdx = m_suggestionView->model()->index(0, 0);
+        /* Select nothing by default */
         const auto completerSelModel = m_suggestionView->selectionModel();
-        completerSelModel->setCurrentIndex(completerFirstIdx, QItemSelectionModel::Current);
+        completerSelModel->setCurrentIndex(QModelIndex(), QItemSelectionModel::Current);
     }
 }
 
@@ -330,7 +338,8 @@ void SearchBarLineEdit::onAdditionalSuggestions(int start)
 void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
 {
     const int start = m_suggestionModel.countOfRegularSuggestions();
-    const auto suggestionWorker = new SuggestionListWorker(m_searchbarInput, m_token, start, this);
+    const auto searchText = m_searchbarInput;
+    const auto suggestionWorker = new SuggestionListWorker(searchText, m_token, start, this);
     connect(suggestionWorker, &SuggestionListWorker::searchFinished, this,
             [=] (const QList<SuggestionData>& suggestionList, int token) {
                 if (token != m_token) {
@@ -338,6 +347,7 @@ void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
                 }
 
                 m_suggestionModel.append(suggestionList);
+                m_suggestionsAreValidFor = searchText;
                 const int listSize = suggestionList.size();
                 const bool hasFullText = listSize > 0 && suggestionList.back().isFullTextSearchSuggestion();
                 const int maxFetchSize = SuggestionListWorker::getFetchSize() + hasFullText;
