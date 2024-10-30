@@ -5,6 +5,26 @@
 #include <QMessageBox>
 #include <QWebEngineSettings>
 
+QString askForSaveFilePath(const QString& suggestedName)
+{
+    const auto app = KiwixApp::instance();
+    const QString suggestedPath = app->getPrevSaveDir() + "/" + suggestedName;
+    const QString extension = suggestedName.section(".", -1);
+    const QString filter = extension.isEmpty() ? "" : "(*" + extension + ")";
+    QString fileName = QFileDialog::getSaveFileName(
+            app->getMainWindow(), gt("save-file-as-window-title"),
+            suggestedPath, filter);
+
+    if (fileName.isEmpty())
+        return QString();
+    
+    if (!fileName.endsWith(extension)) {
+        fileName.append(extension);
+    }
+    app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
+    return fileName;
+}
+
 KProfile::KProfile(QObject *parent) :
     QWebEngineProfile(parent)
 {
@@ -24,32 +44,16 @@ void KProfile::startDownload(QWebEngineDownloadItem* download)
 void KProfile::startDownload(QWebEngineDownloadRequest* download)
 #endif
 {
-    auto app = KiwixApp::instance();
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QString defaultFileName = QUrl(download->path()).fileName();
 #else
     QString defaultFileName = download->downloadFileName();
 #endif
-    QString suggestedPath = app->getPrevSaveDir() + "/" + defaultFileName;
-    QString extension = defaultFileName.section('.', -1);
-    QString filter = extension != '.' ? "(*" + extension + ")" : "";
-
-    QString fileName = QFileDialog::getSaveFileName(
-            app->getMainWindow(), gt("save-file-as-window-title"),
-            suggestedPath, filter);
-
+    const QString fileName = askForSaveFilePath(defaultFileName);
     if (fileName.isEmpty()) {
         return;
     }
-    if (!fileName.endsWith(extension)) {
-        fileName.append(extension);
-    }
-    app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
 
-    if (download->isSavePageDownload()) {
-        download->page()->printToPdf(fileName);
-        return;
-    }
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     download->setPath(fileName);
 #else
