@@ -30,7 +30,15 @@ namespace SearchBar{
 
 namespace MultiZimButton {
 namespace QListWidget {
+namespace item {
+    const int paddingHorizontal = 5;
+    const int border = 1;
+}
     const int paddingVertical = 5;
+}
+
+namespace QScrollBar {
+    const int width = 5;
 }
 }
 

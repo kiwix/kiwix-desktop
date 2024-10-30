@@ -122,14 +122,40 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     radioBt(new QRadioButton(this))
 {
     setLayout(new QHBoxLayout);
-    layout()->setSpacing(0);
-    layout()->setContentsMargins(0, 0, 0, 0);
 
-    textLabel->setText(text);
+    const int paddingHorizontal = CSS::MultiZimButton::QListWidget::item::paddingHorizontal;
+    layout()->setSpacing(paddingHorizontal);
+    layout()->setContentsMargins(0, 0, 0, 0);
 
     const int iconWidth = CSS::ZimItemWidget::QLabel::lineHeight;
     const QSize iconSize = QSize(iconWidth, iconWidth);
     iconLabel->setPixmap(icon.pixmap(iconSize));
+
+    /* Align text on same side irregardless of text direction. */
+    const bool needAlignReverse = KiwixApp::isRightToLeft() == text.isRightToLeft();
+    const auto align = needAlignReverse ? Qt::AlignLeft : Qt::AlignRight;
+    textLabel->setAlignment({Qt::AlignVCenter | align});
+
+    /* Need to align checkmark with select all button. Avoid scroller from 
+       changing checkmark position by always leaving out space on scroller's 
+       side. Do this by align items to the other side and reducing the total
+       length. textLabel is the only expandable element here.
+
+       We set textLabel width to make sure the entire length always leave out 
+       a fixed amount of white space for scroller.
+    */
+    layout()->setAlignment({Qt::AlignVCenter | Qt::AlignLeading});
+    const auto menu = KiwixApp::instance()->getSearchBar().getMultiZimButton().menu();
+    const int iconAndCheckerWidth = iconWidth * 2;
+    const int totalSpacing = paddingHorizontal * 4;
+
+    /* Add an extra border to counteract item border on one side */
+    const int border = CSS::MultiZimButton::QListWidget::item::border;
+    const int scrollerWidth = CSS::MultiZimButton::QScrollBar::width;
+    const int contentWidthExcludeText = iconAndCheckerWidth + totalSpacing + scrollerWidth + border;
+
+    textLabel->setFixedWidth(menu->width() - contentWidthExcludeText);
+    textLabel->setText(text);
 
     layout()->addWidget(iconLabel);
     layout()->addWidget(textLabel);
