@@ -172,5 +172,6 @@
     "portable-disabled-tooltip": "Function disabled in portable mode",
     "scroll-next-tab": "Scroll to next tab",
     "scroll-previous-tab": "Scroll to previous tab",
-    "kiwix-search": "Kiwix search"
+    "kiwix-search": "Kiwix search",
+    "search-options": "Search Options"
 }
