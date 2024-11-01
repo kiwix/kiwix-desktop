@@ -39,6 +39,7 @@ public:
         BrowseLibraryAction,
         OpenFileAction,
         OpenRecentAction,
+        OpenMultiZimAction,
         SavePageAsAction,
         SearchArticleAction,
         SearchLibraryAction,

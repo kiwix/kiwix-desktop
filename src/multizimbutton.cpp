@@ -13,6 +13,8 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
 {
     setMenu(new QMenu(this));
     setPopupMode(QToolButton::InstantPopup);
+    setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::OpenMultiZimAction));
+    connect(this, &QToolButton::triggered, this, &MultiZimButton::showMenu);
 
     const auto popupAction = new QWidgetAction(menu());
     popupAction->setDefaultWidget(mp_buttonList);

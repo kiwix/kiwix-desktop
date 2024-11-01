@@ -438,6 +438,8 @@ void KiwixApp::createActions()
     CREATE_ACTION_SHORTCUT(ToggleTOCAction, gt("table-of-content"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_1));
     HIDE_ACTION(ToggleTOCAction);
 
+    CREATE_ACTION_ICON_SHORTCUT(OpenMultiZimAction, "filter", gt("search-options"), QKeySequence(Qt::CTRL | Qt::Key_M));
+
     CREATE_ACTION_ONOFF_ICON_SHORTCUT(ToggleReadingListAction, "reading-list-active", "reading-list", gt("reading-list"), QKeySequence(Qt::CTRL | Qt::Key_B));
 
     CREATE_ACTION(ExportReadingListAction, gt("export-reading-list"));
