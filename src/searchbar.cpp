@@ -237,8 +237,8 @@ void SearchBarLineEdit::updateCompletion()
 {
     mp_typingTimer->stop();
     clearSuggestions();
-    WebView* current = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if (!current || current->url().isEmpty() || m_searchbarInput.isEmpty()) {
+    const auto& multiZim = KiwixApp::instance()->getSearchBar().getMultiZimButton();
+    if (multiZim.getZimIds().isEmpty() || m_searchbarInput.isEmpty()) {
         hideSuggestions();
         return;
     }
@@ -311,7 +311,9 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
     if (index.isValid())
     {
         const QUrl url = index.data(Qt::UserRole).toUrl();
-        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
+        const auto app = KiwixApp::instance();
+        const bool newTab = app->getTabWidget()->currentWebView() == nullptr;
+        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, newTab);});
     }
 }
 
