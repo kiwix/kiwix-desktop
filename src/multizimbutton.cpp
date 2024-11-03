@@ -12,16 +12,23 @@ QString getElidedText(const QFont& font, int length, const QString& text);
 MultiZimButton::MultiZimButton(QWidget *parent) :
     QToolButton(parent), 
     mp_buttonList(new QListWidget),
-    mp_radioButtonGroup(new QButtonGroup(this))
+    mp_radioButtonGroup(new QButtonGroup(this)),
+    mp_selectAllButton(new QCheckBox(gt("select-all"), this))
 {
     setMenu(new QMenu(this));
     setPopupMode(QToolButton::InstantPopup);
     setDefaultAction(KiwixApp::instance()->getAction(KiwixApp::OpenMultiZimAction));
     connect(this, &QToolButton::triggered, this, &MultiZimButton::showMenu);
 
-    const auto popupAction = new QWidgetAction(menu());
-    popupAction->setDefaultWidget(mp_buttonList);
-    menu()->addAction(popupAction);
+    mp_selectAllButton->setObjectName("selectAllButton");
+    const auto align = KiwixApp::isRightToLeft() ? Qt::LeftToRight : Qt::RightToLeft;
+    mp_selectAllButton->setLayoutDirection(align);
+
+    const auto buttonListAction = new QWidgetAction(menu());
+    const auto selectAllAction = new QWidgetAction(menu());
+    buttonListAction->setDefaultWidget(mp_buttonList);
+    selectAllAction->setDefaultWidget(mp_selectAllButton);
+    menu()->addActions({buttonListAction, selectAllAction});
 
     connect(mp_buttonList, &QListWidget::currentRowChanged, this, [=](int row){
         if (const auto widget = getZimWidget(row))

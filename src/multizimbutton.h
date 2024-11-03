@@ -8,6 +8,7 @@ class QButtonGroup;
 class QListWidgetItem;
 class QRadioButton;
 class QLabel;
+class QCheckBox;
 
 class ZimItemWidget : public QWidget {
     Q_OBJECT
@@ -36,6 +37,7 @@ public slots:
 private:
     QListWidget* mp_buttonList;
     QButtonGroup* mp_radioButtonGroup;
+    QCheckBox* mp_selectAllButton;
 
     ZimItemWidget* getZimWidget(int row) const;
     void setItemZimWidget(QListWidgetItem* item, const QString& title, const QIcon& icon);
