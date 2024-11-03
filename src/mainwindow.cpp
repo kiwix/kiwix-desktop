@@ -172,9 +172,18 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     updateTabButtons();
 }
 
+void checkActionNoSignal(KiwixApp::Actions actionFlag, bool checked)
+{
+    const auto action = KiwixApp::instance()->getAction(actionFlag);
+    const bool oldState = action->blockSignals(true);
+    action->setChecked(checked);
+    action->blockSignals(oldState);
+}
+
 void MainWindow::readingListToggled(bool state)
 {
     if (state) {
+        checkActionNoSignal(KiwixApp::ToggleTOCAction, false);
         mp_ui->sideBar->setCurrentWidget(mp_ui->readinglistbar);
         mp_ui->sideBar->show();
     }
@@ -186,6 +195,7 @@ void MainWindow::readingListToggled(bool state)
 void MainWindow::tableOfContentToggled(bool state)
 {
     if (state) {
+        checkActionNoSignal(KiwixApp::ToggleReadingListAction, false);
         mp_ui->sideBar->setCurrentWidget(mp_ui->tableofcontentbar);
         mp_ui->sideBar->show();
     }
@@ -197,13 +207,18 @@ void MainWindow::tableOfContentToggled(bool state)
 void MainWindow::tabChanged(TabType tabType) 
 {
     QAction *readingList = KiwixApp::instance()->getAction(KiwixApp::ToggleReadingListAction);
+    QAction *tableOfContent = KiwixApp::instance()->getAction(KiwixApp::ToggleTOCAction);
     if (tabType == TabType::SettingsTab) { 
         mp_ui->sideBar->hide();    
     } else if(tabType == TabType::LibraryTab) { 
         mp_ui->sideBar->setCurrentWidget(mp_ui->contentmanagerside);
         mp_ui->sideBar->show();
-    } else { 
-        readingListToggled(readingList->isChecked());
+    } else if (readingList->isChecked()) {
+        readingListToggled(true);
+    } else if (tableOfContent->isChecked()) {
+        tableOfContentToggled(true);
+    } else {
+        mp_ui->sideBar->hide();
     }
 }
 
