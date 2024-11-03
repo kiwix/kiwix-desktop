@@ -44,6 +44,26 @@ void SuggestionListDelegate::paintIcon(QPainter *p,
     p->drawPixmap(pixmapRect, pixmap);
 }
 
+/**
+ * @brief Get the elided text using font that can fit inside the length when 
+ * appended with the custom elide text "(...)".
+ * 
+ * @param font 
+ * @param textRect 
+ * @param text 
+ * @return QString the elided text without any marker.
+ */
+QString getElidedText(const QFont& font, int length, const QString& text)
+{
+    const QFontMetrics metrics(font);
+    const int elideMarkerLength = metrics.tightBoundingRect("(...)").width();
+    const int textLength = length - elideMarkerLength;
+    QString elidedText = metrics.elidedText(text, Qt::ElideRight, textLength);
+    if (elidedText != text)
+        return elidedText.chopped(1);
+    return text;
+}
+
 void SuggestionListDelegate::paintText(QPainter *p,
                                        const QStyleOptionViewItem &opt,
                                        const QModelIndex &index) const
@@ -70,15 +90,9 @@ void SuggestionListDelegate::paintText(QPainter *p,
     const QString text = index.data(Qt::DisplayRole).toString();
 
     /* Custom text elide. */
-    const QFontMetrics metrics = opt.fontMetrics;
-    const int elideMarkerLength = metrics.tightBoundingRect("(...)").width();
-    const int textLength = textRect.width() - elideMarkerLength;
-    QString elidedText = metrics.elidedText(text, Qt::ElideRight, textLength);
+    QString elidedText = getElidedText(opt.font, textRect.width(), text);
     if (elidedText != text)
     {
-        /* Remove built-in elide marker */
-        elidedText.chop(1);
-
         /* drawText's Align direction determines text direction */
         const bool textDirFlipped = KiwixApp::isRightToLeft() != text.isRightToLeft();
         elidedText = textDirFlipped ? "(...)" + elidedText.trimmed() 
