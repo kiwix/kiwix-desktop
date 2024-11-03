@@ -58,6 +58,8 @@ KProfile::KProfile(QObject *parent) :
 #endif
 
     scripts()->insert(getScript(":/js/headerAnchor.js"));
+    scripts()->insert(getScript(":/qtwebchannel/qwebchannel.js", 
+                      QWebEngineScript::DocumentCreation));
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

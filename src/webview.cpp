@@ -16,6 +16,9 @@ class QMenu;
 #include <zim/error.h>
 #include <zim/item.h>
 #include <kiwix/tools.h>
+#include <QWebChannel>
+#include <QWebEngineScript>
+#include "kiwixwebchannelobject.h"
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 QString askForSaveFilePath(const QString& suggestedName);
@@ -97,6 +100,11 @@ WebView::WebView(QWidget *parent)
         }
     });
 #endif
+
+    const auto channel = new QWebChannel(this);
+    const auto kiwixChannelObj = new KiwixWebChannelObject;
+    page()->setWebChannel(channel, QWebEngineScript::UserWorld);
+    channel->registerObject("kiwixChannelObj", kiwixChannelObj);
 }
 
 WebView::~WebView()
