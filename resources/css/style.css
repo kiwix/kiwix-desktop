@@ -121,6 +121,32 @@ ZimItemWidget QRadioButton::indicator:checked {
     image: url(:/icons/tick.svg);
 }
 
+#selectAllButton {
+    background-color: white;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    padding: 5px 10px 10px;
+    outline: none;
+}
+
+#selectAllButton::indicator {
+    width: 24px;
+    height: 24px;
+}
+
+#selectAllButton::indicator:focus {
+    background-color: #D9E9FF;
+}
+
+#selectAllButton::indicator:unchecked {
+    image: url(:/icons/checkbox.svg);
+}
+
+#selectAllButton::indicator:checked {
+    image: url(:/icons/checkbox-active.svg);
+}
+
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
     border: 1px solid #3366CC;

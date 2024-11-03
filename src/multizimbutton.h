@@ -2,12 +2,23 @@
 #define MULTIZIMBUTTON_H
 
 #include <QToolButton>
+#include <QCheckBox>
 
 class QListWidget;
 class QButtonGroup;
 class QListWidgetItem;
 class QRadioButton;
 class QLabel;
+
+class SelectAllButton : public QCheckBox {
+    Q_OBJECT
+
+public:
+    SelectAllButton(const QString &text, QWidget *parent = nullptr) : QCheckBox(text, parent) {}
+
+protected:
+    void keyPressEvent(QKeyEvent *e) override;
+};
 
 class ZimItemWidget : public QWidget {
     Q_OBJECT
@@ -36,6 +47,7 @@ public slots:
 private:
     QListWidget* mp_buttonList;
     QButtonGroup* mp_radioButtonGroup;
+    SelectAllButton* mp_selectAllButton;
 
     ZimItemWidget* getZimWidget(int row) const;
     void setItemZimWidget(QListWidgetItem* item, const QString& title, const QIcon& icon);
