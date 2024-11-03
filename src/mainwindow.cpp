@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, &MainWindow::toggleFullScreen);
     connect(app->getAction(KiwixApp::ToggleReadingListAction), &QAction::toggled,
             this, &MainWindow::readingListToggled);
+    connect(app->getAction(KiwixApp::ToggleTOCAction), &QAction::toggled,
+            this, &MainWindow::tableOfContentToggled);
     connect(app->getAction(KiwixApp::AboutAction), &QAction::triggered,
             mp_about, &QDialog::show);
     connect(app->getAction(KiwixApp::DonateAction), &QAction::triggered,
@@ -174,6 +176,17 @@ void MainWindow::readingListToggled(bool state)
 {
     if (state) {
         mp_ui->sideBar->setCurrentWidget(mp_ui->readinglistbar);
+        mp_ui->sideBar->show();
+    }
+    else {
+        mp_ui->sideBar->hide();
+    }
+}
+
+void MainWindow::tableOfContentToggled(bool state)
+{
+    if (state) {
+        mp_ui->sideBar->setCurrentWidget(mp_ui->tableofcontentbar);
         mp_ui->sideBar->show();
     }
     else {

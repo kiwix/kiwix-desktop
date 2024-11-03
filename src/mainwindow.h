@@ -35,6 +35,7 @@ private slots:
     void toggleFullScreen();
     void tabChanged(TabBar::TabType);
     void readingListToggled(bool state);
+    void tableOfContentToggled(bool state);
     void hideTabAndTop();
     void showTabAndTop();
     void updateTabButtons();

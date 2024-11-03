@@ -85,6 +85,7 @@ SOURCES += \
     src/tabbar.cpp \
     src/contentmanagerside.cpp \
     src/readinglistbar.cpp \
+    src/tableofcontentbar.cpp \
     src/klistwidgetitem.cpp \
     src/opdsrequestmanager.cpp \
     src/localkiwixserver.cpp \
@@ -135,6 +136,7 @@ HEADERS += \
     src/tabbar.h \
     src/contentmanagerside.h \
     src/readinglistbar.h \
+    src/tableofcontentbar.h \
     src/klistwidgetitem.h \
     src/opdsrequestmanager.h \
     src/localkiwixserver.h \
@@ -158,7 +160,8 @@ FORMS += \
     src/contentmanagerside.ui \
     src/readinglistbar.ui \
     ui/localkiwixserver.ui \
-    ui/settings.ui
+    ui/settings.ui \
+    src/tableofcontentbar.ui \
 
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8

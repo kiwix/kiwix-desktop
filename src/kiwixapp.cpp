@@ -435,8 +435,8 @@ void KiwixApp::createActions()
     });
     mpa_actions[ToggleFullscreenAction]->setCheckable(true);
 
-    CREATE_ACTION_SHORTCUT(ToggleTOCAction, gt("table-of-content"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_1));
-    HIDE_ACTION(ToggleTOCAction);
+    CREATE_ACTION_ICON_SHORTCUT(ToggleTOCAction, "toc", gt("table-of-content"), QKeySequence(Qt::CTRL | Qt::Key_M));
+    mpa_actions[ToggleTOCAction]->setCheckable(true);
 
     CREATE_ACTION_ICON_SHORTCUT(OpenMultiZimAction, "filter", gt("search-options"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_L));
 
@@ -492,6 +492,7 @@ void KiwixApp::handleItemsState(TabType tabType)
     auto libraryOrSettingsTab =  (tabType == TabType::LibraryTab || tabType == TabType::SettingsTab);
     auto notBookmarkableTab = libraryOrSettingsTab || getTabWidget()->currentArticleUrl().isEmpty();
     auto app = KiwixApp::instance();
+    app->getAction(KiwixApp::ToggleTOCAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::ToggleAddBookmarkAction)->setDisabled(notBookmarkableTab);
     app->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryOrSettingsTab);
