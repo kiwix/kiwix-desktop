@@ -13,7 +13,7 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
     QToolButton(parent), 
     mp_buttonList(new QListWidget),
     mp_radioButtonGroup(new QButtonGroup(this)),
-    mp_selectAllButton(new QCheckBox(gt("select-all"), this))
+    mp_selectAllButton(new SelectAllButton(gt("select-all"), this))
 {
     setMenu(new QMenu(this));
     setPopupMode(QToolButton::InstantPopup);
@@ -171,4 +171,14 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     layout()->addWidget(iconLabel);
     layout()->addWidget(textLabel);
     layout()->addWidget(radioBt);
+}
+
+void SelectAllButton::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+    {
+        toggle();
+        return;
+    }
+    QCheckBox::keyPressEvent(e);
 }
