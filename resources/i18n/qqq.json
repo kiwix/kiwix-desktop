@@ -180,5 +180,6 @@
 	"portable-disabled-tooltip": "Tooltip used to explain disabled components in the portable version.",
 	"scroll-next-tab": "Represents the action of scrolling to the next tab of the current tab which toward the end of the tab bar.",
 	"scroll-previous-tab": "Represents the action of scrolling to the previous tab of the current tab which toward the start of the tab bar.",
-	"kiwix-search": "Title text for a list of search results, which notes to the user those are from Kiwix's Search Engine"
+	"kiwix-search": "Title text for a list of search results, which notes to the user those are from Kiwix's Search Engine",
+	"search-options": "The term for a collection of additional search filtering options to help users narrow down search results."
 }

@@ -204,7 +204,8 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
     }
     if (event->reason() == Qt::ActiveWindowFocusReason ||
         event->reason() == Qt::MouseFocusReason ||
-        event->reason() == Qt::ShortcutFocusReason) {
+        event->reason() == Qt::ShortcutFocusReason ||
+        event->reason() == Qt::PopupFocusReason) {
         connect(&m_completer, QOverload<const QString &>::of(&QCompleter::activated),
                 this, &QLineEdit::setText,Qt::UniqueConnection);
 
@@ -236,8 +237,8 @@ void SearchBarLineEdit::updateCompletion()
 {
     mp_typingTimer->stop();
     clearSuggestions();
-    WebView* current = KiwixApp::instance()->getTabWidget()->currentWebView();
-    if (!current || current->url().isEmpty() || m_searchbarInput.isEmpty()) {
+    const auto& multiZim = KiwixApp::instance()->getSearchBar().getMultiZimButton();
+    if (multiZim.getZimIds().isEmpty() || m_searchbarInput.isEmpty()) {
         hideSuggestions();
         return;
     }
@@ -310,7 +311,9 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
     if (index.isValid())
     {
         const QUrl url = index.data(Qt::UserRole).toUrl();
-        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, false);});
+        const auto app = KiwixApp::instance();
+        const bool newTab = app->getTabWidget()->currentWebView() == nullptr;
+        QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, newTab);});
     }
 }
 
@@ -414,7 +417,8 @@ QRect SearchBarLineEdit::getCompleterRect() const
 SearchBar::SearchBar(QWidget *parent) :
     QToolBar(parent),
     m_searchBarLineEdit(this),
-    m_bookmarkButton(this)
+    m_bookmarkButton(this),
+    m_multiZimButton(this)
 {
     QLabel* searchIconLabel = new QLabel; 
     searchIconLabel->setObjectName("searchIcon");
@@ -425,9 +429,15 @@ SearchBar::SearchBar(QWidget *parent) :
     addWidget(searchIconLabel);
     addWidget(&m_searchBarLineEdit);
     addWidget(&m_bookmarkButton);
+    addWidget(&m_multiZimButton);
 
     connect(this, &SearchBar::currentTitleChanged, &m_searchBarLineEdit,
             &SearchBarLineEdit::on_currentTitleChanged);
     connect(this, &SearchBar::currentTitleChanged, &m_bookmarkButton,
             &BookmarkButton::update_display);
+    connect(KiwixApp::instance()->getContentManager(),
+            &ContentManager::booksChanged, &m_multiZimButton,
+            &MultiZimButton::updateDisplay);
+    connect(this, &SearchBar::currentTitleChanged, &m_multiZimButton,
+            &MultiZimButton::updateDisplay);
 }
