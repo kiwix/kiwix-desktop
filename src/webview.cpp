@@ -105,6 +105,10 @@ WebView::WebView(QWidget *parent)
     const auto kiwixChannelObj = new KiwixWebChannelObject;
     page()->setWebChannel(channel, QWebEngineScript::UserWorld);
     channel->registerObject("kiwixChannelObj", kiwixChannelObj);
+    
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    connect(tabbar, &TabBar::currentTitleChanged, this, &WebView::onCurrentTitleChanged);
+    connect(kiwixChannelObj, &KiwixWebChannelObject::headersChanged, this, &WebView::onHeadersReceived);
 }
 
 WebView::~WebView()
@@ -198,7 +202,31 @@ void WebView::saveViewContent()
     catch (...) { /* Blank */}
 }
 
-void WebView::addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const
+void WebView::onCurrentTitleChanged()
+{
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    const auto noAnchorUrl = url().url(QUrl::RemoveFragment);
+    const auto headersValid = m_headers["url"].toString() == noAnchorUrl;
+
+    /* If headers not valid for this webview, then we are loading and the emit 
+       will be handled by KiwixWebChannelObject::headersChanged.
+    */
+    if (tabbar->currentWebView() == this && headersValid)
+        emit headersChanged(m_headers);
+}
+
+void WebView::onHeadersReceived(const QJsonObject& headers)
+{
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    m_headers = QJsonObject(headers);
+    
+    if (tabbar->currentWebView() == this)
+        emit headersChanged(m_headers);
+}
+
+void WebView::addHistoryItemAction(QMenu *menu,
+                                   const QWebEngineHistoryItem &item,
+                                   int n) const
 {
     QAction *a = menu->addAction(item.title());
     a->setData(QVariant::fromValue(n));

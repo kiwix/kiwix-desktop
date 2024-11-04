@@ -9,6 +9,11 @@ class KiwixWebChannelObject : public QObject
 
 public:
     explicit KiwixWebChannelObject(QObject *parent = nullptr) : QObject(parent) {};
+
+    Q_INVOKABLE void sendHeaders(const QJsonObject& headers) { emit headersChanged(headers); };
+
+signals:
+    void headersChanged(const QJsonObject& headers);
 };
 
 #endif // KIWIXWEBCHANNELOBJECT_H
