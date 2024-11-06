@@ -15,6 +15,9 @@ public:
     explicit TableOfContentBar(QWidget *parent = nullptr);
     ~TableOfContentBar();
 
+public slots:
+    void setupTree(const QJsonObject& headers);
+
 private:
     Ui::tableofcontentbar *ui;
 };

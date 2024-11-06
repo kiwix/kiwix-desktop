@@ -231,3 +231,8 @@ TopWidget *MainWindow::getTopWidget()
 {
     return mp_ui->mainToolBar;
 }
+
+TableOfContentBar *MainWindow::getTableOfContentBar()
+{
+    return mp_ui->tableofcontentbar;
+}

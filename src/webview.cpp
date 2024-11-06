@@ -19,6 +19,7 @@ class QMenu;
 #include <QWebChannel>
 #include <QWebEngineScript>
 #include "kiwixwebchannelobject.h"
+#include "tableofcontentbar.h"
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 QString askForSaveFilePath(const QString& suggestedName);
@@ -109,6 +110,9 @@ WebView::WebView(QWidget *parent)
     const auto tabbar = KiwixApp::instance()->getTabWidget();
     connect(tabbar, &TabBar::currentTitleChanged, this, &WebView::onCurrentTitleChanged);
     connect(kiwixChannelObj, &KiwixWebChannelObject::headersChanged, this, &WebView::onHeadersReceived);
+
+    const auto tocbar = KiwixApp::instance()->getMainWindow()->getTableOfContentBar();
+    connect(this, &WebView::headersChanged, tocbar, &TableOfContentBar::setupTree);
 }
 
 WebView::~WebView()
