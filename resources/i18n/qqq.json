@@ -53,6 +53,7 @@
 	"donate-to-support-kiwix": "Represents the action of donating to support the Kiwix Organization.",
 	"exit": "Represents the action of exiting the desktop application",
 	"save-file-as-window-title": "Title text of the window prompting user to save as a new file.",
+	"download-finished": "Title of the message box announcing the completion of a download",
 	"download-finished-message": "Text displayed when the download action has been completed",
 	"file": "{{Identical|File}}",
 	"edit": "{{Identical|Edit}}",

@@ -1,8 +1,9 @@
 #include "kprofile.h"
 
 #include "kiwixapp.h"
+#include "kiwixmessagebox.h"
+
 #include <QFileDialog>
-#include <QMessageBox>
 #include <QWebEngineSettings>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
@@ -64,7 +65,7 @@ KProfile::KProfile(QObject *parent) :
 #endif
 
     scripts()->insert(getScript(":/js/headerAnchor.js"));
-    scripts()->insert(getScript(":/qtwebchannel/qwebchannel.js", 
+    scripts()->insert(getScript(":/qtwebchannel/qwebchannel.js",
                       QWebEngineScript::DocumentCreation));
 }
 
@@ -112,9 +113,10 @@ void KProfile::startDownload(WebEngineDownloadType* download)
 
 void KProfile::downloadFinished()
 {
-    QMessageBox msgBox;
-    msgBox.setText(gt("download-finished-message"));
-    msgBox.exec();
+    showInfoBox(gt("download-finished"),
+                gt("download-finished-message"),
+                KiwixApp::instance()->getMainWindow()
+    );
 }
 
 void ExternalReqInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
