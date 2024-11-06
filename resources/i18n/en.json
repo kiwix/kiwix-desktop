@@ -9,6 +9,7 @@
     "error-downloader-launch-message":"Impossible to launch downloader, Kiwix-desktop will start but all download functions will not working!",
     "error-launch-server-message":"An error has occured!",
     "error-archive":"Cannot get the archive",
+    "error-opening-file": "There was an error opening the file.",
     "open-zim":"Open ZIM File",
     "local-kiwix-server":"Local Kiwix Server",
     "random-article":"Random Article",
@@ -23,6 +24,7 @@
     "reopen-closed-tab":"Reopen closed tab",
     "browse-library":"Browse library",
     "open-file":"Open file",
+    "save-file": "Save file",
     "open-recent":"Open recent",
     "search-article":"Search article",
     "search-in-library":"Search in library",
@@ -181,5 +183,7 @@
     "stop": "Stop",
     "voice": "Voice",
     "select-read-voice": "Select reading voice",
-    "select-read-language": "Select reading language"
+    "select-read-language": "Select reading language",
+    "save-or-open": "Save or Open file",
+    "save-or-open-text": "What should Kiwix do with this file?"
 }

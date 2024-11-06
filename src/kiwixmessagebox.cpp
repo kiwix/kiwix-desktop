@@ -64,4 +64,3 @@ KiwixMessageBox::Result showKiwixMessageBox(QString title, QString text, QWidget
     });
     return dialog->execDialog();
 }
-

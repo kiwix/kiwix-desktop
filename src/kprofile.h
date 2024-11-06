@@ -23,10 +23,12 @@ private:
     UrlSchemeHandler m_schemeHandler;
 
 signals:
-public slots:
-    void startDownload(WebEngineDownloadType*);
 
+private slots:
+    void startDownload(WebEngineDownloadType*);
     void downloadFinished();
+    void saveFile(WebEngineDownloadType*);
+    void openFile(WebEngineDownloadType*);
 };
 
 /**

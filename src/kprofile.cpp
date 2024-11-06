@@ -7,6 +7,8 @@
 #include <QWebEngineSettings>
 #include <QWebEngineScript>
 #include <QWebEngineScriptCollection>
+#include <QDesktopServices>
+#include <QTemporaryFile>
 
 namespace
 {
@@ -98,11 +100,32 @@ QString getDownloadFilePath(WebEngineDownloadType* download)
 
 } // unnamed namespace
 
-void KProfile::startDownload(WebEngineDownloadType* download)
+void KProfile::openFile(WebEngineDownloadType* download)
+{
+    const QString defaultFileName = getDownloadFilePath(download);
+    QTemporaryFile tempFile(QDir::tempPath() + "/XXXXXX." + QFileInfo(defaultFileName).suffix());
+    tempFile.setAutoRemove(false);
+    if (tempFile.open()) {
+        QString tempFilePath = tempFile.fileName();
+        tempFile.close();
+        setDownloadFilePath(download, tempFilePath);
+        connect(download, &DownloadFinishedSignal, [tempFilePath]() {
+            if(!QDesktopServices::openUrl(QUrl::fromLocalFile(tempFilePath)))
+                showInfoBox(gt("error-title"), gt("error-opening-file"), KiwixApp::instance()->getMainWindow());
+        });
+        download->accept();
+    } else {
+        qDebug()<<"tmp file err";
+        download->cancel();
+    }
+}
+
+void KProfile::saveFile(WebEngineDownloadType* download)
 {
     const QString defaultFileName = getDownloadFilePath(download);
     const QString fileName = askForSaveFilePath(defaultFileName);
     if (fileName.isEmpty()) {
+        download->cancel();
         return;
     }
 
@@ -117,6 +140,27 @@ void KProfile::downloadFinished()
                 gt("download-finished-message"),
                 KiwixApp::instance()->getMainWindow()
     );
+}
+
+void KProfile::startDownload(WebEngineDownloadType* download)
+{
+    const auto res = showKiwixMessageBox(
+                            gt("save-or-open"),
+                            gt("save-or-open-text"),
+                            KiwixApp::instance()->getMainWindow(),
+                            gt("save-file"),
+                            gt("open-file")
+    );
+
+    if (res == KiwixMessageBox::YesClicked) {
+        saveFile(download);
+        return;
+    }
+    if (res == KiwixMessageBox::NoClicked) {
+        openFile(download);
+        return;
+    }
+    download->cancel();
 }
 
 void ExternalReqInterceptor::interceptRequest(QWebEngineUrlRequestInfo &info)
