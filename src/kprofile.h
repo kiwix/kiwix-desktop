@@ -5,8 +5,10 @@
 #include <QWebEngineUrlRequestInterceptor>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QWebEngineDownloadItem>
+typedef QWebEngineDownloadItem WebEngineDownloadType;
 #else
 #include <QWebEngineDownloadRequest>
+typedef QWebEngineDownloadRequest WebEngineDownloadType;
 #endif
 
 #include "urlschemehandler.h"
@@ -22,12 +24,8 @@ private:
 
 signals:
 public slots:
+    void startDownload(WebEngineDownloadType*);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    void startDownload(QWebEngineDownloadItem*);
-#else
-    void startDownload(QWebEngineDownloadRequest*);
-#endif
     void downloadFinished();
 };
 

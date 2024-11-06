@@ -25,6 +25,12 @@ QWebEngineScript getScript(QString filename,
 
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    #define DownloadFinishedSignal WebEngineDownloadType::finished
+#else
+    #define DownloadFinishedSignal WebEngineDownloadType::isFinishedChanged
+#endif
+
 QString askForSaveFilePath(const QString& suggestedName)
 {
     const auto app = KiwixApp::instance();
@@ -62,32 +68,45 @@ KProfile::KProfile(QObject *parent) :
                       QWebEngineScript::DocumentCreation));
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void KProfile::startDownload(QWebEngineDownloadItem* download)
-#else
-void KProfile::startDownload(QWebEngineDownloadRequest* download)
-#endif
+namespace
 {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    QString defaultFileName = QUrl(download->path()).fileName();
+
+void setDownloadFilePath(WebEngineDownloadType* download, QString filePath)
+{
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    // WebEngineDownloadType is QWebEngineDownloadItem
+    // and no QWebEngineDownloadItem::setDownloadFileName() yet
+    download->setPath(filePath);
 #else
-    QString defaultFileName = download->downloadFileName();
+    // Same API for QWebEngineDownloadItem and QWebEngineDownloadRequest
+    download->setDownloadFileName(filePath);
 #endif
+}
+
+QString getDownloadFilePath(WebEngineDownloadType* download)
+{
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
+    // WebEngineDownloadType is QWebEngineDownloadItem
+    // and no QWebEngineDownloadItem::downloadFileName() yet
+    return QUrl(download->path()).fileName();
+#else
+    // Same API for QWebEngineDownloadItem and QWebEngineDownloadRequest
+    return download->downloadFileName();
+#endif
+}
+
+} // unnamed namespace
+
+void KProfile::startDownload(WebEngineDownloadType* download)
+{
+    const QString defaultFileName = getDownloadFilePath(download);
     const QString fileName = askForSaveFilePath(defaultFileName);
     if (fileName.isEmpty()) {
         return;
     }
 
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-    download->setPath(fileName);
-#else
-    download->setDownloadFileName(fileName);
-#endif
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    connect(download, &QWebEngineDownloadItem::finished, this, &KProfile::downloadFinished);
-#else
-    connect(download, &QWebEngineDownloadRequest::isFinishedChanged, this, &KProfile::downloadFinished);
-#endif
+    setDownloadFilePath(download, fileName);
+    connect(download, &DownloadFinishedSignal, this, &KProfile::downloadFinished);
     download->accept();
 }
 
