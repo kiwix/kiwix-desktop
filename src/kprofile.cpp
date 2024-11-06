@@ -37,7 +37,7 @@ QString askForSaveFilePath(const QString& suggestedName)
 
     if (fileName.isEmpty())
         return QString();
-    
+
     if (!fileName.endsWith(extension)) {
         fileName.append(extension);
     }
@@ -86,7 +86,7 @@ void KProfile::startDownload(QWebEngineDownloadRequest* download)
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     connect(download, &QWebEngineDownloadItem::finished, this, &KProfile::downloadFinished);
 #else
-    connect(download, &QWebEngineDownloadRequest::isFinished, this, &KProfile::downloadFinished);
+    connect(download, &QWebEngineDownloadRequest::isFinishedChanged, this, &KProfile::downloadFinished);
 #endif
     download->accept();
 }
