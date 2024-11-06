@@ -55,6 +55,7 @@ signals:
     void iconChanged(const QIcon& icon);
     void zimIdChanged(const QString& zimId);
     void headersChanged(const QJsonObject& headers);
+    void navigationRequested(const QString& url, const QString& anchor);
 
 protected:
     virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
@@ -71,6 +72,7 @@ private slots:
     void gotoTriggeredHistoryItemAction();
     void onCurrentTitleChanged();
     void onHeadersReceived(const QJsonObject& headers);
+    void onNavigationRequested(const QString& url, const QString& anchor);
 
 private:
     void addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const;

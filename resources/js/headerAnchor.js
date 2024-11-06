@@ -46,4 +46,8 @@ function getHeaders()
 new QWebChannel(qt.webChannelTransport, function(channel) {
     var kiwixObj = channel.objects.kiwixChannelObj;
     kiwixObj.sendHeaders(getHeaders());
+    kiwixObj.navigationRequested.connect(function(url, anchor) {
+        if (window.location.href.replace(location.hash,"") == url)
+            document.getElementById(anchor).scrollIntoView();
+    });
 });

@@ -12,11 +12,18 @@ TableOfContentBar::TableOfContentBar(QWidget *parent) :
     ui->titleLabel->setText(gt("table-of-content"));
     ui->tree->setRootIsDecorated(false);
     ui->tree->setItemsExpandable(false);
+    connect(ui->tree, &QTreeWidget::itemClicked, this, &TableOfContentBar::onTreeItemActivated);
+    connect(ui->tree, &QTreeWidget::itemActivated, this, &TableOfContentBar::onTreeItemActivated);
 }
 
 TableOfContentBar::~TableOfContentBar()
 {
     delete ui;
+}
+
+void TableOfContentBar::onTreeItemActivated(QTreeWidgetItem *item)
+{
+    emit navigationRequested(m_url, item->data(0, Qt::UserRole).toString());
 }
 
 namespace
@@ -27,6 +34,7 @@ QTreeWidgetItem* createChildItem(QTreeWidgetItem* parent, const QJsonObject& hea
     const auto item = new QTreeWidgetItem(parent);
     item->setExpanded(true);
     item->setData(0, Qt::DisplayRole, headerObj["text"].toString());
+    item->setData(0, Qt::UserRole, headerObj["anchor"].toString());
 
     return item;
 }
@@ -68,6 +76,7 @@ void TableOfContentBar::setupTree(const QJsonObject& headers)
     if (headerUrl != currentUrl)
         return;
     
+    m_url = headerUrl;
     ui->tree->clear();
     QJsonArray headerArr = headers["headers"].toArray();
     createSubTree(ui->tree->invisibleRootItem(), headerArr);

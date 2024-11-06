@@ -113,6 +113,8 @@ WebView::WebView(QWidget *parent)
 
     const auto tocbar = KiwixApp::instance()->getMainWindow()->getTableOfContentBar();
     connect(this, &WebView::headersChanged, tocbar, &TableOfContentBar::setupTree);
+    connect(tocbar, &TableOfContentBar::navigationRequested, this, &WebView::onNavigationRequested);
+    connect(this, &WebView::navigationRequested, kiwixChannelObj, &KiwixWebChannelObject::navigationRequested);
 }
 
 WebView::~WebView()
@@ -226,6 +228,13 @@ void WebView::onHeadersReceived(const QJsonObject& headers)
     
     if (tabbar->currentWebView() == this)
         emit headersChanged(m_headers);
+}
+
+void WebView::onNavigationRequested(const QString &url, const QString &anchor)
+{
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    if (tabbar->currentWebView() == this)
+        emit navigationRequested(url, anchor);
 }
 
 void WebView::addHistoryItemAction(QMenu *menu,

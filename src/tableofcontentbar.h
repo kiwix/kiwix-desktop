@@ -7,6 +7,8 @@ namespace Ui {
 class tableofcontentbar;
 }
 
+class QTreeWidgetItem;
+
 class TableOfContentBar : public QFrame
 {
     Q_OBJECT
@@ -17,9 +19,14 @@ public:
 
 public slots:
     void setupTree(const QJsonObject& headers);
+    void onTreeItemActivated(QTreeWidgetItem* item);
+
+signals:
+    void navigationRequested(const QString& url, const QString& anchor);
 
 private:
     Ui::tableofcontentbar *ui;
+    QString m_url;
 };
 
 #endif // TABLEOFCONTENTBAR_H

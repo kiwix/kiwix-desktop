@@ -14,6 +14,7 @@ public:
 
 signals:
     void headersChanged(const QJsonObject& headers);
+    void navigationRequested(const QString& url, const QString& anchor);
 };
 
 #endif // KIWIXWEBCHANNELOBJECT_H
