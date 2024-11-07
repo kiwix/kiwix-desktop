@@ -29,11 +29,13 @@ void TableOfContentBar::onTreeItemActivated(QTreeWidgetItem *item)
 namespace
 {
 
-QTreeWidgetItem* createChildItem(QTreeWidgetItem* parent, const QJsonObject& headerObj)
+QTreeWidgetItem* createChildItem(QTreeWidgetItem* parent, const QString& childNo, const QJsonObject& headerObj)
 {
     const auto item = new QTreeWidgetItem(parent);
     item->setExpanded(true);
-    item->setData(0, Qt::DisplayRole, headerObj["text"].toString());
+
+    const auto display = childNo + "  " + headerObj["text"].toString();
+    item->setData(0, Qt::DisplayRole, display);
     item->setData(0, Qt::UserRole, headerObj["anchor"].toString());
 
     return item;
@@ -54,15 +56,16 @@ QJsonArray takeDeeperEntries(QJsonArray& headerArr, int level)
     return result;
 }
 
-void createSubTree(QTreeWidgetItem* parent, QJsonArray& headerArr)
+void createSubTree(QTreeWidgetItem* parent, QString parentNo, QJsonArray& headerArr)
 {
     while (!headerArr.isEmpty())
     {
         const auto childHeader = headerArr.takeAt(0).toObject();
         const int childLevel = childHeader["level"].toInt();
-        QTreeWidgetItem* childItem = createChildItem(parent, childHeader);
+        const QString childNo = parentNo + QString::number(parent->childCount() + 1);
+        QTreeWidgetItem* childItem = createChildItem(parent, childNo, childHeader);
         QJsonArray deeperEntries = takeDeeperEntries(headerArr, childLevel);
-        createSubTree(childItem, deeperEntries);
+        createSubTree(childItem, childNo + ".", deeperEntries);
     }
 }
 
@@ -79,5 +82,5 @@ void TableOfContentBar::setupTree(const QJsonObject& headers)
     m_url = headerUrl;
     ui->tree->clear();
     QJsonArray headerArr = headers["headers"].toArray();
-    createSubTree(ui->tree->invisibleRootItem(), headerArr);
+    createSubTree(ui->tree->invisibleRootItem(), "", headerArr);
 }
