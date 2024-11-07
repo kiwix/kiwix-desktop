@@ -45,6 +45,7 @@ QTreeWidgetItem* createChildItem(QTreeWidgetItem* parent, const QString& childNo
     item->setExpanded(true);
 
     const auto display = childNo + "  " + headerObj["text"].toString();
+    item->setToolTip(0, display);
     item->setData(0, Qt::DisplayRole, display);
     item->setData(0, Qt::FontRole, QFont("Selawik", 12));
     item->setData(0, Qt::UserRole, headerObj["anchor"].toString());
