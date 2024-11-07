@@ -400,3 +400,7 @@ ContentTypeFilter {
     width: 0;
     height: 0;
 }
+
+#tableofcontentbar QTreeWidget::item {
+    height: 26px;
+}
