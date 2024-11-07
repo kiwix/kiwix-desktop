@@ -10,6 +10,14 @@ TableOfContentBar::TableOfContentBar(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->titleLabel->setText(gt("table-of-content"));
+    ui->hideLabel->setTextFormat(Qt::RichText);
+
+    /* href is needed to make hide clickable, but not used. So Kiwix it is :) */
+    ui->hideLabel->setText("<a href=\"https://kiwix.org/en/\">" + gt("hide") + "</a>");
+    connect(ui->hideLabel, &QLabel::linkActivated, this, [=](){
+        KiwixApp::instance()->getAction(KiwixApp::ToggleTOCAction)->setChecked(false);
+    });
+
     ui->tree->setRootIsDecorated(false);
     ui->tree->setItemsExpandable(false);
     connect(ui->tree, &QTreeWidget::itemClicked, this, &TableOfContentBar::onTreeItemActivated);
