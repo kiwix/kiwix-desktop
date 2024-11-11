@@ -113,5 +113,7 @@
 	"export-reading-list": "Lieslëscht exportéieren",
 	"export-reading-list-error": "Beim Exportéiere vun der Lieslëscht ass ee Feeler geschitt.",
 	"import-reading-list": "Lieslëscht importéieren",
-	"import-reading-list-error": "Beim Importéiere vun der Lieslëscht ass ee Feeler geschitt."
+	"import-reading-list-error": "Beim Importéiere vun der Lieslëscht ass ee Feeler geschitt.",
+	"kiwix-search": "Kiwix-Sich",
+	"search-options": "Sichoptiounen"
 }

@@ -184,5 +184,7 @@
 	"save-page-as": "Enregistrer sous...",
 	"portable-disabled-tooltip": "Fonction désactivée en mode portable",
 	"scroll-next-tab": "Faire défiler vers l' onglet suivant",
-	"scroll-previous-tab": "Faire défiler vers l' onglet précédent"
+	"scroll-previous-tab": "Faire défiler vers l' onglet précédent",
+	"kiwix-search": "Recherche Kiwix",
+	"search-options": "Options de recherche"
 }
