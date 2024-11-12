@@ -173,5 +173,7 @@
     "scroll-next-tab": "Scroll to next tab",
     "scroll-previous-tab": "Scroll to previous tab",
     "kiwix-search": "Kiwix search",
-    "search-options": "Search Options"
+    "search-options": "Search Options",
+    "read-article": "Read article",
+    "read-text": "Read selected text"
 }

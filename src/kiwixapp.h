@@ -55,6 +55,8 @@ public:
         PreviousTabAction,
         HistoryBackAction,
         HistoryForwardAction,
+        ReadTextAction,
+        ReadArticleAction,
         HelpAction,
         FeedbackAction,
         ReportBugAction,
