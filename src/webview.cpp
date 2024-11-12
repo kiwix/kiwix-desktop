@@ -307,6 +307,12 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
     } else {
         menu = createLinkContextMenu();
     }
+
+    const auto app = KiwixApp::instance();
+    menu->addAction(app->getAction(KiwixApp::ReadArticleAction));
+    if (page()->hasSelection())
+        menu->addAction(app->getAction(KiwixApp::ReadTextAction));
+
     menu->exec(event->globalPos());
 }
 
