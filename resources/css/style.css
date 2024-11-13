@@ -400,3 +400,65 @@ ContentTypeFilter {
     width: 0;
     height: 0;
 }
+
+#tableofcontentbar {
+    background-color: white;
+}
+
+#tableofcontentbar QTreeWidget,
+#tableofcontentbar QLabel,
+#tableofcontentbar QFrame {
+    background-color: white;
+}
+
+#tableofcontentbar QTreeWidget {
+    outline: none;
+}
+
+#tableofcontentbar QTreeWidget::item {
+    height: 26px;
+    padding: 0px 10px;
+    outline: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+#tableofcontentbar QTreeWidget::item:selected,
+#tableofcontentbar QTreeWidget::item:hover {
+    outline: none;
+    border-top: 1px solid #3366CC;
+    border-bottom: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    color: black;
+}
+
+#tableofcontentbar QTreeWidget::branch:selected,
+#tableofcontentbar QTreeWidget::branch:hover {
+    outline: none;
+    border-top: 1px solid #3366CC;
+    border-bottom: 1px solid #3366CC;
+    background-color: #D9E9FF;
+}
+
+#tableofcontentbar QTreeWidget::branch {
+    image: none;
+}
+
+#tableofcontentbar #titleLabel {
+    padding: 0px;
+    margin: 10px;
+}
+
+#tableofcontentbar #hideLabel {
+    margin: 13px 10px 10px; /* 3px to match bottom with titleLabel */ 
+}
+
+#tableofcontentbar QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+#tableofcontentbar QScrollBar::handle {
+    background-color: grey;
+}

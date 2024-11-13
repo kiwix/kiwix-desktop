@@ -5,6 +5,7 @@
 #include <QWebEngineView>
 #include <QIcon>
 #include <QWheelEvent>
+#include <QJsonObject>
 
 #include "findinpagebar.h"
 
@@ -53,6 +54,8 @@ public slots:
 signals:
     void iconChanged(const QIcon& icon);
     void zimIdChanged(const QString& zimId);
+    void headersChanged(const QJsonObject& headers);
+    void navigationRequested(const QString& url, const QString& anchor);
 
 protected:
     virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
@@ -67,12 +70,16 @@ protected:
 
 private slots:
     void gotoTriggeredHistoryItemAction();
+    void onCurrentTitleChanged();
+    void onHeadersReceived(const QJsonObject& headers);
+    void onNavigationRequested(const QString& url, const QString& anchor);
 
 private:
     void addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const;
     void applyCorrectZoomFactor();
     QMenu* createStandardContextMenu();
     QMenu* createLinkContextMenu();
+    QJsonObject m_headers;
 };
 
 #endif // WEBVIEW_H

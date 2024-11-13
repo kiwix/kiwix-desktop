@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network
-QT       += webenginewidgets
+QT       += webenginewidgets webchannel
 QT       += printsupport
 
 # Avoid stripping incompatible files, due to false identification as executables, on WSL
@@ -85,6 +85,7 @@ SOURCES += \
     src/tabbar.cpp \
     src/contentmanagerside.cpp \
     src/readinglistbar.cpp \
+    src/tableofcontentbar.cpp \
     src/klistwidgetitem.cpp \
     src/opdsrequestmanager.cpp \
     src/localkiwixserver.cpp \
@@ -135,6 +136,7 @@ HEADERS += \
     src/tabbar.h \
     src/contentmanagerside.h \
     src/readinglistbar.h \
+    src/tableofcontentbar.h \
     src/klistwidgetitem.h \
     src/opdsrequestmanager.h \
     src/localkiwixserver.h \
@@ -145,6 +147,7 @@ HEADERS += \
     src/portutils.h \
     src/css_constants.h \
     src/multizimbutton.h \
+    src/kiwixwebchannelobject.h \
 
 FORMS += \
     src/choiceitem.ui \
@@ -157,7 +160,8 @@ FORMS += \
     src/contentmanagerside.ui \
     src/readinglistbar.ui \
     ui/localkiwixserver.ui \
-    ui/settings.ui
+    ui/settings.ui \
+    src/tableofcontentbar.ui \
 
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8
@@ -232,6 +236,7 @@ RESOURCES += \
     resources/translations.qrc \
     resources/contentmanager.qrc \
     resources/settingsmanager.qrc \
-    resources/style.qrc
+    resources/style.qrc \
+    resources/js.qrc
 
 RC_ICONS = resources/icons/kiwix/app_icon.ico

@@ -14,6 +14,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class TableOfContentBar;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -25,6 +27,7 @@ public:
     TabBar*   getTabBar();
     TopWidget* getTopWidget();
     QWidget getMainView();
+    TableOfContentBar *getTableOfContentBar();
 
 protected:
     bool eventFilter(QObject* object, QEvent* event) override;
@@ -35,6 +38,7 @@ private slots:
     void toggleFullScreen();
     void tabChanged(TabBar::TabType);
     void readingListToggled(bool state);
+    void tableOfContentToggled(bool state);
     void hideTabAndTop();
     void showTabAndTop();
     void updateTabButtons();

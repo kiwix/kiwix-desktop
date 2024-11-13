@@ -145,6 +145,7 @@
             </sizepolicy>
            </property>
           </widget>
+          <widget class="TableOfContentBar" name="tableofcontentbar"/>
           <widget class="ReadingListBar" name="readinglistbar"/>
          </widget>
         </item>
@@ -199,6 +200,12 @@
    <class>ReadingListBar</class>
    <extends>QWidget</extends>
    <header>src/readinglistbar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TableOfContentBar</class>
+   <extends>QWidget</extends>
+   <header>src/tableofcontentbar.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

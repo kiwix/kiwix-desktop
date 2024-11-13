@@ -30,6 +30,9 @@ TopWidget::TopWidget(QWidget *parent) :
     QAction *random = app->getAction(KiwixApp::RandomArticleAction);
     addAction(random);
 
+    QAction *toc = app->getAction(KiwixApp::ToggleTOCAction);
+    addAction(toc);
+
     // For CSS
     if (QGuiApplication::isLeftToRight()) {
         widgetForAction(back)->setObjectName("leftHistoryButton");

@@ -4,6 +4,26 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QWebEngineSettings>
+#include <QWebEngineScript>
+#include <QWebEngineScriptCollection>
+
+namespace
+{
+
+QWebEngineScript getScript(QString filename,
+    QWebEngineScript::InjectionPoint point = QWebEngineScript::DocumentReady)
+{
+    QWebEngineScript script;
+    script.setInjectionPoint(point);
+    script.setWorldId(QWebEngineScript::UserWorld);
+
+    QFile scriptFile(filename);
+    scriptFile.open(QIODevice::ReadOnly);
+    script.setSourceCode(scriptFile.readAll());
+    return script;
+}
+
+}
 
 QString askForSaveFilePath(const QString& suggestedName)
 {
@@ -36,6 +56,10 @@ KProfile::KProfile(QObject *parent) :
 #else // Qt 5.13 and later
     setUrlRequestInterceptor(new ExternalReqInterceptor(this));
 #endif
+
+    scripts()->insert(getScript(":/js/headerAnchor.js"));
+    scripts()->insert(getScript(":/qtwebchannel/qwebchannel.js", 
+                      QWebEngineScript::DocumentCreation));
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

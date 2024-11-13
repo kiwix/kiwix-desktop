@@ -16,6 +16,10 @@ class QMenu;
 #include <zim/error.h>
 #include <zim/item.h>
 #include <kiwix/tools.h>
+#include <QWebChannel>
+#include <QWebEngineScript>
+#include "kiwixwebchannelobject.h"
+#include "tableofcontentbar.h"
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 QString askForSaveFilePath(const QString& suggestedName);
@@ -97,6 +101,20 @@ WebView::WebView(QWidget *parent)
         }
     });
 #endif
+
+    const auto channel = new QWebChannel(this);
+    const auto kiwixChannelObj = new KiwixWebChannelObject;
+    page()->setWebChannel(channel, QWebEngineScript::UserWorld);
+    channel->registerObject("kiwixChannelObj", kiwixChannelObj);
+    
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    connect(tabbar, &TabBar::currentTitleChanged, this, &WebView::onCurrentTitleChanged);
+    connect(kiwixChannelObj, &KiwixWebChannelObject::headersChanged, this, &WebView::onHeadersReceived);
+
+    const auto tocbar = KiwixApp::instance()->getMainWindow()->getTableOfContentBar();
+    connect(this, &WebView::headersChanged, tocbar, &TableOfContentBar::setupTree);
+    connect(tocbar, &TableOfContentBar::navigationRequested, this, &WebView::onNavigationRequested);
+    connect(this, &WebView::navigationRequested, kiwixChannelObj, &KiwixWebChannelObject::navigationRequested);
 }
 
 WebView::~WebView()
@@ -190,7 +208,38 @@ void WebView::saveViewContent()
     catch (...) { /* Blank */}
 }
 
-void WebView::addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const
+void WebView::onCurrentTitleChanged()
+{
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    const auto noAnchorUrl = url().url(QUrl::RemoveFragment);
+    const auto headersValid = m_headers["url"].toString() == noAnchorUrl;
+
+    /* If headers not valid for this webview, then we are loading and the emit 
+       will be handled by KiwixWebChannelObject::headersChanged.
+    */
+    if (tabbar->currentWebView() == this && headersValid)
+        emit headersChanged(m_headers);
+}
+
+void WebView::onHeadersReceived(const QJsonObject& headers)
+{
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    m_headers = QJsonObject(headers);
+    
+    if (tabbar->currentWebView() == this)
+        emit headersChanged(m_headers);
+}
+
+void WebView::onNavigationRequested(const QString &url, const QString &anchor)
+{
+    const auto tabbar = KiwixApp::instance()->getTabWidget();
+    if (tabbar->currentWebView() == this)
+        emit navigationRequested(url, anchor);
+}
+
+void WebView::addHistoryItemAction(QMenu *menu,
+                                   const QWebEngineHistoryItem &item,
+                                   int n) const
 {
     QAction *a = menu->addAction(item.title());
     a->setData(QVariant::fromValue(n));
