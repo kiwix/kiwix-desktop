@@ -22,6 +22,9 @@ public slots:
     void speechClose();
     void speechShow();
 
+protected:
+    void keyPressEvent(QKeyEvent *event);
+
 private:
     QTextToSpeech m_speech;
     Ui::TextToSpeechBar *ui;

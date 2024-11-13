@@ -49,6 +49,17 @@ void TextToSpeechBar::speechShow()
     setFocus();
 }
 
+void TextToSpeechBar::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape)
+    {
+        speechClose();
+        return;
+    }
+    
+    QFrame::keyPressEvent(event);
+}
+
 void TextToSpeechBar::onStateChanged(QTextToSpeech::State state)
 {
     ui->stopButton->setEnabled(state != QTextToSpeech::Ready);
