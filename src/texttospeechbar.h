@@ -36,6 +36,8 @@ public:
     void setupVoiceComboBox();
     void resetVoiceComboBox();
 
+    int getVoiceIndex();
+
 public slots:
     void onStateChanged(QTextToSpeech::State state);
     void speechClose();

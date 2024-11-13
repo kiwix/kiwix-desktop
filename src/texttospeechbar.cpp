@@ -83,16 +83,38 @@ void TextToSpeechBar::resetVoiceComboBox()
     ui->voiceComboBox->clear();
 
     m_voices = m_speech.availableVoices();
-    const QVoice currentVoice = m_speech.voice();
     for (const auto& voice : m_voices)
     {
         ui->voiceComboBox->addItem(QString("%1 - %2 - %3").arg(voice.name())
                           .arg(QVoice::genderName(voice.gender()))
                           .arg(QVoice::ageName(voice.age())));
-        if (voice.name() == currentVoice.name())
-            ui->voiceComboBox->setCurrentIndex(ui->voiceComboBox->count() - 1);
     }
+
+    const int voiceIndex = getVoiceIndex();
+    ui->voiceComboBox->setCurrentIndex(voiceIndex);
+    voiceSelected(voiceIndex);
+
     connect(ui->voiceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TextToSpeechBar::voiceSelected);
+}
+
+int TextToSpeechBar::getVoiceIndex()
+{
+    int voiceIndex = 0;
+    const QVoice currentVoice = m_speech.voice();
+    const QString savedVoiceName = KiwixApp::instance()->getSavedVoiceName(m_speech.locale().name());
+
+    /* We either stay with default voices or matches with the saved voice. */
+    for (int i = 0; i < ui->voiceComboBox->count(); i++)
+    {
+        if (m_voices[i].name() == currentVoice.name())
+            voiceIndex = i;
+        if (m_voices[i].name() == savedVoiceName)
+        {
+            voiceIndex = i;
+            break;
+        }
+    }
+    return voiceIndex;
 }
 
 void TextToSpeechBar::speechClose()
@@ -122,7 +144,11 @@ void TextToSpeechBar::languageSelected(int index)
 
 void TextToSpeechBar::voiceSelected(int index)
 {
-    m_speech.setVoice(m_voices.at(index));
+    const auto voice = m_voices.at(index);
+    const auto currentLang = ui->langComboBox->currentData().toLocale().name();
+    KiwixApp::instance()->saveVoiceName(currentLang, voice.name());
+
+    m_speech.setVoice(voice);
 }
 
 void TextToSpeechBar::keyPressEvent(QKeyEvent *event)

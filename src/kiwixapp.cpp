@@ -545,6 +545,11 @@ void KiwixApp::saveWindowState()
   mp_session->setValue("windowState", getMainWindow()->saveState());
 }
 
+void KiwixApp::saveVoiceName(const QString& langName, const QString& voiceName)
+{
+  mp_session->setValue("voice/" + langName, voiceName);
+}
+
 void KiwixApp::restoreWindowState()
 {
   getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
@@ -559,6 +564,11 @@ void KiwixApp::saveCurrentTabIndex()
 void KiwixApp::savePrevSaveDir(const QString &prevSaveDir)
 {
   mp_session->setValue("prevSaveDir", prevSaveDir);
+}
+
+QString KiwixApp::getSavedVoiceName(const QString& langName) const
+{
+  return mp_session->value("voice/" + langName, "").toString();
 }
 
 QString KiwixApp::getPrevSaveDir() const
