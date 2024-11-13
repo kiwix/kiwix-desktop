@@ -69,6 +69,23 @@
      </property>
     </spacer>
    </item>
+   <item>
+    <widget class="QPushButton" name="closeButton">
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/kiwix.qrc">
+       <normaloff>:/icons/close.svg</normaloff>:/icons/close.svg</iconset>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources>

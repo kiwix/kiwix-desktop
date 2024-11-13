@@ -20,6 +20,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     layout->setSpacing(0);
     setLayout(layout); // now 'mp_webView' has 'this' as the parent QObject
     mp_findInPageBar->hide();
+    mp_ttsBar->hide();
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered, this, &ZimView::readArticle);
     connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered, this, &ZimView::readSelectedText);
@@ -115,6 +116,7 @@ void ZimView::readArticle()
 
     mp_webView->page()->toPlainText([=](const QString& articleText){
         mp_ttsBar->speak(articleText);
+        mp_ttsBar->speechShow();
     });
 }
 
@@ -124,4 +126,5 @@ void ZimView::readSelectedText()
         return;
 
     mp_ttsBar->speak(mp_webView->page()->selectedText());
+    mp_ttsBar->speechShow();
 }

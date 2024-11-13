@@ -19,6 +19,8 @@ public:
 
 public slots:
     void onStateChanged(QTextToSpeech::State state);
+    void speechClose();
+    void speechShow();
 
 private:
     QTextToSpeech m_speech;

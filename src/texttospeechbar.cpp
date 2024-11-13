@@ -17,6 +17,8 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
             this, &TextToSpeechBar::stop);
     connect(ui->stopButton, &QPushButton::pressed, this,
             &TextToSpeechBar::stop);
+    connect(ui->closeButton, &QPushButton::pressed,
+                this, &TextToSpeechBar::speechClose);
 }
 
 void TextToSpeechBar::speak(const QString &text)
@@ -27,6 +29,24 @@ void TextToSpeechBar::speak(const QString &text)
 void TextToSpeechBar::stop()
 {
     m_speech.stop();
+}
+
+void TextToSpeechBar::speechClose()
+{
+    /* Prevent webview from scrolling to up to the top after losing focus. */
+    const auto current = KiwixApp::instance()->getTabWidget()->currentWebView();
+    if (!current)
+        return;
+
+    current->setFocus();
+    m_speech.stop();
+    close();
+}
+
+void TextToSpeechBar::speechShow()
+{
+    show();
+    setFocus();
 }
 
 void TextToSpeechBar::onStateChanged(QTextToSpeech::State state)
