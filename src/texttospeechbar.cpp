@@ -7,7 +7,6 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
 {
     ui->setupUi(this);
 
-    m_speech.setLocale(QLocale::system().language());
     connect(&m_speech, &QTextToSpeech::stateChanged, this,
             &TextToSpeechBar::onStateChanged);
 
@@ -19,6 +18,9 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
             &TextToSpeechBar::stop);
     connect(ui->closeButton, &QPushButton::pressed,
                 this, &TextToSpeechBar::speechClose);
+
+    setupLanguageComboBox();
+    languageSelected(ui->langComboBox->currentIndex());
 }
 
 void TextToSpeechBar::speak(const QString &text)
@@ -29,6 +31,28 @@ void TextToSpeechBar::speak(const QString &text)
 void TextToSpeechBar::stop()
 {
     m_speech.stop();
+}
+
+void TextToSpeechBar::setupLanguageComboBox()
+{
+    ui->langLabel->setText(gt("language"));
+    ui->langComboBox->setMaxVisibleItems(10);
+
+    QLocale current = QLocale::system();
+    for (const auto& locale : m_speech.availableLocales())
+    {
+        const QString name(QString("%1 (%2)")
+                        .arg(QLocale::languageToString(locale.language()))
+                        .arg(locale.nativeLanguageName()));
+
+        ui->langComboBox->addItem(name, locale);
+        if (locale.name() == current.name())
+            current = locale;
+    }
+
+    ui->langComboBox->setCurrentIndex(ui->langComboBox->findData(current));
+    connect(ui->langComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this, &TextToSpeechBar::languageSelected);
 }
 
 void TextToSpeechBar::speechClose()
@@ -47,6 +71,12 @@ void TextToSpeechBar::speechShow()
 {
     show();
     setFocus();
+}
+
+void TextToSpeechBar::languageSelected(int index)
+{
+    const QLocale locale = ui->langComboBox->itemData(index).toLocale();
+    m_speech.setLocale(locale);
 }
 
 void TextToSpeechBar::keyPressEvent(QKeyEvent *event)

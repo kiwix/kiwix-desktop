@@ -17,10 +17,13 @@ public:
     void speak(const QString& text);
     void stop();
 
+    void setupLanguageComboBox();
+
 public slots:
     void onStateChanged(QTextToSpeech::State state);
     void speechClose();
     void speechShow();
+    void languageSelected(int index);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
