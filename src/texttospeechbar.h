@@ -30,6 +30,7 @@ public:
 
     void speak(const QString& text);
     void stop();
+    void setLocale(const QLocale& locale);
 
     void setupLanguageComboBox();
     void setupVoiceComboBox();

@@ -101,6 +101,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                     QToolTip::showText(pos, link);
                 }
             });
+    connect(mp_webView, &WebView::zimIdChanged, this, &ZimView::setSpeechLocaleByZimId);
 }
 
 void ZimView::openFindInPageBar()
@@ -127,4 +128,19 @@ void ZimView::readSelectedText()
 
     mp_ttsBar->speak(mp_webView->page()->selectedText());
     mp_ttsBar->speechShow();
+}
+
+void ZimView::setSpeechLocaleByZimId(const QString& zimId)
+{
+    try
+    {
+        const auto book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
+        const auto iso3 = QString::fromStdString(book.getLanguages().at(0));
+        const auto iso2 = iso3.chopped(1);
+
+        /* Try both 3 letter and 2 letter name. */
+        const auto iso2Locale = QLocale(iso2);
+        const bool isValidISO2 = iso2Locale.language() != QLocale::C;
+        mp_ttsBar->setLocale(isValidISO2 ? iso2Locale : QLocale(iso3));
+    } catch (...) { /* Blank */ }
 }

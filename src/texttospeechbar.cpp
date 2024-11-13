@@ -34,6 +34,19 @@ void TextToSpeechBar::stop()
     m_speech.stop();
 }
 
+void TextToSpeechBar::setLocale(const QLocale& locale)
+{
+    for (int i = 0; i < ui->langComboBox->count(); i++)
+    {
+        if (ui->langComboBox->itemData(i).toLocale().language() == locale.language())
+        {
+            ui->langComboBox->setCurrentIndex(i);
+            languageSelected(i);
+            return;
+        }
+    }
+}
+
 void TextToSpeechBar::setupLanguageComboBox()
 {
     ui->langLabel->setText(gt("language"));

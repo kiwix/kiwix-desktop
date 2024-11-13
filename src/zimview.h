@@ -22,6 +22,7 @@ public:
 public slots:
     void readArticle();
     void readSelectedText();
+    void setSpeechLocaleByZimId(const QString& zimId);
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
