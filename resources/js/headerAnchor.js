@@ -31,7 +31,7 @@ function anchorHeaderElements(headers)
     });
 }
 
-function getHeaders()
+function getHeadersJSONStr()
 {
     const headerInfo = { url: window.location.href.replace(location.hash,""), headers: [] };
 
@@ -40,12 +40,12 @@ function getHeaders()
         const headers = getDOMElementsPreorderDFS(document.body, isHeaderElement);
         headerInfo.headers = anchorHeaderElements(headers);
     }
-    return headerInfo;
+    return JSON.stringify(headerInfo);
 }
 
 new QWebChannel(qt.webChannelTransport, function(channel) {
     var kiwixObj = channel.objects.kiwixChannelObj;
-    kiwixObj.sendHeaders(getHeaders());
+    kiwixObj.sendHeadersJSONStr(getHeadersJSONStr());
     kiwixObj.navigationRequested.connect(function(url, anchor) {
         if (window.location.href.replace(location.hash,"") == url)
             document.getElementById(anchor).scrollIntoView();

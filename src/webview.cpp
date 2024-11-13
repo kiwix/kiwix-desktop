@@ -221,10 +221,10 @@ void WebView::onCurrentTitleChanged()
         emit headersChanged(m_headers);
 }
 
-void WebView::onHeadersReceived(const QJsonObject& headers)
+void WebView::onHeadersReceived(const QString& headersJSONStr)
 {
     const auto tabbar = KiwixApp::instance()->getTabWidget();
-    m_headers = QJsonObject(headers);
+    m_headers = QJsonDocument::fromJson(headersJSONStr.toUtf8()).object();
     
     if (tabbar->currentWebView() == this)
         emit headersChanged(m_headers);
