@@ -183,5 +183,6 @@
 	"kiwix-search": "Title text for a list of search results, which notes to the user those are from Kiwix's Search Engine",
 	"search-options": "The term for a collection of additional search filtering options to help users narrow down search results.",
 	"read-article": "Represents the action of letting the computer read out all the text in the current article.",
-	"read-text": "Represents the action of letting the computer read out the selected text on the article."
+	"read-text": "Represents the action of letting the computer read out the selected text on the article.",
+	"stop": "{{Identical|Stop}}"
 }

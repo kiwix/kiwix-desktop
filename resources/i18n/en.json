@@ -175,5 +175,6 @@
     "kiwix-search": "Kiwix search",
     "search-options": "Search Options",
     "read-article": "Read article",
-    "read-text": "Read selected text"
+    "read-text": "Read selected text",
+    "stop": "Stop"
 }

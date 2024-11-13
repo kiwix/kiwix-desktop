@@ -66,5 +66,6 @@
         <file>icons/home-button.svg</file>
         <file>icons/more-vertical.svg</file>
         <file>icons/caret-left-solid.svg</file>
+        <file>icons/stop-circle.svg</file>
     </qresource>
 </RCC>

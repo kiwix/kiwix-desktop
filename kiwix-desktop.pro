@@ -165,6 +165,7 @@ FORMS += \
     ui/localkiwixserver.ui \
     ui/settings.ui \
     src/tableofcontentbar.ui \
+    src/texttospeechbar.ui \
 
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8
