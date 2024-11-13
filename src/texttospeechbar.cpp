@@ -37,6 +37,7 @@ void TextToSpeechBar::setupLanguageComboBox()
 {
     ui->langLabel->setText(gt("language"));
     ui->langComboBox->setMaxVisibleItems(10);
+    ui->langComboBox->setLineEdit(new ComboBoxLineEdit(ui->langComboBox));
 
     QLocale current = QLocale::system();
     for (const auto& locale : m_speech.availableLocales())
@@ -93,4 +94,18 @@ void TextToSpeechBar::keyPressEvent(QKeyEvent *event)
 void TextToSpeechBar::onStateChanged(QTextToSpeech::State state)
 {
     ui->stopButton->setEnabled(state != QTextToSpeech::Ready);
+}
+
+ComboBoxLineEdit::ComboBoxLineEdit(QWidget *parent) : QLineEdit(parent)
+{
+    setFrame(false);
+
+    /* Work around to both have max visible item and a read-only combobox.*/
+    setReadOnly(true);
+    connect(this, &QLineEdit::selectionChanged, this, &ComboBoxLineEdit::preventSelection);
+}
+
+void ComboBoxLineEdit::preventSelection()
+{
+    setSelection(0, 0);
 }

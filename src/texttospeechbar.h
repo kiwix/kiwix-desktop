@@ -3,10 +3,21 @@
 
 #include <QTextToSpeech>
 #include <QFrame>
+#include <QLineEdit>
 
 namespace Ui {
 class TextToSpeechBar;
 }
+
+class ComboBoxLineEdit : public QLineEdit
+{
+    Q_OBJECT
+public:
+    explicit ComboBoxLineEdit(QWidget *parent = 0);
+
+public slots:
+    void preventSelection();
+};
 
 class TextToSpeechBar : public QFrame
 {
