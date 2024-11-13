@@ -26,7 +26,8 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
 
 void TextToSpeechBar::speak(const QString &text)
 {
-    m_speech.say(text);
+    m_text = text;
+    m_speech.say(m_text);
 }
 
 void TextToSpeechBar::stop()
@@ -149,6 +150,8 @@ void TextToSpeechBar::voiceSelected(int index)
     KiwixApp::instance()->saveVoiceName(currentLang, voice.name());
 
     m_speech.setVoice(voice);
+    if (m_speech.state() == QTextToSpeech::Speaking)
+        speak(m_text);
 }
 
 void TextToSpeechBar::keyPressEvent(QKeyEvent *event)

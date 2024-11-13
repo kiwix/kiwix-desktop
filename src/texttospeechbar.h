@@ -52,6 +52,7 @@ private:
     QTextToSpeech m_speech;
     Ui::TextToSpeechBar *ui;
     QVector<QVoice> m_voices;
+    QString m_text;
 };
 
 #endif // TEXTTOSPEECHMANAGER_H
