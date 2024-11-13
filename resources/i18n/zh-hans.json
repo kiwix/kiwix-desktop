@@ -116,6 +116,9 @@
 	"start-kiwix-server": "启动 Kiwix 服务器",
 	"stop-kiwix-server": "停止 Kiwix 服务器",
 	"all": "全部",
+	"all_ips": "全部 - 双栈模式",
+	"ipv4": "仅 IPv4 模式",
+	"ipv6": "仅 IPv6 模式",
 	"fulltext-search": "全文搜索",
 	"pictures": "图片",
 	"videos": "视频",
@@ -182,9 +185,10 @@
 	"export-reading-list-error": "导出阅读列表时发生了错误。",
 	"import-reading-list": "导入阅读列表",
 	"import-reading-list-error": "导入阅读列表时发生了错误。",
-	"disable-sandbox": "应用程序是从网络驱动器启动的。已知这会导致由沙盒引起的兼容性问题。您是否愿意冒险禁用它？",
+	"disable-sandbox": "Kiwix是从网络驱动器启动的。这会导致已知的由浏览器沙盒的兼容性问题。因此沙盒将被禁用，您想要继续吗？",
 	"save-page-as": "另存为...",
 	"portable-disabled-tooltip": "便携模式下此功能被禁用",
 	"scroll-next-tab": "滚动到下一个标签页",
-	"scroll-previous-tab": "滚动到上一个标签页"
+	"scroll-previous-tab": "滚动到上一个标签页",
+	"kiwix-search": "Kiwix 搜索"
 }
