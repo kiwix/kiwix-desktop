@@ -19,6 +19,7 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
     connect(ui->closeButton, &QPushButton::pressed,
                 this, &TextToSpeechBar::speechClose);
 
+    setupVoiceComboBox();
     setupLanguageComboBox();
     languageSelected(ui->langComboBox->currentIndex());
 }
@@ -56,6 +57,31 @@ void TextToSpeechBar::setupLanguageComboBox()
                 this, &TextToSpeechBar::languageSelected);
 }
 
+void TextToSpeechBar::setupVoiceComboBox()
+{
+    ui->voiceLabel->setText(gt("voice"));
+    ui->voiceComboBox->setMaxVisibleItems(10);
+    ui->voiceComboBox->setLineEdit(new ComboBoxLineEdit(ui->voiceComboBox));
+}
+
+void TextToSpeechBar::resetVoiceComboBox()
+{
+    disconnect(ui->voiceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TextToSpeechBar::voiceSelected);
+    ui->voiceComboBox->clear();
+
+    m_voices = m_speech.availableVoices();
+    const QVoice currentVoice = m_speech.voice();
+    for (const auto& voice : m_voices)
+    {
+        ui->voiceComboBox->addItem(QString("%1 - %2 - %3").arg(voice.name())
+                          .arg(QVoice::genderName(voice.gender()))
+                          .arg(QVoice::ageName(voice.age())));
+        if (voice.name() == currentVoice.name())
+            ui->voiceComboBox->setCurrentIndex(ui->voiceComboBox->count() - 1);
+    }
+    connect(ui->voiceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TextToSpeechBar::voiceSelected);
+}
+
 void TextToSpeechBar::speechClose()
 {
     /* Prevent webview from scrolling to up to the top after losing focus. */
@@ -78,6 +104,12 @@ void TextToSpeechBar::languageSelected(int index)
 {
     const QLocale locale = ui->langComboBox->itemData(index).toLocale();
     m_speech.setLocale(locale);
+    resetVoiceComboBox();
+}
+
+void TextToSpeechBar::voiceSelected(int index)
+{
+    m_speech.setVoice(m_voices.at(index));
 }
 
 void TextToSpeechBar::keyPressEvent(QKeyEvent *event)

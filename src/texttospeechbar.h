@@ -32,12 +32,15 @@ public:
     void stop();
 
     void setupLanguageComboBox();
+    void setupVoiceComboBox();
+    void resetVoiceComboBox();
 
 public slots:
     void onStateChanged(QTextToSpeech::State state);
     void speechClose();
     void speechShow();
     void languageSelected(int index);
+    void voiceSelected(int index);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -45,6 +48,7 @@ protected:
 private:
     QTextToSpeech m_speech;
     Ui::TextToSpeechBar *ui;
+    QVector<QVoice> m_voices;
 };
 
 #endif // TEXTTOSPEECHMANAGER_H
