@@ -17,6 +17,9 @@ public:
 
 public slots:
     void preventSelection();
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *);
 };
 
 class TextToSpeechBar : public QFrame

@@ -109,3 +109,10 @@ void ComboBoxLineEdit::preventSelection()
 {
     setSelection(0, 0);
 }
+
+void ComboBoxLineEdit::mouseReleaseEvent(QMouseEvent *)
+{
+    const auto combo = qobject_cast<QComboBox*>(parent());
+    if(combo)
+        combo->showPopup();
+}
