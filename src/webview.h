@@ -71,7 +71,7 @@ protected:
 private slots:
     void gotoTriggeredHistoryItemAction();
     void onCurrentTitleChanged();
-    void onHeadersReceived(const QJsonObject& headers);
+    void onHeadersReceived(const QString& headersJSONStr);
     void onNavigationRequested(const QString& url, const QString& anchor);
 
 private:

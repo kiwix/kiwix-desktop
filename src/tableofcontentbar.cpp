@@ -85,8 +85,11 @@ void createSubTree(QTreeWidgetItem* parent, QString parentNo, QJsonArray& header
 
 void TableOfContentBar::setupTree(const QJsonObject& headers)
 {
-    const auto headerUrl = headers["url"].toString();
     const auto webView = KiwixApp::instance()->getTabWidget()->currentWebView();
+    if (!webView)
+        return;
+
+    const auto headerUrl = headers["url"].toString();
     const auto currentUrl = webView->url().url(QUrl::RemoveFragment);
     if (headerUrl != currentUrl)
         return;
