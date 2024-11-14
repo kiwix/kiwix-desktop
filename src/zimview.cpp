@@ -1,29 +1,37 @@
 #include "zimview.h"
 #include "kiwixapp.h"
-#include "texttospeechbar.h"
 #include <QAction>
 #include <QVBoxLayout>
 #include <QToolTip>
 
+#if defined(QT_TEXTTOSPEECH_LIB)
+#include "texttospeechbar.h"
+#endif
+
 ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     : QWidget(parent),
       mp_tabBar(tabBar),
-      mp_findInPageBar(new FindInPageBar(this)),
-      mp_ttsBar(new TextToSpeechBar(this))
+      mp_findInPageBar(new FindInPageBar(this))
 {
     mp_webView = new WebView();
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(mp_webView);
     layout->addWidget(mp_findInPageBar);
-    layout->addWidget(mp_ttsBar);
     layout->setContentsMargins(0,0,0,0);
     layout->setSpacing(0);
     setLayout(layout); // now 'mp_webView' has 'this' as the parent QObject
     mp_findInPageBar->hide();
-    mp_ttsBar->hide();
     auto app = KiwixApp::instance();
+
+#if defined(QT_TEXTTOSPEECH_LIB)
+    mp_ttsBar = new TextToSpeechBar(this);
+    layout->addWidget(mp_ttsBar);
+    mp_ttsBar->hide();
+    connect(mp_webView, &WebView::zimIdChanged, this, &ZimView::setSpeechLocaleByZimId);
     connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered, this, &ZimView::readArticle);
     connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered, this, &ZimView::readSelectedText);
+#endif
+
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
                 if (mp_tabBar->currentZimView() != this)
@@ -101,7 +109,6 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                     QToolTip::showText(pos, link);
                 }
             });
-    connect(mp_webView, &WebView::zimIdChanged, this, &ZimView::setSpeechLocaleByZimId);
 }
 
 void ZimView::openFindInPageBar()
@@ -110,6 +117,7 @@ void ZimView::openFindInPageBar()
     mp_findInPageBar->getFindLineEdit()->setFocus();
 }
 
+#if defined(QT_TEXTTOSPEECH_LIB)
 void ZimView::readArticle()
 {
     if (mp_tabBar->currentZimView() != this)
@@ -144,3 +152,4 @@ void ZimView::setSpeechLocaleByZimId(const QString& zimId)
         mp_ttsBar->setLocale(isValidISO2 ? iso2Locale : QLocale(iso3));
     } catch (...) { /* Blank */ }
 }
+#endif

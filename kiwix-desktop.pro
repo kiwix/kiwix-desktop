@@ -7,7 +7,7 @@
 QT       += core gui network
 QT       += webenginewidgets webchannel
 QT       += printsupport
-QT       += texttospeech
+qtHaveModule(texttospeech): QT += texttospeech
 
 # Avoid stripping incompatible files, due to false identification as executables, on WSL
 DETECT_WSL = $$system(test -f /proc/sys/fs/binfmt_misc/WSLInterop && echo true || echo false)
@@ -94,7 +94,8 @@ SOURCES += \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
     src/multizimbutton.cpp \
-    src/texttospeechbar.cpp \
+
+qtHaveModule(texttospeech): SOURCES += src/texttospeechbar.cpp \
 
 HEADERS += \
     src/choiceitem.h \
@@ -150,7 +151,8 @@ HEADERS += \
     src/css_constants.h \
     src/multizimbutton.h \
     src/kiwixwebchannelobject.h \
-    src/texttospeechbar.h \
+
+qtHaveModule(texttospeech): HEADERS += src/texttospeechbar.h \
 
 FORMS += \
     src/choiceitem.ui \
@@ -165,7 +167,8 @@ FORMS += \
     ui/localkiwixserver.ui \
     ui/settings.ui \
     src/tableofcontentbar.ui \
-    src/texttospeechbar.ui \
+
+qtHaveModule(texttospeech): FORMS += src/texttospeechbar.ui \
 
 include(subprojects/QtSingleApplication/src/qtsingleapplication.pri)
 CODECFORSRC = UTF-8
