@@ -462,3 +462,64 @@ ContentTypeFilter {
 #tableofcontentbar QScrollBar::handle {
     background-color: grey;
 }
+
+/* ----------------------------------------
+    Text to Speech Page
+*/
+
+TextToSpeechBar {
+    border-top: 1px solid #ccc;
+}
+
+TextToSpeechBar #closeButton {
+    outline: none;
+    max-height: 36px;
+    max-width: 36px;
+    border: 1px solid #ccc;
+    border-radius: 0;
+}
+
+TextToSpeechBar #stopButton {
+    outline: none;
+    max-height: 36px;
+    padding: 0px 10px;
+    
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 0;
+}
+
+TextToSpeechBar #stopButton:hover {
+    background-color: #D9E9FF;
+    border: 1px solid #3366CC;
+}
+
+TextToSpeechBar #stopButton:disabled {
+    color: grey;
+    background-color: darkgrey;
+}
+
+TextToSpeechBar QComboBox::drop-down {
+    height: 22px;
+    width: 15px;
+    padding: 0px 2px;
+    margin: 0px;
+
+    image: url(":/icons/drop-down.svg");
+    background-color: white;
+}
+
+TextToSpeechBar QComboBox {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+TextToSpeechBar QAbstractItemView QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+TextToSpeechBar QAbstractItemView QScrollBar::handle {
+    background-color: grey;
+}

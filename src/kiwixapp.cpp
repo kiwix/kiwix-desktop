@@ -389,6 +389,14 @@ void KiwixApp::createActions()
     DISABLE_ACTION(HistoryBackAction);
     DISABLE_ACTION(HistoryForwardAction);
 
+    CREATE_ACTION_SHORTCUT(ReadArticleAction, gt("read-article"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_A));
+    CREATE_ACTION_SHORTCUT(ReadTextAction, gt("read-text"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_S));
+    CREATE_ACTION_SHORTCUT(ReadStopAction, gt("read-stop"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_X));
+    CREATE_ACTION_SHORTCUT(ToggleTTSLanguageAction, gt("select-read-language"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_L));
+    CREATE_ACTION_SHORTCUT(ToggleTTSVoiceAction, gt("select-read-voice"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_V));
+    mpa_actions[ToggleTTSLanguageAction]->setCheckable(true);
+    mpa_actions[ToggleTTSVoiceAction]->setCheckable(true);
+
     CREATE_ACTION_ICON_SHORTCUT(PrintAction, "print", gt("print"), QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
             this, &KiwixApp::printPage);
@@ -541,6 +549,11 @@ void KiwixApp::saveWindowState()
   mp_session->setValue("windowState", getMainWindow()->saveState());
 }
 
+void KiwixApp::saveVoiceName(const QString& langName, const QString& voiceName)
+{
+  mp_session->setValue("voice/" + langName, voiceName);
+}
+
 void KiwixApp::restoreWindowState()
 {
   getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
@@ -555,6 +568,11 @@ void KiwixApp::saveCurrentTabIndex()
 void KiwixApp::savePrevSaveDir(const QString &prevSaveDir)
 {
   mp_session->setValue("prevSaveDir", prevSaveDir);
+}
+
+QString KiwixApp::getSavedVoiceName(const QString& langName) const
+{
+  return mp_session->value("voice/" + langName, "").toString();
 }
 
 QString KiwixApp::getPrevSaveDir() const

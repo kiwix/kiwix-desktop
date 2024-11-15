@@ -4,6 +4,10 @@
 #include <QVBoxLayout>
 #include <QToolTip>
 
+#if defined(QT_TEXTTOSPEECH_LIB)
+#include "texttospeechbar.h"
+#endif
+
 ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     : QWidget(parent),
       mp_tabBar(tabBar),
@@ -18,6 +22,16 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     setLayout(layout); // now 'mp_webView' has 'this' as the parent QObject
     mp_findInPageBar->hide();
     auto app = KiwixApp::instance();
+
+#if defined(QT_TEXTTOSPEECH_LIB)
+    mp_ttsBar = new TextToSpeechBar(this);
+    layout->addWidget(mp_ttsBar);
+    mp_ttsBar->hide();
+    connect(mp_webView, &WebView::zimIdChanged, this, &ZimView::setSpeechLocaleByZimId);
+    connect(app->getAction(KiwixApp::ReadArticleAction), &QAction::triggered, this, &ZimView::readArticle);
+    connect(app->getAction(KiwixApp::ReadTextAction), &QAction::triggered, this, &ZimView::readSelectedText);
+#endif
+
     connect(app->getAction(KiwixApp::ZoomInAction), &QAction::triggered,
             this, [=]() {
                 if (mp_tabBar->currentZimView() != this)
@@ -102,3 +116,40 @@ void ZimView::openFindInPageBar()
     mp_findInPageBar->show();
     mp_findInPageBar->getFindLineEdit()->setFocus();
 }
+
+#if defined(QT_TEXTTOSPEECH_LIB)
+void ZimView::readArticle()
+{
+    if (mp_tabBar->currentZimView() != this)
+        return;
+
+    mp_webView->page()->toPlainText([=](const QString& articleText){
+        mp_ttsBar->speak(articleText);
+        mp_ttsBar->speechShow();
+    });
+}
+
+void ZimView::readSelectedText()
+{
+    if (mp_tabBar->currentZimView() != this || !mp_webView->page()->hasSelection())
+        return;
+
+    mp_ttsBar->speak(mp_webView->page()->selectedText());
+    mp_ttsBar->speechShow();
+}
+
+void ZimView::setSpeechLocaleByZimId(const QString& zimId)
+{
+    try
+    {
+        const auto book = KiwixApp::instance()->getLibrary()->getBookById(zimId);
+        const auto iso3 = QString::fromStdString(book.getLanguages().at(0));
+        const auto iso2 = iso3.chopped(1);
+
+        /* Try both 3 letter and 2 letter name. */
+        const auto iso2Locale = QLocale(iso2);
+        const bool isValidISO2 = iso2Locale.language() != QLocale::C;
+        mp_ttsBar->setLocale(isValidISO2 ? iso2Locale : QLocale(iso3));
+    } catch (...) { /* Blank */ }
+}
+#endif

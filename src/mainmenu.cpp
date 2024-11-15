@@ -36,12 +36,19 @@ MainMenu::MainMenu(QWidget *parent) :
     m_editMenu.ADD_ACTION(FindInPageAction);
     m_editMenu.ADD_ACTION(ToggleAddBookmarkAction);
     m_editMenu.ADD_ACTION(OpenMultiZimAction);
+#if defined(QT_TEXTTOSPEECH_LIB)
+    m_editMenu.ADD_ACTION(ReadArticleAction);
+    m_editMenu.ADD_ACTION(ReadTextAction);
+    m_editMenu.ADD_ACTION(ReadStopAction);
+#endif
     addMenu(&m_editMenu);
 
     m_viewMenu.setTitle(gt("view"));
     m_viewMenu.ADD_ACTION(ToggleFullscreenAction);
     m_viewMenu.ADD_ACTION(ToggleTOCAction);
     m_viewMenu.ADD_ACTION(ToggleReadingListAction);
+    m_viewMenu.ADD_ACTION(ToggleTTSLanguageAction);
+    m_viewMenu.ADD_ACTION(ToggleTTSVoiceAction);
     m_viewMenu.ADD_ACTION(ZoomInAction);
     m_viewMenu.ADD_ACTION(ZoomOutAction);
     m_viewMenu.ADD_ACTION(ZoomResetAction);
