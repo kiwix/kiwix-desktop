@@ -186,5 +186,7 @@
 	"read-text": "Represents the action of letting the computer read out the selected text on the article.",
 	"read-stop": "Represents the action of stopping the on-going reading.",
 	"stop": "{{Identical|Stop}}",
-	"voice": "{{Identical|Voice}}"
+	"voice": "{{Identical|Voice}}",
+	"select-read-voice": "Represents the action of opening the voice selection for text-to-speech.",
+	"select-read-language": "Represents the action of opening the language selection for text-to-speech."
 }

@@ -178,5 +178,7 @@
     "read-text": "Read selected text",
     "read-stop": "Stop reading",
     "stop": "Stop",
-    "voice": "Voice"
+    "voice": "Voice",
+    "select-read-voice": "Select reading voice",
+    "select-read-language": "Select reading language"
 }

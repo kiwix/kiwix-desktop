@@ -17,6 +17,7 @@ public:
 
     WebView *getWebView() { return mp_webView; }
     FindInPageBar *getFindInPageBar() { return mp_findInPageBar; }
+    TextToSpeechBar *getTextToSpeechBar() { return mp_ttsBar; }
     void openFindInPageBar();
 
 public slots:

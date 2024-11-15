@@ -42,6 +42,8 @@ public slots:
     void onStateChanged(QTextToSpeech::State state);
     void speechClose();
     void speechShow();
+    void toggleVoice();
+    void toggleLanguage();
     void languageSelected(int index);
     void voiceSelected(int index);
 

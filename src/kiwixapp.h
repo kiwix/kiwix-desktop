@@ -48,6 +48,8 @@ public:
         ToggleTOCAction,
         ToggleReadingListAction,
         ToggleAddBookmarkAction,
+        ToggleTTSLanguageAction,
+        ToggleTTSVoiceAction,
         ZoomInAction,
         ZoomOutAction,
         ZoomResetAction,

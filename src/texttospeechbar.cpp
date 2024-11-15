@@ -12,7 +12,9 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
 
     ui->stopButton->setText(gt("stop"));
     ui->stopButton->setDisabled(true);
-    connect(KiwixApp::instance()->getAction(KiwixApp::ReadStopAction), &QAction::triggered,
+
+    const auto app = KiwixApp::instance();
+    connect(app->getAction(KiwixApp::ReadStopAction), &QAction::triggered,
             this, &TextToSpeechBar::stop);
     connect(ui->stopButton, &QPushButton::pressed, this,
             &TextToSpeechBar::stop);
@@ -22,6 +24,10 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
     setupVoiceComboBox();
     setupLanguageComboBox();
     languageSelected(ui->langComboBox->currentIndex());
+    connect(app->getAction(KiwixApp::ToggleTTSLanguageAction), &QAction::triggered,
+            this, &TextToSpeechBar::toggleLanguage);
+    connect(app->getAction(KiwixApp::ToggleTTSVoiceAction), &QAction::triggered,
+            this, &TextToSpeechBar::toggleVoice);
 }
 
 void TextToSpeechBar::speak(const QString &text)
@@ -134,6 +140,30 @@ void TextToSpeechBar::speechShow()
 {
     show();
     setFocus();
+}
+
+void TextToSpeechBar::toggleVoice()
+{
+    const auto zimView = KiwixApp::instance()->getTabWidget()->currentZimView();
+    if (!zimView || zimView->getTextToSpeechBar() != this)
+        return;
+
+    if (isHidden())
+        speechShow();
+
+    ui->voiceComboBox->showPopup();
+}
+
+void TextToSpeechBar::toggleLanguage()
+{
+    const auto zimView = KiwixApp::instance()->getTabWidget()->currentZimView();
+    if (!zimView || zimView->getTextToSpeechBar() != this)
+        return;
+
+    if (isHidden())
+        speechShow();
+
+    ui->langComboBox->showPopup();
 }
 
 void TextToSpeechBar::languageSelected(int index)
