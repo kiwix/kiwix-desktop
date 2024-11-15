@@ -57,6 +57,7 @@ public:
         HistoryForwardAction,
         ReadTextAction,
         ReadArticleAction,
+        ReadStopAction,
         HelpAction,
         FeedbackAction,
         ReportBugAction,

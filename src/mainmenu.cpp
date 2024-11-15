@@ -38,6 +38,7 @@ MainMenu::MainMenu(QWidget *parent) :
     m_editMenu.ADD_ACTION(OpenMultiZimAction);
     m_editMenu.ADD_ACTION(ReadArticleAction);
     m_editMenu.ADD_ACTION(ReadTextAction);
+    m_editMenu.ADD_ACTION(ReadStopAction);
     addMenu(&m_editMenu);
 
     m_viewMenu.setTitle(gt("view"));

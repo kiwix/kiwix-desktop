@@ -13,6 +13,8 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
 
     ui->stopButton->setText(gt("stop"));
     ui->stopButton->setDisabled(true);
+    connect(KiwixApp::instance()->getAction(KiwixApp::ReadStopAction), &QAction::triggered,
+            this, &TextToSpeechBar::stop);
     connect(ui->stopButton, &QPushButton::pressed, this,
             &TextToSpeechBar::stop);
 }

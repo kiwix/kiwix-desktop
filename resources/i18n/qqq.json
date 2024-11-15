@@ -184,5 +184,6 @@
 	"search-options": "The term for a collection of additional search filtering options to help users narrow down search results.",
 	"read-article": "Represents the action of letting the computer read out all the text in the current article.",
 	"read-text": "Represents the action of letting the computer read out the selected text on the article.",
+	"read-stop": "Represents the action of stopping the on-going reading.",
 	"stop": "{{Identical|Stop}}"
 }

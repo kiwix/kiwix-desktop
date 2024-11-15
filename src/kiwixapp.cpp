@@ -391,6 +391,7 @@ void KiwixApp::createActions()
 
     CREATE_ACTION_SHORTCUT(ReadArticleAction, gt("read-article"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_A));
     CREATE_ACTION_SHORTCUT(ReadTextAction, gt("read-text"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_S));
+    CREATE_ACTION_SHORTCUT(ReadStopAction, gt("read-stop"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_X));
 
     CREATE_ACTION_ICON_SHORTCUT(PrintAction, "print", gt("print"), QKeySequence::Print);
     connect(mpa_actions[PrintAction], &QAction::triggered,
