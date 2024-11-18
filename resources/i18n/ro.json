@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Andreyyshore",
-			"MSClaudiu"
+			"MSClaudiu",
+			"Trotinel Iftode"
 		]
 	},
 	"name": "Română",
@@ -101,5 +102,7 @@
 	"open-link-in-web-browser": "Deschide legătura în browserul web",
 	"download-dir-dialog-title": "Sunteți sigur(ă) că vreți să schimbați folderul de descărcare?",
 	"download-dir-dialog-msg": "Noua cale pentru folderul de descărcare va fi: {{DIRECTORY}}",
-	"invalid-port": "Port invalid"
+	"invalid-port": "Port invalid",
+	"read-text": "Citiți textul selectat",
+	"select-read-voice": "Selectați vocea de citire"
 }

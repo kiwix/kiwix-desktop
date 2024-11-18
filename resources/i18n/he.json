@@ -102,6 +102,9 @@
 	"start-kiwix-server": "הפעלת שרת Kiwix",
 	"stop-kiwix-server": "עצירת שרת Kiwix",
 	"all": "הכול",
+	"all_ips": "הכול - מצב שני תקנים (Dual Stack)",
+	"ipv4": "מצב IPv4 בלבד",
+	"ipv6": "מצב IPv6 בלבד",
 	"fulltext-search": "חיפוש טקסט מלא",
 	"pictures": "תמונות",
 	"videos": "סרטונים",
@@ -172,5 +175,14 @@
 	"save-page-as": "שמירה בשם...",
 	"portable-disabled-tooltip": "הפונקציה מושבתת במצב נייד",
 	"scroll-next-tab": "לגלול ללשונית הבאה",
-	"scroll-previous-tab": "לגלול ללשונית הקודמת"
+	"scroll-previous-tab": "לגלול ללשונית הקודמת",
+	"kiwix-search": "חיפוש קיוויקס",
+	"search-options": "אפשרויות חיפוש",
+	"read-article": "להקריא את הערך",
+	"read-text": "להקריא את הטקסט שנבחר",
+	"read-stop": "להפסיק להקריא",
+	"stop": "עצירה",
+	"voice": "קול",
+	"select-read-voice": "בחירת קול ההקראה",
+	"select-read-language": "בחירת שפת ההקראה"
 }
