@@ -5,6 +5,7 @@
 			"LaMagiaaa",
 			"McDutchie",
 			"Meno25",
+			"Mohammed Qays",
 			"Ravan",
 			"Tala Ali",
 			"بهتين شوكت",
@@ -128,5 +129,7 @@
 	"file-not-found-text": "ملف زيم مش موجود أو مش قابل للقراءة",
 	"zim-id": "معرف زيم",
 	"zim-name": "اسم زيم",
-	"zim-path": "مسار ملف زيم"
+	"zim-path": "مسار ملف زيم",
+	"stop": "إيقاف",
+	"voice": "صوت"
 }

@@ -16,6 +16,7 @@
 			"Stang",
 			"StarrySky",
 			"Sunai",
+			"TFX202X",
 			"XtexChooser",
 			"Zhang8569",
 			"沈澄心"
@@ -190,5 +191,13 @@
 	"portable-disabled-tooltip": "便携模式下此功能被禁用",
 	"scroll-next-tab": "滚动到下一个标签页",
 	"scroll-previous-tab": "滚动到上一个标签页",
-	"kiwix-search": "Kiwix 搜索"
+	"kiwix-search": "Kiwix 搜索",
+	"search-options": "搜索选项",
+	"read-article": "阅读条目",
+	"read-text": "阅读选定的文本",
+	"read-stop": "停止阅读",
+	"stop": "停止",
+	"voice": "语音",
+	"select-read-voice": "选择朗读声音",
+	"select-read-language": "选择阅读语言"
 }

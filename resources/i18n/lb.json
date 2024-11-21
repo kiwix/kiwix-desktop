@@ -110,10 +110,22 @@
 	"category-searcher-placeholder": "No Kategorie filteren",
 	"no-pictures": "Keng Biller",
 	"no-videos": "Keng Videoen",
+	"file-not-found-title": "ZIM-Fichier net fonnt",
+	"file-not-found-text": "De ZIM-Fichier gëtt et net oder e kann net gelies ginn",
+	"zim-id": "ZIM-ID",
+	"zim-name": "ZIM-Numm",
+	"bad-zim-file-error-page-title": "Ongültege ZIM-Fichier",
 	"export-reading-list": "Lieslëscht exportéieren",
 	"export-reading-list-error": "Beim Exportéiere vun der Lieslëscht ass ee Feeler geschitt.",
 	"import-reading-list": "Lieslëscht importéieren",
 	"import-reading-list-error": "Beim Importéiere vun der Lieslëscht ass ee Feeler geschitt.",
 	"kiwix-search": "Kiwix-Sich",
-	"search-options": "Sichoptiounen"
+	"search-options": "Sichoptiounen",
+	"read-article": "Artikel virliesen",
+	"read-text": "Ausgewielten Text virliesen",
+	"read-stop": "Ophale mat virliesen",
+	"stop": "Ophalen",
+	"voice": "Stëmm",
+	"select-read-voice": "Stëmm fir virzeliesen eraussichen",
+	"select-read-language": "Sprooch fir virzeliesen eraussichen"
 }
