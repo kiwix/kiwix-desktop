@@ -60,7 +60,7 @@ QString getElidedText(const QFont& font, int length, const QString& text)
     const int textLength = length - elideMarkerLength;
     QString elidedText = metrics.elidedText(text, Qt::ElideRight, textLength);
     if (elidedText != text)
-        return elidedText.chopped(1);
+        return elidedText.isEmpty() ? "" : elidedText.chopped(1);
     return text;
 }
 

@@ -36,6 +36,10 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_server(m_library.getKiwixLibrary(), mp_nameMapper),
       mp_session(nullptr)
 {
+    /* Place session file in our global library path */
+    QDir dir(m_libraryDirectory);
+    mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
+                               QSettings::defaultFormat(), this);
     try {
         m_translation.setTranslation(QLocale());
     } catch (std::exception& e) {
@@ -172,10 +176,6 @@ QString KiwixApp::findLibraryDirectory()
 
 void KiwixApp::restoreTabs()
 {
-    /* Place session file in our global library path */
-    QDir dir(m_libraryDirectory);
-    mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
-                               QSettings::defaultFormat(), this);
     QStringList tabsToOpen = mp_session->value("reopenTabList").toStringList();
 
     /* Restart a new session to prevent duplicate records in openURL */
