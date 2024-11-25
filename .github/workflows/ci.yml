@@ -49,7 +49,7 @@ jobs:
       run: |
         set PKG_CONFIG_PATH=%cd%\BUILD_win-amd64\INSTALL\lib\pkgconfig
         qmake PREFIX=%cd%\BUILD_win-amd64\INSTALL
-        nmake debug-all
+        nmake release-all
 
   Linux:
     strategy:
