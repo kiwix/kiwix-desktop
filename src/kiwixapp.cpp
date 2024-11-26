@@ -39,7 +39,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     /* Place session file in our global library path */
     QDir dir(m_libraryDirectory);
     mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
-                               QSettings::defaultFormat(), this);
+                               QSettings::IniFormat, this);
     try {
         m_translation.setTranslation(QLocale());
     } catch (std::exception& e) {

@@ -45,7 +45,7 @@ QString getSettingsConfPath()
 
 SettingsManager::SettingsManager(QObject *parent)
     : QObject(parent),
-    m_settings(getSettingsConfPath(), QSettings::NativeFormat),
+    m_settings(getSettingsConfPath(), QSettings::IniFormat),
     m_view(nullptr)
 {
     initSettings();
