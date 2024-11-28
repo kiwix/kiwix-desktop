@@ -85,7 +85,7 @@
 	"clear": "비우기",
 	"browse": "찾아보기",
 	"about-kiwix-desktop-title": "Kiwix 데스크톱",
-	"about-kiwix-desktop-description": "Kiwix를 사용하면 어느 곳에 있든지 위키백과를 사용할 수 있습니다! 보트 위에서도, 인적이 드문 곳, 심지어 감옥에서도 Kiwix는 인류의 모든 지식에 접근하게 해 줍니다. 인터넷이 필요 없꼬 모든 것이 컴퓨터에 저장됩니다.",
+	"about-kiwix-desktop-description": "Kiwix를 사용하면 어느 곳에 있든지 위키백과를 사용할 수 있습니다! 보트 위에서도, 인적이 드문 곳, 심지어 감옥에서도 Kiwix는 인류의 모든 지식에 접근하게 해 줍니다. 인터넷이 필요 없고 모든 것이 컴퓨터에 저장됩니다.",
 	"about-learn-more-about-kiwix": "Kiwix에 관해 더 알아보기",
 	"about-release-title": "릴리스",
 	"about-source-code": "이 소프트웨어는 GNU GPLv3의 조항에 따라 출시됩니다. 소스 코드는 <a href='{{GITHUB_URL}}'>깃허브</a>에서 볼 수 있습니다.",
@@ -180,5 +180,12 @@
 	"scroll-next-tab": "다음 탭으로 스크롤",
 	"scroll-previous-tab": "이전 탭으로 스크롤",
 	"kiwix-search": "Kiwix 검색",
-	"search-options": "검색 옵션"
+	"search-options": "검색 옵션",
+	"read-article": "문서 읽기",
+	"read-text": "선택한 텍스트 읽기",
+	"read-stop": "읽기 중지",
+	"stop": "중지",
+	"voice": "음성",
+	"select-read-voice": "읽기 음성 선택",
+	"select-read-language": "읽기 언어 선택"
 }

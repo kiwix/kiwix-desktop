@@ -187,5 +187,12 @@
 	"scroll-next-tab": "Desplazarse a la pestaña siguiente",
 	"scroll-previous-tab": "Desplazarse a la pestaña anterior",
 	"kiwix-search": "Búsqueda de Kiwix",
-	"search-options": "Opciones de búsqueda"
+	"search-options": "Opciones de búsqueda",
+	"read-article": "Leer artículo",
+	"read-text": "Leer el texto seleccionado",
+	"read-stop": "Dejar de leer",
+	"stop": "Detener",
+	"voice": "Voz",
+	"select-read-voice": "Seleccionar la voz de lectura",
+	"select-read-language": "Seleccione el idioma de lectura"
 }
