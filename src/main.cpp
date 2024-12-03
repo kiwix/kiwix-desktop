@@ -17,6 +17,8 @@
 bool wasAppStartedFromARemoteDrive()
 {
     const std::string exePath = kiwix::getExecutablePath();
+    if ( exePath.substr(0, 2) == "\\\\" )
+        return true;
 
     return GetDriveTypeA(exePath.substr(0, 3).c_str()) == DRIVE_REMOTE;
 }
