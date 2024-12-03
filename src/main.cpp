@@ -12,6 +12,16 @@
 #if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
   #include <QWebEngineUrlScheme>
 #endif
+
+#ifdef Q_OS_WIN
+bool wasAppStartedFromARemoteDrive()
+{
+    const std::string exePath = kiwix::getExecutablePath();
+
+    return GetDriveTypeA(exePath.substr(0, 3).c_str()) == DRIVE_REMOTE;
+}
+#endif
+
 int main(int argc, char *argv[])
 {
 // Small hack to make QtWebEngine works with AppImage.
@@ -23,10 +33,15 @@ int main(int argc, char *argv[])
 // End of hack ^^^
 
 #ifdef Q_OS_WIN
-    std::string driveLetter = kiwix::getExecutablePath().substr(0, 3);
-    UINT driveType = GetDriveTypeA(driveLetter.c_str());
-    if(driveType == DRIVE_REMOTE) qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
+    const bool appWasStartedFromARemoteDrive = wasAppStartedFromARemoteDrive();
+    if ( appWasStartedFromARemoteDrive ) {
+	// This has to be done early before the qtwebengine dll is loaded.
+	// We notify the user about the implications and ask for confirmation
+	// a little later (see closer to the bottom of this function).
+	qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
+    }
 #endif
+
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // High DPI Scaling is enabled by default in Qt6. This attribute no longer exists in 6.0 and later
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -58,7 +73,7 @@ int main(int argc, char *argv[])
     }
     a.init();
 #ifdef Q_OS_WIN
-    if(driveType == DRIVE_REMOTE) {
+    if ( appWasStartedFromARemoteDrive ) {
         int result = QMessageBox::question(nullptr, gt("about-kiwix-desktop-title"), gt("disable-sandbox"), QMessageBox::Yes | QMessageBox::No);
         if (result == QMessageBox::No) return 0;
     }
