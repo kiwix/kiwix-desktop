@@ -80,6 +80,11 @@ int main(int argc, char *argv[])
         if (result == QMessageBox::No) return 0;
     }
 #endif
+
+    /* Restore Tabs before directory monitoring to ensure we know what tabs user had. */
+    a.restoreTabs();
+    a.setupDirectoryMonitoring();
+
     for (QString zimfile : positionalArguments) {
         a.openZimFile(zimfile);
     }

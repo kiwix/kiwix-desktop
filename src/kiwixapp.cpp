@@ -109,10 +109,7 @@ void KiwixApp::init()
         }
     });
 
-    /* Restore Tabs before directory monitoring to ensure we know what tabs user had. */
-    restoreTabs();
     restoreWindowState();
-    setupDirectoryMonitoring();
 }
 
 void KiwixApp::setupDirectoryMonitoring()
