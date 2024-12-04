@@ -106,6 +106,8 @@ public:
     void savePrevSaveDir(const QString& prevSaveDir);
     QString getSavedVoiceName(const QString& langName) const;
     QString getPrevSaveDir() const;
+    void restoreTabs();
+    void setupDirectoryMonitoring();
 
 public slots:
     void newTab();
@@ -137,9 +139,7 @@ private:
 
     QAction*     mpa_actions[MAX_ACTION];
 
-    void setupDirectoryMonitoring();
     QString findLibraryDirectory();
-    void restoreTabs();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
 };
 

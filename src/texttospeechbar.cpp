@@ -90,6 +90,9 @@ void TextToSpeechBar::resetVoiceComboBox()
     ui->voiceComboBox->clear();
 
     m_voices = m_speech.availableVoices();
+    if ( m_voices.isEmpty() )
+	    return;
+
     for (const auto& voice : m_voices)
     {
         ui->voiceComboBox->addItem(QString("%1 - %2 - %3").arg(voice.name())
