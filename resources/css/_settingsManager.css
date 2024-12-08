@@ -1,5 +1,6 @@
 QWidget#widget {
     max-width: 600;
+    border: 1px solid rgba(128, 128, 128, 0.514);
 }
 
 QLabel,
