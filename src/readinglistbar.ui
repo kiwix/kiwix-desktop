@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+     <number>0</number>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -29,7 +32,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="titleLabel">
        <property name="font">
         <font>
          <pointsize>16</pointsize>
@@ -64,8 +67,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>30</width>
-         <height>30</height>
+         <width>25</width>
+         <height>25</height>
         </size>
        </property>
        <property name="flat">
@@ -74,6 +77,13 @@
       </widget>
      </item>
     </layout>
+    </item>
+    <item>
+      <widget class="Line" name="line">
+      <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+      </property>
+      </widget>
    </item>
    <item>
     <widget class="QListWidget" name="listWidget">
@@ -90,7 +100,7 @@
       <enum>QAbstractScrollArea::AdjustToContents</enum>
      </property>
      <property name="textElideMode">
-      <enum>Qt::ElideNone</enum>
+      <enum>Qt::ElideRight</enum>
      </property>
      <property name="isWrapping" stdset="0">
       <bool>false</bool>
