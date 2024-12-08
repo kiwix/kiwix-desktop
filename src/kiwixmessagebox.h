@@ -1,21 +1,30 @@
-#ifndef KIWIXCONFIRMBOX_H
-#define KIWIXCONFIRMBOX_H
+#ifndef KIWIXMESSAGEBOX_H
+#define KIWIXMESSAGEBOX_H
 
 #include <QDialog>
+#include "kiwixapp.h"
 
 #include <stdexcept>
 
 namespace Ui {
-class kiwixconfirmbox;
+class kiwixmessagebox;
 }
 
-class KiwixConfirmBox : public QDialog
+class KiwixMessageBox : public QDialog
 {
     Q_OBJECT
 
 public:
-    KiwixConfirmBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr);
-    ~KiwixConfirmBox();
+    KiwixMessageBox(QString confirmTitle, QString confirmText, bool okDialog, QWidget *parent = nullptr,
+                    QString leftAction = gt("yes"), QString rightAction = gt("no"));
+    ~KiwixMessageBox();
+    enum Result {
+        YesClicked,
+        NoClicked,
+        OkClicked,
+        CloseClicked
+    };
+    Result execDialog() { QDialog::exec(); return m_result; }
 
 signals:
     void yesClicked();
@@ -25,23 +34,25 @@ signals:
 private:
     QString m_confirmTitle;
     QString m_confirmText;
-    Ui::kiwixconfirmbox *ui;
+    Ui::kiwixmessagebox *ui;
+    Result m_result;
 };
 
 
 void showInfoBox(QString title, QString text, QWidget *parent = nullptr);
+KiwixMessageBox::Result showKiwixMessageBox(QString title, QString text, QWidget *parent, QString leftTitle, QString rightTitle);
 
 template<class YesAction>
 void showConfirmBox(QString title, QString text, QWidget *parent,
                     YesAction yesAction)
 {
-    KiwixConfirmBox *dialog = new KiwixConfirmBox(title, text, false, parent);
+    KiwixMessageBox *dialog = new KiwixMessageBox(title, text, false, parent);
     dialog->show();
-    QObject::connect(dialog, &KiwixConfirmBox::yesClicked, [=]() {
+    QObject::connect(dialog, &KiwixMessageBox::yesClicked, [=]() {
         yesAction();
         dialog->deleteLater();
     });
-    QObject::connect(dialog, &KiwixConfirmBox::noClicked, [=]() {
+    QObject::connect(dialog, &KiwixMessageBox::noClicked, [=]() {
         dialog->deleteLater();
     });
 }
@@ -66,4 +77,4 @@ inline void showErrorBox(const KiwixAppError& err, QWidget *parent = nullptr)
     showInfoBox(err.summary(), err.details(), parent);
 }
 
-#endif // KIWIXCONFIRMBOX_H
+#endif // KIWIXMESSAGEBOX_H

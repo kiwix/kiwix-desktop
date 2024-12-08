@@ -56,7 +56,7 @@ SOURCES += \
     src/findinpagebar.cpp \
     src/flowlayout.cpp \
     src/kiwixchoicebox.cpp \
-    src/kiwixconfirmbox.cpp \
+    src/kiwixmessagebox.cpp \
     src/kiwixlineedit.cpp \
     src/kiwixlistwidget.cpp \
     src/kiwixloader.cpp \
@@ -109,7 +109,7 @@ HEADERS += \
     src/findinpagebar.h \
     src/flowlayout.h \
     src/kiwixchoicebox.h \
-    src/kiwixconfirmbox.h \
+    src/kiwixmessagebox.h \
     src/kiwixlineedit.h \
     src/kiwixlistwidget.h \
     src/kiwixloader.h \
@@ -159,7 +159,7 @@ FORMS += \
     src/contentmanagerview.ui \
     src/findinpagebar.ui \
     ui/kiwixchoicebox.ui \
-    ui/kiwixconfirmbox.ui \
+    ui/kiwixmessagebox.ui \
     ui/mainwindow.ui \
     ui/about.ui \
     src/contentmanagerside.ui \

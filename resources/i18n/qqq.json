@@ -17,6 +17,7 @@
 	"error-downloader-launch-message": "Error text displayed to elaborate on the effect of the downloader failure.",
 	"error-launch-server-message": "Error text displayed when Kiwix server failed to launch.",
 	"error-archive": "Error text displayed when the retrieving the archive of a ZIM file failed.",
+	"error-opening-file": "Error text displayed when opening a downloaded file with an external application fails.",
 	"open-zim": "Caption text for file explorer window used to choose a ZIM file.",
 	"local-kiwix-server": "Describes a server hosted locally that contains the local kiwix library.",
 	"random-article": "A randomly chosen article in a ZIM file.",
@@ -31,6 +32,7 @@
 	"reopen-closed-tab": "Represents the action of reopen a tab that has just been closed.",
 	"browse-library": "Represents the action of browsing the local kiwix library.",
 	"open-file": "Represents the action of opening a file from the local file system.",
+	"save-file": "Represents the action of saving a file to the local file system.",
 	"open-recent": "Represents the action of choosing to open a file from those recently opened.",
 	"search-article": "Represents the action of Searching for a article in the current ZIM file.",
 	"search-in-library": "Represents the action of Searching for a text in the local Kiwix library.",
@@ -53,6 +55,7 @@
 	"donate-to-support-kiwix": "Represents the action of donating to support the Kiwix Organization.",
 	"exit": "Represents the action of exiting the desktop application",
 	"save-file-as-window-title": "Title text of the window prompting user to save as a new file.",
+	"download-finished": "Title of the message box announcing the completion of a download",
 	"download-finished-message": "Text displayed when the download action has been completed",
 	"file": "{{Identical|File}}",
 	"edit": "{{Identical|Edit}}",
@@ -188,5 +191,7 @@
 	"stop": "{{Identical|Stop}}",
 	"voice": "{{Identical|Voice}}",
 	"select-read-voice": "Represents the action of opening the voice selection for text-to-speech.",
-	"select-read-language": "Represents the action of opening the language selection for text-to-speech."
+	"select-read-language": "Represents the action of opening the language selection for text-to-speech.",
+	"save-or-open": "Title of the message box allowing to choose whether a remote resource should be saved to disk or opened with a respective application",
+	"save-or-open-text": "Text of the message box allowing to choose whether a remote resource should be saved to disk or opened with a respective application"
 }

@@ -1,7 +1,7 @@
 #include "downloadmanagement.h"
 
 #include "kiwixapp.h"
-#include "kiwixconfirmbox.h"
+#include "kiwixmessagebox.h"
 
 #include <QStorageInfo>
 #include <QThread>
