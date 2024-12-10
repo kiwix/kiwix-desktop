@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QToolTip>
+#include <QScrollArea>
 
 namespace 
 {
@@ -29,7 +30,7 @@ namespace
 }
 
 SettingsView::SettingsView(QWidget *parent)
-    : QWidget(parent)
+    : QScrollArea(parent)
     , ui(new Ui::Settings)
 {
     SettingsManager *settingsMgr = KiwixApp::instance()->getSettingsManager();
