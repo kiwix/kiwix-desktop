@@ -90,7 +90,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     const int contentHeight = HeaderSectionCSS::lineHeight;
     m_suggestionView->setIconSize(QSize(contentHeight, contentHeight));
 
-    /* The suggestionView sizing unfortunately is not aware of headers. We 
+    /* The suggestionView sizing unfortunately is not aware of headers. We
        have to do this manually. We also sized header the same as items.
     */
     connect(&m_suggestionModel, &QAbstractListModel::modelReset, [=](){
@@ -134,7 +134,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
         m_returnPressed = true;
 
         /* Open default index when nothing is selected.
-        
+
            Key_Return can be pressed during typing, where suggestions no longer
            match the text typed. Hence the suggestionsValid check.
          */
@@ -142,7 +142,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
         if (!m_suggestionView->currentIndex().isValid() && suggestionsValid)
             openCompletion(getDefaulSuggestionIndex());
     });
-    
+
     auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::SearchArticleAction), &QAction::triggered,
             this, [=]() {
@@ -166,7 +166,7 @@ bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
         const auto key = e->key();
         const bool isScrollDownKey = key == Qt::Key_Down || key == Qt::Key_PageDown;
         const bool noModifiers = e->modifiers().testFlag(Qt::NoModifier);
-        
+
         if (isScrollDownKey && noModifiers)
         {
             m_aboutToScrollPastEnd = false;
@@ -249,7 +249,7 @@ void SearchBarLineEdit::updateCompletion()
 void SearchBarLineEdit::fetchMoreSuggestions()
 {
     /* TODO: Refactor suggestion worker to re-use zim::SuggestionSearcher for
-       fetching more suggestion in a single archive. Currently we create a 
+       fetching more suggestion in a single archive. Currently we create a
        searcher for every fetch, and discarded after one use.
     */
     fetchSuggestions(&SearchBarLineEdit::onAdditionalSuggestions);
@@ -394,18 +394,18 @@ QRect SearchBarLineEdit::getCompleterRect() const
     const int top = searchGeo.height() - 2 * spaceAround;
     const int width = searchGeo.width() - 2 * spaceAround;
 
-    /* Shift completer to one of the two laterals of search bar, where which 
+    /* Shift completer to one of the two laterals of search bar, where which
        one it shifted to dependes on whether the line edit is flipped.
     */
     int left = -searchLineEditGeo.left();
 
-    /* When not flipped, left() is relative to within the search bar border, 
+    /* When not flipped, left() is relative to within the search bar border,
        thus, we shift by spaceAround to match the side of search bar.
 
-       When flipped, the completer starts at the right end of the search bar 
-       We shift it by width to make the completer start at left lateral of 
+       When flipped, the completer starts at the right end of the search bar
+       We shift it by width to make the completer start at left lateral of
        search bar. Since in a flipped state, left() also considered the opposite
-       side's border, which means we need to shift by a border width in 
+       side's border, which means we need to shift by a border width in
        addition to spaceAround.
     */
     left += isRightToLeft() ? -width + spaceAround + border : spaceAround;
@@ -420,7 +420,7 @@ SearchBar::SearchBar(QWidget *parent) :
     m_bookmarkButton(this),
     m_multiZimButton(this)
 {
-    QLabel* searchIconLabel = new QLabel; 
+    QLabel* searchIconLabel = new QLabel;
     searchIconLabel->setObjectName("searchIcon");
     searchIconLabel->setPixmap(QIcon(":/icons/search.svg").pixmap(QSize(27, 27)));
 
