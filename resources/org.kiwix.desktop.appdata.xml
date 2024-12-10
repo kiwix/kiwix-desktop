@@ -13,7 +13,7 @@
     </p>
   </description>
   <releases>
-    <release version="2.3.1" date="2022-11-30" />
+    <release version="2.4.0" date="2024-12-20" />
   </releases>
   <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
