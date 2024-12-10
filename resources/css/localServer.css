@@ -2,6 +2,10 @@ QWidget {
     background-color: white;
 }
 
+QDialog {
+    border: 2px solid #cccccc;
+}
+
 QPushButton {
     opacity: 1;
     border: none;
