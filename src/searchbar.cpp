@@ -68,7 +68,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
        directional mask to make it LTR at leading position.
        https://stackoverflow.com/questions/66430215/english-and-arabic-mixed-string-not-ordered-correctly-qt
     */
-    const QString ltrConversionChar = QString{"\u200e"};
+    const QString ltrConversionChar(u8"\u200e");
     setPlaceholderText(ltrConversionChar + gt("search"));
     setToolTip(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
