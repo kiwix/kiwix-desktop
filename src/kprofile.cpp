@@ -39,7 +39,7 @@ QString askForSaveFilePath(const QString& suggestedName)
     const auto app = KiwixApp::instance();
     const QString suggestedPath = app->getPrevSaveDir() + "/" + suggestedName;
     const QString extension = suggestedName.section(".", -1);
-    const QString filter = extension.isEmpty() ? "" : "(*" + extension + ")";
+    const QString filter = extension.isEmpty() ? "" : "(*." + extension + ")";
     QString fileName = QFileDialog::getSaveFileName(
             app->getMainWindow(), gt("save-file-as-window-title"),
             suggestedPath, filter);
