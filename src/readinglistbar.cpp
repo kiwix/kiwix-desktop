@@ -15,7 +15,6 @@ ReadingListBar::ReadingListBar(QWidget *parent) :
     ui(new Ui::readinglistbar)
 {
     ui->setupUi(this);
-    ui->titleLabel->setFont(QFont("Selawik", 18, QFont::Weight::Medium));
     ui->titleLabel->setText(gt("reading-list"));
 
     connect(KiwixApp::instance()->getLibrary(), &Library::bookmarksChanged,

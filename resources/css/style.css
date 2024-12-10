@@ -489,6 +489,12 @@ ContentTypeFilter {
     background-color: grey;
 }
 
+#readinglistbar QLabel#titleLabel {
+    font-family: "Selawik";
+    font-size: 24px;  /*equivalent to font-size 18*/
+    font-weight: 500; /*equivalent to font-weight medium*/
+}
+
 /* ----------------------------------------
     Text to Speech Page
 */
