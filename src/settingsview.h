@@ -3,10 +3,11 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include <QScrollArea>
 namespace Ui {
 class Settings;
 }
-class SettingsView : public QWidget
+class SettingsView : public QScrollArea
 {
     Q_OBJECT
 public:

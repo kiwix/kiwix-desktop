@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>Settings</class>
+<widget class="QScrollArea" name="scrollArea">
+<property name="geometry">
+<rect>
+<x>0</x>
+<y>0</y>
+<width>1029</width>
+<height>580</height>
+</rect>
+</property>
+<property name="widgetResizable">
+	<bool>true</bool>
+</property>
+<widget class="QWidget" name="scrollAreaWidgetContents">
+	<property name="geometry">
+	<rect>
+		<x>0</x>
+		<y>0</y>
+		<width>1029</width>
+		<height>580</height>
+	</rect>
+	</property>
+	<layout class="QVBoxLayout" name="verticalLayout">
+		<property name="alignment">
+			<set>Qt::AlignCenter</set>
+		</property>
+	<item>
  <widget class="QWidget" name="Settings">
   <property name="geometry">
    <rect>
@@ -19,7 +45,7 @@
   <property name="minimumSize">
    <size>
     <width>600</width>
-    <height>0</height>
+    <height>450</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -406,6 +432,10 @@
    </item>
   </layout>
  </widget>
+ 	</item>
+</layout>
+</widget>
+</widget>
  <resources/>
  <connections/>
 </ui>
