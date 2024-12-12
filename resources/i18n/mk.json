@@ -10,6 +10,7 @@
 	"error-downloader-launch-message": "Не можам да го пуштам преземачот. Кивикс за сметач ќе се пушти, нема да работи ниедна од можностите за преземање!",
 	"error-launch-server-message": "Се појави грешка!",
 	"error-archive": "Не можам да го добијам архивот",
+	"error-opening-file": "Се јави грешка при отворањето на податотеката.",
 	"open-zim": "Отвори ZIM-податотека",
 	"local-kiwix-server": "Месен опслужувач на Кивикс",
 	"random-article": "Случајна статија",
@@ -24,6 +25,7 @@
 	"reopen-closed-tab": "Преотвори затворено јазиче",
 	"browse-library": "Прелистај библиотека",
 	"open-file": "Отвори податотека",
+	"save-file": "Зачувај податотека",
 	"open-recent": "Отвори скорешни",
 	"search-article": "Пребарај статија",
 	"search-in-library": "Пребарај во библиотеката",
@@ -46,6 +48,7 @@
 	"donate-to-support-kiwix": "Дарувајте на Кивикс",
 	"exit": "Излези",
 	"save-file-as-window-title": "Зачувај како",
+	"download-finished": "Преземањето заврши",
 	"download-finished-message": "Документот е преземен.",
 	"file": "Податотека",
 	"edit": "Уреди",
@@ -181,5 +184,7 @@
 	"stop": "Престани",
 	"voice": "Глас",
 	"select-read-voice": "Изберете глас на читање",
-	"select-read-language": "Изберете јазик на читање"
+	"select-read-language": "Изберете јазик на читање",
+	"save-or-open": "Зачувај или Отвори податотека",
+	"save-or-open-text": "Што да прави Кивикс со податотекава?"
 }

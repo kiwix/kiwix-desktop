@@ -2,12 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Ajeje Brazorf",
-			"GianAntonucci"
+			"GianAntonucci",
+			"Gmelfi"
 		]
 	},
 	"name": "Sicilianu",
 	"error-title": "Erruri",
-	"home-page": "Pàggina mastra",
+	"home-page": "Pàggina principali",
 	"main-menu": "Menu principali",
 	"close": "Chiudi",
 	"help": "Aiutu",
