@@ -6,6 +6,7 @@
 			"Fitoschido",
 			"McDutchie",
 			"Nuevo Paso",
+			"Suleiman the Magnificent Television",
 			"YeBoy371",
 			"Ykhwong",
 			"그냥기여자"
@@ -17,6 +18,7 @@
 	"error-downloader-launch-message": "다운로더를 시작할 수 없습니다. Kiwix-desktop이 시작되더라도 모든 다운로드 기능이 작동하지 않을 것입니다!",
 	"error-launch-server-message": "오류가 발생했습니다!",
 	"error-archive": "아카이브를 가져올 수 없습니다",
+	"error-opening-file": "파일을 여는 중 오류가 발생했습니다.",
 	"open-zim": "ZIM 파일 열기",
 	"local-kiwix-server": "로컬 Kiwix 서버",
 	"random-article": "임의의 문서",
@@ -31,6 +33,7 @@
 	"reopen-closed-tab": "닫힌 탭 다시 열기",
 	"browse-library": "라이브러리 찾아보기",
 	"open-file": "파일 열기",
+	"save-file": "파일 저장",
 	"open-recent": "최근 항목 열기",
 	"search-article": "문서 검색",
 	"search-in-library": "라이브러리에서 검색",
@@ -53,6 +56,7 @@
 	"donate-to-support-kiwix": "Kiwix 후원하기",
 	"exit": "나가기",
 	"save-file-as-window-title": "다른 이름으로 파일 저장",
+	"download-finished": "다운로드 완료",
 	"download-finished-message": "문서가 다운로드되었습니다.",
 	"file": "파일",
 	"edit": "편집",
@@ -175,6 +179,7 @@
 	"export-reading-list-error": "읽기 목록을 내보내는 동안 오류가 발생했습니다.",
 	"import-reading-list": "읽기 목록 가져오기",
 	"import-reading-list-error": "읽기 목록을 가져오는 동안 오류가 발생했습니다.",
+	"disable-sandbox": "Kiwix가 파일서버에서 시작. 이는 검색의 샌드박스에 호환문제를 일으키는 것으로 알려짐. 따라서 샌드박스는 비활성화될 것임. 계속하기?",
 	"save-page-as": "다른 이름으로 저장...",
 	"portable-disabled-tooltip": "포터블 모드에서 기능이 비활성화됩니다",
 	"scroll-next-tab": "다음 탭으로 스크롤",
@@ -187,5 +192,6 @@
 	"stop": "중지",
 	"voice": "음성",
 	"select-read-voice": "읽기 음성 선택",
-	"select-read-language": "읽기 언어 선택"
+	"select-read-language": "읽기 언어 선택",
+	"save-or-open": "파일 저장 또는 열기"
 }

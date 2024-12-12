@@ -18,6 +18,7 @@
 	"error-downloader-launch-message": "Impossibile avviare il downloader, Kiwix-desktop si avvierà ma tutte le funzioni di download non funzioneranno!",
 	"error-launch-server-message": "Si è verificato un errore.",
 	"error-archive": "Impossibile ottenere l'archivio",
+	"error-opening-file": "Si è verificato un errore durante l'apertura del file.",
 	"open-zim": "Apri file ZIM",
 	"local-kiwix-server": "Server Kiwix locale",
 	"random-article": "Voce a caso",
@@ -32,6 +33,7 @@
 	"reopen-closed-tab": "Riapri scheda chiusa",
 	"browse-library": "Esplora libreria",
 	"open-file": "Apri file",
+	"save-file": "Salva file",
 	"open-recent": "Apri recenti",
 	"search-article": "Ricerca voce",
 	"search-in-library": "Cerca nella libreria",
@@ -132,5 +134,6 @@
 	"delete-book": "Cancella libro",
 	"delete-book-text": "Sei sicuro di voler cancellare <b>{{ZIM}}</b> ?",
 	"download-storage-error-text": "Il sistema non dispone di memoria sufficiente.",
-	"download-unavailable-text": "Questo download non è disponibile."
+	"download-unavailable-text": "Questo download non è disponibile.",
+	"save-or-open": "Salva o apri file"
 }

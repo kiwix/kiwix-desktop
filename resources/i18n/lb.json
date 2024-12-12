@@ -9,6 +9,7 @@
 	"name": "Lëtzebuergesch",
 	"error-title": "Feeler",
 	"error-launch-server-message": "Et ass e Feeler geschitt!",
+	"error-opening-file": "Et gouf e Feeler beim Opmaache vum Fichier.",
 	"open-zim": "ZIM Fichier opmaachen",
 	"local-kiwix-server": "Lokale Kiwix-Server",
 	"random-article": "Zoufällegen Artikel",
@@ -21,6 +22,7 @@
 	"close-tab": "Tab zoumaachen",
 	"close": "Zoumaachen",
 	"open-file": "Fichier opmaachen",
+	"save-file": "Fichier späicheren",
 	"search-article": "Artikel sichen",
 	"search-in-library": "An der Bibliothéik sichen",
 	"find-in-page": "Op der Säit sichen",
@@ -127,5 +129,7 @@
 	"stop": "Ophalen",
 	"voice": "Stëmm",
 	"select-read-voice": "Stëmm fir virzeliesen eraussichen",
-	"select-read-language": "Sprooch fir virzeliesen eraussichen"
+	"select-read-language": "Sprooch fir virzeliesen eraussichen",
+	"save-or-open": "Fichier späicheren oder opmaachen",
+	"save-or-open-text": "Wat soll Kiwix mam Fichier maachen?"
 }
