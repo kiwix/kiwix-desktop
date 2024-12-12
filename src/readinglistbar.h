@@ -8,7 +8,7 @@ namespace Ui {
 class readinglistbar;
 }
 
-class ReadingListBar : public QWidget
+class ReadingListBar : public QFrame
 {
     Q_OBJECT
 

@@ -344,16 +344,14 @@ QTabBar::scroller {
 }
 
 #categorySelector QScrollBar,
-#languageSelector QScrollBar,
-#readinglistbar QScrollBar {
+#languageSelector QScrollBar {
     width: 5px;
     border: none;
     outline: none;
 }
 
 #categorySelector QScrollBar::handle,
-#languageSelector QScrollBar::handle,
-#readinglistbar QScrollBar {
+#languageSelector QScrollBar::handle {
     background-color: grey;
 }
 
@@ -369,37 +367,6 @@ ContentTypeFilter {
     spacing: 10;
 }
 
-#readinglistbar QLabel {
-    font-size: 24px;
-    font-weight: bold;
-    padding: 5px;
-}
-
-#readinglistbar QListWidget {
-    show-decoration-selected: 0;
-    border: none;
-    padding: 5px;
-}
-
-#readinglistbar QListWidget::item {
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-#readinglistbar QPushButton {
-    margin-left: 4px;
-}
-
-#readinglistbar QPushButton::hover {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
-    border-radius: 3px;
-}
-
-#readinglistbar QPushButton::menu-indicator {
-    width: 0;
-    height: 0;
-}
 
 #tableofcontentbar {
     background-color: white;
@@ -463,6 +430,70 @@ ContentTypeFilter {
     background-color: grey;
 }
 
+/*this selector worked after changing class ReadingListBar to a QFrame instead of QWidget in readinglistbar.h file*/
+#readinglistbar {
+    background-color: white;
+}
+
+#readinglistbar QPushButton::menu-indicator {
+    width: 0;
+    height: 0;
+}
+
+#readinglistbar QTreeWidget,
+#readinglistbar QLabel,
+#readinglistbar QFrame,
+#readinglistbar QListWidget,
+#readinglistbar QPushButton {
+    background-color: white;
+}
+
+#readinglistbar QPushButton{
+    margin: 13px 10px 10px;
+}
+
+#readinglistbar QListWidget {
+    outline: none;
+}
+
+#readinglistbar QListWidget::item,
+#readinglistbar QListWidget::item:selected{
+    height: 26px;
+    padding: 0px 10px;
+    outline: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    color: black;
+}
+
+#readinglistbar QListWidget::item:hover {
+    outline: none;
+    border-top: 1px solid #3366CC;
+    border-bottom: 1px solid #3366CC;
+    background-color: #D9E9FF;
+    color: black;
+}
+
+#readinglistbar #titleLabel {
+    padding: 0px;
+    margin: 10px;
+}
+
+#readinglistbar QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+#readinglistbar QScrollBar::handle {
+    background-color: grey;
+}
+
+#readinglistbar QLabel#titleLabel {
+    font-family: "Selawik";
+    font-size: 24px;  /*equivalent to font-size 18*/
+    font-weight: 500; /*equivalent to font-weight medium*/
+}
 /* ----------------------------------------
     Text to Speech Page
 */

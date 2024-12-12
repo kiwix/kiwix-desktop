@@ -43,7 +43,6 @@
 	"add-bookmark": "Represents the action of adding a page as a bookmark",
 	"remove-bookmark": "Represents the action of removing a page from the bookmarks",
 	"reading-list": "Describes a list of bookmarked articles.",
-	"reading-list-title": "Describes a list of bookmarked articles.",
 	"zoom-in": "Represents the action of zooming into the article, making the article content appear larger.",
 	"zoom-out": "Represents the action of zooming out of the article, making the article content appear smaller.",
 	"zoom-reset": "Represents the action of resetting the article zoom, changing the article content size back to default",
