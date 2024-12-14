@@ -1,3 +1,80 @@
+kiwix-destkop 2.4.0
+===================
+
+General:
+* FIX: Fullscreen with Wayland on Linux (@adamlamar #1046)
+* FIX: Fullscreen (auto-)scrolling (@sgourdas #1064)
+* FIX: Main window title at start (@juuz0 #962)
+* FIX: Proper fullscreen shortcut when run on WSL (@sgourdas #1080 #068)
+* FIX: Settings directories display (@sgourdas #1139 #1125)
+* FIX: More informative file-not-found page (@ShaopengLin #1132)
+* FIX: UI padding/margin improvements (@ShaopengLin #1146)
+* FIX: Stop crashing if ZIM file is somehow invalid (@veloman-yunkan #1086 #1174)
+* FIX: Support of RTL (@ShaopengLin #1187)
+* FIX: Improve support of high-density screens (@ShaopengLin #1198 #1208 #1209)
+* FIX: Launching from a network drive on Windows (@sgourdas #1215 #1180 #1178 #1170, @veloman-yunkan #1266)
+* FIX: App icons (@rgaudin @siemsie #1245)
+* FIX: Scrollabel Settings tab (@heropj #1269)
+* FIX: Bookmarks sidebar look & feel (@heropj #1256)
+* CHANGE: Non-standart boomark icon changed to standart "star" and adding tooltip (@sgourdas #1066)
+* CHANGE: Bookmarks sidebar shortcut to Ctrl+B (@vinurk #1090)
+* CHANGE: Simplify & improve handling of portable version (@sgourdas #1179)
+* NEW: Support of Qt6 (@adamlamar #1046)
+* NEW: Handle Win+Arrow shortcuts on Windows (@juuz0 #878)
+* NEW: Handle Ctrl+F4 and Ctrl+w tabs related shortcuts @juuz0 #968)
+* NEW: "Random Article" button (@juuz0 #928 #955)
+* NEW: Remember the current directory path to pen file over restart (@sgourdas #1058)
+* NEW: Block any resource required within a ZIM page (@veloman-yunkan #1116)
+* NEW: Remember window position over restart (@ShaopengLin #1126)
+* NEW: Implement the "Home" button (@sgourdas #1138)
+* NEW: import/export bookmarks (@ShaopengLin #1163)
+* NEW: Support of IPv6 in server and improve IP propositions (@sgourdas #1220 #1121)
+* NEW: Table of content sidebar (@ShaopengLin #1237)
+* NEW: Text to Speech tool (ShaopengLin #1143)
+* NEW: Open PDF files in ZIM via PDF reader (@juuz0 @veloman-yunkan #1123)
+
+Tabs:
+* FIX: Buggy tab closing fixed (@veloman-yunkan #1057)
+* FIX: Keep sidebars open by switching tabs (@sgourdas #1079)
+* NEW: Remember (current) tabs over restart (@ShaopengLin #1048 #1073)
+
+Search(es):
+* FIX: Keep vertical position after exiting find-in-page (@vinurk #1075)
+* FIX: Proper search bar focus shortcuts: F6, Ctrl_I, Alt + d, ... (@ShaopengLin #1061)
+* FIX: Fulltext search result handling (@sgourdas #1065)
+* FIX: Improve handling of bookmark button in searchbar (@ShaopengLin #1060)
+* NEW: Endless suggestion list (@ShaopengLin #1224)
+* NEW: Pressing ENTER in the searchbar opens first suggestion (@ShaopengLin #1232)
+* NEW: New search book chooser (@ShaopengLin #1218)
+
+Library:
+* FIX: Book downloader stability (@veloman-yunkan #1024 #1035 #1036 #1038 #118)
+* FIX: Properly check first if ZIM file can be saved to target filesystem (@veloman-yunkan #1188)
+* FIX: More informative message if lack of space to download (@veloman-yunkan #1092)
+* FIX: Detection of clicks on download control buttons (@veloman-yunkan #1101)
+* FIX: Smarter/robuster directory monitoring... for ZIM files (@veloman-yunkan #1164)
+* CHANGE: Moving library freetext search box to the sidebar (@juuz0 #554)
+* CHANGE: Dyanmicaly populated library language & category filter (@juuz0 #960)
+* CHANGE: Library revamping using Qt (@juuz0 #946 #965 #970, @ShaopengLin #1145)
+* NEW: Library double-click opening a book (@juuz0 #946)
+* NEW: Translated category label (@ShaopengLin #1175)
+* NEW: New Library "Open folder" button (@juuz0 #970)
+* NEW: Allow to nove book file to filesystem trash (@juuz0 #479)
+* NEW: Switch automatically to online library if no local book (@juuz0 #989)
+* NEW: Remember library filter values over restart (@juuz0 #974)
+* NEW: Added ContextMenu Button for Previewing Online Books (@ShaopengLin #1110)
+
+Compilation:
+* FIX: Better handle libzim and libkiwix dependencies (@kelson42 #1044)
+* FIX: PPA publishing workflow (@kelson42 #953)
+* FIX: Improve header includes order (@sgourdas #1077)
+* FIX Many fixes around Appimage version (@veloman-yunkan #1016)
+* CHANGE: Use latest libkiwix (@juuz0 #936, @kelson42 #1012, @mgautierfr ##1130, @aryanA101a #1112)
+* NEW: Enable compilation on WSL (@sgourdas #1071)
+
+Documentation:
+* CHANGE: [Proper documentation about where data are saved(https://github.com/kiwix/kiwix-desktop/wiki/Data-and-Configuration-Files) (@sgourdas #111]4)
+
 kiwix-destkop 2.3.1
 ===================
 
