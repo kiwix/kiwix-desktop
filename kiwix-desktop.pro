@@ -24,6 +24,14 @@ QMAKE_LFLAGS +=  -std=c++17
 
 !win32 {
     QMAKE_CXXFLAGS += -Werror
+    equals(QT_MAJOR_VERSION, 6):equals(QT_MINOR_VERSION, 6) {
+        # Fail the build on errors, except for 'template-id-cdtor' due to a problem with Qt headers.
+        # This can be removed when the Ubuntu package is fixed.
+        # See
+        # https://github.com/RfidResearchGroup/proxmark3/issues/2382
+        # https://bugreports.qt.io/browse/QTBUG-126989
+        QMAKE_CXXFLAGS += -Wno-error=template-id-cdtor
+    }
 }
 
 !win32:!static {

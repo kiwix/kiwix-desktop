@@ -57,19 +57,23 @@ jobs:
       matrix:
         target:
           - jammy-qt5
-          - noble-qt6
+          - noble-qt6.4
+          - oracular-qt6.6
         include:
           - target: jammy-qt5
             image_variant: jammy
             lib_postfix: '/x86_64-linux-gnu'
-          - target: noble-qt6
+          - target: noble-qt6.4
             image_variant: noble
+            lib_postfix: '/x86_64-linux-gnu'
+          - target: oracular-qt6.6
+            image_variant: oracular
             lib_postfix: '/x86_64-linux-gnu'
     env:
       HOME: /home/runner
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:2024-12-17
+      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:2024-12-18
 
     steps:
       - name: Install dependencies
