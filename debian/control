@@ -7,8 +7,8 @@ Build-Depends: debhelper-compat (= 13),
  qtbase5-dev,
  qtwebengine5-dev,
  libqt5texttospeech5-dev,
- libkiwix-dev (>= 14.0.0), libkiwix-dev (<< 15.0.0),
- libzim-dev (>= 9.0.0), libzim-dev (<< 10.0.0),
+ libkiwix-dev (>= 14.0), libkiwix-dev (<< 15.0),
+ libzim-dev (>= 9.0), libzim-dev (<< 10.0),
 Standards-Version: 4.5.0
 Homepage: https://www.kiwix.org/
 Rules-Requires-Root: no
