@@ -9,6 +9,10 @@ QT       += webenginewidgets webchannel
 QT       += printsupport
 qtHaveModule(texttospeech): QT += texttospeech
 
+win32 {
+    QT += gui-private
+}
+
 # Avoid stripping incompatible files, due to false identification as executables, on WSL
 DETECT_WSL = $$system(test -f /proc/sys/fs/binfmt_misc/WSLInterop && echo true || echo false)
 equals(DETECT_WSL , "true"): CONFIG += nostrip
