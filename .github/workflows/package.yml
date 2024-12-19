@@ -31,9 +31,9 @@ jobs:
         run: |
           if [[ $REF == refs/tags* ]]
           then
-            echo "::set-output name=ppa::kiwixteam/release"
+            echo "ppa=kiwixteam/release" >> $GITHUB_OUTPUT
           else
-            echo "::set-output name=ppa::kiwixteam/dev"
+            echo "ppa=kiwixteam/dev" >> $GITHUB_OUTPUT
           fi
         env:
           REF: ${{ github.ref }}
