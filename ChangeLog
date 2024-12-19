@@ -1,3 +1,10 @@
+kiwix-destkop 2.4.1
+===================
+
+Compilation:
+* FIX: PPA upload (@veloman-yunkan #1288)
+* NEW: Qt6 in CI (@adamlamar #1287 #1289)
+
 kiwix-destkop 2.4.0
 ===================
 
