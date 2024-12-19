@@ -14,6 +14,7 @@
 	"error-downloader-launch-message": "Tidak dapat meluncurkan pengunduh, Kiwix-desktop akan mulai tetapi semua fungsi pengunduhan tidak berfungsi!",
 	"error-launch-server-message": "Telah terjadi kesalahan!",
 	"error-archive": "Gagal memuat arsip",
+	"error-opening-file": "Ada kesalahan saat membuka berkas.",
 	"open-zim": "Buka Berkas ZIM",
 	"local-kiwix-server": "Server Kiwix Lokal",
 	"random-article": "Artikel Acak",
@@ -28,6 +29,7 @@
 	"reopen-closed-tab": "Buka kembali tab yang telah tertutup",
 	"browse-library": "Lihat isi perpustakaan",
 	"open-file": "Buka file",
+	"save-file": "Simpan berkas",
 	"open-recent": "Buka yang terbaru",
 	"search-article": "Cari artikel",
 	"search-in-library": "Cari di perpustakaan",
@@ -38,7 +40,6 @@
 	"add-bookmark": "Tambah ke daftar bacaan",
 	"remove-bookmark": "Hapus dari daftar bacaan",
 	"reading-list": "Daftar bacaan",
-	"reading-list-title": "Daftar bacaan",
 	"zoom-in": "Perbesar",
 	"zoom-out": "Perkecil",
 	"zoom-reset": "Atur ulang zoom",
@@ -50,6 +51,7 @@
 	"donate-to-support-kiwix": "Berikan donasi untuk mendukung Kiwix",
 	"exit": "Keluar",
 	"save-file-as-window-title": "Simpan Berkas sebagai",
+	"download-finished": "Unduh Selesai",
 	"download-finished-message": "Dokumen telah diunduh.",
 	"file": "File",
 	"edit": "Sunting",
@@ -185,5 +187,7 @@
 	"stop": "Berhenti",
 	"voice": "Suara",
 	"select-read-voice": "Pilih suara bacaan",
-	"select-read-language": "Pilih bahasa bacaan"
+	"select-read-language": "Pilih bahasa bacaan",
+	"save-or-open": "Simpan atau Buka berkas",
+	"save-or-open-text": "Apa yang harus dilakukan Kiwix dengan berkas ini?"
 }

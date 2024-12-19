@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Benoit74",
+			"Constant",
 			"Florian COLLIN",
 			"Gomoko",
 			"Goombiis",
@@ -48,7 +49,6 @@
 	"add-bookmark": "Ajouter à la liste de lecture",
 	"remove-bookmark": "Supprimer de la liste de lecture",
 	"reading-list": "Liste de lecture",
-	"reading-list-title": "Liste de lecture",
 	"zoom-in": "Zoom avant",
 	"zoom-out": "Zoom arrière",
 	"zoom-reset": "Réinitialisation du zoom",
