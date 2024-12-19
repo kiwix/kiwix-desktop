@@ -13,7 +13,7 @@
     </p>
   </description>
   <releases>
-    <release version="2.4.0" date="2024-12-20" />
+    <release version="2.4.1" date="2024-12-21" />
   </releases>
   <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
@@ -23,7 +23,7 @@
   <url type="donation">https://www.kiwix.org/support/</url>
   <url type="faq">https://www.kiwix.org/faq/</url>
   <url type="homepage">https://www.kiwix.org/</url>
-  <update_contact>mgautier_AT_kymeria.fr</update_contact>
+  <update_contact>contact_AT_kiwix.org</update_contact>
   <screenshots>
     <screenshot type="default">
       <image>https://upload.wikimedia.org/wikipedia/commons/3/38/Kiwix-desktop_showing_its_local_Library.png</image>
