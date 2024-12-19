@@ -13,6 +13,7 @@
 	"error-downloader-launch-message": "אי אפשר לטעון מנגנון הורדה, Kiwix לשולחן העבודה יופעל אך יכולות ההורדה לא תפעלנה!",
 	"error-launch-server-message": "אירעה שגיאה!",
 	"error-archive": "לא ניתן לקבל את הארכיון",
+	"error-opening-file": "אירעה שגיאה בפתיחת הקובץ.",
 	"open-zim": "פתיחת קובץ ZIM",
 	"local-kiwix-server": "שרת Kiwix מקומי",
 	"random-article": "ערך אקראי",
@@ -27,6 +28,7 @@
 	"reopen-closed-tab": "פתיחת הלשונית שנסגרה מחדש",
 	"browse-library": "עיון בספרייה",
 	"open-file": "פתיחת קובץ",
+	"save-file": "שמירת קובץ",
 	"open-recent": "פתיחת אחרון",
 	"search-article": "חיפוש ערך",
 	"search-in-library": "חיפוש בספרייה",
@@ -37,7 +39,6 @@
 	"add-bookmark": "הוספה לרשימת הקריאה",
 	"remove-bookmark": "הסרה מרשימת הקריאה",
 	"reading-list": "רשימת קריאה",
-	"reading-list-title": "רשימת קריאה",
 	"zoom-in": "להתקרב",
 	"zoom-out": "להתרחק",
 	"zoom-reset": "איפוס תקריב",
@@ -49,6 +50,7 @@
 	"donate-to-support-kiwix": "ניתן לתרום כדי לתמוך ב־Kiwix",
 	"exit": "יציאה",
 	"save-file-as-window-title": "שמירת הקובץ בשם",
+	"download-finished": "ההורדה הסתיימה",
 	"download-finished-message": "המסמך התקבל.",
 	"file": "קובץ",
 	"edit": "עריכה",
@@ -184,5 +186,7 @@
 	"stop": "עצירה",
 	"voice": "קול",
 	"select-read-voice": "בחירת קול ההקראה",
-	"select-read-language": "בחירת שפת ההקראה"
+	"select-read-language": "בחירת שפת ההקראה",
+	"save-or-open": "שמירה או פתיחה של קובץ",
+	"save-or-open-text": "מה קיוויקס צריך לעשות עם הקובץ הזה?"
 }
