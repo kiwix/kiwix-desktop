@@ -15,8 +15,13 @@
 #include <QPrintDialog>
 #include <thread>
 #include <QMessageBox>
-#if defined(Q_OS_WIN) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#if defined(Q_OS_WIN)
+#include <QWindow>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QtPlatformHeaders\QWindowsWindowFunctions>
+#else
+#include <qpa/qplatformwindow_p.h>
+#endif
 #endif
 
 const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
@@ -95,12 +100,14 @@ void KiwixApp::init()
 #ifdef Q_OS_WIN
     QWindow *window = mp_mainWindow->windowHandle();
     if (window) {
-        #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-            QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
-        #else
-            HWND handle = reinterpret_cast<HWND>(window->winId());
-            SetWindowLongPtr(handle, GWL_STYLE, GetWindowLongPtr(handle, GWL_STYLE) | WS_BORDER);
-        #endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        QWindowsWindowFunctions::setHasBorderInFullScreen(window, true);
+#else
+        auto nativeWindow = window->nativeInterface<QNativeInterface::Private::QWindowsWindow>();
+        if (nativeWindow) {
+            nativeWindow->setHasBorderInFullScreen(true);
+        }
+#endif
     }
 #endif
     connect(this, &QtSingleApplication::messageReceived, this, [=](const QString &message) {
