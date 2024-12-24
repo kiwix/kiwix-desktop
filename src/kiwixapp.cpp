@@ -384,11 +384,19 @@ void KiwixApp::createActions()
       CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-right", gt("forward"), QKeySequence(Qt::ALT | Qt::Key_Right));
       CREATE_ACTION_ICON(ScrollNextTabAction, "caret-right-solid", gt("scroll-next-tab"));
       CREATE_ACTION_ICON(ScrollPreviousTabAction, "caret-left-solid", gt("scroll-previous-tab"));
+      CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_Tab));
+      CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_PageDown ));
+      CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
+      CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::Key_PageUp ));
     } else {
       CREATE_ACTION_ICON_SHORTCUT(HistoryBackAction, "history-right", gt("back"), QKeySequence(Qt::ALT | Qt::Key_Right));
       CREATE_ACTION_ICON_SHORTCUT(HistoryForwardAction, "history-left", gt("forward"), QKeySequence(Qt::ALT | Qt::Key_Left));
       CREATE_ACTION_ICON(ScrollNextTabAction, "caret-left-solid", gt("scroll-next-tab"));
       CREATE_ACTION_ICON(ScrollPreviousTabAction, "caret-right-solid", gt("scroll-previous-tab"));
+      CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
+      CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_PageUp));
+      CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::Key_Tab));
+      CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::Key_PageDown ));
     }
     DISABLE_ACTION(HistoryBackAction);
     DISABLE_ACTION(HistoryForwardAction);
@@ -465,10 +473,6 @@ void KiwixApp::createActions()
     CREATE_ACTION_SHORTCUT(ZoomOutAction, gt("zoom-out"), QKeySequence::ZoomOut);
 
     CREATE_ACTION_SHORTCUT(ZoomResetAction, gt("zoom-reset"), QKeySequence(Qt::CTRL | Qt::Key_0));
-
-    CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_Tab));
-
-    CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
 
     CREATE_ACTION_SHORTCUT(HelpAction, gt("help"), QKeySequence::HelpContents);
     HIDE_ACTION(HelpAction);
