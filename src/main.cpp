@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral("The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and Microsoft Windows OSes."));
+    parser.setApplicationDescription(QStringLiteral("Kiwix is a viewer/manager of ZIM files for GNU/Linux and Microsoft Windows OSes."));
     parser.addHelpOption();
     parser.addPositionalArgument("zimfile", "The zim file");
 
