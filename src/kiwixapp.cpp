@@ -467,8 +467,10 @@ void KiwixApp::createActions()
     CREATE_ACTION_SHORTCUT(ZoomResetAction, gt("zoom-reset"), QKeySequence(Qt::CTRL | Qt::Key_0));
 
     CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_Tab));
+    CREATE_ACTION_SHORTCUT(NextTabAction, gt("next-tab"), QKeySequence(Qt::CTRL | Qt::Key_PageDown ));
 
     CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Tab));
+    CREATE_ACTION_SHORTCUT(PreviousTabAction, gt("previous-tab"), QKeySequence(Qt::CTRL | Qt::Key_PageUp ));
 
     CREATE_ACTION_SHORTCUT(HelpAction, gt("help"), QKeySequence::HelpContents);
     HIDE_ACTION(HelpAction);
