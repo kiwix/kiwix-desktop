@@ -2,11 +2,11 @@
 <img width="100" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png" />
 </a>
 
-Kiwix Desktop
-=============
+Kiwix Linux/Windows
+=====================
 
-The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
-Microsoft Windows OSes.
+The Kiwix Linux/Windows is a viewer/manager of ZIM files for GNU/Linux
+and Microsoft Windows OSes.
 
 [![Release](https://img.shields.io/github/v/tag/kiwix/kiwix-desktop?label=release&sort=semver)](https://download.kiwix.org/release/kiwix-desktop/)
 [![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-desktop/wiki/Repology)
@@ -25,7 +25,7 @@ at [kiwix-build](https://github.com/kiwix/kiwix-build).
 Dependencies
 ------------
 
-The Kiwix Desktop application relies on many third party software libraries.
+The Kiwix application relies on many third party software libraries.
 The following libraries need to be available:
 
 * [libkiwix](https://github.com/kiwix/libkiwix/)
@@ -53,7 +53,7 @@ sudo apt-get install libqt5gui5 qtbase5-dev qtwebengine5-dev \
 Compilation
 -----------
 
-Once all dependencies are installed, you can compile Kiwix Desktop:
+Once all dependencies are installed, you can compile Kiwix:
 
 ```bash
 qmake .
@@ -69,7 +69,7 @@ for example, for x86-64 native systems:
 export PKG_CONFIG_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu/pkgconfig"
 ```
 
-You may want to simply open the kiwix-desktop project in QtCreator and
+You may want to simply open the `kiwix-desktop` project in QtCreator and
 then compile the project from there (don't forget to update
 `PKG_CONFIG_PATH` if necessary).
 
@@ -114,7 +114,7 @@ documentation](https://github.com/kiwix/kiwix-build/wiki/Compile-on-Microsoft-Wi
 Installation
 ------------
 
-To install Kiwix Desktop on the system:
+To install Kiwix on the system:
 ```bash
 sudo make install
 ```
@@ -122,9 +122,9 @@ sudo make install
 Run
 ---
 
-To run Kiwix Desktop
+To run Kiwix:
 ```bash
-kiwix-desktop
+kiwix
 ```
 
 You might have to refresh the `ld` database before:
