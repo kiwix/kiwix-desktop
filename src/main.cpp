@@ -19,16 +19,16 @@ bool wasAppStartedFromARemoteDrive()
     const std::string exePath = kiwix::getExecutablePath();
 
     // Usual mounting point for Windows Network Drives
-    if ( exePath.substr(0, 2) == "\\\\" )
+    if ( exePath.length() >= 2 && exePath.substr(0, 2) == "\\\\" )
         return true;
 
     // Support macOS Parallels shared folders.
     // See https://kb.parallels.com/130138
-    if ( exePath.substr(0, 7) == "C:\\Mac\\" )
+    if ( exePath.length() >= 7 && exePath.substr(0, 7) == "C:\\Mac\\" )
         return true;
 
     // Last chance to identify as remote drive
-    return GetDriveTypeA(exePath.substr(0, 3).c_str()) == DRIVE_REMOTE;
+    return exePath.length() >= 3 && GetDriveTypeA(exePath.substr(0, 3).c_str()) == DRIVE_REMOTE;
 }
 #endif
 
