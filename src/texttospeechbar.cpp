@@ -12,6 +12,7 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
 
     ui->stopButton->setText(gt("stop"));
     ui->stopButton->setDisabled(true);
+    ui->speedComboBox->setCurrentIndex(3);   //speed@1x
 
     const auto app = KiwixApp::instance();
     connect(app->getAction(KiwixApp::ReadStopAction), &QAction::triggered,
@@ -21,6 +22,7 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
     connect(ui->closeButton, &QPushButton::pressed,
                 this, &TextToSpeechBar::speechClose);
 
+    setupSpeedOptionsComboBox();
     setupVoiceComboBox();
     setupLanguageComboBox();
     languageSelected(ui->langComboBox->currentIndex());
@@ -28,6 +30,8 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
             this, &TextToSpeechBar::toggleLanguage);
     connect(app->getAction(KiwixApp::ToggleTTSVoiceAction), &QAction::triggered,
             this, &TextToSpeechBar::toggleVoice);
+    connect(ui->speedComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &TextToSpeechBar::onSpeedChanged);
 }
 
 void TextToSpeechBar::speak(const QString &text)
@@ -52,6 +56,16 @@ void TextToSpeechBar::setLocale(const QLocale& locale)
             return;
         }
     }
+}
+
+void TextToSpeechBar::setupSpeedOptionsComboBox()
+{
+    ui->speedLabel->setText(gt("speed"));
+    ui->speedComboBox->setMaxVisibleItems(10);
+    ui->speedComboBox->setLineEdit(new ComboBoxLineEdit(ui->speedComboBox));
+
+    QStringList speedOptions = {"0.25x","0.50x","0.75x","1.00x","1.25x","1.50x","1.75x","2.00x"};
+    ui->speedComboBox->addItems(speedOptions);
 }
 
 void TextToSpeechBar::setupLanguageComboBox()
@@ -201,6 +215,20 @@ void TextToSpeechBar::keyPressEvent(QKeyEvent *event)
 void TextToSpeechBar::onStateChanged(QTextToSpeech::State state)
 {
     ui->stopButton->setEnabled(state != QTextToSpeech::Ready);
+}
+
+void TextToSpeechBar::onSpeedChanged(int index)
+{
+    QString speedText = ui->speedComboBox->itemText(index);
+    double speed = speedText.remove("x").toDouble();
+    m_speech.setRate(speed-1);      //range:-1,1
+
+    // Restarting the speech wit new speed set above
+    if (m_speech.state() == QTextToSpeech::Speaking)
+    {
+        m_speech.stop();
+        m_speech.say(m_text);
+    }
 }
 
 ComboBoxLineEdit::ComboBoxLineEdit(QWidget *parent) : QLineEdit(parent)
