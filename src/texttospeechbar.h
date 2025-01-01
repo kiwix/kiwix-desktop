@@ -35,6 +35,7 @@ public:
     void setupLanguageComboBox();
     void setupVoiceComboBox();
     void resetVoiceComboBox();
+    void setupSpeedOptionsComboBox();
 
     int getVoiceIndex();
 
@@ -46,6 +47,7 @@ public slots:
     void toggleLanguage();
     void languageSelected(int index);
     void voiceSelected(int index);
+    void onSpeedChanged(int index);
 
 protected:
     void keyPressEvent(QKeyEvent *event);
