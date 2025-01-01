@@ -105,6 +105,12 @@ qmake .
 make
 ```
 
+Compilation on Microsoft Windows
+--------------------------------
+
+Here is the [online
+documentation](https://github.com/kiwix/kiwix-build/wiki/Compile-on-Microsoft-Windows).
+
 Installation
 ------------
 
