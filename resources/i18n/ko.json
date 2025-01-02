@@ -192,5 +192,6 @@
 	"voice": "음성",
 	"select-read-voice": "읽기 음성 선택",
 	"select-read-language": "읽기 언어 선택",
-	"save-or-open": "파일 저장 또는 열기"
+	"save-or-open": "파일 저장 또는 열기",
+	"save-or-open-text": "Kiwix는 이 파일을 어떻게 처리해야 하나요?"
 }
