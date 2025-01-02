@@ -45,7 +45,8 @@ Install needed packages (on Ubuntu 22.04+):
 
 ```bash
 sudo apt install qt6-base-dev qt6-base-dev-tools qt6-webengine-dev \
-     libqt6webenginecore6-bin libqt6svg6
+     libqt6webenginecore6-bin libqt6svg6 qt6-speech-flite-plugin \
+     qt6-speech-speechd-plugin  qt6-speech-flite-plugin
 ```
 
 Compilation
@@ -95,7 +96,7 @@ It is still possible to compile using Qt5, following packages are needed:
 sudo apt-get install libqt5gui5 qtbase5-dev qtwebengine5-dev \
      libqt5svg5-dev qt5-image-formats-plugins aria2 \
      qttools5-dev-tools qtchooser qt5-qmake \
-     qtbase5-dev-tools
+     qtbase5-dev-tools libqt5texttospeech5-dev
 ```
 
 `qmake` needs to be configured to use Qt5:
