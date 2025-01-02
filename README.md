@@ -2,11 +2,11 @@
 <img width="100" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png" />
 </a>
 
-Kiwix Desktop
-=============
+Kiwix Linux/Windows
+=====================
 
-The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
-Microsoft Windows OSes.
+The Kiwix Linux/Windows is a viewer/manager of ZIM files for GNU/Linux
+and Microsoft Windows OSes.
 
 [![Release](https://img.shields.io/github/v/tag/kiwix/kiwix-desktop?label=release&sort=semver)](https://download.kiwix.org/release/kiwix-desktop/)
 [![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-desktop/wiki/Repology)
@@ -25,7 +25,7 @@ at [kiwix-build](https://github.com/kiwix/kiwix-build).
 Dependencies
 ------------
 
-The Kiwix Desktop application relies on many third party software libraries.
+The Kiwix application relies on many third party software libraries.
 The following libraries need to be available:
 
 * [libkiwix](https://github.com/kiwix/libkiwix/)
@@ -41,19 +41,33 @@ version by hand.
 Libkiwix has to be compiled dynamically, the best way to have it is
 to use [kiwix-build](https://github.com/kiwix/kiwix-build).
 
-Install needed packages (on Ubuntu 18.04+):
+Install needed packages (on Ubuntu 22.04+):
 
 ```bash
-sudo apt-get install libqt5gui5 qtbase5-dev qtwebengine5-dev \
-     libqt5svg5-dev qt5-image-formats-plugins aria2 \
-     qttools5-dev-tools qtchooser qt5-qmake \
-     qtbase5-dev-tools
+sudo apt install qt6-base-dev qt6-base-dev-tools qt6-webengine-dev \
+     libqt6webenginecore6-bin libqt6svg6 qt6-speech-flite-plugin \
+     qt6-speech-speechd-plugin  qt6-speech-flite-plugin
 ```
 
 Compilation
 -----------
 
-Once all dependencies are installed, you can compile Kiwix Desktop:
+`qmake` needs to be configured to use Qt6:
+
+```bash
+qtchooser -install qt6 $(which qmake6)   # run once
+export QT_SELECT=qt6                     # set in environments where Qt6 builds are desired
+```
+
+First confirm `qmake` is using the right version, this should produces this output:
+
+```bash
+$ qmake --version
+QMake version 3.1
+Using Qt version 6.2.4 in /usr/lib/aarch64-linux-gnu
+```
+
+Once all dependencies are installed, you can compile Kiwix:
 
 ```bash
 qmake .
@@ -69,33 +83,28 @@ for example, for x86-64 native systems:
 export PKG_CONFIG_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu/pkgconfig"
 ```
 
-You may want to simply open the kiwix-desktop project in QtCreator and
+You may want to simply open the `kiwix-desktop` project in QtCreator and
 then compile the project from there (don't forget to update
 `PKG_CONFIG_PATH` if necessary).
 
-Compilation with Qt6
+Compilation with Qt5
 --------------------
 
-There is initial support for Qt6. Additional packages are needed:
+It is still possible to compile using Qt5, following packages are needed:
 
 ```bash
-sudo apt install qt6-base-dev qt6-base-dev-tools qt6-webengine-dev libqt6webenginecore6-bin libqt6svg6
+sudo apt-get install libqt5gui5 qtbase5-dev qtwebengine5-dev \
+     libqt5svg5-dev qt5-image-formats-plugins aria2 \
+     qttools5-dev-tools qtchooser qt5-qmake \
+     qtbase5-dev-tools libqt5texttospeech5-dev
 ```
 
-And `qmake` needs to be configured to use Qt6. First confirm `qmake` is using the right version:
+`qmake` needs to be configured to use Qt5:
 
 ```bash
-qtchooser -install qt6 $(which qmake6)   # run once
-export QT_SELECT=qt6                     # set in environments where Qt6 builds are desired
+qtchooser -install qt5 $(which qmake5)   # run once
+export QT_SELECT=qt5                     # set in environments where Qt5 builds are desired
 qmake --version
-```
-
-produces this output:
-
-```bash
-$ qmake --version
-QMake version 3.1
-Using Qt version 6.2.4 in /usr/lib/aarch64-linux-gnu
 ```
 
 then build as normal:
@@ -114,7 +123,7 @@ documentation](https://github.com/kiwix/kiwix-build/wiki/Compile-on-Microsoft-Wi
 Installation
 ------------
 
-To install Kiwix Desktop on the system:
+To install Kiwix on the system:
 ```bash
 sudo make install
 ```
@@ -122,9 +131,9 @@ sudo make install
 Run
 ---
 
-To run Kiwix Desktop
+To run Kiwix:
 ```bash
-kiwix-desktop
+kiwix
 ```
 
 You might have to refresh the `ld` database before:

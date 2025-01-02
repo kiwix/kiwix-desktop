@@ -20,11 +20,21 @@ CONFIG += link_pkgconfig
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = kiwix-desktop
+TARGET = kiwix
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++17
 QMAKE_LFLAGS +=  -std=c++17
+
+# Kiwix requires per default on Qt6 (but can still compile with Qt5 if explicitly
+# requested, see README.md for more information).
+QT_SELECT += $$(QT_SELECT)
+lessThan(QT_MAJOR_VERSION, 6) {
+    !equals(QT_SELECT, "qt5") {
+        message("Qt 6 is required, but Qt $${QT_VERSION} is used")
+        error("Use Qt 6.0.0 or newer")
+    }
+}
 
 !win32 {
     QMAKE_CXXFLAGS += -Werror
