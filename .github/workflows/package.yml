@@ -21,7 +21,7 @@ jobs:
 #          - debian-bullseye
           - ubuntu-noble
           - ubuntu-jammy
-          - ubuntu-focal
+#          - ubuntu-focal
     steps:
       - uses: actions/checkout@v4
 
@@ -72,7 +72,7 @@ jobs:
 #        with:
 #          args: --no-sign
 
-      - uses: legoktm/gh-action-build-deb@9114a536498b65c40b932209b9833aa942bf108d # pin@ubuntu-noble
+      - uses: legoktm/gh-action-build-deb@ubuntu-noble
         if: matrix.distro == 'ubuntu-noble'
         name: Build package for ubuntu-noble
         id: build-ubuntu-noble
@@ -88,13 +88,13 @@ jobs:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}
 
-      - uses: legoktm/gh-action-build-deb@ubuntu-focal
-        if: matrix.distro == 'ubuntu-focal'
-        name: Build package for ubuntu-focal
-        id: build-ubuntu-focal
-        with:
-          args: --no-sign
-          ppa: ${{ steps.ppa.outputs.ppa }}
+#      - uses: legoktm/gh-action-build-deb@ubuntu-focal
+#        if: matrix.distro == 'ubuntu-focal'
+#        name: Build package for ubuntu-focal
+#        id: build-ubuntu-focal
+#        with:
+#          args: --no-sign
+#          ppa: ${{ steps.ppa.outputs.ppa }}
 
       - uses: actions/upload-artifact@v4
         with:
