@@ -63,17 +63,20 @@ jobs:
           - target: jammy-qt5
             image_variant: jammy
             lib_postfix: '/x86_64-linux-gnu'
+            qt_version: 5
           - target: noble-qt6.4
             image_variant: noble
             lib_postfix: '/x86_64-linux-gnu'
+            qt_version: 6
           - target: oracular-qt6.6
             image_variant: oracular
             lib_postfix: '/x86_64-linux-gnu'
+            qt_version: 6
     env:
       HOME: /home/runner
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:2024-12-18
+      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:2025-01-05
 
     steps:
       - name: Install dependencies
@@ -89,5 +92,7 @@ jobs:
         env:
           PKG_CONFIG_PATH: "/home/runner/BUILD_linux-x86_64/INSTALL/lib/pkgconfig:/home/runner/BUILD_linux-x86_64/INSTALL/lib${{matrix.lib_postfix}}/pkgconfig"
         run: |
+          export QT_SELECT=qt${{matrix.qt_version}}
+          qmake --version
           qmake PREFIX=$HOME/BUILD_linux-x86_64/INSTALL
           make
