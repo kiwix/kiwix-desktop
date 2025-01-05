@@ -11,6 +11,7 @@ About::About(QWidget *parent) :
     htmlText = htmlText.replace("{{KIWIX_DESKTOP_TITLE}}", gt("about-kiwix-desktop-title"));
     htmlText = htmlText.replace("{{KIWIX_DESKTOP_DESCRIPTION}}", gt("about-kiwix-desktop-description"));
     htmlText = htmlText.replace("{{LEARN_MORE_ABOUT_KIWIX}}", gt("about-learn-more-about-kiwix"));
+    htmlText = htmlText.replace("{{PRIVACY_POLICY}}", gt("about-privacy-policy"));
     htmlText = htmlText.replace("{{RELEASE}}", gt("about-release-title"));
     htmlText = htmlText.replace("{{SOURCE_CODE}}", gt("about-source-code"));
     htmlText = htmlText.replace("{{VERSION_TXT}}", gt("about-version"));
