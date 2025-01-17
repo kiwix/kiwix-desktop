@@ -6,14 +6,34 @@
   <developer_name>The Kiwix Foundation</developer_name>
   <description>
     <p>
-      Kiwix is an offline reader - meaning that it allows you to check text or video that is normally only available on the internet.
-    </p>
-    <p>
-      We turn various online educational contents (such as Wikipedia, for example) into ZIM files, and these can be opened by Kiwix even if you have no connectivity whatsoever.
+      Kiwix is dedicated to providing offline access to educational content.
+    </p><p>
+      Kiwix makes knowledge available to people with no or limited Internet access.
+    </p><p>
+      Kiwix is an offline reader for content like Wikipedia, Project Gutenberg, TED Talks, IFixit... and <a href="https://library.kiwix.org">thousands of others</a>.
+    </p><p>
+      Kiwix deals with highly compressed snapshots of Websites that each fit into a single (.zim) file. ZIM files are small enough that they can be stored on users’ mobile phones, computers or small, inexpensive WiFi Hotspot.
+    </p><p>
+      Kiwix then acts like a regular Web browser, except that it reads these local copies. People with no or limited internet access can enjoy the same browsing experience as being online.
+    </p><p>
+      The name “Kiwix” is a play on the word “Wiki” as it represented our initial goal of making Wikipedia accessible offline.
+    </p><p>
+      Kiwix is free and open-source.
     </p>
   </description>
   <releases>
     <release version="2.4.1" date="2024-12-21" />
+    <description>
+      Most important improvements:
+      <ul>
+        <li>Revamping of the internal Library</li>
+        <li>Robuster download manager</li>
+        <li>Far better portable version</li>
+        <li>New table of content</li>
+        <li>Revamped search box</li>
+      </ul>
+      ... here is <a href="https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1">the complete changelog</a>
+    </description>
   </releases>
   <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
@@ -26,13 +46,22 @@
   <update_contact>contact_AT_kiwix.org</update_contact>
   <screenshots>
     <screenshot type="default">
-      <image>https://upload.wikimedia.org/wikipedia/commons/3/38/Kiwix-desktop_showing_its_local_Library.png</image>
+      <image>https://upload.wikimedia.org/wikipedia/commons/b/b4/Kiwix-desktop-2.4.1-article-with-toc.png</image>
     </screenshot>
     <screenshot>
-      <image>https://upload.wikimedia.org/wikipedia/commons/c/cd/Kiwix-desktop_showing_the_remote_Library.png</image>
+      <image>https://upload.wikimedia.org/wikipedia/commons/6/6c/Kiwix-desktop-2.4.1-multitab-gutenberg.png</image>
     </screenshot>
     <screenshot>
-      <image>https://upload.wikimedia.org/wikipedia/commons/3/3e/Kiwix_desktop_reading_a_TED_ZIM_file.png</image>
+      <image>https://upload.wikimedia.org/wikipedia/commons/8/81/Kiwix-desktop-2.4.1-library-med.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://upload.wikimedia.org/wikipedia/commons/a/ac/Kiwix-desktop-2.4.1-ted-bookmarks.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://upload.wikimedia.org/wikipedia/commons/2/2e/Kiwix-desktop-2.4.1-wiktionary-search.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://upload.wikimedia.org/wikipedia/commons/3/39/Kiwix-desktop-2.4.1-kiwix-server.png</image>
     </screenshot>
   </screenshots>
 </component>
