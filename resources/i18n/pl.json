@@ -82,6 +82,7 @@
 	"about-kiwix-desktop-title": "Pulpit Kiwix",
 	"about-kiwix-desktop-description": "Kiwix pozwala mieć pod ręką całą Wikipedię, gdziekolwiek jesteś! Na łodzi, w szczerym polu lub w więzieniu, Kiwix daje ci dostęp do całej ludzkiej wiedzy. Nie potrzebujesz Internetu, wszystko jest przechowywane na Twoim komputerze.",
 	"about-learn-more-about-kiwix": "Dowiedz się więcej o Kiwix",
+	"about-privacy-policy": "Polityka prywatności",
 	"about-release-title": "Wydanie",
 	"about-source-code": "To oprogramowanie jest wydawane na warunkach Powszechnej Licencji Publicznej GNU w wersji 3. Zobacz kod źródłowy na <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "Wersja: {{VERSION}}",

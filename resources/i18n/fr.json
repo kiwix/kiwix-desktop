@@ -95,6 +95,7 @@
 	"about-kiwix-desktop-title": "Kiwix pour ordinateurs de bureau",
 	"about-kiwix-desktop-description": "Kiwix vous permet d’avoir tout Wikipédia à portée de main où que vous alliez ! Sur un bateau, au milieu de nulle part, ou en prison, Kiwix vous donne accès à tout le savoir humain. Vous n’avez pas besoin d’Internet, tout est conservé dans votre ordinateur.",
 	"about-learn-more-about-kiwix": "En savoir plus sur Kiwix",
+	"about-privacy-policy": "Politique de confidentialité",
 	"about-release-title": "Publication",
 	"about-source-code": "Ce logiciel est publié selon les termes de la licence GNU General Public License version 3. Vous pouvez consulter le code source sur <a href=\"{{GITHUB_URL}}\">Github</a>.",
 	"about-version": "Version : {{VERSION}}",

@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"GilPe",
 			"Les Meloures",
 			"Robby",
 			"Volvox"
@@ -69,6 +70,7 @@
 	"browse": "Duerchsichen",
 	"about-kiwix-desktop-description": "Kiwix gëtt Iech d'Méiglechkeet déi ganz Wikipedia dobäi ze hunn, egal wou Dir sidd! Ob op engem Boot, matzen am Néierewou oder am Prisong: Kiwix gëtt Iech Zougang zur Gesamtheet vum mënschleche Wëssen. Dir braucht keen Internetzougang, alles ass lokal op Ärem Computer gespäichert.",
 	"about-learn-more-about-kiwix": "Méi iwwer Kiwix gewuer ginn",
+	"about-privacy-policy": "Dateschutzrichtlinn",
 	"about-version": "Versioun: {{VERSION}}",
 	"about-reporting-problem-title": "Problemer mellen",
 	"about-libraries-title": "Bibliothéiken",
