@@ -20,7 +20,7 @@ CONFIG += link_pkgconfig
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = kiwix-desktop
+TARGET = kiwix
 TEMPLATE = app
 
 QMAKE_CXXFLAGS += -std=c++17
