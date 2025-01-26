@@ -85,6 +85,7 @@
 	"about-kiwix-desktop-title": "Kiwix לשולחן העבודה",
 	"about-kiwix-desktop-description": "קיוויקס מאפשר לך לקחת אתך את ויקיפדיה לכל מקום שהוא! בסירה, באמצע שום מקום או בכלא, קיוויקס מעניק לך גישה לכל הידע האנושי. אין צורך באינטרנט, הכול מאוחסן אצלך במחשב.",
 	"about-learn-more-about-kiwix": "מידע נוסף אודות Kiwix",
+	"about-privacy-policy": "מדיניות פרטיות",
 	"about-release-title": "מהדורה",
 	"about-source-code": "תכנה זו מופצת בכפוף לתנאי גרסה 3 של הרישיון הציבורי הכללי של גנו. ניתן לצפות בקוד המקור ב־<a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "גרסה: {{VERSION}}",
