@@ -406,6 +406,8 @@ void KiwixApp::createActions()
     CREATE_ACTION_SHORTCUT(ReadStopAction, gt("read-stop"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_X));
     CREATE_ACTION_SHORTCUT(ToggleTTSLanguageAction, gt("select-read-language"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_L));
     CREATE_ACTION_SHORTCUT(ToggleTTSVoiceAction, gt("select-read-voice"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_V));
+    CREATE_ACTION_SHORTCUT(IncreaseTTSSpeedAction, gt("increase-tts-speed"), QKeySequence(Qt::Key_Greater));
+    CREATE_ACTION_SHORTCUT(DecreaseTTSSpeedAction, gt("decrease-tts-speed"), QKeySequence(Qt::Key_Less));
     mpa_actions[ToggleTTSLanguageAction]->setCheckable(true);
     mpa_actions[ToggleTTSVoiceAction]->setCheckable(true);
 
@@ -562,6 +564,11 @@ void KiwixApp::saveVoiceName(const QString& langName, const QString& voiceName)
   mp_session->setValue("voice/" + langName, voiceName);
 }
 
+void KiwixApp::saveTtsSpeed(const QString& langName, double speed)
+{
+    mp_session->setValue("speed/" + langName, speed);
+}
+
 void KiwixApp::restoreWindowState()
 {
   getMainWindow()->restoreGeometry(mp_session->value("geometry").toByteArray());
@@ -581,6 +588,11 @@ void KiwixApp::savePrevSaveDir(const QString &prevSaveDir)
 QString KiwixApp::getSavedVoiceName(const QString& langName) const
 {
   return mp_session->value("voice/" + langName, "").toString();
+}
+
+double KiwixApp::getSavedTtsSpeed(const QString& langName) const
+{
+    return mp_session->value("speed/" + langName, 1.0).toDouble(); // Default: 1.0 (normal speed)
 }
 
 QString KiwixApp::getPrevSaveDir() const

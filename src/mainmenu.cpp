@@ -49,6 +49,8 @@ MainMenu::MainMenu(QWidget *parent) :
     m_viewMenu.ADD_ACTION(ToggleReadingListAction);
     m_viewMenu.ADD_ACTION(ToggleTTSLanguageAction);
     m_viewMenu.ADD_ACTION(ToggleTTSVoiceAction);
+    m_viewMenu.ADD_ACTION(IncreaseTTSSpeedAction);
+    m_viewMenu.ADD_ACTION(DecreaseTTSSpeedAction);
     m_viewMenu.ADD_ACTION(ZoomInAction);
     m_viewMenu.ADD_ACTION(ZoomOutAction);
     m_viewMenu.ADD_ACTION(ZoomResetAction);

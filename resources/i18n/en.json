@@ -185,5 +185,8 @@
     "select-read-voice": "Select reading voice",
     "select-read-language": "Select reading language",
     "save-or-open": "Save or Open file",
-    "save-or-open-text": "What should Kiwix do with this file?"
+    "save-or-open-text": "What should Kiwix do with this file?",
+    "speed": "Speed",
+    "increase-tts-speed": "Increase TTS speed.",
+    "decrease-tts-speed": "Decrease TTS speed."
 }
