@@ -9,6 +9,7 @@
 	},
 	"name": "Lëtzebuergesch",
 	"error-title": "Feeler",
+	"error-downloader-launch-message": "Onméiglech fir den Downloader ze starten. De Kiwix-Desktop fänkt un, awer d'Downloadfunktioune funktionéieren net all.",
 	"error-launch-server-message": "Et ass e Feeler geschitt!",
 	"error-opening-file": "Et gouf e Feeler beim Opmaache vum Fichier.",
 	"open-zim": "ZIM Fichier opmaachen",
