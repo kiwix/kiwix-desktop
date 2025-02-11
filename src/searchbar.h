@@ -35,6 +35,7 @@ public:
     SearchBarLineEdit(QWidget *parent = nullptr);
     void hideSuggestions();
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void onLiveUpdateSuggestions(int start);
 
 public slots:
     void on_currentTitleChanged(const QString &title);
