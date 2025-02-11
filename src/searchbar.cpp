@@ -236,14 +236,15 @@ void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)
 void SearchBarLineEdit::updateCompletion()
 {
     mp_typingTimer->stop();
-    clearSuggestions();
+    // Removed clearSuggestions() so that live updates do not flicker.
     const auto& multiZim = KiwixApp::instance()->getSearchBar().getMultiZimButton();
     if (multiZim.getZimIds().isEmpty() || m_searchbarInput.isEmpty()) {
         hideSuggestions();
         return;
     }
     m_token++;
-    fetchSuggestions(&SearchBarLineEdit::onInitialSuggestions);
+    // Use live update callback for continuously typing
+    fetchSuggestions(&SearchBarLineEdit::onLiveUpdateSuggestions);
 }
 
 void SearchBarLineEdit::fetchMoreSuggestions()
@@ -322,9 +323,8 @@ void SearchBarLineEdit::onInitialSuggestions(int)
     if (m_returnPressed) {
         openCompletion(getDefaulSuggestionIndex());
     } else {
-        m_completer.complete(getCompleterRect());
-
-        /* Select nothing by default */
+        if (!m_suggestionView->isVisible())
+            m_completer.complete(getCompleterRect());
         const auto completerSelModel = m_suggestionView->selectionModel();
         completerSelModel->setCurrentIndex(QModelIndex(), QItemSelectionModel::Current);
     }
@@ -348,7 +348,9 @@ void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
                 if (token != m_token) {
                     return;
                 }
-
+                // For live updates, clear out old suggestions to avoid duplication.
+                if (callback == &SearchBarLineEdit::onLiveUpdateSuggestions)
+                    m_suggestionModel.resetSuggestions();
                 m_suggestionModel.append(suggestionList);
                 m_suggestionsAreValidFor = searchText;
                 const int listSize = suggestionList.size();
@@ -359,6 +361,20 @@ void SearchBarLineEdit::fetchSuggestions(NewSuggestionHandlerFuncPtr callback)
             });
     connect(suggestionWorker, &SuggestionListWorker::finished, suggestionWorker, &QObject::deleteLater);
     suggestionWorker->start();
+}
+
+// New live update callback
+void SearchBarLineEdit::onLiveUpdateSuggestions(int start)
+{
+    Q_UNUSED(start);
+    if (m_returnPressed) {
+        openCompletion(getDefaulSuggestionIndex());
+    } else {
+        // Only call complete() to show the popup initially.
+        if (!m_suggestionView->isVisible())
+            m_completer.complete(getCompleterRect());
+        // Otherwise just update the suggestions model to live-update results.
+    }
 }
 
 QModelIndex SearchBarLineEdit::getDefaulSuggestionIndex() const
