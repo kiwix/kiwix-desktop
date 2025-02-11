@@ -5,7 +5,7 @@
 Kiwix Desktop
 =============
 
-The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and
+Kiwix is an offline reader for Web content, primarily designed to make [Wikipedia](https://www.wikipedia.org/) available offline. It reads archives in the [ZIM](https://openzim.org) file format, a highly compressed open format with additional metadata. This is the Kiwix Desktop version - a viewer/manager of ZIM files for GNU/Linux and
 Microsoft Windows OSes.
 
 [![Release](https://img.shields.io/github/v/tag/kiwix/kiwix-desktop?label=release&sort=semver)](https://download.kiwix.org/release/kiwix-desktop/)
@@ -150,6 +150,9 @@ Available communication channels:
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
+
+## Support
+If you're enjoying using Kiwix, drop a ⭐️ on the repo!
 
 License
 -------
