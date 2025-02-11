@@ -15,7 +15,7 @@
 	"name": "italiano",
 	"error-title": "Errore",
 	"error-downloader-window-title": "Impossibile creare downloader",
-	"error-downloader-launch-message": "Impossibile avviare il downloader, Kiwix-desktop si avvierà ma tutte le funzioni di download non funzioneranno!",
+	"error-downloader-launch-message": "Impossibile avviare il downloader. Kiwix-desktop si avvierà, ma tutte le funzioni di download non funzioneranno.",
 	"error-launch-server-message": "Si è verificato un errore.",
 	"error-archive": "Impossibile ottenere l'archivio",
 	"error-opening-file": "Si è verificato un errore durante l'apertura del file.",
