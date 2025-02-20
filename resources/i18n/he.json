@@ -10,7 +10,7 @@
 	"name": "עברית",
 	"error-title": "שגיאה",
 	"error-downloader-window-title": "לא ניתן ליצור מנגנון הורדה",
-	"error-downloader-launch-message": "אי אפשר לטעון מנגנון הורדה, Kiwix לשולחן העבודה יופעל אך יכולות ההורדה לא תפעלנה!",
+	"error-downloader-launch-message": "אי־אפשר לטעון את מנגנון ההורדה. קיוויקס לשולחן העבודה יופעל, אך יכולות ההורדה לא תפעלנה!",
 	"error-launch-server-message": "אירעה שגיאה!",
 	"error-archive": "לא ניתן לקבל את הארכיון",
 	"error-opening-file": "אירעה שגיאה בפתיחת הקובץ.",
@@ -189,5 +189,8 @@
 	"select-read-voice": "בחירת קול ההקראה",
 	"select-read-language": "בחירת שפת ההקראה",
 	"save-or-open": "שמירה או פתיחה של קובץ",
-	"save-or-open-text": "מה קיוויקס צריך לעשות עם הקובץ הזה?"
+	"save-or-open-text": "מה קיוויקס צריך לעשות עם הקובץ הזה?",
+	"speed": "מהירות",
+	"increase-tts-speed": "הקראת מכונה מהירה יותר.",
+	"decrease-tts-speed": "הקראת מכונה איטית יותר."
 }
