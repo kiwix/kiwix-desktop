@@ -21,6 +21,7 @@ class QMenu;
 #include <QWebEngineScript>
 #include "kiwixwebchannelobject.h"
 #include "tableofcontentbar.h"
+#include <QTimer>
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 QString askForSaveFilePath(const QString& suggestedName);
@@ -85,6 +86,7 @@ WebView::WebView(QWidget *parent)
 {
     setPage(new WebPage(this));
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
+    QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::handleTocHistoryNavigation);
     connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
         m_linkHovered = url;
     });
@@ -107,10 +109,14 @@ WebView::WebView(QWidget *parent)
     const auto kiwixChannelObj = new KiwixWebChannelObject;
     page()->setWebChannel(channel, QWebEngineScript::UserWorld);
     channel->registerObject("kiwixChannelObj", kiwixChannelObj);
-    
+
     const auto tabbar = KiwixApp::instance()->getTabWidget();
     connect(tabbar, &TabBar::currentTitleChanged, this, &WebView::onCurrentTitleChanged);
     connect(kiwixChannelObj, &KiwixWebChannelObject::headersChanged, this, &WebView::onHeadersReceived);
+    connect(kiwixChannelObj, &KiwixWebChannelObject::navigationRequested,
+            this, &WebView::onNavigationRequested);
+    connect(kiwixChannelObj, &KiwixWebChannelObject::consoleMessageReceived,
+            this, &WebView::onConsoleMessageReceived);
 
     const auto tocbar = KiwixApp::instance()->getMainWindow()->getTableOfContentBar();
     connect(this, &WebView::headersChanged, tocbar, &TableOfContentBar::setupTree);
@@ -224,18 +230,106 @@ void WebView::onCurrentTitleChanged()
 
 void WebView::onHeadersReceived(const QString& headersJSONStr)
 {
-    const auto tabbar = KiwixApp::instance()->getTabWidget();
-    m_headers = QJsonDocument::fromJson(headersJSONStr.toUtf8()).object();
-    
-    if (tabbar->currentWebView() == this)
+    QJsonDocument doc = QJsonDocument::fromJson(headersJSONStr.toUtf8());
+    if (!doc.isObject())
+        return;
+
+    m_headers = doc.object();
+    if (KiwixApp::instance()->getTabWidget()->currentWebView() == this)
         emit headersChanged(m_headers);
+}
+
+void WebView::onConsoleMessageReceived(const QString& message)
+{
+    // Parse the JSON message
+    QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8());
+    if (!doc.isObject())
+        return;
+
+    QJsonObject obj = doc.object();
+    QString type = obj["type"].toString();
+    QString msg = obj["message"].toString();
+
+    // Log to console for debugging
+    qDebug() << "JS Console [" << type << "]: " << msg;
 }
 
 void WebView::onNavigationRequested(const QString &url, const QString &anchor)
 {
+    // Safety checks
     const auto tabbar = KiwixApp::instance()->getTabWidget();
-    if (tabbar->currentWebView() == this)
-        emit navigationRequested(url, anchor);
+    if (!tabbar || tabbar->currentWebView() != this) {
+        return;
+    }
+
+    // Check if we're already at this anchor
+    if (this->url().hasFragment() && this->url().fragment() == anchor) {
+        // Already at this anchor, no need to navigate
+        return;
+    }
+
+    // Create a QUrl with fragment for history
+    QUrl historyUrl(url);
+    historyUrl.setFragment(anchor);
+
+    // Properly escape the URL and anchor for JavaScript
+    QString escapedUrl = url.toHtmlEscaped();
+    QString escapedAnchor = anchor.toHtmlEscaped();
+
+    // Use a simpler approach to avoid navigation loops
+    QString js = QString(
+        "if (window.history && window.history.pushState) {"
+        "  if (document.getElementById('%1')) {"
+        "    window.history.pushState({anchor: '%1'}, '', '%2#%1');"
+        "    console.log('History updated for anchor: %1');"
+        "  } else {"
+        "    console.error('Anchor not found: %1');"
+        "  }"
+        "}"
+    ).arg(escapedAnchor).arg(escapedUrl);
+
+    // Execute JavaScript safely with a callback
+    page()->runJavaScript(js, [this, url, anchor](const QVariant &result) {
+        Q_UNUSED(result);
+        // Emit the navigation signal to the JavaScript after the history is updated
+        // Use a small delay to prevent navigation loops
+        QTimer::singleShot(50, this, [this, url, anchor]() {
+            emit navigationRequested(url, anchor);
+        });
+    });
+}
+
+// Add a method to handle history navigation for TOC entries
+void WebView::handleTocHistoryNavigation(const QUrl &url)
+{
+    // Safety check
+    if (!url.isValid()) {
+        return;
+    }
+
+    // If the URL has a fragment and the base URL matches the current page
+    if (url.hasFragment() && url.url(QUrl::RemoveFragment) == this->url().url(QUrl::RemoveFragment)) {
+        // Extract the anchor from the fragment
+        QString anchor = url.fragment();
+
+        // Safety check for empty anchor
+        if (anchor.isEmpty()) {
+            return;
+        }
+
+        // Check if we're already at this anchor to prevent loops
+        if (this->url().hasFragment() && this->url().fragment() == anchor) {
+            return;
+        }
+
+        // Use a small delay to prevent navigation loops
+        QTimer::singleShot(50, this, [this, url, anchor]() {
+            // Emit navigation signal instead of loading the page
+            emit navigationRequested(url.url(QUrl::RemoveFragment), anchor);
+        });
+
+        return;
+    }
 }
 
 void WebView::addHistoryItemAction(QMenu *menu,
@@ -278,6 +372,13 @@ void WebView::onUrlChanged(const QUrl& url) {
     auto app = KiwixApp::instance();
     app->saveListOfOpenTabs();
     if (m_currentZimId == zimId ) {
+        // Even if the ZIM ID hasn't changed, we still need to update TOC selection
+        if (url.hasFragment()) {
+            auto tocBar = app->getMainWindow()->getTableOfContentBar();
+            if (tocBar) {
+                tocBar->updateSelectionFromFragment(url.fragment());
+            }
+        }
         return;
     }
     m_currentZimId = zimId;
