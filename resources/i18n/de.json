@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"AnnaTheProgrammer777",
 			"Brettchenweber",
 			"DraconicDark",
 			"Falwye",
@@ -34,6 +35,7 @@
 	"reopen-closed-tab": "Geschlossene Registerkarte wieder öffnen",
 	"browse-library": "Bibliothek durchsuchen",
 	"open-file": "Datei öffnen",
+	"save-file": "Datei speichern",
 	"open-recent": "Öffne zuletzt Benutztes",
 	"search-article": "Such Artikel",
 	"search-in-library": "Such in der Bibliothek",
@@ -152,5 +154,10 @@
 	"content-type-searcher-placeholder": "Nach Inhaltstyp filtern",
 	"no-details": "Nur Einführung",
 	"no-pictures": "Keine Bilder",
-	"no-videos": "Keine Videos"
+	"no-videos": "Keine Videos",
+	"zim-id": "ZIM-ID",
+	"zim-name": "ZIM-Name",
+	"zim-path": "ZIM-Dateipfad",
+	"stop": "Stop",
+	"speed": "Geschwindigkeit"
 }
