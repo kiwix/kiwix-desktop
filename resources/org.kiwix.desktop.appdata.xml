@@ -22,18 +22,19 @@
     </p>
   </description>
   <releases>
-    <release version="2.4.1" date="2024-12-21" />
-    <description>
-      Most important improvements:
-      <ul>
-        <li>Revamping of the internal Library</li>
-        <li>Robuster download manager</li>
-        <li>Far better portable version</li>
-        <li>New table of content</li>
-        <li>Revamped search box</li>
-      </ul>
-      ... here is <a href="https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1">the complete changelog</a>
-    </description>
+    <release version="2.4.1" date="2024-12-21">
+      <description>
+        Most important improvements:
+        <ul>
+          <li>Revamping of the internal Library</li>
+          <li>Robuster download manager</li>
+          <li>Far better portable version</li>
+          <li>New table of content</li>
+          <li>Revamped search box</li>
+        </ul>
+        ... here is <a href="https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1">the complete changelog</a>
+      </description>
+    </release>
   </releases>
   <content_rating type="oars-1.0" />
   <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
