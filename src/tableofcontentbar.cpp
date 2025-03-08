@@ -4,6 +4,7 @@
 #include <QJsonObject>
 #include <QTreeWidgetItem>
 #include <QTimer>
+#include <QDebug>
 
 TableOfContentBar::TableOfContentBar(QWidget *parent) :
     QFrame(parent),
