@@ -4,6 +4,7 @@ class QMenu;
 
 #include "kiwixapp.h"
 #include "css_constants.h"
+#include "tableofcontentbar.h"
 #include <QAction>
 #include <QTimer>
 #include <QWebEnginePage>
@@ -11,6 +12,7 @@ class QMenu;
 #include <QToolTip>
 #include <QCursor>
 #include <QPainter>
+#include <QDebug>
 #define QUITIFNULL(VIEW) if (nullptr==(VIEW)) { return; }
 #define CURRENTIFNULL(VIEW) if(nullptr==VIEW) { VIEW = currentZimView();}
 
@@ -269,8 +271,43 @@ void TabBar::triggerWebPageAction(QWebEnginePage::WebAction action, ZimView *wid
 {
     CURRENTIFNULL(widget);
     QUITIFNULL(widget);
-    widget->getWebView()->triggerPageAction(action);
-    widget->getWebView()->setFocus();
+    
+    auto webView = widget->getWebView();
+    
+    // For back/forward navigation, use direct JavaScript history methods
+    if (action == QWebEnginePage::Back || action == QWebEnginePage::Forward) {
+        // Instead of using Qt's action, directly use JavaScript to manipulate browser history
+        // This ensures consistent behavior across platforms and better TOC synchronization
+        if (action == QWebEnginePage::Back) {
+            webView->page()->runJavaScript("window.history.back();");
+        } else {
+            webView->page()->runJavaScript("window.history.forward();");
+        }
+        
+        // Focus the webview
+        webView->setFocus();
+        
+        // Set up a check to ensure the TOC is updated after navigation
+        QTimer::singleShot(300, widget, [widget]() {
+            auto webView = widget->getWebView();
+            if (!webView) return;
+            
+            QString fragment = webView->url().fragment();
+            if (!fragment.isEmpty()) {
+                auto app = KiwixApp::instance();
+                auto tocBar = app->getMainWindow()->getTableOfContentBar();
+                if (tocBar) {
+                    tocBar->updateSelectionFromFragment(fragment);
+                }
+            }
+        });
+        
+        return;
+    }
+    
+    // For other actions, just trigger them normally
+    webView->triggerPageAction(action);
+    webView->setFocus();
 }
 
 void TabBar::closeTabsByZimId(const QString &id)

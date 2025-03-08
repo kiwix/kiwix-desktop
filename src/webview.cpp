@@ -87,6 +87,31 @@ WebView::WebView(QWidget *parent)
     setPage(new WebPage(this));
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::handleTocHistoryNavigation);
+    
+    // Inject JavaScript to handle popstate events for better history navigation
+    connect(page(), &QWebEnginePage::loadStarted, this, [=]() {
+        // Inject a popstate event handler to ensure smooth navigation and scrolling
+        QString js =
+        "if (!window._kiwixHandlerInstalled) {"
+        "  window._kiwixHandlerInstalled = true;"
+        "  try {"
+        "    window.addEventListener('popstate', function(event) {"
+        "      if (location.hash) {"
+        "        var anchorId = location.hash.substring(1);"
+        "        var element = document.getElementById(anchorId);"
+        "        if (element) {"
+        "          element.scrollIntoView({behavior: 'smooth'});"
+        "        }"
+        "      }"
+        "    });"
+        "  } catch(e) {"
+        "    console.error('Error in popstate handler:', e);"
+        "  }"
+        "}";
+        
+        page()->runJavaScript(js);
+    });
+    
     connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
         m_linkHovered = url;
     });
@@ -122,6 +147,41 @@ WebView::WebView(QWidget *parent)
     connect(this, &WebView::headersChanged, tocbar, &TableOfContentBar::setupTree);
     connect(tocbar, &TableOfContentBar::navigationRequested, this, &WebView::onNavigationRequested);
     connect(this, &WebView::navigationRequested, kiwixChannelObj, &KiwixWebChannelObject::navigationRequested);
+
+    // Add this in the WebView constructor
+    connect(this, &QWebEngineView::loadFinished, this, [this](bool success) {
+        if (success) {
+            // Update history action states
+            auto app = KiwixApp::instance();
+            app->getAction(KiwixApp::HistoryBackAction)->setEnabled(history()->canGoBack());
+            app->getAction(KiwixApp::HistoryForwardAction)->setEnabled(history()->canGoForward());
+            
+            // This will catch ALL successful page loads, including history navigation
+            // Update TOC selection if URL has fragment
+            if (url().hasFragment()) {
+                QString fragment = url().fragment();
+                qDebug() << "Page load finished - Updating TOC selection for fragment:" << fragment;
+                
+                // Use a slightly longer delay for more reliability
+                QTimer::singleShot(250, this, [this, fragment]() {
+                    auto app = KiwixApp::instance();
+                    auto tocBar = app->getMainWindow()->getTableOfContentBar();
+                    if (tocBar) {
+                        qDebug() << "Applying TOC selection update for fragment:" << fragment;
+                        tocBar->updateSelectionFromFragment(fragment);
+                        
+                        // Force another scroll to the anchor to ensure it's visible
+                        page()->runJavaScript(QString(
+                            "if (document.getElementById('%1')) {"
+                            "   console.log('Page loaded - Ensuring scroll to anchor: %1');"
+                            "   document.getElementById('%1').scrollIntoView({behavior: 'smooth'});"
+                            "}"
+                        ).arg(fragment));
+                    }
+                });
+            }
+        }
+    });
 }
 
 WebView::~WebView()
@@ -250,8 +310,20 @@ void WebView::onConsoleMessageReceived(const QString& message)
     QString type = obj["type"].toString();
     QString msg = obj["message"].toString();
 
-    // Log to console for debugging
-    qDebug() << "JS Console [" << type << "]: " << msg;
+    // Special handling for history navigation messages
+    if (type == "history-navigation") {
+        // Check if we have an anchor in the JSON
+        if (obj.contains("anchor") && obj["anchor"].isString()) {
+            QString anchor = obj["anchor"].toString();
+            
+            if (!anchor.isEmpty()) {
+                // Sync TOC selection with the current fragment
+                QTimer::singleShot(10, this, [this, anchor]() {
+                    syncTOCWithFragment(anchor);
+                });
+            }
+        }
+    }
 }
 
 void WebView::onNavigationRequested(const QString &url, const QString &anchor)
@@ -262,32 +334,42 @@ void WebView::onNavigationRequested(const QString &url, const QString &anchor)
         return;
     }
 
-    // Check if we're already at this anchor
-    if (this->url().hasFragment() && this->url().fragment() == anchor) {
-        // Already at this anchor, no need to navigate
-        return;
-    }
-
     // Create a QUrl with fragment for history
     QUrl historyUrl(url);
     historyUrl.setFragment(anchor);
+
+    // Update TOC selection
+    auto app = KiwixApp::instance();
+    auto tocBar = app->getMainWindow()->getTableOfContentBar();
+    if (tocBar) {
+        tocBar->updateSelectionFromFragment(anchor);
+    }
+
+    // Check if we're already at this anchor
+    if (this->url().hasFragment() && this->url().fragment() == anchor) {
+        return;
+    }
 
     // Properly escape the URL and anchor for JavaScript
     QString escapedUrl = url.toHtmlEscaped();
     QString escapedAnchor = anchor.toHtmlEscaped();
 
-    // Use a simpler approach to avoid navigation loops
-    QString js = QString(
-        "if (window.history && window.history.pushState) {"
-        "  if (document.getElementById('%1')) {"
-        "    window.history.pushState({anchor: '%1'}, '', '%2#%1');"
-        "    console.log('History updated for anchor: %1');"
-        "  } else {"
-        "    console.error('Anchor not found: %1');"
+    // JS code to avoid Unexpected end of input error
+   QString js = QString(
+        "try {"
+        "  if (window.history && window.history.pushState) {"
+        "    var elem = document.getElementById('%1');"
+        "    if (elem) {"
+        "      window.history.pushState({anchor: '%1'}, '', '%2#%1');"
+        "      elem.scrollIntoView({behavior: 'smooth'});"
+        "    } else {"
+        "      console.error('Anchor not found: %1');"
+        "    }"
         "  }"
+        "} catch(e) {"
+        "  console.error('Navigation error:', e);"
         "}"
     ).arg(escapedAnchor).arg(escapedUrl);
-
     // Execute JavaScript safely with a callback
     page()->runJavaScript(js, [this, url, anchor](const QVariant &result) {
         Q_UNUSED(result);
@@ -307,28 +389,33 @@ void WebView::handleTocHistoryNavigation(const QUrl &url)
         return;
     }
 
-    // If the URL has a fragment and the base URL matches the current page
-    if (url.hasFragment() && url.url(QUrl::RemoveFragment) == this->url().url(QUrl::RemoveFragment)) {
-        // Extract the anchor from the fragment
+    // For any URL with a fragment, update TOC selection
+    if (url.hasFragment()) {
         QString anchor = url.fragment();
-
+        
         // Safety check for empty anchor
         if (anchor.isEmpty()) {
             return;
         }
-
-        // Check if we're already at this anchor to prevent loops
-        if (this->url().hasFragment() && this->url().fragment() == anchor) {
-            return;
+        
+        // Update TOC selection for any URL with a fragment
+        auto app = KiwixApp::instance();
+        auto tocBar = app->getMainWindow()->getTableOfContentBar();
+        if (tocBar) {
+            tocBar->updateSelectionFromFragment(anchor);
         }
-
-        // Use a small delay to prevent navigation loops
-        QTimer::singleShot(50, this, [this, url, anchor]() {
-            // Emit navigation signal instead of loading the page
-            emit navigationRequested(url.url(QUrl::RemoveFragment), anchor);
-        });
-
-        return;
+        
+        // Only for URLs on the current page, emit navigation signal
+        if (url.url(QUrl::RemoveFragment) == this->url().url(QUrl::RemoveFragment)) {
+            // Only emit navigation signal if we're not already at this anchor
+            if (!(this->url().hasFragment() && this->url().fragment() == anchor)) {
+                // Use a small delay to prevent navigation loops
+                QTimer::singleShot(50, this, [this, url, anchor]() {
+                    // Emit navigation signal instead of loading the page
+                    emit navigationRequested(url.url(QUrl::RemoveFragment), anchor);
+                });
+            }
+        }
     }
 }
 
@@ -352,7 +439,25 @@ void WebView::gotoTriggeredHistoryItemAction()
     if (n < 0 || n >= h->count())
         return;
 
-    h->goToItem(h->itemAt(n));
+    // Store the item before navigating
+    QWebEngineHistoryItem item = h->itemAt(n);
+    
+    // If the target URL has a fragment, update TOC after navigation
+    if (item.url().hasFragment()) {
+        QString fragment = item.url().fragment();
+        
+        // After navigation, update the TOC selection
+        QTimer::singleShot(200, this, [this, fragment]() {
+            auto app = KiwixApp::instance();
+            auto tocBar = app->getMainWindow()->getTableOfContentBar();
+            if (tocBar) {
+                tocBar->updateSelectionFromFragment(fragment);
+            }
+        });
+    }
+    
+    // Go to the history item
+    h->goToItem(item);
 }
 
 
@@ -374,10 +479,12 @@ void WebView::onUrlChanged(const QUrl& url) {
     if (m_currentZimId == zimId ) {
         // Even if the ZIM ID hasn't changed, we still need to update TOC selection
         if (url.hasFragment()) {
-            auto tocBar = app->getMainWindow()->getTableOfContentBar();
-            if (tocBar) {
-                tocBar->updateSelectionFromFragment(url.fragment());
-            }
+            QString fragment = url.fragment();
+            
+            // Sync TOC selection after a short delay to ensure the page has loaded
+            QTimer::singleShot(100, this, [this, fragment]() {
+                syncTOCWithFragment(fragment);
+            });
         }
         return;
     }
@@ -387,6 +494,10 @@ void WebView::onUrlChanged(const QUrl& url) {
     auto zoomFactor = app->getSettingsManager()->getZoomFactorByZimId(zimId);
     this->setZoomFactor(zoomFactor);
     emit iconChanged(m_icon);
+
+    // Update history action states
+    app->getAction(KiwixApp::HistoryBackAction)->setEnabled(history()->canGoBack());
+    app->getAction(KiwixApp::HistoryForwardAction)->setEnabled(history()->canGoForward());
 }
 
 void WebView::wheelEvent(QWheelEvent *event) {
@@ -530,4 +641,36 @@ bool WebView::event(QEvent *event)
         return QWebEngineView::event(event);
     }
     return true;
+}
+
+void WebView::syncTOCWithFragment(const QString& fragment)
+{
+    if (fragment.isEmpty()) {
+        return;
+    }
+    
+    // Get the TOC bar and update selection
+    auto app = KiwixApp::instance();
+    auto tocBar = app->getMainWindow()->getTableOfContentBar();
+    if (tocBar) {
+        // Update the TOC selection to match the current fragment
+        tocBar->updateSelectionFromFragment(fragment);
+        
+        // Ensure the fragment is properly scrolled into view
+        QString escapedFragment = fragment.toHtmlEscaped();
+        QString js = QString(
+            "try {"
+            "  var element = document.getElementById('%1');"
+            "  if (element) {"
+            "    element.scrollIntoView({behavior: 'smooth'});"
+            "    setTimeout(function() {"
+            "      element.scrollIntoView({behavior: 'smooth'});"
+            "    }, 100);"
+            "  }"
+            "} catch(e) { console.error('Error in syncTOCWithFragment:', e); }"
+        ).arg(escapedFragment);
+        
+        // Execute the JavaScript
+        page()->runJavaScript(js);
+    }
 }
