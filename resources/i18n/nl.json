@@ -11,7 +11,7 @@
 	"name": "Nederlands",
 	"error-title": "Fout",
 	"error-downloader-window-title": "Kan downloader niet aanmaken",
-	"error-downloader-launch-message": "Het is onmogelijk om de downloader te starten. Kiwix-desktop start wel, maar de downloadfuncties werken niet!",
+	"error-downloader-launch-message": "Het is onmogelijk om de downloader te starten. Kiwix-desktop start wel, maar de downloadfuncties werken niet.",
 	"error-launch-server-message": "Er is een fout opgetreden!",
 	"error-archive": "Kan het archief niet ophalen",
 	"open-zim": "ZIM-bestand openen",

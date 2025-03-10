@@ -186,5 +186,8 @@
 	"select-read-voice": "Изберете глас на читање",
 	"select-read-language": "Изберете јазик на читање",
 	"save-or-open": "Зачувај или Отвори податотека",
-	"save-or-open-text": "Што да прави Кивикс со податотекава?"
+	"save-or-open-text": "Што да прави Кивикс со податотекава?",
+	"speed": "Брзина",
+	"increase-tts-speed": "Зголеми ја брзината на TTS.",
+	"decrease-tts-speed": "Намали ја брзината на TTS."
 }

@@ -2,13 +2,14 @@
 	"@metadata": {
 		"authors": [
 			"Besnik b",
+			"INNERLMNT",
 			"McDutchie"
 		]
 	},
 	"name": "Shqip",
 	"error-title": "Gabim",
 	"error-downloader-window-title": "S’krijohet dot shkarkuesi",
-	"error-downloader-launch-message": "E pamundur të niset shkarkuesi, Kiwix-desktop do të niset, por s’do të punojnë krejt funksionet e shkarkimit!",
+	"error-downloader-launch-message": "Nuk mund të niset shkarkuesi, Kiwix-desktop do të niset, por s’do të punojnë krejt funksionet e shkarkimit.",
 	"error-launch-server-message": "Ndodhi një gabim!",
 	"error-archive": "S’merret dor arkivi",
 	"open-zim": "Hap Kartelë Zim",
