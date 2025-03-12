@@ -507,18 +507,37 @@ void KiwixApp::postInit() {
 
 void KiwixApp::handleItemsState(TabType tabType)
 {
-    auto libraryOrSettingsTab =  (tabType == TabType::LibraryTab || tabType == TabType::SettingsTab);
+    auto libraryOrSettingsTab = (tabType == TabType::LibraryTab || tabType == TabType::SettingsTab);
     auto notBookmarkableTab = libraryOrSettingsTab || getTabWidget()->currentArticleUrl().isEmpty();
+    auto hasZimFile = !getTabWidget()->currentZimId().isEmpty();
     auto app = KiwixApp::instance();
+
+    // Navigation actions
     app->getAction(KiwixApp::ToggleTOCAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::OpenHomePageAction)->setDisabled(!hasZimFile);
+    app->getAction(KiwixApp::RandomArticleAction)->setDisabled(!hasZimFile);
+
+    // Reading & bookmarks
     app->getAction(KiwixApp::ToggleReadingListAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::ToggleAddBookmarkAction)->setDisabled(notBookmarkableTab);
+    app->getAction(KiwixApp::ReadArticleAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ReadTextAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ReadStopAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ToggleTTSLanguageAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::ToggleTTSVoiceAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::IncreaseTTSSpeedAction)->setDisabled(libraryOrSettingsTab);
+    app->getAction(KiwixApp::DecreaseTTSSpeedAction)->setDisabled(libraryOrSettingsTab);
+
+    // Search & zoom
     app->getAction(KiwixApp::FindInPageAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::ZoomInAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::ZoomOutAction)->setDisabled(libraryOrSettingsTab);
     app->getAction(KiwixApp::ZoomResetAction)->setDisabled(libraryOrSettingsTab);
-    app->getAction(KiwixApp::RandomArticleAction)->setDisabled(libraryOrSettingsTab);
-    app->getAction(KiwixApp::OpenHomePageAction)->setDisabled(libraryOrSettingsTab);
+
+    // File operations
+    app->getAction(KiwixApp::PrintAction)->setDisabled(!hasZimFile);
+    app->getAction(KiwixApp::SavePageAsAction)->setDisabled(!hasZimFile);
+
 
     /* Non-Zim tabs are not bookmarkable therefore never in reading list. */
     if (notBookmarkableTab)
