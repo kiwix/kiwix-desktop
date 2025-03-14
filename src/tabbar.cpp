@@ -158,12 +158,7 @@ void TabBar::setCloseTabButton(int index)
     tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
     connect(tb, &QToolButton::triggered, this, [=]() {
-        for ( int i = 0; i < realTabCount(); ++i ) {
-            if ( tb == tabButton(i, QTabBar::RightSide) ) {
-                closeTab(i);
-                return;
-            }
-        }
+        closeTab(index);
     });
 }
 
