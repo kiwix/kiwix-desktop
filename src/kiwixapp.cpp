@@ -420,7 +420,9 @@ void KiwixApp::createActions()
     CREATE_ACTION_SHORTCUTS(CloseCurrentTabAction, gt("close-tab"), QList<QKeySequence>({QKeySequence(Qt::CTRL | Qt::Key_F4), QKeySequence(Qt::CTRL | Qt::Key_W)}));
 
     CREATE_ACTION_SHORTCUT(ReopenClosedTabAction, gt("reopen-closed-tab"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T));
-    HIDE_ACTION(ReopenClosedTabAction);
+    mpa_actions[ReopenClosedTabAction]->setEnabled(false);
+    connect(mpa_actions[ReopenClosedTabAction], &QAction::triggered,
+            this, &KiwixApp::reopenLastClosedTab);
 
     CREATE_ACTION_SHORTCUT(BrowseLibraryAction, gt("browse-library"), QKeySequence(Qt::CTRL | Qt::Key_E));
     HIDE_ACTION(BrowseLibraryAction);
@@ -619,4 +621,21 @@ QString KiwixApp::getPrevSaveDir() const
   QString prevSaveDir = mp_session->value("prevSaveDir", DEFAULT_SAVE_DIR).toString();
   QDir dir(prevSaveDir);
   return dir.exists() ? prevSaveDir : DEFAULT_SAVE_DIR;
+}
+
+void KiwixApp::pushClosedTab(const QString& url, const QString& title) {
+    if (url.isEmpty() || title.isEmpty())
+        return;
+    m_closedTabs.push({url, title});
+    mpa_actions[ReopenClosedTabAction]->setEnabled(true);
+}
+
+void KiwixApp::reopenLastClosedTab() {
+    if (m_closedTabs.isEmpty())
+        return;
+    
+    auto tab = m_closedTabs.pop();
+    openUrl(tab.url, true);
+    if (m_closedTabs.isEmpty())
+        mpa_actions[ReopenClosedTabAction]->setEnabled(false);
 }
