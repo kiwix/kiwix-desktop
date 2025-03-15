@@ -158,7 +158,11 @@ void TabBar::setCloseTabButton(int index)
     tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
     connect(tb, &QToolButton::triggered, this, [=]() {
-        closeTab(index);
+        // Get the tab index directly from the tab rect that contains this button
+        const QRect tabRect = tabRect(index);
+        if (tabRect.isValid()) {
+            closeTab(index);
+        }
     });
 }
 
