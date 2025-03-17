@@ -476,8 +476,12 @@ void KiwixApp::createActions()
 
     CREATE_ACTION_SHORTCUT(ZoomResetAction, gt("zoom-reset"), QKeySequence(Qt::CTRL | Qt::Key_0));
 
-    CREATE_ACTION_SHORTCUT(HelpAction, gt("help"), QKeySequence::HelpContents);
+    CREATE_ACTION_ICON_SHORTCUT(HelpAction, "help", gt("help"), QKeySequence::HelpContents);
     HIDE_ACTION(HelpAction);
+
+    CREATE_ACTION_ICON_SHORTCUT(CheckUpdatesAction, "update", gt("check-update-title"), QKeySequence(Qt::CTRL | Qt::Key_U));
+    connect(mpa_actions[CheckUpdatesAction], &QAction::triggered,
+            this, &KiwixApp::checkForUpdates);
 
     CREATE_ACTION(FeedbackAction, gt("feedback"));
     HIDE_ACTION(FeedbackAction);
@@ -619,4 +623,45 @@ QString KiwixApp::getPrevSaveDir() const
   QString prevSaveDir = mp_session->value("prevSaveDir", DEFAULT_SAVE_DIR).toString();
   QDir dir(prevSaveDir);
   return dir.exists() ? prevSaveDir : DEFAULT_SAVE_DIR;
+}
+
+void KiwixApp::checkForUpdates()
+{
+    if (!mp_versionChecker) {
+        mp_versionChecker = std::make_unique<VersionChecker>();
+        connect(mp_versionChecker.get(), &VersionChecker::updateAvailable,
+                this, &KiwixApp::handleUpdateCheckResult);
+        connect(mp_versionChecker.get(), &VersionChecker::noUpdateAvailable,
+                this, &KiwixApp::handleNoUpdateAvailable);
+        connect(mp_versionChecker.get(), &VersionChecker::checkFailed,
+                this, &KiwixApp::handleUpdateCheckFailed);
+    }
+    mp_versionChecker->checkForUpdates();
+}
+
+void KiwixApp::handleUpdateCheckResult(const QString& latestVersion)
+{
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.setWindowTitle(gt("update-available-title"));
+    msgBox.setText(gt("update-available").replace("{{VERSION}}", latestVersion) + 
+                  "\n" + gt("current-version").replace("{{VERSION}}", version));
+    msgBox.setInformativeText(gt("update-available-message"));
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+}
+
+void KiwixApp::handleNoUpdateAvailable()
+{
+    QMessageBox::information(nullptr,
+                           gt("check-update-title"),
+                           gt("no-update-available") + "\n" +
+                           gt("current-version").replace("{{VERSION}}", version));
+}
+
+void KiwixApp::handleUpdateCheckFailed(const QString& error)
+{
+    QMessageBox::warning(nullptr,
+                        gt("check-update-title"),
+                        gt("update-check-failed").replace("{{ERROR}}", error));
 }

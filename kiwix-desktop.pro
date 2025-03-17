@@ -103,6 +103,7 @@ SOURCES += \
     src/opdsrequestmanager.cpp \
     src/localkiwixserver.cpp \
     src/fullscreenwindow.cpp \
+    src/versionchecker.cpp \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
     src/multizimbutton.cpp \
@@ -114,6 +115,7 @@ HEADERS += \
     src/contentmanagerdelegate.h \
     src/contentmanagerheader.h \
     src/contentmanagermodel.h \
+    src/versionchecker.h \
     src/contentmanagerview.h \
     src/contenttypefilter.h \
     src/descriptionnode.h \

@@ -188,5 +188,12 @@
     "save-or-open-text": "What should Kiwix do with this file?",
     "speed": "Speed",
     "increase-tts-speed": "Increase TTS speed.",
-    "decrease-tts-speed": "Decrease TTS speed."
+    "decrease-tts-speed": "Decrease TTS speed.",
+    "check-update-title": "Check for Updates",
+    "update-available-title": "Update Available",
+    "update-available": "A new version ({{VERSION}}) of Kiwix Desktop is available!",
+    "update-available-message": "Please visit kiwix.org to download the latest version.",
+    "no-update-available": "You are running the latest version of Kiwix Desktop.",
+    "update-check-failed": "Failed to check for updates: {{ERROR}}",
+    "current-version": "Current version: {{VERSION}}"
 }
