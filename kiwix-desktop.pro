@@ -103,10 +103,10 @@ SOURCES += \
     src/opdsrequestmanager.cpp \
     src/localkiwixserver.cpp \
     src/fullscreenwindow.cpp \
-    src/versionchecker.cpp \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
     src/multizimbutton.cpp \
+    src/versionchecker.cpp \
 
 qtHaveModule(texttospeech): SOURCES += src/texttospeechbar.cpp \
 
@@ -115,7 +115,6 @@ HEADERS += \
     src/contentmanagerdelegate.h \
     src/contentmanagerheader.h \
     src/contentmanagermodel.h \
-    src/versionchecker.h \
     src/contentmanagerview.h \
     src/contenttypefilter.h \
     src/descriptionnode.h \
@@ -165,6 +164,7 @@ HEADERS += \
     src/css_constants.h \
     src/multizimbutton.h \
     src/kiwixwebchannelobject.h \
+    src/versionchecker.h \
 
 qtHaveModule(texttospeech): HEADERS += src/texttospeechbar.h \
 

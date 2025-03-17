@@ -15,6 +15,8 @@
 #include <QPrintDialog>
 #include <thread>
 #include <QMessageBox>
+#include <QProgressDialog>
+#include <QPushButton>
 #if defined(Q_OS_WIN)
 #include <QWindow>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -647,8 +649,44 @@ void KiwixApp::handleUpdateCheckResult(const QString& latestVersion)
     msgBox.setText(gt("update-available").replace("{{VERSION}}", latestVersion) + 
                   "\n" + gt("current-version").replace("{{VERSION}}", version));
     msgBox.setInformativeText(gt("update-available-message"));
-    msgBox.setStandardButtons(QMessageBox::Ok);
+    
+    auto installButton = msgBox.addButton(gt("install-update"), QMessageBox::ActionRole);
+    msgBox.addButton(gt("remind-later"), QMessageBox::ActionRole); // Remove variable since it's unused
+    msgBox.addButton(QMessageBox::Close);
+
     msgBox.exec();
+
+    if (msgBox.clickedButton() == installButton) {
+        // Create QProgressDialog as a member variable so it stays in scope
+        auto* progressDialog = new QProgressDialog(gt("downloading-update"), 
+                                                 gt("cancel"), 
+                                                 0, 100, 
+                                                 getMainWindow());
+        progressDialog->setWindowModality(Qt::WindowModal);
+        
+        // Connect with progressDialog instead of progress
+        connect(mp_versionChecker.get(), &VersionChecker::downloadProgress,
+                progressDialog, [progressDialog](qint64 received, qint64 total) {
+            progressDialog->setValue((received * 100) / total);
+        });
+        
+        connect(mp_versionChecker.get(), &VersionChecker::installationFailed,
+                this, [this](const QString& error) {
+            QMessageBox::critical(getMainWindow(), 
+                                gt("update-error-title"),
+                                gt("update-error-message").replace("{{ERROR}}", error));
+        });
+
+        // Let's get the download URL for the latest version
+        QString downloadUrl = mp_versionChecker->getDownloadUrl(latestVersion);
+        mp_versionChecker->downloadAndInstallUpdate(downloadUrl, latestVersion);
+        
+        // Clean up progress dialog when done
+        connect(mp_versionChecker.get(), &VersionChecker::installationFinished,
+                progressDialog, &QProgressDialog::deleteLater);
+        
+        progressDialog->exec();
+    }
 }
 
 void KiwixApp::handleNoUpdateAvailable()

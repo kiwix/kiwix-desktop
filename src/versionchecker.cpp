@@ -44,13 +44,92 @@ void VersionChecker::handleNetworkReply(QNetworkReply* reply)
         latestVersion.remove(0, 1);
     }
 
-    if (isNewerVersion(version, latestVersion)) { // Use version from kiwixapp.h
+    if (isNewerVersion(version, latestVersion)) {
         emit updateAvailable(latestVersion);
     } else {
         emit noUpdateAvailable();
     }
 
     reply->deleteLater();
+}
+
+void VersionChecker::parseReleaseDirectory(const QString& html)
+{
+    QList<ReleaseInfo> releases;
+    QRegularExpression linkRegex(QString("href=\"(%1)\".*?(\\d{2}-\\w{3}-\\d{4} \\d{2}:\\d{2})")
+                                .arg(getPlatformSpecificPattern()));
+    
+    auto matches = linkRegex.globalMatch(html);
+    while (matches.hasNext()) {
+        auto match = matches.next();
+        ReleaseInfo info;
+        info.filename = match.captured(1);
+        info.downloadUrl = DOWNLOAD_BASE_URL + info.filename;
+        info.releaseDate = QDateTime::fromString(match.captured(2), "dd-MMM-yyyy hh:mm");
+        
+        // Extract version from filename
+        QRegularExpression versionRegex("\\d+\\.\\d+\\.\\d+");
+        auto vMatch = versionRegex.match(info.filename);
+        if (vMatch.hasMatch()) {
+            info.version = vMatch.captured(0);
+            releases.append(info);
+        }
+    }
+
+    if (releases.isEmpty()) {
+        emit checkFailed("No compatible releases found");
+        return;
+    }
+
+    auto latestRelease = findLatestRelease(releases);
+    if (isNewerVersion(version, latestRelease.version)) {
+        emit updateAvailable(latestRelease.version);
+    } else {
+        emit noUpdateAvailable();
+    }
+}
+
+QString VersionChecker::getPlatformSpecificPattern()
+{
+#if defined(Q_OS_WIN)
+    return "kiwix-desktop_.*_windows-x86_64\\.zip";
+#elif defined(Q_OS_LINUX)
+    return "kiwix-desktop_.*_linux-x86_64\\.appimage";
+#elif defined(Q_OS_MAC)
+    return "kiwix-desktop_.*_macos-x86_64\\.(dmg|pkg)";
+#else
+    return "kiwix-desktop_.*\\.(appimage|zip|dmg|pkg)";
+#endif
+}
+
+QString VersionChecker::getDownloadUrl(const QString& version) const
+{
+    QString filename = QString("kiwix-desktop");
+#if defined(Q_OS_WIN)
+    filename += QString("_windows-x86_64_%1.zip").arg(version);
+#elif defined(Q_OS_LINUX)
+    filename += QString("_x86_64_%1.appimage").arg(version);
+#elif defined(Q_OS_MAC)
+    filename += QString("_macos-x86_64_%1.dmg").arg(version);
+#endif
+    return DOWNLOAD_BASE_URL + filename;
+}
+
+
+void VersionChecker::downloadAndInstallUpdate(const QString& url, const QString& /*version*/)  // Mark version as unused
+{
+    m_downloadPath = getDownloadDirectory() + QDir::separator() + 
+                    QFileInfo(url).fileName();
+
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, 
+                       QNetworkRequest::NoLessSafeRedirectPolicy);
+    
+    m_downloadReply = m_networkManager.get(request);
+    connect(m_downloadReply, &QNetworkReply::downloadProgress,
+            this, &VersionChecker::handleDownloadProgress);
+    connect(m_downloadReply, &QNetworkReply::finished,
+            this, &VersionChecker::handleDownloadFinished);
 }
 
 bool VersionChecker::isNewerVersion(const QString& current, const QString& latest)
@@ -76,4 +155,102 @@ bool VersionChecker::isNewerVersion(const QString& current, const QString& lates
     }
     
     return false;
+}
+
+void VersionChecker::handleDownloadProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+    emit downloadProgress(bytesReceived, bytesTotal);
+}
+
+void VersionChecker::handleDownloadFinished()
+{
+    if (m_downloadReply->error() != QNetworkReply::NoError) {
+        emit installationFailed(m_downloadReply->errorString());
+        m_downloadReply->deleteLater();
+        return;
+    }
+
+    QFile file(m_downloadPath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        emit installationFailed("Could not write to file: " + file.errorString());
+        m_downloadReply->deleteLater();
+        return;
+    }
+
+    file.write(m_downloadReply->readAll());
+    file.close();
+    m_downloadReply->deleteLater();
+
+    emit installationStarted();
+    
+    // Try to install the downloaded update
+    if (!installUpdate(m_downloadPath)) {
+        emit installationFailed("Failed to install update");
+        return;
+    }
+
+    emit installationFinished(true);
+}
+
+bool VersionChecker::installUpdate(const QString& filePath)
+{
+#if defined(Q_OS_WIN)
+    // For Windows, extract zip and run installer
+    // TODO: Implement Windows update installation
+    return false;
+#elif defined(Q_OS_LINUX)
+    // For Linux, make AppImage executable and replace current one
+    QFile file(filePath);
+    if (!file.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner)) {
+        return false;
+    }
+    
+    // Get path of current executable
+    QString currentExePath = QCoreApplication::applicationFilePath();
+    QString backupPath = currentExePath + ".backup";
+    
+    // Backup current executable
+    if (!QFile::copy(currentExePath, backupPath)) {
+        return false;
+    }
+    
+    // Replace current executable with new one
+    if (!QFile::rename(filePath, currentExePath)) {
+        // Restore backup if replacement fails
+        QFile::copy(backupPath, currentExePath);
+        return false;
+    }
+    
+    // Remove backup
+    QFile::remove(backupPath);
+    
+    return true;
+#elif defined(Q_OS_MAC)
+    // For macOS, mount DMG and run installer
+    // TODO: Implement macOS update installation
+    return false;
+#else
+    return false;
+#endif
+}
+
+QString VersionChecker::getDownloadDirectory()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+}
+
+VersionChecker::ReleaseInfo VersionChecker::findLatestRelease(const QList<ReleaseInfo>& releases)  // Add VersionChecker:: scope
+{
+    ReleaseInfo latest;
+    latest.version = "0.0.0";
+    latest.releaseDate = QDateTime::fromSecsSinceEpoch(0);
+
+    for (const auto& release : releases) {
+        if (isNewerVersion(latest.version, release.version) ||
+            (latest.version == release.version && latest.releaseDate < release.releaseDate)) {
+            latest = release;
+        }
+    }
+
+    return latest;
 }
