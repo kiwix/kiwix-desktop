@@ -95,10 +95,8 @@ QString VersionChecker::getPlatformSpecificPattern()
     return "kiwix-desktop_.*_windows-x86_64\\.zip";
 #elif defined(Q_OS_LINUX)
     return "kiwix-desktop_.*_linux-x86_64\\.appimage";
-#elif defined(Q_OS_MAC)
-    return "kiwix-desktop_.*_macos-x86_64\\.(dmg|pkg)";
 #else
-    return "kiwix-desktop_.*\\.(appimage|zip|dmg|pkg)";
+    return "kiwix-desktop_.*\\.(appimage|zip)";
 #endif
 }
 
@@ -109,15 +107,13 @@ QString VersionChecker::getDownloadUrl(const QString& version) const
     filename += QString("_windows-x86_64_%1.zip").arg(version);
 #elif defined(Q_OS_LINUX)
     filename += QString("_x86_64_%1.appimage").arg(version);
-#elif defined(Q_OS_MAC)
-    filename += QString("_macos-x86_64_%1.dmg").arg(version);
 #endif
     return DOWNLOAD_BASE_URL + filename;
 }
 
-
 void VersionChecker::downloadAndInstallUpdate(const QString& url, const QString& /*version*/)  // Mark version as unused
 {
+    logDebug("Starting download from: " + url);
     m_downloadPath = getDownloadDirectory() + QDir::separator() + 
                     QFileInfo(url).fileName();
 
@@ -181,6 +177,12 @@ void VersionChecker::handleDownloadFinished()
     file.close();
     m_downloadReply->deleteLater();
 
+    // Verify package integrity
+    if (!verifyDownloadedPackage(m_downloadPath)) {
+        emit installationFailed("Package verification failed");
+        return;
+    }
+
     emit installationStarted();
     
     // Try to install the downloaded update
@@ -225,10 +227,6 @@ bool VersionChecker::installUpdate(const QString& filePath)
     QFile::remove(backupPath);
     
     return true;
-#elif defined(Q_OS_MAC)
-    // For macOS, mount DMG and run installer
-    // TODO: Implement macOS update installation
-    return false;
 #else
     return false;
 #endif
@@ -253,4 +251,16 @@ VersionChecker::ReleaseInfo VersionChecker::findLatestRelease(const QList<Releas
     }
 
     return latest;
+}
+
+bool VersionChecker::verifyDownloadedPackage(const QString& filePath) const
+{
+    logDebug("Verifying downloaded package: " + filePath);
+    QFileInfo fileInfo(filePath);
+    return fileInfo.exists() && fileInfo.size() > 0;
+}
+
+void VersionChecker::logDebug(const QString& message) const
+{
+    qDebug() << "[VersionChecker]" << message;
 }

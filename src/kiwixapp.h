@@ -124,9 +124,9 @@ public slots:
     void handleItemsState(TabType);
     void updateNameMapper();
     void printVersions(std::ostream& out = std::cout);
-    void checkForUpdates();
+    void checkForUpdates(bool manualCheck = true);
     void handleUpdateCheckResult(const QString& latestVersion);
-    void handleNoUpdateAvailable();
+    void handleNoUpdateAvailable(bool showMessage);
     void handleUpdateCheckFailed(const QString& error);
 
 protected:

@@ -49,6 +49,11 @@ private:
     bool installUpdate(const QString &filePath);
     QString getPlatformSpecificPattern();
     QString getDownloadDirectory();
+    void logDebug(const QString& message) const;
+    bool verifyDownloadedPackage(const QString& filePath) const;
+    QString getTemporaryBackupPath(const QString& originalPath) const;
+    bool restoreBackup(const QString& backupPath, const QString& originalPath);
+    void cleanupBackup(const QString& backupPath);
 };
 
 #endif // VERSIONCHECKER_H

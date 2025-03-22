@@ -17,6 +17,8 @@
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QPushButton>
+#include <QGuiApplication>
+#include <QScreen>
 #if defined(Q_OS_WIN)
 #include <QWindow>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -119,6 +121,13 @@ void KiwixApp::init()
     });
 
     restoreWindowState();
+
+    // Initialize and run update checker if enabled
+    if (m_settingsManager.getAutoCheckUpdates()) {
+        QTimer::singleShot(1000, this, [this]() {
+            checkForUpdates(false); // Auto-check
+        });
+    }
 }
 
 void KiwixApp::setupDirectoryMonitoring()
@@ -483,7 +492,7 @@ void KiwixApp::createActions()
 
     CREATE_ACTION_ICON_SHORTCUT(CheckUpdatesAction, "update", gt("check-update-title"), QKeySequence(Qt::CTRL | Qt::Key_U));
     connect(mpa_actions[CheckUpdatesAction], &QAction::triggered,
-            this, &KiwixApp::checkForUpdates);
+            this, [this]() { checkForUpdates(true); });
 
     CREATE_ACTION(FeedbackAction, gt("feedback"));
     HIDE_ACTION(FeedbackAction);
@@ -627,49 +636,68 @@ QString KiwixApp::getPrevSaveDir() const
   return dir.exists() ? prevSaveDir : DEFAULT_SAVE_DIR;
 }
 
-void KiwixApp::checkForUpdates()
+void KiwixApp::checkForUpdates(bool manualCheck)
 {
     if (!mp_versionChecker) {
         mp_versionChecker = std::make_unique<VersionChecker>();
         connect(mp_versionChecker.get(), &VersionChecker::updateAvailable,
                 this, &KiwixApp::handleUpdateCheckResult);
         connect(mp_versionChecker.get(), &VersionChecker::noUpdateAvailable,
-                this, &KiwixApp::handleNoUpdateAvailable);
+                this, [this](){ handleNoUpdateAvailable(false); });
         connect(mp_versionChecker.get(), &VersionChecker::checkFailed,
                 this, &KiwixApp::handleUpdateCheckFailed);
     }
+    
+    if (manualCheck) {
+        // Reconnect signal for manual check to show "no update" message
+        disconnect(mp_versionChecker.get(), &VersionChecker::noUpdateAvailable, nullptr, nullptr);
+        connect(mp_versionChecker.get(), &VersionChecker::noUpdateAvailable,
+                this, [this](){ handleNoUpdateAvailable(true); });
+    }
+    
     mp_versionChecker->checkForUpdates();
 }
 
 void KiwixApp::handleUpdateCheckResult(const QString& latestVersion)
 {
-    QMessageBox msgBox;
+    // Create a non-intrusive notification
+    QMessageBox msgBox(getMainWindow());
+    msgBox.setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     msgBox.setIcon(QMessageBox::Information);
     msgBox.setWindowTitle(gt("update-available-title"));
-    msgBox.setText(gt("update-available").replace("{{VERSION}}", latestVersion) + 
-                  "\n" + gt("current-version").replace("{{VERSION}}", version));
-    msgBox.setInformativeText(gt("update-available-message"));
+    msgBox.setText(gt("update-available").replace("{{VERSION}}", latestVersion));
     
     auto installButton = msgBox.addButton(gt("install-update"), QMessageBox::ActionRole);
-    msgBox.addButton(gt("remind-later"), QMessageBox::ActionRole); // Remove variable since it's unused
+    msgBox.addButton(gt("remind-later"), QMessageBox::ActionRole);
     msgBox.addButton(QMessageBox::Close);
-
+    
+    // Position the notification in the bottom right corner
+    if (QScreen* screen = QGuiApplication::primaryScreen()) {
+        QRect screenGeometry = screen->geometry();
+        msgBox.show(); // We need to show it first to get its size
+        msgBox.hide();
+        int x = screenGeometry.width() - msgBox.width() - 20;
+        int y = screenGeometry.height() - msgBox.height() - 20;
+        msgBox.move(x, y);
+    }
+    
     msgBox.exec();
 
     if (msgBox.clickedButton() == installButton) {
-        // Create QProgressDialog as a member variable so it stays in scope
+        // Create QProgressDialog for download progress
         auto* progressDialog = new QProgressDialog(gt("downloading-update"), 
                                                  gt("cancel"), 
                                                  0, 100, 
                                                  getMainWindow());
         progressDialog->setWindowModality(Qt::WindowModal);
         
-        // Connect with progressDialog instead of progress
+        // Connect progress updates
         connect(mp_versionChecker.get(), &VersionChecker::downloadProgress,
                 progressDialog, [progressDialog](qint64 received, qint64 total) {
             progressDialog->setValue((received * 100) / total);
         });
         
+        // Handle installation failures
         connect(mp_versionChecker.get(), &VersionChecker::installationFailed,
                 this, [this](const QString& error) {
             QMessageBox::critical(getMainWindow(), 
@@ -677,7 +705,7 @@ void KiwixApp::handleUpdateCheckResult(const QString& latestVersion)
                                 gt("update-error-message").replace("{{ERROR}}", error));
         });
 
-        // Let's get the download URL for the latest version
+        // Get download URL and start update process
         QString downloadUrl = mp_versionChecker->getDownloadUrl(latestVersion);
         mp_versionChecker->downloadAndInstallUpdate(downloadUrl, latestVersion);
         
@@ -689,12 +717,14 @@ void KiwixApp::handleUpdateCheckResult(const QString& latestVersion)
     }
 }
 
-void KiwixApp::handleNoUpdateAvailable()
+void KiwixApp::handleNoUpdateAvailable(bool showMessage)
 {
-    QMessageBox::information(nullptr,
-                           gt("check-update-title"),
-                           gt("no-update-available") + "\n" +
-                           gt("current-version").replace("{{VERSION}}", version));
+    if (showMessage) {
+        QMessageBox::information(nullptr,
+                               gt("check-update-title"),
+                               gt("no-update-available") + "\n" +
+                               gt("current-version").replace("{{VERSION}}", version));
+    }
 }
 
 void KiwixApp::handleUpdateCheckFailed(const QString& error)
