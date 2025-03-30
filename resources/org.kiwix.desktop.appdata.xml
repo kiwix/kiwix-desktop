@@ -10,7 +10,7 @@
     </p><p>
       Kiwix makes knowledge available to people with no or limited Internet access.
     </p><p>
-      Kiwix is an offline reader for content like Wikipedia, Project Gutenberg, TED Talks, IFixit... and <a href="https://library.kiwix.org">thousands of others</a>.
+      Kiwix is an offline reader for content like Wikipedia, Project Gutenberg, TED Talks, IFixit... and thousands of others.
     </p><p>
       Kiwix deals with highly compressed snapshots of Websites that each fit into a single (.zim) file. ZIM files are small enough that they can be stored on users’ mobile phones, computers or small, inexpensive WiFi Hotspot.
     </p><p>
@@ -32,7 +32,7 @@
           <li>New table of content</li>
           <li>Revamped search box</li>
         </ul>
-        ... here is <a href="https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1">the complete changelog</a>
+        ... complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1.
       </description>
     </release>
   </releases>
