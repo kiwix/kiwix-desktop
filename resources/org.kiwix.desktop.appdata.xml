@@ -24,7 +24,7 @@
   <releases>
     <release version="2.4.1" date="2024-12-21">
       <description>
-        Most important improvements:
+        <p>Most important improvements:</p>
         <ul>
           <li>Revamping of the internal Library</li>
           <li>Robuster download manager</li>
@@ -32,7 +32,7 @@
           <li>New table of content</li>
           <li>Revamped search box</li>
         </ul>
-        ... complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1.
+        <p>Complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1.</p>
       </description>
     </release>
   </releases>
