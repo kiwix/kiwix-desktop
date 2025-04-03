@@ -20,6 +20,7 @@
 
 #include <mutex>
 #include <iostream>
+#include <QStack>
 
 typedef TabBar::TabType TabType;
 
@@ -145,6 +146,17 @@ private:
 
     QString findLibraryDirectory();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
+
+    struct ClosedTabInfo {
+        QString url;
+        QString title;
+    };
+    QStack<ClosedTabInfo> m_closedTabs;
+
+public:
+    void pushClosedTab(const QString& url, const QString& title);
+    bool hasClosedTabs() const { return !m_closedTabs.isEmpty(); }
+    void reopenLastClosedTab();
 };
 
 QString gt(const QString &key);
