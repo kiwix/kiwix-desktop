@@ -184,6 +184,8 @@ void SettingsManager::setContentType(FilterList contentTypeList)
     emit(contentTypeChanged(m_contentTypeList));
 }
 
+const QString SettingsManager::SETTING_AUTO_CHECK_UPDATES = "autoCheckUpdates";
+
 void SettingsManager::initSettings()
 {
     if(isPortableMode()) {
@@ -225,4 +227,11 @@ void SettingsManager::initSettings()
     setCategory(m_categoryList.filter(QRegularExpression(R"(^[^|]*$)")));
 
     m_contentTypeList = m_settings.value("contentType", {}).toList();
+    m_autoCheckUpdates = m_settings.value(SETTING_AUTO_CHECK_UPDATES, true).toBool();
+}
+
+void SettingsManager::setAutoCheckUpdates(bool enabled)
+{
+    m_autoCheckUpdates = enabled;
+    m_settings.setValue(SETTING_AUTO_CHECK_UPDATES, enabled);
 }
