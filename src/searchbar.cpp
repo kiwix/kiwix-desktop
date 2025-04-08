@@ -87,6 +87,18 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_suggestionView->setRootIsDecorated(false);
     m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
 
+    /* Configure the view to handle key events properly */
+    m_suggestionView->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_suggestionView->setFocusPolicy(Qt::StrongFocus);
+    m_suggestionView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    
+    /* Prevent wrapping navigation at list boundaries */
+    m_suggestionView->setTabKeyNavigation(false);
+    m_suggestionView->setProperty("_q_KeyboardScrolling", false);
+    m_suggestionView->setAutoScroll(false);
+    
+    m_suggestionView->installEventFilter(this);
+
     const int contentHeight = HeaderSectionCSS::lineHeight;
     m_suggestionView->setIconSize(QSize(contentHeight, contentHeight));
 
@@ -156,25 +168,109 @@ void SearchBarLineEdit::hideSuggestions()
     m_suggestionView->hide();
 }
 
-bool SearchBarLineEdit::eventFilter(QObject *, QEvent *event)
+bool SearchBarLineEdit::eventFilter(QObject *watched, QEvent *event)
 {
-    if (!(m_aboutToScrollPastEnd && m_moreSuggestionsAreAvailable))
-        return false;
-
-    if (const auto e = dynamic_cast<QKeyEvent *>(event))
+    // Handle events for the suggestion view
+    if (watched == m_suggestionView)
     {
-        const auto key = e->key();
-        const bool isScrollDownKey = key == Qt::Key_Down || key == Qt::Key_PageDown;
-        const bool noModifiers = e->modifiers().testFlag(Qt::NoModifier);
-
-        if (isScrollDownKey && noModifiers)
+        // Handle key press events
+        if (event->type() == QEvent::KeyPress)
         {
-            m_aboutToScrollPastEnd = false;
-            fetchMoreSuggestions();
-            return true;
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            const auto key = keyEvent->key();
+            const bool noModifiers = keyEvent->modifiers() == Qt::NoModifier;
+            
+            if (noModifiers)
+            {
+                auto selectionModel = m_suggestionView->selectionModel();
+                auto currentIndex = selectionModel->currentIndex();
+                int lastRow = m_suggestionModel.rowCount() - 1;
+                
+                // Handle down key at the last item
+                if ((key == Qt::Key_Down || key == Qt::Key_PageDown) && currentIndex.row() == lastRow)
+                {
+                    // If more suggestions are available, fetch them
+                    if (m_moreSuggestionsAreAvailable)
+                    {
+                        fetchMoreSuggestions();
+                    }
+                    return true; // Consume the event
+                }
+                
+                // Handle up key at the first item
+                if ((key == Qt::Key_Up || key == Qt::Key_PageUp) && currentIndex.row() == 0)
+                {
+                    return true; 
+                }
+                
+                // Handle fetching more suggestions when near the end
+                if ((key == Qt::Key_Down || key == Qt::Key_PageDown) && 
+                    m_moreSuggestionsAreAvailable && 
+                    currentIndex.row() >= lastRow - 2)
+                {
+                    // Let default behavior happen
+                    bool result = QLineEdit::eventFilter(watched, event);
+                    
+                    // Then fetch more suggestions
+                    fetchMoreSuggestions();
+                    
+                    // Ensure the new selection is visible
+                    QTimer::singleShot(0, [this]() {
+                        auto newIndex = m_suggestionView->selectionModel()->currentIndex();
+                        if (newIndex.isValid()) {
+                            m_suggestionView->scrollTo(newIndex, QAbstractItemView::EnsureVisible);
+                        }
+                    });
+                    
+                    return result;
+                }
+                
+                // For regular navigation, allow default behavior then ensure selection is visible
+                if (key == Qt::Key_Down || key == Qt::Key_Up || 
+                    key == Qt::Key_PageDown || key == Qt::Key_PageUp)
+                {
+                    bool result = QLineEdit::eventFilter(watched, event);
+                    
+                    // Ensure selection is visible
+                    QTimer::singleShot(0, [this]() {
+                        auto newIndex = m_suggestionView->selectionModel()->currentIndex();
+                        if (newIndex.isValid()) {
+                            m_suggestionView->scrollTo(newIndex, QAbstractItemView::EnsureVisible);
+                        }
+                    });
+                    
+                    return result;
+                }
+            }
+        }
+        
+        // Post-key processing to maintain proper selection
+        if (event->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            const auto key = keyEvent->key();
+            
+            if (key == Qt::Key_Down || key == Qt::Key_PageDown || key == Qt::Key_Up || key == Qt::Key_PageUp)
+            {
+                auto selectionModel = m_suggestionView->selectionModel();
+                
+                // If no selection exists after key navigation, select the first/last item
+                if (!selectionModel->currentIndex().isValid())
+                {
+                    int row = (key == Qt::Key_Down || key == Qt::Key_PageDown) ? 0 : m_suggestionModel.rowCount() - 1;
+                    auto index = m_suggestionModel.index(row);
+                    if (index.isValid())
+                    {
+                        selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+                        m_suggestionView->scrollTo(index, QAbstractItemView::EnsureVisible);
+                    }
+                    return true;
+                }
+            }
         }
     }
-    return false;
+    
+    return QLineEdit::eventFilter(watched, event);
 }
 
 void SearchBarLineEdit::clearSuggestions()
@@ -263,43 +359,38 @@ void SearchBarLineEdit::onScroll(int value)
         return;
     }
 
-    /* Scrolling using key_down past end will teleport scroller to the top.
-       We undo this here. Block signal to avoid recursion. We cannot find a way
-       to intercept the scrolling in eventFilter so, until we find out how, this
-       code is here to stay.
-    */
-    if (!m_suggestionView->currentIndex().isValid())
-    {
-        const auto old = m_suggestionView->verticalScrollBar()->blockSignals(true);
-        m_suggestionView->scrollToBottom();
-        m_suggestionView->verticalScrollBar()->blockSignals(old);
-        return;
-    }
-
     const auto suggestionScroller = m_suggestionView->verticalScrollBar();
     const auto scrollMin = suggestionScroller->minimum();
     const auto scrollMax = suggestionScroller->maximum();
     const bool scrolledToEnd = value == suggestionScroller->maximum();
+
     if (m_aboutToScrollPastEnd)
     {
         if (scrolledToEnd)
         {
-            /* The user's intention to scroll past end has been confirmed */
+            /* Store current scroll position before fetching more */
+            const int currentScrollPos = suggestionScroller->value();
+            
+            /* Fetch more suggestions */
             fetchMoreSuggestions();
-            m_aboutToScrollPastEnd = false; /* Relax until next time */
+            
+            /* Restore scroll position after a short delay to ensure the view has updated */
+            QTimer::singleShot(0, [=]() {
+                suggestionScroller->setValue(currentScrollPos);
+            });
+            
+            m_aboutToScrollPastEnd = false;
         }
         else
         {
-            /* Scrolling past end did not happen - remove the extra scroll
-               room created for detecting the intention of scrolling past end
-            */
+            /* Scrolling past end did not happen - remove the extra scroll room */
             suggestionScroller->setRange(scrollMin, scrollMax - 1);
-            m_aboutToScrollPastEnd = false; /* ... and relax */
+            m_aboutToScrollPastEnd = false;
         }
     }
     else if (scrolledToEnd)
     {
-        /* The user has scrolled to end - monitor for furthur scrolling */
+        /* The user has scrolled to end - monitor for further scrolling */
         m_aboutToScrollPastEnd = true;
         /* Create some fictitious room for an extra scroll */
         suggestionScroller->setRange(scrollMin, scrollMax + 1);
@@ -332,9 +423,33 @@ void SearchBarLineEdit::onInitialSuggestions(int)
 
 void SearchBarLineEdit::onAdditionalSuggestions(int start)
 {
-    /* Set selection to be at the last row of the previous list */
-    const auto completerStartIdx = m_suggestionView->model()->index(start, 0);
-    m_suggestionView->setCurrentIndex(completerStartIdx);
+    // Get the model index for the first new suggestion
+    const auto completerStartIdx = m_suggestionModel.index(start, 0);
+    
+    // If we were at the last item before fetching more suggestions,
+    // select the first new suggestion (at index 'start')
+    auto selectionModel = m_suggestionView->selectionModel();
+    auto currentIndex = selectionModel->currentIndex();
+    
+    /* Block signals temporarily to prevent unwanted scroll events */
+    const bool oldState = m_suggestionView->blockSignals(true);
+    
+    // If there was no selection or we were at the end, select the first new item
+    if (!currentIndex.isValid() || currentIndex.row() == start - 1)
+    {
+        selectionModel->setCurrentIndex(completerStartIdx, 
+                                       QItemSelectionModel::ClearAndSelect | 
+                                       QItemSelectionModel::Rows);
+    }
+    
+    // Ensure the selected item is visible
+    m_suggestionView->scrollTo(selectionModel->currentIndex(), 
+                              QAbstractItemView::PositionAtCenter);
+    
+    /* Restore signal state */
+    m_suggestionView->blockSignals(oldState);
+    
+    // Ensure the view is visible
     m_suggestionView->show();
 }
 
