@@ -170,107 +170,98 @@ void SearchBarLineEdit::hideSuggestions()
 
 bool SearchBarLineEdit::eventFilter(QObject *watched, QEvent *event)
 {
-    // Handle events for the suggestion view
     if (watched == m_suggestionView)
     {
-        // Handle key press events
         if (event->type() == QEvent::KeyPress)
         {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            const auto key = keyEvent->key();
-            const bool noModifiers = keyEvent->modifiers() == Qt::NoModifier;
-            
-            if (noModifiers)
+            if (keyEvent->modifiers() == Qt::NoModifier)
             {
-                auto selectionModel = m_suggestionView->selectionModel();
-                auto currentIndex = selectionModel->currentIndex();
-                int lastRow = m_suggestionModel.rowCount() - 1;
-                
-                // Handle down key at the last item
-                if ((key == Qt::Key_Down || key == Qt::Key_PageDown) && currentIndex.row() == lastRow)
-                {
-                    // If more suggestions are available, fetch them
-                    if (m_moreSuggestionsAreAvailable)
-                    {
-                        fetchMoreSuggestions();
-                    }
-                    return true; // Consume the event
-                }
-                
-                // Handle up key at the first item
-                if ((key == Qt::Key_Up || key == Qt::Key_PageUp) && currentIndex.row() == 0)
-                {
-                    return true; 
-                }
-                
-                // Handle fetching more suggestions when near the end
-                if ((key == Qt::Key_Down || key == Qt::Key_PageDown) && 
-                    m_moreSuggestionsAreAvailable && 
-                    currentIndex.row() >= lastRow - 2)
-                {
-                    // Let default behavior happen
-                    bool result = QLineEdit::eventFilter(watched, event);
-                    
-                    // Then fetch more suggestions
-                    fetchMoreSuggestions();
-                    
-                    // Ensure the new selection is visible
-                    QTimer::singleShot(0, [this]() {
-                        auto newIndex = m_suggestionView->selectionModel()->currentIndex();
-                        if (newIndex.isValid()) {
-                            m_suggestionView->scrollTo(newIndex, QAbstractItemView::EnsureVisible);
-                        }
-                    });
-                    
-                    return result;
-                }
-                
-                // For regular navigation, allow default behavior then ensure selection is visible
-                if (key == Qt::Key_Down || key == Qt::Key_Up || 
-                    key == Qt::Key_PageDown || key == Qt::Key_PageUp)
-                {
-                    bool result = QLineEdit::eventFilter(watched, event);
-                    
-                    // Ensure selection is visible
-                    QTimer::singleShot(0, [this]() {
-                        auto newIndex = m_suggestionView->selectionModel()->currentIndex();
-                        if (newIndex.isValid()) {
-                            m_suggestionView->scrollTo(newIndex, QAbstractItemView::EnsureVisible);
-                        }
-                    });
-                    
-                    return result;
-                }
+                return handleSuggestionKeyPress(keyEvent);
             }
         }
-        
-        // Post-key processing to maintain proper selection
-        if (event->type() == QEvent::KeyRelease)
+        else if (event->type() == QEvent::KeyRelease)
         {
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            const auto key = keyEvent->key();
-            
-            if (key == Qt::Key_Down || key == Qt::Key_PageDown || key == Qt::Key_Up || key == Qt::Key_PageUp)
-            {
-                auto selectionModel = m_suggestionView->selectionModel();
-                
-                // If no selection exists after key navigation, select the first/last item
-                if (!selectionModel->currentIndex().isValid())
-                {
-                    int row = (key == Qt::Key_Down || key == Qt::Key_PageDown) ? 0 : m_suggestionModel.rowCount() - 1;
-                    auto index = m_suggestionModel.index(row);
-                    if (index.isValid())
-                    {
-                        selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-                        m_suggestionView->scrollTo(index, QAbstractItemView::EnsureVisible);
-                    }
-                    return true;
-                }
-            }
+            return handleSuggestionKeyRelease(keyEvent);
         }
     }
-    
+
     return QLineEdit::eventFilter(watched, event);
+}
+
+bool SearchBarLineEdit::handleSuggestionKeyPress(QKeyEvent *keyEvent)
+{
+    const int key = keyEvent->key();
+    auto selectionModel = m_suggestionView->selectionModel();
+    auto currentIndex = selectionModel->currentIndex();
+    int lastRow = m_suggestionModel.rowCount() - 1;
+
+    if ((key == Qt::Key_Down || key == Qt::Key_PageDown) && currentIndex.row() == lastRow)
+    {
+        if (m_moreSuggestionsAreAvailable)
+        {
+            fetchMoreSuggestions();
+        }
+        return true;
+    }
+
+    if ((key == Qt::Key_Up || key == Qt::Key_PageUp) && currentIndex.row() == 0)
+    {
+        return true;
+    }
+
+    if ((key == Qt::Key_Down || key == Qt::Key_PageDown) &&
+        m_moreSuggestionsAreAvailable &&
+        currentIndex.row() >= lastRow - 2)
+    {
+        bool result = QLineEdit::eventFilter(m_suggestionView, keyEvent);
+        fetchMoreSuggestions();
+        ensureCurrentIndexVisible();
+        return result;
+    }
+
+    if (key == Qt::Key_Down || key == Qt::Key_Up ||
+        key == Qt::Key_PageDown || key == Qt::Key_PageUp)
+    {
+        bool result = QLineEdit::eventFilter(m_suggestionView, keyEvent);
+        ensureCurrentIndexVisible();
+        return result;
+    }
+
+    return false;
+}
+
+bool SearchBarLineEdit::handleSuggestionKeyRelease(QKeyEvent *keyEvent)
+{
+    int key = keyEvent->key();
+    if (key == Qt::Key_Down || key == Qt::Key_PageDown || key == Qt::Key_Up || key == Qt::Key_PageUp)
+    {
+        auto selectionModel = m_suggestionView->selectionModel();
+        if (!selectionModel->currentIndex().isValid())
+        {
+            int row = (key == Qt::Key_Down || key == Qt::Key_PageDown) ? 0 : m_suggestionModel.rowCount() - 1;
+            auto index = m_suggestionModel.index(row);
+            if (index.isValid())
+            {
+                selectionModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+                m_suggestionView->scrollTo(index, QAbstractItemView::EnsureVisible);
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+void SearchBarLineEdit::ensureCurrentIndexVisible()
+{
+    QTimer::singleShot(0, [this]() {
+        auto newIndex = m_suggestionView->selectionModel()->currentIndex();
+        if (newIndex.isValid())
+        {
+            m_suggestionView->scrollTo(newIndex, QAbstractItemView::EnsureVisible);
+        }
+    });
 }
 
 void SearchBarLineEdit::clearSuggestions()

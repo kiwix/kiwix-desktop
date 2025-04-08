@@ -60,6 +60,11 @@ private:
        indicating the next scroll should trigger a fetch more action. */
     bool m_aboutToScrollPastEnd = false;
 
+    // Helper methods for event filtering
+    bool handleSuggestionKeyPress(QKeyEvent *keyEvent);
+    bool handleSuggestionKeyRelease(QKeyEvent *keyEvent);
+    void ensureCurrentIndexVisible();
+
 private slots:
     void updateCompletion();
     void fetchMoreSuggestions();
