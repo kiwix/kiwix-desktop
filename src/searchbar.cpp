@@ -193,43 +193,77 @@ bool SearchBarLineEdit::eventFilter(QObject *watched, QEvent *event)
 bool SearchBarLineEdit::handleSuggestionKeyPress(QKeyEvent *keyEvent)
 {
     const int key = keyEvent->key();
-    auto selectionModel = m_suggestionView->selectionModel();
-    auto currentIndex = selectionModel->currentIndex();
-    int lastRow = m_suggestionModel.rowCount() - 1;
+    const int currentRow = m_suggestionView->selectionModel()->currentIndex().row();
+    const int lastRow = m_suggestionModel.rowCount() - 1;
 
-    if ((key == Qt::Key_Down || key == Qt::Key_PageDown) && currentIndex.row() == lastRow)
+    if (isAtLastRowAndPressingDown(key, currentRow, lastRow))
     {
-        if (m_moreSuggestionsAreAvailable)
-        {
-            fetchMoreSuggestions();
-        }
-        return true;
+        return handleEndOfListKeyPress();
     }
 
-    if ((key == Qt::Key_Up || key == Qt::Key_PageUp) && currentIndex.row() == 0)
+    if (isAtFirstRowAndPressingUp(key, currentRow))
     {
         return true;
     }
 
-    if ((key == Qt::Key_Down || key == Qt::Key_PageDown) &&
-        m_moreSuggestionsAreAvailable &&
-        currentIndex.row() >= lastRow - 2)
+    if (shouldPreloadMoreSuggestions(key, currentRow, lastRow))
     {
-        bool result = QLineEdit::eventFilter(m_suggestionView, keyEvent);
-        fetchMoreSuggestions();
-        ensureCurrentIndexVisible();
-        return result;
+        return handleNearEndNavigation(keyEvent);
     }
 
-    if (key == Qt::Key_Down || key == Qt::Key_Up ||
-        key == Qt::Key_PageDown || key == Qt::Key_PageUp)
+    if (isNavigationKey(key))
     {
-        bool result = QLineEdit::eventFilter(m_suggestionView, keyEvent);
-        ensureCurrentIndexVisible();
-        return result;
+        return handleStandardNavigation(keyEvent);
     }
 
     return false;
+}
+
+bool SearchBarLineEdit::isAtLastRowAndPressingDown(int key, int row, int lastRow) const
+{
+    return (key == Qt::Key_Down || key == Qt::Key_PageDown) && row == lastRow;
+}
+
+bool SearchBarLineEdit::isAtFirstRowAndPressingUp(int key, int row) const
+{
+    return (key == Qt::Key_Up || key == Qt::Key_PageUp) && row == 0;
+}
+
+bool SearchBarLineEdit::shouldPreloadMoreSuggestions(int key, int row, int lastRow) const
+{
+    return (key == Qt::Key_Down || key == Qt::Key_PageDown) &&
+           m_moreSuggestionsAreAvailable &&
+           row >= lastRow - 2;
+}
+
+bool SearchBarLineEdit::isNavigationKey(int key) const
+{
+    return key == Qt::Key_Down || key == Qt::Key_Up ||
+           key == Qt::Key_PageDown || key == Qt::Key_PageUp;
+}
+
+bool SearchBarLineEdit::handleEndOfListKeyPress()
+{
+    if (m_moreSuggestionsAreAvailable)
+    {
+        fetchMoreSuggestions();
+    }
+    return true;
+}
+
+bool SearchBarLineEdit::handleNearEndNavigation(QKeyEvent *event)
+{
+    bool result = QLineEdit::eventFilter(m_suggestionView, event);
+    fetchMoreSuggestions();
+    ensureCurrentIndexVisible();
+    return result;
+}
+
+bool SearchBarLineEdit::handleStandardNavigation(QKeyEvent *event)
+{
+    bool result = QLineEdit::eventFilter(m_suggestionView, event);
+    ensureCurrentIndexVisible();
+    return result;
 }
 
 bool SearchBarLineEdit::handleSuggestionKeyRelease(QKeyEvent *keyEvent)
