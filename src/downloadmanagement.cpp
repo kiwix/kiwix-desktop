@@ -35,6 +35,23 @@ DownloadState::Status getDownloadStatus(QString status)
     return DownloadState::UNKNOWN;
 }
 
+QString formatTimeRemaining(double seconds)
+{
+    int totalSec = int(seconds);
+    int hours = totalSec / 3600;
+    int minutes = (totalSec % 3600) / 60;
+    int secs = totalSec % 60;
+    if (hours > 0)
+        return QString("%1:%2:%3")
+                   .arg(hours, 2, 10, QChar('0'))
+                   .arg(minutes, 2, 10, QChar('0'))
+                   .arg(secs, 2, 10, QChar('0'));
+    else
+        return QString("%1:%2")
+                   .arg(minutes, 2, 10, QChar('0'))
+                   .arg(secs, 2, 10, QChar('0'));
+}
+
 } // unnamed namespace
 
 bool DownloadState::isLateUpdateInfo(const DownloadInfo& info) const
@@ -49,11 +66,17 @@ bool DownloadState::isLateUpdateInfo(const DownloadInfo& info) const
 void DownloadState::update(const DownloadInfo& info)
 {
     const auto completedBytes = info["completedLength"].toDouble();
-    const double percentage = completedBytes / info["totalLength"].toDouble();
+    const double totalBytes = info["totalLength"].toDouble();
+    const double percentage = completedBytes / totalBytes;
 
     progress = QString::number(100 * percentage, 'g', 3).toDouble();
     completedLength = convertToUnits(completedBytes);
-    downloadSpeed = convertToUnits(info["downloadSpeed"].toDouble()) + "/s";
+    double speedVal = info["downloadSpeed"].toDouble();
+    downloadSpeed = convertToUnits(speedVal) + "/s";
+    // Compute estimated time remaining
+    double remainingSeconds = (speedVal > 0) ? ((totalBytes - completedBytes) / speedVal) : 0;
+    estimatedTimeRemaining = (speedVal > 0) ? formatTimeRemaining(remainingSeconds)
+                                            : "---";
     if ( !isLateUpdateInfo(info) ) {
         status = getDownloadStatus(info["status"].toString());
     }
@@ -229,12 +252,20 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
     const auto d = mp_downloader->getDownload(b.getDownloadId());
     d->updateStatus(true);
 
+    // Calculate estimated time remaining.
+    double total = d->getTotalLength();
+    double completed = d->getCompletedLength();
+    double speed = d->getDownloadSpeed(); // bytes per second
+    double remainingSeconds = (speed > 0) ? ((total - completed) / speed) : 0;
+    QString timeRemaining = (speed > 0) ? formatTimeRemaining(remainingSeconds) : "---";
+
     return {
-             { "status"          , downloadStatus2QString(d->getStatus())   },
-             { "completedLength" , QString::number(d->getCompletedLength()) },
-             { "totalLength"     , QString::number(d->getTotalLength())     },
-             { "downloadSpeed"   , QString::number(d->getDownloadSpeed())   },
-             { "path"            , QString::fromStdString(d->getPath())     }
+             { "status"              , downloadStatus2QString(d->getStatus())   },
+             { "completedLength"     , QString::number(d->getCompletedLength()) },
+             { "totalLength"         , QString::number(d->getTotalLength())     },
+             { "downloadSpeed"       , QString::number(d->getDownloadSpeed())   },
+             { "estimatedTimeRemaining", timeRemaining },
+             { "path"                , QString::fromStdString(d->getPath())     }
     };
 }
 
