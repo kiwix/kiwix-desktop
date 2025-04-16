@@ -5,8 +5,7 @@
 Kiwix Desktop
 =============
 
-Kiwix is an offline reader for Web content, primarily designed to make [Wikipedia](https://www.wikipedia.org/) available offline. It reads archives in the [ZIM](https://openzim.org) file format, a highly compressed open format with additional metadata. This is the Kiwix Desktop version - a viewer/manager of ZIM files for GNU/Linux and
-Microsoft Windows OSes.
+Kiwix is an offline reader for Web content, primarily designed to make [Wikipedia](https://www.wikipedia.org/) available offline. It reads archives in the [ZIM](https://openzim.org) file format, a highly compressed open format with additional metadata. This is the Kiwix Desktop version - a viewer/manager of ZIM files for GNU/Linux (recent versions) and Microsoft Windows 10 & 11 OSes.
 
 [![Release](https://img.shields.io/github/v/tag/kiwix/kiwix-desktop?label=release&sort=semver)](https://download.kiwix.org/release/kiwix-desktop/)
 [![Repositories](https://img.shields.io/repology/repositories/kiwix-desktop?label=repositories)](https://github.com/kiwix/kiwix-desktop/wiki/Repology)
