@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Event",
-			"Johshh"
+			"Johshh",
+			"TorgeirS"
 		]
 	},
 	"error-title": "Feil",
@@ -88,5 +89,12 @@
 	"zim-open-fail-title": "Ugyldig fil",
 	"move-files-to-trash": "Flytt slettede filer til papirkurven",
 	"move-files-to-trash-text": "Denne handlingen vil flytte filen til papirkurven.",
-	"perma-delete-files-text": "Denne handlingen vil slette filen uopprettelig."
+	"perma-delete-files-text": "Denne handlingen vil slette filen uopprettelig.",
+	"stop": "Stopp",
+	"voice": "Stemme",
+	"save-or-open": "Lagre eller åpne fil",
+	"save-or-open-text": "Hva skal Kiwix gjøre med denne filen?",
+	"speed": "Hastighet",
+	"increase-tts-speed": "Øk TTS-hastigheten.",
+	"decrease-tts-speed": "Reduser TTS-hastigheten."
 }
