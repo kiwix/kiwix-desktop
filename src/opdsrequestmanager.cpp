@@ -41,7 +41,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
         query.addQueryItem("category", categoryFilter);
     }
 
-    auto mp_reply = opdsResponseFromPath("/catalog/search", query);
+    auto mp_reply = opdsResponseFromPath("/catalog/v2/entries", query);
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
         receiveContent(mp_reply);
     });
