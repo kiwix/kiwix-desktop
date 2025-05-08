@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Muddyb",
 			"Peggy",
 			"Stephane"
 		]
@@ -139,7 +140,7 @@
 	"perma-delete-files-text": "Kitendo hiki kitafuta faili kabisa.",
 	"clear-filter": "Futa vichujio vilivyowekwa sasa",
 	"language-searcher-placeholder": "Lugha ya tovuti",
-	"category-searcher-placeholder": "Kichujio cha kategoria",
+	"category-searcher-placeholder": "Kichujio cha jamii",
 	"content-type-searcher-placeholder": "Aina ya maudhui ya kichujio",
 	"no-details": "Utangulizi pekee",
 	"no-pictures": "Hakuna picha",

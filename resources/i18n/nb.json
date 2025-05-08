@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Event",
-			"Johshh"
+			"Johshh",
+			"TorgeirS"
 		]
 	},
 	"error-title": "Feil",
@@ -59,13 +60,13 @@
 	"reset": "Nullstill",
 	"clear": "Tøm",
 	"browse": "Bla gjennom",
-	"about-kiwix-desktop-title": "Kiwix Desktop",
+	"about-kiwix-desktop-title": "Kiwix Skrivebord",
 	"about-learn-more-about-kiwix": "Lær mer om Kiwix",
 	"about-release-title": "Utgave",
 	"about-source-code": "Denne programvaren er utgitt under vilkårene i GNU General Public License versjon 3. Se kildekoden på <a href='{{GITHUB_URL}}'>Github</a>.",
 	"about-version": "Versjon: {{VERSION}}",
 	"about-report-issue": "For å åpne et problem, gå til <a href='{{TRACKER_URL}}'>Kiwix-desktop issue tracker</a> og åpne et problem som beskriver problemet ditt.",
-	"about-libraries-title": "Biblioteker",
+	"about-libraries-title": "Bibliotek",
 	"kiwix-server-running-message": "Kiwix-tjeneren kjører og kan nås i det lokale nettverket på:",
 	"kiwix-server-description": "Å starte en tjener lar andre datamaskiner i det lokale nettverket få tilgang til Kiwix-biblioteket med en standard nettleser.",
 	"fullscreen-notification": "Du er nå i fullskjermmodus. Trykk ESC for å avslutte!",
@@ -88,5 +89,12 @@
 	"zim-open-fail-title": "Ugyldig fil",
 	"move-files-to-trash": "Flytt slettede filer til papirkurven",
 	"move-files-to-trash-text": "Denne handlingen vil flytte filen til papirkurven.",
-	"perma-delete-files-text": "Denne handlingen vil slette filen uopprettelig."
+	"perma-delete-files-text": "Denne handlingen vil slette filen permanent.",
+	"stop": "Stopp",
+	"voice": "Stemme",
+	"save-or-open": "Lagre eller åpne fil",
+	"save-or-open-text": "Hva skal Kiwix gjøre med denne filen?",
+	"speed": "Hastighet",
+	"increase-tts-speed": "Øk TTS-hastigheten.",
+	"decrease-tts-speed": "Reduser TTS-hastigheten."
 }
