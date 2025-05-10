@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"ABPMAB",
 			"Dutchy45",
 			"HanV",
 			"Mainframe98",
@@ -14,6 +15,7 @@
 	"error-downloader-launch-message": "Het is onmogelijk om de downloader te starten. Kiwix-desktop start wel, maar de downloadfuncties werken niet.",
 	"error-launch-server-message": "Er is een fout opgetreden!",
 	"error-archive": "Kan het archief niet ophalen",
+	"error-opening-file": "Er is een fout opgetreden bij het openen van het bestand.",
 	"open-zim": "ZIM-bestand openen",
 	"local-kiwix-server": "Lokale Kiwix-server",
 	"random-article": "Willekeurig artikel",
@@ -28,6 +30,7 @@
 	"reopen-closed-tab": "Gesloten tabblad heropenen",
 	"browse-library": "Bibliotheek verkennen",
 	"open-file": "Bestand openen",
+	"save-file": "Bestand opslaan",
 	"open-recent": "Recentelijk geopend",
 	"search-article": "Artikel zoeken",
 	"search-in-library": "In bibliotheek zoeken",
@@ -49,6 +52,7 @@
 	"donate-to-support-kiwix": "Doneer om Kiwix te steunen",
 	"exit": "Afsluiten",
 	"save-file-as-window-title": "Bestand opslaan als",
+	"download-finished": "Downloaden voltooid",
 	"download-finished-message": "Het document is gedownload.",
 	"file": "Bestand",
 	"edit": "Bewerken",
@@ -83,6 +87,7 @@
 	"about-kiwix-desktop-title": "Kiwix Desktop",
 	"about-kiwix-desktop-description": "Met Kiwix hebt u de hele Wikipedia bij de hand, waar u ook gaat! Op een boot, in niemandsland, of in de gevangenis: Kiwix geeft u toegang tot alle menselijke kennis. U hebt geen internet nodig, want alles wordt op uw computer opgeslagen.",
 	"about-learn-more-about-kiwix": "Meer informatie over Kiwix",
+	"about-privacy-policy": "Privacybeleid",
 	"about-release-title": "Uitgave",
 	"about-source-code": "Deze software is uitgebracht onder de voorwaarden van de GNU General Public License versie 3. Bekijk de broncode op <a href='{{GITHUB_URL}}'>Github</a> .",
 	"about-version": "Versie: {{VERSION}}",
@@ -184,5 +189,8 @@
 	"stop": "Stoppen",
 	"voice": "Stem",
 	"select-read-voice": "Kies leesstem",
-	"select-read-language": "Kies leestaal"
+	"select-read-language": "Kies leestaal",
+	"save-or-open": "Bestand opslaan of openen",
+	"save-or-open-text": "Wat moet Kiwix met dit bestand doen?",
+	"speed": "Snelheid"
 }

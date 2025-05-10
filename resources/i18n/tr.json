@@ -9,7 +9,8 @@
 			"Ice bulldog",
 			"Joseph",
 			"Rofiatmustapha12",
-			"SaldırganSincap"
+			"SaldırganSincap",
+			"Slickdaddy"
 		]
 	},
 	"name": "Türkçe",
@@ -39,7 +40,7 @@
 	"set-fullscreen": "Tam ekranı ayarla",
 	"quit-fullscreen": "Tam Ekrandan Çık",
 	"table-of-content": "İçerik tablosu",
-	"reading-list": "Okuma listesi",
+	"reading-list": "Okuma Listesi",
 	"zoom-in": "Yakınlaştır",
 	"zoom-out": "Uzaklaştır",
 	"zoom-reset": "Zoom sıfırla",
@@ -85,6 +86,7 @@
 	"about-kiwix-desktop-title": "Kiwix Masaüstü",
 	"about-kiwix-desktop-description": "Kiwix, gittiğiniz her yerde Wikipedia'nın tamamının elinizin altında olmasını sağlar! Bir teknede, hiçliğin ortasında veya hapishanede, Kiwix size insanlığın tüm bilgisine erişme olanağı sağlar. İnternete ihtiyacınız yok, her şey bilgisayarınızda saklanıyor.",
 	"about-learn-more-about-kiwix": "Kiwix hakkında daha fazla bilgi edinin",
+	"about-privacy-policy": "Gizlilik politikası",
 	"about-release-title": "Sürüm",
 	"about-source-code": "Bu yazılım GNU Genel Kamu Lisansı sürüm 3 koşulları altında yayımlanmıştır. Kaynak kodunu <a href='{{GITHUB_URL}}'>Github</a>'da görün.",
 	"about-version": "Sürüm: {{VERSION}}",
@@ -146,9 +148,10 @@
 	"perma-delete-files-text": "Bu işlem dosyayı kalıcı olarak silecektir.",
 	"clear-filter": "Halihazırda ayarlanmış olan filtreleri temizle",
 	"language-searcher-placeholder": "Dile göre filtrele",
-	"category-searcher-placeholder": "Kategorilerine göre filtrele",
-	"content-type-searcher-placeholder": "İçerik türünü filtrele",
+	"category-searcher-placeholder": "Kategoriye göre filtrele",
+	"content-type-searcher-placeholder": "İçerik türüne göre filtrele",
 	"no-details": "Yalnızca giriş",
 	"no-pictures": "Resim Yok",
-	"no-videos": "Video Yok"
+	"no-videos": "Video Yok",
+	"speed": "Hız"
 }

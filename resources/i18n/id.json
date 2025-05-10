@@ -11,7 +11,7 @@
 	"name": "Bahasa Indonesia",
 	"error-title": "Galat",
 	"error-downloader-window-title": "Tidak dapat membuat pengunduh",
-	"error-downloader-launch-message": "Tidak dapat meluncurkan pengunduh, Kiwix-desktop akan mulai tetapi semua fungsi pengunduhan tidak berfungsi!",
+	"error-downloader-launch-message": "Tidak dapat meluncurkan pengunduh. Kiwix-desktop akan mulai tetapi semua fungsi pengunduhan tidak berfungsi.",
 	"error-launch-server-message": "Telah terjadi kesalahan!",
 	"error-archive": "Gagal memuat arsip",
 	"error-opening-file": "Ada kesalahan saat membuka berkas.",
@@ -39,7 +39,7 @@
 	"table-of-content": "Daftar isi",
 	"add-bookmark": "Tambah ke daftar bacaan",
 	"remove-bookmark": "Hapus dari daftar bacaan",
-	"reading-list": "Daftar bacaan",
+	"reading-list": "Daftar Bacaan",
 	"zoom-in": "Perbesar",
 	"zoom-out": "Perkecil",
 	"zoom-reset": "Atur ulang zoom",
@@ -86,6 +86,7 @@
 	"about-kiwix-desktop-title": "Kiwix Desktop",
 	"about-kiwix-desktop-description": "Kiwix memungkinkan Anda memiliki seluruh Wikipedia dimanapun Anda berada! Di atas kapal, di tengah antah berantah, atau di penjara, Kiwix memberi Anda akses ke semua pengetahuan manusia. Anda tidak memerlukan Internet, semuanya tersimpan di komputer Anda.",
 	"about-learn-more-about-kiwix": "Pelajari lebih lanjut tentang Kiwix",
+	"about-privacy-policy": "Kebijakan privasi",
 	"about-release-title": "Rilis",
 	"about-source-code": "Perangkat lunak ini dirilis berdasarkan ketentuan Lisensi Publik Umum GNU versi 3. Lihat kode sumber di <a href='{{GITHUB_URL}}'>Github</a> .",
 	"about-version": "Versi: {{VERSION}}",
@@ -189,5 +190,8 @@
 	"select-read-voice": "Pilih suara bacaan",
 	"select-read-language": "Pilih bahasa bacaan",
 	"save-or-open": "Simpan atau Buka berkas",
-	"save-or-open-text": "Apa yang harus dilakukan Kiwix dengan berkas ini?"
+	"save-or-open-text": "Apa yang harus dilakukan Kiwix dengan berkas ini?",
+	"speed": "Kecepatan",
+	"increase-tts-speed": "Tingkatkan kecepatan TTS.",
+	"decrease-tts-speed": "Kurangi kecepatan TTS."
 }
