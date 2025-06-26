@@ -10,7 +10,8 @@
 			"IrsY",
 			"McDutchie",
 			"Scompo",
-			"Stefano"
+			"Stefano",
+			"Wheelygay"
 		]
 	},
 	"name": "italiano",
@@ -102,6 +103,8 @@
 	"kiwix-server-description": "L'avvio di un server consente ad altri computer nella rete locale di accedere alla tua libreria Kiwix con un browser web standard.",
 	"fullscreen-notification": "Ora sei in modalità a schermo intero. Premi ESC per uscire!",
 	"local-files": "File locali",
+	"category": "Categoria",
+	"language": "Lingua",
 	"hide": "Nascondi",
 	"open-in-browser": "Apri nel browser",
 	"start-kiwix-server": "Avvia server Kiwix",
@@ -136,6 +139,7 @@
 	"delete-book-text": "Sei sicuro di voler cancellare <b>{{ZIM}}</b> ?",
 	"download-storage-error-text": "Il sistema non dispone di memoria sufficiente.",
 	"download-unavailable-text": "Questo download non è disponibile.",
+	"open-book": "Apri libro",
 	"open-folder": "Apri cartella",
 	"couldnt-open-location": "Impossibile aprire questa posizione",
 	"couldnt-open-location-text": "Kiwix non è riuscito ad aprire la cartella {{FOLDER}}",
