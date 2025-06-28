@@ -27,6 +27,7 @@ Dependencies
 The Kiwix Desktop application relies on many third party software libraries.
 The following libraries need to be available:
 
+* [libzim](https://github.com/openzim/libzim/)
 * [libkiwix](https://github.com/kiwix/libkiwix/)
 * [Qt](https://www.qt.io/)
 * [aria2](https://aria2.github.io/)

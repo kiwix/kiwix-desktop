@@ -21,7 +21,7 @@ jobs:
 #          - debian-bullseye
           - ubuntu-noble
           - ubuntu-jammy
-          - ubuntu-focal
+
     steps:
       - uses: actions/checkout@v4
 
@@ -84,14 +84,6 @@ jobs:
         if: matrix.distro == 'ubuntu-jammy'
         name: Build package for ubuntu-jammy
         id: build-ubuntu-jammy
-        with:
-          args: --no-sign
-          ppa: ${{ steps.ppa.outputs.ppa }}
-
-      - uses: legoktm/gh-action-build-deb@ubuntu-focal
-        if: matrix.distro == 'ubuntu-focal'
-        name: Build package for ubuntu-focal
-        id: build-ubuntu-focal
         with:
           args: --no-sign
           ppa: ${{ steps.ppa.outputs.ppa }}

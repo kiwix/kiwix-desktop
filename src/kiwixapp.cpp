@@ -84,7 +84,7 @@ void KiwixApp::init()
     setWindowIcon(icon);
 
     setApplicationName("Kiwix");
-    setDesktopFileName("kiwix.desktop");
+    setDesktopFileName("org.kiwix.desktop.desktop");
     setStyleSheet(parseStyleFromFile(":/css/style.css"));
 
     createActions();
