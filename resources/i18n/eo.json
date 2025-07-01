@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Jakub Fabijan",
-			"Robin van der Vliet"
+			"Robin van der Vliet",
+			"Stefangrotz"
 		]
 	},
 	"name": "Esperanto",
@@ -59,5 +60,6 @@
 	"no-filter": "neniu filtro",
 	"open-link-in-web-browser": "Malfermi ligilon en retumilo",
 	"invalid-port": "Nevalida pordo",
-	"zim-open-fail-title": "Nevalida dosiero"
+	"zim-open-fail-title": "Nevalida dosiero",
+	"no-pictures": "Sen bildoj"
 }
