@@ -1,5 +1,10 @@
 #include "opdsrequestmanager.h"
 #include "kiwixapp.h"
+#include <QPointer>
+
+namespace {
+constexpr int kMaxRedirects = 5;
+}
 
 OpdsRequestManager::OpdsRequestManager()
 {
@@ -19,6 +24,37 @@ int OpdsRequestManager::getCatalogPort()
     return envVarVal
          ? atoi(envVarVal)
          : 443;
+}
+
+// Helper to handle replies and follow redirects
+void OpdsRequestManager::handleReply(QNetworkReply* reply, std::function<void(QNetworkReply*)> finalHandler, int redirectCount) {
+    QVariant redirectAttr = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+    if (redirectAttr.isValid() && redirectCount < kMaxRedirects) {
+        QUrl redirectUrl = redirectAttr.toUrl();
+        // Make absolute if needed
+        if (redirectUrl.isRelative()) {
+            redirectUrl = reply->url().resolved(redirectUrl);
+        }
+        qInfo() << "Following redirect" << redirectCount + 1 << "to:" << redirectUrl.toString();
+        reply->deleteLater();
+        QNetworkRequest newRequest(redirectUrl);
+        QNetworkReply* newReply = m_networkManager.get(newRequest);
+        connect(newReply, &QNetworkReply::finished, this, [=]() {
+            handleReply(newReply, finalHandler, redirectCount + 1);
+        });
+        return;
+    }
+    // No redirect, or max redirects reached
+    if (redirectCount > 0) {
+        qInfo() << "Completed after" << redirectCount << "redirects";
+    }
+    finalHandler(reply);
+}
+
+// New method to allow requests to arbitrary URLs (for redirects)
+QNetworkReply* OpdsRequestManager::opdsResponseFromUrl(const QUrl &url) {
+    QNetworkRequest request(url);
+    return m_networkManager.get(request);
 }
 
 void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString& categoryFilter)
@@ -43,7 +79,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
 
     auto mp_reply = opdsResponseFromPath("/catalog/v2/entries", query);
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
-        receiveContent(mp_reply);
+        handleReply(mp_reply, [this](QNetworkReply* r) { receiveContent(r); }, 0);
     });
 }
 
@@ -65,7 +101,7 @@ void OpdsRequestManager::getLanguagesFromOpds()
 {
     auto mp_reply = opdsResponseFromPath("/catalog/v2/languages");
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
-        receiveLanguages(mp_reply);
+        handleReply(mp_reply, [this](QNetworkReply* r) { receiveLanguages(r); }, 0);
     });
 }
 
@@ -73,7 +109,7 @@ void OpdsRequestManager::getCategoriesFromOpds()
 {
     auto mp_reply = opdsResponseFromPath("/catalog/v2/categories");
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
-        receiveCategories(mp_reply);
+        handleReply(mp_reply, [this](QNetworkReply* r) { receiveCategories(r); }, 0);
     });
 }
 
@@ -102,3 +138,4 @@ void OpdsRequestManager::receiveContent(QNetworkReply *mp_reply)
 {
     emit(requestReceived(replyContent(mp_reply)));
 }
+
