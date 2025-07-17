@@ -138,4 +138,3 @@ void OpdsRequestManager::receiveContent(QNetworkReply *mp_reply)
 {
     emit(requestReceived(replyContent(mp_reply)));
 }
-
