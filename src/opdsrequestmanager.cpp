@@ -45,6 +45,13 @@ void OpdsRequestManager::handleReply(QNetworkReply* reply, std::function<void(QN
         return;
     }
     // No redirect, or max redirects reached
+    if (redirectAttr.isValid() && redirectCount >= kMaxRedirects) {
+        qWarning() << "Redirect limit (" << kMaxRedirects << ") reached. Reporting error.";
+        // Set a custom property to indicate redirect limit reached
+        reply->setProperty("redirectLimitReached", true);
+        // Optionally, abort the reply to set an error
+        reply->abort();
+    }
     if (redirectCount > 0) {
         qInfo() << "Completed after" << redirectCount << "redirects";
     }
