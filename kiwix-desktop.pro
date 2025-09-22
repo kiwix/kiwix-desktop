@@ -23,7 +23,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = kiwix-desktop
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++17
+QMAKE_CXXFLAGS += -std=c++17 -Wno-error=template-id-cdtor # https://github.com/kiwix/kiwix-desktop/issues/1406
 QMAKE_LFLAGS +=  -std=c++17
 
 !win32 {
