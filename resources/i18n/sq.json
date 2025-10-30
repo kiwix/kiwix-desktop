@@ -3,7 +3,8 @@
 		"authors": [
 			"Besnik b",
 			"INNERLMNT",
-			"McDutchie"
+			"McDutchie",
+			"Xhulianoo"
 		]
 	},
 	"name": "Shqip",
@@ -33,7 +34,7 @@
 	"set-fullscreen": "Vëre sa krejt ekrani",
 	"quit-fullscreen": "Dil nga “Sa krejt ekrani”",
 	"table-of-content": "Tryezë e lëndës",
-	"add-bookmark": "Shtoje te lista e leximeve",
+	"add-bookmark": "Shto në listën e leximit",
 	"remove-bookmark": "Hiqe nga lista e leximeve",
 	"reading-list": "Listë leximesh",
 	"zoom-in": "Zmadhoje",
