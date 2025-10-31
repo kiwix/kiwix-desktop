@@ -9,7 +9,6 @@
 			"WikiPhoenix"
 		]
 	},
-	"name": "Svenska",
 	"error-title": "Fel",
 	"error-downloader-window-title": "Kan inte skapa nedladdare",
 	"error-downloader-launch-message": "Omöjligt att starta nedladdare, Kiwix-desktop kommer starta men alla nedladdningsfunktioner kommer inte fungera!",

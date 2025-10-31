@@ -14,7 +14,6 @@
 			"Wheelygay"
 		]
 	},
-	"name": "italiano",
 	"error-title": "Errore",
 	"error-downloader-window-title": "Impossibile creare downloader",
 	"error-downloader-launch-message": "Impossibile avviare il downloader. Kiwix-desktop si avvierà, ma tutte le funzioni di download non funzioneranno.",

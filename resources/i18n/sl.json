@@ -4,7 +4,6 @@
 			"Eleassar"
 		]
 	},
-	"name": "slovenščina",
 	"error-title": "Napaka",
 	"error-downloader-window-title": "Prenašalnika ni mogoče ustvariti",
 	"error-downloader-launch-message": "Prenašalnika ni mogoče zagnati. Zagnal se bo Kiwix-desktop, vendar vse funkcije prenosa ne bodo delovale!",

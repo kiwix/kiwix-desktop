@@ -17,7 +17,6 @@
 			"Wladek92"
 		]
 	},
-	"name": "Français",
 	"error-title": "Erreur",
 	"error-downloader-window-title": "Impossible de créer le processus de téléchargement",
 	"error-downloader-launch-message": "Impossible de lancer le téléchargement, Kiwix-desktop démarrera mais toutes les fonctions de téléchargement ne fonctionneront pas !",

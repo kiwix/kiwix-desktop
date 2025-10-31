@@ -9,7 +9,6 @@
 			"SPQRobin"
 		]
 	},
-	"name": "Nederlands",
 	"error-title": "Fout",
 	"error-downloader-window-title": "Kan downloader niet aanmaken",
 	"error-downloader-launch-message": "Het is onmogelijk om de downloader te starten. Kiwix-desktop start wel, maar de downloadfuncties werken niet.",

@@ -11,7 +11,6 @@
 			"YoReaper"
 		]
 	},
-	"name": "Português do Brasil",
 	"error-title": "Erro",
 	"error-downloader-window-title": "Não é possível criar o downloader",
 	"error-downloader-launch-message": "Impossível iniciar o downloader, o Kiwix-desktop será iniciado, mas todas as funções de download não funcionarão!",

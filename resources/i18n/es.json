@@ -17,7 +17,6 @@
 			"Vis4valentine"
 		]
 	},
-	"name": "español",
 	"error-title": "Error",
 	"error-downloader-window-title": "No se puede crear el descargador",
 	"error-downloader-launch-message": "No se puede iniciar el descargador. Kiwix-desktop se iniciará pero no funcionarán las prestaciones de descarga!",
