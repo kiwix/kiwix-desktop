@@ -120,7 +120,7 @@
 	"ok": "OK",
 	"no-filter": "geen filter",
 	"open-link-in-web-browser": "Koppeling openen in webbrowser",
-	"open-link-new-tab": "Koppeling openen in nieuwe tab",
+	"open-link-new-tab": "Koppeling openen in nieuw tabblad",
 	"download-dir-dialog-title": "Weet u zeker dat u de downloaddirectory wilt wijzigen?",
 	"download-dir-dialog-msg": "Het pad naar de nieuwe downloaddirectory wordt:\n{{DIRECTORY}}",
 	"invalid-port": "Ongeldige poort",
@@ -192,5 +192,7 @@
 	"select-read-language": "Kies leestaal",
 	"save-or-open": "Bestand opslaan of openen",
 	"save-or-open-text": "Wat moet Kiwix met dit bestand doen?",
-	"speed": "Snelheid"
+	"speed": "Snelheid",
+	"increase-tts-speed": "Uitspraaksnelheid verhogen.",
+	"decrease-tts-speed": "Uitspraaksnelheid verlagen."
 }

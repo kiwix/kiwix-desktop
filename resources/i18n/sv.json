@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Apq",
 			"Jopparn",
 			"Larsa",
 			"Marcusjehrlander",
@@ -12,7 +13,7 @@
 	"name": "Svenska",
 	"error-title": "Fel",
 	"error-downloader-window-title": "Kan inte skapa nedladdare",
-	"error-downloader-launch-message": "Omöjligt att starta nedladdare, Kiwix-desktop kommer starta men alla nedladdningsfunktioner kommer inte fungera!",
+	"error-downloader-launch-message": "Omöjligt att starta nedladdare, Kiwix-desktop kommer starta men alla nedladdningsfunktioner kommer inte att fungera.",
 	"error-launch-server-message": "Ett fel har uppstått!",
 	"error-archive": "Kan inte hämta arkivet",
 	"error-opening-file": "Det gick inte att öppna filen.",
@@ -191,5 +192,8 @@
 	"select-read-voice": "Välj läsröst",
 	"select-read-language": "Välj lässpråk",
 	"save-or-open": "Spara eller Öppna fil",
-	"save-or-open-text": "Vad ska Kiwix göra med den här filen?"
+	"save-or-open-text": "Vad ska Kiwix göra med den här filen?",
+	"speed": "Hastighet",
+	"increase-tts-speed": "Öka TTS-hastighet.",
+	"decrease-tts-speed": "Minska TTS-hastighet."
 }
