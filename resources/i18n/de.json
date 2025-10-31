@@ -15,7 +15,6 @@
 			"Wolfdietmann"
 		]
 	},
-	"name": "Deutsch",
 	"error-title": "Fehler",
 	"error-downloader-window-title": "Erstellen vom Downloader nicht möglich",
 	"error-downloader-launch-message": "Der Downloader konnte nicht gestartet werden, Kiwix-desktop wird gestartet, aber alle Funktionen zum Herunterladen werden nicht funktionieren!",

@@ -23,7 +23,6 @@
 			"沈澄心"
 		]
 	},
-	"name": "简体中文",
 	"error-title": "错误",
 	"error-downloader-window-title": "无法创建下载器",
 	"error-downloader-launch-message": "无法启动下载器。Kiwix-desktop 将会启动，但是所有的下载功能都将无法使用。",

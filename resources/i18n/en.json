@@ -3,7 +3,6 @@
 		"authors": [
 		]
 	},
-    "name":"English",
     "error-title":"Error",
     "error-downloader-window-title":"Cannot create downloader",
     "error-downloader-launch-message":"Impossible to launch downloader. Kiwix-desktop will start, but all download functions will not work.",
