@@ -24,7 +24,7 @@ private:
     Ui::LocalKiwixServer *ui;
     kiwix::Server* mp_server;
     bool m_active = false;
-    QString m_ipAddress;
+    QString m_url;
     int m_port;
 };
 
