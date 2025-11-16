@@ -1,8 +1,7 @@
 #include <QListWidget>
 #include <QMenu>
 #include <QWidgetAction>
-#include <QButtonGroup>
-#include <QRadioButton>
+#include <QCheckBox>
 #include "kiwixapp.h"
 #include "multizimbutton.h"
 #include "css_constants.h"
@@ -11,8 +10,7 @@ QString getElidedText(const QFont& font, int length, const QString& text);
 
 MultiZimButton::MultiZimButton(QWidget *parent) :
     QToolButton(parent), 
-    mp_buttonList(new QListWidget),
-    mp_radioButtonGroup(new QButtonGroup(this))
+    mp_buttonList(new QListWidget)
 {
     setMenu(new QMenu(this));
     setPopupMode(QToolButton::InstantPopup);
@@ -23,17 +21,82 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
     popupAction->setDefaultWidget(mp_buttonList);
     menu()->addAction(popupAction);
 
-    connect(mp_buttonList, &QListWidget::currentRowChanged, this, [=](int row){
-        if (const auto widget = getZimWidget(row))
-            widget->getRadioButton()->setChecked(true);
+    connect(mp_buttonList, &QListWidget::itemActivated, this, [=](QListWidgetItem *item) {
+        if (const auto widget = getZimWidget(item))
+            widget->toggle();
+    });
+    connect(mp_buttonList, &QListWidget::itemClicked, this, [=](QListWidgetItem *item) {
+        if (const auto widget = getZimWidget(item))
+            widget->toggle();
     });
 }
 
 void MultiZimButton::updateDisplay()
 {
+    const auto library = KiwixApp::instance()->getLibrary();
+    const auto view = KiwixApp::instance()->getTabWidget()->currentWebView();
+    QListWidgetItem* currentItem = nullptr;
+    QIcon currentIcon;
+    const int paddingTopBot = CSS::MultiZimButton::QListWidget::paddingVertical * 2;
+    const int itemHeight = paddingTopBot + CSS::ZimItemWidget::QLabel::lineHeight;
+
+    for (int row = 0; row < mp_buttonList->count(); row++)
+    {
+        const auto item = mp_buttonList->item(row);
+        const auto bookId = item->data(Qt::UserRole).toString();
+        const QString bookTitle = QString::fromStdString(library->getBookById(bookId).getTitle());
+        const QIcon zimIcon = library->getBookIcon(bookId);
+        item->setData(Qt::DisplayRole, bookTitle);
+        item->setSizeHint(QSize(0, itemHeight));
+
+        if (view && view->zimId() == bookId)
+        {
+            currentItem = item;
+            currentIcon = zimIcon;
+            continue;
+        }
+
+        setItemZimWidget(item, bookTitle, zimIcon);
+    }
+
+    mp_buttonList->sortItems();
+    if (currentItem)
+    {
+        const auto checked = getZimWidget(currentItem)->isChecked();
+        const auto title = currentItem->data(Qt::DisplayRole).toString();
+        const auto currentRow = mp_buttonList->row(currentItem);
+        if (currentRow > 0) {
+            currentItem = mp_buttonList->takeItem(currentRow);
+            mp_buttonList->insertItem(0, currentItem);
+            currentItem = mp_buttonList->item(0);
+            setItemZimWidget(currentItem, "*" + title, currentIcon);
+            if (checked)
+                getZimWidget(currentItem)->setChecked(checked);
+        }
+        else {
+            setItemZimWidget(currentItem, "*" + title, currentIcon);
+        }
+    }
+
+    /* Display should not be used other than for sorting. */
+    for (int i = 0; i < mp_buttonList->count(); i++)
+        mp_buttonList->item(i)->setData(Qt::DisplayRole, QVariant());
+
+    setDisabled(mp_buttonList->model()->rowCount() == 0);
+
+    mp_buttonList->scrollToTop();
+    mp_buttonList->setCurrentRow(0);
+
+    /* We set a maximum display height for list. Respect padding. */
+    const int listHeight = itemHeight * std::min(7, mp_buttonList->count());
+    mp_buttonList->setFixedHeight(listHeight + paddingTopBot);
+    mp_buttonList->setFixedWidth(menu()->width());
+}
+
+void MultiZimButton::updateBooks()
+{
+    auto checkedZimIds = getCheckedZimIds();
     mp_buttonList->clear();
-    for (const auto& button : mp_radioButtonGroup->buttons())
-        mp_radioButtonGroup->removeButton(button);
 
     const auto library = KiwixApp::instance()->getLibrary();
     const auto view = KiwixApp::instance()->getTabWidget()->currentWebView();
@@ -65,6 +128,10 @@ void MultiZimButton::updateDisplay()
 
         mp_buttonList->addItem(item);
         setItemZimWidget(item, bookTitle, zimIcon);
+        if (checkedZimIds.contains(bookId)) {
+           checkedZimIds.removeOne(bookId);
+           getZimWidget(item)->setChecked(true);
+        }
     }
 
     mp_buttonList->sortItems();
@@ -77,6 +144,7 @@ void MultiZimButton::updateDisplay()
     }
 
     /* Display should not be used other than for sorting. */
+
     for (int i = 0; i < mp_buttonList->count(); i++)
         mp_buttonList->item(i)->setData(Qt::DisplayRole, QVariant());
 
@@ -86,6 +154,7 @@ void MultiZimButton::updateDisplay()
     mp_buttonList->setCurrentRow(0);
 
     /* We set a maximum display height for list. Respect padding. */
+
     const int listHeight = itemHeight * std::min(7, mp_buttonList->count());
     mp_buttonList->setFixedHeight(listHeight + paddingTopBot);
     mp_buttonList->setFixedWidth(menu()->width());
@@ -94,10 +163,30 @@ void MultiZimButton::updateDisplay()
 QStringList MultiZimButton::getZimIds() const
 {
     QStringList idList;
+    bool someChecked = false;
     for (int row = 0; row < mp_buttonList->count(); row++)
     {
         const auto widget = getZimWidget(row);
-        if (widget && widget->getRadioButton()->isChecked())
+        if (widget && widget->isChecked()) {
+            if (!someChecked) {
+                someChecked = true;
+                idList.clear();
+            }
+            idList.append(mp_buttonList->item(row)->data(Qt::UserRole).toString());
+        }
+        else if (!someChecked)
+            idList.append(mp_buttonList->item(row)->data(Qt::UserRole).toString());
+    }
+    return idList;
+}
+
+QStringList MultiZimButton::getCheckedZimIds() const
+{
+    QStringList idList;
+    for (int row = 0; row < mp_buttonList->count(); row++)
+    {
+        const auto widget = getZimWidget(row);
+        if (widget && widget->isChecked())
             idList.append(mp_buttonList->item(row)->data(Qt::UserRole).toString());
     }
     return idList;
@@ -109,19 +198,30 @@ ZimItemWidget *MultiZimButton::getZimWidget(int row) const
     return qobject_cast<ZimItemWidget *>(widget);
 }
 
+ZimItemWidget *MultiZimButton::getZimWidget(QListWidgetItem *item) const
+{
+    const auto widget = mp_buttonList->itemWidget(item);
+    return qobject_cast<ZimItemWidget *>(widget);
+}
+
 void MultiZimButton::setItemZimWidget(QListWidgetItem *item,
                                       const QString &title, const QIcon &icon)
 {
+    const auto oldWidget = getZimWidget(item);
+    const auto checked = oldWidget
+            ? oldWidget->isChecked()
+            : false;
     const auto zimWidget = new ZimItemWidget(title, icon);
-    mp_radioButtonGroup->addButton(zimWidget->getRadioButton());
     mp_buttonList->setItemWidget(item, zimWidget);
+    if (checked)
+        zimWidget->setChecked(true);
 }
 
 ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
     QWidget(parent),
     textLabel(new QLabel(this)),
     iconLabel(new QLabel(this)),
-    radioBt(new QRadioButton(this))
+    checkBx(new QCheckBox(this))
 {
     setLayout(new QHBoxLayout);
 
@@ -163,5 +263,24 @@ ZimItemWidget::ZimItemWidget(QString text, QIcon icon, QWidget *parent) :
 
     layout()->addWidget(iconLabel);
     layout()->addWidget(textLabel);
-    layout()->addWidget(radioBt);
+    layout()->addWidget(checkBx);
+}
+
+bool ZimItemWidget::isChecked() const {
+    const auto cb = getCheckBox();
+    if (cb)
+        return cb->isChecked();
+    return false;
+}
+
+void ZimItemWidget::setChecked(bool checked) {
+    const auto cb = getCheckBox();
+    if (cb)
+        cb->setChecked(checked);
+}
+
+void ZimItemWidget::toggle() {
+    const auto cb = getCheckBox();
+    if (cb)
+        cb->toggle();
 }
