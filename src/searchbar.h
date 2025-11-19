@@ -60,6 +60,20 @@ private:
        indicating the next scroll should trigger a fetch more action. */
     bool m_aboutToScrollPastEnd = false;
 
+    // Helper methods for event filtering
+    bool handleSuggestionKeyPress(QKeyEvent *keyEvent);
+    bool handleSuggestionKeyRelease(QKeyEvent *keyEvent);
+    void ensureCurrentIndexVisible();
+    
+    // Helper methods for handleSuggestionKeyPress
+    bool isAtLastRowAndPressingDown(int key, int row, int lastRow) const;
+    bool isAtFirstRowAndPressingUp(int key, int row) const;
+    bool shouldPreloadMoreSuggestions(int key, int row, int lastRow) const;
+    bool isNavigationKey(int key) const;
+    bool handleEndOfListKeyPress();
+    bool handleNearEndNavigation(QKeyEvent *event);
+    bool handleStandardNavigation(QKeyEvent *event);
+
 private slots:
     void updateCompletion();
     void fetchMoreSuggestions();
