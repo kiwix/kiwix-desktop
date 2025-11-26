@@ -18,7 +18,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     ui(new Ui::kiwixchoicebox)
 {
     ui->setupUi(this);
-    auto styleSheet = KiwixApp::instance()->parseStyleFromFile(":/css/choiceBox.css");
+    auto styleSheet = getFileContent(":/css/choiceBox.css");
     this->setStyleSheet(styleSheet);
     ui->clearButton->setText(gt("clear"));
     ui->clearButton->setToolTip(gt("clear-filter"));
