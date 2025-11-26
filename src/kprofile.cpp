@@ -21,7 +21,11 @@ QWebEngineScript getScript(QString filename,
     script.setWorldId(QWebEngineScript::UserWorld);
 
     QFile scriptFile(filename);
-    scriptFile.open(QIODevice::ReadOnly);
+    if (!(scriptFile.open(QIODevice::ReadOnly))) {
+      qWarning("Error opening %s", qPrintable(filename));
+      script.setSourceCode("");
+      return script;
+    }
     script.setSourceCode(scriptFile.readAll());
     return script;
 }
