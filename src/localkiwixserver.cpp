@@ -13,12 +13,7 @@ LocalKiwixServer::LocalKiwixServer(QWidget *parent) :
     setWindowFlag(Qt::FramelessWindowHint, true);
     ui->setupUi(this);
 
-    QFile styleFile(":/css/localServer.css");
-    styleFile.open(QIODevice::ReadOnly);
-    auto byteContent = styleFile.readAll();
-    styleFile.close();
-    QString style(byteContent);
-    setStyleSheet(style);
+    setStyleSheet(getFileContent(":/css/localServer.css"));
 
     mp_server = KiwixApp::instance()->getLocalServer();
     m_port = KiwixApp::instance()->getSettingsManager()->getKiwixServerPort();

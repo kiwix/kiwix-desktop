@@ -85,7 +85,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     m_suggestionView->setItemDelegate(new SuggestionListDelegate(this));
     m_suggestionView->header()->setStretchLastSection(true);
     m_suggestionView->setRootIsDecorated(false);
-    m_suggestionView->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/popup.css"));
+    m_suggestionView->setStyleSheet(getFileContent(":/css/popup.css"));
 
     const int contentHeight = HeaderSectionCSS::lineHeight;
     m_suggestionView->setIconSize(QSize(contentHeight, contentHeight));

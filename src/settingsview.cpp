@@ -35,7 +35,7 @@ SettingsView::SettingsView(QWidget *parent)
 {
     SettingsManager *settingsMgr = KiwixApp::instance()->getSettingsManager();
     ui->setupUi(this);
-    ui->widget->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/_settingsManager.css"));
+    ui->widget->setStyleSheet(getFileContent(":/css/_settingsManager.css"));
     connect(ui->zoomPercentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setZoom);
     connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->reopenTabToggle, &QCheckBox::clicked, this, &SettingsView::setReopenTab);
