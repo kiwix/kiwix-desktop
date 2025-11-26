@@ -561,7 +561,10 @@ void KiwixApp::printVersions(std::ostream& out) {
 QString KiwixApp::parseStyleFromFile(QString filePath)
 {
     QFile file(filePath);
-    file.open(QFile::ReadOnly);
+    if (!(file.open(QFile::ReadOnly))) {
+      qWarning("Error opening %s", qPrintable(filePath));
+      return QString();
+    }
     QString styleSheet = QString(file.readAll());
     file.close();
     return styleSheet;
