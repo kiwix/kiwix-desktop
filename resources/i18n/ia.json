@@ -115,6 +115,7 @@
 	"ok": "ok",
 	"no-filter": "necun filtro",
 	"open-link-in-web-browser": "Aperir ligamine in navigator web",
+	"copy-link": "Copiar ligamine",
 	"open-link-new-tab": "Aperir ligamine in nove scheda",
 	"download-dir-dialog-title": "Es tu secur de voler cambiar le directorio de discargamento?",
 	"download-dir-dialog-msg": "Le nove directorio de discargamento essera:\n{{DIRECTORY}}",
