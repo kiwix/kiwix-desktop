@@ -115,6 +115,7 @@
 	"ok": "v redu",
 	"no-filter": "brez filtra",
 	"open-link-in-web-browser": "Odpri povezavo v spletnem brskalniku",
+	"copy-link": "Kopiraj povezavo",
 	"open-link-new-tab": "Odpri povezavo na novem zavihku",
 	"download-dir-dialog-title": "Ali res želite spremeniti imenik za prenose?",
 	"download-dir-dialog-msg": "Pot novega imenika za prenose bo:\n{{DIRECTORY}}",
