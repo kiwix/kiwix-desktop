@@ -95,6 +95,7 @@
 	"ok": "ok",
 	"no-filter": "kee Filter",
 	"open-link-in-web-browser": "Link am Browser opmaachen",
+	"copy-link": "Link kopéieren",
 	"open-link-new-tab": "Link an engem neien Tab opmaachen",
 	"invalid-port": "Ongültege Port",
 	"zim-open-fail-title": "Ongültege Fichier",

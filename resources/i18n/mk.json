@@ -115,6 +115,7 @@
 	"ok": "ок",
 	"no-filter": "без филтер",
 	"open-link-in-web-browser": "Отвори ја врската во прелистувач",
+	"copy-link": "Копирај врска",
 	"open-link-new-tab": "Отвори ја врската во ново јазиче",
 	"download-dir-dialog-title": "Дали сигурно сакате да ја смените папката за преземање?",
 	"download-dir-dialog-msg": "Новата папка за преземање ќе биде:\n{{DIRECTORY}}",
