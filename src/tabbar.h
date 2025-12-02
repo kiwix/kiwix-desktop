@@ -62,6 +62,7 @@ protected:
     void tabRemoved(int index) override;
     void tabInserted(int index) override;
     void resizeEvent(QResizeEvent *) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
