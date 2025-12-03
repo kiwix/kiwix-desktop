@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ameisenigel",
 			"AnnaTheProgrammer777",
 			"Brettchenweber",
 			"DraconicDark",
@@ -118,7 +119,7 @@
 	"ok": "Ok",
 	"no-filter": "kein Filter",
 	"open-link-in-web-browser": "Link im Browser öffnen",
-	"download-dir-dialog-title": "Sind Sie sicher, dass Sie das Download-Verzeichnis wechseln möchten?",
+	"download-dir-dialog-title": "Bist du sicher, dass du das Download-Verzeichnis wechseln möchtest?",
 	"download-dir-dialog-msg": "Der neue Download-Verzeichnis-Pfad ist:\n{{DIRECTORY}}",
 	"invalid-port": "Ungültiger Port",
 	"zim-open-fail-title": "Ungültige Datei",
@@ -134,7 +135,7 @@
 	"cancel-download": "Download abbrechen",
 	"cancel-download-text": "Sind Sie sicher, dass Sie den Download von <b>{{ZIM}}</b> abbrechen wollen?",
 	"delete-book": "Buch löschen",
-	"delete-book-text": "Sind Sie sicher, dass Sie <b>{{ZIM}}</b> löschen wollen?",
+	"delete-book-text": "Bist du sicher, dass du <b>{{ZIM}}</b> löschen willst?",
 	"download-storage-error": "Speicherfehler",
 	"download-storage-error-text": "Das System hat nicht genug Speicherplatz zur Verfügung.",
 	"download-unavailable": "Download nicht verfügbar",

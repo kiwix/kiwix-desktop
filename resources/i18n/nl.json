@@ -6,7 +6,8 @@
 			"HanV",
 			"Mainframe98",
 			"McDutchie",
-			"SPQRobin"
+			"SPQRobin",
+			"Siebrand"
 		]
 	},
 	"name": "Nederlands",
@@ -120,6 +121,7 @@
 	"ok": "OK",
 	"no-filter": "geen filter",
 	"open-link-in-web-browser": "Koppeling openen in webbrowser",
+	"copy-link": "Koppeling kopiëren",
 	"open-link-new-tab": "Koppeling openen in nieuw tabblad",
 	"download-dir-dialog-title": "Weet u zeker dat u de downloaddirectory wilt wijzigen?",
 	"download-dir-dialog-msg": "Het pad naar de nieuwe downloaddirectory wordt:\n{{DIRECTORY}}",
