@@ -3,13 +3,15 @@
 		"authors": [
 			"Jakub Fabijan",
 			"Robin van der Vliet",
-			"Stefangrotz"
+			"Stefangrotz",
+			"Tymewalk"
 		]
 	},
 	"name": "Esperanto",
 	"error-title": "Eraro",
 	"error-launch-server-message": "Eraro okazis!",
 	"local-kiwix-server": "Loka Kiwix-servilo",
+	"random-article": "Hazarda Artikolo",
 	"home-page": "Ĉefpaĝo",
 	"main-menu": "Ĉefa menuo",
 	"print": "Presi",

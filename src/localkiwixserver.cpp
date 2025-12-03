@@ -78,9 +78,7 @@ LocalKiwixServer::~LocalKiwixServer()
 void LocalKiwixServer::openInBrowser()
 {
     QUrl url;
-    url.setScheme("http");
-    url.setHost(m_ipAddress);
-    url.setPort(m_port);
+    url.setUrl(m_url);
     QDesktopServices::openUrl(url);
 }
 
@@ -111,10 +109,9 @@ void LocalKiwixServer::runOrStopServer()
             messageBox.critical(0,gt("error-title"),gt("error-launch-server-message"));
             return;
         }
-        kiwix::IpAddress serverAddress = mp_server->getAddress();
-        m_ipAddress = QString::fromStdString(serverAddress.addr.empty() ? serverAddress.addr6 : serverAddress.addr);
-        if (m_ipAddress.contains(':')) m_ipAddress = "[" + m_ipAddress + "]";
-        ui->IpAddress->setText("http://" + m_ipAddress + ":" + QString::number(m_port));
+        // gets first address only [one address is guaranteed to be there]
+        m_url = QString::fromStdString(mp_server->getServerAccessUrls()[0]);
+        ui->IpAddress->setText(m_url);
         ui->IpAddress->setReadOnly(true);
         m_active = true;
     } else {

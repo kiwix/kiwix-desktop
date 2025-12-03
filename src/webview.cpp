@@ -4,6 +4,7 @@ class QMenu;
 
 #include <QDesktopServices>
 #include <QAction>
+#include <QClipboard>
 #include <iostream>
 #include "kiwixapp.h"
 #include "webpage.h"
@@ -352,6 +353,13 @@ QMenu* WebView::createLinkContextMenu() {
     QMenu* menu = new QMenu(this);
 
     if (!m_linkHovered.startsWith("zim://")) {
+        auto copyLinkAction = new QAction(gt("copy-link"));
+        menu->addAction(copyLinkAction);
+        connect(menu, &QObject::destroyed, copyLinkAction, &QObject::deleteLater);
+        connect(copyLinkAction, &QAction::triggered, this, [=](bool checked) {
+            Q_UNUSED(checked);
+            QApplication::clipboard()->setText(m_linkHovered);
+        });
         auto openLinkInWebBrowserAction = new QAction(gt("open-link-in-web-browser"));
         menu->addAction(openLinkInWebBrowserAction);
         connect(menu, &QObject::destroyed, openLinkInWebBrowserAction, &QObject::deleteLater);

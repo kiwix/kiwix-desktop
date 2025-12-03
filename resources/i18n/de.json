@@ -126,6 +126,7 @@
 	"monitor-dir-dialog-title": "Sind Sie sicher, dass Sie das zu beobachtende Verzeichnis ändern wollen?",
 	"monitor-dir-dialog-msg": "Der Pfad des zu beobachtenden Ordners wird auf Folgendes geändert: {{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "Sind Sie sicher, dass Sie den zu beobachtenden Ordner leeren wollen?",
+	"path-was-copied": "Pfad wurde kopiert",
 	"monitor-clear-dir-dialog-msg": "Hierdurch wird der zu beobachtende Ordner nicht mehr nach neu hinzugekommenen ZIM-Dateien durchsucht.",
 	"monitor-directory-tooltip": "Alle ZIM-Dateien in diesem Verzeichnis werden automatisch zur Bibliothek hinzugefügt.",
 	"next-tab": "Zur nächsten Registerkarte wechseln",
@@ -158,6 +159,7 @@
 	"zim-id": "ZIM-ID",
 	"zim-name": "ZIM-Name",
 	"zim-path": "ZIM-Dateipfad",
+	"bad-zim-file-error-page-title": "Ungültige ZIM-Datei",
 	"stop": "Stop",
 	"speed": "Geschwindigkeit"
 }

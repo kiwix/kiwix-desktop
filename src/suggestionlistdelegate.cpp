@@ -10,10 +10,18 @@ void SuggestionListDelegate::paint(QPainter *painter,
                                    const QStyleOptionViewItem &option,
                                    const QModelIndex &index) const
 {
-    /* Paint without text and icon */
+    // Fix: Use a modified option to prevent default text/icon painting
+    // This prevents Qt assertion errors while maintaining custom painting
     QStyleOptionViewItem opt(option);
-    QStyledItemDelegate::paint(painter, opt, QModelIndex());
+    
+    // Clear text and icon roles to prevent default painting
+    opt.text = QString();
+    opt.icon = QIcon();
+    
+    // Call parent paint with valid index to get proper background/selection
+    QStyledItemDelegate::paint(painter, opt, index);
 
+    // Now paint our custom icon and text
     paintIcon(painter, opt, index);
     paintText(painter, opt, index);
 }
