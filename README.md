@@ -105,6 +105,25 @@ qmake .
 make
 ```
 
+Handling of 'template-id' related compilation errors
+----------------------------------------------------
+
+Many minor versions of Qt, for both Qt5 and Qt6, have difficulties to
+compile because of 'template-id' related syntax errors. If your
+compiler (`g++`) supports it, you can get rid of these errors by
+telling the compiler to ignore them with the following command:
+
+```bash
+qmake QMAKE_CXXFLAGS="-Wno-error=template-id-cdtor" .
+make
+```
+
+More info at:
+* https://github.com/kiwix/kiwix-desktop/issues/1406
+* https://bugzilla.redhat.com/show_bug.cgi?id=2280366
+* https://github.com/RfidResearchGroup/proxmark3/issues/2382
+* https://bugreports.qt.io/browse/QTBUG-126989
+
 Compilation on Microsoft Windows
 --------------------------------
 
