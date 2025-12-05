@@ -323,27 +323,17 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
 QMenu* WebView::createStandardContextMenu() {
     auto app = KiwixApp::instance();
 
-    QMenu* menu = new QMenu(this);
-    auto backAction = new QAction(gt("back"));
-    backAction->setEnabled(app->getAction(KiwixApp::HistoryBackAction)->isEnabled());
-    backAction->setIcon(app->getAction(KiwixApp::HistoryBackAction)->icon());
-    menu->addAction(backAction);
-    connect(menu, &QObject::destroyed, backAction, &QObject::deleteLater);
-    connect(backAction, &QAction::triggered, this, [=](bool checked) {
-        Q_UNUSED(checked);
-        KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Back);
-    });
-
-    auto forwardAction = new QAction(gt("forward"));
-    forwardAction->setEnabled(app->getAction(KiwixApp::HistoryForwardAction)->isEnabled());
-    forwardAction->setIcon(app->getAction(KiwixApp::HistoryForwardAction)->icon());
-    menu->addAction(forwardAction);
-    connect(menu, &QObject::destroyed, forwardAction, &QObject::deleteLater);
-    connect(forwardAction, &QAction::triggered, this, [=](bool checked) {
-        Q_UNUSED(checked);
-        KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
-    });
-
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QMenu* menu = QWebEngineView::createStandardContextMenu();
+    #else
+        QMenu* menu = page()->createStandardContextMenu();
+    #endif
+    page()->action(QWebEnginePage::Back)->setIcon(app->getAction(KiwixApp::HistoryBackAction)->icon());
+    page()->action(QWebEnginePage::Forward)->setIcon(app->getAction(KiwixApp::HistoryForwardAction)->icon());
+    if (page()->action(QWebEnginePage::ToggleMediaControls)) {
+      menu->removeAction(page()->action(QWebEnginePage::ToggleMediaControls));
+    }
+    
     menu->addAction(app->getAction(KiwixApp::SavePageAsAction));
     return menu;
 }
