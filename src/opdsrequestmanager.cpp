@@ -58,6 +58,7 @@ QNetworkReply* OpdsRequestManager::opdsResponseFromPath(const QString &path, con
     url.setQuery(query);
     qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
     return m_networkManager.get(request);
 }
 
@@ -102,3 +103,4 @@ void OpdsRequestManager::receiveContent(QNetworkReply *mp_reply)
 {
     emit(requestReceived(replyContent(mp_reply)));
 }
+
