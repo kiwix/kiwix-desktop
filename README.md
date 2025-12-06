@@ -105,6 +105,25 @@ qmake .
 make
 ```
 
+Handling of 'template-id' related compilation errors
+----------------------------------------------------
+
+Many minor versions of Qt, for both Qt5 and Qt6, have difficulties to
+compile because of 'template-id' related syntax errors. If your
+compiler (`g++`) supports it, you can get rid of these errors by
+telling the compiler to ignore them with the following command:
+
+```bash
+qmake QMAKE_CXXFLAGS="-Wno-error=template-id-cdtor" .
+make
+```
+
+More info at:
+* https://github.com/kiwix/kiwix-desktop/issues/1406
+* https://bugzilla.redhat.com/show_bug.cgi?id=2280366
+* https://github.com/RfidResearchGroup/proxmark3/issues/2382
+* https://bugreports.qt.io/browse/QTBUG-126989
+
 Compilation on Microsoft Windows
 --------------------------------
 
@@ -138,6 +157,21 @@ environment variable:
 ```bash
 LD_LIBRARY_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu"
 ```
+
+Debug rendering of a ZIM
+------------------------
+
+`kiwix-desktop` uses [Qt
+WebEngine](https://doc.qt.io/qt-6/qtwebengine-overview.html) to render
+ZIM content, relying on a custom `zim:` protocol to expose the ZIM
+data to the Web engine.
+
+To debug issues related to WebEngine, follow these steps:
+
+1. Launch `kiwix-desktop` with the environment variable `QTWEBENGINE_REMOTE_DEBUGGING=<port>` set (replace `<port>` with an available local port number).
+2. Open the desired ZIM file in the `kiwix-desktop` user interface.
+3. In a Chromium-based browser, go to: `http://localhost:<port>`.
+4. This opens the remote debugging UI. Use it to access Chrome DevTools connected to the ZIM webpage rendered by WebEngine.
 
 ## Communication
 
