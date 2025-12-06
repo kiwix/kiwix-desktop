@@ -85,7 +85,7 @@ void KiwixApp::init()
 
     setApplicationName("Kiwix");
     setDesktopFileName("org.kiwix.desktop.desktop");
-    setStyleSheet(parseStyleFromFile(":/css/style.css"));
+    setStyleSheet(getFileContent(":/css/style.css"));
 
     createActions();
     mp_mainWindow = new MainWindow;
@@ -558,13 +558,16 @@ void KiwixApp::printVersions(std::ostream& out) {
   zim::printVersions(out);
 }
 
-QString KiwixApp::parseStyleFromFile(QString filePath)
+QString getFileContent(QString filePath)
 {
     QFile file(filePath);
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QString(file.readAll());
+    if (!(file.open(QFile::ReadOnly))) {
+      qWarning("Error opening %s", qPrintable(filePath));
+      return QString();
+    }
+    QString content= QString(file.readAll());
     file.close();
-    return styleSheet;
+    return content;
 }
 
 void KiwixApp::saveListOfOpenTabs()

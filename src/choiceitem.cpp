@@ -11,7 +11,7 @@ ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
     m_value(value)
 {
     ui->setupUi(this);
-    this->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/choiceBox.css"));
+    this->setStyleSheet(getFileContent(":/css/choiceBox.css"));
     ui->itemLabel->setText(key);
     ui->itemLabel->setToolTip(key);
     connect(ui->closeButton, &QPushButton::clicked, [=](){

@@ -10,7 +10,7 @@ KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool
 {
     ui->setupUi(this);
     setWindowFlag(Qt::FramelessWindowHint, true);
-    setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/messageBox.css"));
+    setStyleSheet(getFileContent(":/css/messageBox.css"));
     connect(ui->yesButton, &QPushButton::clicked, [=]() {
         emit yesClicked();
         m_result = YesClicked;

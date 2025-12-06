@@ -14,7 +14,7 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 {
     setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     mp_ui->setupUi(this);
-    this->setStyleSheet(KiwixApp::instance()->parseStyleFromFile(":/css/contentmanagerside.css"));
+    this->setStyleSheet(getFileContent(":/css/contentmanagerside.css"));
 
     mp_ui->buttonGroup->setId(mp_ui->allFileButton, CatalogButtonId::ALL);
     mp_ui->buttonGroup->setId(mp_ui->localFileButton, CatalogButtonId::LOCAL);
