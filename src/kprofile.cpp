@@ -20,9 +20,7 @@ QWebEngineScript getScript(QString filename,
     script.setInjectionPoint(point);
     script.setWorldId(QWebEngineScript::UserWorld);
 
-    QFile scriptFile(filename);
-    scriptFile.open(QIODevice::ReadOnly);
-    script.setSourceCode(scriptFile.readAll());
+    script.setSourceCode(getFileContent(filename));
     return script;
 }
 

@@ -99,7 +99,6 @@ public:
     QString getText(const QString &key) { return m_translation.getText(key); };
     void setMonitorDir(const QString &dir);
     bool isCurrentArticleBookmarked();
-    QString parseStyleFromFile(QString filePath);
     void saveListOfOpenTabs();
     void saveWindowState();
     void saveVoiceName(const QString& langName, const QString& voiceName);
@@ -147,6 +146,7 @@ private:
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
 };
 
+QString getFileContent(QString filePath);
 QString gt(const QString &key);
 #define _STR(...) # __VA_ARGS__
 #define STR(X) _STR(X)
