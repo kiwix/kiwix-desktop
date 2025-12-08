@@ -7,17 +7,9 @@
 namespace HeaderSectionCSS = CSS::PopupCSS::QHeaderView::section;
 
 void SuggestionListDelegate::paint(QPainter *painter,
-                                   const QStyleOptionViewItem &option,
+                                   const QStyleOptionViewItem &opt,
                                    const QModelIndex &index) const
 {
-    // Fix: Use a modified option to prevent default text/icon painting
-    // This prevents Qt assertion errors while maintaining custom painting
-    QStyleOptionViewItem opt(option);
-    
-    // Clear text and icon roles to prevent default painting
-    opt.text = QString();
-    opt.icon = QIcon();
-    
     // Call parent paint with valid index to get proper background/selection
     QStyledItemDelegate::paint(painter, opt, index);
 
@@ -35,7 +27,7 @@ void SuggestionListDelegate::paintIcon(QPainter *p,
     const int paddingLeft = HeaderSectionCSS::paddingLeft;
 
     const QSize mapSize = QSize(lineHeight, lineHeight);
-    auto pixmap = index.data(Qt::DecorationRole).value<QIcon>().pixmap(mapSize);
+    auto pixmap = SuggestionListModel::getUserData(index).icon.pixmap(mapSize);
 
     /* Align icon to Header text */
     if (KiwixApp::isRightToLeft())
@@ -53,12 +45,12 @@ void SuggestionListDelegate::paintIcon(QPainter *p,
 }
 
 /**
- * @brief Get the elided text using font that can fit inside the length when 
+ * @brief Get the elided text using font that can fit inside the length when
  * appended with the custom elide text "(...)".
- * 
- * @param font 
- * @param textRect 
- * @param text 
+ *
+ * @param font
+ * @param textRect
+ * @param text
  * @return QString the elided text without any marker.
  */
 QString getElidedText(const QFont& font, int length, const QString& text)
@@ -93,9 +85,9 @@ void SuggestionListDelegate::paintText(QPainter *p,
     }
     else
         textRect.setX(textRect.x() + left);
-    
+
     const int flag = {Qt::AlignVCenter | Qt::AlignLeading};
-    const QString text = index.data(Qt::DisplayRole).toString();
+    const QString text = SuggestionListModel::getUserData(index).text;
 
     /* Custom text elide. */
     QString elidedText = getElidedText(opt.font, textRect.width(), text);
@@ -103,7 +95,7 @@ void SuggestionListDelegate::paintText(QPainter *p,
     {
         /* drawText's Align direction determines text direction */
         const bool textDirFlipped = KiwixApp::isRightToLeft() != text.isRightToLeft();
-        elidedText = textDirFlipped ? "(...)" + elidedText.trimmed() 
+        elidedText = textDirFlipped ? "(...)" + elidedText.trimmed()
                                     : elidedText.trimmed() + "(...)";
         p->drawText(textRect, flag, elidedText);
     }
