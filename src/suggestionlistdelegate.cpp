@@ -13,21 +13,22 @@ void SuggestionListDelegate::paint(QPainter *painter,
     // Call parent paint with valid index to get proper background/selection
     QStyledItemDelegate::paint(painter, opt, index);
 
+    const auto userData = SuggestionListModel::getUserData(index);
     // Now paint our custom icon and text
-    paintIcon(painter, opt, index);
-    paintText(painter, opt, index);
+    paintIcon(painter, opt, userData.icon);
+    paintText(painter, opt, userData.text);
 }
 
 void SuggestionListDelegate::paintIcon(QPainter *p,
                                        const QStyleOptionViewItem &opt,
-                                       const QModelIndex &index) const
+                                       const QIcon &icon) const
 {
     QRect pixmapRect = opt.rect;
     const int lineHeight = HeaderSectionCSS::lineHeight;
     const int paddingLeft = HeaderSectionCSS::paddingLeft;
 
     const QSize mapSize = QSize(lineHeight, lineHeight);
-    auto pixmap = SuggestionListModel::getUserData(index).icon.pixmap(mapSize);
+    auto pixmap = icon.pixmap(mapSize);
 
     /* Align icon to Header text */
     if (KiwixApp::isRightToLeft())
@@ -66,7 +67,7 @@ QString getElidedText(const QFont& font, int length, const QString& text)
 
 void SuggestionListDelegate::paintText(QPainter *p,
                                        const QStyleOptionViewItem &opt,
-                                       const QModelIndex &index) const
+                                       const QString &text) const
 {
     auto& searchBar = KiwixApp::instance()->getSearchBar();
     const auto& lineEditGeo = searchBar.getLineEdit().geometry();
@@ -87,7 +88,6 @@ void SuggestionListDelegate::paintText(QPainter *p,
         textRect.setX(textRect.x() + left);
 
     const int flag = {Qt::AlignVCenter | Qt::AlignLeading};
-    const QString text = SuggestionListModel::getUserData(index).text;
 
     /* Custom text elide. */
     QString elidedText = getElidedText(opt.font, textRect.width(), text);

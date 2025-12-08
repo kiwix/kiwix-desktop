@@ -10,8 +10,8 @@ public:
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
 private:
-    void paintIcon(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
-    void paintText(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const;
+    void paintIcon(QPainter *p, const QStyleOptionViewItem &opt, const QIcon &icon) const;
+    void paintText(QPainter *p, const QStyleOptionViewItem &opt, const QString &text) const;
 };
 
 #endif // SUGGESTIONLISTDELEGATE_H
