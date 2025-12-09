@@ -310,7 +310,7 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
 {
     if (index.isValid())
     {
-        const QUrl url = index.data(Qt::UserRole).toUrl();
+        const QUrl url = SuggestionListModel::getUserData(index).url;
         const auto app = KiwixApp::instance();
         const bool newTab = app->getTabWidget()->currentWebView() == nullptr;
         QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, newTab);});

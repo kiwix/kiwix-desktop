@@ -34,14 +34,25 @@ QVariant SuggestionListModel::data(const QModelIndex &index, int role) const
     {
         case Qt::DisplayRole:
         case Qt::EditRole:
-            return m_suggestions.at(row).text;
-        case Qt::UserRole:
-            return m_suggestions.at(row).url;
         case Qt::DecorationRole:
         {
+            // XXX: This is a hack. All displayable data of the suggestion is
+            // XXX: returned via UserRole to avoid problems with custom
+            // XXX: rendering (which is performed via SuggestionListDelegate)
+            return QVariant();
+        }
+        case Qt::UserRole:
+        {
+            const SuggestionData suggestionData = m_suggestions.at(row);
+            UserData ud;
+            ud.text = suggestionData.text;
+            ud.url =  suggestionData.url;
             const auto library = KiwixApp::instance()->getLibrary();
             const auto zimId = getZimIdFromUrl(m_suggestions.at(row).url);
-            return library->getBookIcon(zimId);
+            ud.icon = library->getBookIcon(zimId);
+            QVariant ret;
+            ret.setValue(ud);
+            return ret;
         }
         case Qt::SizeHintRole:
         {
