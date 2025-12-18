@@ -24,32 +24,51 @@ QWebEngineScript getScript(QString filename,
     return script;
 }
 
+QString getExtensionFromFilter(const QString &filter) {
+  const QRegularExpression re("\\(\\*\\.(\\w+)\\)");
+  const QRegularExpressionMatch match = re.match(filter);
+
+  if (match.hasMatch()) {
+    return "." + match.captured(1);
+  }
+  return QString();
+}
+
 }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #define DownloadFinishedSignal WebEngineDownloadType::finished
+    #define DownloadInProgress QWebEngineDownloadItem::DownloadInProgress
 #else
     #define DownloadFinishedSignal WebEngineDownloadType::isFinishedChanged
+    #define DownloadInProgress QWebEngineDownloadRequest::DownloadInProgress
 #endif
 
-QString askForSaveFilePath(const QString& suggestedName)
+QString askForSaveFilePath(const QString &suggestedName, const QString &filter) {
+  const auto app = KiwixApp::instance();
+  const QString suggestedPath = app->getPrevSaveDir() + "/" + suggestedName;
+  QString selectedFilter;
+  QString fileName = QFileDialog::getSaveFileName(
+      app->getMainWindow(), gt("save-file-as-window-title"), suggestedPath,
+      filter,&selectedFilter);
+
+  if (fileName.isEmpty())
+    return QString();
+
+  const QString extension = getExtensionFromFilter(selectedFilter);
+  if (!fileName.endsWith(extension)) {
+    fileName.append(extension);
+  }
+  app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
+  return fileName;
+}
+
+void downloadFinished()
 {
-    const auto app = KiwixApp::instance();
-    const QString suggestedPath = app->getPrevSaveDir() + "/" + suggestedName;
-    const QString extension = suggestedName.section(".", -1);
-    const QString filter = extension.isEmpty() ? "" : "(*." + extension + ")";
-    QString fileName = QFileDialog::getSaveFileName(
-            app->getMainWindow(), gt("save-file-as-window-title"),
-            suggestedPath, filter);
-
-    if (fileName.isEmpty())
-        return QString();
-
-    if (!fileName.endsWith(extension)) {
-        fileName.append(extension);
-    }
-    app->savePrevSaveDir(QFileInfo(fileName).absolutePath());
-    return fileName;
+    showInfoBox(gt("download-finished"),
+                gt("download-finished-message"),
+                KiwixApp::instance()->getMainWindow()
+    );
 }
 
 KProfile::KProfile(QObject *parent) :
@@ -121,27 +140,26 @@ void KProfile::openFile(WebEngineDownloadType* download)
 void KProfile::saveFile(WebEngineDownloadType* download)
 {
     const QString defaultFileName = getDownloadFilePath(download);
-    const QString fileName = askForSaveFilePath(defaultFileName);
+    const QString extension = defaultFileName.section(".", -1);
+    const QString filter = extension.isEmpty() ? "" : "(*." + extension + ")";
+    const QString fileName = askForSaveFilePath(defaultFileName, filter);
     if (fileName.isEmpty()) {
         download->cancel();
         return;
     }
 
     setDownloadFilePath(download, fileName);
-    connect(download, &DownloadFinishedSignal, this, &KProfile::downloadFinished);
+    connect(download, &DownloadFinishedSignal, &downloadFinished);
     download->accept();
-}
-
-void KProfile::downloadFinished()
-{
-    showInfoBox(gt("download-finished"),
-                gt("download-finished-message"),
-                KiwixApp::instance()->getMainWindow()
-    );
 }
 
 void KProfile::startDownload(WebEngineDownloadType* download)
 {
+  if (download->state() == DownloadInProgress) {
+    connect(download, &DownloadFinishedSignal, &downloadFinished);
+    return;
+  }
+
     const auto res = showKiwixMessageBox(
                             gt("save-or-open"),
                             gt("save-or-open-text"),
