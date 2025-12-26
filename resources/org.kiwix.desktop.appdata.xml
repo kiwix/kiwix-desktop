@@ -22,6 +22,18 @@
     </p>
   </description>
   <releases>
+    <release version="2.5.0" date="2025-12-26">
+      <description>
+        <p>Most important improvements:</p>
+        <ul>
+          <li>Based on Qt6</li>
+          <li>Allow to directly access ZIM files</li>
+          <li>Speed control option for Text-to-Speech module</li>
+          <li>Better suggestions rendering</li>
+        </ul>
+        <p>Complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.5.0.</p>
+      </description>
+    </release>
     <release version="2.4.1" date="2024-12-21">
       <description>
         <p>Most important improvements:</p>
