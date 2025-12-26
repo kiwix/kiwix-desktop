@@ -123,6 +123,7 @@
 	"ok": "확인",
 	"no-filter": "필터 없음",
 	"open-link-in-web-browser": "웹 브라우저로 링크 열기",
+	"copy-link": "링크 복사",
 	"open-link-new-tab": "새 탭에서 링크 열기",
 	"download-dir-dialog-title": "다운로드 디렉터리를 변경하시겠습니까?",
 	"download-dir-dialog-msg": "새 다운로드 디렉터리 경로는 다음과 같습니다:\n{{DIRECTORY}}",
