@@ -8,6 +8,7 @@ Build-Depends: debhelper-compat (= 13),
  qt6-base-dev-tools,
  qt6-webengine-dev,
  qt6-speech-dev,
+ qt6-wayland-dev,
  libkiwix-dev (>= 14.0), libkiwix-dev (<< 15.0),
  libzim-dev (>= 9.0), libzim-dev (<< 10.0),
 Standards-Version: 4.5.0
