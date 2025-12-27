@@ -132,6 +132,9 @@ documentation](https://github.com/kiwix/kiwix-build/wiki/Compile-on-Microsoft-Wi
 
 Installation
 ------------
+Windows users can install Kiwix Desktop using the prebuilt binaries
+available at:
+https://download.kiwix.org/release/kiwix-desktop/
 
 To install Kiwix Desktop on the system:
 ```bash
