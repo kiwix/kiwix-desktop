@@ -3,10 +3,12 @@ Section: misc
 Priority: optional
 Maintainer: Kiwix team <kiwix@kiwix.org>
 Build-Depends: debhelper-compat (= 13),
- pkg-config,
- qtbase5-dev,
- qtwebengine5-dev,
- libqt5texttospeech5-dev,
+ pkgconf,
+ qt6-base-dev,
+ qt6-base-dev-tools,
+ qt6-webengine-dev,
+ qt6-speech-dev,
+ qt6-wayland-dev,
  libkiwix-dev (>= 14.0), libkiwix-dev (<< 15.0),
  libzim-dev (>= 9.0), libzim-dev (<< 10.0),
 Standards-Version: 4.5.0
