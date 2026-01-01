@@ -6,6 +6,7 @@
 			"Larsa",
 			"Marcusjehrlander",
 			"Sabelöga",
+			"Stefan2255",
 			"Susann Schweden",
 			"WikiPhoenix"
 		]
@@ -121,6 +122,7 @@
 	"ok": "ok",
 	"no-filter": "inget filter",
 	"open-link-in-web-browser": "Öppna länk i webbläsaren",
+	"copy-link": "Kopiera länk",
 	"open-link-new-tab": "Öppna länk i ny flik",
 	"download-dir-dialog-title": "Är du säker på att du vill ändra nedladdningskatalog?",
 	"download-dir-dialog-msg": "Den nya sökvägen till nedladdningskatalogen kommer bli:\n{{DIRECTORY}}",
