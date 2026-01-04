@@ -1,3 +1,9 @@
+kiwix-destkop 2.5.1
+===================
+
+General:
+* FIX: wrong version number in the about (@kelson42 #1449)
+
 kiwix-destkop 2.5.0
 ===================
 
