@@ -22,6 +22,15 @@
     </p>
   </description>
   <releases>
+    <release version="2.5.1" date="2026-01-04">
+      <description>
+        <p>Most important improvements:</p>
+        <ul>
+          <li>Fix about with proper version number</li>
+        </ul>
+        <p>Complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.5.1.</p>
+      </description>
+    </release>
     <release version="2.5.0" date="2025-12-26">
       <description>
         <p>Most important improvements:</p>
