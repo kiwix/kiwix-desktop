@@ -23,7 +23,8 @@ class QMenu;
 #include "tableofcontentbar.h"
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
-QString askForSaveFilePath(const QString& suggestedName);
+QString askForSaveFilePath(const QString& suggestedName , const QString& filters);
+void downloadFinished();
 
 void WebViewBackMenu::showEvent(QShowEvent *)
 {
@@ -199,9 +200,18 @@ void WebView::saveViewContent()
         const QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
         if (isHTMLContent(item))
         {
-            const QString fileName = askForSaveFilePath(suggestedFileName + ".pdf");
-            if (!fileName.isEmpty())
-                page()->printToPdf(fileName);
+          const QString filters = QString("PDF Document (*.pdf)") + QString(";;") + QString("Web Archive (*.mhtml)");
+          const QString fileName = askForSaveFilePath(suggestedFileName + ".pdf", filters);
+
+          if (!fileName.isEmpty()) {
+            const QString extension = fileName.section(".", -1);
+            if (extension == "pdf") {
+              connect(page(), &QWebEnginePage::pdfPrintingFinished, &downloadFinished);
+              page()->printToPdf(fileName);
+            } else {
+              page()->save(fileName);
+            }
+          }
         }
         else
             page()->download(this->url(), suggestedFileName);
@@ -344,7 +354,6 @@ QMenu* WebView::createStandardContextMenu() {
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
 
-    menu->addAction(app->getAction(KiwixApp::SavePageAsAction));
     return menu;
 }
 
