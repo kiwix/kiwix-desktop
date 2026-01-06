@@ -1,3 +1,50 @@
+kiwix-destkop 2.5.1
+===================
+
+General:
+* FIX: wrong version number in the about (@kelson42 #1449)
+
+kiwix-destkop 2.5.0
+===================
+
+General:
+* FIX: Bad english in download error message (@theVeryPulse #1331)
+* FIX: Wrong app icon on Linux with Wayland (@Integral-Tech #1384)
+* FIX: Allow to directly access ZIM file (ready-only) for Linux flatpak (@kelson42 #800)
+* FIX: Avoid fulltext crash scenarios (@vighnesh-sawant #1241)
+* NEW: Hidde default Kiwix Server port 80 in URL (@vighnesh-sawant #1417)
+* NEW: Introduce "copy link" in context menu (@Bad-ptr #1422)
+* NEW: Introduce Parrallels shared folder support (@kelson42 #1313)
+* NEW: Tab shortcuts CTRL+PGUP and CTRL+PGDOWN (@kelson42 #1301)
+* NEW: Deactivate menu entries when not actionable (@etude11 #1337)
+* NEW: Speed control option for Text-to-Speech module (@heropj #1317)
+
+Search(es):
+* FIX: Single word suggestion query followed by a space query (@veloman-yunkan #953)
+* FIX: Maybe suggestion rendering issues (@veloman-yunkan #1430)
+
+Library:
+* FIX: Updated filters after sideloading a ZIM file (@heropj #1315)
+* FIX: Wait up to 1s to let aria2c to start (@kelson42 #1169)
+* FIX: Proper highlighting of library items (@veloman-yunkan #1109)
+* NEW: Replace deprecated /catalog/search catalog end-point call (@kelson42 #1373)
+* NEW: Support HTTP redirections for OPDS feed (@depuc8 #1429)
+
+Compilation, CI, CD:
+* FIX: Qt(6) compilation (@adamlamar #1295)
+* FIX: Various CI workflow problems (@kelson42 #1293)
+* FIX: Flatpak appdata.xml (@kelson42 #1351)
+* FIX: Flatpak KDE dependencies (@lapisdecor #1404)
+* FIX: Stop publishing on Ubuntu 20.04 PPA (@kelson42 #1380)
+* FIX: Improve flatpak/flathub metadata (@kelson42 #1305)
+* FIX: Check for file open errors and avoid warnings (@vighnesh-sawant #1425)
+
+Documentation:
+* NEW: Add instructions to debug ZIM rendering (@Benoit74 #1390)
+* NEW: Add privacy policy to the About dialog (@kelson42 #1314)
+* NEW: Add few infos about supported MS Windows (@kelson42 #1368)
+* NEW: Document template-id compilation error with buggy Qt versions (@kelson42 #1407)
+
 kiwix-destkop 2.4.1
 ===================
 
