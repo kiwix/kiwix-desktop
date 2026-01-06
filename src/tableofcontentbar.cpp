@@ -3,6 +3,8 @@
 #include "kiwixapp.h"
 #include <QJsonObject>
 #include <QTreeWidgetItem>
+#include <QTimer>
+#include <QDebug>
 
 TableOfContentBar::TableOfContentBar(QWidget *parent) :
     QFrame(parent),
@@ -24,6 +26,10 @@ TableOfContentBar::TableOfContentBar(QWidget *parent) :
     ui->tree->setItemsExpandable(false);
     connect(ui->tree, &QTreeWidget::itemClicked, this, &TableOfContentBar::onTreeItemActivated);
     connect(ui->tree, &QTreeWidget::itemActivated, this, &TableOfContentBar::onTreeItemActivated);
+
+    // Setup debounce timer
+    m_clickDebounceTimer.setSingleShot(true);
+    m_clickDebounceTimer.setInterval(300); // 300ms debounce
 }
 
 TableOfContentBar::~TableOfContentBar()
@@ -33,7 +39,37 @@ TableOfContentBar::~TableOfContentBar()
 
 void TableOfContentBar::onTreeItemActivated(QTreeWidgetItem *item)
 {
-    emit navigationRequested(m_url, item->data(0, Qt::UserRole).toString());
+    //Safety check
+    if (!item) {
+        return;
+    }
+
+    // Get the anchor from the item
+    QVariant anchorVariant = item->data(0, Qt::UserRole);
+    if (!anchorVariant.isValid()) {
+        return;
+    }
+
+    QString anchor = anchorVariant.toString();
+    if (anchor.isEmpty() || m_url.isEmpty()) {
+        return;
+    }
+
+    if (m_isNavigating || (anchor == m_lastAnchor && m_clickDebounceTimer.isActive())) {
+        return;
+    }
+
+    m_isNavigating = true;
+    m_lastAnchor = anchor;
+    m_clickDebounceTimer.start();
+
+    QTimer::singleShot(10, this, [this, anchor]() {
+        emit navigationRequested(m_url, anchor);
+
+        QTimer::singleShot(300, this, [this]() {
+            m_isNavigating = false;
+        });
+    });
 }
 
 namespace
@@ -93,9 +129,40 @@ void TableOfContentBar::setupTree(const QJsonObject& headers)
     const auto currentUrl = webView->url().url(QUrl::RemoveFragment);
     if (headerUrl != currentUrl)
         return;
-    
+
     m_url = headerUrl;
     ui->tree->clear();
     QJsonArray headerArr = headers["headers"].toArray();
     createSubTree(ui->tree->invisibleRootItem(), "", headerArr);
+
+    // Update selection based on current URL fragment
+    updateSelectionFromFragment(webView->url().fragment());
+}
+
+void TableOfContentBar::updateSelectionFromFragment(const QString& fragment)
+{
+    if (fragment.isEmpty() || !ui || !ui->tree) {
+        return;
+    }
+
+    // Find the item with the matching anchor
+    QTreeWidgetItemIterator it(ui->tree);
+    while (*it) {
+        QVariant anchorVariant = (*it)->data(0, Qt::UserRole);
+        if (!anchorVariant.isValid()) {
+            ++it;
+            continue;
+        }
+
+        QString anchor = anchorVariant.toString();
+        if (anchor == fragment) {
+            // Select the item without triggering navigation
+            ui->tree->blockSignals(true);
+            ui->tree->setCurrentItem(*it);
+            ui->tree->scrollToItem(*it);
+            ui->tree->blockSignals(false);
+            break;
+        }
+        ++it;
+    }
 }
