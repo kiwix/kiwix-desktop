@@ -129,6 +129,7 @@
 	"ok": "correcto",
 	"no-filter": "sin filtro",
 	"open-link-in-web-browser": "Abrir enlace en navegador web",
+	"copy-link": "Copiar enlace",
 	"open-link-new-tab": "Abrir enlace en una nueva pestaña",
 	"download-dir-dialog-title": "¿Está seguro de que desea cambiar el directorio de descarga?",
 	"download-dir-dialog-msg": "La nueva ruta del directorio de descarga será:\n{{DIRECTORY}}",
