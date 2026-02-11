@@ -13,7 +13,7 @@ jobs:
       matrix:
         config:
           - native_mixed
-    runs-on: windows-2022
+    runs-on: windows-2025
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
