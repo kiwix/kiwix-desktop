@@ -47,7 +47,8 @@
 	"exit": "وتل",
 	"save-file-as-window-title": "د دوتنې په توگه خوندي‌کول",
 	"download-finished": "راکښته‌کول بشپړ شول",
-	"download": "ښکته کول",
+	"settings": "اوڼنې",
+	"download": "راکښته‌کول",
 	"cancel": "ناگارل",
 	"clear": "سپينول",
 	"hide": "پټول",
@@ -55,5 +56,17 @@
 	"pictures": "انځورونه",
 	"videos": "ويډيوگانې",
 	"yes": "هو",
-	"no": "نه"
+	"no": "نه",
+	"cancel-download": "راکښته‌کول ناگارل",
+	"cancel-download-text": "ايا تاسو ډاډه ياست چې د <b>{{ZIM}}</b> راکښته‌کول ناگارل غواړئ؟",
+	"download-storage-error": "د ساتنځي تېروتنه",
+	"download-storage-error-text": "غونډال زېرمه‌کولو لپاره کافي ساتنځی نه لري.",
+	"download-exceeds-max-file-size": "د راکښته‌کولو کچه د موخې وړ دوتنې‌غونډال د ډېرکچې‌دوتنې څخه ډېره ده.",
+	"download-dir-missing": "راکښته‌کولو لارښود نشته.",
+	"download-dir-not-writable": "راکښته‌کولو لارښود د ليکلو وړ نه دی.",
+	"download-unavailable": "راکښته‌کولو لپاره د لاسرسي وړ نه دی",
+	"download-unavailable-text": "دا راکښته‌کول د لاسرسي وړ نه دي.",
+	"download-book": "کتاب راکښته‌کول",
+	"pause-download": "راکښته‌کول ځنډول",
+	"resume-download": "راکښته‌کول بېرته‌پيلول"
 }
