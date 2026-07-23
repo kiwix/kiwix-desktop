@@ -10,6 +10,7 @@
 #include "kprofile.h"
 #include "settingsmanager.h"
 #include "translation.h"
+#include "versionchecker.h"
 
 #include <QtSingleApplication>
 #include <QApplication>
@@ -63,6 +64,7 @@ public:
         ReadArticleAction,
         ReadStopAction,
         HelpAction,
+        CheckUpdatesAction, // Add this
         FeedbackAction,
         ReportBugAction,
         RequestFeatureAction,
@@ -121,6 +123,10 @@ public slots:
     void handleItemsState(TabType);
     void updateNameMapper();
     void printVersions(std::ostream& out = std::cout);
+    void checkForUpdates(bool manualCheck = true);
+    void handleUpdateCheckResult(const QString& latestVersion);
+    void handleNoUpdateAvailable(bool showMessage);
+    void handleUpdateCheckFailed(const QString& error);
 
 protected:
     void createActions();
@@ -139,6 +145,7 @@ private:
     kiwix::Server m_server;
     Translation m_translation;
     QSettings* mp_session;
+    std::unique_ptr<VersionChecker> mp_versionChecker;
 
     QAction*     mpa_actions[MAX_ACTION];
 

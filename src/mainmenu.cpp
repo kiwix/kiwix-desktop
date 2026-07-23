@@ -62,6 +62,8 @@ MainMenu::MainMenu(QWidget *parent) :
 
     m_helpMenu.setTitle(gt("help"));
     m_helpMenu.ADD_ACTION(HelpAction);
+    m_helpMenu.ADD_ACTION(CheckUpdatesAction); // Add this line
+    m_helpMenu.addSeparator(); // Add a separator between updates and feedback
     m_helpMenu.ADD_ACTION(FeedbackAction);
     m_helpMenu.ADD_ACTION(ReportBugAction);
     m_helpMenu.ADD_ACTION(RequestFeatureAction);

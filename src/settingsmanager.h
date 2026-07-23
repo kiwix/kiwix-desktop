@@ -33,6 +33,7 @@ public:
     FilterList getLanguageList() { return deducePair(m_langList); }
     QStringList getCategoryList() { return m_categoryList; }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
+    bool getAutoCheckUpdates() const { return m_autoCheckUpdates; }
 
 public slots:
     void setKiwixServerPort(int port);
@@ -45,6 +46,7 @@ public slots:
     void setLanguage(FilterList langList);
     void setCategory(QStringList categoryList);
     void setContentType(FilterList contentTypeList);
+    void setAutoCheckUpdates(bool enabled);
 
 private:
     void initSettings();
@@ -75,6 +77,8 @@ private:
     QList<QVariant> m_langList;
     QStringList m_categoryList;
     QList<QVariant> m_contentTypeList;
+    bool m_autoCheckUpdates;
+    static const QString SETTING_AUTO_CHECK_UPDATES;
 };
 
 QString getDataDirectory();
