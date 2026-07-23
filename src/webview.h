@@ -50,6 +50,15 @@ public:
 
 public slots:
     void onUrlChanged(const QUrl& url);
+    
+    /**
+     * @brief Synchronizes TOC selection with the given fragment
+     * @param fragment The anchor ID to select in the TOC
+     *
+     * This method updates the TOC selection and ensures the selected element
+     * is properly scrolled into view in the browser.
+     */
+    void syncTOCWithFragment(const QString& fragment);
 
 signals:
     void iconChanged(const QIcon& icon);
@@ -72,7 +81,9 @@ private slots:
     void gotoTriggeredHistoryItemAction();
     void onCurrentTitleChanged();
     void onHeadersReceived(const QString& headersJSONStr);
+    void onConsoleMessageReceived(const QString& message);
     void onNavigationRequested(const QString& url, const QString& anchor);
+    void handleTocHistoryNavigation(const QUrl& url);
 
 private:
     void addHistoryItemAction(QMenu *menu, const QWebEngineHistoryItem &item, int n) const;
