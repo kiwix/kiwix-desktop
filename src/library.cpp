@@ -209,7 +209,7 @@ void Library::removeBookmark(const QString &zimId, const QString &url)
 
 void Library::save()
 {
-    mp_library->writeToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
+    mp_library->writeAsXML(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
     mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }
 
