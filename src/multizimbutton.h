@@ -36,9 +36,11 @@ public slots:
 private:
     QListWidget* mp_buttonList;
     QButtonGroup* mp_radioButtonGroup;
+    QString m_selectedZimId;
 
     ZimItemWidget* getZimWidget(int row) const;
-    void setItemZimWidget(QListWidgetItem* item, const QString& title, const QIcon& icon);
+    void setItemZimWidget(QListWidgetItem* item, const QString& title, const QIcon& icon,
+                          const QString& zimId);
 };
 
 #endif // MULTIZIMBUTTON_H
