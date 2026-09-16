@@ -26,7 +26,6 @@ signals:
 
 private slots:
     void startDownload(WebEngineDownloadType*);
-    void downloadFinished();
     void saveFile(WebEngineDownloadType*);
     void openFile(WebEngineDownloadType*);
 };
