@@ -54,8 +54,16 @@ SettingsView::SettingsView(QWidget *parent)
     connect(settingsMgr, &SettingsManager::zoomChanged, this, &SettingsView::onZoomChanged);
     connect(settingsMgr, &SettingsManager::moveToTrashChanged, this, &SettingsView::onMoveToTrashChanged);
     connect(settingsMgr, &SettingsManager::reopenTabChanged, this, &SettingsView::onReopenTabChanged);
+    connect(settingsMgr, &SettingsManager::themeChanged, this, [this](SettingsManager::Theme theme) {
+        this->onThemeChanged(static_cast<int>(theme));
+    });
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
+    ui->themeComboBox->addItem(gt("system"));
+    ui->themeComboBox->addItem(gt("light"));
+    ui->themeComboBox->addItem(gt("dark"));
+    connect(ui->themeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::setTheme);
+    ui->themeLabel->setText(gt("theme"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
     ui->monitorDirLabel->setText(gt("monitor-directory-setting"));
     ui->resetButton->setText(gt("reset"));
@@ -87,13 +95,14 @@ SettingsView::SettingsView(QWidget *parent)
 
 void SettingsView::init(int zoomPercent, const QString &downloadDir,
                         const QString &monitorDir, const bool moveToTrash,
-                        bool reopentab)
+                        bool reopentab, int theme)
 {
     ui->zoomPercentSpinBox->setValue(zoomPercent);
     SettingsView::onDownloadDirChanged(downloadDir);
     SettingsView::onMonitorDirChanged(monitorDir);
     ui->moveToTrashToggle->setChecked(moveToTrash);
     ui->reopenTabToggle->setChecked(reopentab);
+    ui->themeComboBox->setCurrentIndex(theme);
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
 {
@@ -194,6 +203,11 @@ void SettingsView::setReopenTab(bool reopen)
     KiwixApp::instance()->getSettingsManager()->setReopenTab(reopen);
 }
 
+void SettingsView::setTheme(int index)
+{
+    KiwixApp::instance()->getSettingsManager()->setTheme(static_cast<SettingsManager::Theme>(index));
+}
+
 void SettingsView::onDownloadDirChanged(const QString &dir)
 {
     ui->downloadDirPath->setText(formatSettingsDir(dir));
@@ -229,4 +243,9 @@ void SettingsView::onMoveToTrashChanged(bool moveToTrash)
 void SettingsView::onReopenTabChanged(bool reopen)
 {
     ui->reopenTabToggle->setChecked(reopen);
+}
+
+void SettingsView::onThemeChanged(int index)
+{
+    ui->themeComboBox->setCurrentIndex(index);
 }
