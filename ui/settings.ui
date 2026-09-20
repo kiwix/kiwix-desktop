@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <ui version="4.0">
  <class>Settings</class>
 <widget class="QScrollArea" name="scrollArea">
@@ -164,14 +164,14 @@
           <item>
            <widget class="QLabel" name="downloadDirPath">
             <property name="text">
-             <string/>
+             <string />
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="downloadDirPathCopy">
             <property name="text">
-             <string></string>
+             <string />
             </property>
            </widget>
           </item>
@@ -201,7 +201,7 @@
              <bool>true</bool>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true" />
             </property>
             <property name="text">
              <string>Reset</string>
@@ -220,7 +220,7 @@
              <bool>true</bool>
             </property>
             <property name="styleSheet">
-             <string notr="true"/>
+             <string notr="true" />
             </property>
             <property name="text">
              <string>Browse</string>
@@ -287,7 +287,7 @@
           <item>
            <widget class="QPushButton" name="monitorDirPathCopy">
             <property name="text">
-             <string></string>
+             <string />
             </property>
            </widget>
           </item>
@@ -359,7 +359,7 @@
           <item>
            <widget class="QCheckBox" name="moveToTrashToggle">
             <property name="text">
-             <string/>
+             <string />
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -406,13 +406,51 @@
           <item>
            <widget class="QCheckBox" name="reopenTabToggle">
             <property name="text">
-             <string/>
+             <string />
             </property>
            </widget>
           </item>
          </layout>
         </item>
         <item>
+ <widget class="Line" name="line_7">
+  <property name="orientation">
+   <enum>Qt::Horizontal</enum>
+  </property>
+ </widget>
+</item><item>
+ <layout class="QHBoxLayout" name="horizontalLayout_10">
+  <property name="topMargin">
+   <number>0</number>
+  </property>
+  <property name="rightMargin">
+   <number>0</number>
+  </property>
+  <item>
+   <widget class="QLabel" name="themeLabel">
+    <property name="text">
+     <string>Theme</string>
+    </property>
+   </widget>
+  </item>
+  <item>
+   <spacer name="horizontalSpacer_theme">
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="sizeHint" stdset="0">
+     <size>
+      <width>40</width>
+      <height>20</height>
+     </size>
+    </property>
+   </spacer>
+  </item>
+  <item>
+   <widget class="QComboBox" name="themeComboBox" />
+  </item>
+ </layout>
+</item><item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -436,6 +474,6 @@
 </layout>
 </widget>
 </widget>
- <resources/>
- <connections/>
+ <resources />
+ <connections />
 </ui>

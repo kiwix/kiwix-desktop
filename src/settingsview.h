@@ -15,7 +15,7 @@ public:
     ~SettingsView(){};
     void init(int zoomPercent, const QString &downloadDir,
               const QString &monitorDir, const bool moveToTrash,
-              bool reopentab);
+              bool reopentab, int theme);
   public Q_SLOTS:
     void resetDownloadDir();
     void browseDownloadDir();
@@ -24,12 +24,14 @@ public:
     void setZoom(int zoomPercent);
     void setMoveToTrash(bool moveToTrash);
     void setReopenTab(bool reopen);
+    void setTheme(int index);
     void onDownloadDirChanged(const QString &dir);
     void copySettingsPathToClipboard(QString pathToCopy, QPushButton* button);
     void onMonitorDirChanged(const QString &dir);
     void onZoomChanged(qreal zoomFactor);
     void onMoveToTrashChanged(bool moveToTrash);
     void onReopenTabChanged(bool reopen);
+    void onThemeChanged(int index);
 private:
     bool confirmDialogDownloadDir(const QString& dir);
     bool confirmDialog(QString messageText, QString messageTitle);

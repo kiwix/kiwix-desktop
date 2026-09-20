@@ -13,6 +13,8 @@
 #include <QAction>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QGuiApplication>
+#include <QStyleHints>
 #include <thread>
 #include <QMessageBox>
 #if defined(Q_OS_WIN)
@@ -503,6 +505,21 @@ void KiwixApp::postInit() {
     emit(m_library.booksChanged());
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
     handleItemsState(TabType::LibraryTab);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    auto applyTheme = [](SettingsManager::Theme theme) {
+        if (theme == SettingsManager::Theme::Light) {
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+        } else if (theme == SettingsManager::Theme::Dark) {
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+        } else {
+            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+        }
+    };
+
+    connect(&m_settingsManager, &SettingsManager::themeChanged, this, applyTheme);
+    applyTheme(m_settingsManager.getTheme());
+#endif
 }
 
 void KiwixApp::handleItemsState(TabType tabType)

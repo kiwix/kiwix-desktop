@@ -14,6 +14,12 @@ class SettingsManager : public QObject
 
 public:
     typedef QList<QPair<QString, QString>> FilterList;
+    enum Theme {
+        System = 0,
+        Light = 1,
+        Dark = 2
+    };
+    Q_ENUM(Theme)
     explicit SettingsManager(QObject *parent = nullptr);
     virtual ~SettingsManager() {};
 
@@ -30,6 +36,7 @@ public:
     QString getMonitorDir() const { return m_monitorDir; }
     bool getMoveToTrash() const { return m_moveToTrash; }
     bool getReopenTab() const { return m_reopenTab; }
+    Theme getTheme() const { return m_theme; }
     FilterList getLanguageList() { return deducePair(m_langList); }
     QStringList getCategoryList() { return m_categoryList; }
     FilterList getContentType() { return deducePair(m_contentTypeList); }
@@ -42,6 +49,7 @@ public slots:
     void setMonitorDir(QString monitorDir);
     void setMoveToTrash(bool moveToTrash);
     void setReopenTab(bool reopenTab);
+    void setTheme(Theme theme);
     void setLanguage(FilterList langList);
     void setCategory(QStringList categoryList);
     void setContentType(FilterList contentTypeList);
@@ -58,6 +66,7 @@ signals:
     void monitorDirChanged(QString monitorDir);
     void moveToTrashChanged(bool moveToTrash);
     void reopenTabChanged(bool reopenTab);
+    void themeChanged(Theme theme);
     void languageChanged(QList<QVariant> langList);
     void categoryChanged(QStringList categoryList);
     void contentTypeChanged(QList<QVariant> contentTypeList);
@@ -72,6 +81,7 @@ private:
     QString m_monitorDir;
     bool m_moveToTrash;
     bool m_reopenTab;
+    Theme m_theme;
     QList<QVariant> m_langList;
     QStringList m_categoryList;
     QList<QVariant> m_contentTypeList;
