@@ -352,7 +352,10 @@ void TabBar::onCurrentChanged(int index)
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit tabDisplayed(TabType::ZimViewTab);
-        QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
+        QTimer::singleShot(0, [=](){
+            if (!view->title().isEmpty())
+                emit currentTitleChanged(view->title());
+        });
     } else if (qobject_cast<ContentManagerView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
@@ -391,7 +394,7 @@ void TabBar::on_webview_titleChanged(const QString& title)
 
     setTitleOf(title, tab);
 
-    if (currentZimView() == tab)
+    if (currentZimView() == tab && !title.isEmpty())
         emit currentTitleChanged(title);
 }
 
