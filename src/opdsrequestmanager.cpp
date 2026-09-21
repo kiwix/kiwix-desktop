@@ -10,7 +10,7 @@ QString OpdsRequestManager::getCatalogHost()
     const char* const envVarVal = getenv("KIWIX_CATALOG_HOST");
     return envVarVal
          ? envVarVal
-         : "library.kiwix.org";
+         : "opds.library.kiwix.org";
 }
 
 int OpdsRequestManager::getCatalogPort()
