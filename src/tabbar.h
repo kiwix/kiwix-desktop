@@ -75,6 +75,7 @@ public slots:
     void closeTab(int index);
     void openHomePage();
     void openOrSwitchToSettingsTab();
+    void reloadAllWebViews();
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);
     void moveToNextTab();
