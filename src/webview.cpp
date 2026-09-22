@@ -291,7 +291,7 @@ void WebView::onUrlChanged(const QUrl& url) {
             KiwixApp::instance()->saveListOfOpenTabs();
         });
     }
-    saveTabsTimer->start(500);
+    saveTabsTimer->start(5000);
 
     if (m_currentZimId == zimId ) {
         return;
