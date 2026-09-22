@@ -190,8 +190,8 @@
     "speed": "Speed",
     "increase-tts-speed": "Increase TTS speed.",
     "decrease-tts-speed": "Decrease TTS speed.",
-    "theme": "Theme",
-    "system": "System",
-    "light": "Light",
-    "dark": "Dark"
+    "Theme": "Theme",
+    "System": "System",
+    "Light": "Light",
+    "Dark": "Dark"
 }

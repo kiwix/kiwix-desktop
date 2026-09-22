@@ -59,11 +59,11 @@ SettingsView::SettingsView(QWidget *parent)
     });
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
-    ui->themeComboBox->addItem(gt("system"));
-    ui->themeComboBox->addItem(gt("light"));
-    ui->themeComboBox->addItem(gt("dark"));
+    ui->themeComboBox->addItem(gt("System"));
+    ui->themeComboBox->addItem(gt("Light"));
+    ui->themeComboBox->addItem(gt("Dark"));
     connect(ui->themeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::setTheme);
-    ui->themeLabel->setText(gt("theme"));
+    ui->themeLabel->setText(gt("Theme"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
     ui->monitorDirLabel->setText(gt("monitor-directory-setting"));
     ui->resetButton->setText(gt("reset"));
@@ -91,6 +91,7 @@ SettingsView::SettingsView(QWidget *parent)
     ui->moveToTrashToggle->hide();
 #endif
 #if QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
+    ui->line_7->hide();
     ui->themeLabel->hide();
     ui->themeComboBox->hide();
 #endif
