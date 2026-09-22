@@ -194,5 +194,9 @@
 	"save-or-open-text": "Text of the message box allowing to choose whether a remote resource should be saved to disk or opened with a respective application",
 	"speed": "Label for text-to-speech speed adjustment control.",
 	"increase-tts-speed": "Represents the action of increasing the speed of the text-to-speech.",
-	"decrease-tts-speed": "Represents the action of decreasing the speed of the text-to-speech."
+	"decrease-tts-speed": "Represents the action of decreasing the speed of the text-to-speech.",
+	"Theme": "Label for the theme selection setting.",
+	"System": "Option for following the system theme.",
+	"Light": "Option for using the light theme.",
+	"Dark": "Option for using the dark theme."
 }
