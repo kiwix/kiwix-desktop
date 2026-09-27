@@ -310,10 +310,20 @@ QStringList TabBar::getTabZimIds() const
 
 void TabBar::closeTab(int index)
 {
-    // The first and last tabs (i.e. the library tab and the + (new tab) button)
-    // cannot be closed
+    // First and last tabs cannot be closed
     if (index <= 0 || index >= this->realTabCount())
         return;
+
+    // Save tab info before closing
+    if (ZimView* zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(index))) {
+        auto webView = zv->getWebView();
+        if (webView) {
+            KiwixApp::instance()->pushClosedTab(
+                webView->url().toString(),
+                webView->title()
+            );
+        }
+    }
 
     if ( index == currentIndex() ) {
         setCurrentIndex(index + 1 == realTabCount() ? index - 1 : index + 1);
@@ -548,4 +558,14 @@ void TabBar::onTabMoved(int from, int to)
     mp_stackedWidget->insertWidget(to, w_from);
 
     KiwixApp::instance()->saveListOfOpenTabs();
+}
+
+void TabBar::contextMenuEvent(QContextMenuEvent *event)
+{
+    int tabIndex = tabAt(event->pos());
+    if (tabIndex == -1) {  // Clicked outside tabs
+        QMenu menu;
+        menu.addAction(KiwixApp::instance()->getAction(KiwixApp::ReopenClosedTabAction));
+        menu.exec(event->globalPos());
+    }
 }
