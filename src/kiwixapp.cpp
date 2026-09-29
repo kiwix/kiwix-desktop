@@ -87,7 +87,7 @@ void KiwixApp::init()
 
     setApplicationName("Kiwix");
     setDesktopFileName("org.kiwix.desktop");
-    setStyleSheet(getFileContent(":/css/style.css"));
+    applyTheme(m_settingsManager.getTheme());
 
     createActions();
     mp_mainWindow = new MainWindow;
@@ -506,20 +506,27 @@ void KiwixApp::postInit() {
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
     handleItemsState(TabType::LibraryTab);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    auto applyTheme = [](SettingsManager::Theme theme) {
-        if (theme == SettingsManager::Theme::Light) {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-        } else if (theme == SettingsManager::Theme::Dark) {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-        } else {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
-        }
-    };
+    // Connect theme changes to re-apply the global stylesheet and update Qt's
+    // color scheme hint so that native controls and QtWebEngine follow the
+    // user's choice. applyTheme() handles both setColorScheme (Qt >= 6.8) and
+    // setStyleSheet, so no separate lambda is needed.
+    connect(&m_settingsManager, &SettingsManager::themeChanged,
+            this, &KiwixApp::applyTheme);
 
-    connect(&m_settingsManager, &SettingsManager::themeChanged, this, applyTheme);
-    connect(&m_settingsManager, &SettingsManager::themeChanged, getTabWidget(), &TabBar::reloadAllWebViews);
-    applyTheme(m_settingsManager.getTheme());
+    // Reload all open WebViews whenever the theme changes so that injected
+    // CSS (dark-mode overrides, etc.) is re-applied to already-loaded pages.
+    connect(&m_settingsManager, &SettingsManager::themeChanged,
+            getTabWidget(), &TabBar::reloadAllWebViews);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    // When following the System theme, dynamically react to OS theme changes.
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [this](Qt::ColorScheme) {
+        if (m_settingsManager.getTheme() == SettingsManager::Theme::System) {
+            applyTheme(SettingsManager::Theme::System);
+            emit m_settingsManager.themeChanged(SettingsManager::Theme::System);
+        }
+    });
 #endif
 }
 
@@ -576,6 +583,47 @@ void KiwixApp::printVersions(std::ostream& out) {
   zim::printVersions(out);
 }
 
+bool KiwixApp::isDarkTheme() const
+{
+    auto theme = m_settingsManager.getTheme();
+    if (theme == SettingsManager::Theme::Dark)
+        return true;
+    if (theme == SettingsManager::Theme::Light)
+        return false;
+
+    // System: ask Qt what the platform colour scheme is (Qt >= 6.5).
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+#else
+    return false;
+#endif
+}
+
+QString KiwixApp::getThemeCssPath() const
+{
+    return isDarkTheme() ? QStringLiteral(":/css/style_dark.css")
+                         : QStringLiteral(":/css/style.css");
+}
+
+void KiwixApp::applyTheme(SettingsManager::Theme theme)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    // Update Qt's built-in color scheme hint so that native controls
+    // and QtWebEngine follow the user's choice.
+    if (theme == SettingsManager::Theme::Light) {
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+    } else if (theme == SettingsManager::Theme::Dark) {
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+    } else {
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+    }
+#else
+    Q_UNUSED(theme);
+#endif
+
+    setStyleSheet(getFileContent(getThemeCssPath()));
+}
+
 QString getFileContent(QString filePath)
 {
     QFile file(filePath);
@@ -586,6 +634,23 @@ QString getFileContent(QString filePath)
     QString content= QString(file.readAll());
     file.close();
     return content;
+}
+
+QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath)
+{
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    if (!dark)
+        return getFileContent(baseCssPath);
+
+    if (!customDarkPath.isEmpty())
+        return getFileContent(customDarkPath);
+
+    QString darkPath = baseCssPath;
+    darkPath.replace(QStringLiteral(".css"), QStringLiteral("_dark.css"));
+    if (QFile::exists(darkPath))
+        return getFileContent(darkPath);
+
+    return getFileContent(baseCssPath);
 }
 
 void KiwixApp::saveListOfOpenTabs()

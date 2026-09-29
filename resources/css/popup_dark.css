@@ -1,0 +1,43 @@
+QTreeView {
+    background-color: #2b2d31;
+    border: none;
+    outline: none;
+    color: #f0f2f5;
+}
+
+QTreeView::item {
+    border: 1px solid transparent;
+}
+
+QTreeView::item:selected {
+    border: 1px solid #5b92e5;
+    background-color: #34425a;
+    color: #f0f2f5;
+}
+
+QHeaderView {
+    background-color: #2b2d31;
+}
+
+QHeaderView::section {
+    border: none;
+    color: #9aa0a6;
+    background-color: #2b2d31;
+
+    margin-top: 5px; /* XXX: duplicated in css_constants.h */
+    padding: 5px 10px; /* XXX: duplicated in css_constants.h */
+
+    font-size: 16px;
+    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    font-weight: 400;
+}
+
+QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+QScrollBar::handle {
+    background-color: #5f6368;
+}
