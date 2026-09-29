@@ -14,7 +14,12 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 {
     setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     mp_ui->setupUi(this);
-    this->setStyleSheet(getFileContent(":/css/contentmanagerside.css"));
+    auto applyStyle = [this]() {
+        this->setStyleSheet(themeAwareCss(":/css/contentmanagerside.css"));
+    };
+    applyStyle();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
 
     mp_ui->buttonGroup->setId(mp_ui->allFileButton, CatalogButtonId::ALL);
     mp_ui->buttonGroup->setId(mp_ui->localFileButton, CatalogButtonId::LOCAL);

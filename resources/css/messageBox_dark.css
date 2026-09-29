@@ -1,0 +1,41 @@
+* {
+    font-family: 'Selawik';
+    background-color: #2b2d31;
+    color: #f0f2f5;
+    font-size: 16px;
+}
+
+QDialog {
+    border: 2px solid #4a4d52;
+}
+
+#confirmTitle {
+    font-size: 18px;
+    line-height: 44px;
+    font-weight: bold;
+    color: #f0f2f5;
+}
+
+QPushButton {
+    opacity: 1;
+    padding: 6px;
+    outline: 0;
+    border-radius: 2px;
+    width: 24px;
+    border: 1px solid #5b92e5;
+    color: #5b92e5;
+    background-color: #2b2d31;
+}
+
+QPushButton:hover {
+    background-color: #5b92e5;
+    color: #202124;
+}
+
+#closeButton {
+    border: 0;
+}
+
+#closeButton:hover {
+    background-color: transparent;
+}
