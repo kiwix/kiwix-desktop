@@ -1,0 +1,77 @@
+QListWidget::item {
+    padding: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 2px;
+    color: #f0f2f5;
+}
+
+QListWidget {
+    padding: 0;
+    border: 1px solid #4a4d52;
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+QListWidget::item:selected {
+    color: #f0f2f5;
+    background-color: #34425a;
+}
+
+QLineEdit {
+    padding: 4px;
+    border: 0;
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+#choiceLabel {
+    font-size: 16px;
+    color: #f0f2f5;
+}
+
+#currentChoices {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #4a4d52;
+    border-radius: 1px;
+}
+
+#closeButton {
+    margin: 0;
+    background: transparent;
+    color: #9aa0a6;
+    font-size: 12px;
+}
+
+ChoiceItem > QFrame {
+    border: 1px solid #4a4d52;
+    border-radius: 2px;
+    padding: 0;
+    background-color: #3c4043;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin: 0;
+}
+
+#itemLabel {
+    margin: 0;
+    height: 6px;
+    background-color: #3c4043;
+    color: #f0f2f5;
+    font-size: 13px;
+}
+
+#clearButton {
+    background-color: #2b2d31;
+    color: #5b92e5;
+    padding: 4px;
+    font: bold;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+#clearButton:hover {
+    background-color: #5b92e5;
+    color: #202124;
+}
