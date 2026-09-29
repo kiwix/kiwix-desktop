@@ -1,0 +1,117 @@
+QWidget#widget {
+    max-width: 600;
+}
+
+QLabel,
+QPushButton,
+QSpinBox {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+QLabel,
+QPushButton {
+    padding: 12px 8px;
+}
+
+QFrame[frameShape="4"] {
+    /*frameShape 4 is HLine */
+    border: 1px solid #4a4d52;
+    min-height: 0;
+    max-height: 1pt;
+}
+
+QLabel#settingsLabel {
+    font-size: 32px;
+    line-height: 44px;
+    font-weight: bold;
+    color: #f0f2f5;
+}
+
+QSpinBox,
+QLabel#downloadDirPath, #monitorDirPath {
+    font: bold 12pt;
+    color: #f0f2f5;
+}
+
+QPushButton {
+    background-color: #2b2d31;
+    color: #5b92e5;
+    padding: 4px;
+    font: bold;
+    border-radius: 4px;
+}
+
+QPushButton:hover {
+    background-color: #5b92e5;
+    color: #202124;
+}
+
+#downloadDirPathCopy, #monitorDirPathCopy {
+    background-color: none;
+    border: 1px solid transparent;
+}
+
+#downloadDirPathCopy:hover, #monitorDirPathCopy:hover {
+    background-color: #34425a;
+    border: 1px solid #5b92e5;
+    border-radius: 3px;
+}
+
+#monitorDirLabel {
+    padding-right: 0;
+}
+
+#monitorHelp {
+    padding: 1;
+    margin: 0;
+    background: #4a4d52;
+    color: #f0f2f5;
+    border-radius: 2px;
+    max-height: 18px;
+    min-width: 14px;
+    font: bold;
+}
+
+QCheckBox {
+    color: #f0f2f5;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #9aa0a6;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #2b2d31;
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/icons/check-solid-light.svg);
+}
+
+QComboBox {
+    background-color: #2b2d31;
+    color: #f0f2f5;
+    border: 1px solid #4a4d52;
+    border-radius: 3px;
+    padding: 2px 4px;
+}
+
+QComboBox::drop-down {
+    border: none;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #2b2d31;
+    color: #f0f2f5;
+    selection-background-color: #34425a;
+    selection-color: #f0f2f5;
+}
+
+QSpinBox {
+    background-color: #2b2d31;
+    color: #f0f2f5;
+    border: 1px solid #4a4d52;
+    border-radius: 3px;
+}

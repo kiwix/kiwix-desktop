@@ -68,5 +68,11 @@
         <file>icons/caret-left-solid.svg</file>
         <file>icons/stop-circle.svg</file>
         <file>icons/drop-down.svg</file>
+        <file>icons/caret-down-solid-light.svg</file>
+        <file>icons/caret-right-solid-light.svg</file>
+        <file>icons/caret-up-solid-light.svg</file>
+        <file>icons/check-solid-light.svg</file>
+        <file>icons/tick-light.svg</file>
+        <file>icons/drop-down-light.svg</file>
     </qresource>
 </RCC>

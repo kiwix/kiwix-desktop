@@ -10,7 +10,13 @@ ContentManagerView::ContentManagerView(QWidget *parent)
 {
     mp_ui->setupUi(this);
     mp_ui->m_view->setSortingEnabled(true);
-    mp_ui->m_view->setStyleSheet(getFileContent(":/css/_contentManager.css"));
+    auto applyStyle = [this]() {
+        mp_ui->m_view->setStyleSheet(themeAwareCss(":/css/_contentManager.css"));
+        mp_ui->m_view->viewport()->update();
+    };
+    applyStyle();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
     mp_ui->m_view->setContextMenuPolicy(Qt::CustomContextMenu);
     auto managerDelegate = new ContentManagerDelegate();
     mp_ui->m_view->setItemDelegate(managerDelegate);

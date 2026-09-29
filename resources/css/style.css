@@ -557,3 +557,7 @@ TextToSpeechBar QAbstractItemView QScrollBar {
 TextToSpeechBar QAbstractItemView QScrollBar::handle {
     background-color: grey;
 }
+
+#mainView {
+    background-color: white;
+}
