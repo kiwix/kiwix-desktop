@@ -30,6 +30,8 @@ KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool
         m_result = CloseClicked;
     });
     ui->confirmText->setText(confirmText);
+    ui->confirmText->setWordWrap(true);
+    ui->confirmText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
     ui->confirmTitle->setText(confirmTitle);
     ui->yesButton->setText(leftAction);
     ui->noButton->setText(rightAction);
