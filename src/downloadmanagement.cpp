@@ -212,7 +212,7 @@ std::shared_ptr<DownloadState> DownloadManager::restoreDownload(const kiwix::Boo
 
 #ifdef ENABLE_LIBTORRENT
     if ( isLibtorrentDownloadId(b.getDownloadId()) ) {
-        lt::add_torrent_params p = lt::parse_magnet_uri(b.getUrl());
+        lt::add_torrent_params p = lt::parse_magnet_uri(b.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT));
         p.save_path = getDirPath(b.getPath());
         const auto th = m_libtorrentSession.add_torrent(p);
         th.force_recheck();
@@ -395,15 +395,15 @@ void DownloadManager::checkThatBookCanBeDownloaded(const kiwix::Book& book, cons
 #if defined(ENABLE_LIBTORRENT)
 std::string DownloadManager::startTorrentDownload(const kiwix::Book& book, const std::string& downloadDirPath)
 {
-    const std::string& url = book.getUrl();
-    std::cerr << "Trying to start download using libtorrent: " << book.getUrl() << std::endl;
+    const std::string& url = book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
+    std::cerr << "Trying to start download using libtorrent: " << book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT) << std::endl;
     const QString bookId = QString::fromStdString(book.getId());
     lt::add_torrent_params params = lt::parse_magnet_uri(url);
     params.save_path = downloadDirPath;
     const auto downloadState = getDownloadState(bookId);
     downloadState->torrentHandle = m_libtorrentSession.add_torrent(params);
     const auto torrentHash = toHexString(params.info_hashes.get_best());
-    std::cerr << "Now downloading using libtorrent: " << book.getUrl() << std::endl;
+    std::cerr << "Now downloading using libtorrent: " << book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT) << std::endl;
     return LTPREFIX + torrentHash;
 }
 #endif
@@ -414,11 +414,11 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
     try {
         return startTorrentDownload(book, downloadDirPath.toStdString());
     } catch ( ... ) {
-        std::cerr << "Failed to start download using libtorrent: " << book.getUrl() << std::endl;
+        std::cerr << "Failed to start download using libtorrent: " << book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT) << std::endl;
     }
 #endif
 
-    const std::string& url = book.getUrl();
+    const std::string& url = book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
     const QString bookId = QString::fromStdString(book.getId());
 
     std::string downloadId;
