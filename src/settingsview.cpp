@@ -91,6 +91,11 @@ SettingsView::SettingsView(QWidget *parent)
     ui->moveToTrashLabel->hide();
     ui->moveToTrashToggle->hide();
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
+    ui->line_7->hide();
+    ui->themeLabel->hide();
+    ui->themeComboBox->hide();
+#endif
 
 }
 
