@@ -59,9 +59,9 @@ SettingsView::SettingsView(QWidget *parent)
     });
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
-    ui->themeComboBox->addItem(gt("system"));
-    ui->themeComboBox->addItem(gt("light"));
-    ui->themeComboBox->addItem(gt("dark"));
+    ui->themeComboBox->addItem(gt("theme-system"));
+    ui->themeComboBox->addItem(gt("theme-light"));
+    ui->themeComboBox->addItem(gt("theme-dark"));
     connect(ui->themeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::setTheme);
     ui->themeLabel->setText(gt("theme"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
