@@ -22,6 +22,12 @@ class QMenu;
 #include "kiwixwebchannelobject.h"
 #include "tableofcontentbar.h"
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QWebEngineContextMenuRequest>
+#else
+#include <QWebEngineContextMenuData>
+#endif
+
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
 QString askForSaveFilePath(const QString& suggestedName);
 
@@ -343,8 +349,27 @@ QMenu* WebView::createStandardContextMenu() {
         Q_UNUSED(checked);
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
-
-    menu->addAction(app->getAction(KiwixApp::SavePageAsAction));
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const QWebEngineContextMenuRequest *request = this->lastContextMenuRequest();
+    if (request->mediaType() == QWebEngineContextMenuRequest::MediaTypeImage) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadImageToDisk));
+    } else if (request->mediaType() == QWebEngineContextMenuRequest::MediaTypeVideo || request->mediaType() == QWebEngineContextMenuRequest::MediaTypeAudio) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadMediaToDisk));
+    } else {
+      page()->action(QWebEnginePage::SavePage)->setVisible(1);
+      menu->addAction(page()->action(QWebEnginePage::SavePage));
+    }
+#else
+    const QWebEngineContextMenuData::MediaType mediaType = page()->contextMenuData().mediaType();
+    if (mediaType == QWebEngineContextMenuData::MediaTypeImage) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadImageToDisk));
+    } else if (mediaType == QWebEngineContextMenuData::MediaTypeVideo || mediaType == QWebEngineContextMenuData::MediaTypeAudio) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadMediaToDisk));
+    } else {
+      page()->action(QWebEnginePage::SavePage)->setVisible(1);
+      menu->addAction(page()->action(QWebEnginePage::SavePage));
+    }
+#endif
     return menu;
 }
 
@@ -377,6 +402,26 @@ QMenu* WebView::createLinkContextMenu() {
             KiwixApp::instance()->openUrl(m_linkHovered, true);
         });
     }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const QWebEngineContextMenuRequest *request = this->lastContextMenuRequest();
+    if (request->mediaType() == QWebEngineContextMenuRequest::MediaTypeImage) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadImageToDisk));
+    } else if (request->mediaType() == QWebEngineContextMenuRequest::MediaTypeVideo || request->mediaType() == QWebEngineContextMenuRequest::MediaTypeAudio) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadMediaToDisk));
+    } else {
+      menu->addAction(page()->action(QWebEnginePage::DownloadLinkToDisk));
+    }
+#else
+    const QWebEngineContextMenuData::MediaType mediaType = page()->contextMenuData().mediaType();
+    if (mediaType == QWebEngineContextMenuData::MediaTypeImage) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadImageToDisk));
+    } else if (mediaType == QWebEngineContextMenuData::MediaTypeVideo || mediaType == QWebEngineContextMenuData::MediaTypeAudio) {
+      menu->addAction(page()->action(QWebEnginePage::DownloadMediaToDisk));
+    } else {
+      menu->addAction(page()->action(QWebEnginePage::DownloadLinkToDisk));
+    }
+#endif
 
     return menu;
 }
