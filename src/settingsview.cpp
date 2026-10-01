@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QToolTip>
 #include <QScrollArea>
+#include <QSignalBlocker>
 
 namespace 
 {
@@ -102,6 +103,7 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir,
     SettingsView::onMonitorDirChanged(monitorDir);
     ui->moveToTrashToggle->setChecked(moveToTrash);
     ui->reopenTabToggle->setChecked(reopentab);
+    const QSignalBlocker blocker(ui->themeComboBox);
     ui->themeComboBox->setCurrentIndex(theme);
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)
