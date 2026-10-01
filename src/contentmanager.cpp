@@ -344,7 +344,7 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
     if ( a == "title" )       return QString::fromStdString(b.getTitle());
     if ( a == "description" ) return QString::fromStdString(b.getDescription());
     if ( a == "date" )        return QString::fromStdString(b.getDate());
-    if ( a == "url" )         return QString::fromStdString(b.getUrl());
+    if ( a == "url" )         return QString::fromStdString(b.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT));
     if ( a == "name" )        return QString::fromStdString(b.getName());
     if ( a == "favicon")      return getFaviconDataOrUrl(b);
     if ( a == "size" )        return QString::number(b.getSize());
@@ -415,7 +415,7 @@ ContentManager::BookState ContentManager::getBookState(QString bookId)
     try {
         QMutexLocker locker(&remoteLibraryLocker);
         const kiwix::Book& b = mp_remoteLibrary->getBookById(bookId.toStdString());
-        return !b.getUrl().empty()
+        return !b.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).empty()
              ? BookState::AVAILABLE_ONLINE
              : BookState::METADATA_ONLY;
     } catch (...) {}
@@ -455,7 +455,7 @@ void ContentManager::openBookPreview(const QString &id)
     try {
         QMutexLocker locker(&remoteLibraryLocker);
         const std::string &downloadUrl =
-            mp_remoteLibrary->getBookById(id.toStdString()).getUrl();
+            mp_remoteLibrary->getBookById(id.toStdString()).getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
         locker.unlock();
 
         /* Extract the Zim name from the book's download URL */
@@ -501,7 +501,7 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     bCopy.setDownloadId("");
     bCopy.setPathValid(true);
     // removing book url so that download link in kiwix-serve is not displayed.
-    bCopy.setUrl("");
+    bCopy.setUrl(kiwix::Book::AcquisitionLinkKind::DIRECT, "");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
     mp_library->save();
     mp_library->bookmarksChanged();

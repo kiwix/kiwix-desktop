@@ -152,7 +152,7 @@ std::string Library::getBookFilePath(const QString& bookId) const
 
 void Library::addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir)
 {
-    const QString downloadUrl = QString::fromStdString(book.getUrl());
+    const QString downloadUrl = QString::fromStdString(book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT));
 
     // XXX: This works if the URL is a direct link to a ZIM file
     // XXX: rather than to a torrent or a metalink file. In those cases
