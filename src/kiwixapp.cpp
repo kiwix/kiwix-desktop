@@ -197,10 +197,10 @@ void KiwixApp::restoreTabs()
         else
           openUrl(QUrl(zimUrl));
       }
-    }
 
-    /* Restore current tab index. */
-    getTabWidget()->setCurrentIndex(mp_session->value("currentTabIndex", 0).toInt());
+      /* Restore current tab index. */
+      getTabWidget()->setCurrentIndex(mp_session->value("currentTabIndex", 0).toInt());
+    }
 }
 
 KiwixApp *KiwixApp::instance()
