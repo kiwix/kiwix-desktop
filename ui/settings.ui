@@ -10,6 +10,9 @@
 <height>580</height>
 </rect>
 </property>
+<property name="frameShape">
+	<enum>QFrame::NoFrame</enum>
+</property>
 <property name="widgetResizable">
 	<bool>true</bool>
 </property>
