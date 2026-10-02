@@ -21,6 +21,7 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
+#include <QLocale>
 
 #ifndef QT_NO_DEBUG
 #define DBGOUT(X) qDebug().nospace() << "DBG: " << X
@@ -341,7 +342,25 @@ QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
 {
     if ( a == "id" )          return QString::fromStdString(b.getId());
     if ( a == "path" )        return QString::fromStdString(b.getPath());
-    if ( a == "title" )       return QString::fromStdString(b.getTitle());
+    if ( a == "title" ) {
+        QString title = QString::fromStdString(b.getTitle());
+        QStringList tags;
+        const auto langs = b.getLanguages();
+        if (!langs.empty()) {
+            const auto iso3 = QString::fromStdString(langs.at(0));
+            const auto iso2 = iso3.chopped(1);
+            const auto iso2Locale = QLocale(iso2);
+            tags << (iso2Locale.language() != QLocale::C ? iso2.toUpper() : iso3.toUpper());
+        }
+        const auto flavour = QString::fromStdString(b.getFlavour());
+        if (!flavour.isEmpty() && flavour != "all") {
+            tags << flavour;
+        }
+        if (!tags.isEmpty()) {
+            title += " [" + tags.join(" · ") + "]";
+        }
+        return title;
+    }
     if ( a == "description" ) return QString::fromStdString(b.getDescription());
     if ( a == "date" )        return QString::fromStdString(b.getDate());
     if ( a == "url" )         return QString::fromStdString(b.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT));
