@@ -112,6 +112,22 @@ public:
     void restoreTabs();
     void setupDirectoryMonitoring();
 
+    /**
+     * @brief Returns true when the effective UI theme is dark.
+     *
+     * "Dark" wins unconditionally when the user selected Dark.
+     * "System" delegates to QGuiApplication::styleHints() on Qt >= 6.5;
+     * it falls back to false (light) on older versions.
+     * "Light" always returns false.
+     */
+    bool isDarkTheme() const;
+
+    /**
+     * @brief Returns the Qt resource path for the global stylesheet
+     *        that matches the current effective theme.
+     */
+    QString getThemeCssPath() const;
+
 public slots:
     void newTab();
     void openZimFile(const QString& zimfile="");
@@ -121,6 +137,7 @@ public slots:
     void handleItemsState(TabType);
     void updateNameMapper();
     void printVersions(std::ostream& out = std::cout);
+    void applyTheme(SettingsManager::Theme theme);
 
 protected:
     void createActions();
@@ -148,6 +165,15 @@ private:
 
 QString getFileContent(QString filePath);
 QString gt(const QString &key);
+/**
+ * @brief Returns the CSS content for the correct theme variant.
+ *
+ * @param baseCssPath     Qt resource path for the default/light stylesheet.
+ * @param customDarkPath  Optional explicit Qt resource path for the dark stylesheet.
+ *                        If omitted, "_dark.css" is automatically used if available.
+ * @return Content of whichever file matches the effective current theme.
+ */
+QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath = QString());
 #define _STR(...) # __VA_ARGS__
 #define STR(X) _STR(X)
 static QString version = STR(VERSION);
