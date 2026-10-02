@@ -549,3 +549,11 @@ void TabBar::onTabMoved(int from, int to)
 
     KiwixApp::instance()->saveListOfOpenTabs();
 }
+
+void TabBar::reloadAllWebViews()
+{
+    for (int index = 0; index < mp_stackedWidget->count(); index++) {
+        if (ZimView* zv = qobject_cast<ZimView*>(mp_stackedWidget->widget(index)))
+            zv->getWebView()->reload();
+    }
+}

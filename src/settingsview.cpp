@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QToolTip>
 #include <QScrollArea>
+#include <QSignalBlocker>
 
 namespace 
 {
@@ -59,9 +60,9 @@ SettingsView::SettingsView(QWidget *parent)
     });
     ui->settingsLabel->setText(gt("settings"));
     ui->zoomPercentLabel->setText(gt("zoom-level-setting"));
-    ui->themeComboBox->addItem(gt("system"));
-    ui->themeComboBox->addItem(gt("light"));
-    ui->themeComboBox->addItem(gt("dark"));
+    ui->themeComboBox->addItem(gt("theme-system"));
+    ui->themeComboBox->addItem(gt("theme-light"));
+    ui->themeComboBox->addItem(gt("theme-dark"));
     connect(ui->themeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SettingsView::setTheme);
     ui->themeLabel->setText(gt("theme"));
     ui->downloadDirLabel->setText(gt("download-directory-setting"));
@@ -90,6 +91,11 @@ SettingsView::SettingsView(QWidget *parent)
     ui->moveToTrashLabel->hide();
     ui->moveToTrashToggle->hide();
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 8, 0)
+    ui->line_7->hide();
+    ui->themeLabel->hide();
+    ui->themeComboBox->hide();
+#endif
 
 }
 
@@ -102,6 +108,7 @@ void SettingsView::init(int zoomPercent, const QString &downloadDir,
     SettingsView::onMonitorDirChanged(monitorDir);
     ui->moveToTrashToggle->setChecked(moveToTrash);
     ui->reopenTabToggle->setChecked(reopentab);
+    const QSignalBlocker blocker(ui->themeComboBox);
     ui->themeComboBox->setCurrentIndex(theme);
 }
 bool SettingsView::confirmDialog( QString messageText, QString messageTitle)

@@ -518,6 +518,7 @@ void KiwixApp::postInit() {
     };
 
     connect(&m_settingsManager, &SettingsManager::themeChanged, this, applyTheme);
+    connect(&m_settingsManager, &SettingsManager::themeChanged, getTabWidget(), &TabBar::reloadAllWebViews);
     applyTheme(m_settingsManager.getTheme());
 #endif
 }
