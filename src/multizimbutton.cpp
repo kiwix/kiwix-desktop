@@ -64,7 +64,7 @@ void MultiZimButton::updateDisplay()
         }
 
         mp_buttonList->addItem(item);
-        setItemZimWidget(item, bookTitle, zimIcon);
+        setItemZimWidget(item, bookTitle, zimIcon, bookId);
     }
 
     mp_buttonList->sortItems();
@@ -73,7 +73,8 @@ void MultiZimButton::updateDisplay()
         mp_buttonList->insertItem(0, currentItem);
 
         const auto title = currentItem->data(Qt::DisplayRole).toString();
-        setItemZimWidget(currentItem, "*" + title, currentIcon);
+        const auto currentZimId = currentItem->data(Qt::UserRole).toString();
+        setItemZimWidget(currentItem, "*" + title, currentIcon, currentZimId);
     }
 
     /* Display should not be used other than for sorting. */
@@ -85,6 +86,15 @@ void MultiZimButton::updateDisplay()
     mp_buttonList->scrollToTop();
     mp_buttonList->setCurrentRow(0);
 
+    /* Ensure at least one ZIM is selected so that search works from an empty/new
+       tab where no article is loaded yet. Without this, getZimIds() returns an
+       empty list and updateCompletion() bails out before fetching any suggestions.
+       We read the id directly from the list item data to avoid the render-timing
+       problem where itemWidget() can return nullptr before the QMenu is shown.
+    */
+    if (m_selectedZimId.isEmpty() && mp_buttonList->count() > 0)
+        m_selectedZimId = mp_buttonList->item(0)->data(Qt::UserRole).toString();
+
     /* We set a maximum display height for list. Respect padding. */
     const int listHeight = itemHeight * std::min(7, mp_buttonList->count());
     mp_buttonList->setFixedHeight(listHeight + paddingTopBot);
@@ -93,14 +103,12 @@ void MultiZimButton::updateDisplay()
 
 QStringList MultiZimButton::getZimIds() const
 {
-    QStringList idList;
-    for (int row = 0; row < mp_buttonList->count(); row++)
-    {
-        const auto widget = getZimWidget(row);
-        if (widget && widget->getRadioButton()->isChecked())
-            idList.append(mp_buttonList->item(row)->data(Qt::UserRole).toString());
-    }
-    return idList;
+    /* m_selectedZimId is kept in sync via the radio-button toggled signal
+       connected in setItemZimWidget(). This avoids relying on itemWidget()
+       which can return nullptr before the QMenu has been rendered. */
+    if (m_selectedZimId.isEmpty())
+        return {};
+    return { m_selectedZimId };
 }
 
 ZimItemWidget *MultiZimButton::getZimWidget(int row) const
@@ -110,10 +118,21 @@ ZimItemWidget *MultiZimButton::getZimWidget(int row) const
 }
 
 void MultiZimButton::setItemZimWidget(QListWidgetItem *item,
-                                      const QString &title, const QIcon &icon)
+                                      const QString &title, const QIcon &icon,
+                                      const QString &zimId)
 {
     const auto zimWidget = new ZimItemWidget(title, icon);
     mp_radioButtonGroup->addButton(zimWidget->getRadioButton());
+
+    /* Keep m_selectedZimId in sync whenever the user picks a different ZIM.
+       Using Qt::UniqueConnection is not needed here because each ZimItemWidget
+       (and its radio button) is newly constructed on every updateDisplay(). */
+    connect(zimWidget->getRadioButton(), &QAbstractButton::toggled,
+            this, [this, zimId](bool checked) {
+                if (checked)
+                    m_selectedZimId = zimId;
+            });
+
     mp_buttonList->setItemWidget(item, zimWidget);
 }
 

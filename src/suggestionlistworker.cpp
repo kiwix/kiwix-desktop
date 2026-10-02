@@ -17,7 +17,13 @@ void SuggestionListWorker::run()
     const auto app = KiwixApp::instance();
     const auto selectedIdList = app->getSearchBar().getMultiZimButton().getZimIds();
     
-    /* TODO: re-implement this after introducing the actual Multi-Zim. */
+    if (selectedIdList.isEmpty()) {
+        /* No ZIM selected (e.g. brand-new empty tab before any ZIM is opened).
+           Emit an empty result so the search bar behaves gracefully instead of
+           crashing on the unchecked index-0 access below. */
+        emit searchFinished({}, m_token);
+        return;
+    }
     const auto currentZimId = selectedIdList[0];
     try {
         const auto archive = app->getLibrary()->getArchive(currentZimId);
