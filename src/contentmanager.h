@@ -169,7 +169,7 @@ private: // functions
     // the remote or local library (in that order).
     const kiwix::Book& getRemoteOrLocalBook(const QString &id);
     QString getRemoteLibraryUrl() const;
-
+    void applyCustomSort(QStringList& list);
     void startDownload(QString bookId) override;
     void removeDownload(QString bookId);
     void downloadDisappeared(QString bookId);
@@ -186,7 +186,8 @@ private: // data
     QString m_categoryFilter = "all";
     QStringList m_contentTypeFilters;
     kiwix::supportedListSortBy m_sortBy = kiwix::UNSORTED;
-    bool m_sortOrderAsc = true;
+    QString                    m_customSort;
+    bool                       m_sortOrderAsc = true;
     LanguageList m_languages;
     QStringList m_categories;
 
