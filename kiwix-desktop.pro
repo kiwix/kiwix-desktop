@@ -79,6 +79,7 @@ SOURCES += \
     src/suggestionlistmodel.cpp \
     src/suggestionlistdelegate.cpp \
     src/thumbnaildownloader.cpp \
+    src/useragent.cpp \
     src/translation.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
@@ -133,6 +134,7 @@ HEADERS += \
     src/suggestionlistmodel.h \
     src/suggestionlistdelegate.h \
     src/thumbnaildownloader.h \
+    src/useragent.h \
     src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \

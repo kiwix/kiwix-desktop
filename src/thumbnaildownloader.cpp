@@ -1,4 +1,5 @@
 #include "thumbnaildownloader.h"
+#include "useragent.h"
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QPixmap>
@@ -34,6 +35,7 @@ void ThumbnailDownloader::startNextDownload()
 void ThumbnailDownloader::downloadThumbnail(ThumbnailInfo thumbnailInfo)
 {
     QNetworkRequest req(thumbnailInfo.second);
+    req.setHeader(QNetworkRequest::UserAgentHeader, kiwixUserAgent());
     auto reply = manager.get(req);
     connect(reply, &QNetworkReply::finished, this, [=](){
         fileDownloaded(reply, thumbnailInfo);

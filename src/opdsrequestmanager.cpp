@@ -1,5 +1,6 @@
 #include "opdsrequestmanager.h"
 #include "kiwixapp.h"
+#include "useragent.h"
 
 OpdsRequestManager::OpdsRequestManager()
 {
@@ -59,6 +60,7 @@ QNetworkReply* OpdsRequestManager::opdsResponseFromPath(const QString &path, con
     qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
     QNetworkRequest request(url);
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+    request.setHeader(QNetworkRequest::UserAgentHeader, kiwixUserAgent());
     return m_networkManager.get(request);
 }
 
