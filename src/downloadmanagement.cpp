@@ -2,7 +2,6 @@
 
 #include "kiwixapp.h"
 #include "kiwixmessagebox.h"
-#include "useragent.h"
 
 #if defined(ENABLE_LIBTORRENT)
 #include <libtorrent/magnet_uri.hpp>
@@ -424,9 +423,7 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
 
     std::string downloadId;
     try {
-        const auto d = mp_downloader->startDownload(
-            url, downloadDirPath.toStdString(),
-            {{"user-agent", kiwixUserAgent().toStdString()}});
+        const auto d = mp_downloader->startDownload(url, downloadDirPath.toStdString());
         downloadId = d->getDid();
     } catch (std::exception& e) {
         throwDownloadUnavailableError();
