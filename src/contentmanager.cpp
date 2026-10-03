@@ -21,7 +21,7 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
-
+#include <algorithm>
 #ifndef QT_NO_DEBUG
 #define DBGOUT(X) qDebug().nospace() << "DBG: " << X
 #else
@@ -825,25 +825,31 @@ QStringList ContentManager::getBookIds()
     if (m_categoryFilter != "")
         filter.category(m_categoryFilter.toStdString());
 
+    QStringList list;
     if (m_local) {
         filter.local(true);
         filter.valid(true);
-        return mp_library->listBookIds(filter, m_sortBy, m_sortOrderAsc);
+        list = mp_library->listBookIds(filter, m_sortBy, m_sortOrderAsc);
     } else {
         filter.remote(true);
         QMutexLocker locker(&remoteLibraryLocker);
         auto bookIds = mp_remoteLibrary->filter(filter);
         mp_remoteLibrary->sort(bookIds, m_sortBy, m_sortOrderAsc);
-        QStringList list;
         for(auto& bookId:bookIds) {
             list.append(QString::fromStdString(bookId));
         }
-        return list;
     }
+
+    if (!m_customSort.isEmpty()) {
+        applyCustomSort(list);
+    }
+
+    return list;
 }
 
 void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
 {
+    m_customSort = "";
     if (sortBy == "unsorted") {
         m_sortBy = kiwix::UNSORTED;
     } else if (sortBy == "title") {
@@ -852,9 +858,38 @@ void ContentManager::setSortBy(const QString& sortBy, const bool sortOrderAsc)
         m_sortBy = kiwix::SIZE;
     } else if (sortBy == "date") {
         m_sortBy = kiwix::DATE;
+    } else if (sortBy == "content_type" || sortBy == "status") {
+        m_sortBy = kiwix::UNSORTED;
+        m_customSort = sortBy;
     }
     m_sortOrderAsc = sortOrderAsc;
     emit(booksChanged());
+}
+
+void ContentManager::applyCustomSort(QStringList& list)
+{
+    if (m_customSort == "status") {
+        auto getPriority = [this](const QString& id) -> int {
+            switch (this->getBookState(id)) {
+                case BookState::AVAILABLE_LOCALLY_AND_HEALTHY: return 0;
+                case BookState::DOWNLOADING:
+                case BookState::DOWNLOAD_PAUSED:
+                case BookState::DOWNLOAD_ERROR:                return 1;
+                default:                                       return 2;
+            }
+        };
+        std::stable_sort(list.begin(), list.end(), [&](const QString& a, const QString& b) {
+            const int pA = getPriority(a);
+            const int pB = getPriority(b);
+            return m_sortOrderAsc ? (pA < pB) : (pA > pB);
+        });
+    } else if (m_customSort == "content_type") {
+        std::stable_sort(list.begin(), list.end(), [this](const QString& a, const QString& b) {
+            const QString tagA = this->getBookInfos(a, {"tags"})["tags"].toString();
+            const QString tagB = this->getBookInfos(b, {"tags"})["tags"].toString();
+            return m_sortOrderAsc ? (tagA.localeAwareCompare(tagB) < 0) : (tagA.localeAwareCompare(tagB) > 0);
+        });
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
