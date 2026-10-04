@@ -19,6 +19,7 @@ class QMenu;
 #include <kiwix/tools.h>
 #include <QWebChannel>
 #include <QWebEngineScript>
+#include <QTimer>
 #include "kiwixwebchannelobject.h"
 #include "tableofcontentbar.h"
 
@@ -276,7 +277,22 @@ QWebEngineView* WebView::createWindow(QWebEnginePage::WebWindowType type)
 void WebView::onUrlChanged(const QUrl& url) {
     auto zimId = getZimIdFromUrl(url);
     auto app = KiwixApp::instance();
-    app->saveListOfOpenTabs();
+
+    /* saveListOfOpenTabs() does a synchronous settings write. Calling it
+     * on every single navigation (including in-page anchor jumps and
+     * fast successive clicks) was causing noticeable UI lag. Debounce
+     * it so it fires at most once every 500ms.
+     */
+    static QTimer* saveTabsTimer = nullptr;
+    if (!saveTabsTimer) {
+        saveTabsTimer = new QTimer();
+        saveTabsTimer->setSingleShot(true);
+        QObject::connect(saveTabsTimer, &QTimer::timeout, []() {
+            KiwixApp::instance()->saveListOfOpenTabs();
+        });
+    }
+    saveTabsTimer->start(5000);
+
     if (m_currentZimId == zimId ) {
         return;
     }
