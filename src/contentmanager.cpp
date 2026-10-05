@@ -337,11 +337,32 @@ QVariant getFaviconDataOrUrl(const kiwix::Book& b)
     return !data.isNull() ? QVariant(data) : QVariant(getFaviconUrl(b));
 }
 
+QString getBookDisplayTitle(const kiwix::Book& b)
+{
+    QString title = QString::fromStdString(b.getTitle());
+    QStringList tags;
+    const auto langs = b.getLanguages();
+    if (!langs.empty()) {
+        const auto lang = QString::fromStdString(langs.at(0)).trimmed();
+        if (!lang.isEmpty()) {
+            tags << lang.toUpper();
+        }
+    }
+    const auto flavour = QString::fromStdString(b.getFlavour()).trimmed();
+    if (!flavour.isEmpty() && flavour != "all") {
+        tags << flavour;
+    }
+    if (!tags.isEmpty()) {
+        title += " [" + tags.join(" · ") + "]";
+    }
+    return title;
+}
+
 QVariant getBookAttribute(const kiwix::Book& b, const QString& a)
 {
     if ( a == "id" )          return QString::fromStdString(b.getId());
     if ( a == "path" )        return QString::fromStdString(b.getPath());
-    if ( a == "title" )       return QString::fromStdString(b.getTitle());
+    if ( a == "title" )       return getBookDisplayTitle(b);
     if ( a == "description" ) return QString::fromStdString(b.getDescription());
     if ( a == "date" )        return QString::fromStdString(b.getDate());
     if ( a == "url" )         return QString::fromStdString(b.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT));
