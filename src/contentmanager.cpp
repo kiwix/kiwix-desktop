@@ -21,7 +21,6 @@
 #include <QtConcurrent/QtConcurrentRun>
 #include "contentmanagerheader.h"
 #include <QDesktopServices>
-#include <QLocale>
 
 #ifndef QT_NO_DEBUG
 #define DBGOUT(X) qDebug().nospace() << "DBG: " << X
@@ -344,12 +343,12 @@ QString getBookDisplayTitle(const kiwix::Book& b)
     QStringList tags;
     const auto langs = b.getLanguages();
     if (!langs.empty()) {
-        const auto iso3 = QString::fromStdString(langs.at(0));
-        const auto iso2 = iso3.chopped(1);
-        const auto iso2Locale = QLocale(iso2);
-        tags << (iso2Locale.language() != QLocale::C ? iso2.toUpper() : iso3.toUpper());
+        const auto lang = QString::fromStdString(langs.at(0)).trimmed();
+        if (!lang.isEmpty()) {
+            tags << lang.toUpper();
+        }
     }
-    const auto flavour = QString::fromStdString(b.getFlavour());
+    const auto flavour = QString::fromStdString(b.getFlavour()).trimmed();
     if (!flavour.isEmpty() && flavour != "all") {
         tags << flavour;
     }
