@@ -116,6 +116,16 @@
        </layout>
       </item>
       <item>
+       <widget class="TopWidget" name="mainToolBar">
+        <property name="movable">
+         <bool>false</bool>
+        </property>
+        <property name="floatable">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QStackedWidget" name="sideBar">
@@ -161,20 +171,6 @@
      </layout>
     </item>
    </layout>
-  </widget>
-  <widget class="TopWidget" name="mainToolBar">
-   <property name="movable">
-    <bool>false</bool>
-   </property>
-   <property name="floatable">
-    <bool>false</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
