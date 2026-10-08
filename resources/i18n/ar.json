@@ -63,7 +63,7 @@
 	"file": "الملف",
 	"edit": "تعديل",
 	"view": "عرض",
-	"tools": "الأدوات",
+	"tools": "أدوات",
 	"window-title": "مكتبة - كيويكس",
 	"search": "بحث",
 	"browse-directory": "تصفح الدليل",
@@ -201,5 +201,9 @@
 	"save-or-open-text": "ماذا يجب أن يفعله (كيفيكس) بهذا الملف؟",
 	"speed": "السرعة",
 	"increase-tts-speed": "زيادة سرعة خاصية TTS.",
-	"decrease-tts-speed": "خفض سرعة خاصية TTS"
+	"decrease-tts-speed": "خفض سرعة خاصية TTS",
+	"theme": "سمة",
+	"theme-system": "نظام",
+	"theme-light": "فاتح",
+	"theme-dark": "داكن"
 }

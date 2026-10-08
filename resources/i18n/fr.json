@@ -205,5 +205,9 @@
 	"save-or-open-text": "Que doit faire Kiwix avec ce fichier ?",
 	"speed": "Vitesse",
 	"increase-tts-speed": "Augmenter la vitesse TTS.",
-	"decrease-tts-speed": "Diminuer la vitesse du TTS."
+	"decrease-tts-speed": "Diminuer la vitesse du TTS.",
+	"theme": "Thème",
+	"theme-system": "Système",
+	"theme-light": "Clair",
+	"theme-dark": "Sombre"
 }
