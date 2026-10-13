@@ -22,6 +22,7 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
     const auto popupAction = new QWidgetAction(menu());
     popupAction->setDefaultWidget(mp_buttonList);
     menu()->addAction(popupAction);
+    connect(menu(), &QMenu::aboutToShow, this, &MultiZimButton::updateDisplay);
 
     connect(mp_buttonList, &QListWidget::currentRowChanged, this, [=](int row){
         if (const auto widget = getZimWidget(row))
