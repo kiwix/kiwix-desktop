@@ -111,7 +111,10 @@ void TabBar::setNewTabButton(QAction* newTabAction)
     int idx = addTab("");
     setTabEnabled(idx, false);
     setTabButton(idx, QTabBar::LeftSide, tb);
-    tabButton(idx, QTabBar::RightSide)->deleteLater();
+    // On macOS the close button is on the left side, so there may be
+    // nothing on the right side.
+    if (QWidget *closeButton = tabButton(idx, QTabBar::RightSide))
+        closeButton->deleteLater();
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
 }
 
@@ -251,7 +254,9 @@ QString TabBar::currentArticleTitle()
 
 QSize TabBar::tabSizeHint(int index) const
 {
-    QWidget *w = mp_stackedWidget->widget(index);
+    // On macOS Qt may call this from the QTabBar setters used in our
+    // constructor, i.e. before setStackedWidget() has been called.
+    QWidget *w = mp_stackedWidget ? mp_stackedWidget->widget(index) : nullptr;
 
     if ((w && qobject_cast<ContentManagerView*>(w)) || index >= count() - 1)
         return QSize(40, 40); // the "Library" tab is only icon

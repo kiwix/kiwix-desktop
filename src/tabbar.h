@@ -87,7 +87,7 @@ private:
     void setCloseTabButton(int index);
 
 private:
-    QStackedWidget*     mp_stackedWidget;
+    QStackedWidget*     mp_stackedWidget = nullptr;
     QScopedPointer<FullScreenWindow> m_fullScreenWindow;
 
 private slots:
