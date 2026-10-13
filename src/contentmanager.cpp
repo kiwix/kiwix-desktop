@@ -303,7 +303,7 @@ QString getFaviconUrl(const kiwix::Book& b)
     std::string url;
     try {
         auto item = b.getIllustration(48);
-        url = item->url;
+        url = item->getUrl();
     } catch (...) {
     }
     return QString::fromStdString(url);

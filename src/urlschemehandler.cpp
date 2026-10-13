@@ -85,7 +85,7 @@ UrlSchemeHandler::handleMetaRequest(QWebEngineUrlRequestJob* request)
           auto book = library->getBookById(zimId);
           auto illustration = book.getIllustration(48);
           std::string content = illustration->getData();
-          std::string mimeType = illustration->mimeType;
+          std::string mimeType = illustration->getMimeType();
           QBuffer* buffer = new QBuffer;
           buffer->setData(content.data(), content.size());
           connect(request, &QObject::destroyed, buffer, &QObject::deleteLater);
