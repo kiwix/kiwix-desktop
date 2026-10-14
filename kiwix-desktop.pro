@@ -108,6 +108,7 @@ SOURCES += \
     src/fullscreennotification.cpp \
     src/zimview.cpp \
     src/multizimbutton.cpp \
+    src/log.cpp \
 
 qtHaveModule(texttospeech): SOURCES += src/texttospeechbar.cpp \
 
@@ -165,6 +166,7 @@ HEADERS += \
     src/css_constants.h \
     src/multizimbutton.h \
     src/kiwixwebchannelobject.h \
+    src/log.h \
 
 qtHaveModule(texttospeech): HEADERS += src/texttospeechbar.h \
 
