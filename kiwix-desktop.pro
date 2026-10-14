@@ -237,7 +237,7 @@ unix {
   INSTALLS += mime_file
 }
 
-DEPS_DEFINITION = \"libkiwix >= 14.0.0 libkiwix < 15.0.0 libzim >= 9.0.0 libzim < 10.0.0\"
+DEPS_DEFINITION = \"libkiwix >= 14.0.0 libkiwix < 15.0.0 libzim >= 9.0.0 libzim < 10.0.0 spdlog >= 1.0.0 spdlog < 1.18.0\"
 
 PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
 
