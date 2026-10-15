@@ -1,36 +1,80 @@
 #include "log.h"
 
-Log::Log(Log::Level max_level, std::string outfile)
+Log::Log(Log::Level level, std::string outfile)
 {
     terminalSink    = nullptr;
     terminalHandle  = nullptr;
     fileSink        = nullptr;
     fileHandle      = nullptr;
 
-    if(max_level > Level::NONE)
+    maxLevel = level;
+    logfilePath = outfile;
+
+    if(level > Level::NONE)
     {
-        if(!std::empty(outfile))
+        if(!std::empty(logfilePath))
         {
-            fileSink = std::make_unique<spdlog::sinks::basic_file_sink_st>(outfile, true);
+            fileSink = new spdlog::sinks::basic_file_sink_st(outfile, true);
             fileSink->set_level(spdlog::level::info);
             fileSink->set_pattern("[%H:%M:%S %z] [%l]: %v");
 
-            fileHandle = std::make_unique<spdlog::logger>("file_handle", fileSink);
+            fileHandle = new spdlog::logger("file_handle", static_cast<spdlog::sink_ptr>(fileSink));
         }
     
-        terminalSink = std::make_shared<spdlog::sinks::stdout_sink_st>();
+        terminalSink = new spdlog::sinks::stdout_sink_st();
         terminalSink->set_level(spdlog::level::info);
         terminalSink->set_pattern("[%H:%M:%S %z] [%l]: %v");
         
-        terminalHandle = std::make_unique<spdlog::logger>("terminal_handle", terminalSink);
+        terminalHandle = new spdlog::logger("terminal_handle", static_cast<spdlog::sink_ptr>(terminalSink));
     }
 }
 
-void Log::info(std::string str)
+void Log::info(const char *fmt, ...)
 {
-    terminalHandle->info(str);
+    //  Note: list start and end may only appear in functions which contain an ellipsis
+    va_list variaticArgs;
+    va_start(variaticArgs, fmt);
+    std::string out = format(fmt, variaticArgs);
+    va_end(variaticArgs);
+
+    terminalHandle->info(out);
     // fileHandle->info(str);
     return;
 };
 
-Log::~Log(){};
+std::string Log::format(const char *fmt, va_list &args)
+{
+    char *buffer = 0;
+    std::string out = "";
+    
+    //  Make a copy of the variatic arguments so that they may be
+    //  used twice: Once to determine the size and again to format
+    va_list copy;
+    va_copy(copy, args);
+
+    //  Determine the buffersize, make sure it was successful
+    int size = std::vsnprintf(NULL, 0, fmt, copy) + 1;
+    if(size > 0)
+    {
+        //  format arguments into string-out
+        buffer = new char[size];
+        std::vsnprintf(buffer, size, fmt, args);
+    
+        out = std::string(buffer, size);
+        delete[] buffer;
+    }
+
+    return out;
+}
+
+Log::~Log()
+{
+    delete terminalHandle;
+    delete terminalSink;
+
+    if(!std::empty(logfilePath))
+    {
+        delete fileHandle;
+        delete fileSink;
+    }
+};
