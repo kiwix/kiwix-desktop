@@ -197,5 +197,9 @@
 	"save-or-open-text": "Vad ska Kiwix göra med den här filen?",
 	"speed": "Hastighet",
 	"increase-tts-speed": "Öka TTS-hastighet.",
-	"decrease-tts-speed": "Minska TTS-hastighet."
+	"decrease-tts-speed": "Minska TTS-hastighet.",
+	"theme": "Tema",
+	"theme-system": "System",
+	"theme-light": "Ljus",
+	"theme-dark": "Mörk"
 }

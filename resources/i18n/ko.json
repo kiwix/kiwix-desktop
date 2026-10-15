@@ -4,9 +4,11 @@
 			"Apzp79",
 			"Codenstory",
 			"Fitoschido",
+			"KyunghanBae",
 			"McDutchie",
 			"Nuevo Paso",
 			"Suleiman the Magnificent Television",
+			"Tensama0415",
 			"YeBoy371",
 			"Ykhwong",
 			"그냥기여자"
@@ -117,7 +119,7 @@
 	"pictures": "사진",
 	"videos": "동영상",
 	"ftindex": "전문 색인",
-	"details": "모든 문서",
+	"details": "전체 내용",
 	"yes": "예",
 	"no": "아니오",
 	"ok": "확인",
@@ -129,7 +131,7 @@
 	"download-dir-dialog-msg": "새 다운로드 디렉터리 경로는 다음과 같습니다:\n{{DIRECTORY}}",
 	"invalid-port": "유효하지 않은 포트",
 	"zim-open-fail-title": "잘못된 파일",
-	"zim-open-fail-text": "<b>{{ZIM}}</b> ZIM 파일을 적절하게 삭제할 수 없습니다. 내 라이브러리에서 제거됩니다.",
+	"zim-open-fail-text": "<b>{{ZIM}}</b> ZIM 파일을 정상적으로 열 수 없습니다. 라이브러리에서 제거됩니다.",
 	"monitor-dir-dialog-title": "모니터 디렉터리를 변경하시겠습니까?",
 	"monitor-dir-dialog-msg": "새 모니터 디렉터리는 다음과 같습니다: {{DIRECTORY}}",
 	"monitor-clear-dir-dialog-title": "모니터 디렉터리를 비우시겠습니까?",
@@ -198,5 +200,9 @@
 	"save-or-open-text": "Kiwix는 이 파일을 어떻게 처리해야 하나요?",
 	"speed": "속도",
 	"increase-tts-speed": "TTS 속도를 높입니다.",
-	"decrease-tts-speed": "TTS 속도를 낮춥니다."
+	"decrease-tts-speed": "TTS 속도를 낮춥니다.",
+	"theme": "테마",
+	"theme-system": "시스템",
+	"theme-light": "라이트",
+	"theme-dark": "다크"
 }
