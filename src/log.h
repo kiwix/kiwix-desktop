@@ -10,16 +10,32 @@
 class Log
 {
     public:
-        Log();
+        enum Level
+        {
+            NONE,
+            INFO,
+            DEBUG,
+            WARN,
+            ERROR,
+            CRITICAL
+        };
+
+        Log(Level maxLevel = Level::NONE, std::string outfile = "");
         virtual ~Log();
 
         void info(std::string str);
+        void debug(std::string str);
+        void warn(std::string str);
+        void error(std::string str);
+        void critical(std::string str);
 
     private:
-        std::shared_ptr<spdlog::sinks::stdout_sink_st> terminal_sink;
-        // std::shared_ptr<spdlog::sinks::basic_file_sink_st> file_sink;
+        void set_levels();
+        std::shared_ptr<spdlog::sinks::stdout_sink_st> terminalSink;
+        std::shared_ptr<spdlog::sinks::basic_file_sink_st> fileSink;
         
-        std::unique_ptr<spdlog::logger> terminal_handle;
+        std::unique_ptr<spdlog::logger> terminalHandle;
+        std::unique_ptr<spdlog::logger> fileHandle;
 };
 
 #endif
