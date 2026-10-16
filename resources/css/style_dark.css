@@ -1,0 +1,580 @@
+QWidget {
+    background-color: #202124;
+    color: #f0f2f5;
+}
+
+
+/* ------------------------------------
+   The topBar
+*/
+
+TopWidget {
+    min-height: 48px;
+    max-height: 48px;
+    margin: 0;
+    padding: 5px;
+    border: none;
+    border-bottom: 1px solid #4a4d52;
+}
+
+TopWidget::separator {
+    background: none;
+    border: none;
+    width: 40px;
+}
+
+QToolButton {
+    background: none;
+    height: 40px;
+    width: 40px;
+    border: none;
+}
+
+SearchBar {
+    background-color: #2b2d31;
+    margin: 2px; /* XXX: duplicated in css_constants.h */
+    border: 1px solid #4a4d52; /* XXX: duplicated in css_constants.h */
+    border-radius: 3px;
+
+    max-height: 40px;
+}
+
+SearchBar > QLabel#searchIcon {
+    padding: 0;
+    border: none;
+    background-color: none;
+    margin: 0px 6px;
+
+    max-height: 38px;
+    max-width: 38px;
+}
+
+SearchBar > SearchBarLineEdit {
+    background-color: #2b2d31;
+    margin: 0;
+    padding: 0;
+    color: #9aa0a6;
+    border: none;
+    font-size: 16px;
+
+    max-height: 38px;
+}
+
+SearchBar > QToolButton {
+    padding: 0;
+    border: 0 solid #202124;
+    background-color: none;
+    max-height: 38px;
+    max-width: 38px;
+}
+
+SearchBar > QToolButton:pressed,
+SearchBar > QToolButton:hover {
+    border: 1px solid #5b92e5;
+    background-color: #34425a;
+    border-radius: 3px;
+}
+
+MultiZimButton QListWidget {
+    border: 0px;
+    outline: 0px;
+    padding: 5px 0px; /* XXX: duplicated in css_constants.h */
+    background-color: #2b2d31;
+}
+
+MultiZimButton QListWidget::item {
+    padding: 0px 5px; /* XXX: duplicated in css_constants.h */
+    border: 1px solid transparent; /* XXX: duplicated in css_constants.h */
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+MultiZimButton QListWidget::item:hover,
+MultiZimButton QListWidget::item:selected:active {
+    border: 1px solid #5b92e5;
+    background-color: #34425a;
+}
+
+MultiZimButton QScrollBar {
+    width: 5px; /* XXX: duplicated in css_constants.h */
+    border: none;
+    outline: none;
+}
+
+MultiZimButton QScrollBar::handle {
+    background-color: #5f6368;
+}
+
+ZimItemWidget * {
+    background-color: transparent;
+}
+
+ZimItemWidget QLabel {
+    font-size: 16px;
+    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    color: #f0f2f5;
+}
+
+ZimItemWidget QRadioButton::indicator {
+    image: none;
+}
+
+ZimItemWidget QRadioButton::indicator:checked {
+    image: url(:/icons/tick-light.svg);
+}
+
+TopWidget QToolButton:pressed,
+TopWidget QToolButton::hover {
+    border: 1px solid #5b92e5;
+    background-color: #34425a;
+    border-radius: 3px;
+}
+
+TopWidget QToolButton::menu-button {
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+}
+
+TopWidget QToolButton::menu-arrow {
+    image: none;
+}
+
+TopWidget QToolButton::menu-indicator {
+    width: 0; /* it can be hidden at all by setting 0px */
+    height: 0;
+    subcontrol-origin: padding;
+}
+
+TopWidget QToolButton#backButton {
+    margin-left: 6px; /* XXX: duplicated in css_constants.h */
+}
+
+TopWidget QToolButton#fullScreenButton {
+    margin-right: 6px;
+}
+
+
+
+/* ----------------------------------------
+   Menu
+*/
+
+QMenu {
+    border: 1px solid #4a4d52;
+    min-width: 320px;
+    background-color: #2b2d31;
+}
+
+QMenu::item {
+    min-width: 320px;
+    min-height: 40px;
+    max-height: 40px;
+    border: 1px solid transparent;
+    padding: 2px 12px 2px 40px;     /* top right bottom left */
+    color: #f0f2f5;
+    background-color: #2b2d31;
+}
+
+QMenu::icon {
+    min-width: 40px;
+    min-height: 40px;
+}
+
+QMenu::item:selected {
+    background-color: #34425a;
+    border: 1px solid #5b92e5;
+}
+
+QMenu::item:disabled {
+    color: #5f6368;
+}
+
+MainMenu::indicator {
+    color: #9aa0a6;
+    width: 13px;
+    height: 13px;
+}
+
+WebViewForwardMenu::item, WebViewBackMenu::item {
+    padding: 2px 12px;
+}
+
+WebViewForwardMenu::icon, WebViewBackMenu::icon {
+    min-width: 2px;
+    min-height: 2px;
+}
+
+
+/* -----------------------------------------
+    TabWidget
+*/
+
+QTabBar {
+    font-size: 16px;
+    icon-size: 24px;
+    border-bottom: 1px solid #4a4d52;
+}
+
+QTabBar::tear {
+    width: 0px;
+    height: 0px;
+    border: none;
+}
+
+QTabWidget::pane {
+    top: -2px;
+    border: none;
+    border-top: 1px solid #4a4d52;
+}
+
+QTabBar::tab {
+    border: 1px solid #4a4d52; /* XXX: duplicated in css_constants.h */
+    border-radius: 0;
+    padding: 4px; /* XXX: duplicated in css_constants.h */
+    padding-top: 6px;
+    background-color: #202124;
+    color: #9aa0a6;
+}
+
+QTabBar::tab:selected {
+    background-color: #2b2d31;
+    border-bottom: 1px solid #2b2d31;
+    color: #f0f2f5;
+}
+
+QTabBar::tab:first {
+    padding-top: 6px;
+    padding-left: 5px;
+}
+
+#closeTabButton, #newTabButton {
+    font-size: 30px;
+    width: 30px; min-width: 30px; max-width: 30px;
+    height: 30px; min-height:30px; max-height:30px;
+    border-radius: 3px;
+}
+
+#nextTabButton, #prevTabButton, #newTabSideButton {
+    border: 1px solid #4a4d52;
+}
+
+#closeTabButton:hover, #newTabButton:hover,
+#nextTabButton:hover, #prevTabButton:hover,
+#newTabSideButton:hover {
+    border: 1px solid #5b92e5;
+    background-color: #34425a;
+    border-radius: 3px;
+}
+
+QTabBar::scroller {
+    width: 0px;
+    height: 0px;
+
+    /* Last tab size is off by 1 if border not set. */
+    border: 1px solid transparent;
+}
+
+/* -----------------------------------------
+    About page
+*/
+
+#aboutText {
+    padding: 20px;
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+#aboutText a {
+    color: #5b92e5;
+}
+
+/* ----------------------------------------
+    Find Search page
+*/
+
+#FindInPageBar {
+    border-top: 1px solid #4a4d52;
+}
+
+#findEdit {
+    background-color: #2b2d31;
+    padding: 2px;
+    max-height: 36px;
+    color: #f0f2f5;
+    font-size: 16px;
+    border: 1px solid #4a4d52;
+    border-radius: 0;
+}
+
+#fNextButton,
+#fPreviousButton,
+#hideButton {
+    outline: none;
+    max-height: 36px;
+    max-width: 36px;
+    border: 1px solid #4a4d52;
+    border-radius: 0;
+}
+
+#fNextButton:pressed,
+#fPreviousButton:pressed,
+#hideButton:pressed {
+    background-color: #34425a;
+    border: 1px solid #5b92e5;
+}
+
+/* ----------------------------------------
+    Content manager side
+*/
+
+#contentmanagerside QWidget {
+   background-color: #2b2d31;
+   outline: none;
+}
+
+#contentmanagerside QRadioButton,
+#contentmanagerside QCheckBox {
+    padding: 10px;
+    color: #f0f2f5;
+}
+
+#contentmanagerside QRadioButton:checked {
+   border: none;
+}
+
+#contentmanagerside QRadioButton::indicator {
+   image: none;
+}
+
+#contentmanagerside QCheckBox::indicator {
+   image: none;
+}
+
+#contentmanagerside QListWidget {
+    border: none;
+    padding-left: 30px;
+    show-decoration-selected: 0;
+}
+
+#contentTypeSelector QCheckBox {
+    padding: 0;
+}
+
+#categorySelector QScrollBar,
+#languageSelector QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+#categorySelector QScrollBar::handle,
+#languageSelector QScrollBar::handle {
+    background-color: #5f6368;
+}
+
+#categorySelector::item:selected,
+#languageSelector::item:selected {
+    background-color: #34425a;
+    color: #f0f2f5;
+    outline: none;
+}
+
+#contentTypeAllButton,
+ContentTypeFilter {
+    spacing: 10;
+}
+
+
+#tableofcontentbar {
+    background-color: #2b2d31;
+}
+
+#tableofcontentbar QTreeWidget,
+#tableofcontentbar QLabel,
+#tableofcontentbar QFrame {
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+#tableofcontentbar QTreeWidget {
+    outline: none;
+}
+
+#tableofcontentbar QTreeWidget::item {
+    height: 26px;
+    padding: 0px 10px;
+    outline: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+#tableofcontentbar QTreeWidget::item:selected,
+#tableofcontentbar QTreeWidget::item:hover {
+    outline: none;
+    border-top: 1px solid #5b92e5;
+    border-bottom: 1px solid #5b92e5;
+    background-color: #34425a;
+    color: #f0f2f5;
+}
+
+#tableofcontentbar QTreeWidget::branch:selected,
+#tableofcontentbar QTreeWidget::branch:hover {
+    outline: none;
+    border-top: 1px solid #5b92e5;
+    border-bottom: 1px solid #5b92e5;
+    background-color: #34425a;
+}
+
+#tableofcontentbar QTreeWidget::branch {
+    image: none;
+}
+
+#tableofcontentbar #titleLabel {
+    padding: 0px;
+    margin: 10px;
+}
+
+#tableofcontentbar #hideLabel {
+    margin: 13px 10px 10px; /* 3px to match bottom with titleLabel */
+}
+
+#tableofcontentbar QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+#tableofcontentbar QScrollBar::handle {
+    background-color: #5f6368;
+}
+
+/*this selector worked after changing class ReadingListBar to a QFrame instead of QWidget in readinglistbar.h file*/
+#readinglistbar {
+    background-color: #2b2d31;
+}
+
+#readinglistbar QPushButton::menu-indicator {
+    width: 0;
+    height: 0;
+}
+
+#readinglistbar QTreeWidget,
+#readinglistbar QLabel,
+#readinglistbar QFrame,
+#readinglistbar QListWidget,
+#readinglistbar QPushButton {
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+#readinglistbar QPushButton{
+    margin: 13px 10px 10px;
+}
+
+#readinglistbar QListWidget {
+    outline: none;
+}
+
+#readinglistbar QListWidget::item,
+#readinglistbar QListWidget::item:selected{
+    height: 26px;
+    padding: 0px 10px;
+    outline: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    color: #f0f2f5;
+}
+
+#readinglistbar QListWidget::item:hover {
+    outline: none;
+    border-top: 1px solid #5b92e5;
+    border-bottom: 1px solid #5b92e5;
+    background-color: #34425a;
+    color: #f0f2f5;
+}
+
+#readinglistbar #titleLabel {
+    padding: 0px;
+    margin: 10px;
+}
+
+#readinglistbar QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+#readinglistbar QScrollBar::handle {
+    background-color: #5f6368;
+}
+
+#readinglistbar QLabel#titleLabel {
+    font-family: "Selawik";
+    font-size: 24px;  /*equivalent to font-size 18*/
+    font-weight: 500; /*equivalent to font-weight medium*/
+}
+/* ----------------------------------------
+    Text to Speech Page
+*/
+
+TextToSpeechBar {
+    border-top: 1px solid #4a4d52;
+}
+
+TextToSpeechBar #closeButton {
+    outline: none;
+    max-height: 36px;
+    max-width: 36px;
+    border: 1px solid #4a4d52;
+    border-radius: 0;
+}
+
+TextToSpeechBar #stopButton {
+    outline: none;
+    max-height: 36px;
+    padding: 0px 10px;
+
+    background-color: #2b2d31;
+    border: 1px solid #4a4d52;
+    border-radius: 0;
+}
+
+TextToSpeechBar #stopButton:hover {
+    background-color: #34425a;
+    border: 1px solid #5b92e5;
+}
+
+TextToSpeechBar #stopButton:disabled {
+    color: #5f6368;
+    background-color: #202124;
+}
+
+TextToSpeechBar QComboBox::drop-down {
+    height: 22px;
+    width: 15px;
+    padding: 0px 2px;
+    margin: 0px;
+
+    image: url(":/icons/drop-down-light.svg");
+    background-color: #2b2d31;
+}
+
+TextToSpeechBar QComboBox {
+    background-color: #2b2d31;
+    border: 1px solid #4a4d52;
+    color: #f0f2f5;
+}
+
+TextToSpeechBar QAbstractItemView QScrollBar {
+    width: 5px;
+    border: none;
+    outline: none;
+}
+
+TextToSpeechBar QAbstractItemView QScrollBar::handle {
+    background-color: #5f6368;
+}
+
+#mainView {
+    background-color: #202124;
+}
