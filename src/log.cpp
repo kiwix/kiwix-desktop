@@ -3,10 +3,10 @@
 Log::Log(Log::Level level, std::string outfile)
 {
     terminalSink    = nullptr;
-    terminalHandle  = nullptr;
     fileSink        = nullptr;
+    terminalHandle  = nullptr;
     fileHandle      = nullptr;
-
+    
     maxLevel = level;
     logfilePath = outfile;
 
@@ -54,6 +54,8 @@ std::string Log::format(const char *fmt, va_list &args)
 
     //  Determine the buffersize, make sure it was successful
     int size = std::vsnprintf(NULL, 0, fmt, copy) + 1;
+    va_end(copy);
+    
     if(size > 0)
     {
         //  format arguments into string-out
@@ -64,16 +66,15 @@ std::string Log::format(const char *fmt, va_list &args)
         delete[] buffer;
     }
 
+
     return out;
 }
 
 Log::~Log()
-{
+{   
+    spdlog::drop_all();
     spdlog::shutdown();
-
+    
     delete terminalSink;
     if(!std::empty(logfilePath)) delete fileSink;
-
-    // TODO:
-    // investigate why cleaning up *Handle pointers here causes a segfault
 };
