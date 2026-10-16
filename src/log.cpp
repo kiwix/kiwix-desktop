@@ -69,12 +69,11 @@ std::string Log::format(const char *fmt, va_list &args)
 
 Log::~Log()
 {
-    delete terminalHandle;
-    delete terminalSink;
+    spdlog::shutdown();
 
-    if(!std::empty(logfilePath))
-    {
-        delete fileHandle;
-        delete fileSink;
-    }
+    delete terminalSink;
+    if(!std::empty(logfilePath)) delete fileSink;
+
+    // TODO:
+    // investigate why cleaning up *Handle pointers here causes a segfault
 };
