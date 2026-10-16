@@ -239,6 +239,10 @@ QTabBar::tab:first {
     padding-left: 5px;
 }
 
+QTabBar::tab:last {
+    border: none;
+}
+
 #closeTabButton, #newTabButton {
     font-size: 30px;
     width: 30px; min-width: 30px; max-width: 30px;
