@@ -22,7 +22,7 @@ class Log
             CRITICAL
         };
 
-        Log(Level maxLevel = Level::NONE, std::string outfile = "");
+        Log(Level level = Level::NONE, std::string outfile = "");
         virtual ~Log();
 
         void info(const char *fmt, ...);
@@ -37,6 +37,8 @@ class Log
         //  Use this in favour of spdlog's own non-standard formatting syntax
         //  I.e. {0:s} {1:d} {2:3.2f} -- etc
         std::string format(const char *fmt, va_list &args);
+        
+        //  Setup log level and output pattern for a spdlog::sink
         template<typename T> void configureDestination(T &sink);
 
         spdlog::sinks::stdout_sink_st *_terminalSink;
@@ -45,7 +47,7 @@ class Log
         spdlog::logger *_logHandle;
 
         std::string _logfilePath;
-        Level _maxLevel;
+        Level _minLevel;
 };
 
 #endif  //  KIWIXLOG_H
