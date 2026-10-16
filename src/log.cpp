@@ -6,12 +6,13 @@ Log::Log(Log::Level level, std::string outfile)
     _fileSink        = nullptr;
     _logHandle       = nullptr;
     
-    _maxLevel = level;
+    _minLevel = level;
     _logfilePath = outfile;
 
     _terminalSink = new spdlog::sinks::stdout_sink_st();
     configureDestination(*_terminalSink);
 
+    //  Determine whether logs should print to a logfile as well as the terminal
     if(!std::empty(_logfilePath))
     {
         _fileSink = new spdlog::sinks::basic_file_sink_st(outfile, true);
@@ -110,10 +111,9 @@ std::string Log::format(const char *fmt, va_list &args)
 template<typename T> void Log::configureDestination(T &sink)
 {
     //  Set log-level
-    if(_maxLevel > Level::NONE && _maxLevel <= Level::CRITICAL)
+    if(_minLevel > Level::NONE && _minLevel <= Level::CRITICAL)
     {
-        for(size_t i = 1; i < _maxLevel; i++)
-            sink.set_level(static_cast<spdlog::level::level_enum>(i));
+        sink.set_level(static_cast<spdlog::level::level_enum>(_minLevel));
     
         //  Format pattern output 
         //  I.e. [UTC datetime] [log-level]: input
