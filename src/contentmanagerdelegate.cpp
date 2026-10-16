@@ -84,7 +84,8 @@ void createCancelButton(QPainter *painter, const QRect& r)
     painter->setFont(oldFont);
 }
 
-void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QString completedLength)
+// Modified to draw three lines: download speed, completed length and estimated time remaining.
+void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QString completedLength, QString timeRemaining)
 {
     QPen pen;
     int x = box.x();
@@ -95,10 +96,12 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
     painter->setPen(pen);
     auto oldFont = painter->font();
     painter->setFont(QFont("Selawik", 8));
-    QRect nRect(x - 20, y - 10, w, h);
-    painter->drawText(nRect,Qt::AlignCenter | Qt::AlignJustify, downloadSpeed);
-    QRect fRect(x - 20, y + 10, w, h);
-    painter->drawText(fRect,Qt::AlignCenter | Qt::AlignJustify, completedLength);
+    QRect speedRect(x - 20, y - 10, w, h);
+    painter->drawText(speedRect, Qt::AlignCenter | Qt::AlignJustify, downloadSpeed);
+    QRect completedRect(x - 20, y + 10, w, h);
+    painter->drawText(completedRect, Qt::AlignCenter | Qt::AlignJustify, completedLength);
+    QRect timeRect(x - 20, y + 30, w, h);
+    painter->drawText(timeRect, Qt::AlignCenter | Qt::AlignJustify, timeRemaining);
     painter->setFont(oldFont);
 }
 
@@ -131,13 +134,15 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     progress = -progress;
     auto completedLength = downloadInfo.completedLength;
     auto downloadSpeed = downloadInfo.getDownloadSpeed();
+    auto timeRemaining = downloadInfo.getEstimatedTimeRemaining();
 
     if (downloadInfo.getStatus() == DownloadState::PAUSED) {
         createResumeSymbol(painter, dcl.pauseResumeButtonRect);
         createCancelButton(painter, dcl.cancelButtonRect);
     } else if (downloadInfo.getStatus() == DownloadState::DOWNLOADING) {
         createPauseSymbol(painter, dcl.pauseResumeButtonRect);
-        createDownloadStats(painter, box, downloadSpeed, completedLength);
+        // Pass the estimated time remaining to display it
+        createDownloadStats(painter, box, downloadSpeed, completedLength, timeRemaining);
     }
 
     QPen pen;

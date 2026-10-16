@@ -87,6 +87,8 @@ public: // data
 #endif
     double progress = 0;
     QString completedLength;
+    // New member for estimated time remaining
+    QString estimatedTimeRemaining;
 
 public: // functions
     void update(const DownloadInfo& info);
@@ -103,6 +105,9 @@ public: // functions
 
     // time in seconds since last update
     double timeSinceLastUpdate() const;
+
+    // Optional accessor:
+    QString getEstimatedTimeRemaining() const { return estimatedTimeRemaining; }
 
 private: // data
     Status status = UNKNOWN;
