@@ -6,6 +6,7 @@
 #include <zim/item.h>
 
 #include <QtDebug>
+#include <QSettings>
 #include <QtConcurrent/QtConcurrentRun>
 
 
@@ -34,6 +35,7 @@ Library::Library(const QString& libraryDirectory)
     auto manager = kiwix::Manager(LibraryManipulator(this));
     manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
     manager.readBookmarkFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
+    readDownloadIds();
     emit(booksChanged());
 }
 
@@ -118,6 +120,7 @@ void Library::addBookToLibrary(kiwix::Book &book)
 
 void Library::removeBookFromLibraryById(const QString& id) {
     mp_library->removeBookById(id.toStdString());
+    setBookDownloadId(id, "");
 }
 
 namespace
@@ -145,7 +148,7 @@ std::string Library::getBookFilePath(const QString& bookId) const
 {
     const auto& book = getBookById(bookId);
     const std::string bookPath = book.getPath();
-    return book.getDownloadId().empty()
+    return getBookDownloadId(bookId).empty()
          ? bookPath
          : dropSuffix(bookPath, BEINGDOWNLOADEDSUFFIX);
 }
@@ -184,6 +187,72 @@ void Library::updateBookBeingDownloaded(const QString& bookId, const QString& bo
     }
 }
 
+std::string Library::getBookDownloadId(const QString& bookId) const
+{
+    const QMutexLocker locker(&m_downloadIdsMutex);
+    return m_downloadIds.value(bookId);
+}
+
+void Library::setBookDownloadId(const QString& bookId, const std::string& downloadId)
+{
+    const QMutexLocker locker(&m_downloadIdsMutex);
+    if ( downloadId.empty() ) {
+        m_downloadIds.remove(bookId);
+    } else {
+        m_downloadIds[bookId] = downloadId;
+    }
+}
+
+namespace
+{
+
+QString downloadIdsFilePath(const QString& libraryDirectory)
+{
+    return QDir(libraryDirectory).filePath("library.downloads.ini");
+}
+
+const char DOWNLOADIDSGROUP[] = "downloadIds";
+
+bool hasBook(const kiwix::Library& library, const QString& bookId)
+{
+    try {
+        library.getBookById(bookId.toStdString());
+        return true;
+    } catch ( const std::out_of_range& ) {
+        return false;
+    }
+}
+
+} // unnamed namespace
+
+void Library::readDownloadIds()
+{
+    QSettings file(downloadIdsFilePath(m_libraryDirectory), QSettings::IniFormat);
+    file.beginGroup(DOWNLOADIDSGROUP);
+    const QMutexLocker locker(&m_downloadIdsMutex);
+    m_downloadIds.clear();
+    for ( const auto& bookId : file.childKeys() ) {
+        const auto downloadId = file.value(bookId).toString().toStdString();
+        // Ignore the download ids of books that are no longer in the library
+        if ( !downloadId.empty() && hasBook(*mp_library, bookId) ) {
+            m_downloadIds[bookId] = downloadId;
+        }
+    }
+}
+
+void Library::writeDownloadIds() const
+{
+    QSettings file(downloadIdsFilePath(m_libraryDirectory), QSettings::IniFormat);
+    file.clear();
+    file.beginGroup(DOWNLOADIDSGROUP);
+    const QMutexLocker locker(&m_downloadIdsMutex);
+    for ( auto it = m_downloadIds.cbegin(); it != m_downloadIds.cend(); ++it ) {
+        file.setValue(it.key(), QString::fromStdString(it.value()));
+    }
+    file.endGroup();
+    file.sync();
+}
+
 bool Library::isBeingDownloadedByUs(QString path) const
 {
     const auto fakePath = pseudoPathOfAFileBeingDownloaded(path.toStdString());
@@ -211,6 +280,7 @@ void Library::save()
 {
     mp_library->writeAsXML(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
     mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
+    writeDownloadIds();
 }
 
 Library::QStringSet Library::getLibraryZimsFromDir(QString dir) const
