@@ -148,7 +148,7 @@ std::string Library::getBookFilePath(const QString& bookId) const
 {
     const auto& book = getBookById(bookId);
     const std::string bookPath = book.getPath();
-    return book.getDownloadId().empty()
+    return getBookDownloadId(bookId).empty()
          ? bookPath
          : dropSuffix(bookPath, BEINGDOWNLOADEDSUFFIX);
 }

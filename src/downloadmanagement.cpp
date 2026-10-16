@@ -206,12 +206,12 @@ void DownloadManager::startDownloadUpdaterThread()
     timer->start(1000);
 }
 
-std::shared_ptr<DownloadState> DownloadManager::restoreDownload(const kiwix::Book& b)
+std::shared_ptr<DownloadState> DownloadManager::restoreDownload(const kiwix::Book& b, const std::string& downloadId)
 {
     const auto d = std::make_shared<DownloadState>();
 
 #ifdef ENABLE_LIBTORRENT
-    if ( isLibtorrentDownloadId(b.getDownloadId()) ) {
+    if ( isLibtorrentDownloadId(downloadId) ) {
         lt::add_torrent_params p = lt::parse_magnet_uri(b.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT));
         p.save_path = getDirPath(b.getPath());
         const auto th = m_libtorrentSession.add_torrent(p);
@@ -228,9 +228,10 @@ std::shared_ptr<DownloadState> DownloadManager::restoreDownload(const kiwix::Boo
 void DownloadManager::restoreDownloads()
 {
     for ( const auto& bookId : mp_library->getBookIds() ) {
-        const kiwix::Book& book = mp_library->getBookById(bookId);
-        if ( ! book.getDownloadId().empty() ) {
-            const auto newDownload = restoreDownload(book);
+        const auto downloadId = mp_library->getBookDownloadId(bookId);
+        if ( ! downloadId.empty() ) {
+            const kiwix::Book& book = mp_library->getBookById(bookId);
+            const auto newDownload = restoreDownload(book, downloadId);
             m_downloads.set(bookId, newDownload);
         }
     }
@@ -310,8 +311,7 @@ DownloadInfo DownloadManager::getDownloadInfo(QString bookId) const
     }
 #endif
 
-    auto& b = mp_library->getBookById(bookId);
-    const auto d = mp_downloader->getDownload(b.getDownloadId());
+    const auto d = mp_downloader->getDownload(mp_library->getBookDownloadId(bookId));
     d->updateStatus(true);
 
     return {
@@ -458,7 +458,7 @@ void DownloadManager::pauseDownload(const QString& bookId)
     }
 #endif
 
-    const auto downloadId = mp_library->getBookById(bookId).getDownloadId();
+    const auto downloadId = mp_library->getBookDownloadId(bookId);
     if ( downloadId.empty() ) {
         // Completion of the download has been detected (and its id was reset)
         // before the pause-download action was triggered (most likely through
@@ -493,8 +493,7 @@ void DownloadManager::resumeDownload(const QString& bookId)
     }
 #endif
 
-    auto& b = mp_library->getBookById(bookId);
-    auto download = mp_downloader->getDownload(b.getDownloadId());
+    auto download = mp_downloader->getDownload(mp_library->getBookDownloadId(bookId));
     if (download->getStatus() == kiwix::Download::K_PAUSED) {
         download->resumeDownload();
     }
@@ -512,7 +511,7 @@ void DownloadManager::cancelDownload(const QString& bookId)
     }
 #endif
 
-    const auto downloadId = mp_library->getBookById(bookId).getDownloadId();
+    const auto downloadId = mp_library->getBookDownloadId(bookId);
     if ( downloadId.empty() ) {
         // Completion of the download has been detected (and its id was reset)
         // before the confirmation to cancel the download was granted.

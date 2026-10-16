@@ -373,7 +373,7 @@ ContentManager::BookInfo ContentManager::getBookInfos(QString id, const QStringL
     const kiwix::Book* b = nullptr;
     try {
         b = &mp_library->getBookById(id);
-        if ( ! b->getDownloadId().empty() ) {
+        if ( ! mp_library->getBookDownloadId(id).empty() ) {
             // The book is still being downloaded and has been entered into the
             // local library for technical reasons only. Get the book info from
             // the remote library.
@@ -407,7 +407,7 @@ ContentManager::BookState ContentManager::getBookState(QString bookId)
 
     try {
         const kiwix::Book& b = mp_library->getBookById(bookId);
-        return b.getDownloadId().empty()
+        return mp_library->getBookDownloadId(bookId).empty()
              ? getStateOfLocalBook(b)
              : BookState::DOWNLOADING;
     } catch (...) {}
@@ -478,17 +478,15 @@ void ContentManager::removeDownload(QString bookId)
 void ContentManager::downloadDisappeared(QString bookId)
 {
     removeDownload(bookId);
-    kiwix::Book bCopy;
     try {
-        bCopy = mp_library->getBookById(bookId);
+        mp_library->getBookById(bookId);
     } catch ( const std::out_of_range& ) {
         // If the download has disappeared as a result of some
         // obscure chain of events, the book may have disappeared too.
         return;
     }
 
-    bCopy.setDownloadId("");
-    mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
+    mp_library->setBookDownloadId(bookId, "");
     mp_library->save();
     emit(mp_library->booksChanged());
 }
@@ -498,11 +496,11 @@ void ContentManager::downloadCompleted(QString bookId, QString path)
     removeDownload(bookId);
     kiwix::Book bCopy(mp_library->getBookById(bookId));
     bCopy.setPath(QDir::toNativeSeparators(path).toStdString());
-    bCopy.setDownloadId("");
     bCopy.setPathValid(true);
     // removing book url so that download link in kiwix-serve is not displayed.
     bCopy.setUrl(kiwix::Book::AcquisitionLinkKind::DIRECT, "");
     mp_library->getKiwixLibrary()->addOrUpdateBook(bCopy);
+    mp_library->setBookDownloadId(bookId, "");
     mp_library->save();
     mp_library->bookmarksChanged();
     if (!m_local) {
@@ -580,8 +578,8 @@ void ContentManager::startDownload(QString id)
         return;
     }
 
-    book.setDownloadId(downloadId);
     mp_library->addBookBeingDownloaded(book, downloadPath);
+    mp_library->setBookDownloadId(id, downloadId);
     mp_library->save();
     emit(oneBookChanged(id));
 }
