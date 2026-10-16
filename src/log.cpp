@@ -28,13 +28,57 @@ Log::Log(Log::Level level, std::string outfile)
 
 void Log::info(const char *fmt, ...)
 {
-    //  Capture variatic inputs and format output using printf style formatting
+    //  Capture variatic inputs and format them using printf style formatting
+    //  Note that va_list and va_start may only appear inside a function that has an ellipsis (...)
     va_list variaticArgs;
     va_start(variaticArgs, fmt);
     std::string out = format(fmt, variaticArgs);
-    va_end(variaticArgs);
 
     _logHandle->info(out);
+    
+    return;
+};
+
+void Log::debug(const char *fmt, ...)
+{
+    va_list variaticArgs;
+    va_start(variaticArgs, fmt);
+    std::string out = format(fmt, variaticArgs);
+
+    _logHandle->debug(out);
+    
+    return;
+};
+
+void Log::warn(const char *fmt, ...)
+{
+    va_list variaticArgs;
+    va_start(variaticArgs, fmt);
+    std::string out = format(fmt, variaticArgs);
+
+    _logHandle->warn(out);
+    
+    return;
+};
+
+void Log::error(const char *fmt, ...)
+{
+    va_list variaticArgs;
+    va_start(variaticArgs, fmt);
+    std::string out = format(fmt, variaticArgs);
+
+    _logHandle->error(out);
+    
+    return;
+};
+
+void Log::critical(const char *fmt, ...)
+{
+    va_list variaticArgs;
+    va_start(variaticArgs, fmt);
+    std::string out = format(fmt, variaticArgs);
+
+    _logHandle->critical(out);
     
     return;
 };
@@ -56,6 +100,9 @@ std::string Log::format(const char *fmt, va_list &args)
         out = std::string(buffer, size);
         delete[] buffer;
     }
+
+    //  Finish the parsing of variatic arguments
+    va_end(args);
 
     return out;
 }
