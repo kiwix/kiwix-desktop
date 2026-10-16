@@ -30,18 +30,18 @@ class Log
     private:
         //  Facilitates the use of printf-style format string
         //  I.e. %s %d %f -- etc..
-        //  Use this in favour of spdlog's own non-standard format string syntax
+        //  Use this in favour of spdlog's own non-standard formatting syntax
         //  I.e. {0:s} {1:d} {2:3.2f} -- etc
         std::string format(const char *fmt, va_list &args);
+        template<typename T> void configureDestination(T &sink);
 
-        spdlog::sinks::stdout_sink_st *terminalSink;
-        spdlog::sinks::basic_file_sink_st *fileSink;
+        spdlog::sinks::stdout_sink_st *_terminalSink;
+        spdlog::sinks::basic_file_sink_st *_fileSink;
         
-        spdlog::logger *terminalHandle;
-        spdlog::logger *fileHandle;
+        spdlog::logger *_logHandle;
 
-        std::string logfilePath;
-        Level maxLevel;
+        std::string _logfilePath;
+        Level _maxLevel;
 };
 
-#endif
+#endif  //  KIWIXLOG_H

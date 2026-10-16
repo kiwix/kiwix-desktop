@@ -2,43 +2,40 @@
 
 Log::Log(Log::Level level, std::string outfile)
 {
-    terminalSink    = nullptr;
-    fileSink        = nullptr;
-    terminalHandle  = nullptr;
-    fileHandle      = nullptr;
+    _terminalSink    = nullptr;
+    _fileSink        = nullptr;
+    _logHandle       = nullptr;
     
-    maxLevel = level;
-    logfilePath = outfile;
+    _maxLevel = level;
+    _logfilePath = outfile;
 
-    if(level > Level::NONE)
+    _terminalSink = new spdlog::sinks::stdout_sink_st();
+    configureDestination(*_terminalSink);
+
+    if(!std::empty(_logfilePath))
     {
-        if(!std::empty(logfilePath))
-        {
-            fileSink = new spdlog::sinks::basic_file_sink_st(outfile, true);
-            fileSink->set_level(spdlog::level::info);
-            fileSink->set_pattern("[%H:%M:%S %z] [%l]: %v");
+        _fileSink = new spdlog::sinks::basic_file_sink_st(outfile, true);
+        configureDestination(*_fileSink);
 
-            fileHandle = new spdlog::logger("file_handle", static_cast<spdlog::sink_ptr>(fileSink));
-        }
-    
-        terminalSink = new spdlog::sinks::stdout_sink_st();
-        terminalSink->set_level(spdlog::level::info);
-        terminalSink->set_pattern("[%H:%M:%S %z] [%l]: %v");
-        
-        terminalHandle = new spdlog::logger("terminal_handle", static_cast<spdlog::sink_ptr>(terminalSink));
+        spdlog::sinks_init_list sinks = {static_cast<spdlog::sink_ptr>(_terminalSink), static_cast<spdlog::sink_ptr>(_fileSink)};
+        _logHandle = new spdlog::logger("logger", sinks);
+    }
+    else 
+    {
+        _logHandle = new spdlog::logger("logger", static_cast<spdlog::sink_ptr>(_terminalSink));
     }
 }
 
 void Log::info(const char *fmt, ...)
 {
-    //  Note: list start and end may only appear in functions which contain an ellipsis
+    //  Capture variatic inputs and format output using printf style formatting
     va_list variaticArgs;
     va_start(variaticArgs, fmt);
     std::string out = format(fmt, variaticArgs);
     va_end(variaticArgs);
 
-    terminalHandle->info(out);
-    // fileHandle->info(str);
+    _logHandle->info(out);
+    
     return;
 };
 
@@ -46,16 +43,10 @@ std::string Log::format(const char *fmt, va_list &args)
 {
     char *buffer = 0;
     std::string out = "";
-    
-    //  Make a copy of the variatic arguments so that they may be
-    //  used twice: Once to determine the size and again to format
-    va_list copy;
-    va_copy(copy, args);
 
-    //  Determine the buffersize, make sure it was successful
-    int size = std::vsnprintf(NULL, 0, fmt, copy) + 1;
-    va_end(copy);
-    
+    //  Determine the buffer size
+    //  Add an additional byte for storing the null terminator
+    int size = std::vsnprintf(NULL, 0, fmt, args) + 1;
     if(size > 0)
     {
         //  format arguments into string-out
@@ -66,8 +57,27 @@ std::string Log::format(const char *fmt, va_list &args)
         delete[] buffer;
     }
 
-
     return out;
+}
+
+template<typename T> void Log::configureDestination(T &sink)
+{
+    //  Set log-level
+    if(_maxLevel > Level::NONE && _maxLevel <= Level::CRITICAL)
+    {
+        for(size_t i = 1; i < _maxLevel; i++)
+            sink.set_level(static_cast<spdlog::level::level_enum>(i));
+    
+        //  Format pattern output 
+        //  I.e. [UTC datetime] [log-level]: input
+        sink.set_pattern("[%H:%M:%S %z] [%l]: %v");
+    }
+    else
+    {
+        sink.set_level(spdlog::level::off);
+    }
+    
+    return;
 }
 
 Log::~Log()
@@ -75,6 +85,6 @@ Log::~Log()
     spdlog::drop_all();
     spdlog::shutdown();
     
-    delete terminalSink;
-    if(!std::empty(logfilePath)) delete fileSink;
+    delete _terminalSink;
+    if(!std::empty(_logfilePath)) delete _fileSink;
 };
