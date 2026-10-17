@@ -57,7 +57,7 @@ QNetworkReply* OpdsRequestManager::opdsResponseFromPath(const QString &path, con
     url.setPort(port);
     url.setPath(path);
     url.setQuery(query);
-    qInfo() << "Downloading" << url.toString(QUrl::FullyEncoded);
+    logger.info("Downloading %s", url.toString(QUrl::FullyEncoded));
     QNetworkRequest request(url);
     request.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
     request.setHeader(QNetworkRequest::UserAgentHeader, kiwixUserAgent());
