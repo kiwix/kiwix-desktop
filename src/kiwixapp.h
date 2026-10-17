@@ -10,6 +10,7 @@
 #include "kprofile.h"
 #include "settingsmanager.h"
 #include "translation.h"
+#include "log.h"
 
 #include <QtSingleApplication>
 #include <QApplication>
