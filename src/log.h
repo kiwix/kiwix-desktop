@@ -50,4 +50,6 @@ class Log
         Level _minLevel;
 };
 
+static Log logger = Log();
+
 #endif  //  KIWIXLOG_H
