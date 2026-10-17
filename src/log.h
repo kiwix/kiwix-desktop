@@ -22,7 +22,7 @@ class Log
             CRITICAL
         };
 
-        Log(Level level = Level::NONE, std::string outfile = "");
+        Log();
         virtual ~Log();
 
         void info(const char *fmt, ...);
