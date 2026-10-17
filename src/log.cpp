@@ -1,13 +1,23 @@
 #include "log.h"
 
-Log::Log(Log::Level level, std::string outfile)
+Log::Log()
 {
+    //  Default error log-level to stdout
+    _minLevel = Level::ERROR;
+    _logfilePath = "";
+
+    #ifdef KIWIX_LOG_LEVEL
+        if(KIWIX_LOG_LEVEL > Level::NONE && KIWIX_LOG_LEVEL <= Level::CRITICAL) 
+            _minLevel = KIWIX_LOG_LEVEL;
+    #endif
+
+    #ifdef KIWIX_LOGFILE
+        _logfilePath = KIWIX_LOGFILE;
+    #endif
+
     _terminalSink    = nullptr;
     _fileSink        = nullptr;
     _logHandle       = nullptr;
-    
-    _minLevel = level;
-    _logfilePath = outfile;
 
     _terminalSink = new spdlog::sinks::stdout_sink_st();
     configureDestination(*_terminalSink);
@@ -15,7 +25,7 @@ Log::Log(Log::Level level, std::string outfile)
     //  Determine whether logs should print to a logfile as well as the terminal
     if(!std::empty(_logfilePath))
     {
-        _fileSink = new spdlog::sinks::basic_file_sink_st(outfile, true);
+        _fileSink = new spdlog::sinks::basic_file_sink_st(_logfilePath, true);
         configureDestination(*_fileSink);
 
         spdlog::sinks_init_list sinks = {static_cast<spdlog::sink_ptr>(_terminalSink), static_cast<spdlog::sink_ptr>(_fileSink)};
@@ -25,7 +35,7 @@ Log::Log(Log::Level level, std::string outfile)
     {
         _logHandle = new spdlog::logger("logger", static_cast<spdlog::sink_ptr>(_terminalSink));
     }
-}
+};
 
 void Log::info(const char *fmt, ...)
 {
@@ -106,12 +116,16 @@ std::string Log::format(const char *fmt, va_list &args)
     va_end(args);
 
     return out;
-}
+};
 
 template<typename T> void Log::configureDestination(T &sink)
 {
     //  Set log-level
-    if(_minLevel > Level::NONE && _minLevel <= Level::CRITICAL)
+    if(_minLevel == Level::NONE)
+    {
+        sink.set_level(spdlog::level::off);
+    }
+    else
     {
         sink.set_level(static_cast<spdlog::level::level_enum>(_minLevel));
     
@@ -119,13 +133,9 @@ template<typename T> void Log::configureDestination(T &sink)
         //  I.e. [UTC datetime] [log-level]: input
         sink.set_pattern("[%H:%M:%S %z] [%l]: %v");
     }
-    else
-    {
-        sink.set_level(spdlog::level::off);
-    }
     
     return;
-}
+};
 
 Log::~Log()
 {   
