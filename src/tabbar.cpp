@@ -97,7 +97,7 @@ void TabBar::setStackedWidget(QStackedWidget *widget) {
 
 void TabBar::setContentManagerView(ContentManagerView* view)
 {
-    qInfo() << "add widget";
+    logger.info("Adding widget");
     mp_stackedWidget->addWidget(view);
     mp_stackedWidget->show();
     int idx = addTab(QIcon(":/icons/kiwix-logo.svg"), "");
