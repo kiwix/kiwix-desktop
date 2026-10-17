@@ -78,6 +78,7 @@ void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString
 
 void KiwixApp::init()
 {
+    logger.info("Initialising kiwix");
     mp_manager = new ContentManager(&m_library);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 

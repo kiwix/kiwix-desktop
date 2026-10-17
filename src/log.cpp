@@ -8,11 +8,11 @@ Log::Log()
 
     #ifdef KIWIX_LOG_LEVEL
         if(KIWIX_LOG_LEVEL > Level::NONE && KIWIX_LOG_LEVEL <= Level::CRITICAL) 
-            _minLevel = KIWIX_LOG_LEVEL;
+            _minLevel = static_cast<Level>(KIWIX_LOG_LEVEL);
     #endif
 
     #ifdef KIWIX_LOGFILE
-        _logfilePath = KIWIX_LOGFILE;
+        _logfilePath = std::string(KIWIX_LOGFILE);
     #endif
 
     _terminalSink    = nullptr;
