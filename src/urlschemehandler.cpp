@@ -129,7 +129,7 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
     auto app = KiwixApp::instance();
     auto host = qurl.host();
     auto bookId = host.split('.')[0];
-    logger.info("Handling request %s", qurl);
+    logger.info("Handling request %s", qurl.toString());
     QUrlQuery query(qurl.query());
     if (bookId == "library") {
       bookId = query.queryItemValue("content");
