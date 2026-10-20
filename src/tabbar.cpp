@@ -113,6 +113,7 @@ void TabBar::setNewTabButton(QAction* newTabAction)
     setTabButton(idx, QTabBar::LeftSide, tb);
     tabButton(idx, QTabBar::RightSide)->deleteLater();
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
+    adjustNewTabButtonPosition();
 }
 
 // Returns the count of real tabs with content (excluding the last pseudo-tab
@@ -157,6 +158,7 @@ void TabBar::setCloseTabButton(int index)
     a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
     tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
+    adjustNewTabButtonPosition();
     connect(tb, &QToolButton::triggered, this, [=]() {
         for ( int i = 0; i < realTabCount(); ++i ) {
             if ( tb == tabButton(i, QTabBar::RightSide) ) {
@@ -507,19 +509,38 @@ void TabBar::paintEvent(QPaintEvent *e)
 void TabBar::tabRemoved(int index)
 {
     QTabBar::tabRemoved(index);
+    adjustNewTabButtonPosition();
     emit tabRemovedSignal(index);
 }
 
 void TabBar::tabInserted(int index)
 {
     QTabBar::tabInserted(index);
+    adjustNewTabButtonPosition();
     emit tabInsertedSignal(index);
 }
 
 void TabBar::resizeEvent(QResizeEvent *event)
 {
     QTabBar::resizeEvent(event);
+    adjustNewTabButtonPosition();
     emit sizeChanged();
+}
+
+void TabBar::adjustNewTabButtonPosition()
+{
+    const int lastIndex = count() - 1;
+    if (lastIndex < 0)
+        return;
+
+    QWidget *button = tabButton(lastIndex, QTabBar::LeftSide);
+    if (!button)
+        return;
+
+    const QRect tab = tabRect(lastIndex);
+    QRect buttonGeometry = button->geometry();
+    buttonGeometry.moveLeft(tab.left() + (tab.width() - buttonGeometry.width()) / 2);
+    button->setGeometry(buttonGeometry);
 }
 
 void TabBar::onTabMoved(int from, int to)
