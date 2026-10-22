@@ -65,5 +65,9 @@
 	"zim-name": "Isem n ZIM",
 	"save-page-as": "Sekles am…",
 	"voice": "Taɣect",
-	"select-read-language": "Fren tutlayt n tɣuṛi"
+	"select-read-language": "Fren tutlayt n tɣuṛi",
+	"theme": "Asentel",
+	"theme-system": "Anagraw",
+	"theme-light": "Aceɛlal",
+	"theme-dark": "Ubrik"
 }
