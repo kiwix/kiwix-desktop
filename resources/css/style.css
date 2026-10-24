@@ -226,7 +226,6 @@ QTabBar::tab {
     border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
     border-radius: 0;
     padding: 4px; /* XXX: duplicated in css_constants.h */
-    padding-top: 6px;
 }
 
 QTabBar::tab:selected {
@@ -234,9 +233,8 @@ QTabBar::tab:selected {
     border-bottom: 1px solid white;
 }
 
-QTabBar::tab:first {
-    padding-top: 6px;
-    padding-left: 5px;
+QTabBar::tab:last {
+    border: 1px solid transparent;
 }
 
 #closeTabButton, #newTabButton {
