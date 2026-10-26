@@ -6,7 +6,7 @@
 class QListWidget;
 class QButtonGroup;
 class QListWidgetItem;
-class QRadioButton;
+class QCheckBox;
 class QLabel;
 
 class ZimItemWidget : public QWidget {
@@ -15,12 +15,17 @@ class ZimItemWidget : public QWidget {
 public:
     ZimItemWidget(QString text, QIcon icon, QWidget *parent = nullptr);
 
-    QRadioButton* getRadioButton() const { return radioBt; }
+    QCheckBox* getCheckBox() const { return checkBx; }
+    bool isChecked() const;
+
+public slots:
+    void setChecked(bool checked);
+    void toggle();
 
 private:
     QLabel* textLabel;
     QLabel* iconLabel;
-    QRadioButton* radioBt;
+    QCheckBox* checkBx;
 };
 
 class MultiZimButton : public QToolButton {
@@ -31,13 +36,15 @@ public:
 
 public slots:
     void updateDisplay();
+    void updateBooks();
     QStringList getZimIds() const;
+    QStringList getCheckedZimIds() const;
 
 private:
     QListWidget* mp_buttonList;
-    QButtonGroup* mp_radioButtonGroup;
 
     ZimItemWidget* getZimWidget(int row) const;
+    ZimItemWidget* getZimWidget(QListWidgetItem *item) const;
     void setItemZimWidget(QListWidgetItem* item, const QString& title, const QIcon& icon);
 };
 
