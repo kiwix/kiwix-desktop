@@ -135,6 +135,10 @@ UrlSchemeHandler::handleSearchRequest(QWebEngineUrlRequestJob* request)
       bookId = query.queryItemValue("content");
     }
     auto searchQuery = query.queryItemValue("pattern").toStdString();
+    if (searchQuery.empty()) {
+        request->fail(QWebEngineUrlRequestJob::UrlInvalid);
+        return;
+    }
     int start = 0;
     bool ok;
     int temp = query.queryItemValue("start").toInt(&ok);
