@@ -166,7 +166,7 @@ Available communication channels:
 * [Email](mailto:contact+android@kiwix.org)
 * [Mailing list](mailto:kiwix-developer@lists.sourceforge.net)
 * [Slack](https://slack.kiwix.org/): #android channel [Get an invite](https://slack-invite.kiwix.org/)
-* IRC: #kiwix on irc.freenode.net
+* IRC (Libera): #kiwix on https://web.libera.chat
 
 For more information, please refer to
 [https://wiki.kiwix.org/wiki/Communication](https://wiki.kiwix.org/wiki/Communication).
