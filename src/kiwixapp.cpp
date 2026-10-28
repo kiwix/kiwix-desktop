@@ -324,9 +324,12 @@ bool KiwixApp::isCurrentArticleBookmarked()
         return false;
     }
     auto url = getTabWidget()->currentArticleUrl().toStdString();
+    std::string normalizedUrl = (url.empty() || url[0] != '/') ? "/" + url : url;
 
     for (auto& bookmark: getLibrary()->getBookmarks()) {
-        if (bookmark.getBookId() == zimId && bookmark.getUrl() == url) {
+        std::string bUrl = bookmark.getUrl();
+        std::string normalizedBUrl = (bUrl.empty() || bUrl[0] != '/') ? "/" + bUrl : bUrl;
+        if (bookmark.getBookId() == zimId && (bUrl == url || normalizedBUrl == normalizedUrl)) {
             return true;
         }
     }

@@ -77,6 +77,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
     });
     connect(mp_webView->page(), &QWebEnginePage::fullScreenRequested, mp_tabBar, &TabBar::fullScreenRequested);
     connect(mp_webView, &WebView::titleChanged, mp_tabBar, &TabBar::on_webview_titleChanged);
+    connect(mp_webView, &WebView::urlChanged, mp_tabBar, &TabBar::on_webview_urlChanged);
     connect(mp_webView, &WebView::iconChanged, this,
             [=](const QIcon& icon) { mp_tabBar->setIconOf(icon, this); });
 
@@ -98,7 +99,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                 } else {
                     auto link = url;
                     if (url.startsWith("zim://")) {
-                        link = QUrl(url).path();
+                        link = QUrl(url).toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
                     }
 
                     /* because we use QWebEnginePage::linkHovered signal,
