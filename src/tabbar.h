@@ -62,6 +62,10 @@ protected:
     void tabRemoved(int index) override;
     void tabInserted(int index) override;
     void resizeEvent(QResizeEvent *) override;
+    void tabLayoutChange() override;
+
+private:
+    void adjustTabButtonPositions();
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
