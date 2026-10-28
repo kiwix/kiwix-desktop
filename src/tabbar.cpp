@@ -237,8 +237,17 @@ QString TabBar::currentZimId()
 
 QString TabBar::currentArticleUrl()
 {
-    if (WebView *w = currentWebView())
-        return w->url().path();
+    if (WebView *w = currentWebView()) {
+        const QUrl &u = w->url();
+        if (u.isEmpty() || u.scheme() != "zim") {
+            return "";
+        }
+        QString res = u.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+        if (res.isEmpty()) {
+            res = "/";
+        }
+        return res;
+    }
     return "";
 }
 
@@ -346,18 +355,27 @@ void TabBar::onCurrentChanged(int index)
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit tabDisplayed(TabType::SettingsTab);
-        QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
+        QTimer::singleShot(0, [=](){
+            emit currentTitleChanged("");
+            emit currentUrlChanged(QUrl());
+        });
     } else if (auto zv = qobject_cast<ZimView*>(w)) {
         auto view = zv->getWebView();
         emit webActionEnabledChanged(QWebEnginePage::Back, view->isWebActionEnabled(QWebEnginePage::Back));
         emit webActionEnabledChanged(QWebEnginePage::Forward, view->isWebActionEnabled(QWebEnginePage::Forward));
         emit tabDisplayed(TabType::ZimViewTab);
-        QTimer::singleShot(0, [=](){emit currentTitleChanged(view->title());});
+        QTimer::singleShot(0, [=](){
+            emit currentTitleChanged(view->title());
+            emit currentUrlChanged(view->url());
+        });
     } else if (qobject_cast<ContentManagerView*>(w)) {
         emit webActionEnabledChanged(QWebEnginePage::Back, false);
         emit webActionEnabledChanged(QWebEnginePage::Forward, false);
         emit tabDisplayed(TabType::LibraryTab);
-        QTimer::singleShot(0, [=](){emit currentTitleChanged("");});
+        QTimer::singleShot(0, [=](){
+            emit currentTitleChanged("");
+            emit currentUrlChanged(QUrl());
+        });
     }
     else {
         Q_ASSERT(false);
@@ -393,6 +411,16 @@ void TabBar::on_webview_titleChanged(const QString& title)
 
     if (currentZimView() == tab)
         emit currentTitleChanged(title);
+}
+
+void TabBar::on_webview_urlChanged(const QUrl& url)
+{
+    ZimView* tab = qobject_cast<ZimView*>(sender()->parent());
+    if (! tab)
+        return;
+
+    if (currentZimView() == tab)
+        emit currentUrlChanged(url);
 }
 
 void TabBar::onWebviewHistoryActionChanged(QWebEnginePage::WebAction action, bool enabled)

@@ -203,7 +203,13 @@ void Library::addBookmark(kiwix::Bookmark &bookmark)
 
 void Library::removeBookmark(const QString &zimId, const QString &url)
 {
-    mp_library->removeBookmark(zimId.toStdString(), url.toStdString());
+    if (!mp_library->removeBookmark(zimId.toStdString(), url.toStdString())) {
+        if (url.startsWith('/')) {
+            mp_library->removeBookmark(zimId.toStdString(), url.mid(1).toStdString());
+        } else {
+            mp_library->removeBookmark(zimId.toStdString(), ("/" + url).toStdString());
+        }
+    }
     emit bookmarksChanged();
 }
 
