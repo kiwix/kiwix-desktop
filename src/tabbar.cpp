@@ -34,6 +34,7 @@ TabBar::TabBar(QWidget *parent) :
     setMovable(true);
     setIconSize(QSize(30, 30));
     connect(this, &QTabBar::currentChanged, this, &TabBar::onCurrentChanged, Qt::QueuedConnection);
+    connect(this, &QTabBar::currentChanged, this, &TabBar::adjustTabButtonPositions, Qt::QueuedConnection);
 
     connect(getAction(KiwixApp::NextTabAction), &QAction::triggered, this, &TabBar::moveToNextTab);
     connect(getAction(KiwixApp::PreviousTabAction), &QAction::triggered, this, &TabBar::moveToPreviousTab);
@@ -85,6 +86,7 @@ void TabBar::openOrSwitchToSettingsTab()
     setCloseTabButton(index);
     setCurrentIndex(index);
     KiwixApp::instance()->saveListOfOpenTabs();
+    adjustTabButtonPositions();
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {
@@ -113,6 +115,7 @@ void TabBar::setNewTabButton(QAction* newTabAction)
     setTabButton(idx, QTabBar::LeftSide, tb);
     tabButton(idx, QTabBar::RightSide)->deleteLater();
     setTabButton(idx, QTabBar::RightSide, Q_NULLPTR);
+    adjustTabButtonPositions();
 }
 
 // Returns the count of real tabs with content (excluding the last pseudo-tab
@@ -157,6 +160,7 @@ void TabBar::setCloseTabButton(int index)
     a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
     tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
+    adjustTabButtonPositions();
     connect(tb, &QToolButton::triggered, this, [=]() {
         for ( int i = 0; i < realTabCount(); ++i ) {
             if ( tb == tabButton(i, QTabBar::RightSide) ) {
@@ -327,6 +331,7 @@ void TabBar::closeTab(int index)
     view->deleteLater();
 
     KiwixApp::instance()->saveListOfOpenTabs();
+    adjustTabButtonPositions();
 }
 
 void TabBar::onCurrentChanged(int index)
@@ -507,19 +512,67 @@ void TabBar::paintEvent(QPaintEvent *e)
 void TabBar::tabRemoved(int index)
 {
     QTabBar::tabRemoved(index);
+    adjustTabButtonPositions();
     emit tabRemovedSignal(index);
 }
 
 void TabBar::tabInserted(int index)
 {
     QTabBar::tabInserted(index);
+    adjustTabButtonPositions();
     emit tabInsertedSignal(index);
 }
 
 void TabBar::resizeEvent(QResizeEvent *event)
 {
     QTabBar::resizeEvent(event);
+    adjustTabButtonPositions();
     emit sizeChanged();
+}
+
+void TabBar::tabLayoutChange()
+{
+    QTabBar::tabLayoutChange();
+    adjustTabButtonPositions();
+}
+
+void TabBar::adjustTabButtonPositions()
+{
+    const bool rtl = isRightToLeft();
+    for (int i = 1; i < realTabCount(); ++i) {
+        QWidget *closeBtn = tabButton(i, QTabBar::RightSide);
+        if (closeBtn) {
+            const QRect tab = tabRect(i);
+            QRect geom = closeBtn->geometry();
+            const int vMargin = (tab.height() - geom.height()) / 2;
+            const int hMargin = vMargin;
+            geom.moveTop(tab.top() + vMargin);
+            if (rtl) {
+                geom.moveLeft(tab.left() + hMargin);
+            } else {
+                geom.moveRight(tab.right() - hMargin);
+            }
+            closeBtn->setGeometry(geom);
+        }
+    }
+
+    const int lastIndex = count() - 1;
+    if (lastIndex >= 0) {
+        QWidget *button = tabButton(lastIndex, QTabBar::LeftSide);
+        if (button) {
+            const QRect tab = tabRect(lastIndex);
+            QRect buttonGeometry = button->geometry();
+            const int vMargin = (tab.height() - buttonGeometry.height()) / 2;
+            const int hMargin = (tab.width() - buttonGeometry.width()) / 2 - 1;
+            buttonGeometry.moveTop(tab.top() + vMargin);
+            if (rtl) {
+                buttonGeometry.moveRight(tab.right() - hMargin);
+            } else {
+                buttonGeometry.moveLeft(tab.left() + hMargin);
+            }
+            button->setGeometry(buttonGeometry);
+        }
+    }
 }
 
 void TabBar::onTabMoved(int from, int to)
@@ -548,6 +601,7 @@ void TabBar::onTabMoved(int from, int to)
     mp_stackedWidget->insertWidget(to, w_from);
 
     KiwixApp::instance()->saveListOfOpenTabs();
+    adjustTabButtonPositions();
 }
 
 void TabBar::reloadAllWebViews()
