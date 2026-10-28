@@ -7,7 +7,7 @@
 lessThan(QT_MAJOR_VERSION, 6): error("Qt6 is required")
 
 QT       += core gui network
-QT       += webenginewidgets webchannel
+QT       += webenginewidgets webchannel openglwidgets
 QT       += printsupport
 qtHaveModule(texttospeech): QT += texttospeech
 
@@ -237,7 +237,7 @@ unix {
   INSTALLS += mime_file
 }
 
-DEPS_DEFINITION = \"libkiwix >= 14.0.0 libkiwix < 15.0.0 libzim >= 9.0.0 libzim < 10.0.0\"
+DEPS_DEFINITION = \"libkiwix >= 14.0.0 libkiwix < 16.0.0 libzim >= 9.0.0 libzim < 10.0.0\"
 
 PKGCONFIG_CFLAGS = $$system(pkg-config --cflags $$PKGCONFIG_OPTION $$DEPS_DEFINITION)
 
