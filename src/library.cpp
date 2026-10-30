@@ -32,7 +32,7 @@ Library::Library(const QString& libraryDirectory)
     m_libraryDirectory(libraryDirectory)
 {
     auto manager = kiwix::Manager(LibraryManipulator(this));
-    manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"), false);
+    manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.xml"));
     manager.readBookmarkFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
     emit(booksChanged());
 }
