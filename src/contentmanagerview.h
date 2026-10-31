@@ -1,7 +1,7 @@
 #ifndef CONTENTMANAGERVIEW_H
 #define CONTENTMANAGERVIEW_H
 
-#include <QWidget>
+#include <QOpenGLWidget>
 #include "ui_contentmanagerview.h"
 #include "kiwixloader.h"
 
@@ -9,7 +9,7 @@ namespace Ui {
 class contentmanagerview;
 }
 
-class ContentManagerView : public QWidget
+class ContentManagerView : public QOpenGLWidget
 {
     Q_OBJECT
 
