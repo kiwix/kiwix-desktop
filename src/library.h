@@ -44,6 +44,10 @@ public:
     bool isBeingDownloadedByUs(QString path) const;
     void updateBookBeingDownloaded(const QString& bookId, const QString& bookPath);
     std::string getBookFilePath(const QString& bookId) const;
+    // Id of the download of the book (empty if the book isn't being downloaded)
+    std::string getBookDownloadId(const QString& bookId) const;
+    // An empty downloadId means that the book isn't being downloaded anymore
+    void setBookDownloadId(const QString& bookId, const std::string& downloadId);
     void removeBookFromLibraryById(const QString& id);
     void addBookmark(kiwix::Bookmark& bookmark);
     void removeBookmark(const QString& zimId, const QString& url);
@@ -60,6 +64,13 @@ signals:
 private:
     kiwix::LibraryPtr mp_library;
     QString m_libraryDirectory;
+    // BookId -> download id. kiwix::Book doesn't hold the download id,
+    // so it is kept here and saved to a file of its own.
+    QMap<QString, std::string> m_downloadIds;
+    mutable QMutex m_downloadIdsMutex;
+
+    void readDownloadIds();
+    void writeDownloadIds() const;
 friend class LibraryManipulator;
 };
 
