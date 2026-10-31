@@ -11,7 +11,12 @@ ChoiceItem::ChoiceItem(QString key, QString value, QWidget *parent) :
     m_value(value)
 {
     ui->setupUi(this);
-    this->setStyleSheet(getFileContent(":/css/choiceBox.css"));
+    auto applyStyle = [this]() {
+        this->setStyleSheet(themeAwareCss(":/css/choiceBox.css"));
+    };
+    applyStyle();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
     ui->itemLabel->setText(key);
     ui->itemLabel->setToolTip(key);
     connect(ui->closeButton, &QPushButton::clicked, [=](){

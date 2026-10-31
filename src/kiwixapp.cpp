@@ -87,7 +87,7 @@ void KiwixApp::init()
 
     setApplicationName("Kiwix");
     setDesktopFileName("org.kiwix.desktop");
-    setStyleSheet(getFileContent(":/css/style.css"));
+    applyTheme(m_settingsManager.getTheme());
 
     createActions();
     mp_mainWindow = new MainWindow;
@@ -341,7 +341,8 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 #define CREATE_ACTION(ID, TEXT) \
     mpa_actions[ID] = new QAction(TEXT)
 #define CREATE_ACTION_ICON(ID, ICON, TEXT) \
-    mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT);
+    mpa_actions[ID] = new QAction(TEXT); \
+    m_actionIcons[ID] = QStringList{ICON};
 #define SET_SHORTCUT(ID, TEXT, SHORTCUT) \
     mpa_actions[ID]->setShortcut(SHORTCUT); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + QKeySequence(SHORTCUT).toString() + ")" )
@@ -355,10 +356,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
     CREATE_ACTION(ID, TEXT); \
     SET_SHORTCUT(ID, TEXT, SHORTCUT); \
     mpa_actions[ID]->setCheckable(true); \
-    {   QIcon icon; \
-        icon.addPixmap(QPixmap(":/icons/" ON_ICON ".svg"), QIcon::Normal, QIcon::On); \
-        icon.addPixmap(QPixmap(":/icons/" OFF_ICON, ".svg"), QIcon::Normal, QIcon::Off); \
-        mpa_actions[ID]->setIcon(icon); }
+    m_actionIcons[ID] = QStringList{ON_ICON, OFF_ICON}
 #define SET_SHORTCUTS(ID, TEXT, SHORTCUTS) \
     mpa_actions[ID]->setShortcuts(SHORTCUTS); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + SHORTCUTS.first().toString() + ")" )
@@ -453,8 +451,9 @@ void KiwixApp::createActions()
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
         auto action = mpa_actions[ToggleFullscreenAction];
-        action->setIcon(
-            QIcon(checked ? ":/icons/full-screen-exit.svg" : ":/icons/full-screen-enter.svg"));
+        m_actionIcons[ToggleFullscreenAction] =
+            QStringList{checked ? "full-screen-exit" : "full-screen-enter"};
+        action->setIcon(themeAwareIcon(m_actionIcons[ToggleFullscreenAction].first()));
         action->setText(checked ? gt("quit-fullscreen") : gt("set-fullscreen"));
     });
     mpa_actions[ToggleFullscreenAction]->setCheckable(true);
@@ -497,6 +496,23 @@ void KiwixApp::createActions()
     CREATE_ACTION_ICON_SHORTCUT(DonateAction, "donate", gt("donate-to-support-kiwix"),  QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
 
     CREATE_ACTION_ICON_SHORTCUT(ExitAction, "exit", gt("exit"), QKeySequence::Quit);
+
+    updateActionIcons();
+}
+
+void KiwixApp::updateActionIcons()
+{
+    for (auto it = m_actionIcons.cbegin(); it != m_actionIcons.cend(); ++it) {
+        const QStringList& names = it.value();
+        if (names.size() == 1) {
+            mpa_actions[it.key()]->setIcon(themeAwareIcon(names[0]));
+        } else {
+            QIcon icon;
+            icon.addPixmap(QPixmap(themeAwareIconPath(names[0])), QIcon::Normal, QIcon::On);
+            icon.addPixmap(QPixmap(themeAwareIconPath(names[1])), QIcon::Normal, QIcon::Off);
+            mpa_actions[it.key()]->setIcon(icon);
+        }
+    }
 }
 
 void KiwixApp::postInit() {
@@ -506,20 +522,27 @@ void KiwixApp::postInit() {
     connect(&m_library, &Library::booksChanged, this, &KiwixApp::updateNameMapper);
     handleItemsState(TabType::LibraryTab);
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    auto applyTheme = [](SettingsManager::Theme theme) {
-        if (theme == SettingsManager::Theme::Light) {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-        } else if (theme == SettingsManager::Theme::Dark) {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
-        } else {
-            QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
-        }
-    };
+    // Connect theme changes to re-apply the global stylesheet and update Qt's
+    // color scheme hint so that native controls and QtWebEngine follow the
+    // user's choice. applyTheme() handles both setColorScheme (Qt >= 6.8) and
+    // setStyleSheet, so no separate lambda is needed.
+    connect(&m_settingsManager, &SettingsManager::themeChanged,
+            this, &KiwixApp::applyTheme);
 
-    connect(&m_settingsManager, &SettingsManager::themeChanged, this, applyTheme);
-    connect(&m_settingsManager, &SettingsManager::themeChanged, getTabWidget(), &TabBar::reloadAllWebViews);
-    applyTheme(m_settingsManager.getTheme());
+    // Reload all open WebViews whenever the theme changes so that injected
+    // CSS (dark-mode overrides, etc.) is re-applied to already-loaded pages.
+    connect(&m_settingsManager, &SettingsManager::themeChanged,
+            getTabWidget(), &TabBar::reloadAllWebViews);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    // When following the System theme, dynamically react to OS theme changes.
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [this](Qt::ColorScheme) {
+        if (m_settingsManager.getTheme() == SettingsManager::Theme::System) {
+            applyTheme(SettingsManager::Theme::System);
+            emit m_settingsManager.themeChanged(SettingsManager::Theme::System);
+        }
+    });
 #endif
 }
 
@@ -576,6 +599,48 @@ void KiwixApp::printVersions(std::ostream& out) {
   zim::printVersions(out);
 }
 
+bool KiwixApp::isDarkTheme() const
+{
+    auto theme = m_settingsManager.getTheme();
+    if (theme == SettingsManager::Theme::Dark)
+        return true;
+    if (theme == SettingsManager::Theme::Light)
+        return false;
+
+    // System: ask Qt what the platform colour scheme is (Qt >= 6.5).
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+#else
+    return false;
+#endif
+}
+
+QString KiwixApp::getThemeCssPath() const
+{
+    return isDarkTheme() ? QStringLiteral(":/css/style_dark.css")
+                         : QStringLiteral(":/css/style.css");
+}
+
+void KiwixApp::applyTheme(SettingsManager::Theme theme)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    // Update Qt's built-in color scheme hint so that native controls
+    // and QtWebEngine follow the user's choice.
+    if (theme == SettingsManager::Theme::Light) {
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
+    } else if (theme == SettingsManager::Theme::Dark) {
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Dark);
+    } else {
+        QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Unknown);
+    }
+#else
+    Q_UNUSED(theme);
+#endif
+
+    setStyleSheet(getFileContent(getThemeCssPath()));
+    updateActionIcons();
+}
+
 QString getFileContent(QString filePath)
 {
     QFile file(filePath);
@@ -586,6 +651,37 @@ QString getFileContent(QString filePath)
     QString content= QString(file.readAll());
     file.close();
     return content;
+}
+
+QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath)
+{
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    if (!dark)
+        return getFileContent(baseCssPath);
+
+    if (!customDarkPath.isEmpty())
+        return getFileContent(customDarkPath);
+
+    QString darkPath = baseCssPath;
+    darkPath.replace(QStringLiteral(".css"), QStringLiteral("_dark.css"));
+    if (QFile::exists(darkPath))
+        return getFileContent(darkPath);
+
+    return getFileContent(baseCssPath);
+}
+
+QString themeAwareIconPath(const QString &name)
+{
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    const QString lightPath = QStringLiteral(":/icons/") + name + QStringLiteral("-light.svg");
+    if (dark && QFile::exists(lightPath))
+        return lightPath;
+    return QStringLiteral(":/icons/") + name + QStringLiteral(".svg");
+}
+
+QIcon themeAwareIcon(const QString &name)
+{
+    return QIcon(themeAwareIconPath(name));
 }
 
 void KiwixApp::saveListOfOpenTabs()

@@ -1,0 +1,48 @@
+QWidget {
+    background-color: #202124;
+    color: #f0f2f5;
+}
+
+QDialog {
+    border: 2px solid #4a4d52;
+}
+
+QPushButton {
+    opacity: 1;
+    border: none;
+    padding: 3px;
+    color: #5b92e5;
+    outline: 0;
+}
+
+QPushButton:hover {
+    color: #8ab4f8;
+}
+
+QLineEdit {
+    border: 1px solid #4a4d52;
+    padding: 2px;
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+QLabel {
+    margin-left: 8px;
+    margin-top: 4px;
+    color: #f0f2f5;
+}
+
+#IpChooser {
+    border-color: #4a4d52;
+    background-color: #2b2d31;
+    color: #f0f2f5;
+}
+
+#stackedWidget {
+    margin-top: 8px;
+    margin-bottom: 4px;
+}
+
+#KiwixServerButton {
+    margin-right: 8px;
+}
