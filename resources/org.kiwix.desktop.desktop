@@ -8,3 +8,5 @@ Terminal=false
 MimeType=application/org.kiwix.desktop.x-zim;
 Keywords=zim;
 Categories=Education;
+StartupWMClass=org.kiwix.desktop
+StartupNotify=true

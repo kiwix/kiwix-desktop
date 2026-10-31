@@ -1,4 +1,5 @@
 #include <QtGlobal>
+#include <QGuiApplication>
 
 #include "kiwixapp.h"
 
@@ -61,6 +62,8 @@ int main(int argc, char *argv[])
 #endif
     QWebEngineUrlScheme::registerScheme(scheme);
 #endif
+    QGuiApplication::setApplicationName(QStringLiteral("Kiwix"));
+    QGuiApplication::setDesktopFileName(QStringLiteral("org.kiwix.desktop"));
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;

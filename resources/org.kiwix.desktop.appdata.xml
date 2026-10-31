@@ -58,7 +58,7 @@
     </release>
   </releases>
   <content_rating type="oars-1.0" />
-  <launchable type="desktop-id">org.kiwix.desktop</launchable>
+  <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <url type="bugtracker">https://github.com/kiwix/kiwix-desktop</url>

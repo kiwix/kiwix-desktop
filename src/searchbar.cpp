@@ -213,10 +213,8 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
                 this, QOverload<const QModelIndex &>::of(&SearchBarLineEdit::openCompletion),
                 Qt::UniqueConnection);
 
-        connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::highlighted), this,
-                [=](const QModelIndex &index){
-                    setText(index.isValid() ? index.data().toString() : m_searchbarInput);
-                },
+        connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::highlighted),
+                this, &SearchBarLineEdit::onSuggestionHighlighted,
                 Qt::UniqueConnection);
     }
     QLineEdit::focusInEvent(event);
@@ -315,6 +313,11 @@ void SearchBarLineEdit::openCompletion(const QModelIndex &index)
         const bool newTab = app->getTabWidget()->currentWebView() == nullptr;
         QTimer::singleShot(0, [=](){KiwixApp::instance()->openUrl(url, newTab);});
     }
+}
+
+void SearchBarLineEdit::onSuggestionHighlighted(const QModelIndex &index)
+{
+    setText(index.isValid() ? index.data().toString() : m_searchbarInput);
 }
 
 void SearchBarLineEdit::onInitialSuggestions(int)
