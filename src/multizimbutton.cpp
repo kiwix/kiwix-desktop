@@ -4,6 +4,7 @@
 #include <QButtonGroup>
 #include <QRadioButton>
 #include "kiwixapp.h"
+#include "contentmanager.h"
 #include "multizimbutton.h"
 #include "css_constants.h"
 
@@ -32,11 +33,15 @@ MultiZimButton::MultiZimButton(QWidget *parent) :
 
 void MultiZimButton::updateDisplay()
 {
+    const auto library = KiwixApp::instance()->getLibrary();
+    const auto contentManager = KiwixApp::instance()->getContentManager();
+    if (!library || !contentManager)
+        return;
+
     mp_buttonList->clear();
     for (const auto& button : mp_radioButtonGroup->buttons())
         mp_radioButtonGroup->removeButton(button);
 
-    const auto library = KiwixApp::instance()->getLibrary();
     const auto view = KiwixApp::instance()->getTabWidget()->currentWebView();
     QListWidgetItem* currentItem = nullptr;
     QIcon currentIcon;
@@ -44,10 +49,8 @@ void MultiZimButton::updateDisplay()
     const int itemHeight = paddingTopBot + CSS::ZimItemWidget::QLabel::lineHeight;
     for (const auto& bookId : library->getBookIds())
     {
-        try
-        {
-            library->getArchive(bookId);
-        } catch (...) { continue; }
+        if (contentManager->getBookState(bookId) != ContentManager::BookState::AVAILABLE_LOCALLY_AND_HEALTHY)
+            continue;
 
         const QString bookTitle = QString::fromStdString(library->getBookById(bookId).getTitle());
         const QIcon zimIcon = library->getBookIcon(bookId);
