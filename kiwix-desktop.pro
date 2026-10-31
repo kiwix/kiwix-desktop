@@ -199,7 +199,7 @@ static {
 
 unix {
   desktop_file.path = $$PREFIX/share/applications/
-  desktop_file.files = resources/org.kiwix.desktop
+  desktop_file.files = resources/org.kiwix.desktop.desktop
   INSTALLS += desktop_file
 
   metainfo_file.path = $$PREFIX/share/metainfo/
