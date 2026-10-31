@@ -567,6 +567,17 @@ void KiwixApp::updateNameMapper()
   mp_nameMapper->update();
 }
 
+void KiwixApp::printUsage(const char* execName, std::ostream& out) {
+  out << "Usage: " << execName << " [options] zimfile" << std::endl
+      << "The Kiwix Desktop is a viewer/manager of ZIM files for GNU/Linux and Microsoft Windows OSes." << std::endl << std::endl
+      << "Options:" << std::endl
+      << "  -h, --help     Displays help on commandline options." << std::endl
+      << "  --help-all     Displays help, including generic Qt options." << std::endl
+      << "  -v, --version  Displays version information." << std::endl << std::endl
+      << "Arguments:" << std::endl
+      << "  zimfile        The zim file" << std::endl;
+}
+
 void KiwixApp::printVersions(std::ostream& out) {
   out << version.toStdString() << std::endl;
   out << "+ libqt (compile time) " << QT_VERSION_STR << std::endl;
