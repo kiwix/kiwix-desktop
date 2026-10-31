@@ -74,5 +74,30 @@
         <file>icons/check-solid-light.svg</file>
         <file>icons/tick-light.svg</file>
         <file>icons/drop-down-light.svg</file>
+        <file>icons/share-light.svg</file>
+        <file>icons/random-light.svg</file>
+        <file>icons/home-button-light.svg</file>
+        <file>icons/history-left-light.svg</file>
+        <file>icons/history-right-light.svg</file>
+        <file>icons/caret-left-solid-light.svg</file>
+        <file>icons/print-light.svg</file>
+        <file>icons/new-tab-icon-light.svg</file>
+        <file>icons/open-file-light.svg</file>
+        <file>icons/full-screen-enter-light.svg</file>
+        <file>icons/full-screen-exit-light.svg</file>
+        <file>icons/toc-light.svg</file>
+        <file>icons/filter-light.svg</file>
+        <file>icons/reading-list-light.svg</file>
+        <file>icons/reading-list-active-light.svg</file>
+        <file>icons/star-light.svg</file>
+        <file>icons/star-active-light.svg</file>
+        <file>icons/settings-light.svg</file>
+        <file>icons/donate-light.svg</file>
+        <file>icons/exit-light.svg</file>
+        <file>icons/more-light.svg</file>
+        <file>icons/minimize-light.svg</file>
+        <file>icons/close-light.svg</file>
+        <file>icons/search-light.svg</file>
+        <file>icons/copy-light.svg</file>
     </qresource>
 </RCC>
