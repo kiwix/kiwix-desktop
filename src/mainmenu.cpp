@@ -10,7 +10,16 @@ MainMenu::MainMenu(QWidget *parent) :
     QMenu(parent)
 {
     auto app = KiwixApp::instance();
-    setStyle(new MenuProxyStyle());
+
+    auto menuStyle = new MenuProxyStyle();
+    // Qt's Windows 11 style adds these flags to menus while polishing them.
+    // Changing the flags of a menu with its own style (MenuProxyStyle) under
+    // an application style sheet replaces and frees the style sheet style
+    // that is running the polish, which crashes at startup. With the flags
+    // already set, the style's setWindowFlag() calls are no-ops.
+    if (menuStyle->baseStyle()->name() == QLatin1String("windows11"))
+        setWindowFlags(windowFlags() | Qt::FramelessWindowHint | Qt::NoDropShadowWindowHint);
+    setStyle(menuStyle);
 
     ADD_ACTION(KiwixServeAction);
     ADD_ACTION(RandomArticleAction);
