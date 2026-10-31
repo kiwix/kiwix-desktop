@@ -621,7 +621,7 @@ void ContentManager::eraseBookFilesFromComputer(const std::string& bookPath, boo
     const std::string fileGlob = kiwix::getLastPathElement(bookPath) + "*";
 
     if ( fileGlob == "*" ) {
-        std::cerr << MSG_FOR_PREVENTED_RMSTAR_OPERATION << std::endl;
+        logger.error("%s\n", MSG_FOR_PREVENTED_RMSTAR_OPERATION);
         return;
     }
 
