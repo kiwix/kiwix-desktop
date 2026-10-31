@@ -1,6 +1,7 @@
 #include <QtGlobal>
 
 #include "kiwixapp.h"
+#include "useragent.h"
 
 #include <QCommandLineParser>
 #include <iostream>
@@ -61,6 +62,14 @@ int main(int argc, char *argv[])
 #endif
     QWebEngineUrlScheme::registerScheme(scheme);
 #endif
+
+    // Share the desktop User-Agent with libkiwix so that the requests it makes
+    // on our behalf (book illustrations, downloads made through a Downloader)
+    // are identified as Kiwix Desktop too. This has to happen before the first
+    // Downloader is created, because aria2c receives the User-Agent when it is
+    // launched (see kiwix/libkiwix#1364).
+    shareUserAgentWithLibkiwix();
+
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;

@@ -2,6 +2,7 @@
 
 #include "kiwixapp.h"
 #include "kiwixmessagebox.h"
+#include "useragent.h"
 
 #include <QFileDialog>
 #include <QWebEngineSettings>
@@ -57,6 +58,7 @@ KProfile::KProfile(QObject *parent) :
 {
     connect(this, &QWebEngineProfile::downloadRequested, this, &KProfile::startDownload);
     installUrlSchemeHandler("zim", &m_schemeHandler);
+    setHttpUserAgent(kiwixUserAgent());
     settings()->setAttribute(QWebEngineSettings::FullScreenSupportEnabled, true);
 #if QT_VERSION < QT_VERSION_CHECK(5, 13, 0) // Earlier than Qt 5.13
     setRequestInterceptor(new ExternalReqInterceptor(this));
