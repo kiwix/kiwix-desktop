@@ -3,7 +3,9 @@
 #include <QWidgetAction>
 #include <QButtonGroup>
 #include <QRadioButton>
+#include <QFileInfo>
 #include "kiwixapp.h"
+#include "contentmanager.h"
 #include "multizimbutton.h"
 #include "css_constants.h"
 
@@ -37,6 +39,7 @@ void MultiZimButton::updateDisplay()
         mp_radioButtonGroup->removeButton(button);
 
     const auto library = KiwixApp::instance()->getLibrary();
+    const auto contentManager = KiwixApp::instance()->getContentManager();
     const auto view = KiwixApp::instance()->getTabWidget()->currentWebView();
     QListWidgetItem* currentItem = nullptr;
     QIcon currentIcon;
@@ -44,12 +47,26 @@ void MultiZimButton::updateDisplay()
     const int itemHeight = paddingTopBot + CSS::ZimItemWidget::QLabel::lineHeight;
     for (const auto& bookId : library->getBookIds())
     {
-        try
+        if (contentManager)
         {
-            library->getArchive(bookId);
-        } catch (...) { continue; }
+            if (contentManager->getBookState(bookId) != ContentManager::BookState::AVAILABLE_LOCALLY_AND_HEALTHY)
+                continue;
+        }
+        else
+        {
+            try
+            {
+                const auto& book = library->getBookById(bookId);
+                if (!book.isPathValid() || !book.getDownloadId().empty())
+                    continue;
+            } catch (...) { continue; }
+        }
 
-        const QString bookTitle = QString::fromStdString(library->getBookById(bookId).getTitle());
+        const auto& book = library->getBookById(bookId);
+        if (!QFileInfo(QString::fromStdString(book.getPath())).isReadable())
+            continue;
+
+        const QString bookTitle = QString::fromStdString(book.getTitle());
         const QIcon zimIcon = library->getBookIcon(bookId);
         
         const auto item = new QListWidgetItem();
