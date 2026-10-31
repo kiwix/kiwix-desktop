@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 
 #include <QCommandLineParser>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 #ifdef Q_OS_WIN
@@ -34,6 +35,21 @@ bool wasAppStartedFromARemoteDrive()
 
 int main(int argc, char *argv[])
 {
+    for (int i = 1; i < argc; ++i) {
+        if (std::strcmp(argv[i], "-h") == 0 ||
+            std::strcmp(argv[i], "--help") == 0 ||
+            std::strcmp(argv[i], "--help-all") == 0 ||
+            std::strcmp(argv[i], "-?") == 0) {
+            const char* execName = (argc > 0 && argv[0]) ? argv[0] : "kiwix-desktop";
+            KiwixApp::printUsage(execName);
+            return 0;
+        }
+        if (std::strcmp(argv[i], "-v") == 0 ||
+            std::strcmp(argv[i], "--version") == 0) {
+            KiwixApp::printVersions();
+            return 0;
+        }
+    }
 #ifdef Q_OS_WIN
     const bool appWasStartedFromARemoteDrive = wasAppStartedFromARemoteDrive();
     if ( appWasStartedFromARemoteDrive ) {

@@ -111,6 +111,8 @@ public:
     QString getPrevSaveDir() const;
     void restoreTabs();
     void setupDirectoryMonitoring();
+    static void printUsage(const char* execName, std::ostream& out = std::cout);
+    static void printVersions(std::ostream& out = std::cout);
 
 public slots:
     void newTab();
@@ -120,7 +122,6 @@ public slots:
     void printPage();
     void handleItemsState(TabType);
     void updateNameMapper();
-    void printVersions(std::ostream& out = std::cout);
 
 protected:
     void createActions();
