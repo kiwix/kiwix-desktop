@@ -448,6 +448,4 @@ SearchBar::SearchBar(QWidget *parent) :
     connect(KiwixApp::instance()->getContentManager(),
             &ContentManager::booksChanged, &m_multiZimButton,
             &MultiZimButton::updateDisplay);
-    connect(this, &SearchBar::currentTitleChanged, &m_multiZimButton,
-            &MultiZimButton::updateDisplay);
 }
