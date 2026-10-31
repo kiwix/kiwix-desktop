@@ -99,5 +99,6 @@
         <file>icons/close-light.svg</file>
         <file>icons/search-light.svg</file>
         <file>icons/copy-light.svg</file>
+        <file>icons/kiwix-logo-light.svg</file>
     </qresource>
 </RCC>

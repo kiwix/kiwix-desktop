@@ -102,7 +102,7 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     qInfo() << "add widget";
     mp_stackedWidget->addWidget(view);
     mp_stackedWidget->show();
-    int idx = addTab(QIcon(":/icons/kiwix-logo.svg"), "");
+    int idx = addTab(themeAwareIcon("kiwix-logo"), "");
     setTabButton(idx, RightSide, nullptr);
 }
 
@@ -543,6 +543,8 @@ void TabBar::updateIcons()
     for (int i = 0; i < count(); ++i) {
         if (mp_stackedWidget && qobject_cast<SettingsView*>(mp_stackedWidget->widget(i)))
             setTabIcon(i, themeAwareIcon("settings"));
+        if (mp_stackedWidget && qobject_cast<ContentManagerView*>(mp_stackedWidget->widget(i)))
+            setTabIcon(i, themeAwareIcon("kiwix-logo"));
 
         auto closeButton = qobject_cast<QToolButton*>(tabButton(i, QTabBar::RightSide));
         if (closeButton && closeButton->objectName() == "closeTabButton")
