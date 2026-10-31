@@ -49,9 +49,11 @@ ContentManagerSide::ContentManagerSide(QWidget *parent) :
 
     auto searcher = mp_ui->searcher;
     searcher->setPlaceholderText(gt("search-files"));
-    QIcon searchIcon = QIcon(":/icons/search.svg");
-
-    searcher->addAction(searchIcon, QLineEdit::LeadingPosition);
+    QAction *searchIcon = searcher->addAction(themeAwareIcon("search"), QLineEdit::LeadingPosition);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            searchIcon, [searchIcon](SettingsManager::Theme) {
+        searchIcon->setIcon(themeAwareIcon("search"));
+    });
     connect(searcher, &QLineEdit::textChanged, [searcher](){
         KiwixApp::instance()->getContentManager()->setSearch(searcher->text());
     });

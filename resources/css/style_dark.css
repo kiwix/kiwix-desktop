@@ -231,7 +231,6 @@ QTabBar::tab {
     border: 1px solid #4a4d52; /* XXX: duplicated in css_constants.h */
     border-radius: 0;
     padding: 4px; /* XXX: duplicated in css_constants.h */
-    padding-top: 6px;
     background-color: #202124;
     color: #9aa0a6;
 }
@@ -242,15 +241,16 @@ QTabBar::tab:selected {
     color: #f0f2f5;
 }
 
-QTabBar::tab:first {
-    padding-top: 6px;
-    padding-left: 5px;
+QTabBar::tab:last {
+    border: 1px solid transparent;
+    border-top: 1px solid #4a4d52;
 }
 
 #closeTabButton, #newTabButton {
     font-size: 30px;
     width: 30px; min-width: 30px; max-width: 30px;
     height: 30px; min-height:30px; max-height:30px;
+    border: 1px solid transparent;
     border-radius: 3px;
 }
 

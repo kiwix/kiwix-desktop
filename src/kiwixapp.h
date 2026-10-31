@@ -14,6 +14,7 @@
 #include <QtSingleApplication>
 #include <QApplication>
 #include <QErrorMessage>
+#include <QIcon>
 #include <QMessageBox>
 #include <QTranslator>
 #include <kiwix/name_mapper.h>
@@ -158,8 +159,12 @@ private:
     QSettings* mp_session;
 
     QAction*     mpa_actions[MAX_ACTION];
+    // Icon names of the actions: one name, or the "on" and "off" names of a
+    // checkable action. Kept so that the icons can follow theme changes.
+    QMap<Actions, QStringList> m_actionIcons;
 
     QString findLibraryDirectory();
+    void updateActionIcons();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
 };
 
@@ -174,6 +179,15 @@ QString gt(const QString &key);
  * @return Content of whichever file matches the effective current theme.
  */
 QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath = QString());
+/**
+ * @brief Returns the Qt resource path of an icon for the effective theme.
+ *
+ * @param name  Icon name, without directory or extension (e.g. "close").
+ * @return ":/icons/<name>-light.svg" in dark theme if it exists,
+ *         ":/icons/<name>.svg" otherwise.
+ */
+QString themeAwareIconPath(const QString &name);
+QIcon themeAwareIcon(const QString &name);
 #define _STR(...) # __VA_ARGS__
 #define STR(X) _STR(X)
 static QString version = STR(VERSION);

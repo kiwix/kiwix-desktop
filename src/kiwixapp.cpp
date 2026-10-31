@@ -341,7 +341,8 @@ void KiwixApp::setMonitorDir(const QString &dir) {
 #define CREATE_ACTION(ID, TEXT) \
     mpa_actions[ID] = new QAction(TEXT)
 #define CREATE_ACTION_ICON(ID, ICON, TEXT) \
-    mpa_actions[ID] = new QAction(QIcon(":/icons/" ICON ".svg"), TEXT);
+    mpa_actions[ID] = new QAction(TEXT); \
+    m_actionIcons[ID] = QStringList{ICON};
 #define SET_SHORTCUT(ID, TEXT, SHORTCUT) \
     mpa_actions[ID]->setShortcut(SHORTCUT); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + QKeySequence(SHORTCUT).toString() + ")" )
@@ -355,10 +356,7 @@ void KiwixApp::setMonitorDir(const QString &dir) {
     CREATE_ACTION(ID, TEXT); \
     SET_SHORTCUT(ID, TEXT, SHORTCUT); \
     mpa_actions[ID]->setCheckable(true); \
-    {   QIcon icon; \
-        icon.addPixmap(QPixmap(":/icons/" ON_ICON ".svg"), QIcon::Normal, QIcon::On); \
-        icon.addPixmap(QPixmap(":/icons/" OFF_ICON, ".svg"), QIcon::Normal, QIcon::Off); \
-        mpa_actions[ID]->setIcon(icon); }
+    m_actionIcons[ID] = QStringList{ON_ICON, OFF_ICON}
 #define SET_SHORTCUTS(ID, TEXT, SHORTCUTS) \
     mpa_actions[ID]->setShortcuts(SHORTCUTS); \
     mpa_actions[ID]->setToolTip(TEXT + " (" + SHORTCUTS.first().toString() + ")" )
@@ -453,8 +451,9 @@ void KiwixApp::createActions()
     connect(mpa_actions[ToggleFullscreenAction], &QAction::toggled,
             this, [=](bool checked) {
         auto action = mpa_actions[ToggleFullscreenAction];
-        action->setIcon(
-            QIcon(checked ? ":/icons/full-screen-exit.svg" : ":/icons/full-screen-enter.svg"));
+        m_actionIcons[ToggleFullscreenAction] =
+            QStringList{checked ? "full-screen-exit" : "full-screen-enter"};
+        action->setIcon(themeAwareIcon(m_actionIcons[ToggleFullscreenAction].first()));
         action->setText(checked ? gt("quit-fullscreen") : gt("set-fullscreen"));
     });
     mpa_actions[ToggleFullscreenAction]->setCheckable(true);
@@ -497,6 +496,23 @@ void KiwixApp::createActions()
     CREATE_ACTION_ICON_SHORTCUT(DonateAction, "donate", gt("donate-to-support-kiwix"),  QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
 
     CREATE_ACTION_ICON_SHORTCUT(ExitAction, "exit", gt("exit"), QKeySequence::Quit);
+
+    updateActionIcons();
+}
+
+void KiwixApp::updateActionIcons()
+{
+    for (auto it = m_actionIcons.cbegin(); it != m_actionIcons.cend(); ++it) {
+        const QStringList& names = it.value();
+        if (names.size() == 1) {
+            mpa_actions[it.key()]->setIcon(themeAwareIcon(names[0]));
+        } else {
+            QIcon icon;
+            icon.addPixmap(QPixmap(themeAwareIconPath(names[0])), QIcon::Normal, QIcon::On);
+            icon.addPixmap(QPixmap(themeAwareIconPath(names[1])), QIcon::Normal, QIcon::Off);
+            mpa_actions[it.key()]->setIcon(icon);
+        }
+    }
 }
 
 void KiwixApp::postInit() {
@@ -622,6 +638,7 @@ void KiwixApp::applyTheme(SettingsManager::Theme theme)
 #endif
 
     setStyleSheet(getFileContent(getThemeCssPath()));
+    updateActionIcons();
 }
 
 QString getFileContent(QString filePath)
@@ -651,6 +668,20 @@ QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath)
         return getFileContent(darkPath);
 
     return getFileContent(baseCssPath);
+}
+
+QString themeAwareIconPath(const QString &name)
+{
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    const QString lightPath = QStringLiteral(":/icons/") + name + QStringLiteral("-light.svg");
+    if (dark && QFile::exists(lightPath))
+        return lightPath;
+    return QStringLiteral(":/icons/") + name + QStringLiteral(".svg");
+}
+
+QIcon themeAwareIcon(const QString &name)
+{
+    return QIcon(themeAwareIconPath(name));
 }
 
 void KiwixApp::saveListOfOpenTabs()

@@ -427,7 +427,12 @@ SearchBar::SearchBar(QWidget *parent) :
 {
     QLabel* searchIconLabel = new QLabel;
     searchIconLabel->setObjectName("searchIcon");
-    searchIconLabel->setPixmap(QIcon(":/icons/search.svg").pixmap(QSize(27, 27)));
+    auto updateSearchIcon = [searchIconLabel]() {
+        searchIconLabel->setPixmap(themeAwareIcon("search").pixmap(QSize(27, 27)));
+    };
+    updateSearchIcon();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            searchIconLabel, [updateSearchIcon](SettingsManager::Theme) { updateSearchIcon(); });
 
     setIconSize(QSize(32, 32));
 
