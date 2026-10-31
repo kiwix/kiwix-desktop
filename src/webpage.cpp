@@ -1,5 +1,6 @@
 #include "webpage.h"
 
+#include <QDebug>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -14,11 +15,20 @@ WebPage::WebPage(QObject *parent) :
     action(QWebEnginePage::Reload)->setVisible(false);
 }
 
-bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType /*type*/, bool /*isMainFrame*/)
+bool WebPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::NavigationType type, bool /*isMainFrame*/)
 {
-    if (url.scheme() != "zim") {
-        QDesktopServices::openUrl(url);
-        return false;
+    if (url.scheme() == "zim") {
+        return true;
     }
-    return true;
+
+    switch (type) {
+    case QWebEnginePage::NavigationTypeLinkClicked:
+    case QWebEnginePage::NavigationTypeFormSubmitted:
+        QDesktopServices::openUrl(url);
+        break;
+    default:
+        qDebug() << "Blocked navigation request to URL: " << url.toString();
+        break;
+    }
+    return false;
 }
