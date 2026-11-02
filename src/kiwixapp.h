@@ -142,7 +142,6 @@ private:
 
     QAction*     mpa_actions[MAX_ACTION];
 
-    QString findLibraryDirectory();
     void loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory);
 };
 
