@@ -1,10 +1,8 @@
 #!/usr/bin/make -f
-export QT_SELECT=qt6
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-	qmake6 --version
 	dh $@
 
 override_dh_auto_configure:
-	qmake6 PREFIX=/usr CONFIG+=release
+	dh_auto_configure --buildsystem=qmake6 PREFIX=/usr CONFIG+=release
