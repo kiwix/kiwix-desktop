@@ -241,8 +241,17 @@ QString TabBar::currentZimId()
 
 QString TabBar::currentArticleUrl()
 {
-    if (WebView *w = currentWebView())
-        return w->url().path();
+    if (WebView *w = currentWebView()) {
+        const QUrl &u = w->url();
+        if (u.isEmpty() || u.scheme() != "zim") {
+            return "";
+        }
+        QString res = u.toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
+        if (res.isEmpty()) {
+            res = "/";
+        }
+        return res;
+    }
     return "";
 }
 
