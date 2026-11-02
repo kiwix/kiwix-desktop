@@ -99,7 +99,7 @@ ZimView::ZimView(TabBar *tabBar, QWidget *parent)
                 } else {
                     auto link = url;
                     if (url.startsWith("zim://")) {
-                        link = QUrl(url).path();
+                        link = QUrl(url).toString(QUrl::RemoveScheme | QUrl::RemoveAuthority);
                     }
 
                     /* because we use QWebEnginePage::linkHovered signal,
