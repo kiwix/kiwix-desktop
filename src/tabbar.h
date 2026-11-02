@@ -71,6 +71,7 @@ signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
     void tabDisplayed(TabType tabType);
     void currentTitleChanged(const QString& title);
+    void currentUrlChanged(const QUrl& url);
     void tabRemovedSignal(int index);
     void tabInsertedSignal(int index);
     void sizeChanged();
@@ -82,6 +83,7 @@ public slots:
     void reloadAllWebViews();
     void fullScreenRequested(QWebEngineFullScreenRequest request);
     void on_webview_titleChanged(const QString& title);
+    void on_webview_urlChanged(const QUrl& url);
     void moveToNextTab();
     void moveToPreviousTab();
     void scrollNextTab();

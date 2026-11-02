@@ -83,6 +83,7 @@ public:
 
 signals:
     void currentTitleChanged(const QString &title);
+    void currentUrlChanged(const QUrl &url);
 
 private:
     SearchBarLineEdit m_searchBarLineEdit;
