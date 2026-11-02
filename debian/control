@@ -5,7 +5,6 @@ Maintainer: Kiwix team <kiwix@kiwix.org>
 Build-Depends: debhelper-compat (= 13),
  pkgconf,
  qmake6,
- qtchooser,
  qt6-base-dev,
  qt6-base-dev-tools,
  qt6-webengine-dev,
