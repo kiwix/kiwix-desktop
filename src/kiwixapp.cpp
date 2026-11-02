@@ -35,7 +35,7 @@ const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_profile(),
-      m_libraryDirectory(findLibraryDirectory()),
+      m_libraryDirectory(getDataDirectory()),
       m_library(m_libraryDirectory),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
@@ -148,36 +148,6 @@ void KiwixApp::newTab()
     searchBarLineEdit.clear();
     searchBarLineEdit.clearSuggestions();
     searchBarLineEdit.hideSuggestions();
-}
-
-QString KiwixApp::findLibraryDirectory()
-{
-    auto dataDir = getDataDirectory();
-    if (isPortableMode())
-        return dataDir;
-
-    auto libraryFile = QFileInfo(dataDir, "library.xml");
-    if (libraryFile.exists())
-        return dataDir;
-
-    // Check if this is a pre-release version with wrong directory.
-    auto oldDataDir = QDir(dataDir);
-    oldDataDir.cdUp();
-    libraryFile = QFileInfo(oldDataDir, "library.xml");
-    if (libraryFile.exists()) {
-        // We have to move all zim files and xml file to the new dataDir
-        for (auto& fileInfo: oldDataDir.entryInfoList({"*.zim", "library*.xml"})) {
-            auto newFileInfo = QFileInfo(dataDir, fileInfo.fileName());
-            QFile::rename(fileInfo.absoluteFilePath(), newFileInfo.absoluteFilePath());
-        }
-        // Aria2 stores information about the current download using absolute path.
-        // Let's remove everything. User will lose its ongoing download but it should be pretty rare.
-        for (auto& fileInfo: oldDataDir.entryInfoList({"*.aria2", "*.meta4", "kiwix.session"}))
-            QFile::remove(fileInfo.absoluteFilePath());
-    }
-
-    // This is a first launch
-    return dataDir;
 }
 
 void KiwixApp::restoreTabs()
