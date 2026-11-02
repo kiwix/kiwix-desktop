@@ -144,20 +144,12 @@ environment variable:
 LD_LIBRARY_PATH="<...>/BUILD_native_dyn/INSTALL/lib/x86_64-linux-gnu"
 ```
 
-Debug rendering of a ZIM
-------------------------
+Architecture & Contributing
+---------------------------
 
-`kiwix-desktop` uses [Qt6
-WebEngine](https://doc.qt.io/qt-6/qtwebengine-overview.html) to render
-ZIM content, relying on a custom `zim:` protocol to expose the ZIM
-data to the Web engine.
+For an in-depth explanation of Kiwix Desktop's architecture (including the `zim://` protocol scheme handler, QtWebEngine integration, and how to debug ZIM rendering via Chrome DevTools), please refer to the **[Architecture and Contributor Guide](docs/ARCHITECTURE.md)**.
 
-To debug issues related to WebEngine, follow these steps:
-
-1. Launch `kiwix-desktop` with the environment variable `QTWEBENGINE_REMOTE_DEBUGGING=<port>` set (replace `<port>` with an available local port number).
-2. Open the desired ZIM file in the `kiwix-desktop` user interface.
-3. In a Chromium-based browser, go to: `http://localhost:<port>`.
-4. This opens the remote debugging UI. Use it to access Chrome DevTools connected to the ZIM webpage rendered by WebEngine.
+For guidelines on contributing code, reporting bugs, and submitting pull requests, see **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ## Communication
 
