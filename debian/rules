@@ -3,6 +3,8 @@ export QT_SELECT=qt6
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-	qtchooser -install -f qt6 $$(which qmake6)
-	qmake --version
+	qmake6 --version
 	dh $@
+
+override_dh_auto_configure:
+	qmake6 PREFIX=/usr CONFIG+=release
