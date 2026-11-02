@@ -6,7 +6,7 @@
 #include "ui_contentmanagerview.h"
 
 ContentManagerView::ContentManagerView(QWidget *parent)
-    : QWidget(parent), mp_ui(new Ui::contentmanagerview)
+    : QOpenGLWidget(parent), mp_ui(new Ui::contentmanagerview)
 {
     mp_ui->setupUi(this);
     mp_ui->m_view->setSortingEnabled(true);
