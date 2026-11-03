@@ -49,7 +49,11 @@ QString convertToUnits(double bytes)
         unitIndex++;
     }
 
-    const auto preciseBytes = QString::number(bytes, 'g', 3);
+    // With 3 significant digits, 'g' switches to scientific notation
+    // (e.g. "1e+03 KB") for values from 999.5 up to 1024.
+    const auto preciseBytes = bytes < 999.5
+                            ? QString::number(bytes, 'g', 3)
+                            : QString::number(bytes, 'f', 0);
     return preciseBytes + " " + units[unitIndex];
 }
 
