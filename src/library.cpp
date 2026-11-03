@@ -27,19 +27,23 @@ class LibraryManipulator: public kiwix::LibraryManipulator {
     Library* mp_library;
 };
 
-Library::Library(const QString& libraryDirectory)
-  : mp_library(kiwix::Library::create()),
-    m_libraryDirectory(libraryDirectory)
+Library::Library()
+  : mp_library(kiwix::Library::create())
 {
-    auto manager = kiwix::Manager(LibraryManipulator(this));
-    manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.opds"));
-    manager.readBookmarkFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
-    emit(booksChanged());
 }
 
 Library::~Library()
 {
     save();
+}
+
+void Library::load(const QString& libraryDirectory)
+{
+    m_libraryDirectory = libraryDirectory;
+    auto manager = kiwix::Manager(LibraryManipulator(this));
+    manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.opds"));
+    manager.readBookmarkFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
+    emit(booksChanged());
 }
 
 QString Library::openBookFromPath(const QString &zimPath)
@@ -209,6 +213,9 @@ void Library::removeBookmark(const QString &zimId, const QString &url)
 
 void Library::save()
 {
+    if (m_libraryDirectory.isEmpty()) {
+        return;
+    }
     mp_library->writeAsOPDS(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.opds"));
     mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
 }

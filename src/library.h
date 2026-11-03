@@ -29,8 +29,9 @@ class Library : public QObject
 public:
     typedef QSet<QString> QStringSet;
 
-    Library(const QString& libraryDirectory);
+    Library();
     virtual ~Library();
+    void load(const QString& libraryDirectory);
     QString openBookFromPath(const QString& zimPath);
     std::shared_ptr<zim::Archive> getArchive(const QString& zimId);
     std::shared_ptr<zim::Searcher> getSearcher(const QString& zimId);
