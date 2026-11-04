@@ -56,7 +56,7 @@ TopWidget::TopWidget(QWidget *parent) :
 
     QMenu* menu = new MainMenu();
     QToolButton *toolButton = new QToolButton(menu);
-    toolButton->setIcon(QIcon(":/icons/more.svg"));
+    toolButton->setIcon(themeAwareIcon("more"));
     toolButton->setPopupMode(QToolButton::InstantPopup);
     toolButton->setToolTip(gt("main-menu"));
     toolButton->setMenu(menu);
@@ -65,13 +65,21 @@ TopWidget::TopWidget(QWidget *parent) :
     setContextMenuPolicy( Qt::PreventContextMenu );
 
 #if !SYSTEMTITLEBAR
-    addAction(QIcon(":/icons/minimize.svg"), "minimize", parent, SLOT(showMinimized()));
+    QAction *minimizeAction = addAction(themeAwareIcon("minimize"), "minimize", parent, SLOT(showMinimized()));
 #endif
     addAction(app->getAction(KiwixApp::ToggleFullscreenAction));
     widgetForAction(app->getAction(KiwixApp::ToggleFullscreenAction))->setObjectName("fullScreenButton");
 #if !SYSTEMTITLEBAR
-    addAction(QIcon(":/icons/close.svg"), "close", parent, SLOT(close()));
+    QAction *closeAction = addAction(themeAwareIcon("close"), "close", parent, SLOT(close()));
 #endif
+    connect(app->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [=](SettingsManager::Theme) {
+        toolButton->setIcon(themeAwareIcon("more"));
+#if !SYSTEMTITLEBAR
+        minimizeAction->setIcon(themeAwareIcon("minimize"));
+        closeAction->setIcon(themeAwareIcon("close"));
+#endif
+    });
     setMovable(false);
 }
 

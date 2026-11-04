@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>css/_settingsManager.css</file>
+        <file>css/_settingsManager_dark.css</file>
     </qresource>
 </RCC>

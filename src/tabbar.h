@@ -66,6 +66,7 @@ protected:
 
 private:
     void adjustTabButtonPositions();
+    void updateIcons();
 
 signals:
     void webActionEnabledChanged(QWebEnginePage::WebAction action, bool enabled);
