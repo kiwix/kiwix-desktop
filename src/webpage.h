@@ -2,6 +2,7 @@
 #define WEBPAGE_H
 
 #include <QWebEnginePage>
+#include <QUrl>
 
 class WebPage : public QWebEnginePage
 {
@@ -11,6 +12,9 @@ public:
 
 protected:
     bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame);
+
+private slots:
+    void handleFeaturePermissionRequested(const QUrl &origin, Feature feature);
 };
 
 #endif // WEBPAGE_H
