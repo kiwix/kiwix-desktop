@@ -3,6 +3,11 @@
 
 #include <QWebEnginePage>
 #include <QUrl>
+#include <QtGlobal>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+#include <QWebEnginePermission>
+#endif
 
 class WebPage : public QWebEnginePage
 {
@@ -14,7 +19,11 @@ protected:
     bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame);
 
 private slots:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+    void handlePermissionRequested(const QWebEnginePermission &permission);
+#else
     void handleFeaturePermissionRequested(const QUrl &origin, Feature feature);
+#endif
 };
 
 #endif // WEBPAGE_H
