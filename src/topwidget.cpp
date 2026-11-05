@@ -58,6 +58,7 @@ TopWidget::TopWidget(QWidget *parent) :
     QToolButton *toolButton = new QToolButton(menu);
     toolButton->setIcon(QIcon(":/icons/more.svg"));
     toolButton->setPopupMode(QToolButton::InstantPopup);
+    toolButton->setAccessibleName(gt("main-menu"));
     toolButton->setToolTip(gt("main-menu"));
     toolButton->setMenu(menu);
     addWidget(toolButton);
