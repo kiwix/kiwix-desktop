@@ -1,4 +1,5 @@
 #include <QtGlobal>
+#include <QGuiApplication>
 
 #include "kiwixapp.h"
 #include "useragent.h"
@@ -63,7 +64,6 @@ int main(int argc, char *argv[])
 #endif
     QWebEngineUrlScheme::registerScheme(scheme);
 #endif
-
     // Share the desktop User-Agent with libkiwix so that the requests it makes
     // on our behalf (book illustrations, downloads made through a Downloader)
     // are identified as Kiwix Desktop too. This has to happen before the first
@@ -71,6 +71,11 @@ int main(int argc, char *argv[])
     // launched (see kiwix/libkiwix#1364).
     shareUserAgentWithLibkiwix();
 
+    // The application ID is "org.kiwix.desktop". Qt's setDesktopFileName() strips
+    // a trailing ".desktop" suffix (assuming it is a file extension), so passing
+    // "org.kiwix.desktop.desktop" ensures the effective identity is "org.kiwix.desktop",
+    // matching the installed "org.kiwix.desktop.desktop" file and AppStream metadata.
+    QGuiApplication::setDesktopFileName(QStringLiteral("org.kiwix.desktop.desktop"));
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;

@@ -68,6 +68,7 @@ private slots:
     void onInitialSuggestions(int);
     void onAdditionalSuggestions(int start);
     void fetchSuggestions(NewSuggestionHandlerFuncPtr callback);
+    void onSuggestionHighlighted(const QModelIndex &index);
 
     QModelIndex getDefaulSuggestionIndex() const;
     QRect getCompleterRect() const;
