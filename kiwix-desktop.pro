@@ -44,7 +44,7 @@ QMAKE_LFLAGS += -std=c++17
     QMAKE_LFLAGS += -Wl,-rpath-link,\'$$PREFIX/lib/x86_64-linux-gnu\'
 }
 
-# Also change resources/org.kiwix.desktop.appdata.xml
+# Also change resources/org.kiwix.desktopapp.appdata.xml
 DEFINES += VERSION="2.5.1"
 
 # The following define makes your compiler emit warnings if you use
@@ -201,11 +201,11 @@ static {
 
 unix {
   desktop_file.path = $$PREFIX/share/applications/
-  desktop_file.files = resources/org.kiwix.desktop.desktop
+  desktop_file.files = resources/org.kiwix.desktopapp.desktop
   INSTALLS += desktop_file
 
   metainfo_file.path = $$PREFIX/share/metainfo/
-  metainfo_file.files = resources/org.kiwix.desktop.appdata.xml
+  metainfo_file.files = resources/org.kiwix.desktopapp.appdata.xml
   INSTALLS += metainfo_file
 
   app_icon24.path = $$PREFIX/share/icons/hicolor/24x24/apps

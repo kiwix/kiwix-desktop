@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
-  <id>org.kiwix.desktop</id>
+  <id>org.kiwix.desktopapp</id>
   <name>Kiwix</name>
   <summary>View offline content</summary>
   <developer_name>The Kiwix Foundation</developer_name>
@@ -58,7 +58,7 @@
     </release>
   </releases>
   <content_rating type="oars-1.0" />
-  <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
+  <launchable type="desktop-id">org.kiwix.desktopapp.desktop</launchable>:resources/org.kiwix.desktopapp.appdata.xml
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <url type="bugtracker">https://github.com/kiwix/kiwix-desktop</url>

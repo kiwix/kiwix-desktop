@@ -71,11 +71,7 @@ int main(int argc, char *argv[])
     // launched (see kiwix/libkiwix#1364).
     shareUserAgentWithLibkiwix();
 
-    // The application ID is "org.kiwix.desktop". Qt's setDesktopFileName() strips
-    // a trailing ".desktop" suffix (assuming it is a file extension), so passing
-    // "org.kiwix.desktop.desktop" ensures the effective identity is "org.kiwix.desktop",
-    // matching the installed "org.kiwix.desktop.desktop" file and AppStream metadata.
-    QGuiApplication::setDesktopFileName(QStringLiteral("org.kiwix.desktop.desktop"));
+    QGuiApplication::setDesktopFileName(QStringLiteral("org.kiwix.desktopapp"));
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;
