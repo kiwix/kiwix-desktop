@@ -35,6 +35,11 @@ bool wasAppStartedFromARemoteDrive()
 
 int main(int argc, char *argv[])
 {
+    qputenv("QT_ACCESSIBILITY", QByteArray("1"));
+#ifdef Q_OS_LINUX
+    qputenv("QT_LINUX_ACCESSIBILITY_ALWAYS_ON", QByteArray("1"));
+#endif
+
 #ifdef Q_OS_WIN
     const bool appWasStartedFromARemoteDrive = wasAppStartedFromARemoteDrive();
     if ( appWasStartedFromARemoteDrive ) {
@@ -44,6 +49,15 @@ int main(int argc, char *argv[])
 	qputenv("QTWEBENGINE_CHROMIUM_FLAGS", QByteArray("--no-sandbox"));
     }
 #endif
+
+    QByteArray chromiumFlags = qgetenv("QTWEBENGINE_CHROMIUM_FLAGS");
+    if (!chromiumFlags.contains("--force-renderer-accessibility")) {
+        if (!chromiumFlags.isEmpty()) {
+            chromiumFlags.append(' ');
+        }
+        chromiumFlags.append("--force-renderer-accessibility");
+        qputenv("QTWEBENGINE_CHROMIUM_FLAGS", chromiumFlags);
+    }
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
