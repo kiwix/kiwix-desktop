@@ -184,6 +184,10 @@ QMenu::item:disabled {
     color: gray; 
 }
 
+MainMenu {
+    icon-size: 25px;
+}
+
 MainMenu::indicator {
     color: #666666;
     width: 13px;

@@ -161,7 +161,6 @@ HEADERS += \
     src/localkiwixserver.h \
     src/fullscreenwindow.h \
     src/fullscreennotification.h \
-    src/menuproxystyle.h \
     src/zimview.h \
     src/portutils.h \
     src/css_constants.h \
