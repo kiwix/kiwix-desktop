@@ -209,5 +209,9 @@
 	"save-or-open-text": "Kiwix 应该如何处理这个文件？",
 	"speed": "速度",
 	"increase-tts-speed": "提高 TTS 速度。",
-	"decrease-tts-speed": "降低 TTS 速度。"
+	"decrease-tts-speed": "降低 TTS 速度。",
+	"theme": "主题",
+	"theme-system": "系统",
+	"theme-light": "浅色",
+	"theme-dark": "深色"
 }
