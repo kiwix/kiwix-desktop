@@ -6,6 +6,7 @@
 			"Pyscowicz",
 			"Rönttönen",
 			"Samoasambia",
+			"Wikipeedikko",
 			"Yupik"
 		]
 	},
@@ -154,5 +155,9 @@
 	"select-read-voice": "Valitse lukuääni",
 	"select-read-language": "Valitse lukukieli",
 	"save-or-open": "Tallenna tai avaa tiedosto",
-	"speed": "Nopeus"
+	"speed": "Nopeus",
+	"theme": "Teema",
+	"theme-system": "Järjestelmä",
+	"theme-light": "Vaalea",
+	"theme-dark": "Tumma"
 }
