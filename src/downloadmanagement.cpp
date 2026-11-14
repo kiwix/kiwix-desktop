@@ -369,15 +369,26 @@ void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
     }
 
     QStorageInfo storage(targetDir);
-    auto bytesAvailable = storage.bytesAvailable();
-    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        throw KiwixAppError(gt("download-storage-error"),
-                            gt("download-storage-error-text"));
-    }
 
-    if ( book.getSize() > getMaxFileSize(storage) ) {
-        throw KiwixAppError(gt("download-storage-error"),
-                            gt("download-exceeds-max-file-size"));
+    // bytesAvailable() may return -1 when the storage info is not valid or
+    // cannot be read - this happens in sandboxed environments (e.g. Flatpak)
+    // when the target directory is on an external/removable drive whose mount
+    // point is not visible inside the sandbox's mount namespace.
+    // In that case QStorageInfo::isValid() or isReady() will be false.
+    // We already verified above that the directory exists and is writable, so
+    // when storage info is unavailable we skip the quota check and trust the
+    // filesystem rather than showing a spurious "not enough storage" error.
+    if ( storage.isValid() && storage.isReady() ) {
+        const auto bytesAvailable = storage.bytesAvailable();
+        if ( book.getSize() > (unsigned long long) bytesAvailable ) {
+            throw KiwixAppError(gt("download-storage-error"),
+                                gt("download-storage-error-text"));
+        }
+
+        if ( book.getSize() > getMaxFileSize(storage) ) {
+            throw KiwixAppError(gt("download-storage-error"),
+                                gt("download-exceeds-max-file-size"));
+        }
     }
 }
 
