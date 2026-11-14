@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component type="desktop">
+<component type="desktop-application">
   <id>org.kiwix.desktop</id>
   <name>Kiwix</name>
   <summary>View offline content</summary>
-  <developer_name>The Kiwix Foundation</developer_name>
+  <developer id="org.kiwix">
+    <name>The Kiwix Foundation</name>
+  </developer>
   <description>
     <p>
-      Kiwix is dedicated to providing offline access to educational content.
-    </p><p>
-      Kiwix makes knowledge available to people with no or limited Internet access.
+      Kiwix is dedicated to providing offline access to educational content, making knowledge available to people with no or limited Internet access.
     </p><p>
       Kiwix is an offline reader for content like Wikipedia, Project Gutenberg, TED Talks, IFixit... and thousands of others.
     </p><p>
@@ -23,15 +23,16 @@
   </description>
   <releases>
     <release version="2.5.1" date="2026-01-04">
+      <url type="details">https://github.com/kiwix/kiwix-desktop/releases/tag/2.5.1</url>
       <description>
         <p>Most important improvements:</p>
         <ul>
           <li>Fix about with proper version number</li>
         </ul>
-        <p>Complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.5.1.</p>
       </description>
     </release>
     <release version="2.5.0" date="2025-12-26">
+      <url type="details">https://github.com/kiwix/kiwix-desktop/releases/tag/2.5.0</url>
       <description>
         <p>Most important improvements:</p>
         <ul>
@@ -40,10 +41,10 @@
           <li>Speed control option for Text-to-Speech module</li>
           <li>Better suggestions rendering</li>
         </ul>
-        <p>Complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.5.0.</p>
       </description>
     </release>
     <release version="2.4.1" date="2024-12-21">
+      <url type="details">https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1</url>
       <description>
         <p>Most important improvements:</p>
         <ul>
@@ -53,12 +54,11 @@
           <li>New table of content</li>
           <li>Revamped search box</li>
         </ul>
-        <p>Complete changelog can be found at https://github.com/kiwix/kiwix-desktop/releases/tag/2.4.1.</p>
       </description>
     </release>
   </releases>
   <content_rating type="oars-1.0" />
-  <launchable type="desktop-id">org.kiwix.desktop</launchable>
+  <launchable type="desktop-id">org.kiwix.desktop.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <url type="bugtracker">https://github.com/kiwix/kiwix-desktop</url>
@@ -69,21 +69,27 @@
   <screenshots>
     <screenshot type="default">
       <image>https://upload.wikimedia.org/wikipedia/commons/b/b4/Kiwix-desktop-2.4.1-article-with-toc.png</image>
+      <caption>Kiwix Desktop displaying an article with table of contents</caption>
     </screenshot>
     <screenshot>
       <image>https://upload.wikimedia.org/wikipedia/commons/6/6c/Kiwix-desktop-2.4.1-multitab-gutenberg.png</image>
+      <caption>Multiple tabs displaying Project Gutenberg books</caption>
     </screenshot>
     <screenshot>
       <image>https://upload.wikimedia.org/wikipedia/commons/8/81/Kiwix-desktop-2.4.1-library-med.png</image>
+      <caption>Library view for managing and downloading offline content</caption>
     </screenshot>
     <screenshot>
       <image>https://upload.wikimedia.org/wikipedia/commons/a/ac/Kiwix-desktop-2.4.1-ted-bookmarks.png</image>
+      <caption>Bookmarking TED talks in Kiwix Desktop</caption>
     </screenshot>
     <screenshot>
       <image>https://upload.wikimedia.org/wikipedia/commons/2/2e/Kiwix-desktop-2.4.1-wiktionary-search.png</image>
+      <caption>Searching entries in Wiktionary</caption>
     </screenshot>
     <screenshot>
       <image>https://upload.wikimedia.org/wikipedia/commons/3/39/Kiwix-desktop-2.4.1-kiwix-server.png</image>
+      <caption>Hosting content on local network with Kiwix Server</caption>
     </screenshot>
   </screenshots>
 </component>
