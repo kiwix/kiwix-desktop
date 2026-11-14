@@ -1,3 +1,9 @@
+kiwix-desktop 2.6.0
+===================
+
+Compilation, CI, CD:
+* FIX: Desktop entry name and AppStream metadata for Flathub publishing (#1450)
+
 kiwix-destkop 2.5.1
 ===================
 
