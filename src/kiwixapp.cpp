@@ -40,7 +40,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
       mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
-      m_server(m_library.getKiwixLibrary(), mp_nameMapper),
+      mp_server(nullptr),
       mp_session(nullptr)
 {
     /* Place session file in our global library path */
@@ -131,7 +131,9 @@ void KiwixApp::setupDirectoryMonitoring()
 
 KiwixApp::~KiwixApp()
 {
-    m_server.stop();
+    if (mp_server) {
+        mp_server->stop();
+    }
     if (mp_manager) {
         delete mp_manager;
     }
@@ -285,6 +287,14 @@ void KiwixApp::showMessage(const QString &message, const QString &title, const e
 QAction *KiwixApp::getAction(KiwixApp::Actions action)
 {
     return mpa_actions[action];
+}
+
+kiwix::Server* KiwixApp::getLocalServer()
+{
+    if (!mp_server) {
+        mp_server = std::make_unique<kiwix::Server>(m_library.getKiwixLibrary(), mp_nameMapper);
+    }
+    return mp_server.get();
 }
 
 bool KiwixApp::isCurrentArticleBookmarked()

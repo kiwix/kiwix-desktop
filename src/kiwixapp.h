@@ -6,7 +6,7 @@
 #include "tabbar.h"
 #include "mainwindow.h"
 #include "kiwix/downloader.h"
-#include <kiwix/kiwixserve.h>
+#include <kiwix/server.h>
 #include "kprofile.h"
 #include "settingsmanager.h"
 #include "translation.h"
@@ -20,6 +20,7 @@
 
 #include <mutex>
 #include <iostream>
+#include <memory>
 
 typedef TabBar::TabType TabType;
 
@@ -94,7 +95,7 @@ public:
     SearchBar& getSearchBar() { return getMainWindow()->getTopWidget()->getSearchBar(); }
     QAction* getAction(Actions action);
     QString getLibraryDirectory() { return m_libraryDirectory; };
-    kiwix::Server* getLocalServer() { return &m_server; }
+    kiwix::Server* getLocalServer();
     SettingsManager* getSettingsManager() { return &m_settingsManager; };
     QString getText(const QString &key) { return m_translation.getText(key); };
     void setMonitorDir(const QString &dir);
@@ -136,7 +137,7 @@ private:
     MainWindow* mp_mainWindow;
     QErrorMessage* mp_errorDialog;
     std::shared_ptr<kiwix::UpdatableNameMapper> mp_nameMapper;
-    kiwix::Server m_server;
+    std::unique_ptr<kiwix::Server> mp_server;
     Translation m_translation;
     QSettings* mp_session;
 
