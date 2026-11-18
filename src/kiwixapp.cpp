@@ -41,15 +41,20 @@ void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_profile(),
-      m_libraryDirectory(getDataDirectory()),
       m_library(),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
+      mp_nameMapper(nullptr),
       mp_server(nullptr),
       mp_session(nullptr)
 {
+}
+
+void KiwixApp::init()
+{
+    m_libraryDirectory = getDataDirectory();
     m_library.load(m_libraryDirectory);
+    mp_nameMapper = std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false);
 
     /* Place session file in our global library path */
     QDir dir(m_libraryDirectory);
@@ -76,10 +81,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawksl.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawk.ttf");
     setFont(QFont("Selawik"));
-}
 
-void KiwixApp::init()
-{
     mp_manager = new ContentManager(&m_library);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 
@@ -546,7 +548,9 @@ void KiwixApp::handleItemsState(TabType tabType)
 
 void KiwixApp::updateNameMapper()
 {
-  mp_nameMapper->update();
+  if (mp_nameMapper) {
+    mp_nameMapper->update();
+  }
 }
 
 void KiwixApp::printVersions(std::ostream& out) {
