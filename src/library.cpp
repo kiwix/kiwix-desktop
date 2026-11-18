@@ -28,10 +28,14 @@ class LibraryManipulator: public kiwix::LibraryManipulator {
     Library* mp_library;
 };
 
-Library::Library(const QString& libraryDirectory)
-  : mp_library(kiwix::Library::create()),
-    m_libraryDirectory(libraryDirectory)
+Library::Library()
+  : mp_library(kiwix::Library::create())
 {
+}
+
+void Library::load(const QString& libraryDirectory)
+{
+    m_libraryDirectory = libraryDirectory;
     auto manager = kiwix::Manager(LibraryManipulator(this));
     manager.readFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.opds"));
     manager.readBookmarkFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.bookmarks.xml"));
@@ -278,6 +282,9 @@ void Library::removeBookmark(const QString &zimId, const QString &url)
 
 void Library::save()
 {
+    if (m_libraryDirectory.isEmpty()) {
+        return;
+    }
     mp_library->writeAsOPDS(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.opds"));
     mp_library->writeBookmarksToFile(kiwix::appendToDirectory(m_libraryDirectory.toStdString(), "library.bookmarks.xml"));
     writeDownloadIds();

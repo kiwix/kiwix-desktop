@@ -36,13 +36,15 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_profile(),
       m_libraryDirectory(getDataDirectory()),
-      m_library(m_libraryDirectory),
+      m_library(),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
       mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
       mp_server(nullptr),
       mp_session(nullptr)
 {
+    m_library.load(m_libraryDirectory);
+
     /* Place session file in our global library path */
     QDir dir(m_libraryDirectory);
     mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
