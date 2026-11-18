@@ -32,6 +32,12 @@ const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths
 // KiwixApp
 ////////////////////////////////////////////////////////////////////////////////
 
+void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory) {
+    if (translator.load(QLocale(), filename, "_", directory)) {
+        installTranslator(&translator);
+    }
+}
+
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_profile(),
@@ -70,12 +76,6 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawksl.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawk.ttf");
     setFont(QFont("Selawik"));
-}
-
-void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory) {
-    if (translator.load(QLocale(), filename, "_", directory)) {
-        installTranslator(&translator);
-    }
 }
 
 void KiwixApp::init()
