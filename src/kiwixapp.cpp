@@ -32,17 +32,30 @@ const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths
 // KiwixApp
 ////////////////////////////////////////////////////////////////////////////////
 
+void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory) {
+    if (translator.load(QLocale(), filename, "_", directory)) {
+        installTranslator(&translator);
+    }
+}
+
 KiwixApp::KiwixApp(int& argc, char *argv[])
     : QtSingleApplication("kiwix-desktop", argc, argv),
       m_profile(),
-      m_libraryDirectory(getDataDirectory()),
-      m_library(m_libraryDirectory),
+      m_library(),
       mp_manager(nullptr),
       mp_mainWindow(nullptr),
-      mp_nameMapper(std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false)),
-      m_server(m_library.getKiwixLibrary(), mp_nameMapper),
+      mp_nameMapper(nullptr),
+      mp_server(nullptr),
       mp_session(nullptr)
 {
+}
+
+void KiwixApp::init()
+{
+    m_libraryDirectory = getDataDirectory();
+    m_library.load(m_libraryDirectory);
+    mp_nameMapper = std::make_shared<kiwix::UpdatableNameMapper>(m_library.getKiwixLibrary(), false);
+
     /* Place session file in our global library path */
     QDir dir(m_libraryDirectory);
     mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
@@ -68,16 +81,7 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawksl.ttf");
     QFontDatabase::addApplicationFont(":/fonts/Selawik/selawk.ttf");
     setFont(QFont("Selawik"));
-}
 
-void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString& filename, const QString& directory) {
-    if (translator.load(QLocale(), filename, "_", directory)) {
-        installTranslator(&translator);
-    }
-}
-
-void KiwixApp::init()
-{
     mp_manager = new ContentManager(&m_library);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 
@@ -131,7 +135,9 @@ void KiwixApp::setupDirectoryMonitoring()
 
 KiwixApp::~KiwixApp()
 {
-    m_server.stop();
+    if (mp_server) {
+        mp_server->stop();
+    }
     if (mp_manager) {
         delete mp_manager;
     }
@@ -285,6 +291,14 @@ void KiwixApp::showMessage(const QString &message, const QString &title, const e
 QAction *KiwixApp::getAction(KiwixApp::Actions action)
 {
     return mpa_actions[action];
+}
+
+kiwix::Server* KiwixApp::getLocalServer()
+{
+    if (!mp_server) {
+        mp_server = std::make_unique<kiwix::Server>(m_library.getKiwixLibrary(), mp_nameMapper);
+    }
+    return mp_server.get();
 }
 
 bool KiwixApp::isCurrentArticleBookmarked()
@@ -534,7 +548,9 @@ void KiwixApp::handleItemsState(TabType tabType)
 
 void KiwixApp::updateNameMapper()
 {
-  mp_nameMapper->update();
+  if (mp_nameMapper) {
+    mp_nameMapper->update();
+  }
 }
 
 void KiwixApp::printVersions(std::ostream& out) {
