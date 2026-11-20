@@ -52,6 +52,28 @@ jobs:
         qmake PREFIX=%cd%\BUILD_win-amd64\INSTALL
         nmake release-all
 
+    - name: Package Windows archive
+      shell: pwsh
+      run: |
+        $ErrorActionPreference = "Stop"
+        $appExe = Get-ChildItem -Path . -Filter kiwix-desktop.exe -Recurse |
+          Select-Object -First 1 -ExpandProperty FullName
+        if (-not $appExe) {
+          throw "Compiled kiwix-desktop.exe was not found"
+        }
+        New-Item -ItemType Directory -Force -Path dist | Out-Null
+        & .\scripts\package-windows.ps1 -AppExe $appExe -OutDir dist -ArchiveName kiwix-desktop.zip
+
+    - name: Test Windows package structure
+      shell: pwsh
+      run: |
+        & .\scripts\test-windows-package.ps1 -PackageDir dist\Kiwix
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Windows portable archive
+        path: dist\kiwix-desktop.zip
+
   Linux:
     strategy:
       fail-fast: false
