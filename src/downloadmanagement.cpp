@@ -7,6 +7,7 @@
 #include <libtorrent/magnet_uri.hpp>
 #endif
 
+#include <QDebug>
 #include <QStorageInfo>
 #include <QThread>
 
@@ -369,13 +370,33 @@ void checkThatBookCanBeSaved(const kiwix::Book& book, QString targetDir)
     }
 
     QStorageInfo storage(targetDir);
-    auto bytesAvailable = storage.bytesAvailable();
-    if (bytesAvailable == -1 || book.getSize() > (unsigned long long) bytesAvailable) {
-        throw KiwixAppError(gt("download-storage-error"),
-                            gt("download-storage-error-text"));
+    const auto bytesAvailable = storage.bytesAvailable();
+    const auto bytesTotal = storage.bytesTotal();
+    qInfo() << "Download storage check:"
+            << "targetDir=" << targetDir
+            << "isValid=" << storage.isValid()
+            << "isReady=" << storage.isReady()
+            << "rootPath=" << storage.rootPath()
+            << "bytesAvailable=" << bytesAvailable
+            << "bytesTotal=" << bytesTotal;
+
+    // QStorageInfo::bytesAvailable() returns -1 when the storage information
+    // is invalid. An unknown value is not evidence that the drive is full, so
+    // only enforce the available-space check when Qt returned a non-negative
+    // value.
+    if ( storage.isValid() && storage.isReady() ) {
+        if ( bytesAvailable >= 0 &&
+             book.getSize() > static_cast<unsigned long long>(bytesAvailable) ) {
+            throw KiwixAppError(gt("download-storage-error"),
+                                gt("download-storage-error-text"));
+        }
     }
 
-    if ( book.getSize() > getMaxFileSize(storage) ) {
+    // Keep the filesystem's maximum single-file size check independent from
+    // the free-space check. It is useful even when free-space information is
+    // unavailable, provided Qt can identify the filesystem.
+    if ( storage.isValid() && storage.isReady() &&
+         book.getSize() > getMaxFileSize(storage) ) {
         throw KiwixAppError(gt("download-storage-error"),
                             gt("download-exceeds-max-file-size"));
     }
