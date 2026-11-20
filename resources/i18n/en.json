@@ -112,6 +112,8 @@
     "yes":"yes",
     "no":"no",
     "ok":"ok",
+    "camera-permission-title":"Camera access",
+    "camera-permission-text":"Allow this ZIM to access the camera?\n\nOrigin: %1\n\nOnly camera access is requested; microphone access is not enabled.",
     "no-filter":"no filter",
     "open-link-in-web-browser":"Open link in web browser",
     "copy-link":"Copy link",

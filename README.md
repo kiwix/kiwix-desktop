@@ -152,6 +152,21 @@ WebEngine](https://doc.qt.io/qt-6/qtwebengine-overview.html) to render
 ZIM content, relying on a custom `zim:` protocol to expose the ZIM
 data to the Web engine.
 
+ZIM pages can use the standard browser camera API through a
+user-consented, origin-specific permission prompt. Camera-only requests
+from `zim:` content are supported; microphone and combined
+audio/video requests are denied. The desktop user agent includes the
+`KiwixCamera/1` token so readers can distinguish this capability from
+builds that only support selecting an existing image. Standard
+`<input type="file" accept="image/*">` selection remains handled by Qt
+WebEngine's native file chooser and does not request camera permission.
+
+Camera availability still depends on the operating system privacy
+settings, an available device, and the package's WebEngine/portal
+configuration. The capability token indicates that the application has
+wired camera permission handling; it does not guarantee that a camera is
+present or usable.
+
 To debug issues related to WebEngine, follow these steps:
 
 1. Launch `kiwix-desktop` with the environment variable `QTWEBENGINE_REMOTE_DEBUGGING=<port>` set (replace `<port>` with an available local port number).
