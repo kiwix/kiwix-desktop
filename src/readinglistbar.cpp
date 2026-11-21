@@ -138,9 +138,10 @@ void ReadingListBar::openUrl(QListWidgetItem* item, bool newTab)
 {
     int index = ui->listWidget->row(item);
     auto bookmark = KiwixApp::instance()->getLibrary()->getBookmarks(true).at(index);
-    QUrl url;
-    url.setScheme("zim");
-    url.setHost(QString::fromStdString(bookmark.getBookId())+".zim");
-    url.setPath(QString::fromStdString(bookmark.getUrl()));
+    auto bookmarkUrl = QString::fromStdString(bookmark.getUrl());
+    if (!bookmarkUrl.startsWith('/')) {
+        bookmarkUrl.prepend('/');
+    }
+    QUrl url("zim://" + QString::fromStdString(bookmark.getBookId()) + ".zim" + bookmarkUrl);
     KiwixApp::instance()->openUrl(url, newTab);
 }

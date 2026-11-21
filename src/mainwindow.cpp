@@ -76,9 +76,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
             &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::currentTitleChanged);
+    connect(mp_ui->tabBar, &TabBar::currentUrlChanged,
+            &(mp_ui->mainToolBar->getSearchBar()), &SearchBar::currentUrlChanged);
     // This signal emited more often than the history really updated
     // but for now we have no better signal for it.
     connect(mp_ui->tabBar, &TabBar::currentTitleChanged,
+            mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
+    connect(mp_ui->tabBar, &TabBar::currentUrlChanged,
             mp_ui->mainToolBar, &TopWidget::updateBackForwardButtons);
 
     connect(mp_ui->tabBar, &TabBar::webActionEnabledChanged,
