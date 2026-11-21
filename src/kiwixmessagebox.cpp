@@ -12,6 +12,7 @@ KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool
     setWindowFlag(Qt::FramelessWindowHint, true);
     auto applyStyle = [this]() {
         setStyleSheet(themeAwareCss(":/css/messageBox.css"));
+        ui->closeButton->setIcon(themeAwareIcon("close"));
     };
     applyStyle();
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,

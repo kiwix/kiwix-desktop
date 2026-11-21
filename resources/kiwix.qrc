@@ -100,5 +100,9 @@
         <file>icons/search-light.svg</file>
         <file>icons/copy-light.svg</file>
         <file>icons/kiwix-logo-light.svg</file>
+        <file>icons/search_forward-light.svg</file>
+        <file>icons/search_backward-light.svg</file>
+        <file>icons/more-vertical-light.svg</file>
+        <file>icons/stop-circle-light.svg</file>
     </qresource>
 </RCC>
