@@ -396,7 +396,7 @@ void DownloadManager::checkThatBookCanBeDownloaded(const kiwix::Book& book, cons
 std::string DownloadManager::startTorrentDownload(const kiwix::Book& book, const std::string& downloadDirPath)
 {
     const std::string& url = book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
-    logger.error("Trying to start download using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
+    logger.debug("Trying to start download using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
     const QString bookId = QString::fromStdString(book.getId());
     lt::add_torrent_params params = lt::parse_magnet_uri(url);
     params.save_path = downloadDirPath;
