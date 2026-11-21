@@ -1,0 +1,24 @@
+#searcher {
+    font-family: 'Selawik';
+    padding: 4px;
+    border: none;
+    border-bottom: 1px solid #4a4d52;
+    color: #9aa0a6;
+    font-size: 16px;
+    height: 32px;
+    line-height: 24px;
+    background-color: #2b2d31;
+}
+
+QScrollArea {
+    border: 0;
+}
+
+#allFileButton, #localFileButton, #contentTypeButton {
+    padding-left: 2px;
+}
+
+#allFileButton::indicator, #localFileButton::indicator, #contentTypeButton::indicator {
+    height: 0;
+    width: 0;
+}

@@ -18,8 +18,6 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     ui(new Ui::kiwixchoicebox)
 {
     ui->setupUi(this);
-    auto styleSheet = getFileContent(":/css/choiceBox.css");
-    this->setStyleSheet(styleSheet);
     ui->clearButton->setText(gt("clear"));
     ui->clearButton->setToolTip(gt("clear-filter"));
 
@@ -35,14 +33,28 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     choiceSelector->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
     choiceSelector->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     choiceSelector->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
-    choiceSelector->setStyleSheet(styleSheet);
     choiceSelector->setSelectionMode(QAbstractItemView::SelectionMode::MultiSelection);
 
+    // Apply theme-aware stylesheet to self and the detached dropdown.
+    auto applyStyle = [this]() {
+        auto styleSheet = themeAwareCss(":/css/choiceBox.css");
+        this->setStyleSheet(styleSheet);
+        choiceSelector->setStyleSheet(styleSheet);
+        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+        ui->currentChoices->setStyleSheet(
+            dark ? "#currentChoices{border: 1px solid #4a4d52;}"
+                 : "#currentChoices{border: 1px solid #ccc;}");
+        searcher->setStyleSheet(
+            dark ? "QLineEdit{color: #9aa0a6;}" : "QLineEdit{color: #999;}");
+    };
     currentChoicesLayout = new FlowLayout(ui->currentChoices, 4, 2, 2);
     searcher = new KiwixLineEdit();
     searcher->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     searcher->setFixedWidth(20);
     currentChoicesLayout->addWidget(searcher);
+    applyStyle();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
     connect(choiceSelector, &QListWidget::itemPressed, this, [=](QListWidgetItem *item) {
         searcher->clear();
         if (item->isSelected()) {
@@ -53,7 +65,9 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     });
 
     connect(searcher, &QLineEdit::textChanged, [=](QString search) {
-        searcher->setStyleSheet("QLineEdit{color: #666;}");
+        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+        searcher->setStyleSheet(
+            dark ? "QLineEdit{color: #f0f2f5;}" : "QLineEdit{color: #666;}");
         QFontMetrics fm = searcher->fontMetrics();
         auto w = fm.horizontalAdvance(search) + 20;
         if (w + 4 < ui->currentChoices->width()) {
@@ -76,7 +90,9 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     });
 
     choiceSelector->setVisible(false);
-    searcher->setStyleSheet("QLineEdit{color: #999;}");
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    searcher->setStyleSheet(
+        dark ? "QLineEdit{color: #9aa0a6;}" : "QLineEdit{color: #999;}");
 
     connect(searcher, &KiwixLineEdit::focusedOut, [=]() {
         hideOptions();
@@ -129,15 +145,22 @@ void KiwixChoiceBox::hideOptions()
     if (choiceSelector->selectedItems().isEmpty()) {
         showPlaceholder();
     }
-    searcher->setStyleSheet("QLineEdit{color: #999;}");
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    searcher->setStyleSheet(
+        dark ? "QLineEdit{color: #9aa0a6;}" : "QLineEdit{color: #999;}");
     choiceSelector->setVisible(false);
-    ui->currentChoices->setStyleSheet("#currentChoices{border: 1px solid #ccc;}");
+    ui->currentChoices->setStyleSheet(
+        dark ? "#currentChoices{border: 1px solid #4a4d52;}"
+             : "#currentChoices{border: 1px solid #ccc;}");
     searcher->clearFocus();
 }
 
 void KiwixChoiceBox::showOptions()
 {
-    ui->currentChoices->setStyleSheet("#currentChoices{border: 2px solid #4e63ad;}");
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    ui->currentChoices->setStyleSheet(
+        dark ? "#currentChoices{border: 2px solid #5b92e5;}"
+             : "#currentChoices{border: 2px solid #4e63ad;}");
     adjustSize();
     choiceSelector->setVisible(true);
     choiceSelector->raise();
