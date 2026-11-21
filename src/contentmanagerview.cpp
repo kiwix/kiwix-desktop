@@ -9,6 +9,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     : QOpenGLWidget(parent), mp_ui(new Ui::contentmanagerview)
 {
     mp_ui->setupUi(this);
+    mp_ui->m_view->setAccessibleName(gt("library"));
     mp_ui->m_view->setSortingEnabled(true);
     mp_ui->m_view->setStyleSheet(getFileContent(":/css/_contentManager.css"));
     mp_ui->m_view->setContextMenuPolicy(Qt::CustomContextMenu);
