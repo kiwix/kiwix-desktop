@@ -46,6 +46,8 @@ TabBar::TabBar(QWidget *parent) :
             this, &TabBar::openHomePage);
     connect(getAction(KiwixApp::SettingAction), &QAction::triggered,
             this, &TabBar::openOrSwitchToSettingsTab);
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, &TabBar::updateIcons);
 
     for (int i = 0 ; i <= 9 ; i++) {
         QAction *a = new QAction(this);
@@ -82,7 +84,7 @@ void TabBar::openOrSwitchToSettingsTab()
     int index = currentIndex() + 1;
     mp_stackedWidget->insertWidget(index, view);
     emit tabDisplayed(TabType::SettingsTab);
-    insertTab(index,QIcon(":/icons/settings.svg"), gt("settings"));
+    insertTab(index, themeAwareIcon("settings"), gt("settings"));
     setCloseTabButton(index);
     setCurrentIndex(index);
     KiwixApp::instance()->saveListOfOpenTabs();
@@ -100,7 +102,7 @@ void TabBar::setContentManagerView(ContentManagerView* view)
     qInfo() << "add widget";
     mp_stackedWidget->addWidget(view);
     mp_stackedWidget->show();
-    int idx = addTab(QIcon(":/icons/kiwix-logo.svg"), "");
+    int idx = addTab(themeAwareIcon("kiwix-logo"), "");
     setTabButton(idx, RightSide, nullptr);
 }
 
@@ -109,7 +111,7 @@ void TabBar::setNewTabButton(QAction* newTabAction)
     QToolButton *tb = new QToolButton();
     tb->setObjectName("newTabButton");
     tb->setDefaultAction(newTabAction);
-    tb->setIcon(QIcon(":/icons/new-tab-icon.svg"));
+    tb->setIcon(themeAwareIcon("new-tab-icon"));
     int idx = addTab("");
     setTabEnabled(idx, false);
     setTabButton(idx, QTabBar::LeftSide, tb);
@@ -156,7 +158,7 @@ void TabBar::setCloseTabButton(int index)
 
     QToolButton *tb = new QToolButton(this);
     tb->setObjectName("closeTabButton");
-    QAction *a = new QAction(QIcon(":/icons/close.svg"), gt("close-tab"), tb);
+    QAction *a = new QAction(themeAwareIcon("close"), gt("close-tab"), tb);
     a->setToolTip(getAction(KiwixApp::CloseCurrentTabAction)->toolTip());
     tb->setDefaultAction(a);
     setTabButton(index, QTabBar::RightSide, tb);
@@ -534,6 +536,24 @@ void TabBar::tabLayoutChange()
 {
     QTabBar::tabLayoutChange();
     adjustTabButtonPositions();
+}
+
+void TabBar::updateIcons()
+{
+    for (int i = 0; i < count(); ++i) {
+        if (mp_stackedWidget && qobject_cast<SettingsView*>(mp_stackedWidget->widget(i)))
+            setTabIcon(i, themeAwareIcon("settings"));
+        if (mp_stackedWidget && qobject_cast<ContentManagerView*>(mp_stackedWidget->widget(i)))
+            setTabIcon(i, themeAwareIcon("kiwix-logo"));
+
+        auto closeButton = qobject_cast<QToolButton*>(tabButton(i, QTabBar::RightSide));
+        if (closeButton && closeButton->objectName() == "closeTabButton")
+            closeButton->defaultAction()->setIcon(themeAwareIcon("close"));
+
+        auto newTabButton = qobject_cast<QToolButton*>(tabButton(i, QTabBar::LeftSide));
+        if (newTabButton && newTabButton->objectName() == "newTabButton")
+            newTabButton->setIcon(themeAwareIcon("new-tab-icon"));
+    }
 }
 
 void TabBar::adjustTabButtonPositions()

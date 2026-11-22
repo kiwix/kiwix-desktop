@@ -16,6 +16,12 @@ ReadingListBar::ReadingListBar(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->titleLabel->setText(gt("reading-list"));
+    auto updateIcons = [this]() {
+        ui->readingListMenuButton->setIcon(themeAwareIcon("more-vertical"));
+    };
+    updateIcons();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [updateIcons](SettingsManager::Theme) { updateIcons(); });
 
     connect(KiwixApp::instance()->getLibrary(), &Library::bookmarksChanged,
             this, &ReadingListBar::setupList);

@@ -10,7 +10,13 @@ KiwixMessageBox::KiwixMessageBox(QString confirmTitle, QString confirmText, bool
 {
     ui->setupUi(this);
     setWindowFlag(Qt::FramelessWindowHint, true);
-    setStyleSheet(getFileContent(":/css/messageBox.css"));
+    auto applyStyle = [this]() {
+        setStyleSheet(themeAwareCss(":/css/messageBox.css"));
+        ui->closeButton->setIcon(themeAwareIcon("close"));
+    };
+    applyStyle();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
     connect(ui->yesButton, &QPushButton::clicked, [=]() {
         emit yesClicked();
         m_result = YesClicked;

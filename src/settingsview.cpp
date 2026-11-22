@@ -36,7 +36,12 @@ SettingsView::SettingsView(QWidget *parent)
 {
     SettingsManager *settingsMgr = KiwixApp::instance()->getSettingsManager();
     ui->setupUi(this);
-    ui->widget->setStyleSheet(getFileContent(":/css/_settingsManager.css"));
+    auto applyStyle = [this]() {
+        ui->widget->setStyleSheet(themeAwareCss(":/css/_settingsManager.css"));
+    };
+    applyStyle();
+    connect(settingsMgr, &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
     connect(ui->zoomPercentSpinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, &SettingsView::setZoom);
     connect(ui->moveToTrashToggle, &QCheckBox::clicked, this, &SettingsView::setMoveToTrash);
     connect(ui->reopenTabToggle, &QCheckBox::clicked, this, &SettingsView::setReopenTab);
@@ -71,10 +76,15 @@ SettingsView::SettingsView(QWidget *parent)
     ui->browseButton->setText(gt("browse"));
     ui->monitorClear->setText(gt("clear"));
     ui->monitorBrowse->setText(gt("browse"));
-    QIcon copyIcon(":/icons/copy.svg");
-    ui->downloadDirPathCopy->setIcon(copyIcon);
+    auto applyCopyIcon = [this]() {
+        const QIcon copyIcon = themeAwareIcon("copy");
+        ui->downloadDirPathCopy->setIcon(copyIcon);
+        ui->monitorDirPathCopy->setIcon(copyIcon);
+    };
+    applyCopyIcon();
+    connect(settingsMgr, &SettingsManager::themeChanged,
+            this, [applyCopyIcon](SettingsManager::Theme) { applyCopyIcon(); });
     ui->downloadDirPathCopy->setIconSize(QSize(24, 24));
-    ui->monitorDirPathCopy->setIcon(copyIcon);
     ui->monitorDirPathCopy->setIconSize(QSize(24, 24));
     ui->monitorHelp->setText("<b>?</b>");
     ui->monitorHelp->setToolTip(gt("monitor-directory-tooltip"));
