@@ -7,7 +7,7 @@
 lessThan(QT_MAJOR_VERSION, 6): error("Qt6 is required")
 
 QT       += core gui network
-QT       += webenginewidgets webchannel openglwidgets
+QT       += webenginewidgets webchannel openglwidgets quick
 QT       += printsupport
 qtHaveModule(texttospeech): QT += texttospeech
 
