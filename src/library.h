@@ -38,6 +38,7 @@ public:
     QStringList getBookIds() const;
     QStringList listBookIds(const kiwix::Filter& filter, kiwix::supportedListSortBy sortBy, bool ascending) const;
     const std::vector<kiwix::Bookmark> getBookmarks(bool onlyValidBookmarks = false) const { return mp_library->getBookmarks(onlyValidBookmarks); }
+    bool isBookmarked(const std::string& zimId, const std::string& url) const;
     QStringSet getLibraryZimsFromDir(QString dir) const;
     void addBookToLibrary(kiwix::Book& book);
     void addBookBeingDownloaded(const kiwix::Book& book, QString downloadDir);

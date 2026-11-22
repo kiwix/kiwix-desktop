@@ -276,6 +276,16 @@ void Library::removeBookmark(const QString &zimId, const QString &url)
     emit bookmarksChanged();
 }
 
+bool Library::isBookmarked(const std::string& zimId, const std::string& url) const
+{
+    for (const auto& bookmark : mp_library->getBookmarks()) {
+        if (bookmark.getBookId() == zimId && bookmark.getUrl() == url) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void Library::save()
 {
     mp_library->writeAsOPDS(kiwix::appendToDirectory(m_libraryDirectory.toStdString(),"library.opds"));

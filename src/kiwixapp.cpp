@@ -294,13 +294,7 @@ bool KiwixApp::isCurrentArticleBookmarked()
         return false;
     }
     auto url = getTabWidget()->currentArticleUrl().toStdString();
-
-    for (auto& bookmark: getLibrary()->getBookmarks()) {
-        if (bookmark.getBookId() == zimId && bookmark.getUrl() == url) {
-            return true;
-        }
-    }
-    return false;
+    return getLibrary()->isBookmarked(zimId, url);
 }
 
 void KiwixApp::setMonitorDir(const QString &dir) {
