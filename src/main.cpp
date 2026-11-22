@@ -4,6 +4,7 @@
 #include "useragent.h"
 
 #include <QCommandLineParser>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 #ifdef Q_OS_WIN
@@ -33,8 +34,40 @@ bool wasAppStartedFromARemoteDrive()
 }
 #endif
 
+/*
+ * Returns true if the given argument is a help or version flag.
+ * This allows us to handle --help/--version before instantiating KiwixApp
+ * (and the entire Qt application machinery), avoiding QThreadStorage
+ * cleanup warnings on exit (issue #1561).
+ */
+static bool isHelpOrVersionFlag(const char* arg)
+{
+    return std::strcmp(arg, "-h") == 0
+        || std::strcmp(arg, "--help") == 0
+        || std::strcmp(arg, "--help-all") == 0
+        || std::strcmp(arg, "-?") == 0
+        || std::strcmp(arg, "-v") == 0
+        || std::strcmp(arg, "--version") == 0;
+}
+
 int main(int argc, char *argv[])
 {
+    // Handle --help and --version before creating KiwixApp to avoid
+    // QThreadStorage destruction warnings (issue #1561).
+    for (int i = 1; i < argc; ++i) {
+        if (isHelpOrVersionFlag(argv[i])) {
+            const char* execName = (argc > 0 && argv[0] && argv[0][0] != '\0')
+                                 ? argv[0]
+                                 : "kiwix-desktop";
+            if (std::strcmp(argv[i], "-v") == 0 || std::strcmp(argv[i], "--version") == 0) {
+                KiwixApp::printVersions();
+            } else {
+                KiwixApp::printUsage(execName);
+            }
+            return 0;
+        }
+    }
+
 #ifdef Q_OS_WIN
     const bool appWasStartedFromARemoteDrive = wasAppStartedFromARemoteDrive();
     if ( appWasStartedFromARemoteDrive ) {
@@ -80,7 +113,7 @@ int main(int argc, char *argv[])
 
     // Set version string
     std::ostringstream versions;
-    a.printVersions(versions);
+    KiwixApp::printVersions(versions);
     a.setApplicationVersion(QString::fromStdString(versions.str()));
     parser.addVersionOption();
 
