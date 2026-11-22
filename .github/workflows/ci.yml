@@ -56,18 +56,31 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image_variant: [noble, resolute]
+        image_variant: [jammy]
     env:
       HOME: /home/runner
     runs-on: ubuntu-22.04
     container:
-      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:2026-04-25
+      image: ghcr.io/kiwix/kiwix-build_ci_${{matrix.image_variant}}:2026-07-22
 
     steps:
       - name: Install dependencies
         uses: kiwix/kiwix-build/actions/dl_deps_archive@main
         with:
           target_platform: linux-x86_64-dyn
+
+      - name: Install QT
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.8.3
+          host: "linux"
+          target: "desktop"
+          dir: /home/runner
+          modules: "qtwebengine qtwebchannel qtpositioning qtserialport"
+          install-deps: false
+          setup-python: false
+        env:
+          AQT_CONFIG: ${{ github.workspace }}/.github/configs/aqt.ini
 
       - name: Retrieve source code
         uses: actions/checkout@v6
@@ -77,6 +90,7 @@ jobs:
         env:
           PKG_CONFIG_PATH: "/home/runner/BUILD_linux-x86_64/INSTALL/lib/pkgconfig:/home/runner/BUILD_linux-x86_64/INSTALL/lib/x86_64-linux-gnu/pkgconfig"
         run: |
+          PATH=/home/runner/Qt/6.8.3/gcc_64/bin:$PATH
           qmake --version
           qmake PREFIX=$HOME/BUILD_linux-x86_64/INSTALL
           make
