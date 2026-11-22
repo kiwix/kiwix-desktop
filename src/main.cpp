@@ -78,6 +78,11 @@ int main(int argc, char *argv[])
     parser.addHelpOption();
     parser.addPositionalArgument("zimfile", "The zim file");
 
+    QCommandLineOption logLevelOption("log-level", "Enable logging up-to the given level <level>", "level");
+    QCommandLineOption logFileOption("logfile", "Write logs to a file located at <path> as well as stdout", "path");
+    parser.addOption(logLevelOption);
+    parser.addOption(logFileOption);
+
     // Set version string
     std::ostringstream versions;
     a.printVersions(versions);

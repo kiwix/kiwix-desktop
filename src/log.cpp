@@ -1,19 +1,13 @@
 #include "log.h"
 
-Log::Log()
+Log::Log(Level log_level, char *filepath)
 {
     //  Default error log-level to stdout
     _minLevel = Level::ERROR;
     _logfilePath = "";
 
-    #ifdef KIWIX_LOG_LEVEL
-        if(KIWIX_LOG_LEVEL > Level::NONE && KIWIX_LOG_LEVEL <= Level::CRITICAL) 
-            _minLevel = static_cast<Level>(KIWIX_LOG_LEVEL);
-    #endif
-
-    #ifdef KIWIX_LOGFILE
-        _logfilePath = std::string(KIWIX_LOGFILE);
-    #endif
+    if(log_level > Level::NONE && log_level <= Level::CRITICAL)
+        _minLevel = log_level;
 
     _terminalSink    = nullptr;
     _fileSink        = nullptr;
@@ -23,8 +17,9 @@ Log::Log()
     configureDestination(*_terminalSink);
 
     //  Determine whether logs should print to a logfile as well as the terminal
-    if(!std::empty(_logfilePath))
+    if(filepath != NULL)
     {
+        _logfilePath = filepath;
         _fileSink = new spdlog::sinks::basic_file_sink_st(_logfilePath, true);
         configureDestination(*_fileSink);
 
@@ -145,3 +140,5 @@ Log::~Log()
     delete _terminalSink;
     if(!std::empty(_logfilePath)) delete _fileSink;
 };
+
+Log *logger = nullptr;

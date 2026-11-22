@@ -22,7 +22,7 @@ class Log
             CRITICAL
         };
 
-        Log();
+        Log(Level log_level = Level::NONE, char *filepath = NULL);
         virtual ~Log();
 
         void info(const char *fmt, ...);
@@ -50,6 +50,6 @@ class Log
         Level _minLevel;
 };
 
-static Log logger = Log();
+extern Log *logger;
 
 #endif  //  KIWIXLOG_H

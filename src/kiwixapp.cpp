@@ -17,6 +17,7 @@
 #include <QStyleHints>
 #include <thread>
 #include <QMessageBox>
+#include <stdlib.h>
 #if defined(Q_OS_WIN)
 #include <QWindow>
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -43,6 +44,27 @@ KiwixApp::KiwixApp(int& argc, char *argv[])
       m_server(m_library.getKiwixLibrary(), mp_nameMapper),
       mp_session(nullptr)
 {
+    /* Configure application logger */
+    Log::Level log_level = Log::Level::NONE;
+    char *logfile = NULL;
+    
+    for(int i = 0; i < argc; i++)
+    {
+        char *arg = argv[i];
+
+        if(strcmp(arg, "--log-level") == 0)
+        {
+            int level = std::atoi(argv[i + 1]);
+            if(level > Log::Level::NONE && level <= Log::Level::CRITICAL)
+                log_level = static_cast<Log::Level>(level);
+        }
+
+        if(strcmp(arg, "--logfile") == 0)
+            logfile = argv[i + 1];
+    };
+
+    logger = new Log(log_level, logfile);
+
     /* Place session file in our global library path */
     QDir dir(m_libraryDirectory);
     mp_session = new QSettings(dir.filePath("kiwix-desktop.session"),
@@ -78,7 +100,7 @@ void KiwixApp::loadAndInstallTranslations(QTranslator& translator, const QString
 
 void KiwixApp::init()
 {
-    logger.info("Initialising kiwix");
+    logger->info("Initialising kiwix");
     mp_manager = new ContentManager(&m_library);
     mp_manager->setLocal(!m_library.getBookIds().isEmpty());
 

@@ -191,4 +191,5 @@ QIcon themeAwareIcon(const QString &name);
 #define _STR(...) # __VA_ARGS__
 #define STR(X) _STR(X)
 static QString version = STR(VERSION);
+
 #endif // KIWIXAPP_H
