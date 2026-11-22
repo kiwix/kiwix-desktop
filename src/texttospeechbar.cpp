@@ -14,6 +14,13 @@ TextToSpeechBar::TextToSpeechBar(QWidget *parent)
     ui->stopButton->setDisabled(true);
 
     const auto app = KiwixApp::instance();
+    auto updateIcons = [this]() {
+        ui->stopButton->setIcon(themeAwareIcon("stop-circle"));
+        ui->closeButton->setIcon(themeAwareIcon("close"));
+    };
+    updateIcons();
+    connect(app->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [updateIcons](SettingsManager::Theme) { updateIcons(); });
     connect(app->getAction(KiwixApp::ReadStopAction), &QAction::triggered,
             this, &TextToSpeechBar::stop);
     connect(ui->stopButton, &QPushButton::pressed, this,

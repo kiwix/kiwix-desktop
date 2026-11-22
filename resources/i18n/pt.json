@@ -2,11 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"B3rnas",
+			"O andras",
 			"Unamane"
 		]
 	},
 	"name": "português",
-	"open-zim": "Abrir Zim",
+	"open-zim": "Abrir Ficheiro ZIM",
 	"local-kiwix-server": "Servidor Kiwix local",
 	"random-article": "Artigo aleatório",
 	"home-page": "Página principal",
@@ -23,7 +24,7 @@
 	"table-of-content": "Índice",
 	"add-bookmark": "Adicionar à lista de leitura",
 	"remove-bookmark": "Remover da lista de leitura",
-	"reading-list": "Lista de leitura",
+	"reading-list": "Lista de Leitura",
 	"zoom-in": "Ampliar",
 	"zoom-out": "Reduzir",
 	"help": "Ajuda",
@@ -34,7 +35,7 @@
 	"donate-to-support-kiwix": "Doar para apoiar o Kiwix",
 	"exit": "Sair",
 	"save-file-as-window-title": "Guardar ficheiro como",
-	"download-finished-message": "O documento foi descarregado.",
+	"download-finished-message": "O documento foi transferido.",
 	"file": "Ficheiro",
 	"edit": "Editar",
 	"view": "Ver",
@@ -45,7 +46,7 @@
 	"content-type": "Tipo de conteúdo",
 	"open": "Abrir",
 	"delete": "Eliminar",
-	"download": "Descarregar",
+	"download": "Transferir",
 	"resume": "Continuar",
 	"pause": "Pausar",
 	"cancel": "Cancelar"
