@@ -10,6 +10,7 @@
 #include "kprofile.h"
 #include "settingsmanager.h"
 #include "translation.h"
+#include "log.h"
 
 #include <QtSingleApplication>
 #include <QApplication>
@@ -190,4 +191,5 @@ QIcon themeAwareIcon(const QString &name);
 #define _STR(...) # __VA_ARGS__
 #define STR(X) _STR(X)
 static QString version = STR(VERSION);
+
 #endif // KIWIXAPP_H
