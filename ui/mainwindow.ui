@@ -150,11 +150,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QStackedWidget" name="mainView">
-          <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);</string>
-          </property>
-         </widget>
+         <widget class="QStackedWidget" name="mainView"/>
         </item>
        </layout>
       </item>

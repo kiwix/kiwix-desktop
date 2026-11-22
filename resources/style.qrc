@@ -1,10 +1,16 @@
 <RCC>
     <qresource prefix="/">
         <file>css/style.css</file>
+        <file>css/style_dark.css</file>
         <file>css/popup.css</file>
+        <file>css/popup_dark.css</file>
         <file>css/localServer.css</file>
+        <file>css/localServer_dark.css</file>
         <file>css/messageBox.css</file>
+        <file>css/messageBox_dark.css</file>
         <file>css/contentmanagerside.css</file>
+        <file>css/contentmanagerside_dark.css</file>
         <file>css/choiceBox.css</file>
+        <file>css/choiceBox_dark.css</file>
     </qresource>
 </RCC>

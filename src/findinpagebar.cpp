@@ -8,6 +8,14 @@ FindInPageBar::FindInPageBar(QWidget *parent) :
 {
     mp_ui->setupUi(this);
     mp_findLineEdit = mp_ui->findEdit;
+    auto updateIcons = [this]() {
+        mp_ui->fNextButton->setIcon(themeAwareIcon("search_forward"));
+        mp_ui->fPreviousButton->setIcon(themeAwareIcon("search_backward"));
+        mp_ui->hideButton->setIcon(themeAwareIcon("close"));
+    };
+    updateIcons();
+    connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [updateIcons](SettingsManager::Theme) { updateIcons(); });
     connect(mp_ui->hideButton, &QPushButton::released,
             this, &FindInPageBar::findClose);
     connect(mp_ui->fNextButton, &QPushButton::released,
