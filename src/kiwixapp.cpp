@@ -161,6 +161,7 @@ KiwixApp::~KiwixApp()
     if (mp_mainWindow) {
         delete mp_mainWindow;
     }
+    delete logger;
 }
 
 void KiwixApp::newTab()

@@ -396,14 +396,14 @@ void DownloadManager::checkThatBookCanBeDownloaded(const kiwix::Book& book, cons
 std::string DownloadManager::startTorrentDownload(const kiwix::Book& book, const std::string& downloadDirPath)
 {
     const std::string& url = book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
-    logger.debug("Trying to start download using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
+    logger->debug("Trying to start download using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
     const QString bookId = QString::fromStdString(book.getId());
     lt::add_torrent_params params = lt::parse_magnet_uri(url);
     params.save_path = downloadDirPath;
     const auto downloadState = getDownloadState(bookId);
     downloadState->torrentHandle = m_libtorrentSession.add_torrent(params);
     const auto torrentHash = toHexString(params.info_hashes.get_best());
-    logger.info("Now downloading using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
+    logger->info("Now downloading using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
     return LTPREFIX + torrentHash;
 }
 #endif
@@ -414,7 +414,7 @@ std::string DownloadManager::startDownload(const kiwix::Book& book, const QStrin
     try {
         return startTorrentDownload(book, downloadDirPath.toStdString());
     } catch ( ... ) {
-        logger.error("Failed to start download using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
+        logger->error("Failed to start download using libtorrent: %s", book.getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT).c_str());
     }
 #endif
 
