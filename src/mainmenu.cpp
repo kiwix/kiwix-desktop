@@ -1,6 +1,5 @@
 #include "mainmenu.h"
 #include "kiwixapp.h"
-#include "menuproxystyle.h"
 
 #include <QTranslator>
 
@@ -10,7 +9,6 @@ MainMenu::MainMenu(QWidget *parent) :
     QMenu(parent)
 {
     auto app = KiwixApp::instance();
-    setStyle(new MenuProxyStyle());
 
     ADD_ACTION(KiwixServeAction);
     ADD_ACTION(RandomArticleAction);
