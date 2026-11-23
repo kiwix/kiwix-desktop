@@ -1,4 +1,5 @@
 #include "contentmanager.h"
+#include <QFileInfo>
 
 #include "kiwixapp.h"
 #include <kiwix/manager.h>
@@ -44,10 +45,20 @@ void openFileLocation(QString path, QWidget *parent = nullptr)
 {
     QFileInfo fileInfo(path);
     QDir dir = fileInfo.absoluteDir();
-    bool dirOpen = dir.exists() && dir.isReadable() && QDesktopServices::openUrl(dir.absolutePath());
+
+    const QUrl folderUrl = QUrl::fromLocalFile(dir.absolutePath());
+
+    const bool dirOpen = dir.exists() &&
+                         dir.isReadable() &&
+                         QDesktopServices::openUrl(folderUrl);
+
     if (!dirOpen) {
         QString failedText = gt("couldnt-open-location-text");
-        failedText = failedText.replace("{{FOLDER}}", "<b>" + dir.absolutePath() + "</b>");
+        failedText = failedText.replace(
+            "{{FOLDER}}",
+            "<b>" + dir.absolutePath() + "</b>"
+        );
+
         showInfoBox(gt("couldnt-open-location"), failedText, parent);
     }
 }
@@ -283,18 +294,36 @@ namespace
 
 QString getBookTags(const kiwix::Book& b)
 {
-    QStringList tagList = QString::fromStdString(b.getTags()).split(';');
+    const QStringList tagList =
+        QString::fromStdString(b.getTags()).split(';');
+
     QMap<QString, bool> displayTagMap;
-    for(auto tag: tagList) {
-      if (tag[0] == '_') {
-        auto splitTag = tag.split(":");
-        displayTagMap[splitTag[0]] = splitTag[1] == "yes" ? true:false;
-      }
+
+    for (const auto& tag : tagList) {
+        if (tag.isEmpty() || tag[0] != '_') {
+            continue;
+        }
+
+        const auto splitTag = tag.split(':');
+
+        if (splitTag.size() != 2) {
+            continue;
+        }
+
+        displayTagMap[splitTag[0]] = splitTag[1] == "yes";
     }
+
     QStringList displayTagList;
-    if (displayTagMap["_videos"]) displayTagList << QObject::tr("Videos");
-    if (displayTagMap["_pictures"]) displayTagList << QObject::tr("Pictures");
-    if (!displayTagMap["_details"]) displayTagList << QObject::tr("Introduction only");
+
+    if (displayTagMap.value("_videos"))
+        displayTagList << QObject::tr("Videos");
+
+    if (displayTagMap.value("_pictures"))
+        displayTagList << QObject::tr("Pictures");
+
+    if (!displayTagMap.value("_details"))
+        displayTagList << QObject::tr("Introduction only");
+
     return displayTagList.join(", ");
 }
 
@@ -453,20 +482,44 @@ void ContentManager::openBook(const QString &id)
 void ContentManager::openBookPreview(const QString &id)
 {
     try {
-        QMutexLocker locker(&remoteLibraryLocker);
-        const std::string &downloadUrl =
-            mp_remoteLibrary->getBookById(id.toStdString()).getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
-        locker.unlock();
+        std::string downloadUrl;
 
-        /* Extract the Zim name from the book's download URL */
-        const auto zimNameStartIndex = downloadUrl.find_last_of('/') + 1;
-        const std::string& zimName = downloadUrl.substr(
-            zimNameStartIndex,
-            downloadUrl.find(".zim", zimNameStartIndex) - zimNameStartIndex);
+        {
+            QMutexLocker locker(&remoteLibraryLocker);
 
-        const QUrl previewUrl = getRemoteLibraryUrl() + "/viewer#" + zimName.c_str();
+            downloadUrl =
+                mp_remoteLibrary->getBookById(id.toStdString())
+                    .getUrl(kiwix::Book::AcquisitionLinkKind::DIRECT);
+        }
+
+        const QUrl downloadQUrl(QString::fromStdString(downloadUrl));
+
+        if (!downloadQUrl.isValid() || downloadQUrl.isRelative()) {
+            return;
+        }
+
+        const QString fileName =
+            QFileInfo(downloadQUrl.path()).fileName();
+
+        if (!fileName.endsWith(".zim", Qt::CaseInsensitive)) {
+            return;
+        }
+
+        const QString zimName =
+            fileName.left(fileName.size() - 4);
+
+        if (zimName.isEmpty()) {
+            return;
+        }
+
+        QUrl previewUrl(getRemoteLibraryUrl() + "/viewer");
+        previewUrl.setFragment(zimName);
+
         QDesktopServices::openUrl(previewUrl);
-    } catch (...) {}
+
+    } catch (const std::exception& e) {
+        DBGOUT("Failed to open book preview: " << e.what());
+    }
 }
 
 void ContentManager::removeDownload(QString bookId)
