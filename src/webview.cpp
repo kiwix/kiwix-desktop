@@ -23,7 +23,8 @@ class QMenu;
 #include "tableofcontentbar.h"
 
 zim::Entry getArchiveEntryFromUrl(const zim::Archive& archive, const QUrl& url);
-QString askForSaveFilePath(const QString& suggestedName);
+QString askForSaveFilePath(const QString& suggestedName , const QString& filters);
+void articleDownloadFinished(const QString &title, const QString &filePath);
 
 void WebViewBackMenu::showEvent(QShowEvent *)
 {
@@ -88,6 +89,11 @@ WebView::WebView(QWidget *parent)
     connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
         m_linkHovered = url;
     });
+    connect(page(), &QWebEnginePage::pdfPrintingFinished,
+            [=](const QString &filePath,const bool success) {
+              if (success)
+                articleDownloadFinished(page()->title(), filePath);
+            });
 
     /* In Qt 5.12, the zoom factor is not correctly passed after a fulltext search
      * Bug Report: https://bugreports.qt.io/browse/QTBUG-51851
@@ -199,9 +205,17 @@ void WebView::saveViewContent()
         const QString suggestedFileName = QString::fromStdString(kiwix::getSlugifiedFileName(item.getTitle()));
         if (isHTMLContent(item))
         {
-            const QString fileName = askForSaveFilePath(suggestedFileName + ".pdf");
-            if (!fileName.isEmpty())
-                page()->printToPdf(fileName);
+          const QString filters = QString("PDF Document (*.pdf)") + QString(";;") + QString("(Web Page, complete (*.html)");
+          const QString fileName = askForSaveFilePath(suggestedFileName + ".pdf", filters);
+
+          if (!fileName.isEmpty()) {
+            const QString extension = fileName.section(".", -1);
+            if (extension == "pdf") {
+              page()->printToPdf(fileName);
+            } else {
+              page()->save(fileName);
+            }
+          }
         }
         else
             page()->download(this->url(), suggestedFileName);
@@ -344,7 +358,6 @@ QMenu* WebView::createStandardContextMenu() {
         KiwixApp::instance()->getTabWidget()->triggerWebPageAction(QWebEnginePage::Forward);
     });
 
-    menu->addAction(app->getAction(KiwixApp::SavePageAsAction));
     return menu;
 }
 
