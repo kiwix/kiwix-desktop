@@ -149,6 +149,7 @@ QVariant ContentManagerModel::headerData(int section, Qt::Orientation orientatio
         case 2: return "Date";
         case 3: return "Size";
         case 4: return "Content Type";
+        case 5: return "Status";
         default: return QVariant();
     }
 }
@@ -212,7 +213,7 @@ bool ContentManagerModel::hasChildren(const QModelIndex &parent) const
 
 void ContentManagerModel::sort(int column, Qt::SortOrder order)
 {
-    if (column == 0 || column == 4 || column == 5)
+    if (column == 0)
         return;
 
     QString sortBy = "";
@@ -225,6 +226,12 @@ void ContentManagerModel::sort(int column, Qt::SortOrder order)
             break;
         case 3:
             sortBy = "size";
+            break;
+        case 4:
+            sortBy = "content_type";
+            break;
+        case 5:
+            sortBy = "status";
             break;
         default:
             sortBy = "unsorted";
