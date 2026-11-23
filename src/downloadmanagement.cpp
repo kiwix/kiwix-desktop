@@ -40,7 +40,7 @@ std::string getDirPath(const std::string& path)
 
 #endif
 
-QString convertToUnits(double bytes)
+QString beautifyBytesValue(double bytes)
 {
     QStringList units = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB"};
     int unitIndex = 0;
@@ -49,7 +49,11 @@ QString convertToUnits(double bytes)
         unitIndex++;
     }
 
-    const auto preciseBytes = QString::number(bytes, 'g', 3);
+    // With 3 significant digits, 'g' switches to scientific notation
+    // (e.g. "1e+03 KB") for values from 999.5 up to 1024.
+    const auto preciseBytes = bytes < 999.5
+                            ? QString::number(bytes, 'g', 3)
+                            : QString::number(bytes, 'f', 0);
     return preciseBytes + " " + units[unitIndex];
 }
 
@@ -79,8 +83,8 @@ void DownloadState::update(const DownloadInfo& info)
     const double percentage = completedBytes / info["totalLength"].toDouble();
 
     progress = QString::number(100 * percentage, 'g', 3).toDouble();
-    completedLength = convertToUnits(completedBytes);
-    downloadSpeed = convertToUnits(info["downloadSpeed"].toDouble()) + "/s";
+    completedLength = beautifyBytesValue(completedBytes);
+    downloadSpeed = beautifyBytesValue(info["downloadSpeed"].toDouble()) + "/s";
     if ( !isLateUpdateInfo(info) ) {
         status = getDownloadStatus(info["status"].toString());
     }
