@@ -70,6 +70,7 @@ SearchBarLineEdit::SearchBarLineEdit(QWidget *parent) :
     */
     const QString ltrConversionChar(u8"\u200e");
     setPlaceholderText(ltrConversionChar + gt("search"));
+    setAccessibleName(gt("search"));
     setToolTip(gt("search"));
     m_completer.setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     m_completer.setCaseSensitivity(Qt::CaseInsensitive);

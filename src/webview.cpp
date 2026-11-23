@@ -83,6 +83,7 @@ void WebView::applyCorrectZoomFactor() {
 WebView::WebView(QWidget *parent)
     : QWebEngineView(parent)
 {
+    setAccessibleName(gt("article-content"));
     setPage(new WebPage(this));
     QObject::connect(this, &QWebEngineView::urlChanged, this, &WebView::onUrlChanged);
     connect(this->page(), &QWebEnginePage::linkHovered, this, [=] (const QString& url) {
@@ -102,6 +103,12 @@ WebView::WebView(QWidget *parent)
         }
     });
 #endif
+
+    connect(this, &QWebEngineView::loadFinished, this, [this](bool ok) {
+        if (ok) {
+            setFocus(Qt::OtherFocusReason);
+        }
+    });
 
     const auto channel = new QWebChannel(this);
     const auto kiwixChannelObj = new KiwixWebChannelObject;

@@ -9,6 +9,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     : QOpenGLWidget(parent), mp_ui(new Ui::contentmanagerview)
 {
     mp_ui->setupUi(this);
+    mp_ui->m_view->setAccessibleName(gt("library"));
     mp_ui->m_view->setSortingEnabled(true);
     auto applyStyle = [this]() {
         mp_ui->m_view->setStyleSheet(themeAwareCss(":/css/_contentManager.css"));
