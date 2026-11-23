@@ -188,6 +188,8 @@
 	"read-stop": "Represents the action of stopping the on-going reading.",
 	"stop": "{{Identical|Stop}}",
 	"voice": "{{Identical|Voice}}",
+	"camera-permission-title": "Title of the dialog asking the user to allow camera access for a ZIM.",
+	"camera-permission-text": "Text of the dialog asking the user to allow camera access for a ZIM. %1 is replaced with the archive origin.",
 	"select-read-voice": "Represents the action of opening the voice selection for text-to-speech.",
 	"select-read-language": "Represents the action of opening the language selection for text-to-speech.",
 	"save-or-open": "Title of the message box allowing to choose whether a remote resource should be saved to disk or opened with a respective application",

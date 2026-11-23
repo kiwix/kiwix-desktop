@@ -12,7 +12,8 @@ QString kiwixUserAgent()
     const char* const platform = "desktop-linux";
 #endif
     return QStringLiteral("kiwix/%1 (%2)")
-        .arg(version, QLatin1String(platform));
+        .arg(version, QLatin1String(platform))
+        + QStringLiteral(" KiwixCamera/1");
 }
 
 void shareUserAgentWithLibkiwix()
