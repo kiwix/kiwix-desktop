@@ -2,6 +2,7 @@
 #include "kiwixapp.h"
 #include "menuproxystyle.h"
 
+#include <QApplication>
 #include <QTranslator>
 
 #define ADD_ACTION(ID) addAction(app->getAction(KiwixApp::ID));
@@ -10,6 +11,18 @@ MainMenu::MainMenu(QWidget *parent) :
     QMenu(parent)
 {
     auto app = KiwixApp::instance();
+
+    // On Qt 6.8 the windows11 style sets FramelessWindowHint and
+    // NoDropShadowWindowHint on every QMenu during polish(). For a popup
+    // this re-parents the widget and triggers a use-after-free in
+    // inheritStyle() when the app has a style sheet. Setting the flags
+    // beforehand makes the style's setWindowFlag() calls no-ops.
+    // See https://github.com/kiwix/kiwix-desktop/issues/1556
+    if (QApplication::style()->objectName() == QStringLiteral("windows11")) {
+        setWindowFlag(Qt::FramelessWindowHint);
+        setWindowFlag(Qt::NoDropShadowWindowHint);
+    }
+
     setStyle(new MenuProxyStyle());
 
     ADD_ACTION(KiwixServeAction);
