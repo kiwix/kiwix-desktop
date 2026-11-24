@@ -219,12 +219,15 @@ void SearchBarLineEdit::focusInEvent( QFocusEvent* event)
                 Qt::UniqueConnection);
 
         connect(&m_completer, QOverload<const QModelIndex &>::of(&QCompleter::highlighted), this,
-                [=](const QModelIndex &index){
-                    setText(index.isValid() ? index.data().toString() : m_searchbarInput);
-                },
+                &SearchBarLineEdit::onSuggestionHighlighted,
                 Qt::UniqueConnection);
     }
     QLineEdit::focusInEvent(event);
+}
+
+void SearchBarLineEdit::onSuggestionHighlighted(const QModelIndex &index)
+{
+    setText(index.isValid() ? index.data().toString() : m_searchbarInput);
 }
 
 void SearchBarLineEdit::focusOutEvent(QFocusEvent* event)

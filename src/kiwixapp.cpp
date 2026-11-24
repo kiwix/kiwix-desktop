@@ -85,8 +85,6 @@ void KiwixApp::init()
     icon.addFile(":/icons/kiwix-app-icons-square.svg");
     setWindowIcon(icon);
 
-    setApplicationName("Kiwix");
-    setDesktopFileName("org.kiwix.desktop");
     applyTheme(m_settingsManager.getTheme());
 
     createActions();
