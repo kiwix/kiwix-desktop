@@ -71,6 +71,14 @@ int main(int argc, char *argv[])
     // launched (see kiwix/libkiwix#1364).
     shareUserAgentWithLibkiwix();
 
+    /* These are static setters and must run before the Q(Core)Application is
+       constructed: the platform theme registers the app ID with the XDG
+       Desktop Portal during construction, and calling setDesktopFileName()
+       later makes Qt re-register on an already associated D-Bus connection,
+       which fails with "Could not register app ID". See issue #1560. */
+    QCoreApplication::setApplicationName(QStringLiteral("Kiwix"));
+    QGuiApplication::setDesktopFileName(QStringLiteral("org.kiwix.desktop"));
+
     KiwixApp a(argc, argv);
 
     QCommandLineParser parser;
