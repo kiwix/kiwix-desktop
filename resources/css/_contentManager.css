@@ -1,7 +1,3 @@
-#contentmanagerside {
-    background-color: red;
-}
-
 QTreeView::branch:open:has-children {
     image: url(:/icons/caret-down-solid.svg);
     padding: 6px;
@@ -31,6 +27,17 @@ QTreeView {
     border: none;
     selection-color: black;
     qproperty-iconSize: 30px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+QTreeView::viewport {
+    background-color: #ffffff;
+}
+
+QHeaderView {
+    background-color: #ffffff;
+    border: none;
 }
 
 QTreeView::item:hover {
