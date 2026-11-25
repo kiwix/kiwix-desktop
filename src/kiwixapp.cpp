@@ -16,6 +16,7 @@
 #include <QGuiApplication>
 #include <QStyleHints>
 #include <thread>
+#include <iostream>
 #include <QMessageBox>
 #if defined(Q_OS_WIN)
 #include <QWindow>
@@ -24,7 +25,12 @@
 #else
 #include <qpa/qplatformwindow_p.h>
 #endif
-#endif
+#endif  //  Q_OS_WIN
+#if defined(__linux__)
+#include <sys/resource.h>
+#endif  //  __linux__
+
+
 
 const QString DEFAULT_SAVE_DIR = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 
@@ -111,6 +117,12 @@ void KiwixApp::init()
         }
 #endif
     }
+#endif
+#ifdef __linux__
+    rlimit limits;
+    getrlimit(RLIMIT_NOFILE, &limits);
+
+    std::cout << "Warning: Continuing with low FD limit. Soft[" << limits.rlim_cur << "] | Hard[" << limits.rlim_max << "]" << std::endl;
 #endif
     connect(this, &QtSingleApplication::messageReceived, this, [=](const QString &message) {
         if (!message.isEmpty()) {
