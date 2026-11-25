@@ -674,11 +674,16 @@ const QJsonObject &currentThemeValues()
 
 }
 
-QString themeAwareCss(const QString &cssPath)
+QString themeAwareStyleSheet(const QString &styleSheetTemplate)
 {
-    return renderStyleSheetTemplate(getFileContent(cssPath),
+    return renderStyleSheetTemplate(styleSheetTemplate,
                                     isDarkThemeInUse() ? "dark" : "light",
                                     currentThemeValues());
+}
+
+QString themeAwareCss(const QString &cssPath)
+{
+    return themeAwareStyleSheet(getFileContent(cssPath));
 }
 
 QColor themeColor(const QString &name)

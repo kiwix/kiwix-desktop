@@ -173,6 +173,11 @@ QString gt(const QString &key);
  */
 QString themeAwareCss(const QString &cssPath);
 /**
+ * @brief Returns a style sheet template, given as a string, rendered for
+ *        the effective theme (see themeAwareCss()).
+ */
+QString themeAwareStyleSheet(const QString &styleSheetTemplate);
+/**
  * @brief Returns a colour of the effective theme.
  *
  * @param name  Its name in resources/themes/<theme>.json, e.g. "ACCENT".

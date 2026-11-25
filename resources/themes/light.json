@@ -1,6 +1,7 @@
 {
     "WINDOW_BACKGROUND": "#eaecf0",
     "PAGE_BACKGROUND": "#ffffff",
+    "MAIN_VIEW_BACKGROUND": "#ffffff",
     "SURFACE": "#ffffff",
     "TEXT": "#000000",
     "TEXT_SECONDARY": "#666666",
