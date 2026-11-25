@@ -44,7 +44,8 @@ QHeaderView::section {
     font-size: 16px;
     font-family: 'Selawik';
     padding: 4px;
-    margin-left: 10px;
+    /* room for the sort arrow, drawn at the left of the section */
+    padding-left: 16px;
 }
 
 QHeaderView::down-arrow {
