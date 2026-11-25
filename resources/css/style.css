@@ -229,6 +229,10 @@ QTabWidget::pane {
 
 QTabBar::tab {
     border: {{TAB_BORDER}}px solid {{BORDER}};
+    /* Lines are drawn once: the toolbar's bottom border is the top line, and
+       a tab's right border separates it from the next one. */
+    border-top-color: transparent;
+    border-left-color: transparent;
     border-radius: 0;
     padding: {{TAB_PADDING}}px;
     background-color: {{TAB_BACKGROUND}};
@@ -243,7 +247,7 @@ QTabBar::tab:selected {
 
 QTabBar::tab:last {
     border: 1px solid transparent;
-    border-top: 1px solid {{BORDER}};
+    border-bottom: 1px solid {{BORDER}};
 }
 
 #closeTabButton, #newTabButton {
