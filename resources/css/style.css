@@ -584,3 +584,72 @@ TextToSpeechBar QAbstractItemView QScrollBar::handle {
 #mainView {
     background-color: {{PAGE_BACKGROUND}};
 }
+
+/* -----------------------------------------
+    Scroll bars of the book list, the library side panel and the settings:
+    the platform's are hardly visible on the dark background.
+    (Child selectors: only the scroll areas' own scroll bars.)
+*/
+
+@theme dark {
+#m_view > QWidget > QScrollBar,
+ContentManagerSide QScrollArea > QWidget > QScrollBar,
+SettingsView > QWidget > QScrollBar {
+    background-color: {{WINDOW_BACKGROUND}};
+    border: none;
+    margin: 0;
+}
+
+#m_view > QWidget > QScrollBar:vertical,
+ContentManagerSide QScrollArea > QWidget > QScrollBar:vertical,
+SettingsView > QWidget > QScrollBar:vertical {
+    width: 12px;
+}
+
+#m_view > QWidget > QScrollBar:horizontal,
+ContentManagerSide QScrollArea > QWidget > QScrollBar:horizontal,
+SettingsView > QWidget > QScrollBar:horizontal {
+    height: 12px;
+}
+
+#m_view > QWidget > QScrollBar::handle,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::handle,
+SettingsView > QWidget > QScrollBar::handle {
+    background-color: {{MUTED}};
+    border-radius: 4px;
+    margin: 2px;
+}
+
+#m_view > QWidget > QScrollBar::handle:vertical,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::handle:vertical,
+SettingsView > QWidget > QScrollBar::handle:vertical {
+    min-height: 24px;
+}
+
+#m_view > QWidget > QScrollBar::handle:horizontal,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::handle:horizontal,
+SettingsView > QWidget > QScrollBar::handle:horizontal {
+    min-width: 24px;
+}
+
+#m_view > QWidget > QScrollBar::add-line,
+#m_view > QWidget > QScrollBar::sub-line,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::add-line,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::sub-line,
+SettingsView > QWidget > QScrollBar::add-line,
+SettingsView > QWidget > QScrollBar::sub-line {
+    width: 0;
+    height: 0;
+    border: none;
+    background: none;
+}
+
+#m_view > QWidget > QScrollBar::add-page,
+#m_view > QWidget > QScrollBar::sub-page,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::add-page,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::sub-page,
+SettingsView > QWidget > QScrollBar::add-page,
+SettingsView > QWidget > QScrollBar::sub-page {
+    background: none;
+}
+}
