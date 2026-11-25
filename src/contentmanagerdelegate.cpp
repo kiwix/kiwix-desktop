@@ -14,13 +14,11 @@ ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
 {
     auto updateBaseButton = [this]() {
-        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-        const QString btnColor = dark ? "#5b92e5" : "blue";
         baseButton->setStyleSheet("background-color: #00000000;"
                                   "border: 0;"
                                   "font-weight: bold;"
                                   "font-family: Selawik;"
-                                  "color: " + btnColor + ";"
+                                  "color: " + themeColor("BOOK_BUTTON_TEXT").name() + ";"
                                   "margin: 4px;");
     };
     updateBaseButton();
@@ -40,8 +38,7 @@ void createPauseSymbol(QPainter *painter, const QRect& buttonRect)
     QPainterPath path;
     const int x = buttonRect.left() + 12.5;
     const int y = buttonRect.top() + 10;
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#5b92e5" : "#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     path.moveTo(x, y);
     path.lineTo(x, y + 10);
     painter->strokePath(path, pen);
@@ -57,8 +54,7 @@ void createResumeSymbol(QPainter *painter, const QRect& buttonRect)
     QPainterPath path;
     const int x = buttonRect.left() + 12.5;
     const int y = buttonRect.top() + 8;
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#5b92e5" : "#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     path.moveTo(x, y);
     path.lineTo(x, y + 15);
     path.lineTo(x + 10, y + 8);
@@ -102,8 +98,7 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
     int y = box.y();
     int w = box.width();
     int h = box.height();
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#9aa0a6" : "#666666");
+    pen.setColor(themeColor("TEXT_SECONDARY"));
     painter->setPen(pen);
     auto oldFont = painter->font();
     painter->setFont(QFont("Selawik", 8));
@@ -157,13 +152,12 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#4a4d52" : "#dadce0");
+    pen.setColor(themeColor("PROGRESS_TRACK"));
     createArc(painter, 0, 360, dcl.pauseResumeButtonRect, pen);
 
     int startAngle = 0;
     int spanAngle = progress * 360;
-    pen.setColor(dark ? "#5b92e5" : "#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     createArc(painter, startAngle, spanAngle, dcl.pauseResumeButtonRect, pen);
 }
 
@@ -184,8 +178,7 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
     if (opt.state & QStyle::State_MouseOver) {
         // don't paint over the line separator
         const auto cellInternalArea = r.adjusted(0, 0, 0, -1);
-        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-        p->fillRect(cellInternalArea, QBrush(dark ? "#34425a" : "#eaecf0"));
+        p->fillRect(cellInternalArea, themeColor("HOVER_BACKGROUND"));
     }
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();

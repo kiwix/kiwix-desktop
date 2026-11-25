@@ -33,5 +33,11 @@
     "SERVER_BUTTON": "#4169e1",
     "SERVER_BUTTON_HOVER": "rgba(65,105,225,0.9)",
     "SUGGESTION_HEADER_TEXT": "#3b3b3b",
+    "BOOK_BUTTON_TEXT": "#0000ff",
+    "PROGRESS_TRACK": "#dadce0",
+    "LOADER_TRACK": "#eaecf0",
+    "PLACEHOLDER_TEXT": "#999999",
+    "FOCUS_BORDER": "#4e63ad",
+    "CHOICE_TEXT": "#666666",
     "ICON_SUFFIX": ""
 }

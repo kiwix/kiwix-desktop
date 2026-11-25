@@ -660,16 +660,35 @@ QJsonObject loadThemeValues(const QString &path)
     return values;
 }
 
+bool isDarkThemeInUse()
+{
+    return KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+}
+
+const QJsonObject &currentThemeValues()
+{
+    static const QJsonObject lightValues = loadThemeValues(":/themes/light.json");
+    static const QJsonObject darkValues = loadThemeValues(":/themes/dark.json");
+    return isDarkThemeInUse() ? darkValues : lightValues;
+}
+
 }
 
 QString themeAwareCss(const QString &cssPath)
 {
-    static const QJsonObject lightValues = loadThemeValues(":/themes/light.json");
-    static const QJsonObject darkValues = loadThemeValues(":/themes/dark.json");
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
     return renderStyleSheetTemplate(getFileContent(cssPath),
-                                    dark ? "dark" : "light",
-                                    dark ? darkValues : lightValues);
+                                    isDarkThemeInUse() ? "dark" : "light",
+                                    currentThemeValues());
+}
+
+QColor themeColor(const QString &name)
+{
+    const QJsonValue value = currentThemeValues().value(name);
+    if (!value.isString()) {
+        qWarning() << "No colour" << name << "in the theme";
+        return QColor();
+    }
+    return QColor(value.toString());
 }
 
 QString themeAwareIconPath(const QString &name)

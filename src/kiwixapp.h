@@ -13,6 +13,7 @@
 
 #include <QtSingleApplication>
 #include <QApplication>
+#include <QColor>
 #include <QErrorMessage>
 #include <QIcon>
 #include <QMessageBox>
@@ -171,6 +172,12 @@ QString gt(const QString &key);
  *                 renderStyleSheetTemplate() for the template syntax.
  */
 QString themeAwareCss(const QString &cssPath);
+/**
+ * @brief Returns a colour of the effective theme.
+ *
+ * @param name  Its name in resources/themes/<theme>.json, e.g. "ACCENT".
+ */
+QColor themeColor(const QString &name);
 /**
  * @brief Returns the Qt resource path of an icon for the effective theme.
  *
