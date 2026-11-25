@@ -23,7 +23,7 @@ QTreeView::item:has-children {
 
 QTreeView {
     font-family: 'Selawik';
-    padding: 4px; /* XXX: duplicated in css_constants.h */
+    padding: {{BOOK_LIST_PADDING}}px;
     border: none;
     selection-color: {{TEXT}};
     qproperty-iconSize: 30px;

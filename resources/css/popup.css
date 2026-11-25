@@ -24,11 +24,11 @@ QHeaderView::section {
     color: {{SUGGESTION_HEADER_TEXT}};
     background-color: {{SURFACE}};
 
-    margin-top: 5px; /* XXX: duplicated in css_constants.h */
-    padding: 5px 10px; /* XXX: duplicated in css_constants.h */
+    margin-top: {{SUGGESTION_HEADER_MARGIN_TOP}}px;
+    padding: {{SUGGESTION_HEADER_PADDING_VERTICAL}}px {{SUGGESTION_HEADER_PADDING_LEFT}}px;
 
     font-size: 16px;
-    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    line-height: {{SUGGESTION_HEADER_LINE_HEIGHT}}px;
     font-weight: 400;
 }
 

@@ -32,8 +32,8 @@ QToolButton {
 
 SearchBar {
     background-color: {{SURFACE}};
-    margin: 2px; /* XXX: duplicated in css_constants.h */
-    border: 1px solid {{BORDER}}; /* XXX: duplicated in css_constants.h */
+    margin: {{SEARCH_BAR_MARGIN}}px;
+    border: {{SEARCH_BAR_BORDER}}px solid {{BORDER}};
     border-radius: 3px;
 
     max-height: 40px;
@@ -78,13 +78,13 @@ SearchBar > QToolButton:hover {
 MultiZimButton QListWidget {
     border: 0px;
     outline: 0px;
-    padding: 5px 0px; /* XXX: duplicated in css_constants.h */
+    padding: {{MULTI_ZIM_LIST_PADDING_VERTICAL}}px 0px;
     background-color: {{SURFACE}};
 }
 
 MultiZimButton QListWidget::item {
-    padding: 0px 5px; /* XXX: duplicated in css_constants.h */
-    border: 1px solid transparent; /* XXX: duplicated in css_constants.h */
+    padding: 0px {{MULTI_ZIM_ITEM_PADDING_HORIZONTAL}}px;
+    border: {{MULTI_ZIM_ITEM_BORDER}}px solid transparent;
     background-color: {{SURFACE}};
     color: {{CONTROL_TEXT}};
 }
@@ -96,7 +96,7 @@ MultiZimButton QListWidget::item:selected:active {
 }
 
 MultiZimButton QScrollBar {
-    width: 5px; /* XXX: duplicated in css_constants.h */
+    width: {{MULTI_ZIM_SCROLL_BAR_WIDTH}}px;
     border: none;
     outline: none;
 }
@@ -111,7 +111,7 @@ ZimItemWidget * {
 
 ZimItemWidget QLabel {
     font-size: 16px;
-    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    line-height: {{ZIM_ITEM_LINE_HEIGHT}}px;
     color: {{CONTROL_TEXT}};
 }
 
@@ -146,7 +146,7 @@ TopWidget QToolButton::menu-indicator {
 }
 
 TopWidget QToolButton#backButton {
-    margin-left: 6px; /* XXX: duplicated in css_constants.h */
+    margin-left: {{BACK_BUTTON_MARGIN_LEFT}}px;
 }
 
 TopWidget QToolButton#fullScreenButton {
@@ -228,9 +228,9 @@ QTabWidget::pane {
 }
 
 QTabBar::tab {
-    border: 1px solid {{BORDER}}; /* XXX: duplicated in css_constants.h */
+    border: {{TAB_BORDER}}px solid {{BORDER}};
     border-radius: 0;
-    padding: 4px; /* XXX: duplicated in css_constants.h */
+    padding: {{TAB_PADDING}}px;
     background-color: {{TAB_BACKGROUND}};
     color: {{TAB_TEXT}};
 }
