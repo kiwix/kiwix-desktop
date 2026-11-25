@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 #include "contentmanagerdelegate.h"
 #include <QLineEdit>
+#include <QOpenGLFunctions>
 #include "ui_contentmanagerview.h"
 
 ContentManagerView::ContentManagerView(QWidget *parent)
@@ -13,6 +14,7 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     auto applyStyle = [this]() {
         mp_ui->m_view->setStyleSheet(themeAwareCss(":/css/_contentManager.css"));
         mp_ui->m_view->viewport()->update();
+        update();
     };
     applyStyle();
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
@@ -39,6 +41,16 @@ ContentManagerView::ContentManagerView(QWidget *parent)
 ContentManagerView::~ContentManagerView()
 {
 
+}
+
+void ContentManagerView::paintGL()
+{
+    // Only the layout margins around the book list show this surface:
+    // give them the page background instead of an uncleared (black) buffer.
+    const QColor background = themeColor("PAGE_BACKGROUND");
+    QOpenGLFunctions *gl = context()->functions();
+    gl->glClearColor(background.redF(), background.greenF(), background.blueF(), 1.0f);
+    gl->glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void ContentManagerView::showLoader(bool show)

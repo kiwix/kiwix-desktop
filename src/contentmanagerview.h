@@ -32,6 +32,9 @@ public slots:
 signals:
     void sizeHintChanged(const QModelIndex& index);
 
+protected:
+    void paintGL() override;
+
 private:
     Ui::contentmanagerview *mp_ui;
     KiwixLoader *loader;
