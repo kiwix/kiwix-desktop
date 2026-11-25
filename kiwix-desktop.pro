@@ -84,6 +84,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/kiwixapp.cpp \
+    src/stylesheettemplate.cpp \
     src/kprofile.cpp \
     src/blobbuffer.cpp \
     src/library.cpp \
@@ -138,6 +139,7 @@ HEADERS += \
     src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \
+    src/stylesheettemplate.h \
     src/kprofile.h \
     src/blobbuffer.h \
     src/library.h \

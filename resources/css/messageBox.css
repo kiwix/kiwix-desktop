@@ -1,17 +1,19 @@
 * {
     font-family: 'Selawik';
-    background-color: white;
+    background-color: {{SURFACE}};
     font-size: 16px;
+    color: {{CONTROL_TEXT}};
 }
 
 QDialog {
-    border: 2px solid #cccccc;
+    border: 2px solid {{BORDER}};
 }
 
 #confirmTitle {
     font-size: 18px;
     line-height: 44px;
     font-weight: bold;
+    color: {{CONTROL_TEXT}};
 }
 
 QPushButton {
@@ -20,13 +22,14 @@ QPushButton {
     outline: 0;
     border-radius: 2px;
     width: 24px;
-    border: 1px solid #3366cc;
-    color: #3366cc;
+    border: 1px solid {{ACCENT}};
+    color: {{ACCENT}};
+    background-color: {{CONTROL_BACKGROUND}};
 }
 
 QPushButton:hover {
-    background-color: #3366cc;
-    color: white;
+    background-color: {{ACCENT}};
+    color: {{TEXT_ON_ACCENT}};
 }
 
 #closeButton {

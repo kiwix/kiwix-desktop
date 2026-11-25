@@ -1,35 +1,41 @@
 QWidget {
-    background-color: white;
+    background-color: {{PAGE_BACKGROUND}};
+    color: {{CONTROL_TEXT}};
 }
 
 QDialog {
-    border: 2px solid #cccccc;
+    border: 2px solid {{BORDER}};
 }
 
 QPushButton {
     opacity: 1;
     border: none;
     padding: 3px;
-    color: RoyalBlue;
+    color: {{SERVER_BUTTON}};
     outline: 0;
 }
 
 QPushButton:hover {
-    color: rgba(65, 105, 225, 0.9);
+    color: {{SERVER_BUTTON_HOVER}};
 }
 
 QLineEdit {
-    border: 1 solid #cccccc;
+    border: 1px solid {{BORDER}};
     padding: 2px;
+    background-color: {{CONTROL_BACKGROUND}};
+    color: {{CONTROL_TEXT}};
 }
 
 QLabel {
     margin-left: 8px;
     margin-top: 4px;
+    color: {{CONTROL_TEXT}};
 }
 
 #IpChooser {
-    border-color: #cccccc;
+    border-color: {{BORDER}};
+    background-color: {{CONTROL_BACKGROUND}};
+    color: {{CONTROL_TEXT}};
 }
 
 #stackedWidget {

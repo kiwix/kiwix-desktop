@@ -1,27 +1,23 @@
-#contentmanagerside {
-    background-color: red;
-}
-
 QTreeView::branch:open:has-children {
-    image: url(:/icons/caret-down-solid.svg);
+    image: url(:/icons/caret-down-solid{{ICON_SUFFIX}}.svg);
     padding: 6px;
 }
 
 QTreeView::branch:closed:has-children {
-    image: url(:/icons/caret-right-solid.svg);
+    image: url(:/icons/caret-right-solid{{ICON_SUFFIX}}.svg);
     padding: 7px;
 }
 
 QTreeView::branch:has-children {
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid {{BORDER}};
 }
 
 QTreeView::branch:has-children:hover {
-    background-color: #eaecf0;
+    background-color: {{HOVER_BACKGROUND}};
 }
 
 QTreeView::item:has-children {
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid {{BORDER}};
 }
 
 
@@ -29,19 +25,21 @@ QTreeView {
     font-family: 'Selawik';
     padding: 4px; /* XXX: duplicated in css_constants.h */
     border: none;
-    selection-color: black;
+    selection-color: {{TEXT}};
     qproperty-iconSize: 30px;
+    background-color: {{VIEW_BACKGROUND}};
+    color: {{CONTROL_TEXT}};
 }
 
 QTreeView::item:hover {
-    background-color: #eaecf0;
+    background-color: {{HOVER_BACKGROUND}};
 }
 
 QHeaderView::section {
-    color: #666666;
-    background-color:  #fff;
+    color: {{TEXT_SECONDARY}};
+    background-color:  {{SURFACE}};
     border-width: 0px 0px 2px;
-    border-color: black;
+    border-color: {{HEADER_BORDER}};
     border-style: plain;
     font-size: 16px;
     font-family: 'Selawik';
@@ -50,7 +48,7 @@ QHeaderView::section {
 }
 
 QHeaderView::down-arrow {
-    image: url(:/icons/caret-down-solid.svg);
+    image: url(:/icons/caret-down-solid{{ICON_SUFFIX}}.svg);
     height: 12px;
     width: 12px;
     padding-bottom: 6px;
@@ -58,7 +56,7 @@ QHeaderView::down-arrow {
 }
 
 QHeaderView::up-arrow {
-    image: url(:/icons/caret-up-solid.svg);
+    image: url(:/icons/caret-up-solid{{ICON_SUFFIX}}.svg);
     height: 12px;
     width: 12px;
     padding-bottom: 6px;
@@ -66,16 +64,17 @@ QHeaderView::up-arrow {
 }
 
 QMenu {
-    background-color: white;
+    background-color: {{SURFACE}};
     margin: 2px;
     font-family: 'Selawik';
 }
 
 QMenu::item {
     padding: 2px 25px 2px 20px;
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid {{BORDER}};
+    color: {{CONTROL_TEXT}};
 }
 
 QMenu::item:selected {
-    background-color: #cccccc;
+    background-color: {{CONTEXT_MENU_SELECTION}};
 }

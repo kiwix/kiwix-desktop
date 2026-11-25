@@ -3,46 +3,52 @@ QListWidget::item {
     padding-top: 6px;
     padding-bottom: 6px;
     padding-left: 2px;
+    color: {{CONTROL_TEXT}};
 }
 
 QListWidget {
     padding: 0;
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
+    background-color: {{CONTROL_BACKGROUND}};
+    color: {{CONTROL_TEXT}};
 }
 
-QListWidget::item::selected {
-    color: #444444;
-    background-color: transparent;
+QListWidget::item:selected {
+    color: {{CHOICE_SELECTED_TEXT}};
+    background-color: {{CHOICE_SELECTED_BACKGROUND}};
 }
 
 QLineEdit {
     padding: 4px;
     border: 0;
+    background-color: {{CONTROL_BACKGROUND}};
+    color: {{CONTROL_TEXT}};
 }
 
 #choiceLabel {
     font-size: 16px;
+    color: {{CONTROL_TEXT}};
 }
 
 #currentChoices {
     margin: 0;
     padding: 0;
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
     border-radius: 1px;
 }
 
 #closeButton {
     margin: 0;
     background: transparent;
-    color: #eaecf0;
+    color: {{CHIP_CLOSE}};
     font-size: 12px;
 }
 
 ChoiceItem > QFrame {
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
     border-radius: 2px;
     padding: 0;
-    background-color: #666;
+    background-color: {{CHIP_BACKGROUND}};
     padding-left: 2px;
     padding-right: 2px;
     margin:0;
@@ -51,14 +57,14 @@ ChoiceItem > QFrame {
 #itemLabel {
     margin: 0;
     height: 6px;
-    background-color: #666;
-    color: #eaecf0;
+    background-color: {{CHIP_BACKGROUND}};
+    color: {{CHIP_TEXT}};
     font-size: 13px;
 }
 
 #clearButton {
-    background-color: white;
-    color: #3366cc;
+    background-color: {{SURFACE}};
+    color: {{ACCENT}};
     padding: 4px;
     font: bold;
     font-size: 14px;
@@ -66,6 +72,6 @@ ChoiceItem > QFrame {
 }
 
 #clearButton:hover {
-    background-color: #3366cc;
-    color: white;
+    background-color: {{ACCENT}};
+    color: {{TEXT_ON_ACCENT}};
 }

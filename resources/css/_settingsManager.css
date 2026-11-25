@@ -16,7 +16,7 @@ QPushButton {
 
 QFrame[frameShape="4"] {
     /*frameShape 4 is HLine */
-    border: 1px solid #eaecf0;
+    border: 1px solid {{SEPARATOR}};
     min-height: 0;
     max-height: 1pt;
 }
@@ -25,22 +25,24 @@ QLabel#settingsLabel {
     font-size: 32px;
     line-height: 44px;
     font-weight: bold;
+    color: {{CONTROL_TEXT}};
 }
 QSpinBox,
 QLabel#downloadDirPath, #monitorDirPath {
     font: bold 12pt;
+    color: {{CONTROL_TEXT}};
 }
 QPushButton {
-    background-color: white;
-    color: #3366cc;
+    background-color: {{SURFACE}};
+    color: {{ACCENT}};
     padding: 4px;
     font: bold;
     border-radius: 4px;
 }
 
 QPushButton:hover {
-    background-color: #3366cc;
-    color: white;
+    background-color: {{ACCENT}};
+    color: {{TEXT_ON_ACCENT}};
 }
 
 #downloadDirPathCopy, #monitorDirPathCopy {
@@ -49,8 +51,8 @@ QPushButton:hover {
 }
 
 #downloadDirPathCopy:hover, #monitorDirPathCopy:hover {
-    background-color: #D9E9FF;
-    border: 1px solid #3366CC;
+    background-color: {{ACCENT_BACKGROUND}};
+    border: 1px solid {{ACCENT}};
     border-radius: 3px;
 }
 
@@ -61,22 +63,57 @@ QPushButton:hover {
 #monitorHelp {
     padding: 1;
     margin: 0;
-    background: #666666;
-    color: white;
+    background: {{HELP_BADGE_BACKGROUND}};
+    color: {{HELP_BADGE_TEXT}};
     border-radius: 2px;
     max-height: 18px;
     min-width: 14px;
     font: bold;
 }
 
+@theme dark {
+QCheckBox {
+    color: {{TEXT}};
+}
+}
+
 QCheckBox::indicator {
     width: 16px;
     height: 16px;
-    border: 2px solid black;
+    border: 2px solid {{CHECKBOX_BORDER}};
     border-radius: 5px;
     padding: 4px;
+    background-color: {{CONTROL_BACKGROUND}};
 }
 
 QCheckBox::indicator:checked {
-    image: url(:/icons/check-solid.svg);
+    image: url(:/icons/check-solid{{ICON_SUFFIX}}.svg);
+}
+
+@theme dark {
+QComboBox {
+    background-color: {{SURFACE}};
+    color: {{TEXT}};
+    border: 1px solid {{BORDER}};
+    border-radius: 3px;
+    padding: 2px 4px;
+}
+
+QComboBox::drop-down {
+    border: none;
+}
+
+QComboBox QAbstractItemView {
+    background-color: {{SURFACE}};
+    color: {{TEXT}};
+    selection-background-color: {{ACCENT_BACKGROUND}};
+    selection-color: {{TEXT}};
+}
+
+QSpinBox {
+    background-color: {{SURFACE}};
+    color: {{TEXT}};
+    border: 1px solid {{BORDER}};
+    border-radius: 3px;
+}
 }

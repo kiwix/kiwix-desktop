@@ -1,4 +1,5 @@
 #include "kiwixapp.h"
+#include "stylesheettemplate.h"
 #include "zim/error.h"
 #include "zim/version.h"
 #include "kiwix/tools.h"
@@ -15,6 +16,8 @@
 #include <QPrintDialog>
 #include <QGuiApplication>
 #include <QStyleHints>
+#include <QJsonDocument>
+#include <QDebug>
 #include <thread>
 #include <QMessageBox>
 #if defined(Q_OS_WIN)
@@ -585,12 +588,6 @@ bool KiwixApp::isDarkTheme() const
 #endif
 }
 
-QString KiwixApp::getThemeCssPath() const
-{
-    return isDarkTheme() ? QStringLiteral(":/css/style_dark.css")
-                         : QStringLiteral(":/css/style.css");
-}
-
 void KiwixApp::applyTheme(SettingsManager::Theme theme)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
@@ -607,7 +604,7 @@ void KiwixApp::applyTheme(SettingsManager::Theme theme)
     Q_UNUSED(theme);
 #endif
 
-    setStyleSheet(getFileContent(getThemeCssPath()));
+    setStyleSheet(themeAwareCss(":/css/style.css"));
     updateActionIcons();
 }
 
@@ -623,21 +620,28 @@ QString getFileContent(QString filePath)
     return content;
 }
 
-QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath)
+namespace
 {
+
+QJsonObject loadThemeValues(const QString &path)
+{
+    QJsonParseError error;
+    const auto doc = QJsonDocument::fromJson(getFileContent(path).toUtf8(), &error);
+    if (!doc.isObject())
+        qWarning() << "Invalid theme file" << path << error.errorString();
+    return doc.object();
+}
+
+}
+
+QString themeAwareCss(const QString &cssPath)
+{
+    static const QJsonObject lightValues = loadThemeValues(":/themes/light.json");
+    static const QJsonObject darkValues = loadThemeValues(":/themes/dark.json");
     const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    if (!dark)
-        return getFileContent(baseCssPath);
-
-    if (!customDarkPath.isEmpty())
-        return getFileContent(customDarkPath);
-
-    QString darkPath = baseCssPath;
-    darkPath.replace(QStringLiteral(".css"), QStringLiteral("_dark.css"));
-    if (QFile::exists(darkPath))
-        return getFileContent(darkPath);
-
-    return getFileContent(baseCssPath);
+    return renderStyleSheetTemplate(getFileContent(cssPath),
+                                    dark ? "dark" : "light",
+                                    dark ? darkValues : lightValues);
 }
 
 QString themeAwareIconPath(const QString &name)
