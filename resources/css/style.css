@@ -160,7 +160,7 @@ TopWidget QToolButton#fullScreenButton {
 */
 
 QMenu {
-    border: {{MENU_BORDER}};
+    border: 1px solid {{BORDER}};
     min-width: 320px;
     background-color: {{CONTROL_BACKGROUND}};
 }
