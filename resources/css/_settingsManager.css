@@ -101,6 +101,13 @@ QComboBox {
 
 QComboBox::drop-down {
     border: none;
+    width: 20px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/icons/drop-down{{ICON_SUFFIX}}.svg);
+    width: 12px;
+    height: 12px;
 }
 
 QComboBox QAbstractItemView {
@@ -115,5 +122,24 @@ QSpinBox {
     color: {{TEXT}};
     border: 1px solid {{BORDER}};
     border-radius: 3px;
+}
+
+QSpinBox::up-button,
+QSpinBox::down-button {
+    border: none;
+    background-color: transparent;
+    width: 16px;
+}
+
+QSpinBox::up-arrow {
+    image: url(:/icons/caret-up-solid{{ICON_SUFFIX}}.svg);
+    width: 8px;
+    height: 8px;
+}
+
+QSpinBox::down-arrow {
+    image: url(:/icons/caret-down-solid{{ICON_SUFFIX}}.svg);
+    width: 8px;
+    height: 8px;
 }
 }
