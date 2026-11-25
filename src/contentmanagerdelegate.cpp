@@ -2,6 +2,7 @@
 #include <QtGui>
 #include <QApplication>
 #include <QDialog>
+#include <QAbstractItemView>
 #include <QStyleOptionViewItem>
 #include "kiwixapp.h"
 #include <QStyleOptionViewItem>
@@ -175,7 +176,7 @@ void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t)
 void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
     const QRect r = opt.rect;
-    if (opt.state & QStyle::State_MouseOver) {
+    if ((opt.state & QStyle::State_MouseOver) && !(opt.state & QStyle::State_Selected)) {
         // don't paint over the line separator
         const auto cellInternalArea = r.adjusted(0, 0, 0, -1);
         p->fillRect(cellInternalArea, themeColor("HOVER_BACKGROUND"));
@@ -201,8 +202,16 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
 
 void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (isDescriptionIndex(index))
-        return QStyledItemDelegate::paint(painter, option, index);
+    if (isDescriptionIndex(index)) {
+        // Descriptions can't be selected, but belong to their book: draw them
+        // selected with it.
+        QStyleOptionViewItem descriptionOption = option;
+        const auto view = qobject_cast<const QAbstractItemView*>(option.widget);
+        if (view && view->selectionModel()
+                 && view->selectionModel()->isSelected(index.parent()))
+            descriptionOption.state |= QStyle::State_Selected;
+        return QStyledItemDelegate::paint(painter, descriptionOption, index);
+    }
 
     QStyleOptionViewItem eOpt = option;
     if (index.column() == 1) {

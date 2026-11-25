@@ -26,6 +26,8 @@ QTreeView {
     padding: {{BOOK_LIST_PADDING}}px;
     border: none;
     selection-color: {{TEXT}};
+    selection-background-color: transparent;
+    show-decoration-selected: 0;
     qproperty-iconSize: 30px;
     background-color: {{VIEW_BACKGROUND}};
     color: {{CONTROL_TEXT}};
@@ -33,6 +35,12 @@ QTreeView {
 
 QTreeView::item:hover {
     background-color: {{HOVER_BACKGROUND}};
+}
+
+/* The book's description is drawn selected with it (see ContentManagerDelegate) */
+QTreeView::item:selected,
+QTreeView::branch:has-children:selected {
+    background-color: {{ACCENT_BACKGROUND}};
 }
 
 QHeaderView::section {

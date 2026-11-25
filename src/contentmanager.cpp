@@ -67,6 +67,10 @@ ContentManager::ContentManager(Library* library)
     updateModel();
     auto treeView = mp_view->getView();
     treeView->setModel(managerModel);
+    // Descriptions are drawn selected with their book (see
+    // ContentManagerDelegate::paint()), so they must be repainted with it.
+    connect(treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            treeView->viewport(), [treeView]() { treeView->viewport()->update(); });
     treeView->show();
 
     auto header = new ContentManagerHeader(Qt::Orientation::Horizontal, treeView);
