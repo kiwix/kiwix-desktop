@@ -37,7 +37,7 @@ QTreeView::item:hover {
 
 QHeaderView::section {
     color: {{TEXT_SECONDARY}};
-    background-color:  {{SURFACE}};
+    background-color: {{PAGE_BACKGROUND}};
     border-width: 0px 0px 2px;
     border-color: {{HEADER_BORDER}};
     border-style: plain;
