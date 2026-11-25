@@ -27,6 +27,7 @@
 #endif
 #endif  //  Q_OS_WIN
 #if defined(__linux__)
+#define KIWIX_LINUX_SUGGESTED_FD_LIMIT 300
 #include <sys/resource.h>
 #endif  //  __linux__
 
@@ -122,7 +123,11 @@ void KiwixApp::init()
     rlimit limits;
     getrlimit(RLIMIT_NOFILE, &limits);
 
-    std::cout << "Warning: Continuing with low FD limit. Soft[" << limits.rlim_cur << "] | Hard[" << limits.rlim_max << "]" << std::endl;
+    if(limits.rlim_cur < KIWIX_LINUX_SUGGESTED_FD_LIMIT || limits.rlim_max < KIWIX_LINUX_SUGGESTED_FD_LIMIT)
+    {
+        showMessage(gt("Attempting to launch with limitted file descriptor handles."), gt("Low FD limit"), QMessageBox::Warning);
+        std::cout << "Warning: Continuing with low FD limit. Soft[" << limits.rlim_cur << "] | Hard[" << limits.rlim_max << "]" << std::endl;
+    }
 #endif
     connect(this, &QtSingleApplication::messageReceived, this, [=](const QString &message) {
         if (!message.isEmpty()) {
