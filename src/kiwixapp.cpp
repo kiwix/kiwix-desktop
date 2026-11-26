@@ -125,7 +125,7 @@ void KiwixApp::init()
 
     if(limits.rlim_cur < KIWIX_LINUX_SUGGESTED_FD_LIMIT || limits.rlim_max < KIWIX_LINUX_SUGGESTED_FD_LIMIT)
     {
-        showMessage(gt("Attempting to launch with limitted file descriptor handles."), gt("Low FD limit"), QMessageBox::Warning);
+        showMessage(gt("low-fd-limit-warning"), gt("low-fd-limit"), QMessageBox::Warning);
         std::cout << "Warning: Continuing with low FD limit. Soft[" << limits.rlim_cur << "] | Hard[" << limits.rlim_max << "]" << std::endl;
     }
 #endif
