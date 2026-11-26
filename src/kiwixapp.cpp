@@ -27,7 +27,8 @@
 #endif
 #endif  //  Q_OS_WIN
 #if defined(__linux__)
-#define KIWIX_LINUX_SUGGESTED_FD_LIMIT 300
+#define LINUX_DEFAULT_MIN_FD_SOFTLIMIT 1024
+#define LINUX_DEFAULT_MIN_FD_HARDLIMIT 4096
 #include <sys/resource.h>
 #endif  //  __linux__
 
@@ -123,7 +124,8 @@ void KiwixApp::init()
     rlimit limits;
     getrlimit(RLIMIT_NOFILE, &limits);
 
-    if(limits.rlim_cur < KIWIX_LINUX_SUGGESTED_FD_LIMIT || limits.rlim_max < KIWIX_LINUX_SUGGESTED_FD_LIMIT)
+    /* Check for one of the primary causes of 'Too many open files' */
+    if(limits.rlim_cur < LINUX_DEFAULT_MIN_FD_SOFTLIMIT || limits.rlim_max < LINUX_DEFAULT_MIN_FD_HARDLIMIT)
     {
         showMessage(gt("low-fd-limit-warning"), gt("low-fd-limit"), QMessageBox::Warning);
         std::cout << "Warning: Continuing with low FD limit. Soft[" << limits.rlim_cur << "] | Hard[" << limits.rlim_max << "]" << std::endl;
