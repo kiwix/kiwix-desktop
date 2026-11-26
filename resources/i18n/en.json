@@ -193,5 +193,7 @@
     "theme": "Theme",
     "theme-system": "System",
     "theme-light": "Light",
-    "theme-dark": "Dark"
+    "theme-dark": "Dark",
+    "low-fd-limit": "Low FD limit",
+    "low-fd-limit-warning": "Attempting to launch with limitted file descriptor handles."
 }
