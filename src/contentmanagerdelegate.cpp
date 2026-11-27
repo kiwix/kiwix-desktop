@@ -2,7 +2,7 @@
 #include <QtGui>
 #include <QApplication>
 #include <QDialog>
-#include <QAbstractItemView>
+#include "contentmanagertreeview.h"
 #include <QStyleOptionViewItem>
 #include "kiwixapp.h"
 #include <QStyleOptionViewItem>
@@ -202,18 +202,22 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
 
 void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (isDescriptionIndex(index)) {
-        // Descriptions can't be selected, but belong to their book: draw them
-        // selected with it.
-        QStyleOptionViewItem descriptionOption = option;
-        const auto view = qobject_cast<const QAbstractItemView*>(option.widget);
-        if (view && view->selectionModel()
-                 && view->selectionModel()->isSelected(index.parent()))
-            descriptionOption.state |= QStyle::State_Selected;
-        return QStyledItemDelegate::paint(painter, descriptionOption, index);
+    // A book and its description are one item: draw both hovered when either
+    // is under the mouse, and both selected with the book (descriptions can't
+    // be selected themselves).
+    QStyleOptionViewItem itemOption = option;
+    if (const auto view = qobject_cast<const ContentManagerTreeView*>(option.widget)) {
+        const auto book = bookIndex(index);
+        if (view->selectionModel() && view->selectionModel()->isSelected(book))
+            itemOption.state |= QStyle::State_Selected;
+        if (book == view->hoveredBook())
+            itemOption.state |= QStyle::State_MouseOver;
     }
 
-    QStyleOptionViewItem eOpt = option;
+    if (isDescriptionIndex(index))
+        return QStyledItemDelegate::paint(painter, itemOption, index);
+
+    QStyleOptionViewItem eOpt = itemOption;
     if (index.column() == 1) {
         auto bFont = painter->font();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)

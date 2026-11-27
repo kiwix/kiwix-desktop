@@ -99,6 +99,7 @@ SOURCES += \
     src/about.cpp \
     src/contentmanager.cpp \
     src/contentmanagerview.cpp \
+    src/contentmanagertreeview.cpp \
     src/tabbar.cpp \
     src/contentmanagerside.cpp \
     src/readinglistbar.cpp \
@@ -119,6 +120,7 @@ HEADERS += \
     src/contentmanagerheader.h \
     src/contentmanagermodel.h \
     src/contentmanagerview.h \
+    src/contentmanagertreeview.h \
     src/contenttypefilter.h \
     src/descriptionnode.h \
     src/downloadmanagement.h \
