@@ -3,6 +3,7 @@
 #include "kiwixapp.h"
 
 #include <QCursor>
+#include <QEvent>
 #include <QPainter>
 
 ContentManagerTreeView::ContentManagerTreeView(QWidget *parent)

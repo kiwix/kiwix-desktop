@@ -48,7 +48,7 @@
   <customwidget>
    <class>ContentManagerTreeView</class>
    <extends>QTreeView</extends>
-   <header>contentmanagertreeview.h</header>
+   <header>src/contentmanagertreeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
