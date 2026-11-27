@@ -1,6 +1,6 @@
 QWidget {
-    background-color: #EAECF0;
-    color: #000000;
+    background-color: {{WINDOW_BACKGROUND}};
+    color: {{TEXT}};
 }
 
 
@@ -14,7 +14,7 @@ TopWidget {
     margin: 0;
     padding: 5px;
     border: none;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid {{BORDER}};
 }
 
 TopWidget::separator {
@@ -31,9 +31,9 @@ QToolButton {
 }
 
 SearchBar {
-    background-color: white;
-    margin: 2px; /* XXX: duplicated in css_constants.h */
-    border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
+    background-color: {{SURFACE}};
+    margin: {{SEARCH_BAR_MARGIN}}px;
+    border: {{SEARCH_BAR_BORDER}}px solid {{BORDER}};
     border-radius: 3px;
 
     max-height: 40px;
@@ -50,10 +50,10 @@ SearchBar > QLabel#searchIcon {
 }
 
 SearchBar > SearchBarLineEdit {
-    background-color: white;
+    background-color: {{SURFACE}};
     margin: 0;
     padding: 0;
-    color: #666;
+    color: {{TEXT_SECONDARY}};
     border: none;
     font-size: 16px;
 
@@ -62,7 +62,7 @@ SearchBar > SearchBarLineEdit {
 
 SearchBar > QToolButton {
     padding: 0;
-    border: 0 solid #fff;
+    border: 0 solid {{PAGE_BACKGROUND}};
     background-color: none;
     max-height: 38px;
     max-width: 38px;
@@ -70,38 +70,39 @@ SearchBar > QToolButton {
 
 SearchBar > QToolButton:pressed,
 SearchBar > QToolButton:hover {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
+    border: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
     border-radius: 3px;
 }
 
 MultiZimButton QListWidget {
     border: 0px;
     outline: 0px;
-    padding: 5px 0px; /* XXX: duplicated in css_constants.h */
-    background-color: white;
+    padding: {{MULTI_ZIM_LIST_PADDING_VERTICAL}}px 0px;
+    background-color: {{SURFACE}};
 }
 
 MultiZimButton QListWidget::item {
-    padding: 0px 5px; /* XXX: duplicated in css_constants.h */
-    border: 1px solid transparent; /* XXX: duplicated in css_constants.h */
-    background-color: white;
+    padding: 0px {{MULTI_ZIM_ITEM_PADDING_HORIZONTAL}}px;
+    border: {{MULTI_ZIM_ITEM_BORDER}}px solid transparent;
+    background-color: {{SURFACE}};
+    color: {{CONTROL_TEXT}};
 }
 
 MultiZimButton QListWidget::item:hover,
 MultiZimButton QListWidget::item:selected:active {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
+    border: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
 }
 
 MultiZimButton QScrollBar {
-    width: 5px; /* XXX: duplicated in css_constants.h */
+    width: {{MULTI_ZIM_SCROLL_BAR_WIDTH}}px;
     border: none;
     outline: none;
 }
 
 MultiZimButton QScrollBar::handle {
-    background-color: grey;
+    background-color: {{MUTED}};
 }
 
 ZimItemWidget * {
@@ -110,7 +111,8 @@ ZimItemWidget * {
 
 ZimItemWidget QLabel {
     font-size: 16px;
-    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    line-height: {{ZIM_ITEM_LINE_HEIGHT}}px;
+    color: {{CONTROL_TEXT}};
 }
 
 ZimItemWidget QRadioButton::indicator {
@@ -118,13 +120,13 @@ ZimItemWidget QRadioButton::indicator {
 }
 
 ZimItemWidget QRadioButton::indicator:checked {
-    image: url(:/icons/tick.svg);
+    image: url(:/icons/tick{{ICON_SUFFIX}}.svg);
 }
 
 TopWidget QToolButton:pressed,
 TopWidget QToolButton::hover {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
+    border: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
     border-radius: 3px;
 }
 
@@ -144,7 +146,7 @@ TopWidget QToolButton::menu-indicator {
 }
 
 TopWidget QToolButton#backButton {
-    margin-left: 6px; /* XXX: duplicated in css_constants.h */
+    margin-left: {{BACK_BUTTON_MARGIN_LEFT}}px;
 }
 
 TopWidget QToolButton#fullScreenButton {
@@ -158,8 +160,9 @@ TopWidget QToolButton#fullScreenButton {
 */
 
 QMenu {
-    border: none;
+    border: 1px solid {{BORDER}};
     min-width: 320px;
+    background-color: {{CONTROL_BACKGROUND}};
 }
 
 QMenu::item {
@@ -168,6 +171,8 @@ QMenu::item {
     max-height: 40px;
     border: 1px solid transparent;
     padding: 2px 12px 2px 40px;     /* top right bottom left */
+    color: {{CONTROL_TEXT}};
+    background-color: {{CONTROL_BACKGROUND}};
 }
 
 QMenu::icon {
@@ -176,16 +181,16 @@ QMenu::icon {
 }
 
 QMenu::item:selected {
-    background-color: #D9E9FF;
-    border: 1px solid #3366CC;
+    background-color: {{ACCENT_BACKGROUND}};
+    border: 1px solid {{ACCENT}};
 }
 
 QMenu::item:disabled { 
-    color: gray; 
+    color: {{MUTED}}; 
 }
 
 MainMenu::indicator {
-    color: #666666;
+    color: {{TEXT_SECONDARY}};
     width: 13px;
     height: 13px;
 }
@@ -207,7 +212,7 @@ WebViewForwardMenu::icon, WebViewBackMenu::icon {
 QTabBar {
     font-size: 16px;
     icon-size: 24px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid {{BORDER}};
 }
 
 QTabBar::tear {
@@ -219,23 +224,30 @@ QTabBar::tear {
 QTabWidget::pane {
     top: -2px;
     border: none;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid {{BORDER}};
 }
 
 QTabBar::tab {
-    border: 1px solid #ccc; /* XXX: duplicated in css_constants.h */
+    border: {{TAB_BORDER}}px solid {{BORDER}};
+    /* Lines are drawn once: the toolbar's bottom border is the top line, and
+       a tab's right border separates it from the next one. */
+    border-top-color: transparent;
+    border-left-color: transparent;
     border-radius: 0;
-    padding: 4px; /* XXX: duplicated in css_constants.h */
+    padding: {{TAB_PADDING}}px;
+    background-color: {{TAB_BACKGROUND}};
+    color: {{TAB_TEXT}};
 }
 
 QTabBar::tab:selected {
-    background-color: white;
-    border-bottom: 1px solid white;
+    background-color: {{SURFACE}};
+    border-bottom: 1px solid {{SURFACE}};
+    color: {{CONTROL_TEXT}};
 }
 
 QTabBar::tab:last {
     border: 1px solid transparent;
-    border-top: 1px solid #ccc;
+    border-bottom: 1px solid {{BORDER}};
 }
 
 #closeTabButton, #newTabButton {
@@ -247,14 +259,14 @@ QTabBar::tab:last {
 }
 
 #nextTabButton, #prevTabButton, #newTabSideButton {
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
 }
 
 #closeTabButton:hover, #newTabButton:hover,
 #nextTabButton:hover, #prevTabButton:hover,
 #newTabSideButton:hover {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
+    border: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
     border-radius: 3px;
 }
 
@@ -272,7 +284,14 @@ QTabBar::scroller {
 
 #aboutText {
     padding: 20px;
-    background-color: white;
+    background-color: {{SURFACE}};
+    color: {{CONTROL_TEXT}};
+}
+
+@theme dark {
+#aboutText a {
+    color: {{ACCENT}};
+}
 }
 
 /* ----------------------------------------
@@ -280,16 +299,16 @@ QTabBar::scroller {
 */
 
 #FindInPageBar {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid {{BORDER}};
 }
 
 #findEdit {
-    background-color: white;
+    background-color: {{SURFACE}};
     padding: 2px;
     max-height: 36px;
-    color: #666;
+    color: {{INPUT_TEXT}};
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
     border-radius: 0;
 }
 
@@ -299,15 +318,15 @@ QTabBar::scroller {
     outline: none;
     max-height: 36px;
     max-width: 36px;
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
     border-radius: 0;
 }
 
 #fNextButton:pressed,
 #fPreviousButton:pressed,
 #hideButton:pressed {
-    background-color: #D9E9FF;
-    border: 1px solid #3366CC;
+    background-color: {{ACCENT_BACKGROUND}};
+    border: 1px solid {{ACCENT}};
 }
 
 /* ----------------------------------------
@@ -315,13 +334,14 @@ QTabBar::scroller {
 */
 
 #contentmanagerside QWidget {
-   background-color: white;
+   background-color: {{SURFACE}};
    outline: none;
 }
 
 #contentmanagerside QRadioButton,
 #contentmanagerside QCheckBox {
     padding: 10px;
+    color: {{CONTROL_TEXT}};
 }
 
 #contentmanagerside QRadioButton:checked {
@@ -355,13 +375,13 @@ QTabBar::scroller {
 
 #categorySelector QScrollBar::handle,
 #languageSelector QScrollBar::handle {
-    background-color: grey;
+    background-color: {{MUTED}};
 }
 
 #categorySelector::item:selected,
 #languageSelector::item:selected {
-    background-color: white;
-    color: black;
+    background-color: {{SELECTOR_SELECTION}};
+    color: {{TEXT}};
     outline: none;
 }
 
@@ -372,13 +392,14 @@ ContentTypeFilter {
 
 
 #tableofcontentbar {
-    background-color: white;
+    background-color: {{SURFACE}};
 }
 
 #tableofcontentbar QTreeWidget,
 #tableofcontentbar QLabel,
 #tableofcontentbar QFrame {
-    background-color: white;
+    background-color: {{SURFACE}};
+    color: {{CONTROL_TEXT}};
 }
 
 #tableofcontentbar QTreeWidget {
@@ -396,18 +417,18 @@ ContentTypeFilter {
 #tableofcontentbar QTreeWidget::item:selected,
 #tableofcontentbar QTreeWidget::item:hover {
     outline: none;
-    border-top: 1px solid #3366CC;
-    border-bottom: 1px solid #3366CC;
-    background-color: #D9E9FF;
-    color: black;
+    border-top: 1px solid {{ACCENT}};
+    border-bottom: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
+    color: {{TEXT}};
 }
 
 #tableofcontentbar QTreeWidget::branch:selected,
 #tableofcontentbar QTreeWidget::branch:hover {
     outline: none;
-    border-top: 1px solid #3366CC;
-    border-bottom: 1px solid #3366CC;
-    background-color: #D9E9FF;
+    border-top: 1px solid {{ACCENT}};
+    border-bottom: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
 }
 
 #tableofcontentbar QTreeWidget::branch {
@@ -430,12 +451,12 @@ ContentTypeFilter {
 }
 
 #tableofcontentbar QScrollBar::handle {
-    background-color: grey;
+    background-color: {{MUTED}};
 }
 
 /*this selector worked after changing class ReadingListBar to a QFrame instead of QWidget in readinglistbar.h file*/
 #readinglistbar {
-    background-color: white;
+    background-color: {{SURFACE}};
 }
 
 #readinglistbar QPushButton::menu-indicator {
@@ -448,7 +469,8 @@ ContentTypeFilter {
 #readinglistbar QFrame,
 #readinglistbar QListWidget,
 #readinglistbar QPushButton {
-    background-color: white;
+    background-color: {{SURFACE}};
+    color: {{CONTROL_TEXT}};
 }
 
 #readinglistbar QPushButton{
@@ -466,15 +488,15 @@ ContentTypeFilter {
     outline: none;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
-    color: black;
+    color: {{TEXT}};
 }
 
 #readinglistbar QListWidget::item:hover {
     outline: none;
-    border-top: 1px solid #3366CC;
-    border-bottom: 1px solid #3366CC;
-    background-color: #D9E9FF;
-    color: black;
+    border-top: 1px solid {{ACCENT}};
+    border-bottom: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
+    color: {{TEXT}};
 }
 
 #readinglistbar #titleLabel {
@@ -489,7 +511,7 @@ ContentTypeFilter {
 }
 
 #readinglistbar QScrollBar::handle {
-    background-color: grey;
+    background-color: {{MUTED}};
 }
 
 #readinglistbar QLabel#titleLabel {
@@ -502,14 +524,14 @@ ContentTypeFilter {
 */
 
 TextToSpeechBar {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid {{BORDER}};
 }
 
 TextToSpeechBar #closeButton {
     outline: none;
     max-height: 36px;
     max-width: 36px;
-    border: 1px solid #ccc;
+    border: 1px solid {{BORDER}};
     border-radius: 0;
 }
 
@@ -518,19 +540,19 @@ TextToSpeechBar #stopButton {
     max-height: 36px;
     padding: 0px 10px;
     
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: {{SURFACE}};
+    border: 1px solid {{BORDER}};
     border-radius: 0;
 }
 
 TextToSpeechBar #stopButton:hover {
-    background-color: #D9E9FF;
-    border: 1px solid #3366CC;
+    background-color: {{ACCENT_BACKGROUND}};
+    border: 1px solid {{ACCENT}};
 }
 
 TextToSpeechBar #stopButton:disabled {
-    color: grey;
-    background-color: darkgrey;
+    color: {{MUTED}};
+    background-color: {{DISABLED_BUTTON_BACKGROUND}};
 }
 
 TextToSpeechBar QComboBox::drop-down {
@@ -539,13 +561,14 @@ TextToSpeechBar QComboBox::drop-down {
     padding: 0px 2px;
     margin: 0px;
 
-    image: url(":/icons/drop-down.svg");
-    background-color: white;
+    image: url(":/icons/drop-down{{ICON_SUFFIX}}.svg");
+    background-color: {{SURFACE}};
 }
 
 TextToSpeechBar QComboBox {
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: {{SURFACE}};
+    border: 1px solid {{BORDER}};
+    color: {{CONTROL_TEXT}};
 }
 
 TextToSpeechBar QAbstractItemView QScrollBar {
@@ -555,9 +578,78 @@ TextToSpeechBar QAbstractItemView QScrollBar {
 }
 
 TextToSpeechBar QAbstractItemView QScrollBar::handle {
-    background-color: grey;
+    background-color: {{MUTED}};
 }
 
 #mainView {
-    background-color: white;
+    background-color: {{PAGE_BACKGROUND}};
+}
+
+/* -----------------------------------------
+    Scroll bars of the book list, the library side panel and the settings:
+    the platform's are hardly visible on the dark background.
+    (Child selectors: only the scroll areas' own scroll bars.)
+*/
+
+@theme dark {
+#m_view > QWidget > QScrollBar,
+ContentManagerSide QScrollArea > QWidget > QScrollBar,
+SettingsView > QWidget > QScrollBar {
+    background-color: {{WINDOW_BACKGROUND}};
+    border: none;
+    margin: 0;
+}
+
+#m_view > QWidget > QScrollBar:vertical,
+ContentManagerSide QScrollArea > QWidget > QScrollBar:vertical,
+SettingsView > QWidget > QScrollBar:vertical {
+    width: 12px;
+}
+
+#m_view > QWidget > QScrollBar:horizontal,
+ContentManagerSide QScrollArea > QWidget > QScrollBar:horizontal,
+SettingsView > QWidget > QScrollBar:horizontal {
+    height: 12px;
+}
+
+#m_view > QWidget > QScrollBar::handle,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::handle,
+SettingsView > QWidget > QScrollBar::handle {
+    background-color: {{MUTED}};
+    border-radius: 4px;
+    margin: 2px;
+}
+
+#m_view > QWidget > QScrollBar::handle:vertical,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::handle:vertical,
+SettingsView > QWidget > QScrollBar::handle:vertical {
+    min-height: 24px;
+}
+
+#m_view > QWidget > QScrollBar::handle:horizontal,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::handle:horizontal,
+SettingsView > QWidget > QScrollBar::handle:horizontal {
+    min-width: 24px;
+}
+
+#m_view > QWidget > QScrollBar::add-line,
+#m_view > QWidget > QScrollBar::sub-line,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::add-line,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::sub-line,
+SettingsView > QWidget > QScrollBar::add-line,
+SettingsView > QWidget > QScrollBar::sub-line {
+    width: 0;
+    height: 0;
+    border: none;
+    background: none;
+}
+
+#m_view > QWidget > QScrollBar::add-page,
+#m_view > QWidget > QScrollBar::sub-page,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::add-page,
+ContentManagerSide QScrollArea > QWidget > QScrollBar::sub-page,
+SettingsView > QWidget > QScrollBar::add-page,
+SettingsView > QWidget > QScrollBar::sub-page {
+    background: none;
+}
 }

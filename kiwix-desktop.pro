@@ -84,6 +84,7 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/kiwixapp.cpp \
+    src/stylesheettemplate.cpp \
     src/kprofile.cpp \
     src/blobbuffer.cpp \
     src/library.cpp \
@@ -98,6 +99,7 @@ SOURCES += \
     src/about.cpp \
     src/contentmanager.cpp \
     src/contentmanagerview.cpp \
+    src/contentmanagertreeview.cpp \
     src/tabbar.cpp \
     src/contentmanagerside.cpp \
     src/readinglistbar.cpp \
@@ -118,6 +120,7 @@ HEADERS += \
     src/contentmanagerheader.h \
     src/contentmanagermodel.h \
     src/contentmanagerview.h \
+    src/contentmanagertreeview.h \
     src/contenttypefilter.h \
     src/descriptionnode.h \
     src/downloadmanagement.h \
@@ -138,6 +141,7 @@ HEADERS += \
     src/translation.h \
     src/mainwindow.h \
     src/kiwixapp.h \
+    src/stylesheettemplate.h \
     src/kprofile.h \
     src/blobbuffer.h \
     src/library.h \

@@ -1,4 +1,6 @@
 #include "kiwixapp.h"
+#include "stylesheettemplate.h"
+#include "css_constants.h"
 #include "zim/error.h"
 #include "zim/version.h"
 #include "kiwix/tools.h"
@@ -15,6 +17,8 @@
 #include <QPrintDialog>
 #include <QGuiApplication>
 #include <QStyleHints>
+#include <QJsonDocument>
+#include <QDebug>
 #include <thread>
 #include <QMessageBox>
 #if defined(Q_OS_WIN)
@@ -585,12 +589,6 @@ bool KiwixApp::isDarkTheme() const
 #endif
 }
 
-QString KiwixApp::getThemeCssPath() const
-{
-    return isDarkTheme() ? QStringLiteral(":/css/style_dark.css")
-                         : QStringLiteral(":/css/style.css");
-}
-
 void KiwixApp::applyTheme(SettingsManager::Theme theme)
 {
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
@@ -607,7 +605,7 @@ void KiwixApp::applyTheme(SettingsManager::Theme theme)
     Q_UNUSED(theme);
 #endif
 
-    setStyleSheet(getFileContent(getThemeCssPath()));
+    setStyleSheet(themeAwareCss(":/css/style.css"));
     updateActionIcons();
 }
 
@@ -623,21 +621,79 @@ QString getFileContent(QString filePath)
     return content;
 }
 
-QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath)
+namespace
 {
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    if (!dark)
-        return getFileContent(baseCssPath);
 
-    if (!customDarkPath.isEmpty())
-        return getFileContent(customDarkPath);
+// Sizes from css_constants.h, used by the style sheets as {{NAME}}px.
+QJsonObject cssConstantValues()
+{
+    const auto px = [](int value) { return QString::number(value); };
+    return {
+        {"TAB_PADDING", px(CSS::QTabBar::tab::padding)},
+        {"TAB_BORDER", px(CSS::QTabBar::tab::border)},
+        {"SEARCH_BAR_MARGIN", px(CSS::SearchBar::margin)},
+        {"SEARCH_BAR_BORDER", px(CSS::SearchBar::border)},
+        {"MULTI_ZIM_LIST_PADDING_VERTICAL", px(CSS::MultiZimButton::QListWidget::paddingVertical)},
+        {"MULTI_ZIM_ITEM_PADDING_HORIZONTAL", px(CSS::MultiZimButton::QListWidget::item::paddingHorizontal)},
+        {"MULTI_ZIM_ITEM_BORDER", px(CSS::MultiZimButton::QListWidget::item::border)},
+        {"MULTI_ZIM_SCROLL_BAR_WIDTH", px(CSS::MultiZimButton::QScrollBar::width)},
+        {"ZIM_ITEM_LINE_HEIGHT", px(CSS::ZimItemWidget::QLabel::lineHeight)},
+        {"BACK_BUTTON_MARGIN_LEFT", px(CSS::TopWidget::QToolButton::backButton::marginLeft)},
+        {"BOOK_LIST_PADDING", px(CSS::ContentManagerCSS::QTreeView::padding)},
+        {"SUGGESTION_HEADER_MARGIN_TOP", px(CSS::PopupCSS::QHeaderView::section::marginTop)},
+        {"SUGGESTION_HEADER_PADDING_VERTICAL", px(CSS::PopupCSS::QHeaderView::section::paddingVertical)},
+        {"SUGGESTION_HEADER_PADDING_LEFT", px(CSS::PopupCSS::QHeaderView::section::paddingLeft)},
+        {"SUGGESTION_HEADER_LINE_HEIGHT", px(CSS::PopupCSS::QHeaderView::section::lineHeight)},
+    };
+}
 
-    QString darkPath = baseCssPath;
-    darkPath.replace(QStringLiteral(".css"), QStringLiteral("_dark.css"));
-    if (QFile::exists(darkPath))
-        return getFileContent(darkPath);
+QJsonObject loadThemeValues(const QString &path)
+{
+    QJsonParseError error;
+    const auto doc = QJsonDocument::fromJson(getFileContent(path).toUtf8(), &error);
+    if (!doc.isObject())
+        qWarning() << "Invalid theme file" << path << error.errorString();
+    QJsonObject values = doc.object();
+    const QJsonObject sizes = cssConstantValues();
+    for (auto it = sizes.begin(); it != sizes.end(); ++it)
+        values.insert(it.key(), it.value());
+    return values;
+}
 
-    return getFileContent(baseCssPath);
+bool isDarkThemeInUse()
+{
+    return KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+}
+
+const QJsonObject &currentThemeValues()
+{
+    static const QJsonObject lightValues = loadThemeValues(":/themes/light.json");
+    static const QJsonObject darkValues = loadThemeValues(":/themes/dark.json");
+    return isDarkThemeInUse() ? darkValues : lightValues;
+}
+
+}
+
+QString themeAwareStyleSheet(const QString &styleSheetTemplate)
+{
+    return renderStyleSheetTemplate(styleSheetTemplate,
+                                    isDarkThemeInUse() ? "dark" : "light",
+                                    currentThemeValues());
+}
+
+QString themeAwareCss(const QString &cssPath)
+{
+    return themeAwareStyleSheet(getFileContent(cssPath));
+}
+
+QColor themeColor(const QString &name)
+{
+    const QJsonValue value = currentThemeValues().value(name);
+    if (!value.isString()) {
+        qWarning() << "No colour" << name << "in the theme";
+        return QColor();
+    }
+    return QColor(value.toString());
 }
 
 QString themeAwareIconPath(const QString &name)

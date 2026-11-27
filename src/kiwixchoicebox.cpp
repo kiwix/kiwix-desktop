@@ -40,12 +40,9 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
         auto styleSheet = themeAwareCss(":/css/choiceBox.css");
         this->setStyleSheet(styleSheet);
         choiceSelector->setStyleSheet(styleSheet);
-        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
         ui->currentChoices->setStyleSheet(
-            dark ? "#currentChoices{border: 1px solid #4a4d52;}"
-                 : "#currentChoices{border: 1px solid #ccc;}");
-        searcher->setStyleSheet(
-            dark ? "QLineEdit{color: #9aa0a6;}" : "QLineEdit{color: #999;}");
+            "#currentChoices{border: 1px solid " + themeColor("BORDER").name() + ";}");
+        searcher->setStyleSheet("QLineEdit{color: " + themeColor("PLACEHOLDER_TEXT").name() + ";}");
     };
     currentChoicesLayout = new FlowLayout(ui->currentChoices, 4, 2, 2);
     searcher = new KiwixLineEdit();
@@ -65,9 +62,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     });
 
     connect(searcher, &QLineEdit::textChanged, [=](QString search) {
-        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-        searcher->setStyleSheet(
-            dark ? "QLineEdit{color: #f0f2f5;}" : "QLineEdit{color: #666;}");
+        searcher->setStyleSheet("QLineEdit{color: " + themeColor("INPUT_TEXT").name() + ";}");
         QFontMetrics fm = searcher->fontMetrics();
         auto w = fm.horizontalAdvance(search) + 20;
         if (w + 4 < ui->currentChoices->width()) {
@@ -90,9 +85,7 @@ KiwixChoiceBox::KiwixChoiceBox(QWidget *parent) :
     });
 
     choiceSelector->setVisible(false);
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    searcher->setStyleSheet(
-        dark ? "QLineEdit{color: #9aa0a6;}" : "QLineEdit{color: #999;}");
+    searcher->setStyleSheet("QLineEdit{color: " + themeColor("PLACEHOLDER_TEXT").name() + ";}");
 
     connect(searcher, &KiwixLineEdit::focusedOut, [=]() {
         hideOptions();
@@ -145,22 +138,17 @@ void KiwixChoiceBox::hideOptions()
     if (choiceSelector->selectedItems().isEmpty()) {
         showPlaceholder();
     }
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    searcher->setStyleSheet(
-        dark ? "QLineEdit{color: #9aa0a6;}" : "QLineEdit{color: #999;}");
+    searcher->setStyleSheet("QLineEdit{color: " + themeColor("PLACEHOLDER_TEXT").name() + ";}");
     choiceSelector->setVisible(false);
     ui->currentChoices->setStyleSheet(
-        dark ? "#currentChoices{border: 1px solid #4a4d52;}"
-             : "#currentChoices{border: 1px solid #ccc;}");
+        "#currentChoices{border: 1px solid " + themeColor("BORDER").name() + ";}");
     searcher->clearFocus();
 }
 
 void KiwixChoiceBox::showOptions()
 {
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
     ui->currentChoices->setStyleSheet(
-        dark ? "#currentChoices{border: 2px solid #5b92e5;}"
-             : "#currentChoices{border: 2px solid #4e63ad;}");
+        "#currentChoices{border: 2px solid " + themeColor("FOCUS_BORDER").name() + ";}");
     adjustSize();
     choiceSelector->setVisible(true);
     choiceSelector->raise();

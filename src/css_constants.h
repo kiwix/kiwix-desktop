@@ -11,7 +11,8 @@
  *   a CSS hierarchy. 
  * - The classes are defined in resources/style.css unless specified. 
  * - Naming convention should follow Javascript's style naming.
- * - Comments should be added to the duplicated css properties in css files.
+ * - The css files don't repeat these values: they use them as {{NAME}}, see
+ *   cssConstantValues() in kiwixapp.cpp.
  */
 namespace CSS
 {

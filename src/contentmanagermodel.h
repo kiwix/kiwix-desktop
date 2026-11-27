@@ -67,4 +67,10 @@ inline bool isDescriptionIndex(const QModelIndex& index)
     return index.parent().isValid();
 }
 
+// The book of a row (its first column): the row itself, or a description's book.
+inline QModelIndex bookIndex(const QModelIndex& index)
+{
+    return isDescriptionIndex(index) ? index.parent() : index.siblingAtColumn(0);
+}
+
 #endif // CONTENTMANAGERMODEL_H

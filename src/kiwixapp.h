@@ -13,6 +13,7 @@
 
 #include <QtSingleApplication>
 #include <QApplication>
+#include <QColor>
 #include <QErrorMessage>
 #include <QIcon>
 #include <QMessageBox>
@@ -123,12 +124,6 @@ public:
      */
     bool isDarkTheme() const;
 
-    /**
-     * @brief Returns the Qt resource path for the global stylesheet
-     *        that matches the current effective theme.
-     */
-    QString getThemeCssPath() const;
-
 public slots:
     void newTab();
     void openZimFile(const QString& zimfile="");
@@ -170,14 +165,24 @@ private:
 QString getFileContent(QString filePath);
 QString gt(const QString &key);
 /**
- * @brief Returns the CSS content for the correct theme variant.
+ * @brief Returns a style sheet rendered for the effective theme.
  *
- * @param baseCssPath     Qt resource path for the default/light stylesheet.
- * @param customDarkPath  Optional explicit Qt resource path for the dark stylesheet.
- *                        If omitted, "_dark.css" is automatically used if available.
- * @return Content of whichever file matches the effective current theme.
+ * @param cssPath  Qt resource path of the style sheet template. The theme
+ *                 values come from resources/themes/<theme>.json, see
+ *                 renderStyleSheetTemplate() for the template syntax.
  */
-QString themeAwareCss(const QString &baseCssPath, const QString &customDarkPath = QString());
+QString themeAwareCss(const QString &cssPath);
+/**
+ * @brief Returns a style sheet template, given as a string, rendered for
+ *        the effective theme (see themeAwareCss()).
+ */
+QString themeAwareStyleSheet(const QString &styleSheetTemplate);
+/**
+ * @brief Returns a colour of the effective theme.
+ *
+ * @param name  Its name in resources/themes/<theme>.json, e.g. "ACCENT".
+ */
+QColor themeColor(const QString &name);
 /**
  * @brief Returns the Qt resource path of an icon for the effective theme.
  *

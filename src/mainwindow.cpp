@@ -23,6 +23,17 @@ MainWindow::MainWindow(QWidget *parent) :
     mp_ui->tabBar->setStackedWidget(mp_ui->mainView);
 
     auto app = KiwixApp::instance();
+
+    // The light theme puts the library, the settings and the articles' bars
+    // on a white page: this style sheet applies to everything in the view.
+    auto applyStyle = [this]() {
+        mp_ui->mainView->setStyleSheet(
+            themeAwareStyleSheet("background-color: {{MAIN_VIEW_BACKGROUND}};"));
+    };
+    applyStyle();
+    connect(app->getSettingsManager(), &SettingsManager::themeChanged,
+            this, [applyStyle](SettingsManager::Theme) { applyStyle(); });
+
     addAction(app->getAction(KiwixApp::ToggleFullscreenAction));
     addAction(app->getAction(KiwixApp::NextTabAction));
     addAction(app->getAction(KiwixApp::PreviousTabAction));

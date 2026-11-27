@@ -37,12 +37,7 @@ QVariant KListWidgetItem::data(int role) const
         }
     } else if (role == Qt::BackgroundRole || role == Qt::ForegroundRole) {
         // Resolved at paint time so that the colors follow theme changes.
-        const bool dark = KiwixApp::instance()->isDarkTheme();
-        if (role == Qt::BackgroundRole) {
-            v = QVariant::fromValue(QColor(dark ? "#2b2d31" : "white"));
-        } else {
-            v = QVariant::fromValue(QColor(dark ? "#f0f2f5" : "#666666"));
-        }
+        v = QVariant::fromValue(themeColor(role == Qt::BackgroundRole ? "SURFACE" : "CHOICE_TEXT"));
     }
     return v;
 }

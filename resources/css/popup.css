@@ -1,7 +1,8 @@
 QTreeView {
-    background-color: white;
+    background-color: {{SURFACE}};
     border: none;
     outline: none;
+    color: {{CONTROL_TEXT}};
 }
 
 QTreeView::item {
@@ -9,25 +10,25 @@ QTreeView::item {
 }
 
 QTreeView::item:selected {
-    border: 1px solid #3366CC;
-    background-color: #D9E9FF;
-    color: black;
+    border: 1px solid {{ACCENT}};
+    background-color: {{ACCENT_BACKGROUND}};
+    color: {{TEXT}};
 }
 
 QHeaderView {
-    background-color: white;
+    background-color: {{SURFACE}};
 }
 
 QHeaderView::section {
     border: none;
-    color: #3b3b3b;
-    background-color: white;
+    color: {{SUGGESTION_HEADER_TEXT}};
+    background-color: {{SURFACE}};
 
-    margin-top: 5px; /* XXX: duplicated in css_constants.h */
-    padding: 5px 10px; /* XXX: duplicated in css_constants.h */
+    margin-top: {{SUGGESTION_HEADER_MARGIN_TOP}}px;
+    padding: {{SUGGESTION_HEADER_PADDING_VERTICAL}}px {{SUGGESTION_HEADER_PADDING_LEFT}}px;
 
     font-size: 16px;
-    line-height: 24px; /* XXX: duplicated in css_constants.h */
+    line-height: {{SUGGESTION_HEADER_LINE_HEIGHT}}px;
     font-weight: 400;
 }
 
@@ -38,5 +39,5 @@ QScrollBar {
 }
 
 QScrollBar::handle {
-    background-color: grey;
+    background-color: {{MUTED}};
 }

@@ -1,4 +1,5 @@
 #include "kiwixloader.h"
+#include "kiwixapp.h"
 #include <QPainter>
 #include <QPainterPath>
 #include <QDebug>
@@ -59,12 +60,12 @@ void KiwixLoader::paintEvent(QPaintEvent *event)
 
     QRect rectangle(centerX, centerY, width, height);
 
-    pen.setColor("#eaecf0");
+    pen.setColor(themeColor("LOADER_TRACK"));
     createArc(painter, 0, 360, rectangle, pen);
 
     int startAngle = 0;
     int spanAngle = -progress;
-    pen.setColor("#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     createArc(painter, startAngle, spanAngle, rectangle, pen);
 }
 

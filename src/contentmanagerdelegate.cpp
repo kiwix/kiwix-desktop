@@ -2,6 +2,7 @@
 #include <QtGui>
 #include <QApplication>
 #include <QDialog>
+#include "contentmanagertreeview.h"
 #include <QStyleOptionViewItem>
 #include "kiwixapp.h"
 #include <QStyleOptionViewItem>
@@ -14,13 +15,11 @@ ContentManagerDelegate::ContentManagerDelegate(QObject *parent)
     : QStyledItemDelegate(parent), baseButton(new QPushButton)
 {
     auto updateBaseButton = [this]() {
-        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-        const QString btnColor = dark ? "#5b92e5" : "blue";
         baseButton->setStyleSheet("background-color: #00000000;"
                                   "border: 0;"
                                   "font-weight: bold;"
                                   "font-family: Selawik;"
-                                  "color: " + btnColor + ";"
+                                  "color: " + themeColor("BOOK_BUTTON_TEXT").name() + ";"
                                   "margin: 4px;");
     };
     updateBaseButton();
@@ -40,8 +39,7 @@ void createPauseSymbol(QPainter *painter, const QRect& buttonRect)
     QPainterPath path;
     const int x = buttonRect.left() + 12.5;
     const int y = buttonRect.top() + 10;
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#5b92e5" : "#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     path.moveTo(x, y);
     path.lineTo(x, y + 10);
     painter->strokePath(path, pen);
@@ -57,8 +55,7 @@ void createResumeSymbol(QPainter *painter, const QRect& buttonRect)
     QPainterPath path;
     const int x = buttonRect.left() + 12.5;
     const int y = buttonRect.top() + 8;
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#5b92e5" : "#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     path.moveTo(x, y);
     path.lineTo(x, y + 15);
     path.lineTo(x + 10, y + 8);
@@ -102,8 +99,7 @@ void createDownloadStats(QPainter *painter, QRect box, QString downloadSpeed, QS
     int y = box.y();
     int w = box.width();
     int h = box.height();
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#9aa0a6" : "#666666");
+    pen.setColor(themeColor("TEXT_SECONDARY"));
     painter->setPen(pen);
     auto oldFont = painter->font();
     painter->setFont(QFont("Selawik", 8));
@@ -157,13 +153,12 @@ void showDownloadProgress(QPainter *painter, QRect box, const DownloadState& dow
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-    pen.setColor(dark ? "#4a4d52" : "#dadce0");
+    pen.setColor(themeColor("PROGRESS_TRACK"));
     createArc(painter, 0, 360, dcl.pauseResumeButtonRect, pen);
 
     int startAngle = 0;
     int spanAngle = progress * 360;
-    pen.setColor(dark ? "#5b92e5" : "#3366cc");
+    pen.setColor(themeColor("ACCENT"));
     createArc(painter, startAngle, spanAngle, dcl.pauseResumeButtonRect, pen);
 }
 
@@ -181,11 +176,10 @@ void ContentManagerDelegate::paintButton(QPainter *p, const QRect &r, QString t)
 void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
     const QRect r = opt.rect;
-    if (opt.state & QStyle::State_MouseOver) {
+    if ((opt.state & QStyle::State_MouseOver) && !(opt.state & QStyle::State_Selected)) {
         // don't paint over the line separator
         const auto cellInternalArea = r.adjusted(0, 0, 0, -1);
-        const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
-        p->fillRect(cellInternalArea, QBrush(dark ? "#34425a" : "#eaecf0"));
+        p->fillRect(cellInternalArea, themeColor("HOVER_BACKGROUND"));
     }
     const auto node = static_cast<RowNode*>(index.internalPointer());
     const auto id = node->getBookId();
@@ -208,10 +202,22 @@ void ContentManagerDelegate::paintBookState(QPainter *p, const QStyleOptionViewI
 
 void ContentManagerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    if (isDescriptionIndex(index))
-        return QStyledItemDelegate::paint(painter, option, index);
+    // A book and its description are one item: draw both hovered when either
+    // is under the mouse, and both selected with the book (descriptions can't
+    // be selected themselves).
+    QStyleOptionViewItem itemOption = option;
+    if (const auto view = qobject_cast<const ContentManagerTreeView*>(option.widget)) {
+        const auto book = bookIndex(index);
+        if (view->selectionModel() && view->selectionModel()->isSelected(book))
+            itemOption.state |= QStyle::State_Selected;
+        if (book == view->hoveredBook())
+            itemOption.state |= QStyle::State_MouseOver;
+    }
 
-    QStyleOptionViewItem eOpt = option;
+    if (isDescriptionIndex(index))
+        return QStyledItemDelegate::paint(painter, itemOption, index);
+
+    QStyleOptionViewItem eOpt = itemOption;
     if (index.column() == 1) {
         auto bFont = painter->font();
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
