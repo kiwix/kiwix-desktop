@@ -4,6 +4,7 @@
 #include "useragent.h"
 
 #include <QCommandLineParser>
+#include <QQuickWindow>
 #include <iostream>
 #include <sstream>
 #ifdef Q_OS_WIN
@@ -46,6 +47,7 @@ int main(int argc, char *argv[])
 #endif
 
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // High DPI Scaling is enabled by default in Qt6. This attribute no longer exists in 6.0 and later
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
