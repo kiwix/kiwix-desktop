@@ -1,5 +1,7 @@
 #include "contentmanagerview.h"
 #include <QFile>
+#include <QOpenGLFunctions>
+#include <QOpenGLContext>
 #include "kiwixapp.h"
 #include "contentmanagerdelegate.h"
 #include <QLineEdit>
@@ -10,9 +12,17 @@ ContentManagerView::ContentManagerView(QWidget *parent)
 {
     mp_ui->setupUi(this);
     mp_ui->m_view->setSortingEnabled(true);
+
+    // Ensure child widgets use stylesheet-defined background colors rather than
+    // inheriting the OS palette (which causes grey flashes on some platforms, e.g. Ubuntu).
+    mp_ui->stackedWidget->setAttribute(Qt::WA_StyledBackground, true);
+    mp_ui->contents->setAttribute(Qt::WA_StyledBackground, true);
+    mp_ui->loading->setAttribute(Qt::WA_StyledBackground, true);
+
     auto applyStyle = [this]() {
         mp_ui->m_view->setStyleSheet(themeAwareCss(":/css/_contentManager.css"));
         mp_ui->m_view->viewport()->update();
+        this->update();
     };
     applyStyle();
     connect(KiwixApp::instance()->getSettingsManager(), &SettingsManager::themeChanged,
@@ -32,13 +42,31 @@ ContentManagerView::ContentManagerView(QWidget *parent)
     // Needed to reveal the situation with downloads not being updated timely
     // (due to aria2c becoming unresponsive when saving to slow storage)
     QTimer *timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, [this]() { this->update(); });
+    connect(timer, &QTimer::timeout, [this]() { mp_ui->m_view->viewport()->update(); });
     timer->start(1000);
 }
 
 ContentManagerView::~ContentManagerView()
 {
 
+}
+
+void ContentManagerView::initializeGL()
+{
+}
+
+void ContentManagerView::paintGL()
+{
+    const bool dark = KiwixApp::instance() && KiwixApp::instance()->isDarkTheme();
+    QOpenGLFunctions *f = QOpenGLContext::currentContext() ? QOpenGLContext::currentContext()->functions() : nullptr;
+    if (f) {
+        if (dark) {
+            f->glClearColor(0.125f, 0.129f, 0.141f, 1.0f);
+        } else {
+            f->glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+        f->glClear(GL_COLOR_BUFFER_BIT);
+    }
 }
 
 void ContentManagerView::showLoader(bool show)

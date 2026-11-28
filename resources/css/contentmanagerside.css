@@ -11,6 +11,11 @@
 
 QScrollArea {
     border: 0;
+    background-color: white;
+}
+
+QScrollArea > QWidget > QWidget {
+    background-color: white;
 }
 
 #allFileButton, #localFileButton, #contentTypeButton {
