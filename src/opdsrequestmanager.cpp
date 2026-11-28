@@ -11,7 +11,9 @@ QString OpdsRequestManager::getCatalogHost()
     const char* const envVarVal = getenv("KIWIX_CATALOG_HOST");
     return envVarVal
          ? envVarVal
-         : "opds.library.kiwix.org";
+         // TODO: switch back to "opds.library.kiwix.org" before the release
+         // (the /catalog/v3 feeds are only served by the nightly catalog yet)
+         : "opds.nightly.library.kiwix.org";
 }
 
 int OpdsRequestManager::getCatalogPort()
@@ -42,7 +44,7 @@ void OpdsRequestManager::doUpdate(const QString& currentLanguage, const QString&
         query.addQueryItem("category", categoryFilter);
     }
 
-    auto mp_reply = opdsResponseFromPath("/catalog/v2/entries", query);
+    auto mp_reply = opdsResponseFromPath("/catalog/v3/entries", query);
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
         receiveContent(mp_reply);
     });
@@ -66,7 +68,7 @@ QNetworkReply* OpdsRequestManager::opdsResponseFromPath(const QString &path, con
 
 void OpdsRequestManager::getLanguagesFromOpds()
 {
-    auto mp_reply = opdsResponseFromPath("/catalog/v2/languages");
+    auto mp_reply = opdsResponseFromPath("/catalog/v3/languages");
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
         receiveLanguages(mp_reply);
     });
@@ -74,7 +76,7 @@ void OpdsRequestManager::getLanguagesFromOpds()
 
 void OpdsRequestManager::getCategoriesFromOpds()
 {
-    auto mp_reply = opdsResponseFromPath("/catalog/v2/categories");
+    auto mp_reply = opdsResponseFromPath("/catalog/v3/categories");
     connect(mp_reply, &QNetworkReply::finished, this, [=]() {
         receiveCategories(mp_reply);
     });
